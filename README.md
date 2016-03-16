@@ -20,9 +20,6 @@ The launcher itself is made as a joke, since most launcher exist on an immersive
 
 ### Who (made this) ? ###
 
-* Mostly me, I guess
+* Ayj3y from Telegram, he's the actual inventor of the idea so props to him
+* Me, but not by all that much
 * There's several picked codes from StackOverflow that sits around in my HDD, I don't know the exact author, but if you're one of them, just contact me and don't sue me please
-
-### When (will this be updated) ? ###
-
-There's no absolute reason for me to update this (apart from SDK update, maybe), this launcher is just a conceptual demo to see how well a launcher would've performed if it were put in same place as a regular app. You **can** however, fork this project and develop it yourself (that is, if you want to deal with my badly coded app).
