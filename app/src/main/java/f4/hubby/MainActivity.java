@@ -2,11 +2,14 @@ package f4.hubby;
 
 import android.app.WallpaperManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
@@ -30,16 +33,25 @@ public class MainActivity extends AppCompatActivity {
     private List<AppDetail> apps;
     private NestedListView list;
     private AppBarLayout appBarLayout;
+    private CollapsingToolbarLayout toolbarLayout;
+    private SharedPreferences prefs;
+    private boolean list_order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
         refreshWallpaper();
+        loadPref();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -72,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
         if (id == R.id.update_wallpaper) {
@@ -89,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        loadPref();
 
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
         Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
@@ -139,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         refreshWallpaper();
+        loadPref();
     }
 
     private void refreshWallpaper() {
@@ -149,5 +166,10 @@ public class MainActivity extends AppCompatActivity {
         if (homePaper != null) {
             homePaper.setImageDrawable(wallpaperDrawable);
         }
+    }
+
+    private void loadPref() {
+        String title = prefs.getString("title_text", getString(R.string.app_name));
+        toolbarLayout.setTitle(title);
     }
 }
