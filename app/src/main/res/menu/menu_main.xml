@@ -7,4 +7,10 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/update_wallpaper"
+        android:orderInCategory="100"
+        android:title="@string/action_wallpaper"
+        app:showAsAction="never" />
 </menu>

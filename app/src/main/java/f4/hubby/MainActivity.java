@@ -10,6 +10,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,13 +42,7 @@ public class MainActivity extends AppCompatActivity {
         backView = (CoordinatorLayout) findViewById(R.id.coordinator);
         appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
 
-        final WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
-        final Drawable wallpaperDrawable = wallpaperManager.getDrawable();
-
-        ImageView homePaper = (ImageView) findViewById(R.id.homePaper);
-        if (homePaper != null) {
-            homePaper.setImageDrawable(wallpaperDrawable);
-        }
+        refreshWallpaper();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -81,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.update_wallpaper) {
+            Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
+            startActivity(Intent.createChooser(intent, getString(R.string.action_wallpaper)));
+            refreshWallpaper();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         i.addCategory(Intent.CATEGORY_LAUNCHER);
 
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
+        Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
         for(ResolveInfo ri:availableActivities){
             AppDetail app = new AppDetail();
             app.label = ri.loadLabel(manager);
@@ -133,5 +136,15 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(i);
             }
         });
+    }
+
+    private void refreshWallpaper() {
+        WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+        Drawable wallpaperDrawable = wallpaperManager.getDrawable();
+
+        AppCompatImageView homePaper = (AppCompatImageView) findViewById(R.id.homePaper);
+        if (homePaper != null) {
+            homePaper.setImageDrawable(wallpaperDrawable);
+        }
     }
 }
