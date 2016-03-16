@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private PackageManager manager;
     private List<AppDetail> apps;
     private NestedListView list;
+    private CoordinatorLayout backView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        backView = (CoordinatorLayout) findViewById(R.id.coordinator);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -122,4 +127,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        animateOut();
+    }
+
+    private void animateOut() {
+        Animation slideAnim = AnimationUtils.loadAnimation(this,R.anim.push_out);
+        slideAnim.setFillAfter(true);
+        slideAnim.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation paramAnimation) { }
+            public void onAnimationRepeat(Animation paramAnimation) { }
+            public void onAnimationEnd(Animation paramAnimation) {
+                finish();
+                // if you call NavUtils.navigateUpFromSameTask(activity); instead,
+                // the screen will flicker once after the animation. Since FrontActivity is
+                // in front of BackActivity, calling finish() should give the same result.
+                overridePendingTransition(0, 0);
+            }
+        });
+        backView.startAnimation(slideAnim);
+    }
 }

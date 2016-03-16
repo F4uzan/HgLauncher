@@ -34,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(HomeActivity.this, MainActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.pull_up, 0);
                 }
             });
         }
