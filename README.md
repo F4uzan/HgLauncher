@@ -25,4 +25,4 @@ The launcher itself is made as a joke, since most launcher exist on an immersive
 
 ### When (will this be updated) ? ###
 
-There's no absolute reason for me to update this (apart from SDK update, maybe), this launcher is just a conceptual demo to see how well a launcher would've performed if it were put in same place as a regular app.
+There's no absolute reason for me to update this (apart from SDK update, maybe), this launcher is just a conceptual demo to see how well a launcher would've performed if it were put in same place as a regular app. You **can** however, fork this project and develop it yourself (that is, if you want to deal with my badly coded app).
