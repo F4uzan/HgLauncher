@@ -7,7 +7,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
@@ -30,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private PackageManager manager;
     private List<AppDetail> apps;
     private NestedListView list;
-    private CoordinatorLayout backView;
     private AppBarLayout appBarLayout;
 
     @Override
@@ -39,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        backView = (CoordinatorLayout) findViewById(R.id.coordinator);
         appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
 
         refreshWallpaper();
