@@ -114,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
     private void addClickListener() {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
+            public void onItemClick(AdapterView<?> av, View v, int pos,
+                                    long id) {
                 Intent i = manager.getLaunchIntentForPackage(apps.get(pos).name.toString());
                 MainActivity.this.startActivity(i);
             }
