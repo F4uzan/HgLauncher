@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -70,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadApps(){
+    private void loadApps() {
         manager = getPackageManager();
         apps = new ArrayList<>();
 
@@ -87,12 +85,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadListView(){
+    private void loadListView() {
         list = (NestedListView) findViewById(R.id.apps_list);
 
-        ArrayAdapter<AppDetail> adapter = new ArrayAdapter<AppDetail>(this,
-                R.layout.app_list,
-                apps) {
+        ArrayAdapter<AppDetail> adapter = new ArrayAdapter<AppDetail>(this, R.layout.app_list, apps) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if(convertView == null){
@@ -113,41 +109,16 @@ public class MainActivity extends AppCompatActivity {
         };
 
         list.setAdapter(adapter);
-        setListViewHeightBasedOnChildren(list);
     }
 
-    private void addClickListener(){
+    private void addClickListener() {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> av, View v, int pos,
-                                    long id) {
+            public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
                 Intent i = manager.getLaunchIntentForPackage(apps.get(pos).name.toString());
                 MainActivity.this.startActivity(i);
             }
         });
-    }
-
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            // pre-condition
-            return;
-        }
-
-        int totalHeight = 0;
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += listItem.getMeasuredHeight();
-        }
-        //I added this to try to fix half hidden row
-        totalHeight++;
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
     }
 
 }
