@@ -1,20 +1,20 @@
 package f4.hubby;
 
+import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private List<AppDetail> apps;
     private NestedListView list;
     private CoordinatorLayout backView;
+    private AppBarLayout appBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +38,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         backView = (CoordinatorLayout) findViewById(R.id.coordinator);
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+
+        final WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+        final Drawable wallpaperDrawable = wallpaperManager.getDrawable();
+
+        ImageView homePaper = (ImageView) findViewById(R.id.homePaper);
+        if (homePaper != null) {
+            homePaper.setImageDrawable(wallpaperDrawable);
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    appBarLayout.setExpanded(false);
+                }
+            });
+        }
 
         loadApps();
         loadListView();
@@ -106,9 +117,6 @@ public class MainActivity extends AppCompatActivity {
                 TextView appLabel = (TextView)convertView.findViewById(R.id.item_app_label);
                 appLabel.setText(apps.get(position).label);
 
-                TextView appName = (TextView)convertView.findViewById(R.id.item_app_name);
-                appName.setText(apps.get(position).name);
-
                 return convertView;
             }
         };
@@ -125,27 +133,5 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(i);
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        animateOut();
-    }
-
-    private void animateOut() {
-        Animation slideAnim = AnimationUtils.loadAnimation(this,R.anim.push_out);
-        slideAnim.setFillAfter(true);
-        slideAnim.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation paramAnimation) { }
-            public void onAnimationRepeat(Animation paramAnimation) { }
-            public void onAnimationEnd(Animation paramAnimation) {
-                finish();
-                // if you call NavUtils.navigateUpFromSameTask(activity); instead,
-                // the screen will flicker once after the animation. Since FrontActivity is
-                // in front of BackActivity, calling finish() should give the same result.
-                overridePendingTransition(0, 0);
-            }
-        });
-        backView.startAnimation(slideAnim);
     }
 }
