@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     boolean icon_hide;
     boolean list_order;
     boolean wallpaper_hide;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,7 +173,8 @@ public class MainActivity extends AppCompatActivity {
         refreshWallpaper();
         loadApps();
         loadListView();
-        overridePendingTransition(0, 0);
+        overridePendingTransition(R.anim.no_anim, R.anim.push_out);
+        appBarLayout.setExpanded(true, false);
     }
 
     private void refreshWallpaper() {
