@@ -87,6 +87,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            super.onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     // Detect if we're on an extra large tablet and use multipanel if it is true
     @Override
     public boolean onIsMultiPane() {
