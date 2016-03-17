@@ -127,8 +127,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("title_text"));
 
-            Preference anim = findPreference("anim_switch");
-            Preference icon = findPreference("icon_hide_switch");
+            // Preference anim = findPreference("anim_switch");
+            // Preference icon = findPreference("icon_hide_switch");
         }
 
         @Override
