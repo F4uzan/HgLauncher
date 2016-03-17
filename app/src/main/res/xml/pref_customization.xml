@@ -27,16 +27,13 @@
         android:title="@string/pref_icon_view"
         android:summary="@string/pref_icon_view_desc" />
 
-    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-         dismiss it. -->
-    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
-    <!-- <ListPreference
+    <ListPreference
         android:defaultValue="alphabetical"
         android:entries="@array/pref_app_list_order_titles"
         android:entryValues="@array/pref_app_list_order_values"
         android:key="list_order"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_title_app_list_order" /> -->
+        android:title="@string/pref_title_app_list_order" />
 
 </PreferenceScreen>

@@ -37,11 +37,13 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     boolean anim;
     boolean icon_hide;
+    boolean list_order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        overridePendingTransition(0, 0);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         setContentView(R.layout.activity_main);
@@ -112,7 +114,12 @@ public class MainActivity extends AppCompatActivity {
         loadPref();
 
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
-        Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
+        if (list_order) {
+            Collections.sort(availableActivities, Collections
+                    .reverseOrder(new ResolveInfo.DisplayNameComparator(manager)));
+        } else {
+            Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
+        }
         for(ResolveInfo ri:availableActivities){
             AppDetail app = new AppDetail();
             app.label = ri.loadLabel(manager);
@@ -165,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         refreshWallpaper();
         loadPref();
+        loadApps();
         loadListView();
     }
 
@@ -182,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
         String title = prefs.getString("title_text", getString(R.string.app_name));
         anim = prefs.getBoolean("anim_switch", true);
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
+        list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
         toolbarLayout.setTitle(title);
     }
 }
