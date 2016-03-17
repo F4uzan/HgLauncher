@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     boolean icon_hide;
     boolean list_order;
     boolean wallpaper_hide;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
