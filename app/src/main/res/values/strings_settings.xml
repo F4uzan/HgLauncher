@@ -22,7 +22,7 @@
     <string name="pref_title_default">@string/app_name</string>
 
     <string name="pref_animation">Enable animation</string>
-    <string name="pref_animation_on">Animation gives a more parallax effect to the wallpaper view</string>
+    <string name="pref_animation_on">Animation gives more parallax effect to the wallpaper view</string>
     <string name="pref_animation_off">Quickly jumps to the list of apps, skipping the extra delay</string>
 
     <string name="pref_icon_view">Hide icons</string>
