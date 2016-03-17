@@ -29,6 +29,7 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -149,7 +150,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("title_text"));
-            // bindPreferenceSummaryToValue(findPreference("list_order"));
+
+            Preference anim = findPreference("anim_switch");
+            Preference icon = findPreference("icon_hide_switch");
         }
 
         @Override

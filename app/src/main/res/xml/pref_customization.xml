@@ -10,6 +10,19 @@
         android:singleLine="true"
         android:title="@string/pref_title" />
 
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="anim_switch"
+        android:title="@string/pref_animation"
+        android:summaryOn="@string/pref_animation_on"
+        android:summaryOff="@string/pref_animation_off" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="icon_hide_switch"
+        android:title="@string/pref_icon_view"
+        android:summary="@string/pref_icon_view_desc" />
+
     <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
          dismiss it. -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->

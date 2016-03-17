@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarLayout appBarLayout;
     private CollapsingToolbarLayout toolbarLayout;
     private SharedPreferences prefs;
-    private boolean list_order;
+    boolean anim;
+    boolean icon_hide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    appBarLayout.setExpanded(false);
+                    if (anim) {
+                        appBarLayout.setExpanded(false, true);
+                    } else {
+                        appBarLayout.setExpanded(false, false);
+                    }
                 }
             });
         }
@@ -128,7 +133,11 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 ImageView appIcon = (ImageView)convertView.findViewById(R.id.item_app_icon);
-                appIcon.setImageDrawable(apps.get(position).icon);
+                if (!icon_hide) {
+                    appIcon.setImageDrawable(apps.get(position).icon);
+                } else {
+                    appIcon.setImageDrawable(null);
+                }
 
                 TextView appLabel = (TextView)convertView.findViewById(R.id.item_app_label);
                 appLabel.setText(apps.get(position).label);
@@ -156,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         refreshWallpaper();
         loadPref();
+        loadListView();
     }
 
     private void refreshWallpaper() {
@@ -170,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadPref() {
         String title = prefs.getString("title_text", getString(R.string.app_name));
+        anim = prefs.getBoolean("anim_switch", true);
+        icon_hide = prefs.getBoolean("icon_hide_switch", false);
         toolbarLayout.setTitle(title);
     }
 }
