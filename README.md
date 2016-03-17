@@ -1,6 +1,6 @@
 ## Hubby Launcher ##
 
-Hubby (Wubby Dubby) Launcher is a self-made launcher with no interesting feature, it's just a scrollable list of clickable icon, nothing more nothing less (I probably have more, but not now). In its current state, nothing is sorted in an order. It's practically launcher for ubergrandma.
+Hubby (Wubby Dubby) Launcher is a self-made launcher with no interesting feature, it's just a scrollable list of clickable icon, nothing more nothing less (I probably have more, but not now). It's practically launcher for ubergrandma.
 
 ### Why (does it exist) ? ###
 
