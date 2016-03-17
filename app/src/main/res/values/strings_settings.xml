@@ -27,15 +27,4 @@
 
     <string name="pref_icon_view">Hide icons</string>
     <string name="pref_icon_view_desc">Recommended if you have a slow device</string>
-
-    <string name="pref_title_app_list_order">App list order</string>
-    <string-array name="pref_app_list_order_titles">
-        <item>From A to Z</item>
-        <item>From Z to A</item>
-    </string-array>
-    <string-array name="pref_app_list_order_values">
-        <item>alphabetical</item>
-        <item>invertedAlphabetical</item>
-    </string-array>
-
 </resources>
