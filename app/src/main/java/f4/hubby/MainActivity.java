@@ -38,12 +38,11 @@ public class MainActivity extends AppCompatActivity {
     boolean anim;
     boolean icon_hide;
     boolean list_order;
+    boolean wallpaper_hide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        overridePendingTransition(0, 0);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         setContentView(R.layout.activity_main);
@@ -170,10 +169,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        refreshWallpaper();
         loadPref();
+        refreshWallpaper();
         loadApps();
         loadListView();
+        overridePendingTransition(0, 0);
     }
 
     private void refreshWallpaper() {
@@ -182,15 +182,20 @@ public class MainActivity extends AppCompatActivity {
 
         AppCompatImageView homePaper = (AppCompatImageView) findViewById(R.id.homePaper);
         if (homePaper != null) {
-            homePaper.setImageDrawable(wallpaperDrawable);
+            if (!wallpaper_hide) {
+                homePaper.setImageDrawable(wallpaperDrawable);
+            } else {
+                homePaper.setImageDrawable(null);
+            }
         }
     }
 
     private void loadPref() {
-        String title = prefs.getString("title_text", getString(R.string.app_name));
+        String title = prefs.getString("title_text", getString(R.string.pref_title_default));
         anim = prefs.getBoolean("anim_switch", true);
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
         list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
+        wallpaper_hide = prefs.getBoolean("wall_hide_switch", false);
         toolbarLayout.setTitle(title);
     }
 }

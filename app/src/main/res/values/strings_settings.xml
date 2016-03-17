@@ -25,6 +25,9 @@
     <string name="pref_animation_on">Animation gives more parallax effect to the wallpaper view</string>
     <string name="pref_animation_off">Quickly jumps to the list of apps, skipping the extra delay</string>
 
+    <string name="pref_wallpaper_view">Color wallpaper</string>
+    <string name="pref_wallpaper_view_desc">Disable wallpaper and use a color as a replacement instead</string>
+
     <string name="pref_icon_view">Hide icons</string>
     <string name="pref_icon_view_desc">Recommended if you have a slow device</string>
 </resources>
