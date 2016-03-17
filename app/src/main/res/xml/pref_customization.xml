@@ -1,5 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory android:title="@string/pref_header_wall" />
+
     <EditTextPreference
         android:capitalize="words"
         android:defaultValue="@string/pref_title_default"
@@ -16,6 +18,8 @@
         android:title="@string/pref_animation"
         android:summaryOn="@string/pref_animation_on"
         android:summaryOff="@string/pref_animation_off" />
+
+    <PreferenceCategory android:title="@string/pref_header_list" />
 
     <SwitchPreference
         android:defaultValue="false"

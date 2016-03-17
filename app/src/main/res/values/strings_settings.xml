@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Strings for Settings (and all activity related to it -->
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- About and Credits -->
+    <string name="pref_header_about">About</string>
+    <string name="pref_title_credits">Credits</string>
+
+    <string name="f4">F4uzan</string>
+    <string name="f4_hint">Developer and maintainer</string>
+
+    <string name="ayj3y">AyJ3y</string>
+    <string name="ayj3y_hint">Helping developer and a nice friend</string>
+
+    <!-- Customizations -->
+    <string name="pref_header_cust">Customizations</string>
+    <string name="pref_header_wall">Wallpaper View</string>
+    <string name="pref_header_list">List</string>
+
+    <string name="pref_title">Title text</string>
+    <string name="pref_title_default">@string/app_name</string>
+
+    <string name="pref_animation">Enable animation</string>
+    <string name="pref_animation_on">Animation gives a more parallax effect to the wallpaper view</string>
+    <string name="pref_animation_off">Quickly jumps to the list of apps, skipping the extra delay</string>
+
+    <string name="pref_icon_view">Hide icons</string>
+    <string name="pref_icon_view_desc">Recommended if you have a slow device</string>
+
+    <string name="pref_title_app_list_order">App list order</string>
+    <string-array name="pref_app_list_order_titles">
+        <item>From A to Z</item>
+        <item>From Z to A</item>
+    </string-array>
+    <string-array name="pref_app_list_order_values">
+        <item>alphabetical</item>
+        <item>invertedAlphabetical</item>
+    </string-array>
+</resources>
