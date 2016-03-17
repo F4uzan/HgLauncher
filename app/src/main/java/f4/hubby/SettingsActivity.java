@@ -139,13 +139,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             // Preference anim = findPreference("anim_switch");
             // Preference icon = findPreference("icon_hide_switch");
-
-            Preference list_order = findPreference("list_order");
-            if (list_order.equals("invertedAlphabetical")) {
-                list_order.setSummary(R.string.pref_app_list_inverted);
-            } else if (list_order.equals("alphabetical")) {
-                list_order.setSummary(R.string.pref_app_list_default);
-            }
         }
 
         @Override

@@ -34,6 +34,7 @@
         android:key="list_order"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_title_app_list_order" />
+        android:title="@string/pref_title_app_list_order"
+        android:summary="%s" />
 
 </PreferenceScreen>

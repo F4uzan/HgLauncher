@@ -37,6 +37,5 @@
         <item>alphabetical</item>
         <item>invertedAlphabetical</item>
     </string-array>
-    <string name="pref_app_list_inverted">Inverted</string>
-    <string name="pref_app_list_default">Default</string>
+
 </resources>
