@@ -10,4 +10,16 @@
         <item>alphabetical</item>
         <item>invertedAlphabetical</item>
     </string-array>
+
+    <string name="pref_app_launch_anim">App launch animation</string>
+    <string-array name="pref_app_launch_anim_title">
+        <item>Default</item>
+        <item>Pull up</item>
+        <item>Slide in</item>
+    </string-array>
+    <string-array name="pref_app_launch_anim_values">
+        <item>default</item>
+        <item>pull_up</item>
+        <item>slide_in</item>
+    </string-array>
 </resources>

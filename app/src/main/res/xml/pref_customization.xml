@@ -43,4 +43,14 @@
         android:title="@string/pref_title_app_list_order"
         android:summary="%s" />
 
+    <ListPreference
+        android:defaultValue="default"
+        android:entries="@array/pref_app_launch_anim_title"
+        android:entryValues="@array/pref_app_launch_anim_values"
+        android:key="launch_anim"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_app_launch_anim"
+        android:summary="%s" />
+
 </PreferenceScreen>

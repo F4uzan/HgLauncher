@@ -18,10 +18,6 @@
     <string name="pref_header_wall">Wallpaper View</string>
     <string name="pref_header_list">List</string>
 
-    <string name="pref_title_view">Display title text</string>
-    <string name="pref_title_on">Show display title text</string>
-    <string name="pref_title_off">Hide display title text</string>
-
     <string name="pref_title">Title text</string>
     <string name="pref_title_default">@string/app_name</string>
 

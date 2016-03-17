@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     boolean icon_hide;
     boolean list_order;
     boolean wallpaper_hide;
+    String launch_anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,10 +159,21 @@ public class MainActivity extends AppCompatActivity {
     private void addClickListener() {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> av, View v, int pos,
-                                    long id) {
+            public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
                 Intent i = manager.getLaunchIntentForPackage(apps.get(pos).name.toString());
-                MainActivity.this.startActivity(i);
+                switch (launch_anim) {
+                    case "default":
+                        MainActivity.this.startActivity(i);
+                        break;
+                    case "pull_up":
+                        MainActivity.this.startActivity(i);
+                        overridePendingTransition(R.anim.pull_up, 0);
+                        break;
+                    case "slide_in":
+                        MainActivity.this.startActivity(i);
+                        overridePendingTransition(R.anim.slide_in, 0);
+                        break;
+                }
             }
         });
     }
@@ -173,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
         refreshWallpaper();
         loadApps();
         loadListView();
-        overridePendingTransition(R.anim.no_anim, R.anim.push_out);
         appBarLayout.setExpanded(true, false);
     }
 
@@ -193,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadPref() {
         String title = prefs.getString("title_text", getString(R.string.pref_title_default));
+        launch_anim = prefs.getString("launch_anim", "default");
         anim = prefs.getBoolean("anim_switch", true);
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
         list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
