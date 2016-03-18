@@ -1,10 +1,8 @@
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/pref_header_wall" />
 
-    <com.lb.material_preferences_library.custom_preferences.EditTextPreference
+    <EditTextPreference
         android:capitalize="words"
         android:defaultValue="@string/pref_title_default"
         android:inputType="textCapWords"
@@ -12,18 +10,18 @@
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="@string/pref_title"
-        app:negativeButtonText="@android:string/cancel"
-        app:positiveButtonText="@android:string/ok" />
+        android:title="@string/pref_title" />
 
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+    <SwitchPreference
+        android:widgetLayout="@layout/preference_switch_layout"
         android:defaultValue="true"
         android:key="anim_switch"
         android:title="@string/pref_animation"
-        app:summaryOn="@string/pref_animation_on"
-        app:summaryOff="@string/pref_animation_off" />
+        android:summaryOn="@string/pref_animation_on"
+        android:summaryOff="@string/pref_animation_off" />
 
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+    <SwitchPreference
+        android:widgetLayout="@layout/preference_switch_layout"
         android:defaultValue="false"
         android:key="wall_hide_switch"
         android:title="@string/pref_wallpaper_view"
@@ -31,7 +29,8 @@
 
     <PreferenceCategory android:title="@string/pref_header_list" />
 
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+    <SwitchPreference
+        android:widgetLayout="@layout/preference_switch_layout"
         android:defaultValue="false"
         android:key="icon_hide_switch"
         android:title="@string/pref_icon_view"
@@ -39,8 +38,8 @@
 
     <f4.hubby.MenuPreferenceCompat
         android:defaultValue="alphabetical"
-        app:entries="@array/pref_app_list_order_titles"
-        app:entryValues="@array/pref_app_list_order_values"
+        android:entries="@array/pref_app_list_order_titles"
+        android:entryValues="@array/pref_app_list_order_values"
         android:key="list_order"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
@@ -49,8 +48,8 @@
 
     <f4.hubby.MenuPreferenceCompat
         android:defaultValue="default"
-        app:entries="@array/pref_app_launch_anim_title"
-        app:entryValues="@array/pref_app_launch_anim_values"
+        android:entries="@array/pref_app_launch_anim_title"
+        android:entryValues="@array/pref_app_launch_anim_values"
         android:key="launch_anim"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
