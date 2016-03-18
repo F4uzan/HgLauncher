@@ -10,11 +10,18 @@
     tools:context="f4.hubby.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
     <f4.hubby.NestedListView
         android:id="@+id/apps_list"
         android:layout_marginTop="@dimen/text_margin"
         android:layout_marginBottom="@dimen/text_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
