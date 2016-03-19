@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
         }
-        for(ResolveInfo ri:availableActivities){
+        for (ResolveInfo ri:availableActivities) {
             AppDetail app = new AppDetail();
             app.label = ri.loadLabel(manager);
             app.name = ri.activityInfo.packageName;
@@ -136,18 +136,18 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<AppDetail> adapter = new ArrayAdapter<AppDetail>(this, R.layout.app_list, apps) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                if(convertView == null){
+                if(convertView == null) {
                     convertView = getLayoutInflater().inflate(R.layout.app_list, null);
                 }
 
-                ImageView appIcon = (ImageView)convertView.findViewById(R.id.item_app_icon);
+                ImageView appIcon = (ImageView) convertView.findViewById(R.id.item_app_icon);
                 if (!icon_hide) {
                     appIcon.setImageDrawable(apps.get(position).icon);
                 } else {
                     appIcon.setImageDrawable(null);
                 }
 
-                TextView appLabel = (TextView)convertView.findViewById(R.id.item_app_label);
+                TextView appLabel = (TextView) convertView.findViewById(R.id.item_app_label);
                 appLabel.setText(apps.get(position).label);
 
                 return convertView;
