@@ -1,6 +1,5 @@
 package f4.hubby;
 
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
