@@ -16,7 +16,7 @@
     <!-- Customizations -->
     <string name="pref_header_cust">Customizations</string>
     <string name="pref_header_wall">Wallpaper View</string>
-    <string name="pref_header_list">List</string>
+    <string name="pref_header_list">App list</string>
 
     <string name="pref_title">Title text</string>
     <string name="pref_title_default">@string/app_name</string>
