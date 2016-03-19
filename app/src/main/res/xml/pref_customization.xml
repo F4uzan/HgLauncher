@@ -16,6 +16,16 @@
         app:negativeButtonText="@android:string/cancel"
         app:positiveButtonText="@android:string/ok" />
 
+    <f4.hubby.MenuPreferenceCompat
+        android:defaultValue="default"
+        android:entries="@array/pref_title_text_style_title"
+        android:entryValues="@array/pref_title_text_style_values"
+        android:key="title_style"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_text_style"
+        android:summary="%s" />
+
     <com.lb.material_preferences_library.custom_preferences.SwitchPreference
         android:defaultValue="true"
         android:key="anim_switch"

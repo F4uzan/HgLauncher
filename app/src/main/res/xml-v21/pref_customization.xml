@@ -12,6 +12,16 @@
         android:singleLine="true"
         android:title="@string/pref_title" />
 
+    <f4.hubby.MenuPreference
+        android:defaultValue="default"
+        android:entries="@array/pref_title_text_style_title"
+        android:entryValues="@array/pref_title_text_style_values"
+        android:key="title_style"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_text_style"
+        android:summary="%s" />
+
     <SwitchPreference
         android:widgetLayout="@layout/preference_switch_layout"
         android:defaultValue="true"

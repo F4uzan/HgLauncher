@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     boolean list_order;
     boolean wallpaper_hide;
     String launch_anim;
+    String title_style;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,10 +206,28 @@ public class MainActivity extends AppCompatActivity {
     private void loadPref() {
         String title = prefs.getString("title_text", getString(R.string.pref_title_default));
         launch_anim = prefs.getString("launch_anim", "default");
+        title_style = prefs.getString("title_style", "default");
         anim = prefs.getBoolean("anim_switch", true);
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
         list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
         wallpaper_hide = prefs.getBoolean("wall_hide_switch", false);
         toolbarLayout.setTitle(title);
+        switch (title_style) {
+            case "bold":
+                toolbarLayout.setExpandedTitleTextAppearance(R.style.MaterialTextAppearance_Title);
+                break;
+            case "headline":
+                toolbarLayout.setExpandedTitleTextAppearance(R.style.MaterialTextAppearance_Headline);
+                break;
+            case "default":
+                toolbarLayout.setExpandedTitleTextAppearance(R.style.MaterialTextAppearance_Display1);
+                break;
+            case "expanded":
+                toolbarLayout.setExpandedTitleTextAppearance(R.style.MaterialTextAppearance_Display2);
+                break;
+            case "huge":
+                toolbarLayout.setExpandedTitleTextAppearance(R.style.MaterialTextAppearance_Display3);
+                break;
+        }
     }
 }
