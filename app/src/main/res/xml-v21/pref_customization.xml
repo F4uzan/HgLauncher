@@ -19,29 +19,29 @@
         android:key="title_style"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_title_text_style"
-        android:summary="%s" />
+        android:summary="%s"
+        android:title="@string/pref_title_text_style" />
 
     <SwitchPreference
         android:defaultValue="true"
         android:key="anim_switch"
-        android:title="@string/pref_animation"
+        android:summaryOff="@string/pref_animation_off"
         android:summaryOn="@string/pref_animation_on"
-        android:summaryOff="@string/pref_animation_off" />
+        android:title="@string/pref_animation" />
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="wall_hide_switch"
-        android:title="@string/pref_wallpaper_view"
-        android:summary="@string/pref_wallpaper_view_desc" />
+        android:summary="@string/pref_wallpaper_view_desc"
+        android:title="@string/pref_wallpaper_view" />
 
     <PreferenceCategory android:title="@string/pref_header_list" />
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="icon_hide_switch"
-        android:title="@string/pref_icon_view"
-        android:summary="@string/pref_icon_view_desc" />
+        android:summary="@string/pref_icon_view_desc"
+        android:title="@string/pref_icon_view" />
 
     <f4.hubby.MenuPreference
         android:defaultValue="alphabetical"
@@ -50,8 +50,8 @@
         android:key="list_order"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_title_app_list_order"
-        android:summary="%s" />
+        android:summary="%s"
+        android:title="@string/pref_title_app_list_order" />
 
     <f4.hubby.MenuPreference
         android:defaultValue="default"
@@ -60,7 +60,7 @@
         android:key="launch_anim"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_app_launch_anim"
-        android:summary="%s" />
+        android:summary="%s"
+        android:title="@string/pref_app_launch_anim" />
 
 </PreferenceScreen>

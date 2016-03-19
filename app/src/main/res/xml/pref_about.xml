@@ -3,17 +3,17 @@
     <PreferenceCategory android:title="@string/pref_header_about" />
 
     <com.lb.material_preferences_library.custom_preferences.Preference
-        android:title="@string/app_name"
-        android:summary="@string/app_version" />
+        android:summary="@string/app_version"
+        android:title="@string/app_name" />
 
     <PreferenceCategory android:title="@string/pref_title_credits" />
 
     <com.lb.material_preferences_library.custom_preferences.Preference
-        android:title="@string/f4"
-        android:summary="@string/f4_hint" />
+        android:summary="@string/f4_hint"
+        android:title="@string/f4" />
 
     <com.lb.material_preferences_library.custom_preferences.Preference
-        android:title="@string/ayj3y"
-        android:summary="@string/ayj3y_hint" />
+        android:summary="@string/ayj3y_hint"
+        android:title="@string/ayj3y" />
 
 </PreferenceScreen>

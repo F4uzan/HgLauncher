@@ -29,18 +29,18 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private PackageManager manager;
-    private List<AppDetail> apps;
-    private NestedListView list;
-    private AppBarLayout appBarLayout;
-    private CollapsingToolbarLayout toolbarLayout;
-    private SharedPreferences prefs;
     boolean anim;
     boolean icon_hide;
     boolean list_order;
     boolean wallpaper_hide;
     String launch_anim;
     String title_style;
+    private PackageManager manager;
+    private List<AppDetail> apps;
+    private NestedListView list;
+    private AppBarLayout appBarLayout;
+    private CollapsingToolbarLayout toolbarLayout;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
         }
-        for (ResolveInfo ri:availableActivities) {
+        for (ResolveInfo ri : availableActivities) {
             AppDetail app = new AppDetail();
             app.label = ri.loadLabel(manager);
             app.name = ri.activityInfo.packageName;
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<AppDetail> adapter = new ArrayAdapter<AppDetail>(this, R.layout.app_list, apps) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                if(convertView == null) {
+                if (convertView == null) {
                     convertView = getLayoutInflater().inflate(R.layout.app_list, null);
                 }
 

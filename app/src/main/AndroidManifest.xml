@@ -29,8 +29,8 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:theme="@style/AppTheme"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
