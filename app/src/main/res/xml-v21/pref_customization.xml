@@ -36,7 +36,7 @@
         android:title="@string/pref_icon_view"
         android:summary="@string/pref_icon_view_desc" />
 
-    <f4.hubby.MenuPreferenceCompat
+    <f4.hubby.MenuPreference
         android:defaultValue="alphabetical"
         android:entries="@array/pref_app_list_order_titles"
         android:entryValues="@array/pref_app_list_order_values"
@@ -46,7 +46,7 @@
         android:title="@string/pref_title_app_list_order"
         android:summary="%s" />
 
-    <f4.hubby.MenuPreferenceCompat
+    <f4.hubby.MenuPreference
         android:defaultValue="default"
         android:entries="@array/pref_app_launch_anim_title"
         android:entryValues="@array/pref_app_launch_anim_values"
