@@ -34,9 +34,7 @@ public class MenuPreference extends ListPreference {
 
         for (int i = 0; i < getEntries().length; i++) {
             MenuItem item = menu.add(1, i, Menu.NONE, getEntries()[i]);
-            item.setChecked(item.getTitle().equals(getEntry())); // 1
         }
-        menu.setGroupCheckable(1, true, true); // 2
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
