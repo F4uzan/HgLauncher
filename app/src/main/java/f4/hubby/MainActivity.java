@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -134,8 +135,9 @@ public class MainActivity extends AppCompatActivity {
         list = (NestedListView) findViewById(R.id.apps_list);
 
         ArrayAdapter<AppDetail> adapter = new ArrayAdapter<AppDetail>(this, R.layout.app_list, apps) {
+            @NonNull
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 if (convertView == null) {
                     convertView = getLayoutInflater().inflate(R.layout.app_list, null);
                 }

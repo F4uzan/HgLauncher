@@ -6,4 +6,7 @@
     <!-- Menu actions -->
     <string name="action_settings">Settings</string>
     <string name="action_wallpaper">Change wallpaper</string>
+
+    <!-- Misc -->
+    <string name="desc_icon">App icon</string>
 </resources>
