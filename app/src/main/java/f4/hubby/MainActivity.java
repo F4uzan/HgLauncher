@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     boolean icon_hide;
     boolean list_order;
     boolean wallpaper_hide;
+    boolean shade_view;
     String launch_anim;
     String title_style;
     private PackageManager manager;
@@ -196,12 +198,19 @@ public class MainActivity extends AppCompatActivity {
         Drawable wallpaperDrawable = wallpaperManager.getDrawable();
 
         AppCompatImageView homePaper = (AppCompatImageView) findViewById(R.id.homePaper);
+        RelativeLayout shade = (RelativeLayout) findViewById(R.id.shade);
         if (homePaper != null) {
             if (!wallpaper_hide) {
                 homePaper.setImageDrawable(wallpaperDrawable);
             } else {
                 homePaper.setImageDrawable(null);
             }
+        }
+
+        if (shade_view) {
+            shade.setVisibility(View.VISIBLE);
+        } else {
+            shade.setVisibility(View.GONE);
         }
     }
 
@@ -213,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
         list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
         wallpaper_hide = prefs.getBoolean("wall_hide_switch", false);
+        shade_view = prefs.getBoolean("shade_view_switch", false);
         toolbarLayout.setTitle(title);
         switch (title_style) {
             case "bold":

@@ -38,6 +38,7 @@
                 android:id="@+id/shade"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 android:background="@drawable/image_inner_shadow"
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax" />

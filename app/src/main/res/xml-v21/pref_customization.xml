@@ -35,6 +35,12 @@
         android:summary="@string/pref_wallpaper_view_desc"
         android:title="@string/pref_wallpaper_view" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="shade_view_switch"
+        android:summary="@string/pref_shade_view_desc"
+        android:title="@string/pref_shade_view" />
+
     <PreferenceCategory android:title="@string/pref_header_list" />
 
     <SwitchPreference
