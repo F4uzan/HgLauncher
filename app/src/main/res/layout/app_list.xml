@@ -21,6 +21,7 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/item_app_icon"
         android:layout_toEndOf="@+id/item_app_icon"
+        android:ellipsize="end"
         android:paddingLeft="10dp"
         android:paddingStart="10dp" />
 
