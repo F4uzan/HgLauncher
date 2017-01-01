@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "f4.hubby"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 25
     }
     buildTypes {
