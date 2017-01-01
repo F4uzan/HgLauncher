@@ -41,6 +41,13 @@
         android:summary="@string/pref_shade_view_desc"
         android:title="@string/pref_shade_view" />
 
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="fab_view"
+        android:summaryOff="@string/pref_fab_off"
+        android:summaryOn="@string/pref_fab_on"
+        android:title="@string/pref_fab" />
+
     <PreferenceCategory android:title="@string/pref_header_list" />
 
     <SwitchPreference

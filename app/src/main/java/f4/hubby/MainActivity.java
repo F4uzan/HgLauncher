@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     boolean list_order;
     boolean wallpaper_hide;
     boolean shade_view;
+    boolean fab_view;
     String launch_anim;
     String title_style;
     private PackageManager manager;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarLayout appBarLayout;
     private CollapsingToolbarLayout toolbarLayout;
     private SharedPreferences prefs;
+
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         refreshWallpaper();
         loadPref();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -212,6 +215,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
             shade.setVisibility(View.GONE);
         }
+
+        if (fab != null) {
+            if (fab_view) {
+                fab.setVisibility(View.VISIBLE);
+            } else {
+                fab.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void loadPref() {
@@ -223,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
         list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
         wallpaper_hide = prefs.getBoolean("wall_hide_switch", false);
         shade_view = prefs.getBoolean("shade_view_switch", false);
+        fab_view = prefs.getBoolean("fab_view", true);
         toolbarLayout.setTitle(title);
         switch (title_style) {
             case "bold":

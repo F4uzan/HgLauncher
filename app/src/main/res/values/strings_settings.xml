@@ -31,6 +31,10 @@
     <string name="pref_icon_view">Hide icons</string>
     <string name="pref_icon_view_desc">Recommended if you have a slow device</string>
 
+    <string name="pref_fab">Drawer button</string>
+    <string name="pref_fab_on">A floating drawer button is visible to view the app list</string>
+    <string name="pref_fab_off">Hide the drawer button for a cleaner view</string>
+
     <string name="pref_shade_view">Shadow over wallpaper</string>
     <string name="pref_shade_view_desc">Add a visible shadow to shade over wallpaper. Recommended for light wallpapers</string>
 </resources>
