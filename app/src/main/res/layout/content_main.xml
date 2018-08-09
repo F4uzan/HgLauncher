@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,18 +10,10 @@
     tools:context="f4.hubby.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <f4.hubby.NestedListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/apps_list"
+            android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:layout_marginTop="@dimen/text_margin" />
+            android:layout_height="wrap_content" />
 
-    </FrameLayout>
-
-</android.support.v4.widget.NestedScrollView>
+</FrameLayout>

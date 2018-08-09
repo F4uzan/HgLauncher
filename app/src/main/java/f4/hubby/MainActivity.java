@@ -14,6 +14,9 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,14 +32,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import f4.hubby.helpers.RecyclerClick;
+
 public class MainActivity extends AppCompatActivity {
 
     boolean anim, icon_hide, list_order, wallpaper_hide, shade_view, fab_view;
     String launch_anim;
     String title_style;
+    private List<AppDetail> appList = new ArrayList<>();
     private PackageManager manager;
-    private List<AppDetail> apps;
-    private NestedListView list;
+    private AppAdapter apps = new AppAdapter(appList);
+    private RecyclerView list;
     private AppBarLayout appBarLayout;
     private CollapsingToolbarLayout toolbarLayout;
     private SharedPreferences prefs;
@@ -54,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
 
         appBarLayout = findViewById(R.id.app_bar);
         toolbarLayout = findViewById(R.id.toolbar_layout);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
+
+        list = findViewById(R.id.apps_list);
+        list.setAdapter(apps);
+        list.setLayoutManager(mLayoutManager);
+        list.setItemAnimator(new DefaultItemAnimator());
 
         refreshWallpaper();
         loadPref();
@@ -73,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         loadApps();
-        loadListView();
         addClickListener();
     }
 
@@ -108,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadApps() {
         manager = getPackageManager();
-        apps = new ArrayList<>();
 
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -123,47 +135,20 @@ public class MainActivity extends AppCompatActivity {
             Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
         }
         for (ResolveInfo ri : availableActivities) {
-            AppDetail app = new AppDetail();
-            app.label = ri.loadLabel(manager);
-            app.name = ri.activityInfo.packageName;
-            app.icon = ri.activityInfo.loadIcon(manager);
-            apps.add(app);
+            String label = ri.loadLabel(manager).toString();
+            String name = ri.activityInfo.packageName;
+            Drawable icon = ri.activityInfo.loadIcon(manager);
+            AppDetail app = new AppDetail(icon, label, name);
+            appList.add(app);
+            apps.notifyItemInserted(appList.size() - 1);
         }
     }
 
-    private void loadListView() {
-        list = findViewById(R.id.apps_list);
-
-        ArrayAdapter<AppDetail> adapter = new ArrayAdapter<AppDetail>(this, R.layout.app_list, apps) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                if (convertView == null) {
-                    convertView = getLayoutInflater().inflate(R.layout.app_list, null);
-                }
-
-                ImageView appIcon = convertView.findViewById(R.id.item_app_icon);
-                if (!icon_hide) {
-                    appIcon.setImageDrawable(apps.get(position).icon);
-                } else {
-                    appIcon.setImageDrawable(null);
-                }
-
-                TextView appLabel = (TextView) convertView.findViewById(R.id.item_app_label);
-                appLabel.setText(apps.get(position).label);
-
-                return convertView;
-            }
-        };
-
-        list.setAdapter(adapter);
-    }
-
     private void addClickListener() {
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        RecyclerClick.addTo(list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
-                Intent i = manager.getLaunchIntentForPackage(apps.get(pos).name.toString());
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Intent i = manager.getLaunchIntentForPackage(appList.get(position).getName().toString());
                 switch (launch_anim) {
                     case "default":
                         MainActivity.this.startActivity(i);
@@ -186,8 +171,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         loadPref();
         refreshWallpaper();
-        loadApps();
-        loadListView();
         appBarLayout.setExpanded(true, false);
     }
 
@@ -195,8 +178,8 @@ public class MainActivity extends AppCompatActivity {
         WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
         Drawable wallpaperDrawable = wallpaperManager.getDrawable();
 
-        AppCompatImageView homePaper = (AppCompatImageView) findViewById(R.id.homePaper);
-        RelativeLayout shade = (RelativeLayout) findViewById(R.id.shade);
+        AppCompatImageView homePaper = findViewById(R.id.homePaper);
+        RelativeLayout shade = findViewById(R.id.shade);
         if (homePaper != null) {
             if (!wallpaper_hide) {
                 homePaper.setImageDrawable(wallpaperDrawable);
