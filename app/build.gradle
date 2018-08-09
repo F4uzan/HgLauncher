@@ -1,13 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "f4.hubby"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
     }
     buildTypes {
         release {
@@ -19,14 +21,14 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:palette-v7:25.3.1'
-    compile 'com.github.AndroidDeveloperLB:MaterialPreferenceLibrary:7'
-    compile 'com.larswerkman:lobsterpicker:1.0.1'
-    compile 'com.androidhuman:support-material:0.1.2@aar'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:27.+'
+    implementation 'com.android.support:cardview-v7:27.+'
+    implementation 'com.android.support:recyclerview-v7:27.+'
+    implementation 'com.android.support:design:27.+'
+    implementation 'com.android.support:palette-v7:27.+'
+    implementation 'com.github.AndroidDeveloperLB:MaterialPreferenceLibrary:7'
+    implementation 'com.larswerkman:lobsterpicker:1.0.1'
+    implementation 'com.androidhuman:support-material:0.1.2@aar'
 }

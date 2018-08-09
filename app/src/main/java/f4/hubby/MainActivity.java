@@ -31,12 +31,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean anim;
-    boolean icon_hide;
-    boolean list_order;
-    boolean wallpaper_hide;
-    boolean shade_view;
-    boolean fab_view;
+    boolean anim, icon_hide, list_order, wallpaper_hide, shade_view, fab_view;
     String launch_anim;
     String title_style;
     private PackageManager manager;
@@ -54,16 +49,16 @@ public class MainActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
-        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        appBarLayout = findViewById(R.id.app_bar);
+        toolbarLayout = findViewById(R.id.toolbar_layout);
 
         refreshWallpaper();
         loadPref();
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -137,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadListView() {
-        list = (NestedListView) findViewById(R.id.apps_list);
+        list = findViewById(R.id.apps_list);
 
         ArrayAdapter<AppDetail> adapter = new ArrayAdapter<AppDetail>(this, R.layout.app_list, apps) {
             @NonNull
@@ -147,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                     convertView = getLayoutInflater().inflate(R.layout.app_list, null);
                 }
 
-                ImageView appIcon = (ImageView) convertView.findViewById(R.id.item_app_icon);
+                ImageView appIcon = convertView.findViewById(R.id.item_app_icon);
                 if (!icon_hide) {
                     appIcon.setImageDrawable(apps.get(position).icon);
                 } else {
