@@ -7,6 +7,11 @@
     <string name="action_settings">Settings</string>
     <string name="action_wallpaper">Change wallpaper</string>
 
+    <!-- App menu actions -->
+    <string name="action_hide">Hide</string>
+    <string name="action_uninstall">Uninstall</string>
+    <string name="action_info">App info</string>
+
     <!-- Misc -->
     <string name="desc_icon">App icon</string>
 </resources>

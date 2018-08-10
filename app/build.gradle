@@ -28,7 +28,8 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.+'
     implementation 'com.android.support:design:27.+'
     implementation 'com.android.support:palette-v7:27.+'
+    implementation 'com.android.support.constraint:constraint-layout:+'
     implementation 'com.github.AndroidDeveloperLB:MaterialPreferenceLibrary:7'
-    implementation 'com.larswerkman:lobsterpicker:1.0.1'
     implementation 'com.androidhuman:support-material:0.1.2@aar'
+    implementation 'com.sothree.slidinguppanel:library:3.4.0'
 }

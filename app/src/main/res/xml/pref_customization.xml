@@ -3,53 +3,11 @@
 
     <PreferenceCategory android:title="@string/pref_header_wall" />
 
-    <com.lb.material_preferences_library.custom_preferences.EditTextPreference
-        android:capitalize="words"
-        android:defaultValue="@string/pref_title_default"
-        android:inputType="textCapWords"
-        android:key="title_text"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/pref_title"
-        app:negativeButtonText="@android:string/cancel"
-        app:positiveButtonText="@android:string/ok" />
-
-    <f4.hubby.MenuPreferenceCompat
-        android:defaultValue="default"
-        android:entries="@array/pref_title_text_style_title"
-        android:entryValues="@array/pref_title_text_style_values"
-        android:key="title_style"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="%s"
-        android:title="@string/pref_title_text_style" />
-
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
-        android:defaultValue="true"
-        android:key="anim_switch"
-        android:title="@string/pref_animation"
-        app:summaryOff="@string/pref_animation_off"
-        app:summaryOn="@string/pref_animation_on" />
-
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
-        android:defaultValue="false"
-        android:key="wall_hide_switch"
-        android:summary="@string/pref_wallpaper_view_desc"
-        android:title="@string/pref_wallpaper_view" />
-
     <com.lb.material_preferences_library.custom_preferences.SwitchPreference
         android:defaultValue="false"
         android:key="shade_view_switch"
         android:summary="@string/pref_shade_view_desc"
         android:title="@string/pref_shade_view" />
-
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
-        android:defaultValue="true"
-        android:key="fab_view"
-        android:summaryOff="@string/pref_fab_off"
-        android:summaryOn="@string/pref_fab_on"
-        android:title="@string/pref_fab" />
 
     <PreferenceCategory android:title="@string/pref_header_list" />
 

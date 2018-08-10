@@ -22,20 +22,4 @@
         <item>pull_up</item>
         <item>slide_in</item>
     </string-array>
-
-    <string name="pref_title_text_style">Title text style</string>
-    <string-array name="pref_title_text_style_title">
-        <item>Bold Headline</item>
-        <item>Headline</item>
-        <item>Default</item>
-        <item>Expanded</item>
-        <item>Huge</item>
-    </string-array>
-    <string-array name="pref_title_text_style_values">
-        <item>bold</item>
-        <item>headline</item>
-        <item>default</item>
-        <item>expanded</item>
-        <item>huge</item>
-    </string-array>
 </resources>

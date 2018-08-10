@@ -3,7 +3,7 @@ package f4.hubby;
 import android.graphics.drawable.Drawable;
 
 public class AppDetail {
-    String label, name;
+    private String label, name;
     Drawable icon;
 
     AppDetail(Drawable icon, String label, String name) {

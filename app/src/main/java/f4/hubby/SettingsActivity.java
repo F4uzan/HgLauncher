@@ -131,7 +131,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("title_text"));
+            //bindPreferenceSummaryToValue(findPreference("title_text"));
 
             // Preference anim = findPreference("anim_switch");
             // Preference icon = findPreference("icon_hide_switch");
