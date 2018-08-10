@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:weightSum="10"
     android:padding="10dp">
 
     <ImageView
         android:id="@+id/item_app_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="start"
         android:contentDescription="@string/desc_icon" />
 
     <TextView
         android:id="@+id/item_app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/item_app_icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:ellipsize="end"
         android:paddingEnd="10dp"
         android:paddingStart="10dp" />
 
-</RelativeLayout>
+</LinearLayout>
