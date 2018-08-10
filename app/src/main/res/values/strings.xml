@@ -13,6 +13,7 @@
     <string name="action_info">App info</string>
 
     <!-- Misc -->
+    <string name="search_hint">Search…</string>
     <string name="desc_icon">App icon</string>
 
     <!-- Error toast -->

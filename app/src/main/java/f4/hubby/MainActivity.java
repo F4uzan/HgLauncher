@@ -1,6 +1,9 @@
 package f4.hubby;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -10,15 +13,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private PackageManager manager;
     private AppAdapter apps = new AppAdapter(appList);
     private RecyclerView list;
+    private CardView searchContainer;
+    private EditText searchBar;
+    private SlidingUpPanelLayout slidingHome;
     private SharedPreferences prefs;
 
     @Override
@@ -49,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
 
+        searchContainer = findViewById(R.id.search_container);
+        searchBar = findViewById(R.id.search);
+        slidingHome = findViewById(R.id.slide_home);
+
+        slidingHome.setDragView(touchReceiver);
+
         apps.setHasStableIds(true);
 
         list = findViewById(R.id.apps_list);
@@ -56,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         list.setLayoutManager(mLayoutManager);
         list.setItemAnimator(new DefaultItemAnimator());
 
-        // Start loading and intialising everything.
+        // Start loading and initialising everything.
         loadPref();
         loadApps();
         addClickListener();
@@ -79,6 +98,20 @@ public class MainActivity extends AppCompatActivity {
         if (shade_view) {
            touchReceiver.setBackgroundResource(R.drawable.image_inner_shadow);
        }
+
+       // Implement listener for the search bar.
+       searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                apps.getFilter().filter(s.toString());
+            }
+        });
     }
 
     @Override
@@ -202,6 +235,47 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 return false;
+            }
+        });
+
+        slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View view, float v) {
+                // Do nothing.
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED
+                        || newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
+                    // Empty out search bar text
+                    searchBar.setText(null);
+                    // Animate search container entering the view.
+                    searchContainer.animate().alpha(1.0f)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    searchContainer.setVisibility(View.VISIBLE);
+                                }
+                            });
+                } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    // Hide keyboard if container is invisible.
+                    InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (inputManager != null && inputManager.isAcceptingText()) {
+                        inputManager.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
+                    }
+
+                    // Also animate the container when it's disappearing.
+                    searchContainer.animate().alpha(0.0f)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    searchContainer.setVisibility(View.GONE);
+                                }
+                            });
+                }
             }
         });
     }

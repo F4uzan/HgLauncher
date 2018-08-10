@@ -5,13 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
+public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
     private List<AppDetail> apps;
+    private AppFilter filter;
 
     AppAdapter(List<AppDetail> apps) {
         this.apps = apps;
@@ -50,6 +55,14 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     }
 
     @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new AppFilter(this, apps);
+        }
+        return filter;
+    }
+
+    @Override
     public int getItemViewType(int pos) {
         return pos;
     }
@@ -59,4 +72,46 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         return apps.size();
     }
 
+    // Basic filter class
+    private class AppFilter extends Filter {
+        private final AppAdapter adapter;
+        private final List<AppDetail> originalList;
+        private final List<AppDetail> filteredList;
+
+        private AppFilter(AppAdapter adapter, List<AppDetail> originalList) {
+            super();
+            this.adapter = adapter;
+            this.originalList = new LinkedList<>(originalList);
+            this.filteredList = new ArrayList<>();
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            filteredList.clear();
+            final FilterResults results = new FilterResults();
+
+            if (charSequence.length() == 0) {
+                filteredList.addAll(originalList);
+            } else {
+                final String filterPattern = charSequence.toString().toLowerCase().trim();
+                for (AppDetail item : originalList) {
+                    if (item.getName().toString().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            results.values = filteredList;
+            results.count = filteredList.size();
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            apps.clear();
+            apps.addAll((List<AppDetail>) filterResults.values);
+            adapter.notifyDataSetChanged();
+        }
+    }
 }
