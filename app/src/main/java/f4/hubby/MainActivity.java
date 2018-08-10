@@ -1,5 +1,6 @@
 package f4.hubby;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -147,19 +148,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 Intent i = manager.getLaunchIntentForPackage(appList.get(position).getName().toString());
-                // Override app launch animation when needed.
-                switch (launch_anim) {
-                    case "default":
-                        MainActivity.this.startActivity(i);
-                        break;
-                    case "pull_up":
-                        MainActivity.this.startActivity(i);
-                        overridePendingTransition(R.anim.pull_up, 0);
-                        break;
-                    case "slide_in":
-                        MainActivity.this.startActivity(i);
-                        overridePendingTransition(R.anim.slide_in, 0);
-                        break;
+                // Attempt to catch exceptions instead of crash landing directly to the floor.
+                try {
+                    // Override app launch animation when needed.
+                    switch (launch_anim) {
+                        default:
+                            startActivity(i);
+                            break;
+                        case "pull_up":
+                            startActivity(i);
+                            overridePendingTransition(R.anim.pull_up, 0);
+                            break;
+                        case "slide_in":
+                            startActivity(i);
+                            overridePendingTransition(R.anim.slide_in, 0);
+                            break;
+                    }
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(MainActivity.this, R.string.err_activity_not_found, Toast.LENGTH_LONG).show();
+                } catch (NullPointerException e) {
+                    Toast.makeText(MainActivity.this, R.string.err_activity_null, Toast.LENGTH_LONG).show();
                 }
             }
         });

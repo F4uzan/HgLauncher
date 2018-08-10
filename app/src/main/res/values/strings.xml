@@ -14,4 +14,8 @@
 
     <!-- Misc -->
     <string name="desc_icon">App icon</string>
+
+    <!-- Error toast -->
+    <string name="err_activity_not_found">Cannot start activity</string>
+    <string name="err_activity_null">Cannot start application</string>
 </resources>
