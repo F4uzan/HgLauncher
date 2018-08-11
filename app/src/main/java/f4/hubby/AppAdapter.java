@@ -75,13 +75,13 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     // Basic filter class
     private class AppFilter extends Filter {
         private final AppAdapter adapter;
-        private final List<AppDetail> originalList;
-        private final List<AppDetail> filteredList;
+        private final ArrayList<AppDetail> originalList;
+        private final ArrayList<AppDetail> filteredList;
 
         private AppFilter(AppAdapter adapter, List<AppDetail> originalList) {
             super();
             this.adapter = adapter;
-            this.originalList = new LinkedList<>(originalList);
+            this.originalList = new ArrayList<>(originalList);
             this.filteredList = new ArrayList<>();
         }
 
@@ -95,7 +95,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             } else {
                 final String filterPattern = charSequence.toString().toLowerCase().trim();
                 for (AppDetail item : originalList) {
-                    if (item.getName().toString().contains(filterPattern)) {
+                    if (item.getLabel().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
@@ -110,7 +110,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             apps.clear();
-            apps.addAll((List<AppDetail>) filterResults.values);
+            apps.addAll((ArrayList<AppDetail>) filterResults.values);
             adapter.notifyDataSetChanged();
         }
     }

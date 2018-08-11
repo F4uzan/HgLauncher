@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                apps.getFilter().filter(s.toString());
+                apps.getFilter().filter(s);
             }
         });
     }
