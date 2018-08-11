@@ -142,8 +142,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH && !searchBar.getText().toString().equals("")) {
-                    launchApp(appList.get(0).getPackageName());
-                    return true;
+                    if (!appList.isEmpty()) {
+                        launchApp(appList.get(0).getPackageName());
+                        return true;
+                    }
                 }
                 return false;
             }
