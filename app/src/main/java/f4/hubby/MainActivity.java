@@ -38,7 +38,7 @@ import f4.hubby.helpers.RecyclerClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean anim, icon_hide, list_order, shade_view;
+    boolean anim, icon_hide, list_order, shade_view, keyboard_focus;
     String launch_anim;
     private List<AppDetail> appList = new ArrayList<>();
     private PackageManager manager;
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                     searchBar.setText(null);
 
                     // Automatically show keyboard when the panel is called.
-                    if (inputManager != null) {
+                    if (inputManager != null && keyboard_focus) {
                         inputManager.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
                         searchBar.requestFocus();
                     }
@@ -308,5 +308,6 @@ public class MainActivity extends AppCompatActivity {
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
         list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
         shade_view = prefs.getBoolean("shade_view_switch", false);
+        keyboard_focus = prefs.getBoolean("keyboard_focus", false);
     }
 }
