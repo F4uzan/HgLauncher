@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private CardView searchContainer;
     private EditText searchBar;
     private SlidingUpPanelLayout slidingHome;
+    private View snackHolder;
     private SharedPreferences prefs;
 
     @Override
@@ -80,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         searchContainer = findViewById(R.id.search_container);
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
+
+        snackHolder = findViewById(R.id.snackHolder);
 
         slidingHome.setDragView(touchReceiver);
 
@@ -133,6 +137,19 @@ public class MainActivity extends AppCompatActivity {
                 // Scroll back down to the start of the list if search query is empty.
                 if (searchBar.getText().toString().equals("")) {
                     list.getLayoutManager().scrollToPosition(app_count);
+                } else {
+                    // Prompt user if they want to search their query online.
+                    String searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBar.getText());
+                    Snackbar.make(snackHolder, searchHint, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.search_web_button, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    //TODO: Make this link customisable.
+                                    Intent link = new Intent(Intent.ACTION_VIEW,
+                                            Uri.parse("https://duckduckgo.com/?q=" + searchBar.getText()));
+                                    startActivity(link);
+                                }
+                            }).show();
                 }
             }
         });

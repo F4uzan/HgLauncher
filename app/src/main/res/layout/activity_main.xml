@@ -28,6 +28,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/snackHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal">
+        </android.support.design.widget.CoordinatorLayout>
+
     </FrameLayout>
 
     <android.support.constraint.ConstraintLayout
