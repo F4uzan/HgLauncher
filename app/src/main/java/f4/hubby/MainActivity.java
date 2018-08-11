@@ -338,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         loadPref();
+        searchBar.setText(null);
         //TODO: Fix app list not refreshing.
         //appList.clear();
         //loadApps();
