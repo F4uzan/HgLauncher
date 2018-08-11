@@ -22,13 +22,25 @@
         android:summary="@string/pref_shade_view_desc"
         android:title="@string/pref_shade_view" />
 
-    <PreferenceCategory android:title="@string/pref_header_list" />
+    <PreferenceCategory android:title="@string/pref_header_search_bar" />
+
+    <f4.hubby.MenuPreference
+        android:defaultValue="google"
+        android:entries="@array/pref_search_provider_title"
+        android:entryValues="@array/pref_search_provider_values"
+        android:key="search_provider"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="%s"
+        android:title="@string/pref_search_provider" />
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="keyboard_focus"
         android:summary="@string/keyboard_focus_desc"
         android:title="@string/keyboard_focus" />
+
+    <PreferenceCategory android:title="@string/pref_header_list" />
 
     <SwitchPreference
         android:defaultValue="false"

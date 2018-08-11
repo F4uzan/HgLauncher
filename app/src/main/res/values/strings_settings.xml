@@ -18,6 +18,7 @@
     <string name="pref_header_wall">Wallpaper View</string>
     <string name="pref_header_list">App list</string>
     <string name="pref_header_interface">Interface</string>
+    <string name="pref_header_search_bar">Search bar</string>
 
     <string name="dark_theme">Dark theme</string>
     <string name="dark_theme_black">Use true black</string>

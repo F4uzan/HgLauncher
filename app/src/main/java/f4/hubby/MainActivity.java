@@ -43,7 +43,7 @@ import f4.hubby.helpers.RecyclerClick;
 public class MainActivity extends AppCompatActivity {
 
     boolean anim, icon_hide, list_order, shade_view, keyboard_focus, dark_theme, dark_theme_black;
-    String launch_anim;
+    String launch_anim, search_provider;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private PackageManager manager;
     private AppAdapter apps = new AppAdapter(appList);
@@ -144,9 +144,8 @@ public class MainActivity extends AppCompatActivity {
                             .setAction(R.string.search_web_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    //TODO: Make this link customisable.
                                     Intent link = new Intent(Intent.ACTION_VIEW,
-                                            Uri.parse("https://duckduckgo.com/?q=" + searchBar.getText()));
+                                            Uri.parse(search_provider + searchBar.getText()));
                                     startActivity(link);
                                 }
                             }).show();
@@ -376,5 +375,15 @@ public class MainActivity extends AppCompatActivity {
         keyboard_focus = prefs.getBoolean("keyboard_focus", false);
         dark_theme = prefs.getBoolean("dark_theme", false);
         dark_theme_black = prefs.getBoolean("dark_theme_black", false);
+        String search_provider_set = prefs.getString("search_provider", "google");
+
+        switch (search_provider_set) {
+            case "google":
+                search_provider = "https://www.google.com/search?q=";
+                break;
+            case "ddg":
+                search_provider = "https://www.duckduckgo.com/?q=";
+                break;
+        }
     }
 }
