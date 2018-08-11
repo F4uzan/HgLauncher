@@ -38,7 +38,7 @@ import f4.hubby.helpers.RecyclerClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean anim, icon_hide, list_order, shade_view, keyboard_focus, dark_theme;
+    boolean anim, icon_hide, list_order, shade_view, keyboard_focus, dark_theme, dark_theme_black;
     String launch_anim;
     private List<AppDetail> appList = new ArrayList<>();
     private PackageManager manager;
@@ -58,8 +58,10 @@ public class MainActivity extends AppCompatActivity {
         loadPref();
 
         // Set the theme!
-        if (dark_theme) {
+        if (dark_theme && dark_theme_black) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
+        } else if (!dark_theme_black) {
+            setTheme(R.style.AppTheme_Gray_NoActionBar);
         } else {
             setTheme(R.style.AppTheme_NoActionBar);
         }
@@ -323,5 +325,6 @@ public class MainActivity extends AppCompatActivity {
         shade_view = prefs.getBoolean("shade_view_switch", false);
         keyboard_focus = prefs.getBoolean("keyboard_focus", false);
         dark_theme = prefs.getBoolean("dark_theme", false);
+        dark_theme_black = prefs.getBoolean("dark_theme_black", false);
     }
 }

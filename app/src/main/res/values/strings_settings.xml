@@ -20,6 +20,8 @@
     <string name="pref_header_interface">Interface</string>
 
     <string name="dark_theme">Dark theme</string>
+    <string name="dark_theme_black">Use true black</string>
+    <string name="dark_theme_black_desc">Swap out dark gray for actual black in dark theme.</string>
 
     <string name="keyboard_focus">Keyboard focus</string>
     <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down.</string>

@@ -7,6 +7,13 @@
         android:key="dark_theme"
         android:title="@string/dark_theme" />
 
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="dark_theme_black"
+        android:dependency="dark_theme"
+        android:title="@string/dark_theme_black"
+        android:summary="@string/dark_theme_black_desc" />
+
     <PreferenceCategory android:title="@string/pref_header_wall" />
 
     <SwitchPreference

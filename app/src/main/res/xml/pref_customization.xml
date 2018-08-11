@@ -8,6 +8,13 @@
         android:key="dark_theme"
         android:title="@string/dark_theme" />
 
+    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+        android:defaultValue="true"
+        android:key="dark_theme_black"
+        android:dependency="dark_theme"
+        android:title="@string/dark_theme_black"
+        android:summary="@string/dark_theme_black_desc" />
+
     <PreferenceCategory android:title="@string/pref_header_wall" />
 
     <com.lb.material_preferences_library.custom_preferences.SwitchPreference

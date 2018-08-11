@@ -14,12 +14,9 @@
         <item name="backgroundColor">@android:color/background_dark</item>
     </style>
 
-    <style name="AppTheme.Dark.NoActionBar" parent="@style/AppTheme.Dark">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowShowWallpaper">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
+    <style name="AppTheme.Gray" parent="AppTheme.Dark">
+        <item name="android:windowBackground">@color/colorBackgroundGray</item>
+        <item name="backgroundColor">@color/colorBackgroundGray</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="@style/AppTheme">
@@ -28,5 +25,17 @@
         <item name="android:windowShowWallpaper">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.Dark.NoActionBar" parent="@style/AppTheme.Dark">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowShowWallpaper">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.Gray.NoActionBar" parent="@style/AppTheme.Dark.NoActionBar">
+        <item name="backgroundColor">@color/colorBackgroundGray</item>
     </style>
 </resources>
