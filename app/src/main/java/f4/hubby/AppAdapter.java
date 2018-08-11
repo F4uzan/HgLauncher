@@ -13,6 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
     private List<AppDetail> apps;
     private AppFilter filter;
@@ -94,7 +96,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             } else {
                 final String filterPattern = charSequence.toString().toLowerCase().trim();
                 for (AppDetail item : originalList) {
-                    if (item.getAppName().toLowerCase().contains(filterPattern)) {
+                    // Do a fuzzy comparison instead of checking for absolute match.
+                    if (FuzzySearch.weightedRatio(item.getAppName().toLowerCase(), filterPattern) >= 65) {
                         filteredList.add(item);
                     }
                 }

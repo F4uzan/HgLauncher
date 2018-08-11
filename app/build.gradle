@@ -30,4 +30,5 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:+'
     implementation 'com.github.AndroidDeveloperLB:MaterialPreferenceLibrary:7'
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
+    implementation 'me.xdrop:fuzzywuzzy:1.1.10'
 }
