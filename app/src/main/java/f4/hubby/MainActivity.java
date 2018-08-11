@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     boolean anim, icon_hide, list_order, shade_view, keyboard_focus, dark_theme, dark_theme_black;
     String launch_anim;
-    private List<AppDetail> appList = new ArrayList<>();
+    private ArrayList<AppDetail> appList = new ArrayList<>();
     private PackageManager manager;
     private AppAdapter apps = new AppAdapter(appList);
     private RecyclerView list;
@@ -94,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
         loadApps();
         addClickListener();
 
+        // Save our current count.
+        //TODO: There are better ways to accomplish this.
+        final int app_count = appList.size() - 1;
+
         if (!list_order) {
             mLayoutManager.setReverseLayout(true);
             mLayoutManager.setStackFromEnd(true);
@@ -116,15 +120,20 @@ public class MainActivity extends AppCompatActivity {
        // Implement listener for the search bar.
        searchBar.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Begin filtering our list.
+                apps.getFilter().filter(s);
+            }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void afterTextChanged(Editable s) {
-                // Begin filtering our list.
-                apps.getFilter().filter(s);
+                // Scroll back down to the start of the list if search query is empty.
+                if (searchBar.getText().toString().equals("")) {
+                    list.getLayoutManager().scrollToPosition(app_count);
+                }
             }
         });
 
