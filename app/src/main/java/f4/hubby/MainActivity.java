@@ -239,6 +239,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
             @Override
             public void onPanelSlide(View view, float v) {
                 // Do nothing.
@@ -250,6 +252,12 @@ public class MainActivity extends AppCompatActivity {
                         || newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
                     // Empty out search bar text
                     searchBar.setText(null);
+
+                    // Automatically show keyboard when the panel is called.
+                    if (inputManager != null) {
+                        inputManager.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
+                        searchBar.requestFocus();
+                    }
                     // Animate search container entering the view.
                     searchContainer.animate().alpha(1.0f)
                             .setListener(new AnimatorListenerAdapter() {
@@ -261,7 +269,6 @@ public class MainActivity extends AppCompatActivity {
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     // Hide keyboard if container is invisible.
-                    InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (inputManager != null && inputManager.isAcceptingText()) {
                         inputManager.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
                     }
