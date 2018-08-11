@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
@@ -29,7 +28,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
         void setItem(AppDetail app) {
             this.app = app;
-            name.setText(app.getLabel());
+            name.setText(app.getAppName());
             icon.setImageDrawable(app.getIcon());
         }
 
@@ -95,7 +94,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             } else {
                 final String filterPattern = charSequence.toString().toLowerCase().trim();
                 for (AppDetail item : originalList) {
-                    if (item.getLabel().toLowerCase().contains(filterPattern)) {
+                    if (item.getAppName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }

@@ -38,7 +38,7 @@ import f4.hubby.helpers.RecyclerClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean anim, icon_hide, list_order, shade_view, keyboard_focus;
+    boolean anim, icon_hide, list_order, shade_view, keyboard_focus, dark_theme;
     String launch_anim;
     private List<AppDetail> appList = new ArrayList<>();
     private PackageManager manager;
@@ -52,7 +52,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Load preferences before setting layout to allow for quick theme change.
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        loadPref();
+
+        if (dark_theme) {
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
+        } else {
+            setTheme(R.style.AppTheme_NoActionBar);
+        }
 
         setContentView(R.layout.activity_main);
 
@@ -76,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         list.setItemAnimator(new DefaultItemAnimator());
 
         // Start loading and initialising everything.
-        loadPref();
         loadApps();
         addClickListener();
 
@@ -152,14 +160,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Fetch and add every app into our list
         for (ResolveInfo ri : availableActivities) {
-            String label = ri.loadLabel(manager).toString();
-            String name = ri.activityInfo.packageName;
+            String appName = ri.loadLabel(manager).toString();
+            String packageName = ri.activityInfo.packageName;
             Drawable icon = null;
             // Only show icons if user chooses so.
             if (!icon_hide) {
                 icon = ri.activityInfo.loadIcon(manager);
             }
-            AppDetail app = new AppDetail(icon, label, name);
+            AppDetail app = new AppDetail(icon, appName, packageName);
             appList.add(app);
             apps.notifyItemInserted(appList.size() - 1);
         }
@@ -180,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerClick.addTo(list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Intent i = manager.getLaunchIntentForPackage(appList.get(position).getName().toString());
+                Intent i = manager.getLaunchIntentForPackage(appList.get(position).getPackageName());
                 // Attempt to catch exceptions instead of crash landing directly to the floor.
                 try {
                     // Override app launch animation when needed.
@@ -209,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerClick.addTo(list).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
-                final Uri packageName = Uri.parse("package:" + appList.get(position).getName());
+                final Uri packageName = Uri.parse("package:" + appList.get(position).getPackageName());
                 PopupMenu appMenu = new PopupMenu(MainActivity.this, v);
                 appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
                 appMenu.show();
@@ -309,5 +317,6 @@ public class MainActivity extends AppCompatActivity {
         list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
         shade_view = prefs.getBoolean("shade_view_switch", false);
         keyboard_focus = prefs.getBoolean("keyboard_focus", false);
+        dark_theme = prefs.getBoolean("dark_theme", false);
     }
 }

@@ -15,7 +15,7 @@
     tools:context="f4.hubby.MainActivity">
 
     <FrameLayout
-        android:background="@android:color/background_light"
+        android:background="?attr/backgroundColor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center">
