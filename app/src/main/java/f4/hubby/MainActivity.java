@@ -21,11 +21,14 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -124,6 +127,19 @@ public class MainActivity extends AppCompatActivity {
                 apps.getFilter().filter(s);
             }
         });
+
+        // Listen for keyboard enter/search key input.
+        searchBar.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    launchApp(appList.get(0).getPackageName());
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
     @Override
@@ -192,28 +208,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerClick.addTo(list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Intent i = manager.getLaunchIntentForPackage(appList.get(position).getPackageName());
-                // Attempt to catch exceptions instead of crash landing directly to the floor.
-                try {
-                    // Override app launch animation when needed.
-                    switch (launch_anim) {
-                        default:
-                            startActivity(i);
-                            break;
-                        case "pull_up":
-                            startActivity(i);
-                            overridePendingTransition(R.anim.pull_up, 0);
-                            break;
-                        case "slide_in":
-                            startActivity(i);
-                            overridePendingTransition(R.anim.slide_in, 0);
-                            break;
-                    }
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(MainActivity.this, R.string.err_activity_not_found, Toast.LENGTH_LONG).show();
-                } catch (NullPointerException e) {
-                    Toast.makeText(MainActivity.this, R.string.err_activity_null, Toast.LENGTH_LONG).show();
-                }
+                launchApp(appList.get(position).getPackageName());
             }
         });
 
@@ -300,6 +295,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // A method to launch an app based on package name.
+    private void launchApp(String packageName) {
+        Intent i = manager.getLaunchIntentForPackage(packageName);
+        // Attempt to catch exceptions instead of crash landing directly to the floor.
+        try {
+            // Override app launch animation when needed.
+            switch (launch_anim) {
+                default:
+                    startActivity(i);
+                    break;
+                case "pull_up":
+                    startActivity(i);
+                    overridePendingTransition(R.anim.pull_up, 0);
+                    break;
+                case "slide_in":
+                    startActivity(i);
+                    overridePendingTransition(R.anim.slide_in, 0);
+                    break;
+            }
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(MainActivity.this, R.string.err_activity_not_found, Toast.LENGTH_LONG).show();
+        } catch (NullPointerException e) {
+            Toast.makeText(MainActivity.this, R.string.err_activity_null, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
