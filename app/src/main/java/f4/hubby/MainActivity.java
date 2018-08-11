@@ -63,10 +63,10 @@ public class MainActivity extends AppCompatActivity {
         loadPref();
 
         // Set the theme!
-        if (dark_theme && dark_theme_black) {
-            setTheme(R.style.AppTheme_Dark_NoActionBar);
-        } else if (!dark_theme_black) {
+        if (dark_theme && !dark_theme_black) {
             setTheme(R.style.AppTheme_Gray_NoActionBar);
+        } else if (dark_theme) {
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
         } else {
             setTheme(R.style.AppTheme_NoActionBar);
         }
