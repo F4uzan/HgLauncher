@@ -17,7 +17,7 @@ public class AppDetail {
     }
 
     public String getPackageName() {
-        return getPackageName();
+        return packageName;
     }
 
     public Drawable getIcon() {
