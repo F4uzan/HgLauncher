@@ -22,8 +22,8 @@
     <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down.</string>
 
     <string name="pref_icon_view">Hide icons</string>
-    <string name="pref_icon_view_desc">Recommended if you have a slow device</string>
+    <string name="pref_icon_view_desc">Recommended if you have a slower device.</string>
 
     <string name="pref_shade_view">Shadow over wallpaper</string>
-    <string name="pref_shade_view_desc">Add a visible shadow to shade over wallpaper. Recommended for light wallpapers</string>
+    <string name="pref_shade_view_desc">Add a visible shadow to shade over wallpaper. Recommended for light wallpapers.</string>
 </resources>
