@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         loadPref();
 
+        // Set the theme!
         if (dark_theme) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         } else {
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                // Begin filtering our list.
                 apps.getFilter().filter(s);
             }
         });
@@ -217,7 +219,10 @@ public class MainActivity extends AppCompatActivity {
         RecyclerClick.addTo(list).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+                // Parse package URI for use in uninstallation and package info call.
                 final Uri packageName = Uri.parse("package:" + appList.get(position).getPackageName());
+
+                // Inflate the app menu.
                 PopupMenu appMenu = new PopupMenu(MainActivity.this, v);
                 appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
                 appMenu.show();

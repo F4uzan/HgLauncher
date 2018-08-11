@@ -73,6 +73,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+        // Load appropriate theme before creating the activity.
         if (prefs.getBoolean("dark_theme", false)) {
             setTheme(R.style.AppTheme_Dark);
         } else {
