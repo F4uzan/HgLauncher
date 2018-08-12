@@ -7,6 +7,10 @@
         android:icon="@drawable/ic_settings"
         android:title="@string/pref_header_cust" />
     <header
+        android:fragment="f4.hubby.SettingsActivity$HiddenAppFragment"
+        android:icon="@drawable/ic_hidden_app"
+        android:title="@string/pref_header_hidden_apps" />
+    <header
         android:fragment="f4.hubby.SettingsActivity$AboutPreferenceFragment"
         android:icon="@drawable/ic_about"
         android:title="@string/pref_header_about" />
