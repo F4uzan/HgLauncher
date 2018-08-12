@@ -44,7 +44,8 @@ import f4.hubby.helpers.RecyclerClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean anim, icon_hide, list_order, shade_view, keyboard_focus, dark_theme, dark_theme_black;
+    boolean anim, icon_hide, list_order, shade_view,
+            keyboard_focus, dark_theme, dark_theme_black, web_search_enabled;
     String launch_anim, search_provider;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private Set<String> excludedAppList = new ArraySet<>();
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 // Scroll back down to the start of the list if search query is empty.
                 if (searchBarText.equals("")) {
                     list.getLayoutManager().scrollToPosition(app_count);
-                } else {
+                } else if (!searchBarText.equals("") && web_search_enabled) {
                     // Prompt user if they want to search their query online.
                     String searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
                     Snackbar.make(snackHolder, searchHint, Snackbar.LENGTH_LONG)
@@ -393,6 +394,7 @@ public class MainActivity extends AppCompatActivity {
         keyboard_focus = prefs.getBoolean("keyboard_focus", false);
         dark_theme = prefs.getBoolean("dark_theme", false);
         dark_theme_black = prefs.getBoolean("dark_theme_black", false);
+        web_search_enabled = prefs.getBoolean("web_search_enabled", true);
         String search_provider_set = prefs.getString("search_provider", "google");
 
         switch (search_provider_set) {

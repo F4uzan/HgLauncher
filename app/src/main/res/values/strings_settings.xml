@@ -27,6 +27,9 @@
     <string name="keyboard_focus">Keyboard focus</string>
     <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down.</string>
 
+    <string name="web_search">Prompt for online search</string>
+    <string name="web_search_desc">Show a prompt to search for your query online.</string>
+
     <string name="pref_icon_view">Hide icons</string>
     <string name="pref_icon_view_desc">Recommended if you have a slower device.</string>
 

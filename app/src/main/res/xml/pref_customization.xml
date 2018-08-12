@@ -25,8 +25,15 @@
 
     <PreferenceCategory android:title="@string/pref_header_search_bar" />
 
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="web_search_enabled"
+        android:title="@string/web_search"
+        android:summary="@string/web_search_desc" />
+
     <f4.hubby.MenuPreferenceCompat
         android:defaultValue="google"
+        android:dependency="web_search_enabled"
         android:key="search_provider"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
