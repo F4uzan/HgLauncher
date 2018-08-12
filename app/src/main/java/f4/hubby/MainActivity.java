@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.ArraySet;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -37,6 +38,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import f4.hubby.helpers.RecyclerClick;
 
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     boolean anim, icon_hide, list_order, shade_view, keyboard_focus, dark_theme, dark_theme_black;
     String launch_anim, search_provider;
     private ArrayList<AppDetail> appList = new ArrayList<>();
+    private Set<String> excludedAppList = new ArraySet<>();
     private PackageManager manager;
     private AppAdapter apps = new AppAdapter(appList);
     private RecyclerView list;
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private SlidingUpPanelLayout slidingHome;
     private View snackHolder;
     private SharedPreferences prefs;
+    private SharedPreferences.Editor editPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Load preferences before setting layout to allow for quick theme change.
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        editPrefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
         loadPref();
 
         // Set the theme!
@@ -94,7 +99,10 @@ public class MainActivity extends AppCompatActivity {
         list.setLayoutManager(mLayoutManager);
         list.setItemAnimator(new DefaultItemAnimator());
 
-        // Start loading and initialising everything.
+        // Get a list of our hidden apps, default to null if there aren't any.
+        excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
+
+        // Start loading apps and initialising click listeners.
         loadApps();
         addClickListener();
 
@@ -206,18 +214,24 @@ public class MainActivity extends AppCompatActivity {
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
         Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
 
-        // Fetch and add every app into our list
+        // Clear the list to make sure that we aren't just adding over an existing list.
+        appList.clear();
+        apps.notifyDataSetChanged();
+
+        // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
-            String appName = ri.loadLabel(manager).toString();
             String packageName = ri.activityInfo.packageName;
-            Drawable icon = null;
-            // Only show icons if user chooses so.
-            if (!icon_hide) {
-                icon = ri.activityInfo.loadIcon(manager);
+            if (!excludedAppList.contains(packageName)) {
+                String appName = ri.loadLabel(manager).toString();
+                Drawable icon = null;
+                // Only show icons if user chooses so.
+                if (!icon_hide) {
+                    icon = ri.activityInfo.loadIcon(manager);
+                }
+                AppDetail app = new AppDetail(icon, appName, packageName);
+                appList.add(app);
+                apps.notifyItemInserted(appList.size() - 1);
             }
-            AppDetail app = new AppDetail(icon, appName, packageName);
-            appList.add(app);
-            apps.notifyItemInserted(appList.size() - 1);
         }
 
         // Update our view cache size, now that we have got all apps on the list
@@ -245,7 +259,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
-                final Uri packageName = Uri.parse("package:" + appList.get(position).getPackageName());
+                final String packageName = appList.get(position).getPackageName();
+                final Uri packageNameUri = Uri.parse("package:" + packageName);
 
                 // Inflate the app menu.
                 PopupMenu appMenu = new PopupMenu(MainActivity.this, v);
@@ -258,15 +273,17 @@ public class MainActivity extends AppCompatActivity {
                         switch (item.getItemId()) {
                             case R.id.action_info:
                                 startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                        packageName));
+                                        packageNameUri));
                                 break;
                             case R.id.action_uninstall:
-                                startActivity(new Intent(Intent.ACTION_DELETE, packageName));
+                                startActivity(new Intent(Intent.ACTION_DELETE, packageNameUri));
                                 break;
                             case R.id.action_hide:
-                                // Placeholder until there's a mechanism to hide apps.
-                                Toast.makeText(MainActivity.this,
-                                        "Whoops, this is a placeholder", Toast.LENGTH_SHORT).show();
+                                // Add the app's package name to the exclusion list.
+                                excludedAppList.add(packageName);
+                                editPrefs.putStringSet("hidden_apps", excludedAppList).commit();
+                                // Reload the app list!
+                                loadApps();
                                 break;
                         }
                         return true;
