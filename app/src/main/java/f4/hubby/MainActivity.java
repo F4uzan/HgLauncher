@@ -384,6 +384,8 @@ public class MainActivity extends AppCompatActivity {
             case "ddg":
                 search_provider = "https://www.duckduckgo.com/?q=";
                 break;
+            case "searx":
+                search_provider = "https://www.searx.me/?q=";
         }
     }
 }
