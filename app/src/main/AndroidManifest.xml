@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="f4.hubby">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <application
