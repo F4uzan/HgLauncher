@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
                         searchBar.requestFocus();
                     }
                     // Animate search container entering the view.
-                    searchContainer.animate().alpha(1.0f)
+                    searchContainer.animate().alpha(1.0f).setDuration(100)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // Also animate the container when it's disappearing.
-                    searchContainer.animate().alpha(0.0f)
+                    searchContainer.animate().alpha(0.0f).setDuration(200)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
