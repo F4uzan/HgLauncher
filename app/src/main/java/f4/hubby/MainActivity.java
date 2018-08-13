@@ -96,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
         apps.setHasStableIds(true);
 
         list = findViewById(R.id.apps_list);
+        list.setDrawingCacheEnabled(true);
+        list.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
+        list.setHasFixedSize(true);
+        
         list.setAdapter(apps);
         list.setLayoutManager(mLayoutManager);
         list.setItemAnimator(new DefaultItemAnimator());
