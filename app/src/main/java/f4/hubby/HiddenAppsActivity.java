@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Set;
 
 import f4.hubby.helpers.RecyclerClick;
@@ -28,7 +30,6 @@ public class HiddenAppsActivity extends AppCompatActivity {
     Set<String> excludedAppList = new ArraySet<>();
     AppAdapter apps = new AppAdapter(appList);
     RecyclerView list;
-    SharedPreferences prefs;
     SharedPreferences.Editor editPrefs;
 
     @Override
@@ -108,8 +109,16 @@ public class HiddenAppsActivity extends AppCompatActivity {
             String appName = manager.getApplicationLabel(appInfo).toString();
             AppDetail app = new AppDetail(icon, appName, packageName);
             appList.add(app);
-            apps.notifyItemInserted(appList.size() - 1);
         }
+
+        Collections.sort(appList, new Comparator<AppDetail>() {
+            @Override
+            public int compare(AppDetail one, AppDetail two) {
+                return one.getAppName().compareToIgnoreCase(two.getAppName());
+            }
+        });
+
+        apps.notifyDataSetChanged();
     }
 
     private void addListeners() {
