@@ -1,7 +1,6 @@
 <resources>
     <!-- App information -->
     <string name="app_name">Hubby Launcher</string>
-    <string name="app_version">1.0</string>
 
     <!-- Menu actions -->
     <string name="action_settings">Settings</string>

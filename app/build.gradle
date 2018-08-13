@@ -12,10 +12,16 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            versionNameSuffix "-debug"
+            resValue "string", "app_version",
+                    "${defaultConfig.versionName}${versionNameSuffix}"
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             zipAlignEnabled true
+            resValue "string", "app_version", "${defaultConfig.versionName}"
         }
     }
 }
