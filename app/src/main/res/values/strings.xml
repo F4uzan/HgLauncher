@@ -9,7 +9,7 @@
 
     <!-- App menu actions -->
     <string name="action_hide">Hide</string>
-    <string name="action_show">Show</string>
+    <string name="action_show">Restore</string>
     <string name="action_uninstall">Uninstall</string>
     <string name="action_info">App info</string>
 
