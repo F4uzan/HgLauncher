@@ -25,7 +25,7 @@
 
     <PreferenceCategory android:title="@string/pref_header_search_bar" />
 
-    <SwitchPreference
+    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
         android:defaultValue="true"
         android:key="web_search_enabled"
         android:title="@string/web_search"
