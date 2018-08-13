@@ -4,36 +4,17 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.util.ArraySet;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import f4.hubby.helpers.RecyclerClick;
-
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
     /**
@@ -205,8 +186,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             startActivity(new Intent(new Intent(getActivity(), HiddenAppsActivity.class)));
             getActivity().overridePendingTransition(0, 0);
-            super.onCreate(savedInstanceState);
             getActivity().finish();
+            super.onCreate(savedInstanceState);
         }
     }
 }
