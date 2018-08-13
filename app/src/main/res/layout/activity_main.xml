@@ -22,11 +22,14 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/apps_list"
-            android:scrollbars="vertical"
-            android:splitMotionEvents="false"
-            android:alwaysDrawnWithCache="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:splitMotionEvents="false"
+            app:fastScrollEnabled="true"
+            app:fastScrollHorizontalThumbDrawable="@drawable/recycler_thumb"
+            app:fastScrollHorizontalTrackDrawable="@drawable/recycler_line"
+            app:fastScrollVerticalThumbDrawable="@drawable/recycler_thumb"
+            app:fastScrollVerticalTrackDrawable="@drawable/recycler_line" />
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/snackHolder"
