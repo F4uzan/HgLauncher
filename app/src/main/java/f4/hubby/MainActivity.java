@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
         // Add long click action to app list. Long click shows a menu to manage selected app.
         RecyclerClick.addTo(list).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+            public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
                 final String packageName = appList.get(position).getPackageName();
                 final Uri packageNameUri = Uri.parse("package:" + packageName);
@@ -288,7 +288,8 @@ public class MainActivity extends AppCompatActivity {
                                 excludedAppList.add(packageName);
                                 editPrefs.putStringSet("hidden_apps", excludedAppList).commit();
                                 // Reload the app list!
-                                loadApps();
+                                appList.remove(position);
+                                apps.notifyDataSetChanged();
                                 break;
                         }
                         return true;
