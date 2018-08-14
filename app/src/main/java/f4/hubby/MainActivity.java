@@ -42,7 +42,7 @@ import java.util.Set;
 
 import f4.hubby.helpers.RecyclerClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     boolean anim, icon_hide, list_order, shade_view,
             keyboard_focus, dark_theme, dark_theme_black, web_search_enabled;
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         // Load preferences before setting layout to allow for quick theme change.
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         editPrefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        prefs.registerOnSharedPreferenceChangeListener(this);
         loadPref();
 
         // Set the theme!
@@ -208,6 +209,20 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
+        switch (key) {
+            case "dark_theme":
+                dark_theme = prefs.getBoolean("dark_theme", false);
+                recreate();
+                break;
+            case "dark_theme_black":
+                dark_theme_black = prefs.getBoolean("dark_theme_black", false);
+                recreate();
+                break;
+        }
     }
 
     private void loadApps() {
