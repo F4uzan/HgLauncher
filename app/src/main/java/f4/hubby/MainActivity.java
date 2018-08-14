@@ -231,6 +231,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 loadApps(true);
                 apps.setUpdateFilter(true);
                 break;
+            case "icon_hide_switch":
+                icon_hide = prefs.getBoolean("icon_hide_switch", false);
+                loadApps(true);
+                apps.setUpdateFilter(true);
+                break;
+            case "list_order":
+                list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
+                recreate();
+                break;
         }
     }
 
