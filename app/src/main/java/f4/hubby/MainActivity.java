@@ -412,6 +412,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onResume();
         loadPref();
         searchBar.setText(null);
+        if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.DRAGGING) {
+            slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        }
         //TODO: Fix app list not refreshing.
         //appList.clear();
         //loadApps();
