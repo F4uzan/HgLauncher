@@ -18,6 +18,7 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
     private List<AppDetail> apps;
     private AppFilter filter;
+    private Boolean updateFilter = false;
 
     AppAdapter(List<AppDetail> apps) {
         this.apps = apps;
@@ -57,10 +58,18 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
     @Override
     public Filter getFilter() {
-        if (filter == null) {
-            filter = new AppFilter();
+        if (filter == null || updateFilter) {
+            filter = new AppFilter(apps);
         }
         return filter;
+    }
+
+    public Boolean shouldUpdateFilter() {
+        return updateFilter;
+    }
+
+    public void setUpdateFilter(Boolean shouldUpdate) {
+        this.updateFilter = shouldUpdate;
     }
 
     @Override
@@ -75,24 +84,32 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
     // Basic filter class
     private class AppFilter extends Filter {
+        private final ArrayList<AppDetail> originalList;
+        private final ArrayList<AppDetail> filteredList;
+
+        private AppFilter(List<AppDetail> originalList) {
+            super();
+            this.originalList = new ArrayList<>(originalList);
+            this.filteredList = new ArrayList<>();
+        }
 
         @Override
-        protected FilterResults performFiltering(CharSequence query) {
-            ArrayList<AppDetail> filteredList = new ArrayList<>();
+        protected FilterResults performFiltering(CharSequence charSequence) {
             filteredList.clear();
-            FilterResults results = new FilterResults();
+            final FilterResults results = new FilterResults();
 
-            if (query != null && query.length() > 0) {
-                final String filterPattern = query.toString().toLowerCase().trim();
-                for (AppDetail item : apps) {
+            if (charSequence.length() == 0) {
+                filteredList.addAll(originalList);
+            } else {
+                final String filterPattern = charSequence.toString().toLowerCase().trim();
+                for (AppDetail item : originalList) {
                     // Do a fuzzy comparison instead of checking for absolute match.
                     if (FuzzySearch.weightedRatio(item.getAppName().toLowerCase(), filterPattern) >= 65) {
                         filteredList.add(item);
                     }
                 }
-            } else {
-                filteredList.addAll(apps);
             }
+
             results.values = filteredList;
             results.count = filteredList.size();
             return results;

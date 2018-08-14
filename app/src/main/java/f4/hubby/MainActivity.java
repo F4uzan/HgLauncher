@@ -141,6 +141,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // Begin filtering our list.
                 apps.getFilter().filter(s);
+                if (apps.shouldUpdateFilter()) {
+                    apps.setUpdateFilter(false);
+                }
             }
 
             @Override
@@ -305,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 // Reload the app list!
                                 appList.remove(position);
                                 apps.notifyItemRemoved(position);
+                                apps.setUpdateFilter(true);
                                 break;
                         }
                         return true;
