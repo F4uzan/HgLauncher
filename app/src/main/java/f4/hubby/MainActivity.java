@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
 
         // Start loading apps and initialising click listeners.
-        loadApps();
+        loadApps(false);
         addClickListener();
 
         // Save our current count.
@@ -225,10 +225,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 dark_theme_black = prefs.getBoolean("dark_theme_black", false);
                 recreate();
                 break;
+            case "hidden_apps":
+                excludedAppList.clear();
+                excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
+                loadApps(true);
+                apps.setUpdateFilter(true);
+                break;
         }
     }
 
-    private void loadApps() {
+    private void loadApps(Boolean shouldForceRefresh) {
         manager = getPackageManager();
 
         Intent i = new Intent(Intent.ACTION_MAIN, null);
@@ -239,7 +245,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
-        apps.notifyItemRangeChanged(0, 0);
+        if (shouldForceRefresh) {
+            list.getRecycledViewPool().clear();
+            apps.notifyDataSetChanged();
+        } else {
+            apps.notifyItemRangeChanged(0, 0);
+        }
 
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
