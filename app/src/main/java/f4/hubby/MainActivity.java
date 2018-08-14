@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
-        apps.notifyDataSetChanged();
+        apps.notifyItemRangeChanged(0, 0);
 
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
                                 editPrefs.putStringSet("hidden_apps", excludedAppList).commit();
                                 // Reload the app list!
                                 appList.remove(position);
-                                apps.notifyDataSetChanged();
+                                apps.notifyItemRemoved(position);
                                 break;
                         }
                         return true;
