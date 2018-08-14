@@ -184,7 +184,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static class HiddenAppFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
-            startActivity(new Intent(new Intent(getActivity(), HiddenAppsActivity.class)));
+            Intent intent = new Intent(getActivity(), HiddenAppsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             getActivity().overridePendingTransition(0, 0);
             getActivity().finish();
             super.onCreate(savedInstanceState);
