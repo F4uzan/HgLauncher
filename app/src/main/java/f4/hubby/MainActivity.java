@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 excludedAppList.add(packageName);
                                 editPrefs.putStringSet("hidden_apps", excludedAppList).commit();
                                 // Reload the app list!
-                                appList.remove(position);
+                                appList.remove(packageName);
                                 apps.notifyItemRemoved(position);
                                 apps.setUpdateFilter(true);
                                 break;
