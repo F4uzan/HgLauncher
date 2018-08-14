@@ -2,7 +2,7 @@
 .*apk
 .gradle
 /local.properties
-/app
+/app/release
 /.idea
 .DS_Store
 /build
