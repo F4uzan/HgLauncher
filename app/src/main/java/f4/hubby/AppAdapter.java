@@ -58,7 +58,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     @Override
     public Filter getFilter() {
         if (filter == null) {
-            filter = new AppFilter(this, apps);
+            filter = new AppFilter();
         }
         return filter;
     }
@@ -75,34 +75,24 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
     // Basic filter class
     private class AppFilter extends Filter {
-        private final AppAdapter adapter;
-        private final ArrayList<AppDetail> originalList;
-        private final ArrayList<AppDetail> filteredList;
-
-        private AppFilter(AppAdapter adapter, List<AppDetail> originalList) {
-            super();
-            this.adapter = adapter;
-            this.originalList = new ArrayList<>(originalList);
-            this.filteredList = new ArrayList<>();
-        }
 
         @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
+        protected FilterResults performFiltering(CharSequence query) {
+            ArrayList<AppDetail> filteredList = new ArrayList<>();
             filteredList.clear();
-            final FilterResults results = new FilterResults();
+            FilterResults results = new FilterResults();
 
-            if (charSequence.length() == 0) {
-                filteredList.addAll(originalList);
-            } else {
-                final String filterPattern = charSequence.toString().toLowerCase().trim();
-                for (AppDetail item : originalList) {
+            if (query != null && query.length() > 0) {
+                final String filterPattern = query.toString().toLowerCase().trim();
+                for (AppDetail item : apps) {
                     // Do a fuzzy comparison instead of checking for absolute match.
                     if (FuzzySearch.weightedRatio(item.getAppName().toLowerCase(), filterPattern) >= 65) {
                         filteredList.add(item);
                     }
                 }
+            } else {
+                filteredList.addAll(apps);
             }
-
             results.values = filteredList;
             results.count = filteredList.size();
             return results;
@@ -113,7 +103,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             apps.clear();
             apps.addAll((ArrayList<AppDetail>) filterResults.values);
-            adapter.notifyDataSetChanged();
+            notifyDataSetChanged();
         }
     }
 }
