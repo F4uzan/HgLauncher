@@ -115,12 +115,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Save our current count.
         //TODO: There are better ways to accomplish this.
         final int app_count = appList.size() - 1;
-
-        if (!list_order) {
-            mLayoutManager.setReverseLayout(true);
-            mLayoutManager.setStackFromEnd(true);
-        }
-
+        
         // Show context menu when touchReceiver is long pressed.
         touchReceiver.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -238,7 +233,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
             case "list_order":
                 list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
-                recreate();
+                loadApps(true);
+                apps.setUpdateFilter(true);
                 break;
         }
     }
@@ -250,8 +246,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         i.addCategory(Intent.CATEGORY_LAUNCHER);
 
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
-        Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
 
+        if (!list_order) {
+            Collections.sort(availableActivities, Collections
+                    .reverseOrder(new ResolveInfo.DisplayNameComparator(manager)));
+        } else {
+            Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
+        }
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
         if (shouldForceRefresh) {
@@ -279,13 +280,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Update our view cache size, now that we have got all apps on the list
         list.setItemViewCacheSize(appList.size() - 1);
-
-        // Start list at the bottom
-        if (list_order) {
-            list.scrollToPosition(appList.size() - 1);
-        } else {
-            list.scrollToPosition(0);
-        }
     }
 
     private void addClickListener() {
