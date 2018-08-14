@@ -236,6 +236,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 loadApps(true);
                 apps.setUpdateFilter(true);
                 break;
+            case "refreshAppList":
+                loadApps(true);
+                apps.setUpdateFilter(true);
+                editPrefs.putBoolean("refreshAppList", false).apply();
+                break;
         }
     }
 
@@ -415,9 +420,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.DRAGGING) {
             slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
-        //TODO: Fix app list not refreshing.
-        //appList.clear();
-        //loadApps();
+        if (prefs.getBoolean("refreshAppList", false)) {
+            loadApps(true);
+            apps.setUpdateFilter(true);
+            editPrefs.putBoolean("refreshAppList", false).apply();
+        }
     }
 
     // Don't do anything when back is pressed.

@@ -41,6 +41,18 @@
             android:label="@string/pref_header_hidden_apps"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme" />
+
+        <receiver
+            android:name=".receivers.PackageChangesReceiver"
+            android:enabled="true"
+            android:priority="0" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
