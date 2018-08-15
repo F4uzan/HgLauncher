@@ -2,14 +2,17 @@ package f4.hubby;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -41,6 +44,7 @@ import java.util.List;
 import java.util.Set;
 
 import f4.hubby.helpers.RecyclerClick;
+import f4.hubby.receivers.PackageChangesReceiver;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -111,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Start loading apps and initialising click listeners.
         loadApps(false);
         addClickListener();
+
+        registerPackageReceiver();
 
         // Save our current count.
         //TODO: There are better ways to accomplish this.
@@ -420,10 +426,23 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.DRAGGING) {
             slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
+        registerPackageReceiver();
         if (prefs.getBoolean("refreshAppList", false)) {
             loadApps(true);
             apps.setUpdateFilter(true);
             editPrefs.putBoolean("refreshAppList", false).apply();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    public void registerPackageReceiver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+            intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+            intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+            intentFilter.addDataScheme("package");
+            registerReceiver(new PackageChangesReceiver(), intentFilter);
         }
     }
 
