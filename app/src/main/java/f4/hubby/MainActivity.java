@@ -440,6 +440,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
             intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+            intentFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED);
             intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
             intentFilter.addDataScheme("package");
             registerReceiver(new PackageChangesReceiver(), intentFilter);
