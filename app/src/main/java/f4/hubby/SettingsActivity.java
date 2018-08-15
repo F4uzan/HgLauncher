@@ -15,6 +15,9 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import java.util.List;
+
+import f4.hubby.wrappers.AppCompatPreferenceActivity;
+
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
     /**

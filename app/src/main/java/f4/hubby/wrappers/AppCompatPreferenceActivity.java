@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package f4.hubby;
+package f4.hubby.wrappers;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

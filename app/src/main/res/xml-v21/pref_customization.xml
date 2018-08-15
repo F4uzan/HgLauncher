@@ -30,7 +30,7 @@
         android:title="@string/web_search"
         android:summary="@string/web_search_desc" />
 
-    <f4.hubby.MenuPreference
+    <f4.hubby.wrappers.MenuPreference
         android:defaultValue="google"
         android:dependency="web_search_enabled"
         android:entries="@array/pref_search_provider_title"
@@ -55,7 +55,7 @@
         android:summary="@string/pref_icon_view_desc"
         android:title="@string/pref_icon_view" />
 
-    <f4.hubby.MenuPreference
+    <f4.hubby.wrappers.MenuPreference
         android:defaultValue="alphabetical"
         android:entries="@array/pref_app_list_order_titles"
         android:entryValues="@array/pref_app_list_order_values"
@@ -65,7 +65,7 @@
         android:summary="%s"
         android:title="@string/pref_title_app_list_order" />
 
-    <f4.hubby.MenuPreference
+    <f4.hubby.wrappers.MenuPreference
         android:defaultValue="default"
         android:entries="@array/pref_app_launch_anim_title"
         android:entryValues="@array/pref_app_launch_anim_values"

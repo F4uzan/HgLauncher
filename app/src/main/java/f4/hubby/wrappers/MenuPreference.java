@@ -1,4 +1,4 @@
-package f4.hubby;
+package f4.hubby.wrappers;
 
 import android.content.Context;
 import android.os.Bundle;
