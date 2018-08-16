@@ -11,7 +11,6 @@
     app:umanoScrollableView="@id/apps_list"
     app:umanoPanelHeight="56dp"
     app:umanoShadowHeight="4dp"
-    android:fitsSystemWindows="true"
     tools:context="f4.hubby.MainActivity">
 
     <FrameLayout
