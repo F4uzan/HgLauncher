@@ -1,75 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
+<f4.hubby.wrappers.ZeroInsetsFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/slide_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
-    app:umanoInitialState="expanded"
-    app:umanoScrollableView="@id/apps_list"
-    app:umanoPanelHeight="56dp"
-    app:umanoShadowHeight="4dp"
+    android:fitsSystemWindows="true"
     tools:context="f4.hubby.MainActivity">
 
-    <FrameLayout
-        android:background="?attr/backgroundColor"
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/slide_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="bottom"
+        app:umanoInitialState="expanded"
+        app:umanoScrollableView="@id/apps_list"
+        app:umanoPanelHeight="56dp"
+        app:umanoShadowHeight="4dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/apps_list"
+        <FrameLayout
+            android:id="@+id/app_list_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:splitMotionEvents="false"
-            app:fastScrollEnabled="true"
-            app:fastScrollHorizontalThumbDrawable="@drawable/recycler_thumb"
-            app:fastScrollHorizontalTrackDrawable="@drawable/recycler_line"
-            app:fastScrollVerticalThumbDrawable="@drawable/recycler_thumb"
-            app:fastScrollVerticalTrackDrawable="@drawable/recycler_line" />
+            android:layout_height="match_parent"
+            android:gravity="center">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/snackHolder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal">
-        </android.support.design.widget.CoordinatorLayout>
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/bottom_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <View
-            android:id="@+id/touch_receiver"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/search_container"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            app:cardElevation="0dp"
-            app:contentPaddingLeft="8dp"
-            app:contentPaddingRight="8dp">
-
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/search"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/apps_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:maxLines="1"
-                android:inputType="text"
-                android:imeOptions="actionSearch"
-                android:hint="@string/search_hint"
-                android:background="@android:color/transparent" />
+                android:splitMotionEvents="false"
+                android:background="?attr/backgroundColor"
+                app:fastScrollEnabled="true"
+                app:fastScrollHorizontalThumbDrawable="@drawable/recycler_thumb"
+                app:fastScrollHorizontalTrackDrawable="@drawable/recycler_line"
+                app:fastScrollVerticalThumbDrawable="@drawable/recycler_thumb"
+                app:fastScrollVerticalTrackDrawable="@drawable/recycler_line" />
 
-        </android.support.v7.widget.CardView>
+            <android.support.design.widget.CoordinatorLayout
+                android:id="@+id/snackHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal">
+            </android.support.design.widget.CoordinatorLayout>
 
-    </FrameLayout>
+        </FrameLayout>
 
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+        <FrameLayout
+            android:id="@+id/bottom_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/touch_receiver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/search_container"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                app:cardElevation="0dp"
+                app:contentPaddingLeft="8dp"
+                app:contentPaddingRight="8dp">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:hint="@string/search_hint"
+                    android:background="@android:color/transparent" />
+
+            </android.support.v7.widget.CardView>
+        </FrameLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</f4.hubby.wrappers.ZeroInsetsFrameLayout>
