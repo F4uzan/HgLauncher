@@ -106,9 +106,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
 
-        if (comfy_padding) {
-            int padding = getResources().getDimensionPixelOffset(R.dimen.uniform_panel_margin);
-            slidingHome.setPadding(padding, 0, padding, 0);
+        if (!comfy_padding) {
+            slidingHome.setPadding(0, 0, 0, 0);
         }
 
         snackHolder = findViewById(R.id.snackHolder);
