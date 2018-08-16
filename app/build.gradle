@@ -7,8 +7,8 @@ android {
         applicationId "f4.hubby"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 3
-        versionName "1.2.1"
+        versionCode 4
+        versionName "1.2.2"
     }
     buildTypes {
         debug {
