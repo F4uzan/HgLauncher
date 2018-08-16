@@ -265,6 +265,27 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+    // Don't do anything when back is pressed.
+    // Fixes the issue of launcher going AWOL.
+    @Override
+    public void onBackPressed() {}
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadPref();
+        searchBar.setText(null);
+        if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.DRAGGING) {
+            slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        }
+        registerPackageReceiver();
+        if (prefs.getBoolean("refreshAppList", false)) {
+            loadApps(true);
+            apps.setUpdateFilter(true);
+            editPrefs.putBoolean("refreshAppList", false).apply();
+        }
+    }
+
     private void loadApps(Boolean shouldForceRefresh) {
         manager = getPackageManager();
 
@@ -429,22 +450,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadPref();
-        searchBar.setText(null);
-        if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.DRAGGING) {
-            slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        }
-        registerPackageReceiver();
-        if (prefs.getBoolean("refreshAppList", false)) {
-            loadApps(true);
-            apps.setUpdateFilter(true);
-            editPrefs.putBoolean("refreshAppList", false).apply();
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.O)
     public void registerPackageReceiver() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -457,11 +462,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             registerReceiver(new PackageChangesReceiver(), intentFilter);
         }
     }
-
-    // Don't do anything when back is pressed.
-    // Fixes the issue of launcher going AWOL.
-    @Override
-    public void onBackPressed() {}
 
     // Load available preferences.
     //TODO: This is suboptimal. Maybe try coming up with a better hax?
