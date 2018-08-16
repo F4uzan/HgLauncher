@@ -2,4 +2,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="statusbar_margin">24dp</dimen>
+    <dimen name="uniform_panel_margin">8dp</dimen>
 </resources>

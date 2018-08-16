@@ -8,6 +8,11 @@
     android:fitsSystemWindows="true"
     tools:context="f4.hubby.MainActivity">
 
+    <View
+        android:id="@+id/wallpaper_shade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/slide_home"
         android:layout_width="match_parent"

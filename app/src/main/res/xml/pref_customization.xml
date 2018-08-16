@@ -52,6 +52,12 @@
 
     <com.lb.material_preferences_library.custom_preferences.SwitchPreference
         android:defaultValue="false"
+        android:key="comfy_padding"
+        android:summary="@string/comfy_padding_desc"
+        android:title="@string/comfy_padding" />
+
+    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+        android:defaultValue="false"
         android:key="icon_hide_switch"
         android:summary="@string/pref_icon_view_desc"
         android:title="@string/pref_icon_view" />

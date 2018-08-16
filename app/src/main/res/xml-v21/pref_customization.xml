@@ -55,6 +55,12 @@
         android:summary="@string/pref_icon_view_desc"
         android:title="@string/pref_icon_view" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="comfy_padding"
+        android:summary="@string/comfy_padding_desc"
+        android:title="@string/comfy_padding" />
+
     <f4.hubby.wrappers.MenuPreference
         android:defaultValue="alphabetical"
         android:entries="@array/pref_app_list_order_titles"

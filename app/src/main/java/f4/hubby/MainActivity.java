@@ -50,7 +50,8 @@ import f4.hubby.receivers.PackageChangesReceiver;
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     boolean anim, icon_hide, list_order, shade_view,
-            keyboard_focus, dark_theme, dark_theme_black, web_search_enabled;
+            keyboard_focus, dark_theme, dark_theme_black, web_search_enabled,
+            comfy_padding;
     String launch_anim, search_provider;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private Set<String> excludedAppList = new ArraySet<>();
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setContentView(R.layout.activity_main);
 
         final View touchReceiver = findViewById(R.id.touch_receiver);
+        View wallpaperShade = findViewById(R.id.wallpaper_shade);
         registerForContextMenu(touchReceiver);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
@@ -103,6 +105,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         searchContainer = findViewById(R.id.search_container);
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
+
+        if (comfy_padding) {
+            int padding = getResources().getDimensionPixelOffset(R.dimen.uniform_panel_margin);
+            slidingHome.setPadding(padding, 0, padding, 0);
+        }
 
         snackHolder = findViewById(R.id.snackHolder);
 
@@ -141,9 +148,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         });
 
-        // Overlays touchReceiver with the shade background.
+        // Switch on wallpaper shade.
         if (shade_view) {
-           touchReceiver.setBackgroundResource(R.drawable.image_inner_shadow);
+           wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
        }
 
        // Implement listener for the search bar.
@@ -251,6 +258,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
                 loadApps(true);
                 apps.setUpdateFilter(true);
+                break;
+            case "comfy_padding":
+                comfy_padding = prefs.getBoolean("comfy_padding", false);
+                recreate();
                 break;
             case "refreshAppList":
                 loadApps(true);
@@ -470,6 +481,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
         shade_view = prefs.getBoolean("shade_view_switch", false);
         keyboard_focus = prefs.getBoolean("keyboard_focus", false);
+        comfy_padding = prefs.getBoolean("comfy_padding", false);
         dark_theme = prefs.getBoolean("dark_theme", false);
         dark_theme_black = prefs.getBoolean("dark_theme_black", false);
         web_search_enabled = prefs.getBoolean("web_search_enabled", true);
