@@ -17,6 +17,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +31,7 @@ public class HiddenAppsActivity extends AppCompatActivity {
     Set<String> excludedAppList = new ArraySet<>();
     AppAdapter apps = new AppAdapter(appList);
     RecyclerView list;
+    TextView emptyHint;
     SharedPreferences.Editor editPrefs;
 
     @Override
@@ -59,6 +61,7 @@ public class HiddenAppsActivity extends AppCompatActivity {
                 LinearLayoutManager.VERTICAL, false);
 
         list = findViewById(R.id.ex_apps_list);
+        emptyHint = findViewById(R.id.empty_hint);
 
         list.setAdapter(apps);
         list.setLayoutManager(mLayoutManager);
@@ -119,6 +122,10 @@ public class HiddenAppsActivity extends AppCompatActivity {
         });
 
         apps.notifyDataSetChanged();
+
+        if (appList.size() == 0) {
+            emptyHint.setVisibility(View.VISIBLE);
+        }
     }
 
     private void addListeners() {

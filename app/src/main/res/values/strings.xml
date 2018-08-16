@@ -17,6 +17,7 @@
     <string name="search_web_hint">Search for \'%1$s\' online.</string>
     <string name="search_web_button">Go</string>
     <string name="desc_icon">App icon</string>
+    <string name="no_hidden_apps">There is nothing here yet.</string>
 
     <!-- Error toast -->
     <string name="err_activity_not_found">Cannot start activity</string>

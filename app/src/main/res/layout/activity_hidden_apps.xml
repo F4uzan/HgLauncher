@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor">
 
+    <TextView
+        android:id="@+id/empty_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_hidden_apps"
+        android:visibility="invisible"
+        android:layout_gravity="center"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ex_apps_list"
         android:scrollbars="vertical"
