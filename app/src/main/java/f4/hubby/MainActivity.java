@@ -236,11 +236,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         switch (key) {
             case "dark_theme":
-                dark_theme = prefs.getBoolean("dark_theme", false);
-                recreate();
-                break;
             case "dark_theme_black":
-                dark_theme_black = prefs.getBoolean("dark_theme_black", false);
+            case "shade_view_switch":
+            case "comfy_padding":
                 recreate();
                 break;
             case "hidden_apps":
@@ -258,10 +256,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
                 loadApps(true);
                 apps.setUpdateFilter(true);
-                break;
-            case "comfy_padding":
-                comfy_padding = prefs.getBoolean("comfy_padding", false);
-                recreate();
                 break;
             case "refreshAppList":
                 loadApps(true);
