@@ -413,16 +413,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Attempt to catch exceptions instead of crash landing directly to the floor.
         try {
             // Override app launch animation when needed.
+            startActivity(i);
             switch (launch_anim) {
-                default:
-                    startActivity(i);
-                    break;
                 case "pull_up":
-                    startActivity(i);
                     overridePendingTransition(R.anim.pull_up, 0);
                     break;
                 case "slide_in":
-                    startActivity(i);
                     overridePendingTransition(R.anim.slide_in, 0);
                     break;
             }
