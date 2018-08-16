@@ -15,6 +15,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -77,12 +78,15 @@ public class HiddenAppsActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        overridePendingTransition(0, 0);
-        finish();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_hidden_app, menu);
+        MenuItem reset = menu.findItem(R.id.action_reset_hidden_apps);
+
+        // Don't show an option to restore entries when there is nothing to restore.
+        if (appList.size() == 0) {
+            reset.setVisible(false);
+        }
+        return true;
     }
 
     @Override
@@ -91,8 +95,25 @@ public class HiddenAppsActivity extends AppCompatActivity {
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
+        } else if (id == R.id.action_reset_hidden_apps) {
+            excludedAppList.clear();
+            editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
+            // Recreate the toolbar menu to hide the 'restore all' button.
+            invalidateOptionsMenu();
+            // Reload the list.
+            loadHiddenApps();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
     }
 
     private void loadHiddenApps() {
@@ -125,6 +146,8 @@ public class HiddenAppsActivity extends AppCompatActivity {
 
         if (appList.size() == 0) {
             emptyHint.setVisibility(View.VISIBLE);
+            // Kill the list since there is nothing to show.
+            list.setVisibility(View.GONE);
         }
     }
 
