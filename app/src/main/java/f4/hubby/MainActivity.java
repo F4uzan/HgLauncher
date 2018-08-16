@@ -30,6 +30,7 @@ import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -106,8 +107,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
 
+        // Empty out slidingHome margins if they are not needed.
         if (!comfy_padding) {
-            slidingHome.setPadding(0, 0, 0, 0);
+            ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome.getLayoutParams();
+            homeParams.setMargins(0, 0, 0, 0);
+            slidingHome.setLayoutParams(homeParams);
         }
 
         snackHolder = findViewById(R.id.snackHolder);

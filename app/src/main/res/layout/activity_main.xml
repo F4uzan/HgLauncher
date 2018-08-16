@@ -18,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        android:paddingStart="@dimen/uniform_panel_margin"
-        android:paddingEnd="@dimen/uniform_panel_margin"
+        android:layout_marginStart="@dimen/uniform_panel_margin"
+        android:layout_marginEnd="@dimen/uniform_panel_margin"
         app:umanoInitialState="expanded"
         app:umanoScrollableView="@id/apps_list"
         app:umanoPanelHeight="56dp"
@@ -68,9 +68,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 app:cardElevation="0dp"
-                app:cardUseCompatPadding="true"
-                app:contentPaddingLeft="8dp"
-                app:contentPaddingRight="8dp">
+                app:contentPaddingLeft="@dimen/uniform_panel_margin"
+                app:contentPaddingRight="@dimen/uniform_panel_margin">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/search"
