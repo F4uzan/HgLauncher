@@ -98,7 +98,8 @@ public class HiddenAppsActivity extends AppCompatActivity {
     private void loadHiddenApps() {
         PackageManager manager = getPackageManager();
         appList.clear();
-        apps.notifyDataSetChanged();
+        list.getRecycledViewPool().clear();
+        apps.notifyItemRangeChanged(0, 0);
 
         for (String packageName : excludedAppList) {
             ApplicationInfo appInfo;
@@ -112,6 +113,7 @@ public class HiddenAppsActivity extends AppCompatActivity {
             String appName = manager.getApplicationLabel(appInfo).toString();
             AppDetail app = new AppDetail(icon, appName, packageName);
             appList.add(app);
+            apps.notifyItemInserted(appList.size() - 1);
         }
 
         Collections.sort(appList, new Comparator<AppDetail>() {
@@ -121,8 +123,6 @@ public class HiddenAppsActivity extends AppCompatActivity {
             }
         });
 
-        apps.notifyDataSetChanged();
-
         if (appList.size() == 0) {
             emptyHint.setVisibility(View.VISIBLE);
         }
@@ -131,7 +131,7 @@ public class HiddenAppsActivity extends AppCompatActivity {
     private void addListeners() {
         RecyclerClick.addTo(list).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+            public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
                 final String packageName = appList.get(position).getPackageName();
                 final Uri packageNameUri = Uri.parse("package:" + packageName);
@@ -153,11 +153,15 @@ public class HiddenAppsActivity extends AppCompatActivity {
                                 startActivity(new Intent(Intent.ACTION_DELETE, packageNameUri));
                                 break;
                             case R.id.action_show:
-                                // Add the app's package name to the exclusion list.
+                                // Remove the app's package name from the exclusion list.
                                 excludedAppList.remove(packageName);
                                 editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
                                 // Reload the app list!
-                                loadHiddenApps();
+                                appList.remove(position);
+                                if (appList.size() == 0) {
+                                    emptyHint.setVisibility(View.VISIBLE);
+                                }
+                                apps.notifyItemRemoved(position);
                                 break;
                         }
                         return true;
