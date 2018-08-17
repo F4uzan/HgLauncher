@@ -2,6 +2,8 @@
 
 Hubby Launcher is a launcher with a design philosophy of 'if it works, it works.' Consisting of simply a scrolling list of apps, there is very little visual cue to disturb you. If all you want in a launcher is for it to just launch apps _ASAP_, then you may be looking at the right launcher.
 
+[Try out Hubby now!](https://github.com/F4uzan/HubbyLauncher/releases)
+
 ***
 
 ### What does it look like? ##
