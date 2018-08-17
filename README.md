@@ -4,7 +4,7 @@ Hubby Launcher is a launcher with a design philosophy of 'if it works, it works.
 
 ***
 
-## What does it look like? ##
+### What does it look like? ##
 
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
