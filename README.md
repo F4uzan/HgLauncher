@@ -1,25 +1,19 @@
 ## Hubby Launcher ##
 
-Hubby (Wubby Dubby) Launcher is a self-made launcher with no interesting feature, it's just a scrollable list of clickable icons, nothing more nothing less (I probably have more, but not now). It's practically launcher for ubergrandma.
+Hubby Launcher is a launcher with a design philosophy of 'if it works, it works.' Consisting of simply a scrolling list of apps, there is very little visual cue to disturb you. If all you want in a launcher is for it to just launch apps _ASAP_, then you may be looking at the right launcher.
 
-### Why (does it exist)? ###
+***
 
-The launcher itself is made as a joke, since most launchers exist on an immersive view — with wallpaper filling the screen and tiny icon floating in harmony, then there's this little rebel I made to proof that… well… bad programming with bad idea equals bad result.
+## What does it look like? ##
 
-### What (makes it different from other launcher)? ###
+| | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
+![alt text](https://github.com/F4uzan/HubbyLauncher/raw/master/readme/1-home.png "Homescreen") | ![alt text](https://github.com/F4uzan/HubbyLauncher/raw/master/readme/2-list.png "List all your apps") | ![alt text](https://github.com/F4uzan/HubbyLauncher/raw/master/readme/3-search.png "Search and find apps")
 
-* No nonsense, just a list of your apps
-* Makes you look kewl
-* Probably also has a side effect of making you look weird
+***
 
-### How (can I contribute)? ###
+### How can I contribute? ###
 
 * Send me a pull request
 * Let me review the changes (but I mostly just let it go through)
-* Enjoy your life and move on
-
-### Who (made this)? ###
-
-* Ayj3y from Telegram, he's the actual inventor of the idea so props to him.
-* Me, but not by all that much.
-* There are several picked codes from StackOverflow that sits around in my HDD, I don't know the exact author, but if you're one of them, just contact me and don't sue me (please).
+* Enjoy your life and move on!
