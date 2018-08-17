@@ -31,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -153,7 +154,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Switch on wallpaper shade.
         if (shade_view) {
-           wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
+            // Tints the navigation bar with a semi-transparent shade.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarShade));
+            }
+            wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
        }
 
        // Implement listener for the search bar.
