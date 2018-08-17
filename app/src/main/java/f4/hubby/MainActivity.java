@@ -31,7 +31,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -412,8 +411,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
                                     searchContainer.setVisibility(View.VISIBLE);
+                                    searchContainer.clearAnimation();
                                 }
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
@@ -427,8 +426,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    searchContainer.setVisibility(View.GONE);
+                                    searchContainer.setVisibility(View.INVISIBLE);
+                                    searchContainer.clearAnimation();
                                 }
                             });
                 }
