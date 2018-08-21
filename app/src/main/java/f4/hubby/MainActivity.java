@@ -419,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     // Hide keyboard if container is invisible.
-                    if (inputManager != null && inputManager.isAcceptingText()) {
+                    if (inputManager != null) {
                         inputManager.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
                     }
 
