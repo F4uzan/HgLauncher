@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onResume();
         loadPref();
         searchBar.setText(null);
-        if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.DRAGGING) {
+        if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED) {
             slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
         registerPackageReceiver();
