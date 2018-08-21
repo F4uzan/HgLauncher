@@ -275,7 +275,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     // Don't do anything when back is pressed.
     // Fixes the issue of launcher going AWOL.
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed() {
+        if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+            slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+        }
+    }
 
     @Override
     public void onResume() {
