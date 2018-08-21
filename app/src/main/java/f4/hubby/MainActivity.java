@@ -436,6 +436,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                     searchContainer.clearAnimation();
                                 }
                             });
+                } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 }
             }
         });
