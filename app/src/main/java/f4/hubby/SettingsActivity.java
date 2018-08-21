@@ -4,6 +4,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,11 +15,18 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
+import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import f4.hubby.wrappers.AppCompatPreferenceActivity;
+import f4.hubby.wrappers.MenuPreference;
+
+import static android.content.pm.PackageManager.GET_META_DATA;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -43,7 +53,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     };
 
     /**
-     * Helper method to determine if the device has an extra-large screen. For
+     * Helister method to determine if the device has an extra-large screen. For
      * example, 10" tablets are extra-large.
      */
     private static boolean isXLargeTablet(Context context) {
@@ -142,14 +152,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_customization);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of references to their values.
-            // When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            //bindPreferenceSummaryToValue(findPreference("title_text"));
-
-            // Preference anim = findPreference("anim_switch");
-            // Preference icon = findPreference("icon_hide_switch");
+            final ListPreference iconList = (ListPreference) findPreference("icon_pack");
+            setIconList(iconList);
         }
 
         @Override
@@ -160,6 +164,38 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+
+        protected ListPreference setIconList(ListPreference list) {
+            PackageManager manager = getActivity().getPackageManager();
+            List<String> entries = new ArrayList<>();
+            List<String> entryValues = new ArrayList<>();
+
+            // Get default value.
+            entries.add(getString(R.string.icon_pack_default));
+            entryValues.add(getString(R.string.icon_pack_default_value));
+
+            // Fetch all available icon pack.
+            Intent intent = new Intent("org.adw.launcher.THEMES");
+            List<ResolveInfo> infos = manager.queryIntentActivities (intent,
+                    PackageManager.GET_META_DATA);
+            for (ResolveInfo info : infos) {
+                ActivityInfo activityInfo = info.activityInfo;
+                String packageName = activityInfo.packageName;
+                String appName = activityInfo.loadLabel(manager).toString();
+                entries.add(appName);
+                entryValues.add(packageName);
+            }
+
+            CharSequence[] finalEntries = entries.toArray(new CharSequence[entries.size()]);
+            CharSequence[] finalEntryValues = entryValues.toArray(new CharSequence[entryValues.size()]);
+
+            list.setEntries(finalEntries);
+            list.setDefaultValue(getString(R.string.icon_pack_default_value));
+            list.setEntryValues(finalEntryValues);
+            list.setTitle(getString(R.string.icon_pack));
+            list.setKey("icon_pack");
+            return list;
         }
     }
 

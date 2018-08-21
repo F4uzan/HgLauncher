@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -25,6 +26,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.MenuInflater;
@@ -40,6 +42,7 @@ import android.widget.Toast;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,6 +50,7 @@ import java.util.Set;
 
 import f4.hubby.helpers.RecyclerClick;
 import f4.hubby.receivers.PackageChangesReceiver;
+import f4.hubby.helpers.IconPackHelper;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -131,6 +135,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Get a list of our hidden apps, default to null if there aren't any.
         excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
+
+        // Get icons from icon pack.
+        //TODO: This seems super slow.
+        if (!prefs.getString("icon_pack", "default").equals("default")) {
+            new getIconTask(this).execute();
+        }
 
         // Start loading apps and initialising click listeners.
         loadApps(false);
@@ -246,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "dark_theme_black":
             case "shade_view_switch":
             case "comfy_padding":
+            case "icon_pack":
                 recreate();
                 break;
             case "hidden_apps":
@@ -326,9 +337,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             if (!excludedAppList.contains(packageName)) {
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = null;
+                Drawable getIcon = null;
                 // Only show icons if user chooses so.
                 if (!icon_hide) {
-                    icon = ri.activityInfo.loadIcon(manager);
+                    if (!prefs.getString("icon_pack", "default").equals("default")) {
+                        getIcon = new IconPackHelper().getIconDrawable(this, packageName);
+                    }
+                    if (getIcon == null) {
+                        icon = ri.activityInfo.loadIcon(manager);
+                    } else {
+                        icon = getIcon;
+                    }
                 }
                 AppDetail app = new AppDetail(icon, appName, packageName);
                 appList.add(app);
@@ -462,6 +481,28 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             Toast.makeText(MainActivity.this, R.string.err_activity_not_found, Toast.LENGTH_LONG).show();
         } catch (NullPointerException e) {
             Toast.makeText(MainActivity.this, R.string.err_activity_null, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private static class getIconTask extends AsyncTask<Void, Void, Void> {
+        private WeakReference<MainActivity> activityRef;
+
+        getIconTask(MainActivity context) {
+            activityRef = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            MainActivity activity = activityRef.get();
+            if (activity != null) {
+                new IconPackHelper().loadIconPack(activity);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
         }
     }
 

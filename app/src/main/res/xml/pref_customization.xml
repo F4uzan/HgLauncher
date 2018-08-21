@@ -63,6 +63,14 @@
         android:title="@string/pref_icon_view" />
 
     <f4.hubby.wrappers.MenuPreferenceCompat
+        android:defaultValue="default"
+        android:key="icon_pack"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="%s"
+        android:title="@string/pref_app_launch_anim" />
+
+    <f4.hubby.wrappers.MenuPreferenceCompat
         android:defaultValue="alphabetical"
         android:key="list_order"
         android:negativeButtonText="@null"

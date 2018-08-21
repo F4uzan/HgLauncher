@@ -39,4 +39,8 @@
 
     <string name="comfy_padding">Comfortable padding mode</string>
     <string name="comfy_padding_desc">Create padding around the app panel for a uniform look.</string>
+
+    <string name="icon_pack">Icon pack</string>
+    <string name="icon_pack_default">Default</string>
+    <string name="icon_pack_default_value" translatable="false">default</string>
 </resources>
