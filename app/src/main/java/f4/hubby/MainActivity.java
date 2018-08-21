@@ -391,7 +391,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             @Override
             public void onPanelSlide(View view, float v) {
-                // Do nothing.
+                // Don't show keyboard on slide.
+                inputManager.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
             }
 
             @Override
@@ -402,7 +403,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     searchBar.setText(null);
 
                     // Automatically show keyboard when the panel is called.
-                    if (inputManager != null && keyboard_focus) {
+                    if (inputManager != null && keyboard_focus &&
+                            previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
                         inputManager.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
                         searchBar.requestFocus();
                     }
