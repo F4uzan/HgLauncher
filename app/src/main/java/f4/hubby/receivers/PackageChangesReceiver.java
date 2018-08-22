@@ -13,10 +13,15 @@ public class PackageChangesReceiver extends BroadcastReceiver {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
         // Receive intent from broadcast and simply let the launcher know it needs a refresh.
-        if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")
-                || intent.getAction().equals("android.intent.action.PACKAGE_ADDED")
+        if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")
                 || intent.getAction().equals("android.intent.action.PACKAGE_CHANGED")) {
-            editor.putBoolean("refreshAppList", true).apply();
+            editor.putBoolean("addApp", true).apply();
+            editor.putString("added_app", intent.getData().toString().replace("package:", ""));
+        }
+
+        if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")) {
+            editor.putBoolean("removedApp", true).apply();
+            editor.putString("removed_app", intent.getData().toString().replace("package:", ""));
         }
     }
 }

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
@@ -282,11 +283,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 loadApps(true);
                 apps.setUpdateFilter(true);
                 break;
-            case "refreshAppList":
-                apps.notifyDataSetChanged();
-                loadApps(false);
+            case "removedApp":
+                appList.remove(prefs.getString("removed_app", "none"));
+                apps.notifyItemRemoved(appList.indexOf(prefs.getString("removed_app", "none")));
                 apps.setUpdateFilter(true);
-                editPrefs.putBoolean("refreshAppList", false).apply();
+                editPrefs.putBoolean("removedApp", false).apply();
+                editPrefs.remove("removed_app").apply();
+                break;
+            case "addApp":
+                loadSingleApp(prefs.getString("added_app", "none"));
+                apps.setUpdateFilter(true);
+                editPrefs.putBoolean("addApp", false).apply();
+                editPrefs.remove("added_app").apply();
                 break;
         }
     }
@@ -309,11 +317,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
         registerPackageReceiver();
-        if (prefs.getBoolean("refreshAppList", false)) {
-            apps.notifyDataSetChanged();
-            loadApps(false);
+        if (prefs.getBoolean("addApp", false)) {
+            loadSingleApp(prefs.getString("added_app", "none"));
             apps.setUpdateFilter(true);
-            editPrefs.putBoolean("refreshAppList", false).apply();
+            editPrefs.putBoolean("addApp", false).apply();
+            editPrefs.remove("added_app").apply();
+        } else if (prefs.getBoolean("removedApp", false)) {
+            appList.remove(prefs.getString("removed_app", "none"));
+            apps.notifyItemRemoved(appList.indexOf(prefs.getString("removed_app", "none")));
+            apps.setUpdateFilter(true);
+            editPrefs.putBoolean("removedApp", false).apply();
+            editPrefs.remove("removed_app").apply();
         }
     }
 
@@ -374,6 +388,33 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Update our view cache size, now that we have got all apps on the list
         list.setItemViewCacheSize(appList.size() - 1);
+    }
+
+    private void loadSingleApp(String packageName) {
+        PackageManager pm = getPackageManager();
+        ApplicationInfo applicationInfo;
+
+        try {
+            applicationInfo = pm.getApplicationInfo(packageName, 0);
+            String appName = pm.getApplicationLabel(applicationInfo).toString();
+            Drawable icon = null;
+            Drawable getIcon = null;
+            if (!icon_hide) {
+                if (!prefs.getString("icon_pack", "default").equals("default")) {
+                    getIcon = new IconPackHelper().getIconDrawable(this, packageName);
+                }
+                if (getIcon == null) {
+                    icon = pm.getApplicationIcon(packageName);
+                } else {
+                    icon = getIcon;
+                }
+            }
+            AppDetail app = new AppDetail(icon, appName, packageName);
+            appList.add(app);
+            apps.notifyItemInserted(appList.size() - 1);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addClickListener() {
