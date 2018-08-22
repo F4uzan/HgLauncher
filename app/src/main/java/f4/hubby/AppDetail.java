@@ -23,4 +23,9 @@ public class AppDetail {
     public Drawable getIcon() {
         return icon;
     }
+
+    public boolean equals(Object object) {
+        AppDetail alt = (AppDetail) object;
+        return this == object || getPackageName().equals(alt.getPackageName());
+    }
 }
