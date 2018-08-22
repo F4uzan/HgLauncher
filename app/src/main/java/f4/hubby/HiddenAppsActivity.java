@@ -124,17 +124,17 @@ public class HiddenAppsActivity extends AppCompatActivity {
 
         for (String packageName : excludedAppList) {
             ApplicationInfo appInfo;
-            Drawable icon = null;
+            Drawable icon;
             try {
                 appInfo = manager.getApplicationInfo(packageName, 0);
                 icon = manager.getApplicationIcon(packageName);
+                String appName = manager.getApplicationLabel(appInfo).toString();
+                AppDetail app = new AppDetail(icon, appName, packageName);
+                appList.add(app);
+                apps.notifyItemInserted(appList.size() - 1);
             } catch (PackageManager.NameNotFoundException e) {
-                appInfo = null;
+                // Don't do anything if package manager throws this.
             }
-            String appName = manager.getApplicationLabel(appInfo).toString();
-            AppDetail app = new AppDetail(icon, appName, packageName);
-            appList.add(app);
-            apps.notifyItemInserted(appList.size() - 1);
         }
 
         Collections.sort(appList, new Comparator<AppDetail>() {
