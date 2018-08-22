@@ -276,7 +276,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 apps.setUpdateFilter(true);
                 break;
             case "refreshAppList":
-                loadApps(true);
+                apps.notifyDataSetChanged();
+                loadApps(false);
                 apps.setUpdateFilter(true);
                 editPrefs.putBoolean("refreshAppList", false).apply();
                 break;
@@ -302,7 +303,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         registerPackageReceiver();
         if (prefs.getBoolean("refreshAppList", false)) {
-            loadApps(true);
+            apps.notifyDataSetChanged();
+            loadApps(false);
             apps.setUpdateFilter(true);
             editPrefs.putBoolean("refreshAppList", false).apply();
         }
