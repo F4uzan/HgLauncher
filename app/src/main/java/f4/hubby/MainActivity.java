@@ -186,6 +186,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             @Override
             public void afterTextChanged(Editable s) {
+                // Don't allow spamming of empty spaces.
+                if (s.length() > 0 && s.charAt(0) == ' ') {
+                    s.delete(0, 1);
+                }
+
                 final String searchBarText = searchBar.getText().toString().trim();
                 // Scroll back down to the start of the list if search query is empty.
                 if (searchBarText.equals("")) {
