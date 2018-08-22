@@ -397,26 +397,28 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         PackageManager pm = getPackageManager();
         ApplicationInfo applicationInfo;
 
-        try {
-            applicationInfo = pm.getApplicationInfo(packageName, 0);
-            String appName = pm.getApplicationLabel(applicationInfo).toString();
-            Drawable icon = null;
-            Drawable getIcon = null;
-            if (!icon_hide) {
-                if (!prefs.getString("icon_pack", "default").equals("default")) {
-                    getIcon = new IconPackHelper().getIconDrawable(this, packageName);
+        if (pm.getLaunchIntentForPackage(packageName) != null) {
+            try {
+                applicationInfo = pm.getApplicationInfo(packageName, 0);
+                String appName = pm.getApplicationLabel(applicationInfo).toString();
+                Drawable icon = null;
+                Drawable getIcon = null;
+                if (!icon_hide) {
+                    if (!prefs.getString("icon_pack", "default").equals("default")) {
+                        getIcon = new IconPackHelper().getIconDrawable(this, packageName);
+                    }
+                    if (getIcon == null) {
+                        icon = pm.getApplicationIcon(packageName);
+                    } else {
+                        icon = getIcon;
+                    }
                 }
-                if (getIcon == null) {
-                    icon = pm.getApplicationIcon(packageName);
-                } else {
-                    icon = getIcon;
-                }
+                AppDetail app = new AppDetail(icon, appName, packageName);
+                appList.add(app);
+                apps.notifyItemInserted(appList.size() - 1);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
             }
-            AppDetail app = new AppDetail(icon, appName, packageName);
-            appList.add(app);
-            apps.notifyItemInserted(appList.size() - 1);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
