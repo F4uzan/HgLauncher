@@ -319,16 +319,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         registerPackageReceiver();
         if (prefs.getBoolean("addApp", false)) {
             loadSingleApp(prefs.getString("added_app", "none"));
-            apps.setUpdateFilter(true);
             editPrefs.putBoolean("addApp", false).apply();
             editPrefs.remove("added_app").apply();
         } else if (prefs.getBoolean("removedApp", false)) {
             appList.remove(prefs.getString("removed_app", "none"));
             apps.notifyItemRemoved(appList.indexOf(prefs.getString("removed_app", "none")));
-            apps.setUpdateFilter(true);
             editPrefs.putBoolean("removedApp", false).apply();
             editPrefs.remove("removed_app").apply();
         }
+        apps.setUpdateFilter(true);
     }
 
     @Override
