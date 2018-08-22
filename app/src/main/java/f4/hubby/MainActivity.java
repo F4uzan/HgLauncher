@@ -288,17 +288,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 apps.setUpdateFilter(true);
                 break;
             case "removedApp":
-                appList.remove(prefs.getString("removed_app", "none"));
-                apps.notifyItemRemoved(appList.indexOf(prefs.getString("removed_app", "none")));
+                editPrefs.putBoolean("removedApp", false).commit();
+                String packageToRemove = prefs.getString("removed_app", "none");
+                AppDetail objPackage = new AppDetail(null, null, packageToRemove);
+                if (!packageToRemove.equals("none") && appList.contains(objPackage)) {
+                    appList.remove(objPackage);
+                    apps.notifyItemRemoved(appList.indexOf(objPackage));
+                }
+                editPrefs.remove("removed_app").commit();
                 apps.setUpdateFilter(true);
-                editPrefs.putBoolean("removedApp", false).apply();
-                editPrefs.remove("removed_app").apply();
                 break;
             case "addApp":
+                editPrefs.putBoolean("addApp", false).commit();
                 loadSingleApp(prefs.getString("added_app", "none"));
+                editPrefs.remove("added_app").commit();
                 apps.setUpdateFilter(true);
-                editPrefs.putBoolean("addApp", false).apply();
-                editPrefs.remove("added_app").apply();
                 break;
         }
     }
@@ -321,15 +325,20 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
         registerPackageReceiver();
+
         if (prefs.getBoolean("addApp", false)) {
+            editPrefs.putBoolean("addApp", false).commit();
             loadSingleApp(prefs.getString("added_app", "none"));
-            editPrefs.putBoolean("addApp", false).apply();
-            editPrefs.remove("added_app").apply();
+            editPrefs.remove("added_app").commit();
         } else if (prefs.getBoolean("removedApp", false)) {
-            appList.remove(prefs.getString("removed_app", "none"));
-            apps.notifyItemRemoved(appList.indexOf(prefs.getString("removed_app", "none")));
-            editPrefs.putBoolean("removedApp", false).apply();
-            editPrefs.remove("removed_app").apply();
+            editPrefs.putBoolean("removedApp", false).commit();
+            String packageToRemove = prefs.getString("removed_app", "none");
+            AppDetail objPackage = new AppDetail(null, null, packageToRemove);
+            if (!packageToRemove.equals("none") && appList.contains(objPackage)) {
+                appList.remove(objPackage);
+                apps.notifyItemRemoved(appList.indexOf(objPackage));
+            }
+            editPrefs.remove("removed_app").commit();
         }
         apps.setUpdateFilter(true);
     }
@@ -385,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
                 AppDetail app = new AppDetail(icon, appName, packageName);
                 appList.add(app);
-                apps.notifyItemInserted(appList.size() - 1);
+                apps.notifyItemInserted(appList.size());
             }
         }
 
@@ -415,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
                 AppDetail app = new AppDetail(icon, appName, packageName);
                 appList.add(app);
-                apps.notifyItemInserted(appList.size() - 1);
+                apps.notifyItemInserted(appList.size());
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
