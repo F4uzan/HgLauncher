@@ -50,6 +50,11 @@
 
     <PreferenceCategory android:title="@string/pref_header_list" />
 
+    <com.lb.material_preferences_library.custom_preferences.Preference
+        android:key="hidden_apps_menu"
+        android:summary="@string/pref_header_hidden_apps_desc"
+        android:title="@string/pref_header_hidden_apps" />
+
     <com.lb.material_preferences_library.custom_preferences.SwitchPreference
         android:defaultValue="false"
         android:key="comfy_padding"
@@ -89,5 +94,11 @@
         android:title="@string/pref_app_launch_anim"
         app:entries="@array/pref_app_launch_anim_title"
         app:entryValues="@array/pref_app_launch_anim_values" />
+
+    <PreferenceCategory android:title="@string/pref_header_about" />
+
+    <com.lb.material_preferences_library.custom_preferences.Preference
+        android:summary="@string/app_version"
+        android:title="@string/app_name" />
 
 </PreferenceScreen>

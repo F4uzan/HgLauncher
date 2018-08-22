@@ -5,18 +5,12 @@
 
     <!-- About and Credits -->
     <string name="pref_header_about">About</string>
-    <string name="pref_title_credits">Credits</string>
     <string name="pref_header_hidden_apps">Hidden apps</string>
-
-    <string name="f4">F4uzan</string>
-    <string name="f4_hint">Developer and maintainer</string>
-
-    <string name="ayj3y">AyJ3y</string>
-    <string name="ayj3y_hint">Helping developer and a nice friend</string>
+    <string name="pref_header_hidden_apps_desc">Manage your list of hidden apps.</string>
 
     <!-- Customizations -->
     <string name="pref_header_cust">Customizations</string>
-    <string name="pref_header_wall">Wallpaper View</string>
+    <string name="pref_header_wall">Desktop</string>
     <string name="pref_header_list">App list</string>
     <string name="pref_header_interface">Interface</string>
     <string name="pref_header_search_bar">Search bar</string>

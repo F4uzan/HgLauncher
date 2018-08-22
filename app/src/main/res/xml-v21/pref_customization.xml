@@ -49,6 +49,11 @@
 
     <PreferenceCategory android:title="@string/pref_header_list" />
 
+    <Preference
+        android:key="hidden_apps_menu"
+        android:summary="@string/pref_header_hidden_apps_desc"
+        android:title="@string/pref_header_hidden_apps" />
+
     <SwitchPreference
         android:defaultValue="false"
         android:key="icon_hide_switch"
@@ -89,4 +94,9 @@
         android:summary="%s"
         android:title="@string/pref_app_launch_anim" />
 
+    <PreferenceCategory android:title="@string/pref_header_about" />
+
+    <Preference
+        android:summary="@string/app_version"
+        android:title="@string/app_name" />
 </PreferenceScreen>

@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArraySet;
@@ -247,6 +248,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT,
+                        SettingsActivity.CustomizePreferenceFragment.class.getName());
+                intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
                 startActivity(intent);
                 return true;
             case R.id.update_wallpaper:

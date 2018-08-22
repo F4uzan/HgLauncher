@@ -93,7 +93,7 @@ public class HiddenAppsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            onBackPressed();
+            super.onBackPressed();
             return true;
         } else if (id == R.id.action_reset_hidden_apps) {
             excludedAppList.clear();
@@ -105,15 +105,6 @@ public class HiddenAppsActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        overridePendingTransition(0, 0);
-        finish();
     }
 
     private void loadHiddenApps() {
