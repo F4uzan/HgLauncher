@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorBackgroundGray">#202020</color>
+    <color name="colorCardBackgroundGray">#101010</color>
     <color name="navigationBarShade">#80000000</color>
 </resources>

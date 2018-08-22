@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:listSeparatorTextViewStyle">@style/MPL_PreferenceListHeader</item>
         <item name="android:colorAccent" tools:ignore="NewApi">@color/colorAccent</item>
+        <item name="cardColor">@android:color/background_light</item>
         <item name="backgroundColor">@android:color/background_light</item>
     </style>
 
@@ -15,6 +16,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:listSeparatorTextViewStyle">@style/MPL_PreferenceListHeader</item>
         <item name="android:colorAccent" tools:ignore="NewApi">@color/colorAccent</item>
+        <item name="cardColor">@color/colorCardBackgroundGray</item>
         <item name="backgroundColor">@android:color/background_dark</item>
     </style>
 

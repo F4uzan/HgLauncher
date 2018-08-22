@@ -19,7 +19,6 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArraySet;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private PackageManager manager;
     private AppAdapter apps = new AppAdapter(appList);
     private RecyclerView list;
-    private CardView searchContainer;
+    private FrameLayout searchContainer;
     private EditText searchBar;
     private SlidingUpPanelLayout slidingHome;
     private View snackHolder;

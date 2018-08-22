@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="cardColor">@android:color/background_light</item>
         <item name="backgroundColor">@android:color/background_light</item>
     </style>
 
@@ -11,6 +12,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="cardColor">@color/colorCardBackgroundGray</item>
         <item name="backgroundColor">@android:color/background_dark</item>
     </style>
 
