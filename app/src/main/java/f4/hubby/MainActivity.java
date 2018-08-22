@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private View snackHolder;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
+
+    private BroadcastReceiver packageReceiver = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -317,7 +320,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(new PackageChangesReceiver());
+        if (packageReceiver != null) {
+            unregisterReceiver(packageReceiver);
+        }
     }
 
     private void loadApps(Boolean shouldForceRefresh) {
@@ -526,7 +531,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
             intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
             intentFilter.addDataScheme("package");
-            registerReceiver(new PackageChangesReceiver(), intentFilter);
+            packageReceiver = new PackageChangesReceiver();
+            registerReceiver(packageReceiver, intentFilter);
         }
     }
 
