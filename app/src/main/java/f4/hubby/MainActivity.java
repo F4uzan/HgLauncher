@@ -453,10 +453,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             case R.id.action_hide:
                                 // Add the app's package name to the exclusion list.
                                 excludedAppList.add(packageName);
-                                editPrefs.putStringSet("hidden_apps", excludedAppList).commit();
+                                editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
                                 // Reload the app list!
                                 appList.remove(packageName);
-                                apps.notifyItemRemoved(position);
+                                apps.notifyItemRemoved(appList.indexOf(packageName));
                                 apps.setUpdateFilter(true);
                                 break;
                         }
