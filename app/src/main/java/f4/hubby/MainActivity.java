@@ -315,6 +315,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(new PackageChangesReceiver());
+    }
+
     private void loadApps(Boolean shouldForceRefresh) {
         manager = getPackageManager();
 
