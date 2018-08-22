@@ -30,17 +30,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
+            <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
                 android:id="@+id/apps_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:splitMotionEvents="false"
                 android:background="?attr/backgroundColor"
-                app:fastScrollEnabled="true"
-                app:fastScrollHorizontalThumbDrawable="@drawable/recycler_thumb"
-                app:fastScrollHorizontalTrackDrawable="@drawable/recycler_line"
-                app:fastScrollVerticalThumbDrawable="@drawable/recycler_thumb"
-                app:fastScrollVerticalTrackDrawable="@drawable/recycler_line" />
+                app:fastScrollThumbInactiveColor="@color/colorPrimary"
+                app:fastScrollPopupBgColor="@color/colorPrimaryDark"
+                app:fastScrollPopupTextColor="@android:color/primary_text_dark"
+                app:fastScrollThumbColor="@color/colorPrimaryDark" />
 
             <android.support.design.widget.CoordinatorLayout
                 android:id="@+id/snackHolder"

@@ -10,12 +10,15 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 
-public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
+public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable,
+        FastScrollRecyclerView.SectionedAdapter {
     private List<AppDetail> apps;
     private AppFilter filter;
     private Boolean updateFilter = false;
@@ -80,6 +83,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     @Override
     public int getItemCount() {
         return apps.size();
+    }
+
+    @Override
+    public String getSectionName(int position) {
+        return apps.get(position).getAppName().substring(0, 1).toUpperCase();
     }
 
     // Basic filter class
