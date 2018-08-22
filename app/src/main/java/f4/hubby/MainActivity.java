@@ -406,7 +406,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         PackageManager pm = getPackageManager();
         ApplicationInfo applicationInfo;
 
-        if (pm.getLaunchIntentForPackage(packageName) != null) {
+        if (pm.getLaunchIntentForPackage(packageName) != null &&
+                !appList.contains(new AppDetail(null, null, packageName))) {
             try {
                 applicationInfo = pm.getApplicationInfo(packageName, 0);
                 String appName = pm.getApplicationLabel(applicationInfo).toString();
