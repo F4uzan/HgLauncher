@@ -15,18 +15,12 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import f4.hubby.wrappers.AppCompatPreferenceActivity;
-import f4.hubby.wrappers.MenuPreference;
-
-import static android.content.pm.PackageManager.GET_META_DATA;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -53,32 +47,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     };
 
     /**
-     * Helister method to determine if the device has an extra-large screen. For
+     * Helper method to determine if the device has an extra-large screen. For
      * example, 10" tablets are extra-large.
      */
     private static boolean isXLargeTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-    }
-
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary is updated to reflect the value.
-     * The summary is also immediately updated upon calling this method.
-     * The exact display format is dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
     }
 
     @Override
@@ -166,7 +140,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
 
-        protected ListPreference setIconList(ListPreference list) {
+        protected void setIconList(ListPreference list) {
             PackageManager manager = getActivity().getPackageManager();
             List<String> entries = new ArrayList<>();
             List<String> entryValues = new ArrayList<>();
@@ -195,7 +169,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             list.setEntryValues(finalEntryValues);
             list.setTitle(getString(R.string.icon_pack));
             list.setKey("icon_pack");
-            return list;
         }
     }
 
