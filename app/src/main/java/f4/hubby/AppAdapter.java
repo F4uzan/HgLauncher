@@ -15,7 +15,7 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.xdrop.fuzzywuzzy.FuzzySearch;
+import f4.hubby.helpers.KissFuzzySearch;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable,
         FastScrollRecyclerView.SectionedAdapter {
@@ -109,10 +109,10 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             if (charSequence.length() == 0) {
                 filteredList.addAll(originalList);
             } else {
-                final String filterPattern = charSequence.toString().toLowerCase().trim();
+                final String filterPattern = charSequence.toString();
                 for (AppDetail item : originalList) {
                     // Do a fuzzy comparison instead of checking for absolute match.
-                    if (FuzzySearch.weightedRatio(item.getAppName().toLowerCase(), filterPattern) >= 65) {
+                    if (KissFuzzySearch.doFuzzy(item.getAppName(), filterPattern) >= 30) {
                         filteredList.add(item);
                     }
                 }
@@ -126,9 +126,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            apps.clear();
-            apps.addAll((ArrayList<AppDetail>) filterResults.values);
-            notifyDataSetChanged();
+            if (filterResults.values != null) {
+                apps.clear();
+                apps.addAll((ArrayList<AppDetail>) filterResults.values);
+                notifyDataSetChanged();
+            }
         }
     }
 }
