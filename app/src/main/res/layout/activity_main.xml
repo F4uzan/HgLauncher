@@ -79,7 +79,7 @@
                     android:paddingRight="@dimen/uniform_panel_margin"
                     android:maxLines="1"
                     android:inputType="text"
-                    android:imeOptions="actionSearch"
+                    android:imeOptions="actionSearch|actionDone"
                     android:hint="@string/search_hint"
                     android:background="@android:color/transparent" />
 

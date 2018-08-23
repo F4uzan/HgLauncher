@@ -219,7 +219,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         searchBar.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH && !searchBar.getText().toString().equals("")) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                        || actionId == EditorInfo.IME_NULL && !searchBar.getText().toString().equals("")) {
                     if (!appList.isEmpty()) {
                         launchApp(appList.get(0).getPackageName());
                         return true;
