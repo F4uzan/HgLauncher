@@ -1,73 +1,73 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:title="@string/title_activity_settings">
 
     <PreferenceCategory android:title="@string/pref_header_interface" />
 
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+    <CheckBoxPreference
         android:defaultValue="false"
         android:key="dark_theme"
-        android:title="@string/dark_theme" />
+        android:title="@string/dark_theme"
+        android:widgetLayout="@layout/mp_preference_switch" />
 
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+    <CheckBoxPreference
         android:defaultValue="true"
         android:key="dark_theme_black"
         android:dependency="dark_theme"
         android:title="@string/dark_theme_black"
-        android:summary="@string/dark_theme_black_desc" />
+        android:summary="@string/dark_theme_black_desc"
+        android:widgetLayout="@layout/mp_preference_switch" />
 
     <PreferenceCategory android:title="@string/pref_header_wall" />
 
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+    <CheckBoxPreference
         android:defaultValue="false"
         android:key="shade_view_switch"
         android:summary="@string/pref_shade_view_desc"
-        android:title="@string/pref_shade_view" />
+        android:title="@string/pref_shade_view"
+        android:widgetLayout="@layout/mp_preference_switch" />
 
     <PreferenceCategory android:title="@string/pref_header_search_bar" />
 
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+    <CheckBoxPreference
         android:defaultValue="true"
         android:key="web_search_enabled"
         android:title="@string/web_search"
-        android:summary="@string/web_search_desc" />
+        android:summary="@string/web_search_desc"
+        android:widgetLayout="@layout/mp_preference_switch" />
 
-    <f4.hubby.wrappers.MenuPreferenceCompat
+    <f4.hubby.wrappers.MenuPreference
         android:defaultValue="google"
         android:dependency="web_search_enabled"
+        android:entries="@array/pref_search_provider_title"
+        android:entryValues="@array/pref_search_provider_values"
         android:key="search_provider"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:summary="%s"
-        android:title="@string/pref_search_provider"
-        app:entries="@array/pref_search_provider_title"
-        app:entryValues="@array/pref_search_provider_values" />
+        android:title="@string/pref_search_provider" />
 
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+    <CheckBoxPreference
         android:defaultValue="false"
         android:key="keyboard_focus"
         android:summary="@string/keyboard_focus_desc"
-        android:title="@string/keyboard_focus" />
+        android:title="@string/keyboard_focus"
+        android:widgetLayout="@layout/mp_preference_switch" />
 
     <PreferenceCategory android:title="@string/pref_header_list" />
 
-    <com.lb.material_preferences_library.custom_preferences.Preference
+    <Preference
         android:key="hidden_apps_menu"
         android:summary="@string/pref_header_hidden_apps_desc"
         android:title="@string/pref_header_hidden_apps" />
 
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
-        android:defaultValue="false"
-        android:key="comfy_padding"
-        android:summary="@string/comfy_padding_desc"
-        android:title="@string/comfy_padding" />
-
-    <com.lb.material_preferences_library.custom_preferences.SwitchPreference
+    <CheckBoxPreference
         android:defaultValue="false"
         android:key="icon_hide_switch"
         android:summary="@string/pref_icon_view_desc"
-        android:title="@string/pref_icon_view" />
+        android:title="@string/pref_icon_view"
+        android:widgetLayout="@layout/mp_preference_switch" />
 
-    <f4.hubby.wrappers.MenuPreferenceCompat
+    <f4.hubby.wrappers.MenuPreference
         android:defaultValue="default"
         android:key="icon_pack"
         android:negativeButtonText="@null"
@@ -75,30 +75,36 @@
         android:summary="%s"
         android:title="@string/pref_app_launch_anim" />
 
-    <f4.hubby.wrappers.MenuPreferenceCompat
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="comfy_padding"
+        android:summary="@string/comfy_padding_desc"
+        android:title="@string/comfy_padding"
+        android:widgetLayout="@layout/mp_preference_switch" />
+
+    <f4.hubby.wrappers.MenuPreference
         android:defaultValue="alphabetical"
+        android:entries="@array/pref_app_list_order_titles"
+        android:entryValues="@array/pref_app_list_order_values"
         android:key="list_order"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:summary="%s"
-        android:title="@string/pref_title_app_list_order"
-        app:entries="@array/pref_app_list_order_titles"
-        app:entryValues="@array/pref_app_list_order_values" />
+        android:title="@string/pref_title_app_list_order" />
 
-    <f4.hubby.wrappers.MenuPreferenceCompat
+    <f4.hubby.wrappers.MenuPreference
         android:defaultValue="default"
+        android:entries="@array/pref_app_launch_anim_title"
+        android:entryValues="@array/pref_app_launch_anim_values"
         android:key="launch_anim"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:summary="%s"
-        android:title="@string/pref_app_launch_anim"
-        app:entries="@array/pref_app_launch_anim_title"
-        app:entryValues="@array/pref_app_launch_anim_values" />
+        android:title="@string/pref_app_launch_anim" />
 
     <PreferenceCategory android:title="@string/pref_header_about" />
 
-    <com.lb.material_preferences_library.custom_preferences.Preference
+    <Preference
         android:summary="@string/app_version"
         android:title="@string/app_name" />
-
 </PreferenceScreen>

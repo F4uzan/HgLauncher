@@ -12,15 +12,14 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import f4.hubby.wrappers.AppCompatPreferenceActivity;
-
-public class SettingsActivity extends AppCompatPreferenceActivity {
+public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity {
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -45,29 +44,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Load appropriate theme before creating the activity.
         if (prefs.getBoolean("dark_theme", false) && prefs.getBoolean("dark_theme_black", true)) {
-            setTheme(R.style.AppTheme_Dark);
+            setTheme(R.style.SettingTheme_Dark);
+        } else if (!prefs.getBoolean("dark_theme", false) && !prefs.getBoolean("dark_theme_black", true)) {
+            setTheme(R.style.SettingTheme);
         } else if (!prefs.getBoolean("dark_theme_black", true)) {
-            setTheme(R.style.AppTheme_Gray);
-        } else {
-            setTheme(R.style.AppTheme);
+            setTheme(R.style.SettingTheme_Gray);
         }
 
         super.onCreate(savedInstanceState);
-        setupActionBar();
-    }
-
-    // Set up action bar
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            // Show the Up button in the action bar.
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        setTitle(R.string.title_activity_settings);
+        setPreferenceFragment(new CustomizePreferenceFragment());
     }
 
     @Override
@@ -93,12 +84,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * It is used when the activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class CustomizePreferenceFragment extends PreferenceFragment {
+    public static class CustomizePreferenceFragment extends
+            com.fnp.materialpreferences.PreferenceFragment {
+
+        @Override
+        public int addPreferencesFromResource() {
+            return R.xml.pref_customization;
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_customization);
             setHasOptionsMenu(true);
+
+            // HACK: Add padding in KitKat and below.
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                ListView lv = getActivity().findViewById(android.R.id.list);
+                ViewGroup parent = (ViewGroup) lv.getParent();
+                parent.setPadding(getResources().getDimensionPixelOffset(R.dimen.uniform_panel_margin), 0,
+                        getResources().getDimensionPixelOffset(R.dimen.uniform_panel_margin), 0);
+            }
 
             Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
             hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

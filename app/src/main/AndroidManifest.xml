@@ -33,7 +33,7 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:excludeFromRecents="true"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/SettingTheme" />
 
         <activity
             android:name=".HiddenAppsActivity"
