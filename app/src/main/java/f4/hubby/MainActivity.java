@@ -47,6 +47,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -432,6 +433,22 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 apps.notifyItemInserted(appList.size());
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
+            }
+
+            if (!list_order) {
+                Collections.sort(appList, new Comparator<AppDetail>() {
+                    @Override
+                    public int compare(AppDetail nameL, AppDetail nameR) {
+                        return nameR.getAppName().compareToIgnoreCase(nameL.getAppName());
+                    }
+                });
+            } else {
+                Collections.sort(appList, Collections.reverseOrder(new Comparator<AppDetail>() {
+                    @Override
+                    public int compare(AppDetail nameL, AppDetail nameR) {
+                        return nameR.getAppName().compareToIgnoreCase(nameL.getAppName());
+                    }
+                }));
             }
         }
     }
