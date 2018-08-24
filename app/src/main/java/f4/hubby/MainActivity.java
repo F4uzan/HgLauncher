@@ -280,6 +280,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
                 apps.setUpdateFilter(true);
                 break;
+            case "dummy_restore":
+                excludedAppList.clear();
+                excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
+                loadApps(true);
+                apps.setUpdateFilter(true);
+                break;
             case "icon_hide_switch":
                 icon_hide = prefs.getBoolean("icon_hide_switch", false);
                 loadApps(true);

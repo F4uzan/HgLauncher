@@ -15,6 +15,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,17 +34,18 @@ public class HiddenAppsActivity extends AppCompatActivity {
     AppAdapter apps = new AppAdapter(appList);
     RecyclerView list;
     TextView emptyHint;
+    SharedPreferences prefs;
     SharedPreferences.Editor editPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Load appropriate theme before creating the activity.
         if (prefs.getBoolean("dark_theme", false) && prefs.getBoolean("dark_theme_black", true)) {
@@ -56,7 +58,6 @@ public class HiddenAppsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_hidden_apps);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         editPrefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
@@ -98,6 +99,11 @@ public class HiddenAppsActivity extends AppCompatActivity {
         } else if (id == R.id.action_reset_hidden_apps) {
             excludedAppList.clear();
             editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
+            if (prefs.getBoolean("dummy_restore", true)) {
+                editPrefs.putBoolean("dummy_restore", false).apply();
+            } else {
+                editPrefs.putBoolean("dummy_restore", true).apply();
+            }
             // Recreate the toolbar menu to hide the 'restore all' button.
             invalidateOptionsMenu();
             // Reload the list.
@@ -170,6 +176,11 @@ public class HiddenAppsActivity extends AppCompatActivity {
                                 // Remove the app's package name from the exclusion list.
                                 excludedAppList.remove(packageName);
                                 editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
+                                if (prefs.getBoolean("dummy_restore", true)) {
+                                    editPrefs.putBoolean("dummy_restore", false).apply();
+                                } else {
+                                    editPrefs.putBoolean("dummy_restore", true).apply();
+                                }
                                 // Reload the app list!
                                 appList.remove(position);
                                 if (appList.size() == 0) {
