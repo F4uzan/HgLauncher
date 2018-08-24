@@ -583,17 +583,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
     public void registerPackageReceiver() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-            intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-            intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-            intentFilter.addDataScheme("package");
-            packageReceiver = new PackageChangesReceiver();
-            registerReceiver(packageReceiver, intentFilter);
-        }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+        intentFilter.addDataScheme("package");
+        packageReceiver = new PackageChangesReceiver();
+        registerReceiver(packageReceiver, intentFilter);
     }
 
     // Load available preferences.
