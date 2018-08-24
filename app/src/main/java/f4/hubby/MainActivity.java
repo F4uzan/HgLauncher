@@ -307,9 +307,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
             case "addApp":
                 editPrefs.putBoolean("addApp", false).commit();
-                loadSingleApp(prefs.getString("added_app", "none"));
                 editPrefs.remove("added_app").commit();
-                apps.setUpdateFilter(true);
+                // HACK: Recreate after receiving installation.
+                // A workaround for app list getting stuck in search result due to filters.
+                recreate();
                 break;
         }
     }
