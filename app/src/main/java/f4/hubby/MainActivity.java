@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Load preferences before setting layout to allow for quick theme change.
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        editPrefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editPrefs = prefs.edit();
         prefs.registerOnSharedPreferenceChangeListener(this);
         loadPref();
 

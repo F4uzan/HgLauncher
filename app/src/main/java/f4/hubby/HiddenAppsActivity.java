@@ -58,7 +58,7 @@ public class HiddenAppsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_hidden_apps);
 
-        editPrefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editPrefs = prefs.edit();
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
 
