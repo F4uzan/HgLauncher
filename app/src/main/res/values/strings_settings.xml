@@ -18,6 +18,17 @@
     <string name="dark_theme">Dark theme</string>
     <string name="dark_theme_black">Use true black</string>
     <string name="dark_theme_black_desc">Swap out dark gray for actual black in dark theme.</string>
+    
+    <string name="pref_title_app_list_order">App list order</string>
+    <string name="app_list_order_normal">A to Z</string>
+    <string name="app_list_order_inverse">Z to A</string>
+
+    <string name="pref_app_launch_anim">App launch animation</string>
+    <string name="anim_list_default">Default</string>
+    <string name="anim_list_pull_up">Pull up</string>
+    <string name="anim_list_slide_in">Slide in</string>
+
+    <string name="pref_search_provider">Online search provider</string>
 
     <string name="keyboard_focus">Keyboard focus</string>
     <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down.</string>

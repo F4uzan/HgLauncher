@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Arrays for SettingsActivity -->
-    <string name="pref_title_app_list_order">App list order</string>
     <string-array name="pref_app_list_order_titles">
-        <item>From A to Z</item>
-        <item>From Z to A</item>
+        <item>@string/app_list_order_normal</item>
+        <item>@string/app_list_order_inverse</item>
     </string-array>
     <string-array name="pref_app_list_order_values">
         <item>alphabetical</item>
         <item>invertedAlphabetical</item>
     </string-array>
 
-    <string name="pref_app_launch_anim">App launch animation</string>
     <string-array name="pref_app_launch_anim_title">
-        <item>Default</item>
-        <item>Pull up</item>
-        <item>Slide in</item>
+        <item>@string/anim_list_default</item>
+        <item>@string/anim_list_pull_up</item>
+        <item>@string/anim_list_slide_in</item>
     </string-array>
     <string-array name="pref_app_launch_anim_values">
         <item>default</item>
@@ -23,7 +21,6 @@
         <item>slide_in</item>
     </string-array>
 
-    <string name="pref_search_provider">Online search provider</string>
     <string-array name="pref_search_provider_title">
         <item>Google</item>
         <item>DuckDuckGo</item>
