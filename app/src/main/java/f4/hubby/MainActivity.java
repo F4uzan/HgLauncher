@@ -269,17 +269,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "icon_pack":
                 recreate();
                 break;
-            case "hidden_apps":
-                excludedAppList.clear();
-                excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
-                for (String packageName : excludedAppList) {
-                    AppDetail removedPackage = new AppDetail(null, null, packageName);
-                    if (appList.contains(removedPackage)) {
-                        appList.remove(removedPackage);
-                    }
-                }
-                apps.setUpdateFilter(true);
-                break;
             case "dummy_restore":
                 excludedAppList.clear();
                 excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
