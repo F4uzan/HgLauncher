@@ -5,6 +5,7 @@
     <!-- Menu actions -->
     <string name="action_settings">Settings</string>
     <string name="action_wallpaper">Change wallpaper</string>
+    <string name="action_force_refresh">Refresh list</string>
     <string name="action_hidden_app_reset">Restore all</string>
 
     <!-- App menu actions -->

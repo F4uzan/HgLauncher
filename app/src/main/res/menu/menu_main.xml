@@ -9,6 +9,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_force_refresh"
+        android:orderInCategory="100"
+        android:title="@string/action_force_refresh"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/update_wallpaper"
         android:orderInCategory="100"
         android:title="@string/action_wallpaper"
