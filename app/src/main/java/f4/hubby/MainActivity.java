@@ -116,6 +116,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
 
+        // Restore search bar visibility when available.
+        if (savedInstanceState != null) {
+            searchContainer.setVisibility(savedInstanceState.getInt("searchVisibility"));
+        }
+
         // Empty out slidingHome margins if they are not needed.
         if (!comfy_padding) {
             ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome.getLayoutParams();
@@ -357,6 +362,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (packageReceiver != null) {
             unregisterReceiver(packageReceiver);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save search bar visibility state.
+        savedInstanceState.putInt("searchVisibility", searchContainer.getVisibility());
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     private void loadApps(Boolean shouldForceRefresh) {
