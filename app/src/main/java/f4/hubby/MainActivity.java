@@ -315,6 +315,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        apps.getFilter().filter(null);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         loadPref();
@@ -536,7 +542,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     // A method to launch an app based on package name.
     private void launchApp(String packageName) {
         Intent i = manager.getLaunchIntentForPackage(packageName);
-        apps.getFilter().filter(null);
         // Attempt to catch exceptions instead of crash landing directly to the floor.
         try {
             // Override app launch animation when needed.
