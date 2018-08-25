@@ -15,8 +15,10 @@ import android.view.View;
 public class OnTouchListener implements View.OnTouchListener {
 
     private final GestureDetector gestureDetector;
-    private float reportedX;
-    private float reportedY;
+    private float startX;
+    private float startY;
+    private float endX;
+    private float endY;
 
     public OnTouchListener(Context context) {
         gestureDetector = new GestureDetector(context, new GestureListener());
@@ -40,12 +42,20 @@ public class OnTouchListener implements View.OnTouchListener {
     public void onClick() {
     }
 
-    public float getReportedX() {
-        return reportedX;
+    public float getStartX() {
+        return startX;
     }
 
-    public float getReportedY() {
-        return reportedY;
+    public float getStartY() {
+        return startY;
+    }
+
+    public float getEndX() {
+        return endX;
+    }
+
+    public float getEndY() {
+        return endY;
     }
 
     public boolean onTouch(View v, MotionEvent event) {
@@ -76,8 +86,10 @@ public class OnTouchListener implements View.OnTouchListener {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             float distanceX = e2.getX() - e1.getX();
             float distanceY = e2.getY() - e1.getY();
-            reportedX = e2.getX();
-            reportedY = e2.getY();
+            startX = e1.getX();
+            startY = e1.getY();
+            endX = e2.getX();
+            endY = e2.getY();
 
             if (Math.abs(distanceX) > Math.abs(distanceY)
                     && Math.abs(distanceX) > SWIPE_DISTANCE_THRESHOLD
