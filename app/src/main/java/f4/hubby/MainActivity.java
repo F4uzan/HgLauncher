@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     boolean anim, icon_hide, list_order, shade_view,
             keyboard_focus, dark_theme, dark_theme_black, web_search_enabled,
-            comfy_padding;
+            comfy_padding, tap_to_drawer;
     String launch_anim, search_provider;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private Set<String> excludedAppList = new ArraySet<>();
@@ -176,8 +176,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             @Override
             public void onClick() {
-                // Imitate drag view behaviour; show the app panel on click.
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                // Imitate sliding panel drag view behaviour; show the app panel on click.
+                if (tap_to_drawer && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 }
             }
@@ -645,6 +645,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         shade_view = prefs.getBoolean("shade_view_switch", false);
         keyboard_focus = prefs.getBoolean("keyboard_focus", false);
         comfy_padding = prefs.getBoolean("comfy_padding", false);
+        tap_to_drawer = prefs.getBoolean("tap_to_drawer", false);
         dark_theme = prefs.getBoolean("dark_theme", false);
         dark_theme_black = prefs.getBoolean("dark_theme_black", false);
         web_search_enabled = prefs.getBoolean("web_search_enabled", true);
