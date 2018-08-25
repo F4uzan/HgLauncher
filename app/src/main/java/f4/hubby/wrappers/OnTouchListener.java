@@ -6,11 +6,11 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Detects left and right swipes across a view.
+ * Detects touch events across a view.
  * Based on OnTouchListener originally written by Edward Brey at StackOverflow,
  * (https://stackoverflow.com/a/19506010)
  *
- * Modified to add swipe up, swipe down, and long press events.
+ * Modified to add swipe up, swipe down, single tap, and long press events.
  */
 public class OnTouchListener implements View.OnTouchListener {
 
@@ -35,6 +35,9 @@ public class OnTouchListener implements View.OnTouchListener {
     public void onLongPress() {
     }
 
+    public void onClick() {
+    }
+
     public boolean onTouch(View v, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
@@ -46,6 +49,12 @@ public class OnTouchListener implements View.OnTouchListener {
 
         @Override
         public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent event) {
+            onClick();
             return true;
         }
 

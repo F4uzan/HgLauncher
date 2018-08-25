@@ -173,6 +173,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 // Show context menu when touchReceiver is long pressed.
                 touchReceiver.showContextMenu();
             }
+
+            @Override
+            public void onClick() {
+                // Imitate drag view behaviour; show the app panel on click.
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                }
+            }
         });
 
         // Switch on wallpaper shade.
