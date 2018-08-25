@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 startActivity(intent);
                 return true;
             case R.id.action_force_refresh:
-                loadApps(true);
+                recreate();
                 return true;
             case R.id.update_wallpaper:
                 intent = new Intent(Intent.ACTION_SET_WALLPAPER);
