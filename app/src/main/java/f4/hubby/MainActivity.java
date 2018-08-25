@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArraySet;
 import android.support.v7.app.AppCompatActivity;
@@ -163,9 +164,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onSwipeDown() {
                 // Show the app panel when swiped down.
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                }
+                parseAction("panel_down", null);
             }
 
             @Override
@@ -177,8 +176,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onClick() {
                 // Imitate sliding panel drag view behaviour; show the app panel on click.
-                if (tap_to_drawer && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                if (tap_to_drawer) {
+                    parseAction("panel_down", null);
                 }
             }
         });
@@ -329,9 +328,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onBackPressed() {
         // Hides the panel if back is pressed.
-        if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-            slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-        }
+        parseAction("panel_down", null);
     }
 
     @Override
@@ -345,9 +342,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onResume();
         loadPref();
         searchBar.setText(null);
-        if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED) {
-            slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        }
+        parseAction("panel_up", null);
         registerPackageReceiver();
 
         if (prefs.getBoolean("addApp", false)) {
@@ -530,12 +525,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         });
 
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
             @Override
             public void onPanelSlide(View view, float v) {
                 // Don't show keyboard on slide.
-                inputManager.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
+                parseAction("hide_keyboard", searchBar);
             }
 
             @Override
@@ -546,9 +539,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     searchBar.setText(null);
 
                     // Automatically show keyboard when the panel is called.
-                    if (inputManager != null && keyboard_focus &&
-                            previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                        inputManager.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
+                    if (keyboard_focus && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                        parseAction("show_keyboard", searchBar);
                         searchBar.requestFocus();
                     }
                     // Animate search container entering the view.
@@ -562,9 +554,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     // Hide keyboard if container is invisible.
-                    if (inputManager != null) {
-                        inputManager.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
-                    }
+                    parseAction("hide_keyboard", searchBar);
 
                     // Also animate the container when it's disappearing.
                     searchContainer.animate().alpha(0.0f).setDuration(200)
@@ -634,6 +624,33 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         intentFilter.addDataScheme("package");
         packageReceiver = new PackageChangesReceiver();
         registerReceiver(packageReceiver, intentFilter);
+    }
+
+    private void parseAction(String action, @Nullable View actionContext) {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        switch (action) {
+            case "panel_down":
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                }
+                break;
+            case "panel_up":
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
+                        || slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED) {
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                }
+                break;
+            case "hide_keyboard":
+                if (inputManager != null && actionContext != null) {
+                    inputManager.hideSoftInputFromWindow(actionContext.getWindowToken(), 0);
+                }
+                break;
+            case "show_keyboard":
+                if (inputManager != null && actionContext != null) {
+                    inputManager.showSoftInput(actionContext, InputMethodManager.SHOW_IMPLICIT);
+                }
+        }
     }
 
     // Load available preferences.
