@@ -2,7 +2,6 @@ package f4.hubby;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,7 +16,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArraySet;
@@ -28,7 +26,6 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.MenuInflater;
@@ -54,6 +51,7 @@ import java.util.Set;
 import f4.hubby.helpers.RecyclerClick;
 import f4.hubby.receivers.PackageChangesReceiver;
 import f4.hubby.helpers.IconPackHelper;
+import f4.hubby.wrappers.OnTouchListener;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -130,8 +128,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         snackHolder = findViewById(R.id.snackHolder);
 
-        slidingHome.setDragView(touchReceiver);
-
         apps.setHasStableIds(true);
 
         list = findViewById(R.id.apps_list);
@@ -162,12 +158,20 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         //TODO: There are better ways to accomplish this.
         final int app_count = appList.size() - 1;
         
-        // Show context menu when touchReceiver is long pressed.
-        touchReceiver.setOnLongClickListener(new View.OnLongClickListener() {
+        // Handle touch events in touchReceiver.
+        touchReceiver.setOnTouchListener(new OnTouchListener(this) {
             @Override
-            public boolean onLongClick(View v) {
+            public void onSwipeDown() {
+                // Show the app panel when swiped down.
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                }
+            }
+
+            @Override
+            public void onLongPress() {
+                // Show context menu when touchReceiver is long pressed.
                 touchReceiver.showContextMenu();
-                return true;
             }
         });
 
@@ -235,7 +239,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 return false;
             }
         });
-
     }
 
     @Override
@@ -315,10 +318,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    // Don't do anything when back is pressed.
-    // Fixes the issue of launcher going AWOL.
     @Override
     public void onBackPressed() {
+        // Hides the panel if back is pressed.
         if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
             slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
         }
