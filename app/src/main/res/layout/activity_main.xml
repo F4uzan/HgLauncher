@@ -22,7 +22,7 @@
         app:umanoInitialState="expanded"
         app:umanoScrollableView="@id/apps_list"
         app:umanoPanelHeight="56dp"
-        app:umanoShadowHeight="4dp">
+        app:umanoShadowHeight="0dp">
 
         <FrameLayout
             android:id="@+id/app_list_container"
