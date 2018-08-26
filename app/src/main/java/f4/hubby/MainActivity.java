@@ -326,10 +326,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onPause() {
         super.onPause();
-        apps.getFilter().filter(null);
-        if (packageReceiver != null) {
+        try {
             unregisterReceiver(packageReceiver);
+        } catch(IllegalArgumentException e) {
+            e.printStackTrace();
         }
+        apps.getFilter().filter(null);
     }
 
     @Override
@@ -360,8 +362,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (packageReceiver != null) {
+        try {
             unregisterReceiver(packageReceiver);
+        } catch(IllegalArgumentException e) {
+            e.printStackTrace();
         }
     }
 
