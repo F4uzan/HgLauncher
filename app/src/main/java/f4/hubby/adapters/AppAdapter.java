@@ -108,7 +108,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             filteredList.clear();
             final FilterResults results = new FilterResults();
 
-            if (charSequence.length() == 0) {
+            if (charSequence == null || charSequence.length() == 0) {
                 filteredList.addAll(originalList);
             } else {
                 final String filterPattern = charSequence.toString();
