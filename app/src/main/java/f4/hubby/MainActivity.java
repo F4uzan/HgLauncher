@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -56,9 +57,9 @@ import java.util.Set;
 
 import f4.hubby.adapters.AppAdapter;
 import f4.hubby.adapters.PinnedAppAdapter;
+import f4.hubby.helpers.IconPackHelper;
 import f4.hubby.helpers.RecyclerClick;
 import f4.hubby.receivers.PackageChangesReceiver;
-import f4.hubby.helpers.IconPackHelper;
 import f4.hubby.wrappers.OnTouchListener;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            appListContainer.setPadding(0, getResources().getDimensionPixelSize(R.dimen.statusbar_margin), 0, 0);
+            appListContainer.setPadding(0, getStatusBarHeight(getResources()), 0, 0);
         }
 
         searchContainer = findViewById(R.id.search_container);
@@ -517,6 +518,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         intentFilter.addDataScheme("package");
         packageReceiver = new PackageChangesReceiver();
         registerReceiver(packageReceiver, intentFilter);
+    }
+
+    private int getStatusBarHeight(Resources resources) {
+        int idStatusBarHeight = resources.getIdentifier("status_bar_height", "dimen", "android");
+        if (idStatusBarHeight > 0) {
+            return getResources().getDimensionPixelSize(idStatusBarHeight);
+        } else {
+            return 0;
+        }
     }
 
     private void parseAction(String action, @Nullable View actionContext) {
