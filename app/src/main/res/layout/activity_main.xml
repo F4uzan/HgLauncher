@@ -96,14 +96,14 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:visibility="invisible"
-                android:background="?attr/cardColor"
-                android:layout_gravity="left|center_vertical">
+                android:background="?attr/cardColor">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/pinned_apps_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center"
+                    android:overScrollMode="never"
                     android:splitMotionEvents="false" />
 
             </FrameLayout>

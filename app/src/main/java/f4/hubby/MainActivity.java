@@ -29,6 +29,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,7 +41,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             keyboard_focus, dark_theme, dark_theme_black, web_search_enabled,
             comfy_padding, tap_to_drawer;
     Integer app_count;
-    String launch_anim, search_provider;
+    String launch_anim, search_provider, fav_orientation;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
     private Set<String> excludedAppList = new ArraySet<>();
@@ -186,6 +186,31 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         //TODO: There are better ways to accomplish this.
         app_count = appList.size() - 1;
 
+        // Favourites bar params coaster: set its gravity, width, and height based on orientation.
+        //TODO: Make this work with START and END gravity.
+        FrameLayout.LayoutParams pinContainerParams =  new FrameLayout.LayoutParams(pinnedAppsContainer.getLayoutParams());
+        switch (fav_orientation) {
+            case "left":
+                pinContainerParams.gravity = Gravity.LEFT;
+                pinContainerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size);
+                pinnedAppsManager.setOrientation(LinearLayoutManager.VERTICAL);
+                break;
+            case "right":
+                pinContainerParams.gravity = Gravity.RIGHT;
+                pinContainerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size);
+                pinnedAppsManager.setOrientation(LinearLayoutManager.VERTICAL);
+                break;
+            case "bottom":
+                pinContainerParams.gravity = Gravity.BOTTOM;
+                pinContainerParams.height = getResources().getDimensionPixelSize(R.dimen.panel_size);
+                pinContainerParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                pinnedAppsManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                break;
+        }
+        pinnedAppsContainer.setLayoutParams(pinContainerParams);
+
         // Switch on wallpaper shade.
         if (shade_view) {
             // Tints the navigation bar with a semi-transparent shade.
@@ -234,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "shade_view_switch":
             case "comfy_padding":
             case "icon_pack":
+            case "fav_orientation":
                 recreate();
                 break;
             case "dummy_restore":
@@ -519,6 +545,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         dark_theme_black = prefs.getBoolean("dark_theme_black", false);
         web_search_enabled = prefs.getBoolean("web_search_enabled", true);
         String search_provider_set = prefs.getString("search_provider", "google");
+        fav_orientation = prefs.getString("fav_orientation", "left");
 
         switch (search_provider_set) {
             case "google":
@@ -741,18 +768,36 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onSwipeLeft() {
                 // Dismiss favourites panel.
-                if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
-                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_left);
+                if (pinnedAppsContainer.getVisibility() == View.VISIBLE && fav_orientation.equals("left")) {
+                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_out_left);
                     pinnedAppsContainer.setAnimation(slide);
                     pinnedAppsContainer.setVisibility(View.INVISIBLE);
+                } else if (pinnedAppsContainer.getVisibility() == View.INVISIBLE && fav_orientation.equals("right")) {
+                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_in_right);
+                    pinnedAppsContainer.setAnimation(slide);
+                    pinnedAppsContainer.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onSwipeRight() {
                 // Show favourites panel on swipe.
-                if (pinnedAppsContainer.getVisibility() == View.INVISIBLE) {
-                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_right);
+                if (pinnedAppsContainer.getVisibility() == View.INVISIBLE && fav_orientation.equals("left")) {
+                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_out_right);
+                    pinnedAppsContainer.setAnimation(slide);
+                    pinnedAppsContainer.setVisibility(View.VISIBLE);
+                } else if (pinnedAppsContainer.getVisibility() == View.VISIBLE && fav_orientation.equals("right")) {
+                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_in_left);
+                    pinnedAppsContainer.setAnimation(slide);
+                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onSwipeUp() {
+                // Show favourites panel on swipe up when its orientation is in the bottom.
+                if (pinnedAppsContainer.getVisibility() == View.INVISIBLE && fav_orientation.equals("bottom")) {
+                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.pull_up);
                     pinnedAppsContainer.setAnimation(slide);
                     pinnedAppsContainer.setVisibility(View.VISIBLE);
                 }

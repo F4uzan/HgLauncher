@@ -33,6 +33,16 @@
         android:title="@string/tap_to_drawer"
         android:widgetLayout="@layout/mp_preference_switch" />
 
+    <f4.hubby.wrappers.MenuPreference
+        android:defaultValue="left"
+        android:entries="@array/pref_favourites_orientation_title"
+        android:entryValues="@array/pref_favourites_orientation_values"
+        android:key="fav_orientation"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="%s"
+        android:title="@string/pref_favourites_orientation" />
+
     <PreferenceCategory android:title="@string/pref_header_search_bar" />
 
     <CheckBoxPreference
