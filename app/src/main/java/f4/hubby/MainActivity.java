@@ -717,7 +717,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
-                final String packageName = appList.get(position).getPackageName();
+                final String packageName = pinnedAppList.get(position).getPackageName();
                 final Uri packageNameUri = Uri.parse("package:" + packageName);
 
                 // Inflate the app menu.
@@ -733,7 +733,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 pinnedAppList.remove(position);
                                 pinnedApps.notifyItemRemoved(position);
                                 pinnedAppSet.remove(packageName);
-                                editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
+                                editPrefs.putStringSet("pinned_apps", pinnedAppSet).commit();
                                 break;
                             case R.id.action_info:
                                 startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
