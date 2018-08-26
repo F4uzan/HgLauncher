@@ -327,6 +327,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onPause() {
         super.onPause();
         apps.getFilter().filter(null);
+        if (packageReceiver != null) {
+            unregisterReceiver(packageReceiver);
+        }
     }
 
     @Override
@@ -530,7 +533,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             return 0;
         }
     }
-    
+
     private void parseAction(String action, @Nullable View actionContext) {
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
