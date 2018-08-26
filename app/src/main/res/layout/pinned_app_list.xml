@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    android:paddingLeft="@dimen/uniform_panel_margin"
+    android:paddingRight="@dimen/uniform_panel_margin"
+    android:paddingTop="@dimen/uniform_panel_margin"
+    android:paddingBottom="@dimen/uniform_panel_margin">
+
+    <ImageView
+        android:id="@+id/item_app_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:contentDescription="@string/desc_icon" />
+
+</LinearLayout>

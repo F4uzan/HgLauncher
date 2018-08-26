@@ -5,15 +5,9 @@
     tools:context="f4.hubby.MainActivity">
 
     <item
-        android:id="@+id/action_pin"
+        android:id="@+id/action_unpin"
         android:orderInCategory="100"
-        android:title="@string/action_pin"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_hide"
-        android:orderInCategory="100"
-        android:title="@string/action_hide"
+        android:title="@string/action_unpin"
         app:showAsAction="never" />
 
     <item

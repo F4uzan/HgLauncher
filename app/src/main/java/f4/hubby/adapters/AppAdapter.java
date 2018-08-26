@@ -1,4 +1,4 @@
-package f4.hubby;
+package f4.hubby.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +15,8 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import f4.hubby.AppDetail;
+import f4.hubby.R;
 import f4.hubby.helpers.KissFuzzySearch;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable,
@@ -23,7 +25,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     private AppFilter filter;
     private Boolean updateFilter = false;
 
-    AppAdapter(List<AppDetail> apps) {
+    public AppAdapter(List<AppDetail> apps) {
         this.apps = apps;
     }
 

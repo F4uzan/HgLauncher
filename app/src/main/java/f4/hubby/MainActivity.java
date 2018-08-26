@@ -2,6 +2,7 @@ package f4.hubby;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -33,10 +34,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,9 +50,12 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import f4.hubby.adapters.AppAdapter;
+import f4.hubby.adapters.PinnedAppAdapter;
 import f4.hubby.helpers.RecyclerClick;
 import f4.hubby.receivers.PackageChangesReceiver;
 import f4.hubby.helpers.IconPackHelper;
@@ -61,11 +68,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             comfy_padding, tap_to_drawer;
     String launch_anim, search_provider;
     private ArrayList<AppDetail> appList = new ArrayList<>();
+    private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
     private Set<String> excludedAppList = new ArraySet<>();
+    private Set<String> pinnedAppSet;
     private PackageManager manager;
+    private PinnedAppAdapter pinnedApps = new PinnedAppAdapter(pinnedAppList);
     private AppAdapter apps = new AppAdapter(appList);
-    private RecyclerView list;
-    private FrameLayout searchContainer;
+    private RecyclerView list, pinned_list;
+    private FrameLayout searchContainer, pinnedAppsContainer;
     private EditText searchBar;
     private SlidingUpPanelLayout slidingHome;
     private View snackHolder;
@@ -74,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private BroadcastReceiver packageReceiver = null;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +110,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         View wallpaperShade = findViewById(R.id.wallpaper_shade);
         registerForContextMenu(touchReceiver);
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
+        LinearLayoutManager appListManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
+
+        final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
 
         FrameLayout appListContainer = findViewById(R.id.app_list_container);
@@ -112,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         searchContainer = findViewById(R.id.search_container);
+        pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
 
@@ -137,11 +152,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         list.setHasFixedSize(true);
         
         list.setAdapter(apps);
-        list.setLayoutManager(mLayoutManager);
+        list.setLayoutManager(appListManager);
         list.setItemAnimator(new DefaultItemAnimator());
+
+        pinned_list = findViewById(R.id.pinned_apps_list);
+        pinned_list.setAdapter(pinnedApps);
+        pinned_list.setLayoutManager(pinnedAppsManager);
 
         // Get a list of our hidden apps, default to null if there aren't any.
         excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
+
+        // Do the same for pinned apps.
+        pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
+        for (String pinnedApp : pinnedAppSet) {
+            loadSingleApp(pinnedApp, pinnedApps, pinnedAppList, false);
+        }
 
         // Get icons from icon pack.
         //TODO: This seems super slow.
@@ -161,6 +186,26 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         
         // Handle touch events in touchReceiver.
         touchReceiver.setOnTouchListener(new OnTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+                // Dismiss favourites panel.
+                if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
+                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_left);
+                    pinnedAppsContainer.setAnimation(slide);
+                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onSwipeRight() {
+                // Show favourites panel on swipe.
+                if (pinnedAppsContainer.getVisibility() == View.INVISIBLE) {
+                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_right);
+                    pinnedAppsContainer.setAnimation(slide);
+                    pinnedAppsContainer.setVisibility(View.VISIBLE);
+                }
+            }
+            
             @Override
             public void onSwipeDown() {
                 // Show the app panel when swiped down.
@@ -347,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         if (prefs.getBoolean("addApp", false)) {
             editPrefs.putBoolean("addApp", false).commit();
-            loadSingleApp(prefs.getString("added_app", "none"));
+            loadSingleApp(prefs.getString("added_app", "none"), apps, appList, true);
             editPrefs.remove("added_app").commit();
         } else if (prefs.getBoolean("removedApp", false)) {
             editPrefs.putBoolean("removedApp", false).commit();
@@ -428,12 +473,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         list.setItemViewCacheSize(appList.size() - 1);
     }
 
-    private void loadSingleApp(String packageName) {
+    private void loadSingleApp(String packageName, RecyclerView.Adapter adapter, List<AppDetail> list, Boolean shouldSort) {
         PackageManager pm = getPackageManager();
         ApplicationInfo applicationInfo;
 
         if (pm.getLaunchIntentForPackage(packageName) != null &&
-                !appList.contains(new AppDetail(null, null, packageName))) {
+                !list.contains(new AppDetail(null, null, packageName))) {
             try {
                 applicationInfo = pm.getApplicationInfo(packageName, 0);
                 String appName = pm.getApplicationLabel(applicationInfo).toString();
@@ -450,26 +495,28 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     }
                 }
                 AppDetail app = new AppDetail(icon, appName, packageName);
-                appList.add(app);
-                apps.notifyItemInserted(appList.size());
+                list.add(app);
+                adapter.notifyItemInserted(list.size());
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
 
-            if (!list_order) {
-                Collections.sort(appList, new Comparator<AppDetail>() {
-                    @Override
-                    public int compare(AppDetail nameL, AppDetail nameR) {
-                        return nameR.getAppName().compareToIgnoreCase(nameL.getAppName());
-                    }
-                });
-            } else {
-                Collections.sort(appList, Collections.reverseOrder(new Comparator<AppDetail>() {
-                    @Override
-                    public int compare(AppDetail nameL, AppDetail nameR) {
-                        return nameR.getAppName().compareToIgnoreCase(nameL.getAppName());
-                    }
-                }));
+            if (shouldSort) {
+                if (!list_order) {
+                    Collections.sort(list, new Comparator<AppDetail>() {
+                        @Override
+                        public int compare(AppDetail nameL, AppDetail nameR) {
+                            return nameR.getAppName().compareToIgnoreCase(nameL.getAppName());
+                        }
+                    });
+                } else {
+                    Collections.sort(list, Collections.reverseOrder(new Comparator<AppDetail>() {
+                        @Override
+                        public int compare(AppDetail nameL, AppDetail nameR) {
+                            return nameR.getAppName().compareToIgnoreCase(nameL.getAppName());
+                        }
+                    }));
+                }
             }
         }
     }
@@ -500,6 +547,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
+                            case R.id.action_pin:
+                                loadSingleApp(appList.get(position).getPackageName(), pinnedApps, pinnedAppList, false);
+                                pinnedAppSet.add(packageName);
+                                editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
+                                break;
                             case R.id.action_info:
                                 startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                         packageNameUri));
@@ -521,6 +573,51 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     }
                 });
                 return false;
+            }
+        });
+
+        // Add long click action to pinned apps.
+        RecyclerClick.addTo(pinned_list).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
+                // Parse package URI for use in uninstallation and package info call.
+                final String packageName = appList.get(position).getPackageName();
+                final Uri packageNameUri = Uri.parse("package:" + packageName);
+
+                // Inflate the app menu.
+                PopupMenu appMenu = new PopupMenu(MainActivity.this, v);
+                appMenu.getMenuInflater().inflate(R.menu.menu_pinned_app, appMenu.getMenu());
+                appMenu.show();
+
+                //TODO: Still looks hackish.
+                appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_unpin:
+                                pinnedAppList.remove(position);
+                                pinnedApps.notifyItemRemoved(position);
+                                pinnedAppSet.remove(packageName);
+                                editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
+                                break;
+                            case R.id.action_info:
+                                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                        packageNameUri));
+                                break;
+                            case R.id.action_uninstall:
+                                startActivity(new Intent(Intent.ACTION_DELETE, packageNameUri));
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                return false;
+            }
+        });
+
+        RecyclerClick.addTo(pinned_list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                launchApp(pinnedAppList.get(position).getPackageName());
             }
         });
 

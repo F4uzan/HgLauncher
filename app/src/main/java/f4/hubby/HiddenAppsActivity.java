@@ -15,7 +15,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 
+import f4.hubby.adapters.AppAdapter;
 import f4.hubby.helpers.RecyclerClick;
 
 public class HiddenAppsActivity extends AppCompatActivity {
