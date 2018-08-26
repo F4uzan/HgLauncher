@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     boolean anim, icon_hide, list_order, shade_view,
             keyboard_focus, dark_theme, dark_theme_black, web_search_enabled,
             comfy_padding, tap_to_drawer;
+    Integer app_count;
     String launch_anim, search_provider;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private FrameLayout searchContainer, pinnedAppsContainer;
     private EditText searchBar;
     private SlidingUpPanelLayout slidingHome;
-    private View snackHolder;
+    private View snackHolder, touchReceiver;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
 
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         setContentView(R.layout.activity_main);
 
-        final View touchReceiver = findViewById(R.id.touch_receiver);
+        touchReceiver = findViewById(R.id.touch_receiver);
         View wallpaperShade = findViewById(R.id.wallpaper_shade);
         registerForContextMenu(touchReceiver);
 
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         list.setDrawingCacheEnabled(true);
         list.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         list.setHasFixedSize(true);
-        
+
         list.setAdapter(apps);
         list.setLayoutManager(appListManager);
         list.setItemAnimator(new DefaultItemAnimator());
@@ -183,55 +184,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Save our current count.
         //TODO: There are better ways to accomplish this.
-        final int app_count = appList.size() - 1;
-        
-        // Handle touch events in touchReceiver.
-        touchReceiver.setOnTouchListener(new OnTouchListener(this) {
-            @Override
-            public void onSwipeLeft() {
-                // Dismiss favourites panel.
-                if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
-                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_left);
-                    pinnedAppsContainer.setAnimation(slide);
-                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onSwipeRight() {
-                // Show favourites panel on swipe.
-                if (pinnedAppsContainer.getVisibility() == View.INVISIBLE) {
-                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_right);
-                    pinnedAppsContainer.setAnimation(slide);
-                    pinnedAppsContainer.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onSwipeDown() {
-                // Show the app panel and dismiss favourites panel when swiped down.
-                if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
-                    Animation push = AnimationUtils.loadAnimation(MainActivity.this, R.anim.push_down);
-                    pinnedAppsContainer.setAnimation(push);
-                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
-                }
-                parseAction("panel_down", null);
-            }
-
-            @Override
-            public void onLongPress() {
-                // Show context menu when touchReceiver is long pressed.
-                touchReceiver.showContextMenu();
-            }
-
-            @Override
-            public void onClick() {
-                // Imitate sliding panel drag view behaviour; show the app panel on click.
-                if (tap_to_drawer) {
-                    parseAction("panel_down", null);
-                }
-            }
-        });
+        app_count = appList.size() - 1;
 
         // Switch on wallpaper shade.
         if (shade_view) {
@@ -240,63 +193,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarShade));
             }
             wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
-       }
-
-       // Implement listener for the search bar.
-       searchBar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Begin filtering our list.
-                apps.getFilter().filter(s);
-                if (apps.shouldUpdateFilter()) {
-                    apps.setUpdateFilter(false);
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Don't allow spamming of empty spaces.
-                if (s.length() > 0 && s.charAt(0) == ' ') {
-                    s.delete(0, 1);
-                }
-
-                final String searchBarText = searchBar.getText().toString().trim();
-                // Scroll back down to the start of the list if search query is empty.
-                if (searchBarText.equals("")) {
-                    list.getLayoutManager().scrollToPosition(app_count);
-                } else if (!searchBarText.equals("") && web_search_enabled) {
-                    // Prompt user if they want to search their query online.
-                    String searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
-                    Snackbar.make(snackHolder, searchHint, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.search_web_button, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent link = new Intent(Intent.ACTION_VIEW,
-                                            Uri.parse(search_provider + searchBarText));
-                                    startActivity(link);
-                                }
-                            }).show();
-                }
-            }
-        });
-
-        // Listen for keyboard enter/search key input.
-        searchBar.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL
-                        && !searchBar.getText().toString().equals("")) {
-                    if (!appList.isEmpty()) {
-                        launchApp(appList.get(0).getPackageName());
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
+        }
     }
 
     @Override
@@ -527,7 +424,171 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+    // A method to launch an app based on package name.
+    private void launchApp(String packageName) {
+        Intent i = manager.getLaunchIntentForPackage(packageName);
+        // Attempt to catch exceptions instead of crash landing directly to the floor.
+        try {
+            // Override app launch animation when needed.
+            startActivity(i);
+            switch (launch_anim) {
+                case "pull_up":
+                    overridePendingTransition(R.anim.pull_up, 0);
+                    break;
+                case "slide_in":
+                    overridePendingTransition(R.anim.slide_in, 0);
+                    break;
+            }
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(MainActivity.this, R.string.err_activity_not_found, Toast.LENGTH_LONG).show();
+        } catch (NullPointerException e) {
+            Toast.makeText(MainActivity.this, R.string.err_activity_null, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private static class getIconTask extends AsyncTask<Void, Void, Void> {
+        private WeakReference<MainActivity> activityRef;
+
+        getIconTask(MainActivity context) {
+            activityRef = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            MainActivity activity = activityRef.get();
+            if (activity != null) {
+                new IconPackHelper().loadIconPack(activity);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+        }
+    }
+
+    public void registerPackageReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+        intentFilter.addDataScheme("package");
+        packageReceiver = new PackageChangesReceiver();
+        registerReceiver(packageReceiver, intentFilter);
+    }
+
+    private void parseAction(String action, @Nullable View actionContext) {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        switch (action) {
+            case "panel_down":
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                }
+                break;
+            case "panel_up":
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
+                        || slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED) {
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                }
+                break;
+            case "hide_keyboard":
+                if (inputManager != null && actionContext != null) {
+                    inputManager.hideSoftInputFromWindow(actionContext.getWindowToken(), 0);
+                }
+                break;
+            case "show_keyboard":
+                if (inputManager != null && actionContext != null) {
+                    inputManager.showSoftInput(actionContext, InputMethodManager.SHOW_IMPLICIT);
+                }
+        }
+    }
+
+    // Load available preferences.
+    //TODO: This is suboptimal. Maybe try coming up with a better hax?
+    private void loadPref() {
+        launch_anim = prefs.getString("launch_anim", "default");
+        icon_hide = prefs.getBoolean("icon_hide_switch", false);
+        list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
+        shade_view = prefs.getBoolean("shade_view_switch", false);
+        keyboard_focus = prefs.getBoolean("keyboard_focus", false);
+        comfy_padding = prefs.getBoolean("comfy_padding", false);
+        tap_to_drawer = prefs.getBoolean("tap_to_drawer", false);
+        dark_theme = prefs.getBoolean("dark_theme", false);
+        dark_theme_black = prefs.getBoolean("dark_theme_black", false);
+        web_search_enabled = prefs.getBoolean("web_search_enabled", true);
+        String search_provider_set = prefs.getString("search_provider", "google");
+
+        switch (search_provider_set) {
+            case "google":
+                search_provider = "https://www.google.com/search?q=";
+                break;
+            case "ddg":
+                search_provider = "https://www.duckduckgo.com/?q=";
+                break;
+            case "searx":
+                search_provider = "https://www.searx.me/?q=";
+        }
+    }
+
     private void addClickListener() {
+        // Implement listener for the search bar.
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Begin filtering our list.
+                apps.getFilter().filter(s);
+                if (apps.shouldUpdateFilter()) {
+                    apps.setUpdateFilter(false);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Don't allow spamming of empty spaces.
+                if (s.length() > 0 && s.charAt(0) == ' ') {
+                    s.delete(0, 1);
+                }
+
+                final String searchBarText = searchBar.getText().toString().trim();
+                // Scroll back down to the start of the list if search query is empty.
+                if (searchBarText.equals("")) {
+                    list.getLayoutManager().scrollToPosition(app_count);
+                } else if (!searchBarText.equals("") && web_search_enabled) {
+                    // Prompt user if they want to search their query online.
+                    String searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
+                    Snackbar.make(snackHolder, searchHint, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.search_web_button, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent link = new Intent(Intent.ACTION_VIEW,
+                                            Uri.parse(search_provider + searchBarText));
+                                    startActivity(link);
+                                }
+                            }).show();
+                }
+            }
+        });
+
+        // Listen for keyboard enter/search key input.
+        searchBar.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL
+                        && !searchBar.getText().toString().equals("")) {
+                    if (!appList.isEmpty()) {
+                        launchApp(appList.get(0).getPackageName());
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
         // Add short click/click listener to the app list.
         RecyclerClick.addTo(list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
@@ -673,113 +734,54 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
             }
         });
-    }
 
-    // A method to launch an app based on package name.
-    private void launchApp(String packageName) {
-        Intent i = manager.getLaunchIntentForPackage(packageName);
-        // Attempt to catch exceptions instead of crash landing directly to the floor.
-        try {
-            // Override app launch animation when needed.
-            startActivity(i);
-            switch (launch_anim) {
-                case "pull_up":
-                    overridePendingTransition(R.anim.pull_up, 0);
-                    break;
-                case "slide_in":
-                    overridePendingTransition(R.anim.slide_in, 0);
-                    break;
+
+        // Handle touch events in touchReceiver.
+        touchReceiver.setOnTouchListener(new OnTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+                // Dismiss favourites panel.
+                if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
+                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_left);
+                    pinnedAppsContainer.setAnimation(slide);
+                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
+                }
             }
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(MainActivity.this, R.string.err_activity_not_found, Toast.LENGTH_LONG).show();
-        } catch (NullPointerException e) {
-            Toast.makeText(MainActivity.this, R.string.err_activity_null, Toast.LENGTH_LONG).show();
-        }
-    }
 
-    private static class getIconTask extends AsyncTask<Void, Void, Void> {
-        private WeakReference<MainActivity> activityRef;
-
-        getIconTask(MainActivity context) {
-            activityRef = new WeakReference<>(context);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            MainActivity activity = activityRef.get();
-            if (activity != null) {
-                new IconPackHelper().loadIconPack(activity);
+            @Override
+            public void onSwipeRight() {
+                // Show favourites panel on swipe.
+                if (pinnedAppsContainer.getVisibility() == View.INVISIBLE) {
+                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_right);
+                    pinnedAppsContainer.setAnimation(slide);
+                    pinnedAppsContainer.setVisibility(View.VISIBLE);
+                }
             }
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-        }
-    }
-
-    public void registerPackageReceiver() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-        intentFilter.addDataScheme("package");
-        packageReceiver = new PackageChangesReceiver();
-        registerReceiver(packageReceiver, intentFilter);
-    }
-
-    private void parseAction(String action, @Nullable View actionContext) {
-        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        switch (action) {
-            case "panel_down":
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            @Override
+            public void onSwipeDown() {
+                // Show the app panel and dismiss favourites panel when swiped down.
+                if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
+                    Animation push = AnimationUtils.loadAnimation(MainActivity.this, R.anim.push_down);
+                    pinnedAppsContainer.setAnimation(push);
+                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
                 }
-                break;
-            case "panel_up":
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
-                        || slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-                }
-                break;
-            case "hide_keyboard":
-                if (inputManager != null && actionContext != null) {
-                    inputManager.hideSoftInputFromWindow(actionContext.getWindowToken(), 0);
-                }
-                break;
-            case "show_keyboard":
-                if (inputManager != null && actionContext != null) {
-                    inputManager.showSoftInput(actionContext, InputMethodManager.SHOW_IMPLICIT);
-                }
-        }
-    }
+                parseAction("panel_down", null);
+            }
 
-    // Load available preferences.
-    //TODO: This is suboptimal. Maybe try coming up with a better hax?
-    private void loadPref() {
-        launch_anim = prefs.getString("launch_anim", "default");
-        icon_hide = prefs.getBoolean("icon_hide_switch", false);
-        list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
-        shade_view = prefs.getBoolean("shade_view_switch", false);
-        keyboard_focus = prefs.getBoolean("keyboard_focus", false);
-        comfy_padding = prefs.getBoolean("comfy_padding", false);
-        tap_to_drawer = prefs.getBoolean("tap_to_drawer", false);
-        dark_theme = prefs.getBoolean("dark_theme", false);
-        dark_theme_black = prefs.getBoolean("dark_theme_black", false);
-        web_search_enabled = prefs.getBoolean("web_search_enabled", true);
-        String search_provider_set = prefs.getString("search_provider", "google");
+            @Override
+            public void onLongPress() {
+                // Show context menu when touchReceiver is long pressed.
+                touchReceiver.showContextMenu();
+            }
 
-        switch (search_provider_set) {
-            case "google":
-                search_provider = "https://www.google.com/search?q=";
-                break;
-            case "ddg":
-                search_provider = "https://www.duckduckgo.com/?q=";
-                break;
-            case "searx":
-                search_provider = "https://www.searx.me/?q=";
-        }
+            @Override
+            public void onClick() {
+                // Imitate sliding panel drag view behaviour; show the app panel on click.
+                if (tap_to_drawer) {
+                    parseAction("panel_down", null);
+                }
+            }
+        });
     }
 }
