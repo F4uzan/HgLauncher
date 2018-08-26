@@ -33,16 +33,6 @@
         android:title="@string/tap_to_drawer"
         android:widgetLayout="@layout/mp_preference_switch" />
 
-    <f4.hubby.wrappers.MenuPreference
-        android:defaultValue="left"
-        android:entries="@array/pref_favourites_orientation_title"
-        android:entryValues="@array/pref_favourites_orientation_values"
-        android:key="fav_orientation"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="%s"
-        android:title="@string/pref_favourites_orientation" />
-
     <PreferenceCategory android:title="@string/pref_header_search_bar" />
 
     <CheckBoxPreference
@@ -69,6 +59,27 @@
         android:summary="@string/keyboard_focus_desc"
         android:title="@string/keyboard_focus"
         android:widgetLayout="@layout/mp_preference_switch" />
+
+
+    <PreferenceCategory android:title="@string/favourites_panel_title" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="favourites_panel_switch"
+        android:summary="@string/favourites_panel_desc"
+        android:title="@string/favourites_panel_title"
+        android:widgetLayout="@layout/mp_preference_switch" />
+
+    <f4.hubby.wrappers.MenuPreference
+        android:defaultValue="left"
+        android:entries="@array/pref_favourites_orientation_title"
+        android:entryValues="@array/pref_favourites_orientation_values"
+        android:key="fav_orientation"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="%s"
+        android:dependency="favourites_panel_switch"
+        android:title="@string/pref_favourites_orientation" />
 
     <PreferenceCategory android:title="@string/pref_header_list" />
 

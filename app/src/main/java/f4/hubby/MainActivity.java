@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     boolean anim, icon_hide, list_order, shade_view,
             keyboard_focus, dark_theme, dark_theme_black, web_search_enabled,
-            comfy_padding, tap_to_drawer;
+            comfy_padding, tap_to_drawer, favourites_panel;
     Integer app_count;
     String launch_anim, search_provider, fav_orientation;
     private ArrayList<AppDetail> appList = new ArrayList<>();
@@ -287,6 +287,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "icon_pack":
             case "fav_orientation":
                 recreate();
+                break;
+            case "favourites_panel_switch":
+                if (favourites_panel && pinnedAppsContainer.getVisibility() == View.VISIBLE) {
+                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
+                }
                 break;
             case "dummy_restore":
                 excludedAppList.clear();
@@ -588,6 +593,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         web_search_enabled = prefs.getBoolean("web_search_enabled", true);
         String search_provider_set = prefs.getString("search_provider", "google");
         fav_orientation = prefs.getString("fav_orientation", "left");
+        favourites_panel = prefs.getBoolean("favourites_panel_switch", true);
 
         switch (search_provider_set) {
             case "google":
@@ -687,6 +693,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 loadSingleApp(appList.get(position).getPackageName(), pinnedApps, pinnedAppList, false);
                                 pinnedAppSet.add(packageName);
                                 editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
+                                if (!favourites_panel) {
+                                    Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
+                                }
                                 break;
                             case R.id.action_info:
                                 startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -810,11 +819,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onSwipeLeft() {
                 // Dismiss favourites panel.
-                if (pinnedAppsContainer.getVisibility() == View.VISIBLE && fav_orientation.equals("left")) {
+                if (favourites_panel && pinnedAppsContainer.getVisibility() == View.VISIBLE
+                        && fav_orientation.equals("left")) {
                     Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_out_left);
                     pinnedAppsContainer.setAnimation(slide);
                     pinnedAppsContainer.setVisibility(View.INVISIBLE);
-                } else if (pinnedAppsContainer.getVisibility() == View.INVISIBLE && fav_orientation.equals("right")) {
+                } else if (favourites_panel &&pinnedAppsContainer.getVisibility() == View.INVISIBLE
+                        && fav_orientation.equals("right")) {
                     Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_in_right);
                     pinnedAppsContainer.setAnimation(slide);
                     pinnedAppsContainer.setVisibility(View.VISIBLE);
@@ -824,11 +835,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onSwipeRight() {
                 // Show favourites panel on swipe.
-                if (pinnedAppsContainer.getVisibility() == View.INVISIBLE && fav_orientation.equals("left")) {
+                if (favourites_panel && pinnedAppsContainer.getVisibility() == View.INVISIBLE
+                        && fav_orientation.equals("left")) {
                     Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_out_right);
                     pinnedAppsContainer.setAnimation(slide);
                     pinnedAppsContainer.setVisibility(View.VISIBLE);
-                } else if (pinnedAppsContainer.getVisibility() == View.VISIBLE && fav_orientation.equals("right")) {
+                } else if (favourites_panel && pinnedAppsContainer.getVisibility() == View.VISIBLE
+                        && fav_orientation.equals("right")) {
                     Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_in_left);
                     pinnedAppsContainer.setAnimation(slide);
                     pinnedAppsContainer.setVisibility(View.INVISIBLE);
@@ -838,7 +851,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onSwipeUp() {
                 // Show favourites panel on swipe up when its orientation is in the bottom.
-                if (pinnedAppsContainer.getVisibility() == View.INVISIBLE && fav_orientation.equals("bottom")) {
+                if (favourites_panel && pinnedAppsContainer.getVisibility() == View.INVISIBLE
+                        && fav_orientation.equals("bottom")) {
                     Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.pull_up);
                     pinnedAppsContainer.setAnimation(slide);
                     pinnedAppsContainer.setVisibility(View.VISIBLE);

@@ -28,6 +28,9 @@
     <string name="anim_list_pull_up">Pull up</string>
     <string name="anim_list_slide_in">Slide in</string>
 
+    <string name="favourites_panel_title">Favourites panel</string>
+    <string name="favourites_panel_desc">Toggle the swipeable panel for pinning apps.</string>
+
     <string name="pref_favourites_orientation">Favourites panel orientation</string>
     <string name="fav_orientation_left">Left</string>
     <string name="fav_orientation_right">Right</string>
