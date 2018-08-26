@@ -92,11 +92,10 @@
 
             <FrameLayout
                 android:id="@+id/pinned_apps_container"
-                android:layout_width="48dp"
+                android:layout_width="@dimen/panel_size"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="invisible"
-                android:background="?attr/cardColor">
+                android:visibility="invisible">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/pinned_apps_list"

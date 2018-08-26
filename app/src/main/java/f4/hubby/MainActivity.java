@@ -195,18 +195,33 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 pinContainerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
                 pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size);
                 pinnedAppsManager.setOrientation(LinearLayoutManager.VERTICAL);
+                if (dark_theme) {
+                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_left_shadow_dark);
+                } else {
+                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_left_shadow);
+                }
                 break;
             case "right":
                 pinContainerParams.gravity = Gravity.RIGHT;
                 pinContainerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
                 pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size);
                 pinnedAppsManager.setOrientation(LinearLayoutManager.VERTICAL);
+                if (dark_theme) {
+                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_right_shadow_dark);
+                } else {
+                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_right_shadow);
+                }
                 break;
             case "bottom":
                 pinContainerParams.gravity = Gravity.BOTTOM;
                 pinContainerParams.height = getResources().getDimensionPixelSize(R.dimen.panel_size);
                 pinContainerParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
                 pinnedAppsManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                if (dark_theme) {
+                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_bottom_shadow_dark);
+                } else {
+                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_bottom_shadow);
+                }
                 break;
         }
         pinnedAppsContainer.setLayoutParams(pinContainerParams);
@@ -822,6 +837,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             @Override
             public void onClick() {
+                // Dismiss favourites bar.
+                if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
+                    Animation push = AnimationUtils.loadAnimation(MainActivity.this, R.anim.push_down);
+                    pinnedAppsContainer.setAnimation(push);
+                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
+                }
+
                 // Imitate sliding panel drag view behaviour; show the app panel on click.
                 if (tap_to_drawer) {
                     parseAction("panel_down", null);
