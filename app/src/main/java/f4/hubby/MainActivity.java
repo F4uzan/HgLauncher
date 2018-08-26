@@ -192,7 +192,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         FrameLayout.LayoutParams pinContainerParams =  new FrameLayout.LayoutParams(pinnedAppsContainer.getLayoutParams());
         switch (fav_orientation) {
             case "left":
-                pinContainerParams.gravity = Gravity.LEFT;
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    pinContainerParams.gravity = Gravity.LEFT;
+                } else {
+                    pinContainerParams.gravity = Gravity.START;
+                }
                 pinContainerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
                 pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size);
                 pinnedAppsManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -204,7 +208,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 pinContainerParams.topMargin = getStatusBarHeight(getResources());
                 break;
             case "right":
-                pinContainerParams.gravity = Gravity.RIGHT;
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    pinContainerParams.gravity = Gravity.RIGHT;
+                } else {
+                    pinContainerParams.gravity = Gravity.END;
+                }
                 pinContainerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
                 pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size);
                 pinnedAppsManager.setOrientation(LinearLayoutManager.VERTICAL);
