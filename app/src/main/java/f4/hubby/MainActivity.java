@@ -211,8 +211,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public void onSwipeDown() {
                 // Show the app panel and dismiss favourites panel when swiped down.
                 if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
-                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_left);
-                    pinnedAppsContainer.setAnimation(slide);
+                    Animation push = AnimationUtils.loadAnimation(MainActivity.this, R.anim.push_down);
+                    pinnedAppsContainer.setAnimation(push);
                     pinnedAppsContainer.setVisibility(View.INVISIBLE);
                 }
                 parseAction("panel_down", null);
