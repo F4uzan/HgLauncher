@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 } else {
                     pinnedAppsContainer.setBackgroundResource(R.drawable.panel_left_shadow);
                 }
+                pinContainerParams.topMargin = getStatusBarHeight(getResources());
                 break;
             case "right":
                 pinContainerParams.gravity = Gravity.RIGHT;
@@ -212,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 } else {
                     pinnedAppsContainer.setBackgroundResource(R.drawable.panel_right_shadow);
                 }
+                pinContainerParams.topMargin = getStatusBarHeight(getResources());
                 break;
             case "bottom":
                 pinContainerParams.gravity = Gravity.BOTTOM;
@@ -528,7 +530,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             return 0;
         }
     }
-
+    
     private void parseAction(String action, @Nullable View actionContext) {
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
