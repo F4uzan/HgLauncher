@@ -18,10 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        android:layout_marginStart="@dimen/uniform_panel_margin"
-        android:layout_marginEnd="@dimen/uniform_panel_margin"
-        android:layout_marginLeft="@dimen/uniform_panel_margin"
-        android:layout_marginRight="@dimen/uniform_panel_margin"
         app:umanoInitialState="expanded"
         app:umanoScrollableView="@id/apps_list"
         app:umanoPanelHeight="56dp"
@@ -30,7 +26,11 @@
         <FrameLayout
             android:id="@+id/app_list_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/uniform_panel_margin"
+            android:layout_marginEnd="@dimen/uniform_panel_margin"
+            android:layout_marginLeft="@dimen/uniform_panel_margin"
+            android:layout_marginRight="@dimen/uniform_panel_margin">
 
             <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
                 android:id="@+id/apps_list"
@@ -67,7 +67,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:orientation="horizontal"
-                android:background="?attr/cardColor">
+                android:background="?attr/cardColor"
+                android:layout_marginStart="@dimen/uniform_panel_margin"
+                android:layout_marginEnd="@dimen/uniform_panel_margin"
+                android:layout_marginLeft="@dimen/uniform_panel_margin"
+                android:layout_marginRight="@dimen/uniform_panel_margin">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/search"

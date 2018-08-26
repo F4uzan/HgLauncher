@@ -135,11 +135,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             searchContainer.setVisibility(savedInstanceState.getInt("searchVisibility"));
         }
 
-        // Empty out slidingHome margins if they are not needed.
+        // Empty out margins if they are not needed.
         if (!comfy_padding) {
-            ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome.getLayoutParams();
-            homeParams.setMargins(0, 0, 0, 0);
-            slidingHome.setLayoutParams(homeParams);
+            ViewGroup.MarginLayoutParams searchParams = (ViewGroup.MarginLayoutParams) searchContainer.getLayoutParams();
+            ViewGroup.MarginLayoutParams listParams = (ViewGroup.MarginLayoutParams) appListContainer.getLayoutParams();
+            searchParams.setMargins(0, 0, 0, 0);
+            listParams.setMargins(0, 0, 0, 0);
         }
 
         snackHolder = findViewById(R.id.snackHolder);
@@ -205,10 +206,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     pinnedAppsContainer.setVisibility(View.VISIBLE);
                 }
             }
-            
+
             @Override
             public void onSwipeDown() {
-                // Show the app panel when swiped down.
+                // Show the app panel and dismiss favourites panel when swiped down.
+                if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
+                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_left);
+                    pinnedAppsContainer.setAnimation(slide);
+                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
+                }
                 parseAction("panel_down", null);
             }
 
