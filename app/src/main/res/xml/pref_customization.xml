@@ -60,7 +60,6 @@
         android:title="@string/keyboard_focus"
         android:widgetLayout="@layout/mp_preference_switch" />
 
-
     <PreferenceCategory android:title="@string/favourites_panel_title" />
 
     <CheckBoxPreference

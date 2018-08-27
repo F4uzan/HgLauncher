@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Start loading apps and initialising click listeners.
         loadApps(false);
-        addClickListener();
+        addListeners();
 
         registerPackageReceiver();
 
@@ -607,7 +607,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    private void addClickListener() {
+    private void addListeners() {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
