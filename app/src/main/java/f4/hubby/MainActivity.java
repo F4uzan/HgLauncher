@@ -29,6 +29,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -332,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         try {
             unregisterReceiver(packageReceiver);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            Log.e("Hubby", e.toString());
         }
         apps.getFilter().filter(null);
     }
@@ -343,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         try {
             unregisterReceiver(packageReceiver);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            Log.e("Hubby", e.toString());
         }
     }
 
@@ -451,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 list.add(app);
                 adapter.notifyItemInserted(list.size());
             } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
+                Log.e("Hubby", e.toString());
             }
 
             if (shouldSort) {
