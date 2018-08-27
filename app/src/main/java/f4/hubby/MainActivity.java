@@ -679,7 +679,20 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 // Inflate the app menu.
                 PopupMenu appMenu = new PopupMenu(MainActivity.this, v);
                 appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
-                appMenu.show();
+
+                // Remove uninstall menu if the app is a system app.
+                //TODO: System apps can be 'downgraded' if they are updated. Maybe check for that?
+                try {
+                    ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
+                    if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
+                        appMenu.getMenu().removeItem(R.id.action_uninstall);
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e("Hubby", e.toString());
+                } finally {
+                    // Show the menu.
+                    appMenu.show();
+                }
 
                 //TODO: Why does this look so hackish.
                 appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
