@@ -23,8 +23,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         FastScrollRecyclerView.SectionedAdapter {
     private List<AppDetail> apps;
     private AppFilter filter;
-    private Boolean updateFilter = false, resetFilter = false;
-    private AppDetail toRemove;
+    private Boolean updateFilter = false;
 
     public AppAdapter(List<AppDetail> apps) {
         this.apps = apps;
@@ -64,7 +63,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
     @Override
     public Filter getFilter() {
-        if (filter == null || updateFilter || resetFilter) {
+        if (filter == null || updateFilter) {
             filter = new AppFilter(apps);
         }
         return filter;
@@ -78,11 +77,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         this.updateFilter = shouldUpdate;
     }
 
-    public void removeFromFilter(AppDetail toRemove) {
-        this.toRemove = toRemove;
-        resetFilter = true;
-    }
-
     @Override
     public int getItemViewType(int pos) {
         return pos;
@@ -93,6 +87,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         return apps.size();
     }
 
+    @NonNull
     @Override
     public String getSectionName(int position) {
         return apps.get(position).getAppName().substring(0, 1).toUpperCase();
@@ -116,10 +111,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
             if (charSequence == null || charSequence.length() == 0 || updateFilter) {
                 filteredList.addAll(originalList);
-            } else if (resetFilter) {
-                originalList.remove(toRemove);
-                filteredList.addAll(originalList);
-                resetFilter = false;
             } else {
                 final String filterPattern = charSequence.toString();
                 for (AppDetail item : originalList) {
