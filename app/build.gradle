@@ -33,6 +33,5 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.18'
     implementation 'com.fnp:material-preferences:0.1.4'
-    implementation 'com.github.AndroidDeveloperLB:MaterialPreferenceLibrary:11'
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
 }
