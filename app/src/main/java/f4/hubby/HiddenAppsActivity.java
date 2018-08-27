@@ -15,6 +15,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ public class HiddenAppsActivity extends AppCompatActivity {
     TextView emptyHint;
     SharedPreferences prefs;
     SharedPreferences.Editor editPrefs;
+    PackageManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,8 @@ public class HiddenAppsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        manager = getPackageManager();
 
         // Load appropriate theme before creating the activity.
         if (prefs.getBoolean("dark_theme", false) && prefs.getBoolean("dark_theme_black", true)) {
@@ -114,7 +118,6 @@ public class HiddenAppsActivity extends AppCompatActivity {
     }
 
     private void loadHiddenApps() {
-        PackageManager manager = getPackageManager();
         appList.clear();
         list.getRecycledViewPool().clear();
         apps.notifyItemRangeChanged(0, 0);
@@ -159,7 +162,19 @@ public class HiddenAppsActivity extends AppCompatActivity {
                 // Inflate the app menu.
                 PopupMenu appMenu = new PopupMenu(HiddenAppsActivity.this, v);
                 appMenu.getMenuInflater().inflate(R.menu.menu_hidden_app, appMenu.getMenu());
-                appMenu.show();
+
+                // Remove uninstall menu if the app is a system app.
+                try {
+                    ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
+                    if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
+                        appMenu.getMenu().removeItem(R.id.action_uninstall);
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e("Hubby", e.toString());
+                } finally {
+                    // Show the menu.
+                    appMenu.show();
+                }
 
                 // Set listener for the menu.
                 appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
