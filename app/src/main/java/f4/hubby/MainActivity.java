@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
 
-    private BroadcastReceiver packageReceiver = null;
+    private BroadcastReceiver packageReceiver;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -92,25 +92,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
 
         // Load preferences before setting layout to allow for quick theme change.
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        editPrefs = prefs.edit();
-        prefs.registerOnSharedPreferenceChangeListener(this);
         loadPref();
-
-        // Set the theme!
-        if (dark_theme && !dark_theme_black) {
-            setTheme(R.style.AppTheme_Gray_NoActionBar);
-        } else if (dark_theme) {
-            setTheme(R.style.AppTheme_Dark_NoActionBar);
-        } else {
-            setTheme(R.style.AppTheme_NoActionBar);
-        }
 
         setContentView(R.layout.activity_main);
 
-        touchReceiver = findViewById(R.id.touch_receiver);
-        View wallpaperShade = findViewById(R.id.wallpaper_shade);
-        registerForContextMenu(touchReceiver);
+        manager = getPackageManager();
 
         LinearLayoutManager appListManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
@@ -120,17 +106,41 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         FrameLayout appListContainer = findViewById(R.id.app_list_container);
 
+        searchContainer = findViewById(R.id.search_container);
+        pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
+        searchBar = findViewById(R.id.search);
+        slidingHome = findViewById(R.id.slide_home);
+
+        touchReceiver = findViewById(R.id.touch_receiver);
+        View wallpaperShade = findViewById(R.id.wallpaper_shade);
+
+        snackHolder = findViewById(R.id.snackHolder);
+
+        list = findViewById(R.id.apps_list);
+        pinned_list = findViewById(R.id.pinned_apps_list);
+
+        apps.setHasStableIds(true);
+
+        list.setDrawingCacheEnabled(true);
+        list.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
+        list.setHasFixedSize(true);
+
+        list.setAdapter(apps);
+        list.setLayoutManager(appListManager);
+        list.setItemAnimator(new DefaultItemAnimator());
+
+        pinned_list.setAdapter(pinnedApps);
+        pinned_list.setLayoutManager(pinnedAppsManager);
+
+        // Get a list of our hidden apps, default to null if there aren't any.
+        excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
+
         // Workaround v21+ statusbar transparency issue.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             appListContainer.setPadding(0, getStatusBarHeight(getResources()), 0, 0);
         }
-
-        searchContainer = findViewById(R.id.search_container);
-        pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
-        searchBar = findViewById(R.id.search);
-        slidingHome = findViewById(R.id.slide_home);
 
         // Restore search bar visibility when available.
         if (savedInstanceState != null) {
@@ -145,32 +155,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             listParams.setMargins(0, 0, 0, 0);
         }
 
-        snackHolder = findViewById(R.id.snackHolder);
-
-        apps.setHasStableIds(true);
-
-        list = findViewById(R.id.apps_list);
-        list.setDrawingCacheEnabled(true);
-        list.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-        list.setHasFixedSize(true);
-
-        list.setAdapter(apps);
-        list.setLayoutManager(appListManager);
-        list.setItemAnimator(new DefaultItemAnimator());
-
-        pinned_list = findViewById(R.id.pinned_apps_list);
-        pinned_list.setAdapter(pinnedApps);
-        pinned_list.setLayoutManager(pinnedAppsManager);
-
-        // Get a list of our hidden apps, default to null if there aren't any.
-        excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
-
-        // Do the same for pinned apps.
-        pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
-        for (String pinnedApp : pinnedAppSet) {
-            loadSingleApp(pinnedApp, pinnedApps, pinnedAppList, false);
-        }
-
         // Get icons from icon pack.
         //TODO: This seems super slow.
         if (!prefs.getString("icon_pack", "default").equals("default")) {
@@ -181,14 +165,20 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         loadApps(false);
         addListeners();
 
+        registerForContextMenu(touchReceiver);
         registerPackageReceiver();
 
-        // Save our current count.
+        // Save our current app count.
         //TODO: There are better ways to accomplish this.
         app_count = appList.size() - 1;
 
+        // Get pinned apps here, after the initialisation of getIconTask.
+        pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
+        for (String pinnedApp : pinnedAppSet) {
+            loadSingleApp(pinnedApp, pinnedApps, pinnedAppList, false);
+        }
+
         // Favourites bar params coaster: set its gravity, width, and height based on orientation.
-        //TODO: Make this work with START and END gravity.
         FrameLayout.LayoutParams pinContainerParams =  new FrameLayout.LayoutParams(pinnedAppsContainer.getLayoutParams());
         switch (fav_orientation) {
             case "left":
@@ -290,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
             case "favourites_panel_switch":
                 if (favourites_panel && pinnedAppsContainer.getVisibility() == View.VISIBLE) {
-                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
+                    pinnedAppsContainer.setVisibility(View.GONE);
                 }
                 break;
             case "dummy_restore":
@@ -341,16 +331,25 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onPause();
         try {
             unregisterReceiver(packageReceiver);
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
         apps.getFilter().filter(null);
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            unregisterReceiver(packageReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        loadPref();
         searchBar.setText(null);
         parseAction("panel_up", null);
         registerPackageReceiver();
@@ -373,16 +372,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try {
-            unregisterReceiver(packageReceiver);
-        } catch(IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save search bar visibility state.
         savedInstanceState.putInt("searchVisibility", searchContainer.getVisibility());
@@ -390,8 +379,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void loadApps(Boolean shouldForceRefresh) {
-        manager = getPackageManager();
-
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
 
@@ -441,14 +428,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void loadSingleApp(String packageName, RecyclerView.Adapter adapter, List<AppDetail> list, Boolean shouldSort) {
-        PackageManager pm = getPackageManager();
         ApplicationInfo applicationInfo;
 
-        if (pm.getLaunchIntentForPackage(packageName) != null &&
+        if (manager.getLaunchIntentForPackage(packageName) != null &&
                 !list.contains(new AppDetail(null, null, packageName))) {
             try {
-                applicationInfo = pm.getApplicationInfo(packageName, 0);
-                String appName = pm.getApplicationLabel(applicationInfo).toString();
+                applicationInfo = manager.getApplicationInfo(packageName, 0);
+                String appName = manager.getApplicationLabel(applicationInfo).toString();
                 Drawable icon = null;
                 Drawable getIcon = null;
                 if (!icon_hide) {
@@ -456,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         getIcon = new IconPackHelper().getIconDrawable(this, packageName);
                     }
                     if (getIcon == null) {
-                        icon = pm.getApplicationIcon(packageName);
+                        icon = manager.getApplicationIcon(packageName);
                     } else {
                         icon = getIcon;
                     }
@@ -525,14 +511,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
             return null;
         }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-        }
     }
 
-    public void registerPackageReceiver() {
+    private void registerPackageReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
         intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
@@ -547,7 +528,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (idStatusBarHeight > 0) {
             return getResources().getDimensionPixelSize(idStatusBarHeight);
         } else {
-            return 0;
+            // Return fallback size if we can't get the value from the system.
+            return getResources().getDimensionPixelSize(R.dimen.status_bar_height_fallback);
         }
     }
 
@@ -581,6 +563,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     // Load available preferences.
     //TODO: This is suboptimal. Maybe try coming up with a better hax?
     private void loadPref() {
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        editPrefs = prefs.edit();
+        prefs.registerOnSharedPreferenceChangeListener(this);
+
         launch_anim = prefs.getString("launch_anim", "default");
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
         list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
@@ -604,6 +590,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
             case "searx":
                 search_provider = "https://www.searx.me/?q=";
+        }
+
+        // Set the app theme!
+        if (dark_theme && !dark_theme_black) {
+            setTheme(R.style.AppTheme_Gray_NoActionBar);
+        } else if (dark_theme) {
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
+        } else {
+            setTheme(R.style.AppTheme_NoActionBar);
         }
     }
 
