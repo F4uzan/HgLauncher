@@ -1,5 +1,6 @@
 package f4.hubby;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -163,11 +165,15 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
             backupMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(getActivity(), BackupRestoreActivity.class);
-                    intent.putExtra("isRestore", false);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    return false;
+                    if (hasStoragePermission()) {
+                        Intent intent = new Intent(getActivity(), BackupRestoreActivity.class);
+                        intent.putExtra("isRestore", false);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        return false;
+                    } else {
+                        return false;
+                    }
                 }
             });
 
@@ -175,11 +181,15 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
             restoreMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(getActivity(), BackupRestoreActivity.class);
-                    intent.putExtra("isRestore", true);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    return false;
+                    if (hasStoragePermission()) {
+                        Intent intent = new Intent(getActivity(), BackupRestoreActivity.class);
+                        intent.putExtra("isRestore", true);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        return false;
+                    } else {
+                        return false;
+                    }
                 }
             });
 
@@ -226,6 +236,22 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
             list.setEntryValues(finalEntryValues);
             list.setTitle(getString(R.string.icon_pack));
             list.setKey("icon_pack");
+        }
+
+        // Used to check for storage permission.
+        // Throws true when API is less than M.
+        private boolean hasStoragePermission() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4200);
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+            return false;
         }
     }
 }

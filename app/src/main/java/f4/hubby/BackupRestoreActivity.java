@@ -47,6 +47,7 @@ public class BackupRestoreActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         super.onCreate(savedInstanceState);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -81,10 +82,8 @@ public class BackupRestoreActivity extends AppCompatActivity {
         }
 
         // Check for storage permission if we're in Marshmallow and up.
-        if (hasStoragePermission()) {
-            path = Environment.getExternalStorageDirectory();
-            traverseStorage(path);
-        }
+        path = Environment.getExternalStorageDirectory();
+        traverseStorage(path);
 
         fileFolders.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -138,22 +137,6 @@ public class BackupRestoreActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    // Used to check for storage permission.
-    // Throws true when API is less than M.
-    private boolean hasStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4200);
-            } else {
-                return true;
-            }
-        } else {
-            return true;
-        }
-        return true;
     }
 
     // Open a directory and refresh fileFoldersList.
