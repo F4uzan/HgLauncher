@@ -26,6 +26,11 @@
     <string name="version_key_toast">Tap once again to confirm.</string>
     <string name="version_key_name">HubbySbubby</string>
 
+    <!-- Dialogue and toast messages -->
+    <string name="backup_restore_dialogue">Restoring…</string>
+    <string name="restore_complete">Restore complete, open desktop to see changes.</string>
+    <string name="backup_complete">Backup saved!</string>
+
     <!-- Customizations -->
     <string name="dark_theme">Dark theme</string>
     <string name="dark_theme_black">Use true black</string>

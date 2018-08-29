@@ -1,13 +1,11 @@
 package f4.hubby;
 
-import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -96,7 +96,7 @@ public class BackupRestoreActivity extends AppCompatActivity {
                     // Restore backup when clicking a file, but only do so in restore mode.
                     File possibleBackup = new File(path + File.separator + fileFoldersList.get(position).getName());
                     if (isInRestore && possibleBackup.isFile() && fileFoldersList.get(position).getName().indexOf('.') > 0) {
-                        restoreBackup(possibleBackup);
+                        new restoreBackupTask(BackupRestoreActivity.this, possibleBackup).execute();
                     }
                 }
             }
@@ -184,6 +184,7 @@ public class BackupRestoreActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            Toast.makeText(BackupRestoreActivity.this, R.string.backup_complete, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -226,6 +227,43 @@ public class BackupRestoreActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Log.e("Hubby", e.toString());
             }
+        }
+    }
+
+    private static class restoreBackupTask extends AsyncTask<Void, Void, Void> {
+        private WeakReference<BackupRestoreActivity> activityRef;
+        private File path;
+        private ProgressDialog progress;
+
+        restoreBackupTask(BackupRestoreActivity context, File path) {
+            activityRef = new WeakReference<>(context);
+            this.path = path;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress = new ProgressDialog(activityRef.get());
+            progress.setMessage(activityRef.get().getString(R.string.backup_restore_dialogue));
+            progress.setIndeterminate(false);
+            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            BackupRestoreActivity activity = activityRef.get();
+            if (activity != null) {
+                activity.restoreBackup(path);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            progress.dismiss();
+            Toast.makeText(activityRef.get(), R.string.restore_complete, Toast.LENGTH_LONG).show();
         }
     }
 }
