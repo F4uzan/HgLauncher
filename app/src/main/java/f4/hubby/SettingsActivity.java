@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +98,8 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
             super.onCreate(savedInstanceState);
             setHasOptionsMenu(true);
 
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
             // HACK: Add padding in KitKat and below.
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 ListView lv = getActivity().findViewById(android.R.id.list);
@@ -104,6 +107,46 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
                 parent.setPadding(getResources().getDimensionPixelOffset(R.dimen.uniform_panel_margin), 0,
                         getResources().getDimensionPixelOffset(R.dimen.uniform_panel_margin), 0);
             }
+
+            final Preference versionMenu = findPreference("version_key");
+
+            if (prefs.getBoolean("is_grandma", false)) {
+                versionMenu.setEnabled(false);
+                versionMenu.setTitle(R.string.version_key_name);
+            }
+
+            versionMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                int counter = 9;
+                SharedPreferences.Editor editor =  PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+                Toast counterToast;
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (counter > 0) {
+                        counter--;
+                    } else if (counter == 0) {
+                        editor.putBoolean("is_grandma", true).apply();
+                        versionMenu.setEnabled(false);
+                        versionMenu.setTitle(R.string.version_key_name);
+                    }
+
+                    if (counter < 7 && counter > 1) {
+                        if (counterToast != null) {
+                            counterToast.cancel();
+                        }
+                        counterToast = Toast.makeText(getActivity(),
+                                String.format(getString(R.string.version_key_toast_plural), counter), Toast.LENGTH_SHORT);
+                        counterToast.show();
+                    } else if (counter == 1) {
+                        if (counterToast != null) {
+                            counterToast.cancel();
+                        }
+                        counterToast = Toast.makeText(getActivity(), R.string.version_key_toast, Toast.LENGTH_SHORT);
+                        counterToast.show();
+                    }
+                    return false;
+                }
+            });
 
             Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
             hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

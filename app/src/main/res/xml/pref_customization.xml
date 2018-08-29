@@ -132,6 +132,7 @@
     <PreferenceCategory android:title="@string/pref_header_about" />
 
     <Preference
+        android:key="version_key"
         android:summary="@string/app_version"
         android:title="@string/app_name" />
 </PreferenceScreen>
