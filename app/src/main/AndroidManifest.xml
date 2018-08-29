@@ -3,6 +3,7 @@
     package="f4.hubby">
 
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -38,6 +39,11 @@
         <activity
             android:name=".HiddenAppsActivity"
             android:label="@string/pref_header_hidden_apps"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".BackupRestoreActivity"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme" />
     </application>

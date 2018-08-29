@@ -3,21 +3,30 @@
     <!-- Strings for Settings (and all activity related to it -->
     <string name="title_activity_settings">Settings</string>
 
-    <!-- About and Credits -->
+    <!-- Header/category names -->
     <string name="pref_header_about">About</string>
-    <string name="pref_header_hidden_apps">Hidden apps</string>
-    <string name="pref_header_hidden_apps_desc">Manage your list of hidden apps.</string>
-    <string name="version_key_toast_plural">Tap %1$d more times to enable secrets.</string>
-    <string name="version_key_toast">Tap once again to confirm.</string>
-    <string name="version_key_name">HubbySbubby</string>
-
-    <!-- Customizations -->
     <string name="pref_header_cust">Customizations</string>
     <string name="pref_header_wall">Desktop</string>
     <string name="pref_header_list">App list</string>
     <string name="pref_header_interface">Interface</string>
     <string name="pref_header_search_bar">Search bar</string>
+    <string name="pref_header_backup_restore">Backup &amp; Restore</string>
 
+    <!-- Preference names -->
+    <string name="pref_header_hidden_apps">Hidden apps</string>
+    <string name="pref_header_hidden_apps_desc">Manage your list of hidden apps.</string>
+    <string name="pref_header_backup">Backup</string>
+    <string name="pref_header_backup_desc">Backup current launcher configuration.</string>
+    <string name="backup_name_hint">Backup name…</string>
+    <string name="pref_header_restore">Restore</string>
+    <string name="pref_header_restore_desc">Restore a saved configuration.</string>
+
+    <!-- Easter egg -->
+    <string name="version_key_toast_plural">Tap %1$d more times to enable secrets.</string>
+    <string name="version_key_toast">Tap once again to confirm.</string>
+    <string name="version_key_name">HubbySbubby</string>
+
+    <!-- Customizations -->
     <string name="dark_theme">Dark theme</string>
     <string name="dark_theme_black">Use true black</string>
     <string name="dark_theme_black_desc">Swap out dark gray for actual black in dark theme.</string>

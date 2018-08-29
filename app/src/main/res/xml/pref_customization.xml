@@ -129,6 +129,18 @@
         android:summary="%s"
         android:title="@string/pref_app_launch_anim" />
 
+    <PreferenceCategory android:title="@string/pref_header_backup_restore" />
+
+    <Preference
+        android:key="backup"
+        android:summary="@string/pref_header_backup_desc"
+        android:title="@string/pref_header_backup" />
+
+    <Preference
+        android:key="restore"
+        android:summary="@string/pref_header_restore_desc"
+        android:title="@string/pref_header_restore" />
+
     <PreferenceCategory android:title="@string/pref_header_about" />
 
     <Preference

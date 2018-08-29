@@ -159,6 +159,30 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
                 }
             });
 
+            Preference backupMenu = findPreference("backup");
+            backupMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), BackupRestoreActivity.class);
+                    intent.putExtra("isRestore", false);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    return false;
+                }
+            });
+
+            Preference restoreMenu = findPreference("restore");
+            restoreMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), BackupRestoreActivity.class);
+                    intent.putExtra("isRestore", true);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    return false;
+                }
+            });
+
             final ListPreference iconList = (ListPreference) findPreference("icon_pack");
             setIconList(iconList);
         }

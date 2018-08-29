@@ -7,6 +7,7 @@
     <string name="action_wallpaper">Change wallpaper</string>
     <string name="action_force_refresh">Refresh</string>
     <string name="action_hidden_app_reset">Restore all</string>
+    <string name="action_save_backup">Save</string>
 
     <!-- App menu actions -->
     <string name="action_pin">Pin</string>

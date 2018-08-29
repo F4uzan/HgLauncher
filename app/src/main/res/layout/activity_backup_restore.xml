@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground">
+
+    <FrameLayout
+        android:id="@+id/file_input_container"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:background="?attr/cardColor">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/file_input_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/uniform_panel_margin"
+            android:paddingEnd="@dimen/uniform_panel_margin"
+            android:paddingLeft="@dimen/uniform_panel_margin"
+            android:paddingRight="@dimen/uniform_panel_margin"
+            android:maxLines="1"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:hint="@string/backup_name_hint"
+            android:background="@android:color/transparent" />
+
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/files_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
