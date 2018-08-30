@@ -168,7 +168,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         addListeners();
 
         registerForContextMenu(touchReceiver);
-        registerPackageReceiver();
+        
+        if (packageReceiver == null) {
+            registerPackageReceiver();
+        }
 
         // Save our current app count.
         //TODO: There are better ways to accomplish this.
