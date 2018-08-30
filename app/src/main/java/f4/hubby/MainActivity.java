@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     pinContainerParams.gravity = Gravity.START;
                 }
                 pinContainerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size);
+                pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size_vertical);
                 pinnedAppsManager.setOrientation(LinearLayoutManager.VERTICAL);
                 if (dark_theme) {
                     pinnedAppsContainer.setBackgroundResource(R.drawable.panel_left_shadow_dark);
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     pinContainerParams.gravity = Gravity.END;
                 }
                 pinContainerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size);
+                pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size_vertical);
                 pinnedAppsManager.setOrientation(LinearLayoutManager.VERTICAL);
                 if (dark_theme) {
                     pinnedAppsContainer.setBackgroundResource(R.drawable.panel_right_shadow_dark);
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
             case "bottom":
                 pinContainerParams.gravity = Gravity.BOTTOM;
-                pinContainerParams.height = getResources().getDimensionPixelSize(R.dimen.panel_size);
+                pinContainerParams.height = getResources().getDimensionPixelSize(R.dimen.panel_size_horizontal);
                 pinContainerParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
                 pinnedAppsManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                 if (dark_theme) {

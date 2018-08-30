@@ -92,7 +92,7 @@
 
             <FrameLayout
                 android:id="@+id/pinned_apps_container"
-                android:layout_width="@dimen/panel_size"
+                android:layout_width="@dimen/panel_size_vertical"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:visibility="invisible">
