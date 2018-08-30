@@ -1,4 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="settings"
     android:title="@string/title_activity_settings">
 
     <PreferenceCategory android:title="@string/pref_header_interface" />
