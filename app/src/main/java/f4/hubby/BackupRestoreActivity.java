@@ -190,6 +190,7 @@ public class BackupRestoreActivity extends AppCompatActivity {
     }
 
     // Restore backup from a specified file.
+    @SuppressWarnings("unchecked")
     public void restoreBackup(File path) {
         ObjectInputStream input = null;
         try {
