@@ -339,16 +339,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try {
-            unregisterReceiver(packageReceiver);
-        } catch (IllegalArgumentException e) {
-            Log.e("Hubby", e.toString());
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         loadPref(false);
