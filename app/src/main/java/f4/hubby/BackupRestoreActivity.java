@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Set;
 
 import f4.hubby.adapters.FileFolderAdapter;
 
@@ -208,6 +209,8 @@ public class BackupRestoreActivity extends AppCompatActivity {
                     edit.putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
                     edit.putLong(key, (Long) v);
+                } else if (v instanceof Set){
+                    edit.putStringSet(key, (Set<String>) v);
                 } else if (v instanceof String) {
                     edit.putString(key, ((String) v));
                 }
