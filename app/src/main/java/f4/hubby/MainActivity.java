@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         pinned_list = findViewById(R.id.pinned_apps_list);
 
         apps.setHasStableIds(true);
+        pinnedApps.setHasStableIds(true);
 
         list.setDrawingCacheEnabled(true);
         list.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
