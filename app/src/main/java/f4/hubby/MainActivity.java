@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
 
         // Load preferences before setting layout to allow for quick theme change.
-        loadPref();
+        loadPref(true);
 
         setContentView(R.layout.activity_main);
 
@@ -351,6 +351,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onResume() {
         super.onResume();
+        loadPref(false);
         searchBar.setText(null);
         parseAction("panel_up", null);
         registerPackageReceiver();
@@ -563,10 +564,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     // Load available preferences.
     //TODO: This is suboptimal. Maybe try coming up with a better hax?
-    private void loadPref() {
+    private void loadPref(Boolean isInit) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         editPrefs = prefs.edit();
-        prefs.registerOnSharedPreferenceChangeListener(this);
+        if (isInit) {
+            prefs.registerOnSharedPreferenceChangeListener(this);
+        }
 
         launch_anim = prefs.getString("launch_anim", "default");
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
@@ -593,13 +596,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 search_provider = "https://www.searx.me/?q=";
         }
 
-        // Set the app theme!
-        if (dark_theme && !dark_theme_black) {
-            setTheme(R.style.AppTheme_Gray_NoActionBar);
-        } else if (dark_theme) {
-            setTheme(R.style.AppTheme_Dark_NoActionBar);
-        } else {
-            setTheme(R.style.AppTheme_NoActionBar);
+        if (isInit) {
+            // Set the app theme!
+            if (dark_theme && !dark_theme_black) {
+                setTheme(R.style.AppTheme_Gray_NoActionBar);
+            } else if (dark_theme) {
+                setTheme(R.style.AppTheme_Dark_NoActionBar);
+            } else {
+                setTheme(R.style.AppTheme_NoActionBar);
+            }
         }
     }
 
