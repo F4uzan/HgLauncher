@@ -224,10 +224,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
             CharSequence[] finalEntryValues = entryValues.toArray(new CharSequence[entryValues.size()]);
 
             list.setEntries(finalEntries);
-            list.setDefaultValue(getString(R.string.icon_pack_default_value));
             list.setEntryValues(finalEntryValues);
-            list.setTitle(getString(R.string.icon_pack));
-            list.setKey("icon_pack");
         }
 
         // Used to check for storage permission.
