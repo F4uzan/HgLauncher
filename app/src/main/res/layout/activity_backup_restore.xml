@@ -24,7 +24,7 @@
             android:paddingRight="@dimen/uniform_panel_margin"
             android:maxLines="1"
             android:inputType="text"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionDone|flagNoExtractUi"
             android:hint="@string/backup_name_hint"
             android:background="@android:color/transparent" />
 
