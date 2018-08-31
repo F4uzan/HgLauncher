@@ -1,4 +1,4 @@
-package f4.hubby;
+package f4.hg;
 
 import org.junit.Test;
 

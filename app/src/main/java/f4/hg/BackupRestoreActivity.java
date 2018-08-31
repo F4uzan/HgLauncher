@@ -1,4 +1,4 @@
-package f4.hubby;
+package f4.hg;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
@@ -33,7 +33,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 
-import f4.hubby.adapters.FileFolderAdapter;
+import f4.hg.adapters.FileFolderAdapter;
+import f4.hubby.R;
 
 public class BackupRestoreActivity extends AppCompatActivity {
 

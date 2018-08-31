@@ -1,4 +1,4 @@
-package f4.hubby.receivers;
+package f4.hg.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

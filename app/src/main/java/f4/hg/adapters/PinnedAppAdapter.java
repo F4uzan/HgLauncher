@@ -1,4 +1,4 @@
-package f4.hubby.adapters;
+package f4.hg.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-import f4.hubby.AppDetail;
+import f4.hg.AppDetail;
 import f4.hubby.R;
 
 public class PinnedAppAdapter extends RecyclerView.Adapter<PinnedAppAdapter.ViewHolder> {

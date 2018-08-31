@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
     defaultConfig {
-        applicationId "f4.hubby"
+        applicationId "f4.hg"
         minSdkVersion 14
         targetSdkVersion 27
         versionCode 6

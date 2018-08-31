@@ -1,4 +1,4 @@
-package f4.hubby.helpers;
+package f4.hg.helpers;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

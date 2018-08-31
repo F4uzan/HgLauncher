@@ -1,4 +1,4 @@
-package f4.hubby;
+package f4.hg;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -52,12 +52,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import f4.hubby.adapters.AppAdapter;
-import f4.hubby.adapters.PinnedAppAdapter;
-import f4.hubby.helpers.IconPackHelper;
-import f4.hubby.helpers.RecyclerClick;
-import f4.hubby.receivers.PackageChangesReceiver;
-import f4.hubby.wrappers.OnTouchListener;
+import f4.hg.adapters.AppAdapter;
+import f4.hg.adapters.PinnedAppAdapter;
+import f4.hg.helpers.RecyclerClick;
+import f4.hg.wrappers.OnTouchListener;
+import f4.hubby.R;
+import f4.hg.helpers.IconPackHelper;
+import f4.hg.receivers.PackageChangesReceiver;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 

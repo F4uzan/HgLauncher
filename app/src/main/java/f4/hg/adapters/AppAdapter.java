@@ -1,4 +1,4 @@
-package f4.hubby.adapters;
+package f4.hg.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +15,9 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import f4.hubby.AppDetail;
+import f4.hg.AppDetail;
 import f4.hubby.R;
-import f4.hubby.helpers.KissFuzzySearch;
+import f4.hg.helpers.KissFuzzySearch;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable,
         FastScrollRecyclerView.SectionedAdapter {

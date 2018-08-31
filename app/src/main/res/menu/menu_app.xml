@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="f4.hubby.MainActivity">
+    tools:context="f4.hubby.f4.hg.MainActivity">
 
     <item
         android:id="@+id/action_pin"

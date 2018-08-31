@@ -1,9 +1,6 @@
-package f4.hubby;
+package f4.hg;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -17,8 +14,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import f4.hubby.helpers.IconPackHelper;
-import f4.hubby.receivers.PackageChangesReceiver;
+import f4.hubby.R;
+import f4.hg.helpers.IconPackHelper;
 
 //TODO: Documentations?
 

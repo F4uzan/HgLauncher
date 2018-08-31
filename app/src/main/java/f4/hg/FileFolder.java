@@ -1,4 +1,4 @@
-package f4.hubby;
+package f4.hg;
 
 public class FileFolder {
     private Boolean isFolder;

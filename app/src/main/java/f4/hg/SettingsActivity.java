@@ -1,4 +1,4 @@
-package f4.hubby;
+package f4.hg;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import f4.hubby.R;
 
 public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity {
 

@@ -1,4 +1,4 @@
-package f4.hubby.adapters;
+package f4.hg.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,10 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import f4.hubby.FileFolder;
+import f4.hg.FileFolder;
 import f4.hubby.R;
 
 public class FileFolderAdapter extends BaseAdapter {

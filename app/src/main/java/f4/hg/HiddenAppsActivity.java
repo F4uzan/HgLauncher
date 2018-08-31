@@ -1,4 +1,4 @@
-package f4.hubby;
+package f4.hg;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,8 +26,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 
-import f4.hubby.adapters.AppAdapter;
-import f4.hubby.helpers.RecyclerClick;
+import f4.hg.adapters.AppAdapter;
+import f4.hg.helpers.RecyclerClick;
+import f4.hubby.R;
 
 public class HiddenAppsActivity extends AppCompatActivity {
     ArrayList<AppDetail> appList = new ArrayList<>();

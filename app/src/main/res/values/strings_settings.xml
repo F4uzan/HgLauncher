@@ -24,7 +24,7 @@
     <!-- Easter egg -->
     <string name="version_key_toast_plural">Tap %1$d more times to enable secrets.</string>
     <string name="version_key_toast">Tap once again to confirm.</string>
-    <string name="version_key_name">HubbySbubby</string>
+    <string name="version_key_name">Re:HgLauncher</string>
 
     <!-- Dialogue and toast messages -->
     <string name="backup_restore_dialogue">Restoring…</string>
