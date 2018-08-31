@@ -109,7 +109,7 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:summary="%s"
-            android:title="@string/pref_app_launch_anim" />
+            android:title="@string/icon_pack" />
 
         <CheckBoxPreference
             android:defaultValue="false"
