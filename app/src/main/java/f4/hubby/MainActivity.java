@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
 
-    private BroadcastReceiver packageReceiver = new PackageChangesReceiver();
+    private BroadcastReceiver packageReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,9 +164,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         addListeners();
 
         registerForContextMenu(touchReceiver);
-        
+
         if (packageReceiver == null) {
-            Utils.registerPackageReceiver(this);
+            registerPackageReceiver();
         }
 
         // Save our current app count.
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Get pinned apps here, after the initialisation of getIconTask.
         pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
         for (String pinnedApp : pinnedAppSet) {
-            Utils.loadSingleApp(this, pinnedApp, pinnedApps, pinnedAppList, false);
+            Utils.loadSingleApp(this, pinnedApp, pinnedApps, pinnedAppList, true);
         }
 
         // Favourites bar params coaster: set its gravity, width, and height based on orientation.
@@ -329,7 +330,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onPause() {
         super.onPause();
-        Utils.unregisterReceiver(this, packageReceiver);
+        try {
+            unregisterReceiver(packageReceiver);
+        } catch (IllegalArgumentException e) {
+            Utils.sendLog(3, e.toString());
+        }
         apps.getFilter().filter(null);
     }
 
@@ -339,11 +344,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         loadPref(false);
         searchBar.setText(null);
         parseAction("panel_up", null);
-        Utils.registerPackageReceiver(this);
+        registerPackageReceiver();
 
         if (prefs.getBoolean("addApp", false)) {
             editPrefs.putBoolean("addApp", false).commit();
-            Utils.loadSingleApp(this, prefs.getString("added_app", "none"), apps, appList, true);
+            Utils.loadSingleApp(this, prefs.getString("added_app", "none"), apps, appList, false);
             editPrefs.remove("added_app").commit();
         } else if (prefs.getBoolean("removedApp", false)) {
             editPrefs.putBoolean("removedApp", false).commit();
@@ -526,6 +531,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+    private void registerPackageReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+        intentFilter.addDataScheme("package");
+        packageReceiver = new PackageChangesReceiver();
+        registerReceiver(packageReceiver, intentFilter);
+    }
+
     private void addListeners() {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
@@ -622,7 +637,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_pin:
-                                Utils.loadSingleApp(MainActivity.this, appList.get(position).getPackageName(), pinnedApps, pinnedAppList, false);
+                                Utils.loadSingleApp(MainActivity.this, appList.get(position).getPackageName(), pinnedApps, pinnedAppList, true);
                                 pinnedAppSet.add(packageName);
                                 editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
                                 if (!favourites_panel) {

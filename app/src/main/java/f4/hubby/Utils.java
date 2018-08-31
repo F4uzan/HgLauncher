@@ -23,24 +23,6 @@ import f4.hubby.receivers.PackageChangesReceiver;
 //TODO: Documentations?
 
 public class Utils {
-    public static void registerPackageReceiver(Context context) {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-        intentFilter.addDataScheme("package");
-        PackageChangesReceiver packageReceiver = new PackageChangesReceiver();
-        context.registerReceiver(packageReceiver, intentFilter);
-    }
-
-    public static void unregisterReceiver(Context context, BroadcastReceiver receiver) {
-        try {
-            context.unregisterReceiver(receiver);
-        } catch (IllegalArgumentException e) {
-            sendLog(3, e.toString());
-        }
-    }
-
     public static int getStatusBarHeight(Context context, Resources resources) {
         int idStatusBarHeight = resources.getIdentifier("status_bar_height", "dimen", "android");
         if (idStatusBarHeight > 0) {
@@ -69,7 +51,8 @@ public class Utils {
         }
     }
 
-    public static void loadSingleApp(Context context, String packageName, RecyclerView.Adapter adapter, List<AppDetail> list, Boolean shouldSort) {
+    public static void loadSingleApp(Context context, String packageName,
+                                     RecyclerView.Adapter adapter, List<AppDetail> list, Boolean forFavourites) {
         PackageManager manager = context.getPackageManager();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         ApplicationInfo applicationInfo;
@@ -81,7 +64,7 @@ public class Utils {
                 String appName = manager.getApplicationLabel(applicationInfo).toString();
                 Drawable icon = null;
                 Drawable getIcon = null;
-                if (!prefs.getBoolean("icon_hide", false)) {
+                if (!prefs.getBoolean("icon_hide", false) || forFavourites) {
                     if (!prefs.getString("icon_pack", "default").equals("default")) {
                         getIcon = new IconPackHelper().getIconDrawable(context, packageName);
                     }
@@ -98,7 +81,7 @@ public class Utils {
                 Log.e("Hubby", e.toString());
             }
 
-            if (shouldSort) {
+            if (!forFavourites) {
                 if (!prefs.getBoolean("list_order", false)) {
                     Collections.sort(list, new Comparator<AppDetail>() {
                         @Override
