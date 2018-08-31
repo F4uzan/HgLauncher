@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -134,7 +135,11 @@ public class BackupRestoreActivity extends AppCompatActivity {
             return true;
         } else if (id == 1) {
             // Send our backup signal!
-            saveBackup(new File(path + File.separator + backupNameField.getText().toString() + ".xml"));
+            if (!backupNameField.getText().toString().equals("")) {
+                saveBackup(new File(path + File.separator + backupNameField.getText().toString() + ".xml"));
+            } else {
+                Toast.makeText(this, R.string.backup_empty, Toast.LENGTH_SHORT).show();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -144,7 +149,16 @@ public class BackupRestoreActivity extends AppCompatActivity {
     public void traverseStorage(File path) {
         fileFoldersList.clear();
         fileFolderAdapter.notifyDataSetInvalidated();
-        File contents[] = path.listFiles();
+        File contents[];
+        if (isInRestore) {
+            contents = path.listFiles(new FileFilter() {
+                public boolean accept(File dir) {
+                    return dir.getName().toLowerCase().endsWith(".xml") || dir.isDirectory() && !dir.isFile();
+                }
+            });
+        } else {
+            contents = path.listFiles();
+        }
 
         if (contents.length > 0) {
             for (File availableContents : contents) {

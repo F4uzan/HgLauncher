@@ -30,6 +30,7 @@
     <string name="backup_restore_dialogue">Restoring…</string>
     <string name="restore_complete">Restore complete, open desktop to see changes.</string>
     <string name="backup_complete">Backup saved!</string>
+    <string name="backup_empty">Backup name cannot be empty.</string>
 
     <!-- Customizations -->
     <string name="dark_theme">Dark theme</string>
