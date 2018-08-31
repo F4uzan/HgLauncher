@@ -2,150 +2,164 @@
     android:key="settings"
     android:title="@string/title_activity_settings">
 
-    <PreferenceCategory android:title="@string/pref_header_interface" />
+    <PreferenceCategory android:title="@string/pref_header_interface">
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="dark_theme"
-        android:title="@string/dark_theme"
-        android:widgetLayout="@layout/mp_preference_switch" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="dark_theme"
+            android:title="@string/dark_theme"
+            android:widgetLayout="@layout/mp_preference_switch" />
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="dark_theme_black"
-        android:dependency="dark_theme"
-        android:title="@string/dark_theme_black"
-        android:summary="@string/dark_theme_black_desc"
-        android:widgetLayout="@layout/mp_preference_switch" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="dark_theme_black"
+            android:dependency="dark_theme"
+            android:title="@string/dark_theme_black"
+            android:summary="@string/dark_theme_black_desc"
+            android:widgetLayout="@layout/mp_preference_switch" />
 
-    <PreferenceCategory android:title="@string/pref_header_wall" />
+    </PreferenceCategory>
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="shade_view_switch"
-        android:summary="@string/pref_shade_view_desc"
-        android:title="@string/pref_shade_view"
-        android:widgetLayout="@layout/mp_preference_switch" />
+    <PreferenceCategory android:title="@string/pref_header_wall">
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="tap_to_drawer"
-        android:summary="@string/tap_to_drawer_desc"
-        android:title="@string/tap_to_drawer"
-        android:widgetLayout="@layout/mp_preference_switch" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="shade_view_switch"
+            android:summary="@string/pref_shade_view_desc"
+            android:title="@string/pref_shade_view"
+            android:widgetLayout="@layout/mp_preference_switch" />
 
-    <PreferenceCategory android:title="@string/pref_header_search_bar" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="tap_to_drawer"
+            android:summary="@string/tap_to_drawer_desc"
+            android:title="@string/tap_to_drawer"
+            android:widgetLayout="@layout/mp_preference_switch" />
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="web_search_enabled"
-        android:title="@string/web_search"
-        android:summary="@string/web_search_desc"
-        android:widgetLayout="@layout/mp_preference_switch" />
+    </PreferenceCategory>
 
-    <f4.hubby.wrappers.MenuPreference
-        android:defaultValue="google"
-        android:dependency="web_search_enabled"
-        android:entries="@array/pref_search_provider_title"
-        android:entryValues="@array/pref_search_provider_values"
-        android:key="search_provider"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="%s"
-        android:title="@string/pref_search_provider" />
+    <PreferenceCategory android:title="@string/pref_header_search_bar">
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="keyboard_focus"
-        android:summary="@string/keyboard_focus_desc"
-        android:title="@string/keyboard_focus"
-        android:widgetLayout="@layout/mp_preference_switch" />
+        <f4.hubby.wrappers.MenuPreference
+            android:defaultValue="google"
+            android:dependency="web_search_enabled"
+            android:entries="@array/pref_search_provider_title"
+            android:entryValues="@array/pref_search_provider_values"
+            android:key="search_provider"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:title="@string/pref_search_provider" />
 
-    <PreferenceCategory android:title="@string/favourites_panel_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="keyboard_focus"
+            android:summary="@string/keyboard_focus_desc"
+            android:title="@string/keyboard_focus"
+            android:widgetLayout="@layout/mp_preference_switch" />
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="favourites_panel_switch"
-        android:summary="@string/favourites_panel_desc"
-        android:title="@string/favourites_panel_title"
-        android:widgetLayout="@layout/mp_preference_switch" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="web_search_enabled"
+            android:title="@string/web_search"
+            android:summary="@string/web_search_desc"
+            android:widgetLayout="@layout/mp_preference_switch" />
 
-    <f4.hubby.wrappers.MenuPreference
-        android:defaultValue="left"
-        android:entries="@array/pref_favourites_orientation_title"
-        android:entryValues="@array/pref_favourites_orientation_values"
-        android:key="fav_orientation"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="%s"
-        android:dependency="favourites_panel_switch"
-        android:title="@string/pref_favourites_orientation" />
+    </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_header_list" />
+    <PreferenceCategory android:title="@string/favourites_panel_title">
 
-    <Preference
-        android:key="hidden_apps_menu"
-        android:summary="@string/pref_header_hidden_apps_desc"
-        android:title="@string/pref_header_hidden_apps" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="favourites_panel_switch"
+            android:summary="@string/favourites_panel_desc"
+            android:title="@string/favourites_panel_title"
+            android:widgetLayout="@layout/mp_preference_switch" />
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="icon_hide_switch"
-        android:summary="@string/pref_icon_view_desc"
-        android:title="@string/pref_icon_view"
-        android:widgetLayout="@layout/mp_preference_switch" />
+        <f4.hubby.wrappers.MenuPreference
+            android:defaultValue="left"
+            android:entries="@array/pref_favourites_orientation_title"
+            android:entryValues="@array/pref_favourites_orientation_values"
+            android:key="fav_orientation"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:dependency="favourites_panel_switch"
+            android:title="@string/pref_favourites_orientation" />
 
-    <f4.hubby.wrappers.MenuPreference
-        android:defaultValue="default"
-        android:key="icon_pack"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="%s"
-        android:title="@string/pref_app_launch_anim" />
+    </PreferenceCategory>
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="comfy_padding"
-        android:summary="@string/comfy_padding_desc"
-        android:title="@string/comfy_padding"
-        android:widgetLayout="@layout/mp_preference_switch" />
+    <PreferenceCategory android:title="@string/pref_header_list">
 
-    <f4.hubby.wrappers.MenuPreference
-        android:defaultValue="alphabetical"
-        android:entries="@array/pref_app_list_order_titles"
-        android:entryValues="@array/pref_app_list_order_values"
-        android:key="list_order"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="%s"
-        android:title="@string/pref_title_app_list_order" />
+        <Preference
+            android:key="hidden_apps_menu"
+            android:summary="@string/pref_header_hidden_apps_desc"
+            android:title="@string/pref_header_hidden_apps" />
 
-    <f4.hubby.wrappers.MenuPreference
-        android:defaultValue="default"
-        android:entries="@array/pref_app_launch_anim_title"
-        android:entryValues="@array/pref_app_launch_anim_values"
-        android:key="launch_anim"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="%s"
-        android:title="@string/pref_app_launch_anim" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="icon_hide_switch"
+            android:summary="@string/pref_icon_view_desc"
+            android:title="@string/pref_icon_view"
+            android:widgetLayout="@layout/mp_preference_switch" />
 
-    <PreferenceCategory android:title="@string/pref_header_backup_restore" />
+        <f4.hubby.wrappers.MenuPreference
+            android:defaultValue="default"
+            android:key="icon_pack"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:title="@string/pref_app_launch_anim" />
 
-    <Preference
-        android:key="backup"
-        android:summary="@string/pref_header_backup_desc"
-        android:title="@string/pref_header_backup" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="comfy_padding"
+            android:summary="@string/comfy_padding_desc"
+            android:title="@string/comfy_padding"
+            android:widgetLayout="@layout/mp_preference_switch" />
 
-    <Preference
-        android:key="restore"
-        android:summary="@string/pref_header_restore_desc"
-        android:title="@string/pref_header_restore" />
+        <f4.hubby.wrappers.MenuPreference
+            android:defaultValue="alphabetical"
+            android:entries="@array/pref_app_list_order_titles"
+            android:entryValues="@array/pref_app_list_order_values"
+            android:key="list_order"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:title="@string/pref_title_app_list_order" />
 
-    <PreferenceCategory android:title="@string/pref_header_about" />
+        <f4.hubby.wrappers.MenuPreference
+            android:defaultValue="default"
+            android:entries="@array/pref_app_launch_anim_title"
+            android:entryValues="@array/pref_app_launch_anim_values"
+            android:key="launch_anim"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:title="@string/pref_app_launch_anim" />
 
-    <Preference
-        android:key="version_key"
-        android:summary="@string/app_version"
-        android:title="@string/app_name" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_header_backup_restore">
+
+        <Preference
+            android:key="backup"
+            android:summary="@string/pref_header_backup_desc"
+            android:title="@string/pref_header_backup" />
+
+        <Preference
+            android:key="restore"
+            android:summary="@string/pref_header_restore_desc"
+            android:title="@string/pref_header_restore" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_header_about">
+
+        <Preference
+            android:key="version_key"
+            android:summary="@string/app_version"
+            android:title="@string/app_name" />
+
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -102,14 +102,6 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-            // HACK: Add padding in KitKat and below.
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                ListView lv = getActivity().findViewById(android.R.id.list);
-                ViewGroup parent = (ViewGroup) lv.getParent();
-                parent.setPadding(getResources().getDimensionPixelOffset(R.dimen.uniform_panel_margin), 0,
-                        getResources().getDimensionPixelOffset(R.dimen.uniform_panel_margin), 0);
-            }
-
             final Preference versionMenu = findPreference("version_key");
 
             if (prefs.getBoolean("is_grandma", false)) {
