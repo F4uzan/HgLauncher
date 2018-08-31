@@ -148,10 +148,13 @@ public class BackupRestoreActivity extends AppCompatActivity {
 
         if (contents.length > 0) {
             for (File availableContents : contents) {
-                if (availableContents.isDirectory()) {
-                    fileFoldersList.add(new FileFolder(availableContents.getName(), true));
-                } else if (availableContents.isFile()) {
-                    fileFoldersList.add(new FileFolder(availableContents.getName(), false));
+                // Don't show hidden (.hidden) files/folders.
+                if (!availableContents.isHidden()) {
+                    if (availableContents.isDirectory()) {
+                        fileFoldersList.add(new FileFolder(availableContents.getName(), true));
+                    } else if (availableContents.isFile()) {
+                        fileFoldersList.add(new FileFolder(availableContents.getName(), false));
+                    }
                 }
             }
             fileFolderAdapter.notifyDataSetChanged();
