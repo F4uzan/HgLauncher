@@ -1,6 +1,9 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:key="settings"
-    android:title="@string/title_activity_settings">
+    android:title="@string/title_activity_settings"
+    tools:ignore="UnusedAttribute">
 
     <PreferenceCategory android:title="@string/pref_header_interface">
 
@@ -45,6 +48,7 @@
             android:dependency="web_search_enabled"
             android:entries="@array/pref_search_provider_title"
             android:entryValues="@array/pref_search_provider_values"
+            android:recycleEnabled="false"
             android:key="search_provider"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
@@ -80,6 +84,7 @@
             android:defaultValue="left"
             android:entries="@array/pref_favourites_orientation_title"
             android:entryValues="@array/pref_favourites_orientation_values"
+            android:recycleEnabled="false"
             android:key="fav_orientation"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
@@ -106,6 +111,7 @@
         <f4.hubby.wrappers.MenuPreference
             android:defaultValue="default"
             android:key="icon_pack"
+            android:recycleEnabled="false"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:summary="%s"
@@ -123,6 +129,7 @@
             android:entries="@array/pref_app_list_order_titles"
             android:entryValues="@array/pref_app_list_order_values"
             android:key="list_order"
+            android:recycleEnabled="false"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:summary="%s"
@@ -133,6 +140,7 @@
             android:entries="@array/pref_app_launch_anim_title"
             android:entryValues="@array/pref_app_launch_anim_values"
             android:key="launch_anim"
+            android:recycleEnabled="false"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:summary="%s"
