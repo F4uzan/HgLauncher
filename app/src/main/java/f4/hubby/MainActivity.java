@@ -2,17 +2,14 @@ package f4.hubby;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -51,7 +48,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -85,9 +81,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
 
-    private BroadcastReceiver packageReceiver;
+    private BroadcastReceiver packageReceiver = new PackageChangesReceiver();
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            appListContainer.setPadding(0, getStatusBarHeight(getResources()), 0, 0);
+            appListContainer.setPadding(0, Utils.getStatusBarHeight(this, getResources()), 0, 0);
         }
 
         // Restore search bar visibility when available.
@@ -170,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         registerForContextMenu(touchReceiver);
         
         if (packageReceiver == null) {
-            registerPackageReceiver();
+            Utils.registerPackageReceiver(this);
         }
 
         // Save our current app count.
@@ -180,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Get pinned apps here, after the initialisation of getIconTask.
         pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
         for (String pinnedApp : pinnedAppSet) {
-            loadSingleApp(pinnedApp, pinnedApps, pinnedAppList, false);
+            Utils.loadSingleApp(this, pinnedApp, pinnedApps, pinnedAppList, false);
         }
 
         // Favourites bar params coaster: set its gravity, width, and height based on orientation.
@@ -200,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 } else {
                     pinnedAppsContainer.setBackgroundResource(R.drawable.panel_left_shadow);
                 }
-                pinContainerParams.topMargin = getStatusBarHeight(getResources());
+                pinContainerParams.topMargin = Utils.getStatusBarHeight(this, getResources());
                 break;
             case "right":
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -216,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 } else {
                     pinnedAppsContainer.setBackgroundResource(R.drawable.panel_right_shadow);
                 }
-                pinContainerParams.topMargin = getStatusBarHeight(getResources());
+                pinContainerParams.topMargin = Utils.getStatusBarHeight(this, getResources());
                 break;
             case "bottom":
                 pinContainerParams.gravity = Gravity.BOTTOM;
@@ -334,11 +329,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onPause() {
         super.onPause();
-        try {
-            unregisterReceiver(packageReceiver);
-        } catch (IllegalArgumentException e) {
-            Log.e("Hubby", e.toString());
-        }
+        Utils.unregisterReceiver(this, packageReceiver);
         apps.getFilter().filter(null);
     }
 
@@ -348,11 +339,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         loadPref(false);
         searchBar.setText(null);
         parseAction("panel_up", null);
-        registerPackageReceiver();
+        Utils.registerPackageReceiver(this);
 
         if (prefs.getBoolean("addApp", false)) {
             editPrefs.putBoolean("addApp", false).commit();
-            loadSingleApp(prefs.getString("added_app", "none"), apps, appList, true);
+            Utils.loadSingleApp(this, prefs.getString("added_app", "none"), apps, appList, true);
             editPrefs.remove("added_app").commit();
         } else if (prefs.getBoolean("removedApp", false)) {
             editPrefs.putBoolean("removedApp", false).commit();
@@ -423,53 +414,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         list.setItemViewCacheSize(appList.size() - 1);
     }
 
-    private void loadSingleApp(String packageName, RecyclerView.Adapter adapter, List<AppDetail> list, Boolean shouldSort) {
-        ApplicationInfo applicationInfo;
-
-        if (manager.getLaunchIntentForPackage(packageName) != null &&
-                !list.contains(new AppDetail(null, null, packageName))) {
-            try {
-                applicationInfo = manager.getApplicationInfo(packageName, 0);
-                String appName = manager.getApplicationLabel(applicationInfo).toString();
-                Drawable icon = null;
-                Drawable getIcon = null;
-                if (!icon_hide) {
-                    if (!prefs.getString("icon_pack", "default").equals("default")) {
-                        getIcon = new IconPackHelper().getIconDrawable(this, packageName);
-                    }
-                    if (getIcon == null) {
-                        icon = manager.getApplicationIcon(packageName);
-                    } else {
-                        icon = getIcon;
-                    }
-                }
-                AppDetail app = new AppDetail(icon, appName, packageName);
-                list.add(app);
-                adapter.notifyItemInserted(list.size());
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e("Hubby", e.toString());
-            }
-
-            if (shouldSort) {
-                if (!list_order) {
-                    Collections.sort(list, new Comparator<AppDetail>() {
-                        @Override
-                        public int compare(AppDetail nameL, AppDetail nameR) {
-                            return nameR.getAppName().compareToIgnoreCase(nameL.getAppName());
-                        }
-                    });
-                } else {
-                    Collections.sort(list, Collections.reverseOrder(new Comparator<AppDetail>() {
-                        @Override
-                        public int compare(AppDetail nameL, AppDetail nameR) {
-                            return nameR.getAppName().compareToIgnoreCase(nameL.getAppName());
-                        }
-                    }));
-                }
-            }
-        }
-    }
-
     // A method to launch an app based on package name.
     private void launchApp(String packageName) {
         Intent i = manager.getLaunchIntentForPackage(packageName);
@@ -506,26 +450,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 new IconPackHelper().loadIconPack(activity);
             }
             return null;
-        }
-    }
-
-    private void registerPackageReceiver() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-        intentFilter.addDataScheme("package");
-        packageReceiver = new PackageChangesReceiver();
-        registerReceiver(packageReceiver, intentFilter);
-    }
-
-    private int getStatusBarHeight(Resources resources) {
-        int idStatusBarHeight = resources.getIdentifier("status_bar_height", "dimen", "android");
-        if (idStatusBarHeight > 0) {
-            return getResources().getDimensionPixelSize(idStatusBarHeight);
-        } else {
-            // Return fallback size if we can't get the value from the system.
-            return getResources().getDimensionPixelSize(R.dimen.status_bar_height_fallback);
         }
     }
 
@@ -687,7 +611,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         appMenu.getMenu().removeItem(R.id.action_uninstall);
                     }
                 } catch (PackageManager.NameNotFoundException e) {
-                    Log.e("Hubby", e.toString());
+                    Utils.sendLog(3, e.toString());
                 } finally {
                     // Show the menu.
                     appMenu.show();
@@ -698,7 +622,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_pin:
-                                loadSingleApp(appList.get(position).getPackageName(), pinnedApps, pinnedAppList, false);
+                                Utils.loadSingleApp(MainActivity.this, appList.get(position).getPackageName(), pinnedApps, pinnedAppList, false);
                                 pinnedAppSet.add(packageName);
                                 editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
                                 if (!favourites_panel) {
@@ -753,7 +677,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         appMenu.getMenu().removeItem(R.id.action_uninstall);
                     }
                 } catch (PackageManager.NameNotFoundException e) {
-                    Log.e("Hubby", e.toString());
+                    Utils.sendLog(3, e.toString());
                 } finally {
                     // Show the menu.
                     appMenu.show();
