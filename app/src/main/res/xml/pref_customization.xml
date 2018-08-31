@@ -43,6 +43,13 @@
 
     <PreferenceCategory android:title="@string/pref_header_search_bar">
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="web_search_enabled"
+            android:title="@string/web_search"
+            android:summary="@string/web_search_desc"
+            android:widgetLayout="@layout/mp_preference_switch" />
+
         <mono.hg.wrappers.MenuPreference
             android:defaultValue="google"
             android:dependency="web_search_enabled"
@@ -60,13 +67,6 @@
             android:key="keyboard_focus"
             android:summary="@string/keyboard_focus_desc"
             android:title="@string/keyboard_focus"
-            android:widgetLayout="@layout/mp_preference_switch" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="web_search_enabled"
-            android:title="@string/web_search"
-            android:summary="@string/web_search_desc"
             android:widgetLayout="@layout/mp_preference_switch" />
 
     </PreferenceCategory>
