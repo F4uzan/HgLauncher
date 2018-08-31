@@ -177,7 +177,7 @@ public class BackupRestoreActivity extends AppCompatActivity {
         Collections.sort(fileFoldersList, new Comparator<FileFolder>() {
             @Override
             public int compare(FileFolder f1, FileFolder f2) {
-                return f1.getName().compareTo(f2.getName());
+                return f1.getName().compareToIgnoreCase(f2.getName());
             }
         });
     }
