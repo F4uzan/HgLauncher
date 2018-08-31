@@ -87,6 +87,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         return apps.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return apps.get(position).hashCode();
+    }
+
     @NonNull
     @Override
     public String getSectionName(int position) {
