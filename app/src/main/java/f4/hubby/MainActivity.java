@@ -740,8 +740,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float v) {
-                // Don't show keyboard on slide.
-                parseAction("hide_keyboard", searchBar);
+                // Nothing to do here.
             }
 
             @Override
