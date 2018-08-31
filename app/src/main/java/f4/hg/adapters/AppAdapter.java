@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import f4.hg.AppDetail;
-import f4.hubby.R;
+import f4.hg.R;
 import f4.hg.helpers.KissFuzzySearch;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable,

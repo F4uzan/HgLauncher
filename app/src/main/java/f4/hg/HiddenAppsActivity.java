@@ -28,7 +28,6 @@ import java.util.Set;
 
 import f4.hg.adapters.AppAdapter;
 import f4.hg.helpers.RecyclerClick;
-import f4.hubby.R;
 
 public class HiddenAppsActivity extends AppCompatActivity {
     ArrayList<AppDetail> appList = new ArrayList<>();

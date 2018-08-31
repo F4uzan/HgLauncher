@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import f4.hubby.R;
 import f4.hg.helpers.IconPackHelper;
 
 //TODO: Documentations?

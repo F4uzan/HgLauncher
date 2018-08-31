@@ -54,11 +54,10 @@ import java.util.Set;
 
 import f4.hg.adapters.AppAdapter;
 import f4.hg.adapters.PinnedAppAdapter;
-import f4.hg.helpers.RecyclerClick;
-import f4.hg.wrappers.OnTouchListener;
-import f4.hubby.R;
 import f4.hg.helpers.IconPackHelper;
+import f4.hg.helpers.RecyclerClick;
 import f4.hg.receivers.PackageChangesReceiver;
+import f4.hg.wrappers.OnTouchListener;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 

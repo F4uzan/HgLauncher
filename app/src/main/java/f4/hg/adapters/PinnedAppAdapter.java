@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import java.util.List;
 
 import f4.hg.AppDetail;
-import f4.hubby.R;
+import f4.hg.R;
 
 public class PinnedAppAdapter extends RecyclerView.Adapter<PinnedAppAdapter.ViewHolder> {
     private List<AppDetail> apps;

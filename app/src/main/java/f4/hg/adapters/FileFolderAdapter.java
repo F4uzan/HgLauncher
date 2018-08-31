@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import f4.hg.FileFolder;
-import f4.hubby.R;
+import f4.hg.R;
 
 public class FileFolderAdapter extends BaseAdapter {
     private ArrayList<FileFolder> files;

@@ -20,8 +20,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import f4.hubby.R;
-
 public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity {
 
     /**

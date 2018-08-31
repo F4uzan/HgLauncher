@@ -3,7 +3,7 @@ package f4.hg.helpers;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import f4.hubby.R;
+import f4.hg.R;
 
 /**
  * Very huge thanks to Hugo (https://www.littlerobots.nl/blog/Handle-Android-RecyclerView-Clicks/)
