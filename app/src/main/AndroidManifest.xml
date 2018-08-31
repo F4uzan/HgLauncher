@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="f4.hg">
+    package="mono.hg">
 
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="f4.hg.MainActivity"
+            android:name="mono.hg.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:stateNotNeeded="true"
@@ -31,19 +31,19 @@
         </activity>
 
         <activity
-            android:name="f4.hg.SettingsActivity"
+            android:name="mono.hg.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:excludeFromRecents="true"
             android:theme="@style/SettingTheme" />
 
         <activity
-            android:name="f4.hg.HiddenAppsActivity"
+            android:name="mono.hg.HiddenAppsActivity"
             android:label="@string/pref_header_hidden_apps"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name="f4.hg.BackupRestoreActivity"
+            android:name="mono.hg.BackupRestoreActivity"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme" />
     </application>

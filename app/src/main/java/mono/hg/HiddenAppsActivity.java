@@ -1,4 +1,4 @@
-package f4.hg;
+package mono.hg;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,8 +26,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 
-import f4.hg.adapters.AppAdapter;
-import f4.hg.helpers.RecyclerClick;
+import mono.hg.adapters.AppAdapter;
+import mono.hg.helpers.RecyclerClick;
 
 public class HiddenAppsActivity extends AppCompatActivity {
     ArrayList<AppDetail> appList = new ArrayList<>();

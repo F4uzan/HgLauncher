@@ -1,4 +1,4 @@
-package f4.hg.receivers;
+package mono.hg.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

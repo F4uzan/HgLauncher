@@ -1,4 +1,4 @@
-package f4.hg;
+package mono.hg;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

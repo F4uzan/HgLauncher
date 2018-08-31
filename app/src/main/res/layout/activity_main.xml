@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<f4.hg.wrappers.ZeroInsetsFrameLayout
+<mono.hg.wrappers.ZeroInsetsFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="f4.hubby.f4.hg.MainActivity">
+    tools:context="mono.hubby.f4.hg.MainActivity">
 
     <View
         android:id="@+id/wallpaper_shade"
@@ -111,4 +111,4 @@
 
         </FrameLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
-</f4.hg.wrappers.ZeroInsetsFrameLayout>
+</mono.hg.wrappers.ZeroInsetsFrameLayout>

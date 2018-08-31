@@ -1,4 +1,4 @@
-package f4.hg.adapters;
+package mono.hg.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +9,8 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-import f4.hg.AppDetail;
-import f4.hg.R;
+import mono.hg.AppDetail;
+import mono.hg.R;
 
 public class PinnedAppAdapter extends RecyclerView.Adapter<PinnedAppAdapter.ViewHolder> {
     private List<AppDetail> apps;
