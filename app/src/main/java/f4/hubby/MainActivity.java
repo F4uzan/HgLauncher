@@ -27,7 +27,6 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -595,6 +594,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     }
                 }
                 return false;
+            }
+        });
+
+        // Scroll app list down when it is being pushed by the keyboard.
+        list.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom) {
+                list.scrollToPosition(list.getAdapter().getItemCount() - 1);
             }
         });
 
