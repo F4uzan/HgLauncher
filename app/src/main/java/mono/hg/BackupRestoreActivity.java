@@ -230,6 +230,7 @@ public class BackupRestoreActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            traverseStorage(this.path);
             Toast.makeText(BackupRestoreActivity.this, R.string.backup_complete, Toast.LENGTH_SHORT).show();
         }
     }
