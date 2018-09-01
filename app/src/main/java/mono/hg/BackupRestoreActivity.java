@@ -1,6 +1,8 @@
 package mono.hg;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,7 +36,6 @@ import java.util.Map;
 import java.util.Set;
 
 import mono.hg.adapters.FileFolderAdapter;
-import mono.hg.R;
 
 public class BackupRestoreActivity extends AppCompatActivity {
 
@@ -137,7 +138,27 @@ public class BackupRestoreActivity extends AppCompatActivity {
         } else if (id == 1) {
             // Send our backup signal!
             if (!backupNameField.getText().toString().equals("")) {
-                saveBackup(new File(path + File.separator + backupNameField.getText().toString() + ".xml"));
+                final File backupName = new File(path + File.separator + backupNameField.getText().toString() + ".xml");
+                if (backupName.exists() && backupName.isFile()) {
+                    final AlertDialog.Builder overwriteDialog = new AlertDialog.Builder(this);
+                    overwriteDialog.setTitle(getString(R.string.pref_header_backup));
+                    overwriteDialog.setMessage(getString(R.string.backup_exist));
+                    overwriteDialog.setNegativeButton(getString(R.string.backup_exist_cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Do nothing.
+                        }
+                    });
+                    overwriteDialog.setPositiveButton(getString(R.string.backup_exist_overwrite), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            saveBackup(backupName);
+                        }
+                    });
+                    overwriteDialog.show();
+                } else {
+                    saveBackup(backupName);
+                }
             } else {
                 Toast.makeText(this, R.string.backup_empty, Toast.LENGTH_SHORT).show();
             }

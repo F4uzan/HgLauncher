@@ -27,6 +27,9 @@
     <string name="version_key_name">Re:HgLauncher</string>
 
     <!-- Dialogue and toast messages -->
+    <string name="backup_exist">A file with the same name as the backup already exists.</string>
+    <string name="backup_exist_overwrite">Overwrite</string>
+    <string name="backup_exist_cancel">Cancel</string>
     <string name="backup_restore_dialogue">Restoring…</string>
     <string name="restore_complete">Restore complete, open desktop to see changes.</string>
     <string name="backup_complete">Backup saved!</string>
