@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "removedApp":
                 editPrefs.putBoolean("removedApp", false).commit();
                 String packageToRemove = prefs.getString("removed_app", "none");
-                AppDetail objPackage = new AppDetail(null, null, packageToRemove);
+                AppDetail objPackage = new AppDetail(null, null, packageToRemove, false);
                 if (!packageToRemove.equals("none") && appList.contains(objPackage)) {
                     appList.remove(objPackage);
                     apps.notifyItemRemoved(appList.indexOf(objPackage));
@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } else if (prefs.getBoolean("removedApp", false)) {
             editPrefs.putBoolean("removedApp", false).commit();
             String packageToRemove = prefs.getString("removed_app", "none");
-            AppDetail objPackage = new AppDetail(null, null, packageToRemove);
+            AppDetail objPackage = new AppDetail(null, null, packageToRemove, false);
             if (!packageToRemove.equals("none") && appList.contains(objPackage)) {
                 appList.remove(objPackage);
                 apps.notifyItemRemoved(appList.indexOf(objPackage));
@@ -408,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         icon = getIcon;
                     }
                 }
-                AppDetail app = new AppDetail(icon, appName, packageName);
+                AppDetail app = new AppDetail(icon, appName, packageName,false);
                 appList.add(app);
                 apps.notifyItemInserted(appList.size());
             }
@@ -669,7 +669,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 excludedAppList.add(packageName);
                                 editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
                                 // Reload the app list!
-                                appList.remove(new AppDetail(null, null, packageName));
+                                appList.remove(new AppDetail(null, null, packageName, false));
                                 apps.notifyItemRemoved(position);
                                 if (searchBar.getText().toString().equals("")) {
                                     apps.setUpdateFilter(true);

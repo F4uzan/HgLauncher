@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,10 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArraySet;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,24 +21,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import mono.hg.AppDetail;
 import mono.hg.R;
-import mono.hg.adapters.AppAdapter;
-import mono.hg.helpers.RecyclerClick;
+import mono.hg.adapters.HiddenAppAdapter;
 
 public class HiddenAppsFragment extends Fragment {
     ArrayList<AppDetail> appList = new ArrayList<>();
     Set<String> excludedAppList = new ArraySet<>();
-    AppAdapter apps = new AppAdapter(appList);
-    RecyclerView list;
-    TextView emptyHint;
+    HiddenAppAdapter apps;
+    ListView list;
     SharedPreferences prefs;
     SharedPreferences.Editor editPrefs;
     PackageManager manager;
@@ -60,22 +57,18 @@ public class HiddenAppsFragment extends Fragment {
         manager = getActivity().getPackageManager();
 
         editPrefs = prefs.edit();
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(),
-                LinearLayoutManager.VERTICAL, false);
+        editPrefs.remove("dummy_restore").apply();
 
         list = getActivity().findViewById(R.id.ex_apps_list);
-        emptyHint = getActivity().findViewById(R.id.empty_hint);
+
+        apps = new HiddenAppAdapter(appList, getActivity());
 
         list.setAdapter(apps);
-        list.setLayoutManager(mLayoutManager);
-        list.setItemAnimator(new DefaultItemAnimator());
 
         // Get our app list.
         excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
-        loadHiddenApps();
+        loadApps();
 
-        // Update our view cache size, now that we have got all apps on the list.
-        list.setItemViewCacheSize(appList.size() - 1);
         addListeners();
     }
 
@@ -98,66 +91,88 @@ public class HiddenAppsFragment extends Fragment {
         } else if (id == 1) {
             excludedAppList.clear();
             editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
-            if (prefs.getBoolean("dummy_restore", true)) {
-                editPrefs.putBoolean("dummy_restore", false).apply();
-            } else {
-                editPrefs.putBoolean("dummy_restore", true).apply();
-            }
+            editPrefs.putBoolean("dummy_restore", true).apply();
             // Recreate the toolbar menu to hide the 'restore all' button.
             getActivity().invalidateOptionsMenu();
 
             // Reload the list.
-            loadHiddenApps();
+            loadApps();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadHiddenApps() {
+    private void loadApps() {
+        Intent i = new Intent(Intent.ACTION_MAIN, null);
+        i.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
+
+        Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
+        // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
-        list.getRecycledViewPool().clear();
-        apps.notifyItemRangeChanged(0, 0);
+        apps.notifyDataSetChanged();
 
-        for (String packageName : excludedAppList) {
-            ApplicationInfo appInfo;
-            Drawable icon;
-            try {
-                appInfo = manager.getApplicationInfo(packageName, 0);
-                icon = manager.getApplicationIcon(packageName);
-                String appName = manager.getApplicationLabel(appInfo).toString();
-                AppDetail app = new AppDetail(icon, appName, packageName);
-                appList.add(app);
-                apps.notifyItemInserted(appList.size() - 1);
-            } catch (PackageManager.NameNotFoundException e) {
-                // Don't do anything if package manager throws this.
+        // Fetch and add every app into our list, but ignore those that are in the exclusion list.
+        for (ResolveInfo ri : availableActivities) {
+            String packageName = ri.activityInfo.packageName;
+            Boolean isHidden = false;
+            String appName = ri.loadLabel(manager).toString();
+            Drawable icon = ri.activityInfo.loadIcon(manager);
+            if (excludedAppList.contains(packageName)) {
+                isHidden = true;
             }
-        }
-
-        Collections.sort(appList, new Comparator<AppDetail>() {
-            @Override
-            public int compare(AppDetail one, AppDetail two) {
-                return one.getAppName().compareToIgnoreCase(two.getAppName());
-            }
-        });
-
-        if (appList.size() == 0) {
-            emptyHint.setVisibility(View.VISIBLE);
-            // Kill the list since there is nothing to show.
-            list.setVisibility(View.GONE);
+            AppDetail app = new AppDetail(icon, appName, packageName, isHidden);
+            appList.add(app);
+            apps.notifyDataSetChanged();
         }
     }
 
+    private void toggleHiddenState(int position) {
+        String packageName = appList.get(position).getPackageName();
+        // Check if package is already in exclusion.
+        if (excludedAppList.contains(packageName)) {
+            excludedAppList.remove(packageName);
+            editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
+        } else {
+            excludedAppList.add(packageName);
+            editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
+        }
+        editPrefs.putBoolean("dummy_restore", true).apply();
+        // Reload the app list!
+        if (excludedAppList.contains(packageName)) {
+            appList.get(position).setHidden(true);
+        } else {
+            appList.get(position).setHidden(false);
+        }
+        apps.notifyDataSetChanged();
+    }
+
     private void addListeners() {
-        RecyclerClick.addTo(list).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                toggleHiddenState(position);
+            }
+        });
+
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 // Parse package URI for use in uninstallation and package info call.
                 final String packageName = appList.get(position).getPackageName();
                 final Uri packageNameUri = Uri.parse("package:" + packageName);
 
                 // Inflate the app menu.
-                PopupMenu appMenu = new PopupMenu(getActivity(), v);
+                PopupMenu appMenu = new PopupMenu(getActivity(), view);
                 appMenu.getMenuInflater().inflate(R.menu.menu_hidden_app, appMenu.getMenu());
+
+                // Don't show hide action if the app is already hidden.
+                if (appList.get(position).isHidden()) {
+                    appMenu.getMenu().removeItem(R.id.action_hide);
+                } else {
+                    appMenu.getMenu().removeItem(R.id.action_show);
+                }
 
                 // Remove uninstall menu if the app is a system app.
                 try {
@@ -183,21 +198,9 @@ public class HiddenAppsFragment extends Fragment {
                             case R.id.action_uninstall:
                                 startActivity(new Intent(Intent.ACTION_DELETE, packageNameUri));
                                 break;
+                            case R.id.action_hide:
                             case R.id.action_show:
-                                // Remove the app's package name from the exclusion list.
-                                excludedAppList.remove(packageName);
-                                editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
-                                if (prefs.getBoolean("dummy_restore", true)) {
-                                    editPrefs.putBoolean("dummy_restore", false).apply();
-                                } else {
-                                    editPrefs.putBoolean("dummy_restore", true).apply();
-                                }
-                                // Reload the app list!
-                                appList.remove(position);
-                                if (appList.size() == 0) {
-                                    emptyHint.setVisibility(View.VISIBLE);
-                                }
-                                apps.notifyItemRemoved(position);
+                                toggleHiddenState(position);
                                 break;
                         }
                         return true;

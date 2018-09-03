@@ -54,7 +54,7 @@ public class Utils {
         ApplicationInfo applicationInfo;
 
         if (manager.getLaunchIntentForPackage(packageName) != null &&
-                !list.contains(new AppDetail(null, null, packageName))) {
+                !list.contains(new AppDetail(null, null, packageName, false))) {
             try {
                 applicationInfo = manager.getApplicationInfo(packageName, 0);
                 String appName = manager.getApplicationLabel(applicationInfo).toString();
@@ -70,7 +70,7 @@ public class Utils {
                         icon = getIcon;
                     }
                 }
-                AppDetail app = new AppDetail(icon, appName, packageName);
+                AppDetail app = new AppDetail(icon, appName, packageName, false);
                 list.add(app);
                 adapter.notifyItemInserted(list.size());
             } catch (PackageManager.NameNotFoundException e) {
