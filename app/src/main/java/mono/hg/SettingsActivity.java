@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import mono.hg.fragments.BackupRestoreFragment;
 import mono.hg.fragments.CustomizePreferenceFragment;
+import mono.hg.fragments.HiddenAppsFragment;
 import mono.hg.wrappers.BackHandledFragment;
 
 public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity implements BackHandledFragment.BackHandlerInterface {
@@ -93,6 +94,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || CustomizePreferenceFragment.class.getName().equals(fragmentName)
+                || HiddenAppsFragment.class.getName().equals(fragmentName)
                 || BackupRestoreFragment.class.getName().equals(fragmentName);
     }
 }

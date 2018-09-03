@@ -36,12 +36,6 @@
             android:excludeFromRecents="true"
             android:theme="@style/SettingTheme" />
 
-        <activity
-            android:name="mono.hg.HiddenAppsActivity"
-            android:label="@string/pref_header_hidden_apps"
-            android:excludeFromRecents="true"
-            android:theme="@style/AppTheme" />
-
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
-package mono.hg;
+package mono.hg.fragments;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -8,17 +9,20 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.util.ArraySet;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,10 +30,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 
+import mono.hg.AppDetail;
+import mono.hg.R;
 import mono.hg.adapters.AppAdapter;
 import mono.hg.helpers.RecyclerClick;
 
-public class HiddenAppsActivity extends AppCompatActivity {
+public class HiddenAppsFragment extends Fragment {
     ArrayList<AppDetail> appList = new ArrayList<>();
     Set<String> excludedAppList = new ArraySet<>();
     AppAdapter apps = new AppAdapter(appList);
@@ -40,34 +46,25 @@ public class HiddenAppsActivity extends AppCompatActivity {
     PackageManager manager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_hidden_apps, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        setHasOptionsMenu(true);
 
-        manager = getPackageManager();
-
-        // Load appropriate theme before creating the activity.
-        if (prefs.getBoolean("dark_theme", false) && prefs.getBoolean("dark_theme_black", true)) {
-            setTheme(R.style.AppTheme_Dark);
-        } else if (!prefs.getBoolean("dark_theme", false) && !prefs.getBoolean("dark_theme_black", true)) {
-            setTheme(R.style.AppTheme);
-        } else if (!prefs.getBoolean("dark_theme_black", true)) {
-            setTheme(R.style.AppTheme_Gray);
-        }
-
-        setContentView(R.layout.activity_hidden_apps);
+        manager = getActivity().getPackageManager();
 
         editPrefs = prefs.edit();
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false);
 
-        list = findViewById(R.id.ex_apps_list);
-        emptyHint = findViewById(R.id.empty_hint);
+        list = getActivity().findViewById(R.id.ex_apps_list);
+        emptyHint = getActivity().findViewById(R.id.empty_hint);
 
         list.setAdapter(apps);
         list.setLayoutManager(mLayoutManager);
@@ -83,22 +80,22 @@ public class HiddenAppsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_hidden_app, menu);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_toolbar_hidden_app, menu);
         MenuItem reset = menu.findItem(R.id.action_reset_hidden_apps);
 
         // Don't show an option to restore entries when there is nothing to restore.
         if (appList.size() == 0) {
             reset.setVisible(false);
         }
-        return true;
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            super.onBackPressed();
+            getActivity().onBackPressed();
             return true;
         } else if (id == R.id.action_reset_hidden_apps) {
             excludedAppList.clear();
@@ -109,7 +106,7 @@ public class HiddenAppsActivity extends AppCompatActivity {
                 editPrefs.putBoolean("dummy_restore", true).apply();
             }
             // Recreate the toolbar menu to hide the 'restore all' button.
-            invalidateOptionsMenu();
+            getActivity().invalidateOptionsMenu();
             // Reload the list.
             loadHiddenApps();
             return true;
@@ -160,7 +157,7 @@ public class HiddenAppsActivity extends AppCompatActivity {
                 final Uri packageNameUri = Uri.parse("package:" + packageName);
 
                 // Inflate the app menu.
-                PopupMenu appMenu = new PopupMenu(HiddenAppsActivity.this, v);
+                PopupMenu appMenu = new PopupMenu(getActivity(), v);
                 appMenu.getMenuInflater().inflate(R.menu.menu_hidden_app, appMenu.getMenu());
 
                 // Remove uninstall menu if the app is a system app.

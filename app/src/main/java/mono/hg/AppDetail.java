@@ -6,7 +6,7 @@ public class AppDetail {
     private String appName, packageName;
     Drawable icon;
 
-    AppDetail(Drawable icon, String appName, String packageName) {
+    public AppDetail(Drawable icon, String appName, String packageName) {
         this.packageName = packageName;
         this.appName = appName;
         this.icon = icon;

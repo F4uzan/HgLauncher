@@ -18,7 +18,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import mono.hg.HiddenAppsActivity;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 
@@ -80,9 +79,10 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), HiddenAppsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, new HiddenAppsFragment(), "HiddenApps")
+                        .addToBackStack(null)
+                        .commit();
                 return false;
             }
         });
