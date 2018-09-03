@@ -334,7 +334,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } catch (IllegalArgumentException e) {
             Utils.sendLog(3, e.toString());
         }
-        apps.getFilter().filter(null);
     }
 
     @Override
@@ -575,7 +574,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 public void onClick(View view) {
                                     Intent link = new Intent(Intent.ACTION_VIEW,
                                             Uri.parse(search_provider + searchBarText));
-                                    startActivity(link);
+                                    synchronized (this) {
+                                        startActivity(link);
+                                        apps.getFilter().filter(null);
+                                    }
                                 }
                             }).show();
                 }
@@ -609,7 +611,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         RecyclerClick.addTo(list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                launchApp(appList.get(position).getPackageName());
+                synchronized (this) {
+                    launchApp(appList.get(position).getPackageName());
+                    apps.getFilter().filter(null);
+                }
             }
         });
 
