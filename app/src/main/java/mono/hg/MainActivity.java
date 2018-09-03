@@ -136,7 +136,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            appListContainer.setPadding(0, Utils.getStatusBarHeight(this, getResources()), 0, 0);
+            ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome.getLayoutParams();
+            homeParams.topMargin = Utils.getStatusBarHeight(this, getResources());
         }
 
         // Restore search bar visibility when available.
