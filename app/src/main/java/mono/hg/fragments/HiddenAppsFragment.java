@@ -57,7 +57,9 @@ public class HiddenAppsFragment extends Fragment {
         manager = getActivity().getPackageManager();
 
         editPrefs = prefs.edit();
-        editPrefs.remove("dummy_restore").apply();
+        if (prefs.getBoolean("dummy_restore", false)) {
+            editPrefs.remove("dummy_restore").apply();
+        }
 
         list = getActivity().findViewById(R.id.ex_apps_list);
 
