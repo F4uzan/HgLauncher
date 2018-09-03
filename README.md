@@ -2,13 +2,21 @@
 
 HgLauncher is a launcher with a design philosophy of 'if it works, it works.' Consisting of simply a scrolling list of apps, there is very little visual cue to disturb you. If all you want in a launcher is for it to just launch apps _ASAP_, then you may be looking at the right launcher.
 
-[Try it out now!](https://github.com/F4uzan/HgLauncher/releases)
+Try it out now!
 
 ### What does it look like?
 
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
 ![Homescreen](https://github.com/F4uzan/HgLauncher/raw/master/readme/1-home.png "Homescreen") | ![App list](https://github.com/F4uzan/HgLauncher/raw/master/readme/2-list.png "List all your apps") | ![App search](https://github.com/F4uzan/HgLauncher/raw/master/readme/3-search.png "Search and find apps")
+
+### Where can I get it?
+
+HgLauncher is available in:
+- [Google Play Store](https://play.google.com/store/apps/details?id=mono.hg)
+- [GitHub Releases](https://github.com/F4uzan/HgLauncher/releases)
+
+Releases in Play Store is different from the one distributed in GitHub! You can safely upgrade to the Play Store version, but there will be differences in feature set and changes applied to it.
 
 ### How can I contribute?
 
