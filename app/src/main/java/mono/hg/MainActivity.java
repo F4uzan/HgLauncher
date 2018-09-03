@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onBackPressed() {
         // Hides the panel if back is pressed.
-        parseAction("panel_down", null);
+        parseAction("panel_up", null);
     }
 
     @Override
