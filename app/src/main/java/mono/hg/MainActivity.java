@@ -277,18 +277,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "comfy_padding":
             case "icon_pack":
             case "fav_orientation":
+            case "dummy_restore":
                 recreate();
                 break;
             case "favourites_panel_switch":
                 if (favourites_panel && pinnedAppsContainer.getVisibility() == View.VISIBLE) {
                     pinnedAppsContainer.setVisibility(View.GONE);
                 }
-                break;
-            case "dummy_restore":
-                excludedAppList.clear();
-                excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
-                loadApps(true);
-                apps.setUpdateFilter(true);
                 break;
             case "icon_hide_switch":
                 icon_hide = prefs.getBoolean("icon_hide_switch", false);
