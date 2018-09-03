@@ -42,10 +42,6 @@
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme" />
 
-        <activity
-            android:name="mono.hg.BackupRestoreActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

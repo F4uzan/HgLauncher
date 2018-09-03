@@ -8,9 +8,20 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
+import mono.hg.fragments.BackupRestoreFragment;
 import mono.hg.fragments.CustomizePreferenceFragment;
+import mono.hg.wrappers.BackHandledFragment;
 
-public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity {
+public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity implements BackHandledFragment.BackHandlerInterface {
+    private BackHandledFragment selectedFragment;
+
+    public interface OnBackPressedListener {
+        /**
+         * Callback, which is called if the back button is pressed.
+         * @return true if the app can be closed, false otherwise.
+         */
+        boolean onBackPressed();
+    }
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -53,6 +64,19 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
     }
 
     @Override
+    public void onBackPressed() {
+        if (selectedFragment == null || !selectedFragment.onBackPressed()) {
+            // Selected fragment did not consume the back press event.
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void setSelectedFragment(BackHandledFragment selectedFragment) {
+        this.selectedFragment = selectedFragment;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -68,6 +92,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
-                || CustomizePreferenceFragment.class.getName().equals(fragmentName);
+                || CustomizePreferenceFragment.class.getName().equals(fragmentName)
+                || BackupRestoreFragment.class.getName().equals(fragmentName);
     }
 }

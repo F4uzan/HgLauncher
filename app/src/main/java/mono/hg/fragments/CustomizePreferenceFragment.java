@@ -18,7 +18,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import mono.hg.BackupRestoreActivity;
 import mono.hg.HiddenAppsActivity;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
@@ -88,15 +87,19 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
             }
         });
 
-        Preference backupMenu = findPreference("backup");
+        final Preference backupMenu = findPreference("backup");
         backupMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (hasStoragePermission()) {
-                    Intent intent = new Intent(getActivity(), BackupRestoreActivity.class);
-                    intent.putExtra("isRestore", false);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    BackupRestoreFragment backupRestoreFragment = new BackupRestoreFragment();
+                    Bundle fragmentBundle = new Bundle();
+                    fragmentBundle.putBoolean("isRestore", false);
+                    backupRestoreFragment.setArguments(fragmentBundle);
+                    getActivity().getFragmentManager().beginTransaction()
+                            .replace(android.R.id.content, backupRestoreFragment, "BackupRestore")
+                            .addToBackStack(null)
+                            .commit();
                     return false;
                 } else {
                     return false;
@@ -109,10 +112,14 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (hasStoragePermission()) {
-                    Intent intent = new Intent(getActivity(), BackupRestoreActivity.class);
-                    intent.putExtra("isRestore", true);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    BackupRestoreFragment backupRestoreFragment = new BackupRestoreFragment();
+                    Bundle fragmentBundle = new Bundle();
+                    fragmentBundle.putBoolean("isRestore", true);
+                    backupRestoreFragment.setArguments(fragmentBundle);
+                    getActivity().getFragmentManager().beginTransaction()
+                            .replace(android.R.id.content, backupRestoreFragment, "BackupRestore")
+                            .addToBackStack(null)
+                            .commit();
                     return false;
                 } else {
                     return false;
