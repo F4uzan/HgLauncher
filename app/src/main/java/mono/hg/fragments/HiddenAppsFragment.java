@@ -75,7 +75,7 @@ public class HiddenAppsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        if (appList.size() > 0) {
+        if (excludedAppList.size() > 0) {
             menu.add(0, 1, 100, getString(R.string.action_hidden_app_reset));
             menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
@@ -92,6 +92,7 @@ public class HiddenAppsFragment extends Fragment {
             excludedAppList.clear();
             editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
             editPrefs.putBoolean("dummy_restore", true).apply();
+
             // Recreate the toolbar menu to hide the 'restore all' button.
             getActivity().invalidateOptionsMenu();
 
@@ -146,6 +147,9 @@ public class HiddenAppsFragment extends Fragment {
             appList.get(position).setHidden(false);
         }
         apps.notifyDataSetChanged();
+
+        // Toggle the state of the 'restore all' button.
+        getActivity().invalidateOptionsMenu();
     }
 
     private void addListeners() {
