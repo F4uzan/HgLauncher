@@ -47,7 +47,7 @@ public class HiddenAppsFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_hidden_apps, container, false);
+        return inflater.inflate(R.layout.fragment_hidden_apps, container, false);
     }
 
     @Override
