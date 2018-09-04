@@ -57,9 +57,6 @@ public class HiddenAppsFragment extends Fragment {
         manager = getActivity().getPackageManager();
 
         editPrefs = prefs.edit();
-        if (prefs.getBoolean("dummy_restore", false)) {
-            editPrefs.remove("dummy_restore").apply();
-        }
 
         list = getActivity().findViewById(R.id.ex_apps_list);
 
@@ -72,6 +69,14 @@ public class HiddenAppsFragment extends Fragment {
         loadApps();
 
         addListeners();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (prefs.getBoolean("dummy_restore", false)) {
+            editPrefs.remove("dummy_restore").apply();
+        }
     }
 
     @Override
