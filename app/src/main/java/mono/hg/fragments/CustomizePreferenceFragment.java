@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mono.hg.R;
-import mono.hg.SettingsActivity;
 
 public class CustomizePreferenceFragment extends com.fnp.materialpreferences.PreferenceFragment {
 
@@ -36,6 +35,12 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         final Preference versionMenu = findPreference("version_key");
+        Preference restoreMenu = findPreference("restore");
+        Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
+        final Preference backupMenu = findPreference("backup");
+        final ListPreference iconList = (ListPreference) findPreference("icon_pack");
+
+        setIconList(iconList);
 
         if (prefs.getBoolean("is_grandma", false)) {
             versionMenu.setEnabled(false);
@@ -75,7 +80,6 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
             }
         });
 
-        Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
         hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -87,7 +91,6 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
             }
         });
 
-        final Preference backupMenu = findPreference("backup");
         backupMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -107,7 +110,6 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
             }
         });
 
-        Preference restoreMenu = findPreference("restore");
         restoreMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -126,16 +128,14 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                 }
             }
         });
-
-        final ListPreference iconList = (ListPreference) findPreference("icon_pack");
-        setIconList(iconList);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            startActivity(new Intent(getActivity(), SettingsActivity.class));
+            // Let the activity handle the back press.
+            getActivity().onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -152,10 +152,10 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
 
         // Fetch all available icon pack.
         Intent intent = new Intent("org.adw.launcher.THEMES");
-        List<ResolveInfo> infos = manager.queryIntentActivities (intent,
+        List<ResolveInfo> info = manager.queryIntentActivities (intent,
                 PackageManager.GET_META_DATA);
-        for (ResolveInfo info : infos) {
-            ActivityInfo activityInfo = info.activityInfo;
+        for (ResolveInfo resolveInfo : info) {
+            ActivityInfo activityInfo = resolveInfo.activityInfo;
             String packageName = activityInfo.packageName;
             String appName = activityInfo.loadLabel(manager).toString();
             entries.add(appName);
