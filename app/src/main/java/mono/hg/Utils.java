@@ -30,19 +30,20 @@ public class Utils {
     }
 
     public static void sendLog(int level, String message) {
+        String tag = "HgLogger";
         switch (level) {
             default:
             case 0:
-                Log.d("Hubby", message);
+                Log.d(tag, message);
                 break;
             case 1:
-                Log.v("Hubby", message);
+                Log.v(tag, message);
                 break;
             case 2:
-                Log.w("Hubby", message);
+                Log.w(tag, message);
                 break;
             case 3:
-                Log.e("Hubby", message);
+                Log.e(tag, message);
                 break;
         }
     }
