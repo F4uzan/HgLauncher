@@ -75,7 +75,7 @@ public class Utils {
                 list.add(app);
                 adapter.notifyItemInserted(list.size());
             } catch (PackageManager.NameNotFoundException e) {
-                Log.e("Hubby", e.toString());
+                sendLog(3, e.toString());
             }
 
             if (!forFavourites) {
