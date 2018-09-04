@@ -308,8 +308,10 @@ public class BackupRestoreFragment extends BackHandledFragment {
 
         @Override
         protected void onPostExecute(Void result) {
+            BackupRestoreFragment fragment = fragmentRef.get();
             super.onPostExecute(result);
             progress.dismiss();
+            fragment.getActivity().recreate();
             Toast.makeText(fragmentRef.get().getActivity(), R.string.restore_complete, Toast.LENGTH_LONG).show();
         }
     }
