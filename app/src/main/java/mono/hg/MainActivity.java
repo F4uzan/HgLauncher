@@ -3,7 +3,6 @@ package mono.hg;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
 
-    private BroadcastReceiver packageReceiver;
+    private PackageChangesReceiver packageReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
