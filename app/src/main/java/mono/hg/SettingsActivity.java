@@ -1,5 +1,6 @@
 package mono.hg;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -96,5 +97,15 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
                 || CustomizePreferenceFragment.class.getName().equals(fragmentName)
                 || HiddenAppsFragment.class.getName().equals(fragmentName)
                 || BackupRestoreFragment.class.getName().equals(fragmentName);
+    }
+
+    // Called when the activity needs to be restarted (i.e when a theme change occurs).
+    // Allows for smooth transition between recreation.
+    public void restartActivity() {
+        Intent intent = getIntent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(intent);
     }
 }

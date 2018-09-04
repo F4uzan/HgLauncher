@@ -24,11 +24,13 @@
     <style name="SettingTheme" parent="AppTheme">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
     </style>
 
     <style name="SettingTheme.Dark" parent="AppTheme.Dark">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
     </style>
 
     <style name="SettingTheme.Gray" parent="SettingTheme.Dark">
@@ -56,6 +58,11 @@
 
     <style name="AppTheme.Gray.NoActionBar" parent="@style/AppTheme.Dark.NoActionBar">
         <item name="backgroundColor">@color/colorBackgroundGray</item>
+    </style>
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
 </resources>

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mono.hg.R;
+import mono.hg.SettingsActivity;
 
 public class CustomizePreferenceFragment extends com.fnp.materialpreferences.PreferenceFragment {
 
@@ -38,6 +39,8 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         Preference restoreMenu = findPreference("restore");
         Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
         final Preference backupMenu = findPreference("backup");
+        Preference darkTheme = findPreference("dark_theme");
+        Preference darkThemeBlack = findPreference("dark_theme_black");
         final ListPreference iconList = (ListPreference) findPreference("icon_pack");
 
         setIconList(iconList);
@@ -46,6 +49,17 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
             versionMenu.setEnabled(false);
             versionMenu.setTitle(R.string.version_key_name);
         }
+
+        Preference.OnPreferenceClickListener themeSwitchClick = new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                ((SettingsActivity) getActivity()).restartActivity();
+                return false;
+            }
+        };
+
+        darkTheme.setOnPreferenceClickListener(themeSwitchClick);
+        darkThemeBlack.setOnPreferenceClickListener(themeSwitchClick);
 
         versionMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             int counter = 9;
