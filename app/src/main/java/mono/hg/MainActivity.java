@@ -787,7 +787,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         });
 
-
         // Handle touch events in touchReceiver.
         touchReceiver.setOnTouchListener(new OnTouchListener(this) {
             @Override
