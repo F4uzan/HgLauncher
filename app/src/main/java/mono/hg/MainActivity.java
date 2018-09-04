@@ -331,6 +331,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } catch (IllegalArgumentException e) {
             Utils.sendLog(3, e.toString());
         }
+        if (!searchBar.getText().toString().isEmpty()) {
+            apps.getFilter().filter(null);
+        }
     }
 
     @Override
