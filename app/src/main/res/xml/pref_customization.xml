@@ -5,7 +5,9 @@
     android:title="@string/title_activity_settings"
     tools:ignore="UnusedAttribute">
 
-    <PreferenceCategory android:title="@string/pref_header_interface">
+    <PreferenceCategory
+        android:title="@string/pref_header_interface"
+        android:key="interface">
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -23,7 +25,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_header_wall">
+    <PreferenceCategory
+        android:title="@string/pref_header_wall"
+        android:key="desktop">
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -41,7 +45,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_header_search_bar">
+    <PreferenceCategory
+        android:title="@string/pref_header_search_bar"
+        android:key="search_bar">
 
         <CheckBoxPreference
             android:defaultValue="true"
@@ -71,7 +77,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/favourites_panel_title">
+    <PreferenceCategory
+        android:title="@string/favourites_panel_title"
+        android:key="fav_panel">
 
         <CheckBoxPreference
             android:defaultValue="true"
@@ -94,7 +102,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_header_list">
+    <PreferenceCategory
+        android:title="@string/pref_header_list"
+        android:key="app_list">
 
         <Preference
             android:key="hidden_apps_menu"
@@ -148,7 +158,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_header_backup_restore">
+    <PreferenceCategory
+        android:title="@string/pref_header_backup_restore"
+        android:key="backup_restore">
 
         <Preference
             android:key="backup"
@@ -162,7 +174,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_header_about">
+    <PreferenceCategory
+        android:title="@string/pref_header_about"
+        android:key="about_credit">
 
         <Preference
             android:key="version_key"
