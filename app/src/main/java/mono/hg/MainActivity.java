@@ -325,7 +325,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onPause() {
         super.onPause();
         try {
-            unregisterReceiver(packageReceiver);
+            if (packageReceiver != null) {
+                unregisterReceiver(packageReceiver);
+            }
         } catch (IllegalArgumentException e) {
             Utils.sendLog(3, e.toString());
         }
@@ -337,7 +339,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         loadPref(false);
         searchBar.setText(null);
         parseAction("panel_up", null);
-        registerPackageReceiver();
+        if (packageReceiver == null) {
+            registerPackageReceiver();
+        }
 
         if (prefs.getBoolean("addApp", false)) {
             editPrefs.putBoolean("addApp", false).commit();
