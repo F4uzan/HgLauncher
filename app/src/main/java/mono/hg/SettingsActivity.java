@@ -17,14 +17,6 @@ import mono.hg.wrappers.BackHandledFragment;
 public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity implements BackHandledFragment.BackHandlerInterface {
     private BackHandledFragment selectedFragment;
 
-    public interface OnBackPressedListener {
-        /**
-         * Callback, which is called if the back button is pressed.
-         * @return true if the app can be closed, false otherwise.
-         */
-        boolean onBackPressed();
-    }
-
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
