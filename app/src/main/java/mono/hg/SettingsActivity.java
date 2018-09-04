@@ -104,6 +104,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
     public void restartActivity() {
         Intent intent = getIntent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         finish();
         overridePendingTransition(0, 0);
         startActivity(intent);
