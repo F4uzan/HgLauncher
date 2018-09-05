@@ -141,7 +141,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Restore search bar visibility when available.
         if (savedInstanceState != null) {
-            searchContainer.setVisibility(savedInstanceState.getInt("searchVisibility"));
+            // The search bar shouldn't be invisible when the panel is pulled down,
+            // and it shouldn't be visible when the panel isn't visible.
+            if (savedInstanceState.getInt("searchVisibility") == View.INVISIBLE
+                    && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                searchContainer.setVisibility(View.VISIBLE);
+            } else if (savedInstanceState.getInt("searchVisibility") == View.VISIBLE
+                    && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                searchContainer.setVisibility(View.INVISIBLE);
+            } else {
+                searchContainer.setVisibility(savedInstanceState.getInt("searchVisibility"));
+            }
         }
 
         // Empty out margins if they are not needed.
