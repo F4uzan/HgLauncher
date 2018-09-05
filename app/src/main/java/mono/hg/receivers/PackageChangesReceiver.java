@@ -17,13 +17,13 @@ public class PackageChangesReceiver extends BroadcastReceiver {
                 || intent.getAction().equals("android.intent.action.PACKAGE_CHANGED")
                 && !intent.getDataString().contains("f4.hg")) {
             editor.putBoolean("addApp", true).apply();
-            editor.putString("added_app", intent.getDataString().replace("package:", "")).commit();
+            editor.putString("added_app", intent.getDataString().replace("package:", "")).apply();
         }
 
         if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")
                 && !intent.getDataString().contains("f4.hg")) {
             editor.putBoolean("removedApp", true).apply();
-            editor.putString("removed_app", intent.getDataString().replace("package:", "")).commit();
+            editor.putString("removed_app", intent.getDataString().replace("package:", "")).apply();
         }
     }
 }
