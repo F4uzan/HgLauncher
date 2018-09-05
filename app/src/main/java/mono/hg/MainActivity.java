@@ -541,6 +541,85 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         registerReceiver(packageReceiver, intentFilter);
     }
 
+    private void createAppMenu(View v, Boolean isPinned, final String packageName) {
+        int position;
+        if (isPinned) {
+            position = pinnedAppList.indexOf(new AppDetail(null, null, packageName, false));
+        } else {
+            position = appList.indexOf(new AppDetail(null, null, packageName, false));
+        }
+        final Uri packageNameUri = Uri.parse("package:" + packageName);
+
+        // Inflate the app menu.
+        PopupMenu appMenu = new PopupMenu(MainActivity.this, v);
+        appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
+
+        if (isPinned) {
+            appMenu.getMenu().removeItem(R.id.action_pin);
+            appMenu.getMenu().removeItem(R.id.action_hide);
+        } else {
+            appMenu.getMenu().removeItem(R.id.action_unpin);
+        }
+
+        // Remove uninstall menu if the app is a system app.
+        try {
+            ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
+            if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
+                appMenu.getMenu().removeItem(R.id.action_uninstall);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Utils.sendLog(3, e.toString());
+        } finally {
+            // Show the menu.
+            appMenu.show();
+        }
+
+        //TODO: Still looks hackish.
+        final int finalPosition = position;
+        appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_pin:
+                        Utils.loadSingleApp(MainActivity.this, appList.get(finalPosition).getPackageName(), pinnedApps, pinnedAppList, true);
+                        pinnedAppSet.add(packageName);
+                        editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
+                        if (!favourites_panel) {
+                            Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case R.id.action_unpin:
+                        pinnedAppList.remove(finalPosition);
+                        pinnedApps.notifyItemRemoved(finalPosition);
+                        pinnedAppSet.remove(packageName);
+                        editPrefs.putStringSet("pinned_apps", pinnedAppSet).commit();
+                        break;
+                    case R.id.action_info:
+                        startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                packageNameUri));
+                        break;
+                    case R.id.action_uninstall:
+                        startActivity(new Intent(Intent.ACTION_DELETE, packageNameUri));
+                        break;
+                    case R.id.action_hide:
+                        // Add the app's package name to the exclusion list.
+                        excludedAppList.add(packageName);
+                        editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
+                        // Reload the app list!
+                        appList.remove(new AppDetail(null, null, packageName, false));
+                        apps.notifyItemRemoved(finalPosition);
+                        if (searchBar.getText().toString().equals("")) {
+                            apps.setUpdateFilter(true);
+                        } else {
+                            //TODO: Remove this when loadApps become less of a behemoth.
+                            recreate();
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
     private void addListeners() {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
@@ -626,63 +705,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
                 final String packageName = appList.get(position).getPackageName();
-                final Uri packageNameUri = Uri.parse("package:" + packageName);
-
-                // Inflate the app menu.
-                PopupMenu appMenu = new PopupMenu(MainActivity.this, v);
-                appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
-
-                // Remove uninstall menu if the app is a system app.
-                //TODO: System apps can be 'downgraded' if they are updated. Maybe check for that?
-                try {
-                    ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
-                    if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
-                        appMenu.getMenu().removeItem(R.id.action_uninstall);
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    Utils.sendLog(3, e.toString());
-                } finally {
-                    // Show the menu.
-                    appMenu.show();
-                }
-
-                //TODO: Why does this look so hackish.
-                appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_pin:
-                                Utils.loadSingleApp(MainActivity.this, appList.get(position).getPackageName(), pinnedApps, pinnedAppList, true);
-                                pinnedAppSet.add(packageName);
-                                editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
-                                if (!favourites_panel) {
-                                    Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
-                                }
-                                break;
-                            case R.id.action_info:
-                                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                        packageNameUri));
-                                break;
-                            case R.id.action_uninstall:
-                                startActivity(new Intent(Intent.ACTION_DELETE, packageNameUri));
-                                break;
-                            case R.id.action_hide:
-                                // Add the app's package name to the exclusion list.
-                                excludedAppList.add(packageName);
-                                editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
-                                // Reload the app list!
-                                appList.remove(new AppDetail(null, null, packageName, false));
-                                apps.notifyItemRemoved(position);
-                                if (searchBar.getText().toString().equals("")) {
-                                    apps.setUpdateFilter(true);
-                                } else {
-                                    //TODO: Remove this when loadApps become less of a behemoth.
-                                    recreate();
-                                }
-                                break;
-                        }
-                        return true;
-                    }
-                });
+                createAppMenu(v, false, packageName);
                 return false;
             }
         });
@@ -693,46 +716,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
                 final String packageName = pinnedAppList.get(position).getPackageName();
-                final Uri packageNameUri = Uri.parse("package:" + packageName);
-
-                // Inflate the app menu.
-                PopupMenu appMenu = new PopupMenu(MainActivity.this, v);
-                appMenu.getMenuInflater().inflate(R.menu.menu_pinned_app, appMenu.getMenu());
-
-                // Remove uninstall menu if the app is a system app.
-                try {
-                    ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
-                    if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
-                        appMenu.getMenu().removeItem(R.id.action_uninstall);
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    Utils.sendLog(3, e.toString());
-                } finally {
-                    // Show the menu.
-                    appMenu.show();
-                }
-
-                //TODO: Still looks hackish.
-                appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_unpin:
-                                pinnedAppList.remove(position);
-                                pinnedApps.notifyItemRemoved(position);
-                                pinnedAppSet.remove(packageName);
-                                editPrefs.putStringSet("pinned_apps", pinnedAppSet).commit();
-                                break;
-                            case R.id.action_info:
-                                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                        packageNameUri));
-                                break;
-                            case R.id.action_uninstall:
-                                startActivity(new Intent(Intent.ACTION_DELETE, packageNameUri));
-                                break;
-                        }
-                        return true;
-                    }
-                });
+                createAppMenu(v, true, packageName);
                 return false;
             }
         });

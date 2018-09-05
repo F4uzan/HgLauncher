@@ -5,6 +5,12 @@
     tools:context="mono.hubby.f4.hg.MainActivity">
 
     <item
+        android:id="@+id/action_unpin"
+        android:orderInCategory="100"
+        android:title="@string/action_unpin"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_pin"
         android:orderInCategory="100"
         android:title="@string/action_pin"
