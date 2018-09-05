@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Fuzzy search class, code taken from works of saveman71 at KISS Launcher.
  * https://github.com/Neamar/KISS/commit/41aaec1e27da79fea7c929146cbababe3acac64e
  *
- * Parts have been slightly altered to fit Hubby Launcher here.
+ * Parts have been slightly altered to fit our codes here.
  */
 
 public class KissFuzzySearch {
@@ -19,8 +19,8 @@ public class KissFuzzySearch {
                 matchedWordStarts = 0, totalWordStarts = 0;
 
         // Normalise query and source (app name).
-        String source = sourceName.toLowerCase().replaceAll("\\s", "");
-        String matchTo = queryMatch.toLowerCase().replaceAll("\\s", "").trim();
+        String source = sourceName.toLowerCase();
+        String matchTo = queryMatch.toLowerCase().trim();
 
         boolean match = false;
 
