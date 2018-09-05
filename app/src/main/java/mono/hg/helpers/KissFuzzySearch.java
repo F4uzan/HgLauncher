@@ -33,8 +33,7 @@ public class KissFuzzySearch {
                 }
 
                 // If we are at the beginning of a word, add it to matchedWordStarts
-                if (Character.isUpperCase(source.charAt(appPos)) || appPos == 0
-                        || Character.isWhitespace(source.charAt(appPos - 1))) {
+                if (appPos == 0 || Character.isWhitespace(source.charAt(appPos - 1))) {
                     matchedWordStarts += 1;
                 }
 
@@ -46,8 +45,7 @@ public class KissFuzzySearch {
             }
 
             // If we are at the beginning of a word, add it to totalWordsStarts
-            if (Character.isUpperCase(source.charAt(appPos)) || appPos == 0
-                    || Character.isWhitespace(source.charAt(appPos - 1))) {
+            if (appPos == 0 || Character.isWhitespace(source.charAt(appPos - 1))) {
                 totalWordStarts += 1;
             }
             appPos++;
@@ -58,8 +56,8 @@ public class KissFuzzySearch {
         }
 
         if (queryPos == matchTo.length()) {
-            // Add percentage of matched letters, but at a weight of 40
-            relevance += (int) (((double) queryPos / source.length()) * 40);
+            // Add percentage of matched letters at a weight of 100
+            relevance += (int) (((double) queryPos / source.length()) * 100);
 
             // Add percentage of matched upper case letters (start of word), but at a weight of 60
             relevance += (int) (((double) matchedWordStarts / totalWordStarts) * 60);
