@@ -307,6 +307,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "removedApp":
                 editPrefs.putBoolean("removedApp", false).commit();
                 editPrefs.remove("removed_app").commit();
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                }
                 // HACK: Recreate, recreate.
                 // Sometimes we receive inconsistent result, so just kick the bucket here.
                 recreate();
@@ -314,6 +317,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "addApp":
                 editPrefs.putBoolean("addApp", false).commit();
                 editPrefs.remove("added_app").commit();
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                }
                 // HACK: Recreate after receiving installation.
                 // A workaround for app list getting stuck in search result due to filters.
                 recreate();
