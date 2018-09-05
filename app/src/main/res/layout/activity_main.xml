@@ -28,6 +28,7 @@
             android:id="@+id/app_list_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?attr/backgroundColor"
             android:layout_marginStart="@dimen/uniform_panel_margin"
             android:layout_marginEnd="@dimen/uniform_panel_margin"
             android:layout_marginLeft="@dimen/uniform_panel_margin"
@@ -36,13 +37,31 @@
             <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
                 android:id="@+id/apps_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="48dp"
                 android:splitMotionEvents="false"
-                android:background="?attr/backgroundColor"
                 app:fastScrollThumbInactiveColor="@color/colorPrimary"
                 app:fastScrollPopupBgColor="@color/colorPrimaryDark"
                 app:fastScrollPopupTextColor="@android:color/primary_text_dark"
                 app:fastScrollThumbColor="@color/colorPrimaryDark" />
+
+            <FrameLayout
+                android:id="@+id/pinned_apps_container"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:background="?attr/cardColor"
+                android:layout_gravity="bottom|center_horizontal">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/pinned_apps_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:overScrollMode="never"
+                    android:splitMotionEvents="false" />
+
+            </FrameLayout>
 
             <android.support.design.widget.CoordinatorLayout
                 android:id="@+id/snackHolder"
@@ -87,25 +106,6 @@
                     android:imeOptions="actionSearch|flagNoExtractUi"
                     android:hint="@string/search_hint"
                     android:background="@android:color/transparent" />
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/pinned_apps_container"
-                android:layout_width="@dimen/panel_size_vertical"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="invisible">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/pinned_apps_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:layout_gravity="center"
-                    android:overScrollMode="never"
-                    android:splitMotionEvents="false" />
 
             </FrameLayout>
 

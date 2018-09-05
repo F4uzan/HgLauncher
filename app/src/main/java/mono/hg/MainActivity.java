@@ -27,14 +27,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -97,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 LinearLayoutManager.VERTICAL, false);
 
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false);
+                LinearLayoutManager.HORIZONTAL, false);
 
         FrameLayout appListContainer = findViewById(R.id.app_list_container);
 
@@ -187,55 +184,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         for (String pinnedApp : pinnedAppSet) {
             Utils.loadSingleApp(this, pinnedApp, pinnedApps, pinnedAppList, true);
         }
-
-        // Favourites bar params coaster: set its gravity, width, and height based on orientation.
-        FrameLayout.LayoutParams pinContainerParams =  new FrameLayout.LayoutParams(pinnedAppsContainer.getLayoutParams());
-        switch (fav_orientation) {
-            case "left":
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    pinContainerParams.gravity = Gravity.LEFT;
-                } else {
-                    pinContainerParams.gravity = Gravity.START;
-                }
-                pinContainerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size_vertical);
-                pinnedAppsManager.setOrientation(LinearLayoutManager.VERTICAL);
-                if (dark_theme) {
-                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_left_shadow_dark);
-                } else {
-                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_left_shadow);
-                }
-                pinContainerParams.topMargin = Utils.getStatusBarHeight(this, getResources());
-                break;
-            case "right":
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    pinContainerParams.gravity = Gravity.RIGHT;
-                } else {
-                    pinContainerParams.gravity = Gravity.END;
-                }
-                pinContainerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                pinContainerParams.width = getResources().getDimensionPixelSize(R.dimen.panel_size_vertical);
-                pinnedAppsManager.setOrientation(LinearLayoutManager.VERTICAL);
-                if (dark_theme) {
-                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_right_shadow_dark);
-                } else {
-                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_right_shadow);
-                }
-                pinContainerParams.topMargin = Utils.getStatusBarHeight(this, getResources());
-                break;
-            case "bottom":
-                pinContainerParams.gravity = Gravity.BOTTOM;
-                pinContainerParams.height = getResources().getDimensionPixelSize(R.dimen.panel_size_horizontal);
-                pinContainerParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                pinnedAppsManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                if (dark_theme) {
-                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_bottom_shadow_dark);
-                } else {
-                    pinnedAppsContainer.setBackgroundResource(R.drawable.panel_bottom_shadow);
-                }
-                break;
-        }
-        pinnedAppsContainer.setLayoutParams(pinContainerParams);
 
         // Switch on wallpaper shade.
         if (shade_view) {
@@ -780,56 +728,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Handle touch events in touchReceiver.
         touchReceiver.setOnTouchListener(new OnTouchListener(this) {
             @Override
-            public void onSwipeLeft() {
-                // Dismiss favourites panel.
-                if (favourites_panel && pinnedAppsContainer.getVisibility() == View.VISIBLE
-                        && fav_orientation.equals("left")) {
-                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_out_left);
-                    pinnedAppsContainer.setAnimation(slide);
-                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
-                } else if (favourites_panel &&pinnedAppsContainer.getVisibility() == View.INVISIBLE
-                        && fav_orientation.equals("right")) {
-                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_in_right);
-                    pinnedAppsContainer.setAnimation(slide);
-                    pinnedAppsContainer.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onSwipeRight() {
-                // Show favourites panel on swipe.
-                if (favourites_panel && pinnedAppsContainer.getVisibility() == View.INVISIBLE
-                        && fav_orientation.equals("left")) {
-                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_out_right);
-                    pinnedAppsContainer.setAnimation(slide);
-                    pinnedAppsContainer.setVisibility(View.VISIBLE);
-                } else if (favourites_panel && pinnedAppsContainer.getVisibility() == View.VISIBLE
-                        && fav_orientation.equals("right")) {
-                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_in_left);
-                    pinnedAppsContainer.setAnimation(slide);
-                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onSwipeUp() {
-                // Show favourites panel on swipe up when its orientation is in the bottom.
-                if (favourites_panel && pinnedAppsContainer.getVisibility() == View.INVISIBLE
-                        && fav_orientation.equals("bottom")) {
-                    Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.pull_up);
-                    pinnedAppsContainer.setAnimation(slide);
-                    pinnedAppsContainer.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
             public void onSwipeDown() {
-                // Show the app panel and dismiss favourites panel when swiped down.
-                if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
-                    Animation push = AnimationUtils.loadAnimation(MainActivity.this, R.anim.push_down);
-                    pinnedAppsContainer.setAnimation(push);
-                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
-                }
+                // Show the app panel.
                 parseAction("panel_down", null);
             }
 
@@ -841,13 +741,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             @Override
             public void onClick() {
-                // Dismiss favourites bar.
-                if (pinnedAppsContainer.getVisibility() == View.VISIBLE) {
-                    Animation push = AnimationUtils.loadAnimation(MainActivity.this, R.anim.push_down);
-                    pinnedAppsContainer.setAnimation(push);
-                    pinnedAppsContainer.setVisibility(View.INVISIBLE);
-                }
-
                 // Imitate sliding panel drag view behaviour; show the app panel on click.
                 if (tap_to_drawer) {
                     parseAction("panel_down", null);
