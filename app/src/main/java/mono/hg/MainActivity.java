@@ -296,14 +296,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
             case "removedApp":
                 editPrefs.putBoolean("removedApp", false).commit();
-                String packageToRemove = prefs.getString("removed_app", "none");
-                AppDetail objPackage = new AppDetail(null, null, packageToRemove, false);
-                if (!packageToRemove.equals("none") && appList.contains(objPackage)) {
-                    appList.remove(objPackage);
-                    apps.notifyItemRemoved(appList.indexOf(objPackage));
-                }
                 editPrefs.remove("removed_app").commit();
-                apps.setUpdateFilter(true);
+                // HACK: Recreate, recreate.
+                // Sometimes we receive inconsistent result, so just kick the bucket here.
+                recreate();
                 break;
             case "addApp":
                 editPrefs.putBoolean("addApp", false).commit();
@@ -322,8 +318,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
         try {
             if (packageReceiver != null) {
                 unregisterReceiver(packageReceiver);
@@ -331,6 +326,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } catch (IllegalArgumentException e) {
             Utils.sendLog(3, e.toString());
         }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         if (!searchBar.getText().toString().isEmpty()) {
             apps.getFilter().filter(null);
         }
@@ -342,24 +343,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         loadPref(false);
         searchBar.setText(null);
         parseAction("panel_up", null);
-        if (packageReceiver == null) {
-            registerPackageReceiver();
-        }
-
-        if (prefs.getBoolean("addApp", false)) {
-            editPrefs.putBoolean("addApp", false).commit();
-            Utils.loadSingleApp(this, prefs.getString("added_app", "none"), apps, appList, false);
-            editPrefs.remove("added_app").commit();
-        } else if (prefs.getBoolean("removedApp", false)) {
-            editPrefs.putBoolean("removedApp", false).commit();
-            String packageToRemove = prefs.getString("removed_app", "none");
-            AppDetail objPackage = new AppDetail(null, null, packageToRemove, false);
-            if (!packageToRemove.equals("none") && appList.contains(objPackage)) {
-                appList.remove(objPackage);
-                apps.notifyItemRemoved(appList.indexOf(objPackage));
-            }
-            editPrefs.remove("removed_app").commit();
-        }
+        registerPackageReceiver();
         apps.setUpdateFilter(true);
     }
 
