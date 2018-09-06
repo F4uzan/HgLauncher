@@ -17,9 +17,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArraySet;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +37,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private AppAdapter apps = new AppAdapter(appList);
     private RecyclerView list, pinned_list;
     private FrameLayout searchContainer, pinnedAppsContainer;
-    private CoordinatorLayout appListContainer;
+    private RelativeLayout appListContainer;
     private EditText searchBar;
     private SlidingUpPanelLayout slidingHome;
     private View touchReceiver;
@@ -635,6 +636,40 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom) {
                 list.scrollToPosition(list.getAdapter().getItemCount() - 1);
             }
+        });
+
+        list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+                    pinnedAppsContainer.animate().cancel();
+
+                    pinnedAppsContainer.animate()
+                            .translationY(0f)
+                            .setInterpolator(new FastOutSlowInInterpolator())
+                            .setDuration(200)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override public void onAnimationStart(Animator animator) {
+                                    pinnedAppsContainer.setVisibility(View.VISIBLE);
+                                }
+                            });
+                } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
+                    pinnedAppsContainer.animate().cancel();
+
+                    pinnedAppsContainer.animate()
+                            .translationY(pinnedAppsContainer.getHeight())
+                            .setInterpolator(new FastOutSlowInInterpolator())
+                            .setDuration(200)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override public void onAnimationEnd(Animator animator) {
+                                    pinnedAppsContainer.setVisibility(View.GONE);
+                                }
+                            });
+                } else {
+                    pinnedAppsContainer.setVisibility(View.GONE);
+                }
+            }
+
         });
 
         // Add short click/click listener to the app list.

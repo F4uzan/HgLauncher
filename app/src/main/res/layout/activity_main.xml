@@ -24,7 +24,7 @@
         app:umanoPanelHeight="56dp"
         app:umanoShadowHeight="0dp">
 
-        <android.support.design.widget.CoordinatorLayout
+        <RelativeLayout
             android:id="@+id/app_list_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -40,7 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:splitMotionEvents="false"
-                app:layout_dodgeInsetEdges="bottom"
+                android:layout_above="@id/pinned_apps_container"
+                app:layout_behavior="@string/bottom_sheet_behavior"
                 app:fastScrollThumbInactiveColor="@color/colorPrimary"
                 app:fastScrollPopupBgColor="@color/colorPrimaryDark"
                 app:fastScrollPopupTextColor="@android:color/primary_text_dark"
@@ -53,8 +54,7 @@
                 android:orientation="horizontal"
                 android:background="?attr/cardColor"
                 android:layout_gravity="bottom"
-                app:layout_insetEdge="bottom"
-                app:layout_behavior=".wrappers.QuickReturnFooterBehavior">
+                android:layout_alignParentBottom="true">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/pinned_apps_list"
@@ -66,7 +66,7 @@
 
             </FrameLayout>
 
-        </android.support.design.widget.CoordinatorLayout>
+        </RelativeLayout>
 
         <FrameLayout
             android:id="@+id/bottom_container"
