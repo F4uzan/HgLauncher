@@ -27,6 +27,9 @@ public class QuickReturnFooterBehavior extends CoordinatorLayout.Behavior<View> 
     private static final int ANIM_STATE_HIDING = 1;
     private static final int ANIM_STATE_SHOWING = 2;
 
+    private static final int REQUIRED_DOWN_SCROLL = 20;
+    private static final int REQUIRED_UP_SCROLL = -55;
+
     private int animState = ANIM_STATE_NONE;
 
     private int mDySinceDirectionChange;
@@ -50,9 +53,9 @@ public class QuickReturnFooterBehavior extends CoordinatorLayout.Behavior<View> 
 
         mDySinceDirectionChange += dy;
 
-        if (mDySinceDirectionChange > child.getHeight() && !isOrWillBeShown(child)) {
+        if (mDySinceDirectionChange > REQUIRED_UP_SCROLL && !isOrWillBeShown(child)) {
             show(child);
-        } else if (mDySinceDirectionChange < 0 && !isOrWillBeHidden(child)) {
+        } else if (dy < REQUIRED_UP_SCROLL && !isOrWillBeHidden(child)) {
             hide(child);
         }
     }
