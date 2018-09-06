@@ -639,39 +639,44 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         });
 
-        list.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                    pinnedAppsContainer.animate().cancel();
+        // Listen for app list scroll to hide/show favourites panel.
+        // Only do this when the user has favourites panel enabled.
+        if (favourites_panel) {
+            list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+                        pinnedAppsContainer.animate().cancel();
 
-                    pinnedAppsContainer.animate()
-                            .translationY(0f)
-                            .setInterpolator(new FastOutSlowInInterpolator())
-                            .setDuration(200)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override public void onAnimationStart(Animator animator) {
-                                    pinnedAppsContainer.setVisibility(View.VISIBLE);
-                                }
-                            });
-                } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
-                    pinnedAppsContainer.animate().cancel();
+                        pinnedAppsContainer.animate()
+                                .translationY(0f)
+                                .setInterpolator(new FastOutSlowInInterpolator())
+                                .setDuration(200)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationStart(Animator animator) {
+                                        pinnedAppsContainer.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                    } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
+                        pinnedAppsContainer.animate().cancel();
 
-                    pinnedAppsContainer.animate()
-                            .translationY(pinnedAppsContainer.getHeight())
-                            .setInterpolator(new FastOutSlowInInterpolator())
-                            .setDuration(200)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override public void onAnimationEnd(Animator animator) {
-                                    pinnedAppsContainer.setVisibility(View.GONE);
-                                }
-                            });
-                } else {
-                    pinnedAppsContainer.setVisibility(View.GONE);
+                        pinnedAppsContainer.animate()
+                                .translationY(pinnedAppsContainer.getHeight())
+                                .setInterpolator(new FastOutSlowInInterpolator())
+                                .setDuration(200)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animator) {
+                                        pinnedAppsContainer.setVisibility(View.GONE);
+                                    }
+                                });
+                    } else {
+                        pinnedAppsContainer.setVisibility(View.GONE);
+                    }
                 }
-            }
-
-        });
+            });
+        }
 
         // Add short click/click listener to the app list.
         RecyclerClick.addTo(list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
