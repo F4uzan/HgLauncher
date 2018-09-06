@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         touchReceiver = findViewById(R.id.touch_receiver);
         snackHolder = findViewById(R.id.snack_holder);
-        View wallpaperShade = findViewById(R.id.wallpaper_shade);
 
         list = findViewById(R.id.apps_list);
         pinned_list = findViewById(R.id.pinned_apps_list);
@@ -194,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Switch on wallpaper shade.
         if (shade_view) {
+            View wallpaperShade = findViewById(R.id.wallpaper_shade);
             // Tints the navigation bar with a semi-transparent shade.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarShade));
