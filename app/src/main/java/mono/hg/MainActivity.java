@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         pinned_list.setAdapter(pinnedApps);
         pinned_list.setLayoutManager(pinnedAppsManager);
+        pinned_list.setHasFixedSize(true);
 
         // Get a list of our hidden apps, default to null if there aren't any.
         excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
