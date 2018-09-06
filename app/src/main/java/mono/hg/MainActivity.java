@@ -100,15 +100,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 LinearLayoutManager.HORIZONTAL, false);
 
         appListContainer = findViewById(R.id.app_list_container);
-
         searchContainer = findViewById(R.id.search_container);
         pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
-
         touchReceiver = findViewById(R.id.touch_receiver);
         snackHolder = findViewById(R.id.snack_holder);
-
         list = findViewById(R.id.apps_list);
         pinned_list = findViewById(R.id.pinned_apps_list);
 
@@ -167,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Get icons from icon pack.
-        //TODO: This seems super slow.
         if (!prefs.getString("icon_pack", "default").equals("default")) {
             new getIconTask(this).execute();
         }
@@ -526,7 +522,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             appMenu.show();
         }
 
-        //TODO: Still looks hackish.
         final int finalPosition = position;
         appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
