@@ -3,6 +3,7 @@ package mono.hg.wrappers;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
@@ -34,13 +35,21 @@ public class QuickReturnFooterBehavior extends CoordinatorLayout.Behavior<View> 
 
     private int mDySinceDirectionChange;
 
+    private Context mContext;
+    private Boolean shouldNotDraw = false;
+
     public QuickReturnFooterBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.mContext = context;
+
+        if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("favourites_panel_switch", true)) {
+            shouldNotDraw = true;
+        }
     }
 
     @Override
     public boolean onStartNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, View child, View directTargetChild, View target, int nestedScrollAxes, int type) {
-        return (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
+        return !shouldNotDraw && (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
     }
 
     @Override

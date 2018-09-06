@@ -128,6 +128,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Get a list of our hidden apps, default to null if there aren't any.
         excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
 
+        // Hide the favourites panel when user chooses to disable it.
+        if (!favourites_panel) {
+            pinnedAppsContainer.setVisibility(View.GONE);
+        }
+
         // Workaround v21+ statusbar transparency issue.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
@@ -235,12 +240,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "icon_pack":
             case "fav_orientation":
             case "dummy_restore":
-                recreate();
-                break;
             case "favourites_panel_switch":
-                if (favourites_panel && pinnedAppsContainer.getVisibility() == View.VISIBLE) {
-                    pinnedAppsContainer.setVisibility(View.GONE);
-                }
+                recreate();
                 break;
             case "icon_hide_switch":
                 icon_hide = prefs.getBoolean("icon_hide_switch", false);
