@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private RelativeLayout appListContainer;
     private EditText searchBar;
     private SlidingUpPanelLayout slidingHome;
-    private View touchReceiver;
+    private View snackHolder, touchReceiver;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
 
@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         slidingHome = findViewById(R.id.slide_home);
 
         touchReceiver = findViewById(R.id.touch_receiver);
+        snackHolder = findViewById(R.id.snack_holder);
         View wallpaperShade = findViewById(R.id.wallpaper_shade);
 
         list = findViewById(R.id.apps_list);
@@ -599,7 +600,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 } else if (!searchBarText.equals("") && web_search_enabled) {
                     // Prompt user if they want to search their query online.
                     String searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
-                    Snackbar.make(appListContainer, searchHint, Snackbar.LENGTH_LONG)
+                    Snackbar.make(snackHolder, searchHint, Snackbar.LENGTH_LONG)
                             .setAction(R.string.search_web_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
