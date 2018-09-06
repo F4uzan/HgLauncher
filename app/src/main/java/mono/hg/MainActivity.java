@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArraySet;
 import android.support.v7.app.AppCompatActivity;
@@ -71,9 +72,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private AppAdapter apps = new AppAdapter(appList);
     private RecyclerView list, pinned_list;
     private FrameLayout searchContainer, pinnedAppsContainer;
+    private CoordinatorLayout appListContainer;
     private EditText searchBar;
     private SlidingUpPanelLayout slidingHome;
-    private View snackHolder, touchReceiver;
+    private View touchReceiver;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
 
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
 
-        FrameLayout appListContainer = findViewById(R.id.app_list_container);
+        appListContainer = findViewById(R.id.app_list_container);
 
         searchContainer = findViewById(R.id.search_container);
         pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
@@ -105,8 +107,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         touchReceiver = findViewById(R.id.touch_receiver);
         View wallpaperShade = findViewById(R.id.wallpaper_shade);
-
-        snackHolder = findViewById(R.id.snackHolder);
 
         list = findViewById(R.id.apps_list);
         pinned_list = findViewById(R.id.pinned_apps_list);
@@ -597,7 +597,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 } else if (!searchBarText.equals("") && web_search_enabled) {
                     // Prompt user if they want to search their query online.
                     String searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
-                    Snackbar.make(snackHolder, searchHint, Snackbar.LENGTH_LONG)
+                    Snackbar.make(appListContainer, searchHint, Snackbar.LENGTH_LONG)
                             .setAction(R.string.search_web_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
