@@ -599,8 +599,19 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private void addListeners() {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
+            String searchBarText, searchHint;
+            Snackbar searchSnack = Snackbar.make(snackHolder, searchHint, Snackbar.LENGTH_INDEFINITE);
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchBarText = searchBar.getText().toString().trim();
+                searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
+                if (!searchBarText.isEmpty()) {
+                    searchSnack.setText(searchHint);
+                } else {
+                    searchSnack.dismiss();
+                }
+
                 // Begin filtering our list.
                 apps.getFilter().filter(s);
                 if (apps.shouldUpdateFilter()) {
@@ -609,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -618,25 +629,22 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     s.delete(0, 1);
                 }
 
-                final String searchBarText = searchBar.getText().toString().trim();
                 // Scroll back down to the start of the list if search query is empty.
-                if (searchBarText.equals("")) {
+                if (s.length() <= 0) {
                     list.getLayoutManager().scrollToPosition(app_count);
-                } else if (!searchBarText.equals("") && web_search_enabled) {
+                } else if (s.length() > 0 && web_search_enabled) {
                     // Prompt user if they want to search their query online.
-                    String searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
-                    Snackbar.make(snackHolder, searchHint, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.search_web_button, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent link = new Intent(Intent.ACTION_VIEW,
-                                            Uri.parse(search_provider + searchBarText));
-                                    synchronized (this) {
-                                        startActivity(link);
-                                        apps.getFilter().filter(null);
-                                    }
-                                }
-                            }).show();
+                    searchSnack.setAction(R.string.search_web_button, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent link = new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse(search_provider + searchBarText));
+                            synchronized (this) {
+                                startActivity(link);
+                                apps.getFilter().filter(null);
+                            }
+                        }
+                    }).show();
                 }
             }
         });
