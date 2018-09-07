@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private AppAdapter apps = new AppAdapter(appList);
     private RecyclerView list, pinned_list;
     private FrameLayout searchContainer, pinnedAppsContainer;
-    private RelativeLayout appListContainer;
     private EditText searchBar;
     private SlidingUpPanelLayout slidingHome;
     private View snackHolder, touchReceiver;
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
 
-        appListContainer = findViewById(R.id.app_list_container);
+        RelativeLayout appListContainer = findViewById(R.id.app_list_container);
         searchContainer = findViewById(R.id.search_container);
         pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
         searchBar = findViewById(R.id.search);
@@ -761,10 +760,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float v) {
-                // Hide the keyboard once the panel has slid to a certain point.
-                if (v <= 0.35f) {
-                    parseAction("hide_keyboard", searchBar);
-                }
+                // Hide the keyboard at slide.
+                parseAction("hide_keyboard", searchBar);
             }
 
             @Override
