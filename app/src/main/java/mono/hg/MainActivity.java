@@ -430,6 +430,35 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 if (inputManager != null && actionContext != null) {
                     inputManager.showSoftInput(actionContext, InputMethodManager.SHOW_IMPLICIT);
                 }
+                break;
+            case "show_favourites":
+                pinnedAppsContainer.animate().cancel();
+
+                pinnedAppsContainer.animate()
+                        .translationY(0f)
+                        .setInterpolator(new FastOutSlowInInterpolator())
+                        .setDuration(200)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationStart(Animator animator) {
+                                pinnedAppsContainer.setVisibility(View.VISIBLE);
+                            }
+                        });
+                break;
+            case "hide_favourites":
+                pinnedAppsContainer.animate().cancel();
+
+                pinnedAppsContainer.animate()
+                        .translationY(pinnedAppsContainer.getHeight())
+                        .setInterpolator(new FastOutSlowInInterpolator())
+                        .setDuration(200)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                pinnedAppsContainer.setVisibility(View.GONE);
+                            }
+                        });
+                break;
         }
     }
 
@@ -642,31 +671,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                        pinnedAppsContainer.animate().cancel();
-
-                        pinnedAppsContainer.animate()
-                                .translationY(0f)
-                                .setInterpolator(new FastOutSlowInInterpolator())
-                                .setDuration(200)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationStart(Animator animator) {
-                                        pinnedAppsContainer.setVisibility(View.VISIBLE);
-                                    }
-                                });
+                        parseAction("show_favourites", null);
                     } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
-                        pinnedAppsContainer.animate().cancel();
-
-                        pinnedAppsContainer.animate()
-                                .translationY(pinnedAppsContainer.getHeight())
-                                .setInterpolator(new FastOutSlowInInterpolator())
-                                .setDuration(200)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animator) {
-                                        pinnedAppsContainer.setVisibility(View.GONE);
-                                    }
-                                });
+                        parseAction("hide_favourites", null);
                     } else {
                         pinnedAppsContainer.setVisibility(View.GONE);
                     }
