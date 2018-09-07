@@ -624,7 +624,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
 
                 // Instantly dismiss the search snackbar if there is nothing to search.
-                if (!searchBarText.isEmpty()) {
+                if (!searchBarText.isEmpty() && s.length() > 0) {
                     searchSnack.setText(searchHint);
                 } else {
                     searchSnack.dismiss();
