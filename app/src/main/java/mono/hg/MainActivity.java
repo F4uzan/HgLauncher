@@ -302,12 +302,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onPause() {
         super.onPause();
         // You shouldn't be visible.
-        if (appMenu != null) {
+        if (appMenu != null)
             appMenu.dismiss();
-        }
-        if (!searchBar.getText().toString().isEmpty()) {
+        if (!searchBar.getText().toString().isEmpty())
             apps.getFilter().filter(null);
-        }
     }
 
     @Override
@@ -357,9 +355,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Drawable getIcon = null;
                 // Only show icons if user chooses so.
                 if (!icon_hide) {
-                    if (!prefs.getString("icon_pack", "default").equals("default")) {
+                    if (!prefs.getString("icon_pack", "default").equals("default"))
                         getIcon = new IconPackHelper().getIconDrawable(this, packageName);
-                    }
                     if (getIcon == null) {
                         icon = ri.activityInfo.loadIcon(manager);
                     } else {
@@ -408,9 +405,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         @Override
         protected Void doInBackground(Void... params) {
             MainActivity activity = activityRef.get();
-            if (activity != null) {
+            if (activity != null)
                 new IconPackHelper().loadIconPack(activity);
-            }
             return null;
         }
     }
@@ -420,25 +416,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         switch (action) {
             case "panel_down":
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED)
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                }
                 break;
             case "panel_up":
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
-                        || slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED) {
+                        || slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-                }
                 break;
             case "hide_keyboard":
-                if (inputManager != null && actionContext != null) {
+                if (inputManager != null && actionContext != null)
                     inputManager.hideSoftInputFromWindow(actionContext.getWindowToken(), 0);
-                }
                 break;
             case "show_keyboard":
-                if (inputManager != null && actionContext != null) {
+                if (inputManager != null && actionContext != null)
                     inputManager.showSoftInput(actionContext, InputMethodManager.SHOW_IMPLICIT);
-                }
                 break;
             case "show_favourites_animate":
                 pinnedAppsContainer.animate().cancel();
@@ -489,9 +481,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private void loadPref(Boolean isInit) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         editPrefs = prefs.edit();
-        if (isInit) {
+        if (isInit)
             prefs.registerOnSharedPreferenceChangeListener(this);
-        }
 
         launch_anim = prefs.getString("launch_anim", "default");
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
@@ -541,9 +532,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private void createAppMenu(View v, Boolean isPinned, final String packageName) {
         // Dismiss existing menu if they exist.
-        if (appMenu != null) {
+        if (appMenu != null)
             appMenu.dismiss();
-        }
 
         int position;
         if (isPinned) {
@@ -585,18 +575,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         Utils.loadSingleApp(MainActivity.this, appList.get(finalPosition).getPackageName(), pinnedApps, pinnedAppList, true);
                         pinnedAppSet.add(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
-                        if (!favourites_panel) {
+                        if (!favourites_panel)
                             Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
-                        }
                         break;
                     case R.id.action_unpin:
                         pinnedAppList.remove(finalPosition);
                         pinnedApps.notifyItemRemoved(finalPosition);
                         pinnedAppSet.remove(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).commit();
-                        if (pinnedAppList.size() == 0) {
+                        if (pinnedAppList.size() == 0)
                             parseAction("hide_favourites_animate", null);
-                        }
                         break;
                     case R.id.action_info:
                         startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -646,9 +634,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                 // Begin filtering our list.
                 apps.getFilter().filter(s);
-                if (apps.shouldUpdateFilter()) {
+                if (apps.shouldUpdateFilter())
                     apps.setUpdateFilter(false);
-                }
             }
 
             @Override
@@ -657,9 +644,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void afterTextChanged(Editable s) {
                 // Don't allow spamming of empty spaces.
-                if (s.length() > 0 && s.charAt(0) == ' ') {
+                if (s.length() > 0 && s.charAt(0) == ' ')
                     s.delete(0, 1);
-                }
 
                 // Scroll back down to the start of the list if search query is empty.
                 if (s.length() <= 0) {
@@ -731,13 +717,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     // When the favourites panel is replaced/swapped out,
                     // we should not be calling it until we are told to.
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                        if (shouldShowFavourites) {
+                        if (shouldShowFavourites)
                             parseAction("show_favourites", null);
-                        }
                     } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
-                        if (shouldShowFavourites) {
+                        if (shouldShowFavourites)
                             parseAction("hide_favourites", null);
-                        }
                     }
                 }
             });
@@ -845,9 +829,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onClick() {
                 // Imitate sliding panel drag view behaviour; show the app panel on click.
-                if (tap_to_drawer) {
+                if (tap_to_drawer)
                     parseAction("panel_down", null);
-                }
             }
         });
     }

@@ -127,9 +127,8 @@ public class HiddenAppsFragment extends Fragment {
             Boolean isHidden = false;
             String appName = ri.loadLabel(manager).toString();
             Drawable icon = ri.activityInfo.loadIcon(manager);
-            if (excludedAppList.contains(packageName)) {
+            if (excludedAppList.contains(packageName))
                 isHidden = true;
-            }
             AppDetail app = new AppDetail(icon, appName, packageName, isHidden);
             appList.add(app);
             apps.notifyDataSetChanged();

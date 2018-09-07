@@ -62,9 +62,8 @@ public class Utils {
                 Drawable icon = null;
                 Drawable getIcon = null;
                 if (!prefs.getBoolean("icon_hide", false) || forFavourites) {
-                    if (!prefs.getString("icon_pack", "default").equals("default")) {
+                    if (!prefs.getString("icon_pack", "default").equals("default"))
                         getIcon = new IconPackHelper().getIconDrawable(context, packageName);
-                    }
                     if (getIcon == null) {
                         icon = manager.getApplicationIcon(packageName);
                     } else {

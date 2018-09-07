@@ -33,9 +33,8 @@ public class KissFuzzySearch {
                 }
 
                 // If we are at the beginning of a word, add it to matchedWordStarts
-                if (appPos == 0 || Character.isWhitespace(source.charAt(appPos - 1))) {
+                if (appPos == 0 || Character.isWhitespace(source.charAt(appPos - 1)))
                     matchedWordStarts += 1;
-                }
 
                 // Increment the position in the query
                 queryPos++;
@@ -45,15 +44,14 @@ public class KissFuzzySearch {
             }
 
             // If we are at the beginning of a word, add it to totalWordsStarts
-            if (appPos == 0 || Character.isWhitespace(source.charAt(appPos - 1))) {
+            if (appPos == 0 || Character.isWhitespace(source.charAt(appPos - 1)))
                 totalWordStarts += 1;
-            }
+
             appPos++;
         }
 
-        if (match) {
+        if (match)
             matchPositions.add(Pair.create(beginMatch, appPos));
-        }
 
         if (queryPos == matchTo.length()) {
             // Add percentage of matched letters at a weight of 100

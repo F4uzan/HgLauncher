@@ -129,37 +129,38 @@ public class BackupRestoreFragment extends BackHandledFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            startActivity(new Intent(getActivity(), SettingsActivity.class));
-            return true;
-        } else if (id == 1) {
-            // Send our backup signal!
-            if (!backupNameField.getText().toString().equals("")) {
-                final File backupName = new File(path + File.separator + backupNameField.getText().toString() + ".xml");
-                if (backupName.exists() && backupName.isFile()) {
-                    final AlertDialog.Builder overwriteDialog = new AlertDialog.Builder(getActivity());
-                    overwriteDialog.setTitle(getString(R.string.pref_header_backup));
-                    overwriteDialog.setMessage(getString(R.string.backup_exist));
-                    overwriteDialog.setNegativeButton(getString(R.string.backup_exist_cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Do nothing.
-                        }
-                    });
-                    overwriteDialog.setPositiveButton(getString(R.string.backup_exist_overwrite), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            saveBackup(backupName);
-                        }
-                    });
-                    overwriteDialog.show();
+        switch (id) {
+            case android.R.id.home:
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                return true;
+            case 1:
+                // Send our backup signal!
+                if (!backupNameField.getText().toString().equals("")) {
+                    final File backupName = new File(path + File.separator + backupNameField.getText().toString() + ".xml");
+                    if (backupName.exists() && backupName.isFile()) {
+                        final AlertDialog.Builder overwriteDialog = new AlertDialog.Builder(getActivity());
+                        overwriteDialog.setTitle(getString(R.string.pref_header_backup));
+                        overwriteDialog.setMessage(getString(R.string.backup_exist));
+                        overwriteDialog.setNegativeButton(getString(R.string.backup_exist_cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing.
+                            }
+                        });
+                        overwriteDialog.setPositiveButton(getString(R.string.backup_exist_overwrite), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                saveBackup(backupName);
+                            }
+                        });
+                        overwriteDialog.show();
+                    } else {
+                        saveBackup(backupName);
+                    }
                 } else {
-                    saveBackup(backupName);
+                    Toast.makeText(getActivity(), R.string.backup_empty, Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(getActivity(), R.string.backup_empty, Toast.LENGTH_SHORT).show();
-            }
-            return true;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

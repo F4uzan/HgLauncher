@@ -89,9 +89,8 @@ public class IconPackHelper {
 
     private Drawable loadDrawable(Resources resources, String drawableName, String iconPackageName) {
         int icon = resources.getIdentifier(drawableName, "drawable", iconPackageName);
-        if (icon > 0) {
+        if (icon > 0)
             return resources.getDrawable(icon);
-        }
         return null;
     }
 
@@ -110,9 +109,8 @@ public class IconPackHelper {
             e.printStackTrace();
         }
 
-        if (launchIntent != null) {
+        if (launchIntent != null)
             componentName = pm.getLaunchIntentForPackage(appPackageName).getComponent().toString();
-        }
 
         String drawable = mPackagesDrawables.get(componentName);
         if (drawable != null) {

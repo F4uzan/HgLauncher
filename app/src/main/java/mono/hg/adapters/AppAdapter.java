@@ -63,9 +63,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
     @Override
     public Filter getFilter() {
-        if (filter == null || updateFilter) {
+        if (filter == null || updateFilter)
             filter = new AppFilter(apps);
-        }
         return filter;
     }
 
