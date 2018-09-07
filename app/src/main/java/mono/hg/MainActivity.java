@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private View snackHolder, touchReceiver;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
+    private PopupMenu appMenu;
 
     private PackageChangesReceiver packageReceiver;
 
@@ -300,6 +301,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onPause() {
         super.onPause();
+        // You shouldn't be visible.
+        if (appMenu != null) {
+            appMenu.dismiss();
+        }
         if (!searchBar.getText().toString().isEmpty()) {
             apps.getFilter().filter(null);
         }
@@ -535,6 +540,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void createAppMenu(View v, Boolean isPinned, final String packageName) {
+        // Dismiss existing menu if they exist.
+        if (appMenu != null) {
+            appMenu.dismiss();
+        }
+
         int position;
         if (isPinned) {
             position = pinnedAppList.indexOf(new AppDetail(null, null, packageName, false));
@@ -544,7 +554,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         final Uri packageNameUri = Uri.parse("package:" + packageName);
 
         // Inflate the app menu.
-        PopupMenu appMenu = new PopupMenu(MainActivity.this, v);
+        appMenu = new PopupMenu(MainActivity.this, v);
         appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
 
         if (isPinned) {
