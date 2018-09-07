@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             keyboard_focus, dark_theme, dark_theme_black, web_search_enabled,
             comfy_padding, tap_to_drawer, favourites_panel;
     boolean shouldShowFavourites;
-    Integer app_count;
+    Integer app_count, animateTime;
     String launch_anim, search_provider, fav_orientation;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         snackHolder = findViewById(R.id.snack_holder);
         list = findViewById(R.id.apps_list);
         pinned_list = findViewById(R.id.pinned_apps_list);
+
+        animateTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         apps.setHasStableIds(true);
         pinnedApps.setHasStableIds(true);
@@ -440,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     pinnedAppsContainer.animate()
                             .translationY(0f)
                             .setInterpolator(new FastOutSlowInInterpolator())
-                            .setDuration(200)
+                            .setDuration(animateTime)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationStart(Animator animator) {
@@ -455,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 pinnedAppsContainer.animate()
                         .translationY(pinnedAppsContainer.getHeight())
                         .setInterpolator(new FastOutSlowInInterpolator())
-                        .setDuration(200)
+                        .setDuration(animateTime)
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animator) {
@@ -789,7 +791,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         searchBar.requestFocus();
                     }
                     // Animate search container entering the view.
-                    searchContainer.animate().alpha(1.0f).setDuration(100)
+                    searchContainer.animate().alpha(1.0f).setDuration(animateTime)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
@@ -801,7 +803,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     parseAction("hide_keyboard", searchBar);
 
                     // Also animate the container when it's disappearing.
-                    searchContainer.animate().alpha(0.0f).setDuration(200)
+                    searchContainer.animate().alpha(0.0f).setDuration(animateTime)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
