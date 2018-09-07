@@ -577,6 +577,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         pinnedApps.notifyItemRemoved(finalPosition);
                         pinnedAppSet.remove(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).commit();
+                        if (pinnedAppList.size() == 0) {
+                            parseAction("hide_favourites", null);
+                        }
                         break;
                     case R.id.action_info:
                         startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
