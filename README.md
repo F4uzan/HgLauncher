@@ -12,11 +12,9 @@ Try it out now!
 
 ### Where can I get it?
 
-HgLauncher is available in:
+HgLauncher is available at:
 - [Google Play Store](https://play.google.com/store/apps/details?id=mono.hg)
 - [GitHub Releases](https://github.com/F4uzan/HgLauncher/releases)
-
-Releases in Play Store is different from the one distributed in GitHub! You can safely upgrade to the Play Store version, but there will be differences in feature set and changes applied to it.
 
 ### How can I contribute?
 
