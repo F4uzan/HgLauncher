@@ -435,7 +435,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     inputManager.showSoftInput(actionContext, InputMethodManager.SHOW_IMPLICIT);
                 }
                 break;
-            case "show_favourites":
+            case "show_favourites_animate":
                 pinnedAppsContainer.animate().cancel();
 
                 if (favourites_panel && pinnedAppList.size() > 0) {
@@ -451,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             });
                 }
                 break;
-            case "hide_favourites":
+            case "hide_favourites_animate":
                 pinnedAppsContainer.animate().cancel();
 
                 pinnedAppsContainer.animate()
@@ -465,7 +465,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             }
                         });
                 break;
-            case "kill_favourites":
+            case "show_favourites":
+                pinnedAppsContainer.setVisibility(View.VISIBLE);
+                break;
+            case "hide_favourites":
                 pinnedAppsContainer.setVisibility(View.GONE);
                 break;
             case "replace_favourites":
@@ -583,7 +586,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         pinnedAppSet.remove(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).commit();
                         if (pinnedAppList.size() == 0) {
-                            parseAction("hide_favourites", null);
+                            parseAction("hide_favourites_animate", null);
                         }
                         break;
                     case R.id.action_info:
@@ -654,10 +657,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     list.getLayoutManager().scrollToPosition(app_count);
                     // Summon our favourites panel back.
                     if (!favourites_panel || pinnedAppList.size() == 0) {
-                        parseAction("kill_favourites", null);
+                        parseAction("hide_favourites", null);
                     } else {
                         shouldShowFavourites = true;
-                        parseAction("show_favourites", null);
+                        parseAction("show_favourites_animate", null);
                     }
                 } else if (s.length() > 0 && web_search_enabled) {
                     parseAction("replace_favourites", null);
