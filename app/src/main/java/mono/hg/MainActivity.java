@@ -780,9 +780,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     searchContainer.animate().alpha(1.0f).setDuration(100)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
-                                public void onAnimationEnd(Animator animation) {
+                                public void onAnimationStart(Animator animation) {
                                     searchContainer.setVisibility(View.VISIBLE);
-                                    searchContainer.clearAnimation();
                                 }
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
@@ -795,7 +794,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
                                     searchContainer.setVisibility(View.INVISIBLE);
-                                    searchContainer.clearAnimation();
                                 }
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
