@@ -464,6 +464,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
             case "replace_favourites":
                 pinnedAppsContainer.setVisibility(View.INVISIBLE);
+                // Tell the favourites panel to not show itself for now.
                 shouldShowFavourites = false;
                 break;
         }
@@ -611,8 +612,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Fetch texts for the snackbar.
                 searchBarText = searchBar.getText().toString().trim();
                 searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
+
+                // Instantly dismiss the search snackbar if there is nothing to search.
                 if (!searchBarText.isEmpty()) {
                     searchSnack.setText(searchHint);
                 } else {
@@ -639,6 +643,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 // Scroll back down to the start of the list if search query is empty.
                 if (s.length() <= 0) {
                     list.getLayoutManager().scrollToPosition(app_count);
+                    // Summon our favourites panel back.
                     shouldShowFavourites = true;
                     parseAction("show_favourites", null);
                 } else if (s.length() > 0 && web_search_enabled) {
@@ -655,7 +660,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             }
                         }
                     }).show();
-                    
+
+                    // Disable search snackbar swipe-to-dismiss.
                     searchSnack.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                         @Override
                         public boolean onPreDraw() {
@@ -697,6 +703,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             list.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    // When the favourites panel is replaced/swapped out,
+                    // we should not be calling it until we are told to.
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
                         if (shouldShowFavourites) {
                             parseAction("show_favourites", null);
