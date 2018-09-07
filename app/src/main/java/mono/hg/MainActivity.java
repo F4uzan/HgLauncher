@@ -463,6 +463,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             }
                         });
                 break;
+            case "kill_favourites":
+                pinnedAppsContainer.setVisibility(View.GONE);
+                break;
             case "replace_favourites":
                 pinnedAppsContainer.setVisibility(View.INVISIBLE);
                 // Tell the favourites panel to not show itself for now.
@@ -648,8 +651,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 if (s.length() <= 0) {
                     list.getLayoutManager().scrollToPosition(app_count);
                     // Summon our favourites panel back.
-                    shouldShowFavourites = true;
-                    parseAction("show_favourites", null);
+                    if (pinnedAppList.size() == 0) {
+                        parseAction("kill_favourites", null);
+                    } else {
+                        shouldShowFavourites = true;
+                        parseAction("show_favourites", null);
+                    }
                 } else if (s.length() > 0 && web_search_enabled) {
                     parseAction("replace_favourites", null);
                     // Prompt user if they want to search their query online.
