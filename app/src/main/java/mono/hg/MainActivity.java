@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             comfy_padding, tap_to_drawer, favourites_panel;
     boolean shouldShowFavourites;
     Integer app_count, animateTime;
-    String launch_anim, search_provider, fav_orientation;
+    String launch_anim, search_provider;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
     private Set<String> excludedAppList = new ArraySet<>();
@@ -499,7 +499,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         dark_theme_black = prefs.getBoolean("dark_theme_black", false);
         web_search_enabled = prefs.getBoolean("web_search_enabled", true);
         String search_provider_set = prefs.getString("search_provider", "google");
-        fav_orientation = prefs.getString("fav_orientation", "left");
         favourites_panel = prefs.getBoolean("favourites_panel_switch", true);
 
         switch (search_provider_set) {

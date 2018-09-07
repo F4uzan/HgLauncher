@@ -78,31 +78,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/favourites_panel_title"
-        android:key="fav_panel">
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="favourites_panel_switch"
-            android:summary="@string/favourites_panel_desc"
-            android:title="@string/favourites_panel_title"
-            android:widgetLayout="@layout/mp_preference_switch" />
-
-        <mono.hg.wrappers.MenuPreference
-            android:defaultValue="left"
-            android:entries="@array/pref_favourites_orientation_title"
-            android:entryValues="@array/pref_favourites_orientation_values"
-            android:recycleEnabled="false"
-            android:key="fav_orientation"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:summary="%s"
-            android:dependency="favourites_panel_switch"
-            android:title="@string/pref_favourites_orientation" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="@string/pref_header_list"
         android:key="app_list">
 
@@ -126,6 +101,13 @@
             android:positiveButtonText="@null"
             android:summary="%s"
             android:title="@string/icon_pack" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="favourites_panel_switch"
+            android:summary="@string/favourites_panel_desc"
+            android:title="@string/favourites_panel_title"
+            android:widgetLayout="@layout/mp_preference_switch" />
 
         <CheckBoxPreference
             android:defaultValue="false"
