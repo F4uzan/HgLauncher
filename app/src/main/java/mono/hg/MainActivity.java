@@ -651,7 +651,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 if (s.length() <= 0) {
                     list.getLayoutManager().scrollToPosition(app_count);
                     // Summon our favourites panel back.
-                    if (pinnedAppList.size() == 0) {
+                    if (!favourites_panel || pinnedAppList.size() == 0) {
                         parseAction("kill_favourites", null);
                     } else {
                         shouldShowFavourites = true;
