@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     boolean anim, icon_hide, list_order, shade_view,
             keyboard_focus, dark_theme, dark_theme_black, web_search_enabled,
             comfy_padding, tap_to_drawer, favourites_panel;
+    boolean shouldShowFavourites;
     Integer app_count;
     String launch_anim, search_provider, fav_orientation;
     private ArrayList<AppDetail> appList = new ArrayList<>();
@@ -459,6 +460,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             }
                         });
                 break;
+            case "replace_favourites":
+                pinnedAppsContainer.setVisibility(View.INVISIBLE);
+                shouldShowFavourites = false;
+                break;
         }
     }
 
@@ -632,7 +637,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 // Scroll back down to the start of the list if search query is empty.
                 if (s.length() <= 0) {
                     list.getLayoutManager().scrollToPosition(app_count);
+                    shouldShowFavourites = true;
+                    parseAction("show_favourites", null);
                 } else if (s.length() > 0 && web_search_enabled) {
+                    parseAction("replace_favourites", null);
                     // Prompt user if they want to search their query online.
                     searchSnack.setAction(R.string.search_web_button, new View.OnClickListener() {
                         @Override
@@ -679,11 +687,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                        parseAction("show_favourites", null);
+                        if (shouldShowFavourites) {
+                            parseAction("show_favourites", null);
+                        }
                     } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
-                        parseAction("hide_favourites", null);
-                    } else {
-                        pinnedAppsContainer.setVisibility(View.GONE);
+                        if (shouldShowFavourites) {
+                            parseAction("hide_favourites", null);
+                        }
                     }
                 }
             });
