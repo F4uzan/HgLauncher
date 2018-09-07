@@ -77,14 +77,12 @@ public class RecyclerClick {
         return support;
     }
 
-    public RecyclerClick setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         mOnItemClickListener = listener;
-        return this;
     }
 
-    public RecyclerClick setOnItemLongClickListener(OnItemLongClickListener listener) {
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mOnItemLongClickListener = listener;
-        return this;
     }
 
     private void detach(RecyclerView view) {
