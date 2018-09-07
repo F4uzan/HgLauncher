@@ -436,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "show_favourites":
                 pinnedAppsContainer.animate().cancel();
 
-                if (pinnedAppList.size() > 0) {
+                if (favourites_panel && pinnedAppList.size() > 0) {
                     pinnedAppsContainer.animate()
                             .translationY(0f)
                             .setInterpolator(new FastOutSlowInInterpolator())
