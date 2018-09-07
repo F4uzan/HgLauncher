@@ -129,11 +129,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Get a list of our hidden apps, default to null if there aren't any.
         excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
 
-        // Hide the favourites panel when user chooses to disable it.
-        if (!favourites_panel) {
-            pinnedAppsContainer.setVisibility(View.GONE);
-        }
-
         // Workaround v21+ statusbar transparency issue.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
@@ -188,6 +183,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
         for (String pinnedApp : pinnedAppSet) {
             Utils.loadSingleApp(this, pinnedApp, pinnedApps, pinnedAppList, true);
+        }
+
+        // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
+        if (!favourites_panel || pinnedAppList.size() == 0) {
+            pinnedAppsContainer.setVisibility(View.GONE);
         }
 
         // Switch on wallpaper shade.
@@ -436,16 +436,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "show_favourites":
                 pinnedAppsContainer.animate().cancel();
 
-                pinnedAppsContainer.animate()
-                        .translationY(0f)
-                        .setInterpolator(new FastOutSlowInInterpolator())
-                        .setDuration(200)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationStart(Animator animator) {
-                                pinnedAppsContainer.setVisibility(View.VISIBLE);
-                            }
-                        });
+                if (pinnedAppList.size() > 0) {
+                    pinnedAppsContainer.animate()
+                            .translationY(0f)
+                            .setInterpolator(new FastOutSlowInInterpolator())
+                            .setDuration(200)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationStart(Animator animator) {
+                                    pinnedAppsContainer.setVisibility(View.VISIBLE);
+                                }
+                            });
+                }
                 break;
             case "hide_favourites":
                 pinnedAppsContainer.animate().cancel();
