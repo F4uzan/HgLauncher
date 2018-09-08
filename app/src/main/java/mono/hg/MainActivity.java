@@ -489,7 +489,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         keyboard_focus = prefs.getBoolean("keyboard_focus", false);
         comfy_padding = prefs.getBoolean("comfy_padding", false);
         dismiss_panel = prefs.getBoolean("dismiss_panel", true);
-        tap_to_drawer = prefs.getBoolean("tap_to_drawer", false);
+        tap_to_drawer = prefs.getBoolean("tap_to_drawer", true);
         app_theme = prefs.getString("app_theme", "light");
         web_search_enabled = prefs.getBoolean("web_search_enabled", true);
         String search_provider_set = prefs.getString("search_provider", "google");

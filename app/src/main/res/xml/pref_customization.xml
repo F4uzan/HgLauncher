@@ -34,7 +34,7 @@
             android:widgetLayout="@layout/mp_preference_switch" />
 
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="tap_to_drawer"
             android:summary="@string/tap_to_drawer_desc"
             android:title="@string/tap_to_drawer"
