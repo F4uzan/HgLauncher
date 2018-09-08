@@ -717,12 +717,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     // When the favourites panel is replaced/swapped out,
                     // we should not be calling it until we are told to.
-                    if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                        if (shouldShowFavourites)
-                            parseAction("show_favourites", null);
-                    } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
-                        if (shouldShowFavourites)
-                            parseAction("hide_favourites", null);
+                    if (pinnedAppList.size() > 0) {
+                        if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+                            if (shouldShowFavourites)
+                                parseAction("show_favourites", null);
+                        } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
+                            if (shouldShowFavourites)
+                                parseAction("hide_favourites", null);
+                        }
                     }
                 }
             });
