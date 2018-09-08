@@ -59,6 +59,9 @@
 
     <string name="pref_search_provider">Online search provider</string>
 
+    <string name="panel_dismiss">Dismiss at pause</string>
+    <string name="panel_dismiss_desc">Dismiss the app panel when leaving the launcher.</string>
+
     <string name="keyboard_focus">Keyboard focus</string>
     <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down.</string>
 

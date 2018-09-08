@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     boolean anim, icon_hide, list_order, shade_view,
             keyboard_focus, dark_theme, dark_theme_black, web_search_enabled,
-            comfy_padding, tap_to_drawer, favourites_panel;
+            comfy_padding, tap_to_drawer, favourites_panel, dismiss_panel;
     boolean shouldShowFavourites;
     Integer app_count, animateTime;
     String launch_anim, search_provider;
@@ -309,9 +309,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onResume() {
         super.onResume();
         loadPref(false);
-        searchBar.setText(null);
-        parseAction("panel_up", null);
         registerPackageReceiver();
+
+        if (dismiss_panel)
+            parseAction("panel_up", null);
+
+        searchBar.setText(null);
         apps.setUpdateFilter(true);
     }
 
@@ -487,6 +490,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         shade_view = prefs.getBoolean("shade_view_switch", false);
         keyboard_focus = prefs.getBoolean("keyboard_focus", false);
         comfy_padding = prefs.getBoolean("comfy_padding", false);
+        dismiss_panel = prefs.getBoolean("dismiss_panel", true);
         tap_to_drawer = prefs.getBoolean("tap_to_drawer", false);
         dark_theme = prefs.getBoolean("dark_theme", false);
         dark_theme_black = prefs.getBoolean("dark_theme_black", false);

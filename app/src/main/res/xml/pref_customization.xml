@@ -116,6 +116,13 @@
             android:title="@string/comfy_padding"
             android:widgetLayout="@layout/mp_preference_switch" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="dismiss_panel"
+            android:summary="@string/panel_dismiss_desc"
+            android:title="@string/panel_dismiss"
+            android:widgetLayout="@layout/mp_preference_switch" />
+
         <mono.hg.wrappers.MenuPreference
             android:defaultValue="alphabetical"
             android:entries="@array/pref_app_list_order_titles"
