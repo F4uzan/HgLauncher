@@ -164,9 +164,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Get icons from icon pack.
-        if (!prefs.getString("icon_pack", "default").equals("default")) {
+        if (!prefs.getString("icon_pack", "default").equals("default"))
             new getIconTask(this).execute();
-        }
 
         // Start loading apps and initialising click listeners.
         loadApps(false);
@@ -174,9 +173,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         registerForContextMenu(touchReceiver);
 
-        if (packageReceiver == null) {
+        if (packageReceiver == null)
             registerPackageReceiver();
-        }
 
         // Save our current app count.
         //TODO: There are better ways to accomplish this.
@@ -189,9 +187,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
-        if (!favourites_panel || pinnedAppList.size() == 0) {
+        if (!favourites_panel || pinnedAppList.size() == 0)
             pinnedAppsContainer.setVisibility(View.GONE);
-        }
 
         // Switch on wallpaper shade.
         if (shade_view) {
@@ -557,9 +554,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Remove uninstall menu if the app is a system app.
         try {
             ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
-            if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
+            if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1)
                 appMenu.getMenu().removeItem(R.id.action_uninstall);
-            }
         } catch (PackageManager.NameNotFoundException e) {
             Utils.sendLog(3, e.toString());
         } finally {
