@@ -44,12 +44,17 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Load appropriate theme before creating the activity.
-        if (prefs.getBoolean("dark_theme", false) && prefs.getBoolean("dark_theme_black", true)) {
-            setTheme(R.style.SettingTheme_Dark);
-        } else if (!prefs.getBoolean("dark_theme", false) && !prefs.getBoolean("dark_theme_black", true)) {
-            setTheme(R.style.SettingTheme);
-        } else if (!prefs.getBoolean("dark_theme_black", true)) {
-            setTheme(R.style.SettingTheme_Gray);
+        String app_theme = prefs.getString("app_theme", "light");
+        switch (app_theme) {
+            case "light":
+                setTheme(R.style.SettingTheme);
+                break;
+            case "dark":
+                setTheme(R.style.SettingTheme_Gray);
+                break;
+            case "black":
+                setTheme(R.style.SettingTheme_Dark);
+                break;
         }
 
         super.onCreate(savedInstanceState);

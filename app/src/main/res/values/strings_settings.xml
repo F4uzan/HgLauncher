@@ -36,6 +36,11 @@
     <string name="backup_empty">Backup name cannot be empty.</string>
 
     <!-- Customizations -->
+    <string name="app_theme">App theme</string>
+    <string name="app_theme_light">Light</string>
+    <string name="app_theme_dark">Dark</string>
+    <string name="app_theme_black">Black</string>
+
     <string name="dark_theme">Dark theme</string>
     <string name="dark_theme_black">Use true black</string>
     <string name="dark_theme_black_desc">Swap out dark gray for actual black in dark theme.</string>

@@ -62,11 +62,11 @@ import mono.hg.wrappers.OnTouchListener;
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     boolean anim, icon_hide, list_order, shade_view,
-            keyboard_focus, dark_theme, dark_theme_black, web_search_enabled,
-            comfy_padding, tap_to_drawer, favourites_panel, dismiss_panel;
+            keyboard_focus, web_search_enabled, comfy_padding,
+            tap_to_drawer, favourites_panel, dismiss_panel;
     boolean shouldShowFavourites;
     Integer app_count, animateTime;
-    String launch_anim, search_provider;
+    String launch_anim, search_provider, app_theme;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
     private Set<String> excludedAppList = new ArraySet<>();
@@ -234,8 +234,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         switch (key) {
-            case "dark_theme":
-            case "dark_theme_black":
+            case "app_theme":
             case "shade_view_switch":
             case "comfy_padding":
             case "icon_pack":
@@ -492,8 +491,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         comfy_padding = prefs.getBoolean("comfy_padding", false);
         dismiss_panel = prefs.getBoolean("dismiss_panel", true);
         tap_to_drawer = prefs.getBoolean("tap_to_drawer", false);
-        dark_theme = prefs.getBoolean("dark_theme", false);
-        dark_theme_black = prefs.getBoolean("dark_theme_black", false);
+        app_theme = prefs.getString("app_theme", "light");
         web_search_enabled = prefs.getBoolean("web_search_enabled", true);
         String search_provider_set = prefs.getString("search_provider", "google");
         favourites_panel = prefs.getBoolean("favourites_panel_switch", true);
@@ -511,12 +509,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         if (isInit) {
             // Set the app theme!
-            if (dark_theme && !dark_theme_black) {
-                setTheme(R.style.AppTheme_Gray_NoActionBar);
-            } else if (dark_theme) {
-                setTheme(R.style.AppTheme_Dark_NoActionBar);
-            } else {
-                setTheme(R.style.AppTheme_NoActionBar);
+            switch (app_theme) {
+                case "light":
+                    setTheme(R.style.AppTheme_NoActionBar);
+                    break;
+                case "dark":
+                    setTheme(R.style.AppTheme_Gray_NoActionBar);
+                    break;
+                case "black":
+                    setTheme(R.style.AppTheme_Dark_NoActionBar);
+                    break;
             }
         }
     }

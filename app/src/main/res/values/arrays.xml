@@ -31,4 +31,15 @@
         <item>ddg</item>
         <item>searx</item>
     </string-array>
+
+    <string-array name="pref_app_theme_title">
+        <item>@string/app_theme_light</item>
+        <item>@string/app_theme_dark</item>
+        <item>@string/app_theme_black</item>
+    </string-array>
+    <string-array name="pref_app_theme_values">
+        <item>light</item>
+        <item>dark</item>
+        <item>black</item>
+    </string-array>
 </resources>
