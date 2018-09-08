@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
         if (!favourites_panel || pinnedAppList.size() == 0)
-            pinnedAppsContainer.setVisibility(View.GONE);
+            parseAction("hide_favourites", null);
 
         // Switch on wallpaper shade.
         if (shade_view) {
