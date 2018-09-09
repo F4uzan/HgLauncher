@@ -3,7 +3,6 @@ package mono.hg.fragments;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,7 +39,7 @@ import java.util.Set;
 
 import mono.hg.FileFolder;
 import mono.hg.R;
-import mono.hg.SettingsActivity;
+import mono.hg.Utils;
 import mono.hg.adapters.FileFolderAdapter;
 import mono.hg.wrappers.BackHandledFragment;
 
@@ -131,7 +129,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                getActivity().onBackPressed();
                 return true;
             case 1:
                 // Send our backup signal!
@@ -216,9 +214,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
             out = new ObjectOutputStream(new FileOutputStream(path));
             out.writeObject(prefs.getAll());
         } catch (FileNotFoundException e) {
-            Log.e("Hubby", e.toString());
+            Utils.sendLog(3, e.toString());
         } catch (IOException e) {
-            Log.e("Hubby", e.toString());
+            Utils.sendLog(3, e.toString());
         } finally {
             try {
                 if (out != null) {
@@ -226,7 +224,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
                     out.flush();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Utils.sendLog(3, e.toString());
             }
             traverseStorage(this.path);
             Toast.makeText(getActivity(), R.string.backup_complete, Toast.LENGTH_SHORT).show();
@@ -262,18 +260,17 @@ public class BackupRestoreFragment extends BackHandledFragment {
             }
             edit.apply();
         } catch (FileNotFoundException e) {
-            Log.e("Hubby", e.toString());
+            Utils.sendLog(3, e.toString());
         } catch (IOException e) {
-            Log.e("Hubby", e.toString());
+            Utils.sendLog(3, e.toString());
         } catch (ClassNotFoundException e) {
-            Log.e("Hubby", e.toString());
+            Utils.sendLog(3, e.toString());
         } finally {
             try {
-                if (input != null) {
+                if (input != null)
                     input.close();
-                }
             } catch (IOException e) {
-                Log.e("Hubby", e.toString());
+                Utils.sendLog(3, e.toString());
             }
         }
     }
@@ -301,9 +298,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         @Override
         protected Void doInBackground(Void... params) {
             BackupRestoreFragment fragment = fragmentRef.get();
-            if (fragment != null) {
-                fragment.restoreBackup(path);
-            }
+            fragment.restoreBackup(path);
             return null;
         }
 
