@@ -533,15 +533,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void createAppMenu(View v, Boolean isPinned, final String packageName) {
+        AppDetail selectedPackage = new AppDetail(null, null, packageName, false);
+
         // Dismiss existing menu if they exist.
         if (appMenu != null)
             appMenu.dismiss();
 
         int position;
         if (isPinned) {
-            position = pinnedAppList.indexOf(new AppDetail(null, null, packageName, false));
+            position = pinnedAppList.indexOf(selectedPackage);
         } else {
-            position = appList.indexOf(new AppDetail(null, null, packageName, false));
+            position = appList.indexOf(selectedPackage);
         }
         final Uri packageNameUri = Uri.parse("package:" + packageName);
 
@@ -553,6 +555,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             appMenu.getMenu().removeItem(R.id.action_pin);
             appMenu.getMenu().removeItem(R.id.action_hide);
         } else {
+            // Don't show the 'pin' action when the app is already pinned.
+            if (pinnedAppList.contains(selectedPackage))
+                appMenu.getMenu().removeItem(R.id.action_pin);
             appMenu.getMenu().removeItem(R.id.action_unpin);
         }
 
