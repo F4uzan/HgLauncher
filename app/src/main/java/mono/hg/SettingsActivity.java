@@ -3,8 +3,6 @@ package mono.hg;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
@@ -16,28 +14,6 @@ import mono.hg.wrappers.BackHandledFragment;
 
 public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity implements BackHandledFragment.BackHandlerInterface {
     private BackHandledFragment selectedFragment;
-
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
-
-            if (preference instanceof ListPreference) {
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
-
-                // Set the summary to reflect the new value.
-                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-            } else {
-                preference.setSummary(stringValue);
-            }
-            return true;
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
