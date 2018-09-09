@@ -184,7 +184,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
             contents = path.listFiles();
         }
 
-        if (contents.length > 0) {
+        if (contents != null && contents.length > 0) {
             for (File availableContents : contents) {
                 // Don't show hidden (.hidden) files/folders.
                 if (!availableContents.isHidden()) {
