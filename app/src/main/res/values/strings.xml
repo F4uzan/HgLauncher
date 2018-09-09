@@ -22,7 +22,6 @@
     <string name="search_web_hint">Search for \'%1$s\' online.</string>
     <string name="search_web_button">Go</string>
     <string name="desc_icon">App icon</string>
-    <string name="no_hidden_apps">There is nothing here yet.</string>
 
     <!-- Warning/Information toast -->
     <string name="warn_pinning">Enable favourites panel to see pinned apps.</string>

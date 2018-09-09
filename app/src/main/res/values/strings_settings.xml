@@ -57,11 +57,6 @@
     <string name="favourites_panel_title">Favourites panel</string>
     <string name="favourites_panel_desc">Toggle the panel used for pinning apps.</string>
 
-    <string name="pref_favourites_orientation">Favourites panel orientation</string>
-    <string name="fav_orientation_left">Left</string>
-    <string name="fav_orientation_right">Right</string>
-    <string name="fav_orientation_bottom">Bottom</string>
-
     <string name="pref_search_provider">Online search provider</string>
 
     <string name="panel_dismiss">Dismiss at pause</string>
