@@ -5,12 +5,14 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,11 +64,35 @@ public class BackupRestoreFragment extends BackHandledFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        setHasOptionsMenu(true);
-
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
+        /*
+         * Show our own toolbar if we are running below Lollipop.
+         * This is needed because the preference library does not supply toolbars
+         * for fragments that it isn't managing.
+         */
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+            ((SettingsActivity) getActivity()).setSupportActionBar(toolbar);
+            toolbar.setVisibility(View.VISIBLE);
+            if (this.getArguments().getBoolean("isRestore", false)) {
+                toolbar.setTitle(R.string.pref_header_restore);
+                isInRestore = true;
+            } else {
+                toolbar.setTitle(R.string.pref_header_backup);
+            }
+        } else {
+            ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                if (this.getArguments().getBoolean("isRestore", false)) {
+                    actionBar.setTitle(R.string.pref_header_restore);
+                } else {
+                    actionBar.setTitle(R.string.pref_header_backup);
+                }
+            }
+        }
+
+        setHasOptionsMenu(true);
 
         fileFolderAdapter = new FileFolderAdapter(fileFoldersList, getActivity());
         FrameLayout fileInputContainer = getActivity().findViewById(R.id.file_input_container);
@@ -76,15 +102,8 @@ public class BackupRestoreFragment extends BackHandledFragment {
         fileFolders.setAdapter(fileFolderAdapter);
 
         // If we are called to restore, then hide the input field.
-        // Also set appropriate action bar title here.
-        if (this.getArguments().getBoolean("isRestore", false)) {
-            if (actionBar != null)
-                actionBar.setTitle(R.string.pref_header_restore);
+        if (isInRestore) {
             fileInputContainer.setVisibility(View.GONE);
-            isInRestore = true;
-        } else {
-            if (actionBar != null)
-                actionBar.setTitle(R.string.pref_header_backup);
         }
 
         // Check for storage permission if we're in Marshmallow and up.

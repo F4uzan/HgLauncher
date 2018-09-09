@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.ArraySet;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,11 +57,19 @@ public class HiddenAppsFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
-        setHasOptionsMenu(true);
+        // Make a toolbar when the preference library doesn't give us anything.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+            ((SettingsActivity) getActivity()).setSupportActionBar(toolbar);
+            toolbar.setVisibility(View.VISIBLE);
+            toolbar.setTitle(R.string.pref_header_hidden_apps);
+        } else {
+            ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null)
+                actionBar.setTitle(R.string.pref_header_hidden_apps);
+        }
 
-        if (actionBar != null)
-            actionBar.setTitle(R.string.pref_header_hidden_apps);
+        setHasOptionsMenu(true);
 
         manager = getActivity().getPackageManager();
         editPrefs = prefs.edit();
