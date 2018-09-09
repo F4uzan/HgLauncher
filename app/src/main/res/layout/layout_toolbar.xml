@@ -7,4 +7,5 @@
     android:layout_height="56dp"
     android:visibility="gone"
     android:background="@color/colorPrimary"
+    app:titleTextColor="@android:color/white"
     app:navigationIcon="@drawable/ic_toolbar_back" />
