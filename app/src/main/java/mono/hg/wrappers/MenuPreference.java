@@ -43,8 +43,11 @@ public class MenuPreference extends ListPreference {
             public boolean onMenuItemClick(MenuItem item) {
                 popup.dismiss();
                 String value = getEntryValues()[item.getItemId()].toString();
-                if (callChangeListener(value))
+                String entry = getEntries()[item.getItemId()].toString();
+                if (callChangeListener(value)) {
                     setValue(value);
+                    setSummary(entry);
+                }
                 return true;
             }
         });
