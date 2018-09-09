@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArraySet;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import java.util.Set;
 
 import mono.hg.AppDetail;
 import mono.hg.R;
+import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
 
 public class HiddenAppsFragment extends Fragment {
@@ -52,14 +54,17 @@ public class HiddenAppsFragment extends Fragment {
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
         setHasOptionsMenu(true);
 
-        manager = getActivity().getPackageManager();
+        if (actionBar != null)
+            actionBar.setTitle(R.string.pref_header_hidden_apps);
 
+        manager = getActivity().getPackageManager();
         editPrefs = prefs.edit();
 
         list = getActivity().findViewById(R.id.ex_apps_list);
-
         apps = new HiddenAppAdapter(appList, getActivity());
 
         list.setAdapter(apps);

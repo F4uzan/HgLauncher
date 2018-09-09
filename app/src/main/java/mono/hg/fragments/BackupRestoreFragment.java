@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,6 +40,7 @@ import java.util.Set;
 
 import mono.hg.FileFolder;
 import mono.hg.R;
+import mono.hg.SettingsActivity;
 import mono.hg.Utils;
 import mono.hg.adapters.FileFolderAdapter;
 import mono.hg.wrappers.BackHandledFragment;
@@ -64,6 +66,8 @@ public class BackupRestoreFragment extends BackHandledFragment {
 
         super.onCreate(savedInstanceState);
 
+        ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
+
         fileFolderAdapter = new FileFolderAdapter(fileFoldersList, getActivity());
         FrameLayout fileInputContainer = getActivity().findViewById(R.id.file_input_container);
         ListView fileFolders = getActivity().findViewById(R.id.files_list);
@@ -74,11 +78,13 @@ public class BackupRestoreFragment extends BackHandledFragment {
         // If we are called to restore, then hide the input field.
         // Also set appropriate action bar title here.
         if (this.getArguments().getBoolean("isRestore", false)) {
-            getActivity().setTitle(R.string.pref_header_restore);
+            if (actionBar != null)
+                actionBar.setTitle(R.string.pref_header_restore);
             fileInputContainer.setVisibility(View.GONE);
             isInRestore = true;
         } else {
-            getActivity().setTitle(R.string.pref_header_backup);
+            if (actionBar != null)
+                actionBar.setTitle(R.string.pref_header_backup);
         }
 
         // Check for storage permission if we're in Marshmallow and up.
