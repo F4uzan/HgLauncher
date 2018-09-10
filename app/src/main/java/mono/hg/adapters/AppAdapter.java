@@ -30,11 +30,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        AppDetail app;
-        TextView name;
-        ImageView icon;
+        private AppDetail app;
+        private TextView name;
+        private ImageView icon;
 
-        void setItem(AppDetail app) {
+        private void setItem(AppDetail app) {
             this.app = app;
             name.setText(app.getAppName());
             icon.setImageDrawable(app.getIcon());

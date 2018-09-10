@@ -23,7 +23,7 @@ public class PinnedAppAdapter extends RecyclerView.Adapter<PinnedAppAdapter.View
         AppDetail app;
         ImageView icon;
 
-        void setItem(AppDetail app) {
+        private void setItem(AppDetail app) {
             this.app = app;
             icon.setImageDrawable(app.getIcon());
         }

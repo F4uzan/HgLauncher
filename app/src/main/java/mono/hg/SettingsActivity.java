@@ -20,6 +20,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
         PreferenceHelper.fetchPreference(this);
 
         switch (PreferenceHelper.appTheme()) {
+            default:
             case "light":
                 setTheme(R.style.SettingTheme);
                 break;

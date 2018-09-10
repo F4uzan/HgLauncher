@@ -63,7 +63,7 @@ import mono.hg.wrappers.OnTouchListener;
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     boolean shouldShowFavourites;
-    Integer app_count, animateTime;
+    private Integer app_count, animateTime;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
     private Set<String> excludedAppList = new ArraySet<>();
@@ -484,6 +484,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (isInit) {
             // Set the app theme!
             switch (PreferenceHelper.appTheme()) {
+                default:
                 case "light":
                     setTheme(R.style.AppTheme_NoActionBar);
                     break;
@@ -702,12 +703,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     // When the favourites panel is replaced/swapped out,
                     // we should not be calling it until we are told to.
                     if (pinnedAppList.size() > 0) {
-                        if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                            if (shouldShowFavourites)
-                                parseAction("show_favourites", null);
-                        } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
-                            if (shouldShowFavourites)
-                                parseAction("hide_favourites", null);
+                        if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && shouldShowFavourites) {
+                            parseAction("show_favourites", null);
+                        } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP) && shouldShowFavourites) {
+                            parseAction("hide_favourites", null);
                         }
                     }
                 }

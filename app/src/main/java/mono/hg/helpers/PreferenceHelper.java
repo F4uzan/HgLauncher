@@ -56,6 +56,7 @@ public class PreferenceHelper {
 
     public static String getSearchProvider() {
         switch (search_provider_set) {
+            default:
             case "google":
                 search_provider = "https://www.google.com/search?q=";
                 break;

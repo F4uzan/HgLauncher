@@ -38,13 +38,13 @@ import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
 
 public class HiddenAppsFragment extends Fragment {
-    ArrayList<AppDetail> appList = new ArrayList<>();
+    private ArrayList<AppDetail> appList = new ArrayList<>();
+    private HiddenAppAdapter apps;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editPrefs;
+    private PackageManager manager;
     Set<String> excludedAppList = new ArraySet<>();
-    HiddenAppAdapter apps;
     ListView list;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editPrefs;
-    PackageManager manager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
