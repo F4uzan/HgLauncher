@@ -55,18 +55,15 @@ import java.util.Set;
 import mono.hg.adapters.AppAdapter;
 import mono.hg.adapters.PinnedAppAdapter;
 import mono.hg.helpers.IconPackHelper;
+import mono.hg.helpers.PreferenceHelper;
 import mono.hg.helpers.RecyclerClick;
 import mono.hg.receivers.PackageChangesReceiver;
 import mono.hg.wrappers.OnTouchListener;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    boolean anim, icon_hide, list_order, shade_view,
-            keyboard_focus, web_search_enabled, comfy_padding,
-            tap_to_drawer, favourites_panel, dismiss_panel;
     boolean shouldShowFavourites;
     Integer app_count, animateTime;
-    String launch_anim, search_provider, app_theme;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
     private Set<String> excludedAppList = new ArraySet<>();
@@ -161,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Empty out margins if they are not needed.
-        if (!comfy_padding) {
+        if (!PreferenceHelper.usesComfyPadding()) {
             ViewGroup.MarginLayoutParams searchParams = (ViewGroup.MarginLayoutParams) searchContainer.getLayoutParams();
             ViewGroup.MarginLayoutParams listParams = (ViewGroup.MarginLayoutParams) appListContainer.getLayoutParams();
             searchParams.setMargins(0, 0, 0, 0);
@@ -199,11 +196,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
-        if (!favourites_panel || pinnedAppList.size() == 0)
+        if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0)
             parseAction("hide_favourites", null);
 
         // Switch on wallpaper shade.
-        if (shade_view) {
+        if (PreferenceHelper.useWallpaperShade()) {
             View wallpaperShade = findViewById(R.id.wallpaper_shade);
             // Tints the navigation bar with a semi-transparent shade.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -252,17 +249,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "icon_pack":
             case "dummy_restore":
             case "favourites_panel_switch":
-                recreate();
-                break;
             case "icon_hide_switch":
-                icon_hide = prefs.getBoolean("icon_hide_switch", false);
-                loadApps(true);
-                apps.setUpdateFilter(true);
-                break;
             case "list_order":
-                list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
-                loadApps(true);
-                apps.setUpdateFilter(true);
+                recreate();
                 break;
             case "removedApp":
                 editPrefs.putBoolean("removedApp", false).commit();
@@ -317,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         loadPref(false);
         registerPackageReceiver();
 
-        if (dismiss_panel)
+        if (PreferenceHelper.shouldDismissOnLeave())
             parseAction("panel_up", null);
 
         searchBar.setText(null);
@@ -337,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
 
-        if (!list_order) {
+        if (!PreferenceHelper.isListInverted()) {
             Collections.sort(availableActivities, Collections
                     .reverseOrder(new ResolveInfo.DisplayNameComparator(manager)));
         } else {
@@ -360,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Drawable icon = null;
                 Drawable getIcon = null;
                 // Only show icons if user chooses so.
-                if (!icon_hide) {
+                if (!PreferenceHelper.shouldHideIcon()) {
                     if (!prefs.getString("icon_pack", "default").equals("default"))
                         getIcon = new IconPackHelper().getIconDrawable(this, packageName);
                     if (getIcon == null) {
@@ -386,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         try {
             // Override app launch animation when needed.
             startActivity(i);
-            switch (launch_anim) {
+            switch (PreferenceHelper.getLaunchAnim()) {
                 case "pull_up":
                     overridePendingTransition(R.anim.pull_up, 0);
                     break;
@@ -441,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "show_favourites_animate":
                 pinnedAppsContainer.animate().cancel();
 
-                if (favourites_panel && pinnedAppList.size() > 0) {
+                if (PreferenceHelper.isFavouritesEnabled() && pinnedAppList.size() > 0) {
                     pinnedAppsContainer.animate()
                             .translationY(0f)
                             .setInterpolator(new FastOutSlowInInterpolator())
@@ -483,40 +472,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     // Load available preferences.
-    //TODO: This is suboptimal. Maybe try coming up with a better hax?
     private void loadPref(Boolean isInit) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         editPrefs = prefs.edit();
+
+        PreferenceHelper.fetchPreference(this);
+
         if (isInit)
             prefs.registerOnSharedPreferenceChangeListener(this);
 
-        launch_anim = prefs.getString("launch_anim", "default");
-        icon_hide = prefs.getBoolean("icon_hide_switch", false);
-        list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
-        shade_view = prefs.getBoolean("shade_view_switch", false);
-        keyboard_focus = prefs.getBoolean("keyboard_focus", false);
-        comfy_padding = prefs.getBoolean("comfy_padding", false);
-        dismiss_panel = prefs.getBoolean("dismiss_panel", true);
-        tap_to_drawer = prefs.getBoolean("tap_to_drawer", true);
-        app_theme = prefs.getString("app_theme", "light");
-        web_search_enabled = prefs.getBoolean("web_search_enabled", true);
-        String search_provider_set = prefs.getString("search_provider", "google");
-        favourites_panel = prefs.getBoolean("favourites_panel_switch", true);
-
-        switch (search_provider_set) {
-            case "google":
-                search_provider = "https://www.google.com/search?q=";
-                break;
-            case "ddg":
-                search_provider = "https://www.duckduckgo.com/?q=";
-                break;
-            case "searx":
-                search_provider = "https://www.searx.me/?q=";
-        }
-
         if (isInit) {
             // Set the app theme!
-            switch (app_theme) {
+            switch (PreferenceHelper.appTheme()) {
                 case "light":
                     setTheme(R.style.AppTheme_NoActionBar);
                     break;
@@ -590,9 +557,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         Utils.loadSingleApp(MainActivity.this, packageName, pinnedApps, pinnedAppList, true);
                         pinnedAppSet.add(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
-                        if (!favourites_panel)
+                        if (!PreferenceHelper.isFavouritesEnabled())
                             Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
-                        if (favourites_panel && pinnedAppList.size() == 1) {
+                        if (PreferenceHelper.isFavouritesEnabled() && pinnedAppList.size() == 1) {
                             parseAction("show_favourites_animate", null);
                             shouldShowFavourites = true;
                         }
@@ -670,20 +637,20 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 if (s.length() <= 0) {
                     list.getLayoutManager().scrollToPosition(app_count);
                     // Summon our favourites panel back.
-                    if (!favourites_panel || pinnedAppList.size() == 0) {
+                    if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0) {
                         parseAction("hide_favourites", null);
                     } else {
                         shouldShowFavourites = true;
                         parseAction("show_favourites_animate", null);
                     }
-                } else if (s.length() > 0 && web_search_enabled) {
+                } else if (s.length() > 0 && PreferenceHelper.promptSearch()) {
                     parseAction("replace_favourites", null);
                     // Prompt user if they want to search their query online.
                     searchSnack.setAction(R.string.search_web_button, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Intent link = new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse(search_provider + searchBarText));
+                                    Uri.parse(PreferenceHelper.getSearchProvider() + searchBarText));
                             synchronized (this) {
                                 startActivity(link);
                                 apps.getFilter().filter(null);
@@ -728,7 +695,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Listen for app list scroll to hide/show favourites panel.
         // Only do this when the user has favourites panel enabled.
-        if (favourites_panel) {
+        if (PreferenceHelper.isFavouritesEnabled()) {
             list.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -802,7 +769,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     searchBar.setText(null);
 
                     // Automatically show keyboard when the panel is called.
-                    if (keyboard_focus && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    if (PreferenceHelper.shouldFocusKeyboard()
+                            && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
                         parseAction("show_keyboard", searchBar);
                         searchBar.requestFocus();
                     }
@@ -849,7 +817,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onClick() {
                 // Imitate sliding panel drag view behaviour; show the app panel on click.
-                if (tap_to_drawer)
+                if (PreferenceHelper.allowTapToOpen())
                     parseAction("panel_down", null);
             }
         });
