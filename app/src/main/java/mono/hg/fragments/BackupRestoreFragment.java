@@ -86,6 +86,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
             if (actionBar != null) {
                 if (this.getArguments().getBoolean("isRestore", false)) {
                     actionBar.setTitle(R.string.pref_header_restore);
+                    isInRestore = true;
                 } else {
                     actionBar.setTitle(R.string.pref_header_backup);
                 }
