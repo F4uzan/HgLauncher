@@ -150,8 +150,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             } else if (savedInstanceState.getInt("searchVisibility") == View.VISIBLE
                     && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                 searchContainer.setVisibility(View.INVISIBLE);
-            } else {
-                searchContainer.setVisibility(savedInstanceState.getInt("searchVisibility"));
+            } else if (savedInstanceState.getInt("searchVisibility") == View.GONE) {
+                // This can happen and we don't want it.
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    searchContainer.setVisibility(View.VISIBLE);
+                } else if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    searchContainer.setVisibility(View.INVISIBLE);
+                }
             }
         }
 
