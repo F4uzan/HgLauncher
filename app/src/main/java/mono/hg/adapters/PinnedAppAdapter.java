@@ -20,11 +20,9 @@ public class PinnedAppAdapter extends RecyclerView.Adapter<PinnedAppAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        AppDetail app;
-        ImageView icon;
+        private ImageView icon;
 
         private void setItem(AppDetail app) {
-            this.app = app;
             icon.setImageDrawable(app.getIcon());
         }
 

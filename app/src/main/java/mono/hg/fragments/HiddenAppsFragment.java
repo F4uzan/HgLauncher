@@ -43,8 +43,8 @@ public class HiddenAppsFragment extends Fragment {
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
     private PackageManager manager;
-    Set<String> excludedAppList = new ArraySet<>();
-    ListView list;
+    private Set<String> excludedAppList = new ArraySet<>();
+    private ListView list;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -226,6 +226,9 @@ public class HiddenAppsFragment extends Fragment {
                             case R.id.action_hide:
                             case R.id.action_show:
                                 toggleHiddenState(position);
+                                break;
+                            default:
+                                // Don't do anything.
                                 break;
                         }
                         return true;

@@ -62,7 +62,7 @@ import mono.hg.wrappers.OnTouchListener;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    boolean shouldShowFavourites;
+    private boolean shouldShowFavourites;
     private Integer app_count, animateTime;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Get icons from icon pack.
         String iconPack = prefs.getString("icon_pack", "default");
-        if (!iconPack.equals("default")) {
+        if (!"default".equals(iconPack)) {
             if (manager.getLaunchIntentForPackage(iconPack) != null) {
                 new getIconTask(this).execute();
             } else {
@@ -410,6 +410,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         switch (action) {
+            default:
+                return;
             case "panel_down":
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED)
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
@@ -626,7 +628,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No-op.
+            }
 
             @Override
             public void afterTextChanged(Editable s) {

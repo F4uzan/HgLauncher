@@ -15,8 +15,12 @@ public class KissFuzzySearch {
     public static int doFuzzy(String sourceName, String queryMatch) {
         ArrayList<Pair<Integer, Integer>> matchPositions = new ArrayList<>();
 
-        int relevance = 0, queryPos = 0, appPos = 0, beginMatch = 0,
-                matchedWordStarts = 0, totalWordStarts = 0;
+        int relevance = 0;
+        int queryPos = 0;
+        int appPos = 0;
+        int beginMatch = 0;
+        int matchedWordStarts = 0;
+        int totalWordStarts = 0;
 
         // Normalise query and source (app name).
         String source = sourceName.toLowerCase();

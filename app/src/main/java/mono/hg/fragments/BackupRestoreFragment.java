@@ -185,6 +185,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
                     Toast.makeText(getActivity(), R.string.backup_empty, Toast.LENGTH_SHORT).show();
                 }
                 return true;
+            default:
+                // Do nothing.
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

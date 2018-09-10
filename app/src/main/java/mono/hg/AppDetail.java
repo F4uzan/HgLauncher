@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable;
 public class AppDetail {
     private String appName, packageName;
     private Boolean isHidden;
-    Drawable icon;
+    private Drawable icon;
 
     public AppDetail(Drawable icon, String appName, String packageName, Boolean isHidden) {
         this.packageName = packageName;

@@ -51,7 +51,7 @@ public class RecyclerClick {
 
         @Override
         public void onChildViewDetachedFromWindow(View view) {
-
+            // Do nothing here.
         }
     };
 
