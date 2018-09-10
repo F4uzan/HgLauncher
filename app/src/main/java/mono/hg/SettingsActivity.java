@@ -1,15 +1,14 @@
 package mono.hg;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import mono.hg.fragments.BackupRestoreFragment;
 import mono.hg.fragments.CustomizePreferenceFragment;
 import mono.hg.fragments.HiddenAppsFragment;
+import mono.hg.helpers.PreferenceHelper;
 import mono.hg.wrappers.BackHandledFragment;
 
 public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity implements BackHandledFragment.BackHandlerInterface {
@@ -17,11 +16,10 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         // Load appropriate theme before creating the activity.
-        String app_theme = prefs.getString("app_theme", "light");
-        switch (app_theme) {
+        PreferenceHelper.fetchPreference(this);
+
+        switch (PreferenceHelper.appTheme()) {
             case "light":
                 setTheme(R.style.SettingTheme);
                 break;

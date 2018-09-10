@@ -5,8 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class PreferenceHelper {
-    Context mContext;
-    private static boolean anim, icon_hide, list_order, shade_view,
+    private static boolean icon_hide, list_order, shade_view,
             keyboard_focus, web_search_enabled, comfy_padding,
             tap_to_drawer, favourites_panel, dismiss_panel;
     private static String launch_anim, search_provider, app_theme, search_provider_set;
