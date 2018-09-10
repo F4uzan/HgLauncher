@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Locale;
 
+import mono.hg.Utils;
+
 /*
  * A class used to handle icon packs.
  * The implementation is based off of rickeythefox's code @ StackOverflow
@@ -36,22 +38,25 @@ public class IconPackHelper {
         try {
             iconRes = context.getPackageManager().getResourcesForApplication(iconPackageName);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Utils.sendLog(3, e.toString());
         }
 
         // Get appfilter from icon pack's asset folder.
         //TODO: It's probable to get it from the XML folder as well.
         try {
-            InputStream iconAsset = iconRes.getAssets().open("appfilter.xml");
+            InputStream iconAsset = null;
+            if (iconRes != null) {
+                iconAsset = iconRes.getAssets().open("appfilter.xml");
+            }
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 
             factory.setNamespaceAware(true);
             iconFilterXml = factory.newPullParser();
             iconFilterXml.setInput(iconAsset, "utf-8");
         } catch (IOException e) {
-            e.printStackTrace();
+            Utils.sendLog(3, e.toString());
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Utils.sendLog(3, e.toString());
         }
 
         // Begin parsing the received appfilter.
@@ -80,9 +85,9 @@ public class IconPackHelper {
                     eventType = iconFilterXml.next();
                 }
             } catch (XmlPullParserException e) {
-                e.printStackTrace();
+                Utils.sendLog(3, e.toString());
             } catch (IOException e) {
-                e.printStackTrace();
+                Utils.sendLog(3, e.toString());
             }
         }
     }
@@ -106,14 +111,14 @@ public class IconPackHelper {
         try {
             iconRes = context.getPackageManager().getResourcesForApplication(iconPackageName);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Utils.sendLog(3, e.toString());
         }
 
         if (launchIntent != null)
             componentName = pm.getLaunchIntentForPackage(appPackageName).getComponent().toString();
 
         String drawable = mPackagesDrawables.get(componentName);
-        if (drawable != null) {
+        if (drawable != null && iconRes != null) {
             // Load and return.
             return loadDrawable(iconRes, drawable, iconPackageName);
         } else {
@@ -121,7 +126,7 @@ public class IconPackHelper {
             if (componentName != null) {
                 int start = componentName.indexOf("{") + 1;
                 int end = componentName.indexOf("}",  start);
-                if (end > start) {
+                if (end > start && iconRes != null) {
                     drawable = componentName.substring(start,end).toLowerCase(Locale.getDefault()).replace(".","_").replace("/", "_");
                     if (iconRes.getIdentifier(drawable, "drawable", iconPackageName) > 0)
                         return loadDrawable(iconRes, drawable, iconPackageName);
