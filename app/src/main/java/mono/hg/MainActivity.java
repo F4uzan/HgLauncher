@@ -164,8 +164,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Get icons from icon pack.
-        if (!prefs.getString("icon_pack", "default").equals("default"))
-            new getIconTask(this).execute();
+        String iconPack = prefs.getString("icon_pack", "default");
+        if (!iconPack.equals("default")) {
+            if (manager.getLaunchIntentForPackage(iconPack) != null) {
+                new getIconTask(this).execute();
+            } else {
+                // We can't find the icon pack, so revert back to the default pack.
+                editPrefs.putString("icon_pack", "default").apply();
+            }
+        }
 
         // Start loading apps and initialising click listeners.
         loadApps(false);
