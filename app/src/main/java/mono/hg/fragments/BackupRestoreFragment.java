@@ -209,9 +209,13 @@ public class BackupRestoreFragment extends BackHandledFragment {
                 // Don't show hidden (.hidden) files/folders.
                 if (!availableContents.isHidden()) {
                     if (availableContents.isDirectory()) {
-                        fileFoldersList.add(new FileFolder(availableContents.getName(), true));
+                        fileFoldersList.add(new FileFolder(availableContents.getName(), true, false));
                     } else if (availableContents.isFile()) {
-                        fileFoldersList.add(new FileFolder(availableContents.getName(), false));
+                        if (isInRestore && availableContents.getName().toLowerCase().endsWith(".xml")) {
+                            fileFoldersList.add(new FileFolder(availableContents.getName(), false, true));
+                        } else {
+                            fileFoldersList.add(new FileFolder(availableContents.getName(), false, false));
+                        }
                     }
                 }
             }

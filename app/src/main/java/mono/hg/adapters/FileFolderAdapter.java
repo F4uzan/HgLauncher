@@ -1,6 +1,7 @@
 package mono.hg.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,10 @@ public class FileFolderAdapter extends BaseAdapter {
         }
 
         name.setText(files.get(position).getName());
+
+        if (files.get(position).shouldHighlight()) {
+            name.setTypeface(null, Typeface.BOLD);
+        }
 
         return view;
     }
