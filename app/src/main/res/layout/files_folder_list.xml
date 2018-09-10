@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:windowBackground"
@@ -15,7 +16,7 @@
         android:layout_height="48dp"
         android:layout_gravity="start"
         android:visibility="gone"
-        android:src="@drawable/ic_folder" />
+        app:srcCompat="@drawable/ic_folder" />
 
     <ImageView
         android:id="@+id/item_file"
@@ -23,7 +24,7 @@
         android:layout_height="48dp"
         android:layout_gravity="start"
         android:visibility="gone"
-        android:src="@drawable/ic_file" />
+        app:srcCompat="@drawable/ic_file" />
 
     <TextView
         android:id="@+id/item_content_name"
