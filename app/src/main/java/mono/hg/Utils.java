@@ -72,7 +72,11 @@ public class Utils {
                 }
                 AppDetail app = new AppDetail(icon, appName, packageName, false);
                 list.add(app);
-                adapter.notifyItemInserted(list.size());
+                if (forFavourites) {
+                    adapter.notifyDataSetChanged();
+                } else {
+                    adapter.notifyItemInserted(list.size());
+                }
             } catch (PackageManager.NameNotFoundException e) {
                 sendLog(3, e.toString());
             }
