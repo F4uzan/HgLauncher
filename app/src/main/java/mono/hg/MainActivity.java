@@ -579,8 +579,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
                         if (!favourites_panel)
                             Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
-                        if (favourites_panel && pinnedAppList.size() == 1)
+                        if (favourites_panel && pinnedAppList.size() == 1) {
                             parseAction("show_favourites_animate", null);
+                            shouldShowFavourites = true;
+                        }
                         break;
                     case R.id.action_unpin:
                         pinnedAppList.remove(finalPosition);
