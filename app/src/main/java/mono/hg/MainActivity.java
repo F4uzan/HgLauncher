@@ -254,16 +254,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 recreate();
                 break;
             case "removedApp":
-                editPrefs.putBoolean("removedApp", false).commit();
-                editPrefs.remove("removed_app").commit();
+                editPrefs.putBoolean("removedApp", false).apply();
+                editPrefs.remove("removed_app").apply();
                 parseAction("panel_up", null);
                 // HACK: Recreate, recreate.
                 // Sometimes we receive inconsistent result, so just kick the bucket here.
                 recreate();
                 break;
             case "addApp":
-                editPrefs.putBoolean("addApp", false).commit();
-                editPrefs.remove("added_app").commit();
+                editPrefs.putBoolean("addApp", false).apply();
+                editPrefs.remove("added_app").apply();
                 parseAction("panel_up", null);
                 // HACK: Recreate after receiving installation.
                 // A workaround for app list getting stuck in search result due to filters.
@@ -568,7 +568,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         pinnedAppList.remove(finalPosition);
                         pinnedApps.notifyItemRemoved(finalPosition);
                         pinnedAppSet.remove(packageName);
-                        editPrefs.putStringSet("pinned_apps", pinnedAppSet).commit();
+                        editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
                         if (pinnedAppList.size() == 0)
                             parseAction("hide_favourites_animate", null);
                         break;
