@@ -553,6 +553,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } else {
             position = appList.indexOf(selectedPackage);
         }
+
         final Uri packageNameUri = Uri.parse("package:" + packageName);
 
         // Inflate the app menu.
@@ -586,7 +587,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pin:
-                        Utils.loadSingleApp(MainActivity.this, appList.get(finalPosition).getPackageName(), pinnedApps, pinnedAppList, true);
+                        Utils.loadSingleApp(MainActivity.this, packageName, pinnedApps, pinnedAppList, true);
                         pinnedAppSet.add(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
                         if (!favourites_panel)
