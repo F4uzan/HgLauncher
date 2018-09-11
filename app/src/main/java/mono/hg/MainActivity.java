@@ -158,8 +158,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Start loading apps and initialising click listeners.
-        loadApps();
         loadPinnedHiddenApps();
+        loadApps();
         addListeners();
         addGestureListener();
 
@@ -395,7 +395,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         switch (action) {
             default:
-                return;
+                // Don't do anything.
+                break;
             case "panel_down":
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED)
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
