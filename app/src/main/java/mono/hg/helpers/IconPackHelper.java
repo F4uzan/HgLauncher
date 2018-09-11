@@ -41,18 +41,24 @@ public class IconPackHelper {
             Utils.sendLog(3, e.toString());
         }
 
-        // Get appfilter from icon pack's asset folder.
-        //TODO: It's probable to get it from the XML folder as well.
+        // Get appfilter from the icon pack.
         try {
-            InputStream iconAsset = null;
-            if (iconRes != null) {
-                iconAsset = iconRes.getAssets().open("appfilter.xml");
-            }
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            InputStream iconAsset;
+            int appFilterXml = 0;
 
-            factory.setNamespaceAware(true);
-            iconFilterXml = factory.newPullParser();
-            iconFilterXml.setInput(iconAsset, "utf-8");
+            if (iconRes != null) {
+                appFilterXml = iconRes.getIdentifier("appfilter", "xml", iconPackageName);
+            }
+
+            if (appFilterXml > 0) {
+                iconFilterXml = iconRes.getXml(appFilterXml);
+            } else {
+                iconAsset = iconRes.getAssets().open("appfilter.xml");
+                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                factory.setNamespaceAware(true);
+                iconFilterXml = factory.newPullParser();
+                iconFilterXml.setInput(iconAsset, "utf-8");
+            }
         } catch (IOException e) {
             Utils.sendLog(3, e.toString());
         } catch (XmlPullParserException e) {
