@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
@@ -73,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private AppAdapter apps = new AppAdapter(appList);
     private RecyclerView list, pinned_list;
     private FrameLayout searchContainer, pinnedAppsContainer;
+    private RelativeLayout appListContainer;
     private EditText searchBar;
     private SlidingUpPanelLayout slidingHome;
     private View snackHolder, touchReceiver;
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
 
-        RelativeLayout appListContainer = findViewById(R.id.app_list_container);
+        appListContainer = findViewById(R.id.app_list_container);
         searchContainer = findViewById(R.id.search_container);
         pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
         searchBar = findViewById(R.id.search);
@@ -126,17 +126,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         pinned_list.setLayoutManager(pinnedAppsManager);
         pinned_list.setHasFixedSize(true);
 
-        // Get a list of our hidden apps, default to null if there aren't any.
-        excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
-
-        // Workaround v21+ statusbar transparency issue.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome.getLayoutParams();
-            homeParams.topMargin = Utils.getStatusBarHeight(this, getResources());
-        }
-
         // Restore search bar visibility when available.
         if (savedInstanceState != null) {
             // The search bar shouldn't be invisible when the panel is pulled down,
@@ -157,14 +146,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
-        // Empty out margins if they are not needed.
-        if (!PreferenceHelper.usesComfyPadding()) {
-            ViewGroup.MarginLayoutParams searchParams = (ViewGroup.MarginLayoutParams) searchContainer.getLayoutParams();
-            ViewGroup.MarginLayoutParams listParams = (ViewGroup.MarginLayoutParams) appListContainer.getLayoutParams();
-            searchParams.setMargins(0, 0, 0, 0);
-            listParams.setMargins(0, 0, 0, 0);
-        }
-
         // Get icons from icon pack.
         String iconPack = prefs.getString("icon_pack", "default");
         if (!"default".equals(iconPack)) {
@@ -177,37 +158,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Start loading apps and initialising click listeners.
-        loadApps(false);
+        loadApps();
+        loadPinnedHiddenApps();
         addListeners();
+        addGestureListener();
 
         registerForContextMenu(touchReceiver);
 
         if (packageReceiver == null)
             registerPackageReceiver();
 
+        applyPrefToViews();
+
         // Save our current app count.
         //TODO: There are better ways to accomplish this.
         app_count = appList.size() - 1;
-
-        // Get pinned apps here, after the initialisation of getIconTask.
-        pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
-        for (String pinnedApp : pinnedAppSet) {
-            Utils.loadSingleApp(this, pinnedApp, pinnedApps, pinnedAppList, true);
-        }
-
-        // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
-        if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0)
-            parseAction("hide_favourites", null);
-
-        // Switch on wallpaper shade.
-        if (PreferenceHelper.useWallpaperShade()) {
-            View wallpaperShade = findViewById(R.id.wallpaper_shade);
-            // Tints the navigation bar with a semi-transparent shade.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarShade));
-            }
-            wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
-        }
     }
 
     @Override
@@ -293,6 +258,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onPause() {
         super.onPause();
+
+        try {
+            if (packageReceiver != null) {
+                this.unregisterReceiver(packageReceiver);
+            }
+        } catch (IllegalArgumentException e) {
+            Utils.sendLog(3, e.toString());
+        }
+
         // You shouldn't be visible.
         if (appMenu != null)
             appMenu.dismiss();
@@ -320,7 +294,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    private void loadApps(Boolean shouldForceRefresh) {
+    private void loadPinnedHiddenApps() {
+        // Get a list of our hidden apps, default to null if there aren't any.
+        excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
+
+        // Get pinned apps.
+        pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
+        for (String pinnedApp : pinnedAppSet) {
+            Utils.loadSingleApp(this, pinnedApp, pinnedApps, pinnedAppList, true);
+        }
+    }
+
+    private void loadApps() {
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
 
@@ -334,12 +319,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
-        if (shouldForceRefresh) {
-            list.getRecycledViewPool().clear();
-            apps.notifyDataSetChanged();
-        } else {
-            apps.notifyItemRangeChanged(0, 0);
-        }
+        apps.notifyItemRangeChanged(0, 0);
 
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
@@ -473,6 +453,38 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+    private void applyPrefToViews() {
+        // Workaround v21+ statusbar transparency issue.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome.getLayoutParams();
+            homeParams.topMargin = Utils.getStatusBarHeight(this, getResources());
+        }
+
+        // Empty out margins if they are not needed.
+        if (!PreferenceHelper.usesComfyPadding()) {
+            ViewGroup.MarginLayoutParams searchParams = (ViewGroup.MarginLayoutParams) searchContainer.getLayoutParams();
+            ViewGroup.MarginLayoutParams listParams = (ViewGroup.MarginLayoutParams) appListContainer.getLayoutParams();
+            searchParams.setMargins(0, 0, 0, 0);
+            listParams.setMargins(0, 0, 0, 0);
+        }
+
+        // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
+        if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0)
+            parseAction("hide_favourites", null);
+
+        // Switch on wallpaper shade.
+        if (PreferenceHelper.useWallpaperShade()) {
+            View wallpaperShade = findViewById(R.id.wallpaper_shade);
+            // Tints the navigation bar with a semi-transparent shade.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarShade));
+            }
+            wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
+        }
+    }
+
     // Load available preferences.
     private void loadPref(Boolean isInit) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -541,16 +553,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Remove uninstall menu if the app is a system app.
-        try {
-            ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
-            if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1)
-                appMenu.getMenu().removeItem(R.id.action_uninstall);
-        } catch (PackageManager.NameNotFoundException e) {
-            Utils.sendLog(3, e.toString());
-        } finally {
-            // Show the menu.
-            appMenu.show();
+        if (Utils.isSystemApp(this, packageName)) {
+            appMenu.getMenu().removeItem(R.id.action_uninstall);
         }
+
+        appMenu.show();
 
         final int finalPosition = position;
         appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -598,6 +605,30 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         break;
                 }
                 return true;
+            }
+        });
+    }
+
+    private void addGestureListener() {
+        // Handle touch events in touchReceiver.
+        touchReceiver.setOnTouchListener(new OnTouchListener(this) {
+            @Override
+            public void onSwipeDown() {
+                // Show the app panel.
+                parseAction("panel_down", null);
+            }
+
+            @Override
+            public void onLongPress() {
+                // Show context menu when touchReceiver is long pressed.
+                touchReceiver.showContextMenu();
+            }
+
+            @Override
+            public void onClick() {
+                // Imitate sliding panel drag view behaviour; show the app panel on click.
+                if (PreferenceHelper.allowTapToOpen())
+                    parseAction("panel_down", null);
             }
         });
     }
@@ -800,28 +831,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 }
-            }
-        });
-
-        // Handle touch events in touchReceiver.
-        touchReceiver.setOnTouchListener(new OnTouchListener(this) {
-            @Override
-            public void onSwipeDown() {
-                // Show the app panel.
-                parseAction("panel_down", null);
-            }
-
-            @Override
-            public void onLongPress() {
-                // Show context menu when touchReceiver is long pressed.
-                touchReceiver.showContextMenu();
-            }
-
-            @Override
-            public void onClick() {
-                // Imitate sliding panel drag view behaviour; show the app panel on click.
-                if (PreferenceHelper.allowTapToOpen())
-                    parseAction("panel_down", null);
             }
         });
     }

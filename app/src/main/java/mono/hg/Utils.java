@@ -48,6 +48,19 @@ public class Utils {
         }
     }
 
+    public static boolean isSystemApp(Context context, String packageName) {
+        PackageManager manager = context.getPackageManager();
+        try {
+            ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
+            if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1)
+                return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            Utils.sendLog(3, e.toString());
+            return false;
+        }
+        return false;
+    }
+
     public static void loadSingleApp(Context context, String packageName,
                                      RecyclerView.Adapter adapter, List<AppDetail> list, Boolean forFavourites) {
         PackageManager manager = context.getPackageManager();

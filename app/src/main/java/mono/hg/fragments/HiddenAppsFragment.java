@@ -3,7 +3,6 @@ package mono.hg.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
@@ -17,7 +16,6 @@ import android.support.v4.util.ArraySet;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +33,7 @@ import java.util.Set;
 import mono.hg.AppDetail;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
+import mono.hg.Utils;
 import mono.hg.adapters.HiddenAppAdapter;
 
 public class HiddenAppsFragment extends Fragment {
@@ -200,17 +199,11 @@ public class HiddenAppsFragment extends Fragment {
                 }
 
                 // Remove uninstall menu if the app is a system app.
-                try {
-                    ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
-                    if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
-                        appMenu.getMenu().removeItem(R.id.action_uninstall);
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e("Hubby", e.toString());
-                } finally {
-                    // Show the menu.
-                    appMenu.show();
+                if (Utils.isSystemApp(getActivity(), packageName)) {
+                    appMenu.getMenu().removeItem(R.id.action_uninstall);
                 }
+
+                appMenu.show();
 
                 // Set listener for the menu.
                 appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
