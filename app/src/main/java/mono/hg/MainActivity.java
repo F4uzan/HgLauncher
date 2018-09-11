@@ -362,6 +362,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 case "slide_in":
                     overridePendingTransition(R.anim.slide_in, 0);
                     break;
+                default:
+                case "default":
+                    // Don't override when we have the default value.
+                    break;
             }
         } catch (ActivityNotFoundException e) {
             Toast.makeText(MainActivity.this, R.string.err_activity_not_found, Toast.LENGTH_LONG).show();
@@ -604,6 +608,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             //TODO: Remove this when loadApps become less of a behemoth.
                             recreate();
                         }
+                        break;
+                    default:
+                        // There is nothing to do.
                         break;
                 }
                 return true;
