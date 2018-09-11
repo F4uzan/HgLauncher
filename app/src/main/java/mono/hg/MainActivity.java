@@ -691,10 +691,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     searchSnack.setAction(R.string.search_web_button, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent link = new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse(PreferenceHelper.getSearchProvider() + searchBarText));
                             synchronized (this) {
-                                startActivity(link);
+                                Utils.openLink(MainActivity.this, PreferenceHelper.getSearchProvider() + searchBarText);
                                 apps.getFilter().filter(null);
                             }
                         }

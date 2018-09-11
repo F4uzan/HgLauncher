@@ -2,8 +2,6 @@ package mono.hg.fragments;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -12,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import mono.hg.R;
+import mono.hg.Utils;
 
 public class LibraryInfoFragment extends DialogFragment {
 
@@ -31,15 +30,15 @@ public class LibraryInfoFragment extends DialogFragment {
                 switch (position) {
                     case 0:
                         // SlidingUpPanel.
-                        openLink(getString(R.string.lib_slidinguppanel_url));
+                        Utils.openLink(getActivity(), getString(R.string.lib_slidinguppanel_url));
                         break;
                     case 1:
                         // RecyclerView-FastScroll.
-                        openLink(getString(R.string.lib_recyclerview_fastscroll_url));
+                        Utils.openLink(getActivity(), getString(R.string.lib_recyclerview_fastscroll_url));
                         break;
                     case 2:
                         // material-preferences.
-                        openLink(getString(R.string.lib_material_preferences_url));
+                        Utils.openLink(getActivity(), getString(R.string.lib_material_preferences_url));
                         break;
                     default:
                         // Nada.
@@ -48,10 +47,5 @@ public class LibraryInfoFragment extends DialogFragment {
             }
         });
         return builder.create();
-    }
-
-    private void openLink(String link) {
-        Intent linkIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-        startActivity(linkIntent);
     }
 }

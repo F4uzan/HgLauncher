@@ -1,11 +1,13 @@
 package mono.hg;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,6 +48,11 @@ public class Utils {
                 Log.e(tag, message);
                 break;
         }
+    }
+
+    public static void openLink(Context context, String link) {
+        Intent linkIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+        context.startActivity(linkIntent);
     }
 
     public static boolean isSystemApp(Context context, String packageName) {
