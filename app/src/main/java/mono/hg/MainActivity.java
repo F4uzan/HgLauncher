@@ -158,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Start loading apps and initialising click listeners.
-        loadPinnedHiddenApps();
         loadApps();
         addListeners();
         addGestureListener();
@@ -167,6 +166,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         if (packageReceiver == null)
             registerPackageReceiver();
+
+        // Get pinned apps.
+        pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
+        for (String pinnedApp : pinnedAppSet) {
+            Utils.loadSingleApp(this, pinnedApp, pinnedApps, pinnedAppList, true);
+        }
 
         applyPrefToViews();
 
@@ -292,17 +297,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Save search bar visibility state.
         savedInstanceState.putInt("searchVisibility", searchContainer.getVisibility());
         super.onSaveInstanceState(savedInstanceState);
-    }
-
-    private void loadPinnedHiddenApps() {
-        // Get a list of our hidden apps, default to null if there aren't any.
-        excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
-
-        // Get pinned apps.
-        pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
-        for (String pinnedApp : pinnedAppSet) {
-            Utils.loadSingleApp(this, pinnedApp, pinnedApps, pinnedAppList, true);
-        }
     }
 
     private void loadApps() {
@@ -499,10 +493,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         PreferenceHelper.fetchPreference(this);
 
-        if (isInit)
+        if (isInit) {
             prefs.registerOnSharedPreferenceChangeListener(this);
 
-        if (isInit) {
+            // Get a list of our hidden apps, default to null if there aren't any.
+            excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
+
             // Set the app theme!
             switch (PreferenceHelper.appTheme()) {
                 default:
