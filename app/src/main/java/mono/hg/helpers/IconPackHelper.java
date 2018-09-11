@@ -64,24 +64,26 @@ public class IconPackHelper {
             try {
                 int eventType = iconFilterXml.getEventType();
                 while (eventType != XmlPullParser.END_DOCUMENT) {
-                    if (eventType == XmlPullParser.START_TAG && iconFilterXml.getName().equals("item")) {
-                        String componentName = null;
-                        String drawableName = null;
+                    if (eventType == XmlPullParser.START_TAG) {
+                        if (iconFilterXml.getName().equals("item")) {
+                            String componentName = null;
+                            String drawableName = null;
 
-                        for (int i = 0; i < iconFilterXml.getAttributeCount(); i++) {
-                            if (iconFilterXml.getAttributeName(i).equals("component")) {
-                                componentName = iconFilterXml.getAttributeValue(i);
-                            } else if (iconFilterXml.getAttributeName(i).equals("drawable")) {
-                                drawableName = iconFilterXml.getAttributeValue(i);
+                            for (int i = 0; i < iconFilterXml.getAttributeCount(); i++) {
+                                if (iconFilterXml.getAttributeName(i).equals("component")) {
+                                    componentName = iconFilterXml.getAttributeValue(i);
+                                } else if (iconFilterXml.getAttributeName(i).equals("drawable")) {
+                                    drawableName = iconFilterXml.getAttributeValue(i);
+                                }
+                            }
+
+                            if (!mPackagesDrawables.containsKey(componentName)) {
+                                mPackagesDrawables.put(componentName, drawableName);
                             }
                         }
-
-                        if (!mPackagesDrawables.containsKey(componentName)) {
-                            mPackagesDrawables.put(componentName, drawableName);
-                        }
                     }
+                    eventType = iconFilterXml.next();
                 }
-                eventType = iconFilterXml.next();
             } catch (XmlPullParserException e) {
                 Utils.sendLog(3, e.toString());
             } catch (IOException e) {
