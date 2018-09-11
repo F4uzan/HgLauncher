@@ -568,10 +568,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private void createAppMenu(View v, Boolean isPinned, final String packageName) {
         AppDetail selectedPackage = new AppDetail(null, null, packageName, false);
-
-        // Dismiss existing menu if they exist.
-        if (appMenu != null)
-            appMenu.dismiss();
+        final Uri packageNameUri = Uri.parse("package:" + packageName);
 
         int position;
         if (isPinned) {
@@ -579,8 +576,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } else {
             position = appList.indexOf(selectedPackage);
         }
-
-        final Uri packageNameUri = Uri.parse("package:" + packageName);
 
         // Inflate the app menu.
         appMenu = new PopupMenu(MainActivity.this, v);
