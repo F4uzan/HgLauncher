@@ -3,6 +3,9 @@ package mono.hg;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -289,6 +292,45 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         searchBar.setText(null);
         apps.setUpdateFilter(true);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Utils.sendLog(3, "KeyUp received");
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.isCtrlPressed()) {
+            // Get selected text for cut and copy.
+            int start = searchBar.getSelectionStart();
+            int end = searchBar.getSelectionEnd();
+            final String text = searchBar.getText().toString().substring(start, end);
+
+            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_A:
+                    searchBar.selectAll();
+                    return true;
+                case KeyEvent.KEYCODE_X:
+                    searchBar.setText(searchBar.getText().toString().replace(text, ""));
+                    return true;
+                case KeyEvent.KEYCODE_C:
+                    ClipData clipData = ClipData.newPlainText(null, text);
+                    if (clipboardManager != null) {
+                        clipboardManager.setPrimaryClip(clipData);
+                    }
+                    return true;
+                case KeyEvent.KEYCODE_V:
+                    if (clipboardManager != null && clipboardManager.hasPrimaryClip()
+                            && clipboardManager.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                        CharSequence textToPaste = clipboardManager.getPrimaryClip().getItemAt(0).getText();
+                        searchBar.setText(searchBar.getText().replace(Math.min(start, end), Math.max(start, end),
+                                textToPaste, 0, textToPaste.length()));
+                    }
+                    return true;
+                default:
+                    return super.onKeyUp(keyCode, event);
+            }
+        }
+        return super.onKeyUp(keyCode, event);
     }
 
     @Override
