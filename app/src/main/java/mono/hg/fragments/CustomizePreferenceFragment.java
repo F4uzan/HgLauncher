@@ -34,55 +34,10 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        final Preference versionMenu = findPreference("version_key");
-        final Preference librariesDialogue = findPreference("about_libraries");
-        Preference restoreMenu = findPreference("restore");
-        Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
-        final Preference backupMenu = findPreference("backup");
         ListPreference appTheme = (ListPreference) findPreference("app_theme");
         final ListPreference iconList = (ListPreference) findPreference("icon_pack");
 
         setIconList(iconList);
-
-        if (prefs.getBoolean("is_grandma", false)) {
-            versionMenu.setEnabled(false);
-            versionMenu.setTitle(R.string.version_key_name);
-        }
-
-        versionMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            int counter = 9;
-            SharedPreferences.Editor editor =  PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-            Toast counterToast;
-
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (counter > 0) {
-                    counter--;
-                } else if (counter == 0) {
-                    editor.putBoolean("is_grandma", true).apply();
-                    versionMenu.setEnabled(false);
-                    versionMenu.setTitle(R.string.version_key_name);
-                }
-
-                if (counter < 7 && counter > 1) {
-                    if (counterToast != null) {
-                        counterToast.cancel();
-                    }
-                    counterToast = Toast.makeText(getActivity(),
-                            String.format(getString(R.string.version_key_toast_plural), counter), Toast.LENGTH_SHORT);
-                    counterToast.show();
-                } else if (counter == 1) {
-                    if (counterToast != null) {
-                        counterToast.cancel();
-                    }
-                    counterToast = Toast.makeText(getActivity(), R.string.version_key_toast, Toast.LENGTH_SHORT);
-                    counterToast.show();
-                }
-                return false;
-            }
-        });
 
         appTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -91,6 +46,97 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                 return true;
             }
         });
+
+        addVersionCounterListener();
+        addFragmentListener();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            // Let the activity handle the back press.
+            getActivity().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    protected void setIconList(ListPreference list) {
+        PackageManager manager = getActivity().getPackageManager();
+        List<String> entries = new ArrayList<>();
+        List<String> entryValues = new ArrayList<>();
+
+        // Get default value.
+        entries.add(getString(R.string.icon_pack_default));
+        entryValues.add(getString(R.string.icon_pack_default_value));
+
+        // Fetch all available icon pack.
+        Intent intent = new Intent("org.adw.launcher.THEMES");
+        List<ResolveInfo> info = manager.queryIntentActivities (intent,
+                PackageManager.GET_META_DATA);
+        for (ResolveInfo resolveInfo : info) {
+            ActivityInfo activityInfo = resolveInfo.activityInfo;
+            String packageName = activityInfo.packageName;
+            String appName = activityInfo.loadLabel(manager).toString();
+            entries.add(appName);
+            entryValues.add(packageName);
+        }
+
+        CharSequence[] finalEntries = entries.toArray(new CharSequence[entries.size()]);
+        CharSequence[] finalEntryValues = entryValues.toArray(new CharSequence[entryValues.size()]);
+
+        list.setEntries(finalEntries);
+        list.setEntryValues(finalEntryValues);
+    }
+
+    private void addVersionCounterListener() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final Preference versionMenu = findPreference("version_key");
+
+        if (!prefs.getBoolean("is_grandma", false)) {
+            versionMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                int counter = 9;
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+                Toast counterToast;
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (counter > 0) {
+                        counter--;
+                    } else if (counter == 0) {
+                        editor.putBoolean("is_grandma", true).apply();
+                        versionMenu.setEnabled(false);
+                        versionMenu.setTitle(R.string.version_key_name);
+                    }
+
+                    if (counter < 7 && counter > 1) {
+                        if (counterToast != null) {
+                            counterToast.cancel();
+                        }
+                        counterToast = Toast.makeText(getActivity(),
+                                String.format(getString(R.string.version_key_toast_plural), counter), Toast.LENGTH_SHORT);
+                        counterToast.show();
+                    } else if (counter == 1) {
+                        if (counterToast != null) {
+                            counterToast.cancel();
+                        }
+                        counterToast = Toast.makeText(getActivity(), R.string.version_key_toast, Toast.LENGTH_SHORT);
+                        counterToast.show();
+                    }
+                    return false;
+                }
+            });
+        } else {
+            versionMenu.setTitle(R.string.version_key_name);
+        }
+    }
+
+    private void addFragmentListener() {
+        final Preference librariesDialogue = findPreference("about_libraries");
+        Preference restoreMenu = findPreference("restore");
+        Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
+        final Preference backupMenu = findPreference("backup");
 
         librariesDialogue.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -149,45 +195,6 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // Let the activity handle the back press.
-            getActivity().onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    protected void setIconList(ListPreference list) {
-        PackageManager manager = getActivity().getPackageManager();
-        List<String> entries = new ArrayList<>();
-        List<String> entryValues = new ArrayList<>();
-
-        // Get default value.
-        entries.add(getString(R.string.icon_pack_default));
-        entryValues.add(getString(R.string.icon_pack_default_value));
-
-        // Fetch all available icon pack.
-        Intent intent = new Intent("org.adw.launcher.THEMES");
-        List<ResolveInfo> info = manager.queryIntentActivities (intent,
-                PackageManager.GET_META_DATA);
-        for (ResolveInfo resolveInfo : info) {
-            ActivityInfo activityInfo = resolveInfo.activityInfo;
-            String packageName = activityInfo.packageName;
-            String appName = activityInfo.loadLabel(manager).toString();
-            entries.add(appName);
-            entryValues.add(packageName);
-        }
-
-        CharSequence[] finalEntries = entries.toArray(new CharSequence[entries.size()]);
-        CharSequence[] finalEntryValues = entryValues.toArray(new CharSequence[entryValues.size()]);
-
-        list.setEntries(finalEntries);
-        list.setEntryValues(finalEntryValues);
     }
 
     // Used to check for storage permission.
