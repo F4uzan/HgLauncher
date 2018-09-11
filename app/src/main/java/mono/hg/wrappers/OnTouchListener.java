@@ -25,21 +25,27 @@ public class OnTouchListener implements View.OnTouchListener {
     }
 
     public void onSwipeLeft() {
+        // Do swipe left action.
     }
 
     public void onSwipeRight() {
+        // Do swipe right action.
     }
 
     public void onSwipeUp() {
+        // Do swipe up action.
     }
 
     public void onSwipeDown() {
+        // Do swipe down action.
     }
 
     public void onLongPress() {
+        // Do long press action.
     }
 
     public void onClick() {
+        // Do tap/click action.
     }
 
     public float getStartX() {

@@ -406,8 +406,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     inputManager.hideSoftInputFromWindow(actionContext.getWindowToken(), 0);
                 break;
             case "show_keyboard":
-                if (inputManager != null && actionContext != null)
+                if (inputManager != null && actionContext != null) {
                     inputManager.showSoftInput(actionContext, InputMethodManager.SHOW_IMPLICIT);
+                    actionContext.requestFocus();
+                }
                 break;
             case "show_favourites_animate":
                 pinnedAppsContainer.animate().cancel();
@@ -806,7 +808,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     if (PreferenceHelper.shouldFocusKeyboard()
                             && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
                         parseAction("show_keyboard", searchBar);
-                        searchBar.requestFocus();
                     }
                     // Animate search container entering the view.
                     searchContainer.animate().alpha(1.0f).setDuration(animateTime)

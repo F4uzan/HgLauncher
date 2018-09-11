@@ -65,6 +65,7 @@ public class PreferenceHelper {
                 break;
             case "searx":
                 search_provider = "https://www.searx.me/?q=";
+                break;
         }
         return search_provider;
     }
