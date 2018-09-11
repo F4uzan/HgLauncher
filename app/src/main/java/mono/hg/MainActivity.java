@@ -147,9 +147,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Get icons from icon pack.
-        String iconPack = prefs.getString("icon_pack", "default");
-        if (!"default".equals(iconPack)) {
-            if (Utils.isAppInstalled(getPackageManager(), iconPack)) {
+        if (!"default".equals(PreferenceHelper.getIconPackName())) {
+            if (Utils.isAppInstalled(getPackageManager(), PreferenceHelper.getIconPackName())) {
                 new getIconTask(this).execute();
             } else {
                 // We can't find the icon pack, so revert back to the default pack.
@@ -556,7 +555,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Remove uninstall menu if the app is a system app.
-        if (Utils.isSystemApp(this, packageName)) {
+        if (Utils.isSystemApp(getPackageManager(), packageName)) {
             appMenu.getMenu().removeItem(R.id.action_uninstall);
         }
 

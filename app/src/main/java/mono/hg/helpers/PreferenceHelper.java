@@ -8,7 +8,8 @@ public class PreferenceHelper {
     private static boolean icon_hide, list_order, shade_view,
             keyboard_focus, web_search_enabled, comfy_padding,
             tap_to_drawer, favourites_panel, dismiss_panel;
-    private static String launch_anim, search_provider, app_theme, search_provider_set;
+    private static String launch_anim, search_provider, app_theme, search_provider_set,
+            icon_pack;
 
     public static String getLaunchAnim() {
         return launch_anim;
@@ -17,6 +18,8 @@ public class PreferenceHelper {
     public static boolean shouldHideIcon() {
         return icon_hide;
     }
+
+    public static String getIconPackName() { return icon_pack; }
 
     public static boolean isListInverted() {
         return list_order;
@@ -74,6 +77,7 @@ public class PreferenceHelper {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         launch_anim = prefs.getString("launch_anim", "default");
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
+        icon_pack = prefs.getString("icon_pack", "default");
         list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
         shade_view = prefs.getBoolean("shade_view_switch", false);
         keyboard_focus = prefs.getBoolean("keyboard_focus", false);

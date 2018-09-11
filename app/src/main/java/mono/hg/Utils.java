@@ -2,13 +2,11 @@ package mono.hg;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -17,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import mono.hg.helpers.IconPackHelper;
+import mono.hg.helpers.PreferenceHelper;
 
 //TODO: Documentations?
 
@@ -66,8 +65,7 @@ public class Utils {
         }
     }
 
-    public static boolean isSystemApp(Context context, String packageName) {
-        PackageManager manager = context.getPackageManager();
+    public static boolean isSystemApp(PackageManager manager, String packageName) {
         try {
             ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
             if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1)
@@ -82,7 +80,6 @@ public class Utils {
     public static void loadSingleApp(Context context, String packageName,
                                      RecyclerView.Adapter adapter, List<AppDetail> list, Boolean forFavourites) {
         PackageManager manager = context.getPackageManager();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         ApplicationInfo applicationInfo;
 
         if (manager.getLaunchIntentForPackage(packageName) != null &&
@@ -92,8 +89,8 @@ public class Utils {
                 String appName = manager.getApplicationLabel(applicationInfo).toString();
                 Drawable icon = null;
                 Drawable getIcon = null;
-                if (!prefs.getBoolean("icon_hide", false) || forFavourites) {
-                    if (!prefs.getString("icon_pack", "default").equals("default"))
+                if (PreferenceHelper.shouldHideIcon() || forFavourites) {
+                    if (!PreferenceHelper.getIconPackName().equals("default"))
                         getIcon = new IconPackHelper().getIconDrawable(context, packageName);
                     if (getIcon == null) {
                         icon = manager.getApplicationIcon(packageName);
@@ -113,7 +110,7 @@ public class Utils {
             }
 
             if (!forFavourites) {
-                if (!prefs.getBoolean("list_order", false)) {
+                if (!PreferenceHelper.isListInverted()) {
                     Collections.sort(list, new Comparator<AppDetail>() {
                         @Override
                         public int compare(AppDetail nameL, AppDetail nameR) {
