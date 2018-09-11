@@ -55,6 +55,17 @@ public class Utils {
         context.startActivity(linkIntent);
     }
 
+    public static boolean isAppInstalled(PackageManager packageManager, String packageName) {
+        try {
+            // Get application info while handling exception spawning from it.
+            packageManager.getApplicationInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            // No, it's not installed.
+            return false;
+        }
+    }
+
     public static boolean isSystemApp(Context context, String packageName) {
         PackageManager manager = context.getPackageManager();
         try {

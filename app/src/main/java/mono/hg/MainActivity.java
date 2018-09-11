@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Get icons from icon pack.
         String iconPack = prefs.getString("icon_pack", "default");
         if (!"default".equals(iconPack)) {
-            if (manager.getLaunchIntentForPackage(iconPack) != null) {
+            if (Utils.isAppInstalled(getPackageManager(), iconPack)) {
                 new getIconTask(this).execute();
             } else {
                 // We can't find the icon pack, so revert back to the default pack.
