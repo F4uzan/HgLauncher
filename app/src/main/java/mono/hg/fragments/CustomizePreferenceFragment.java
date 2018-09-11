@@ -1,6 +1,7 @@
 package mono.hg.fragments;
 
 import android.Manifest;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -36,6 +37,7 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         final Preference versionMenu = findPreference("version_key");
+        final Preference librariesDialogue = findPreference("about_libraries");
         Preference restoreMenu = findPreference("restore");
         Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
         final Preference backupMenu = findPreference("backup");
@@ -87,6 +89,15 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 ((SettingsActivity) getActivity()).restartActivity();
                 return true;
+            }
+        });
+
+        librariesDialogue.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                DialogFragment librariesInfo = new LibraryInfoFragment();
+                librariesInfo.show(getActivity().getFragmentManager(), "LibrariesInfo");
+                return false;
             }
         });
 
