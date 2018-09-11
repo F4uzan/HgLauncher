@@ -5,4 +5,5 @@
     <dimen name="uniform_panel_margin">8dp</dimen>
     <dimen name="panel_size_vertical">52dp</dimen>
     <dimen name="panel_size_horizontal">58dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
 </resources>
