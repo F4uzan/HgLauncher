@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         addSearchBarListener();
         addGestureListener();
         addListListeners();
+        addPanelListener();
 
         registerForContextMenu(touchReceiver);
 
@@ -834,7 +835,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 launchApp(pinnedAppList.get(position).getPackageName());
             }
         });
+    }
 
+    private void addPanelListener() {
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float v) {
