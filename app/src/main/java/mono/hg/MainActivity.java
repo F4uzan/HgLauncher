@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Drawable getIcon = null;
                 // Only show icons if user chooses so.
                 if (!PreferenceHelper.shouldHideIcon()) {
-                    if (!prefs.getString("icon_pack", "default").equals("default"))
+                    if (!PreferenceHelper.getIconPackName().equals("default"))
                         getIcon = new IconPackHelper().getIconDrawable(this, packageName);
                     if (getIcon == null) {
                         icon = ri.activityInfo.loadIcon(manager);

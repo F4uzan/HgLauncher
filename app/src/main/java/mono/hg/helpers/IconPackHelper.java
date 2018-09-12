@@ -30,8 +30,7 @@ public class IconPackHelper {
 
     // Load and cache icon pack's appfilter.
     public void loadIconPack(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String iconPackageName = prefs.getString("icon_pack", "default");
+        String iconPackageName = PreferenceHelper.getIconPackName();
         XmlPullParser iconFilterXml = null;
         Resources iconRes = null;
 
