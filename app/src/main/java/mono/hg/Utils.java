@@ -105,7 +105,7 @@ public class Utils {
                 Drawable getIcon = null;
                 if (PreferenceHelper.shouldHideIcon() || forFavourites) {
                     if (!PreferenceHelper.getIconPackName().equals("default"))
-                        getIcon = new IconPackHelper().getIconDrawable(context, packageName);
+                        getIcon = new IconPackHelper().getIconDrawable(manager, packageName);
                     if (getIcon == null) {
                         icon = manager.getApplicationIcon(packageName);
                     } else {

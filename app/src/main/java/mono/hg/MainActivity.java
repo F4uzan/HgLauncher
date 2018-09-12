@@ -373,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 // Only show icons if user chooses so.
                 if (!PreferenceHelper.shouldHideIcon()) {
                     if (!PreferenceHelper.getIconPackName().equals("default"))
-                        getIcon = new IconPackHelper().getIconDrawable(this, packageName);
+                        getIcon = new IconPackHelper().getIconDrawable(manager, packageName);
                     if (getIcon == null) {
                         icon = ri.activityInfo.loadIcon(manager);
                     } else {
@@ -427,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         protected Void doInBackground(Void... params) {
             MainActivity activity = activityRef.get();
             if (activity != null)
-                new IconPackHelper().loadIconPack(activity);
+                new IconPackHelper().loadIconPack(activity.getPackageManager());
             return null;
         }
     }

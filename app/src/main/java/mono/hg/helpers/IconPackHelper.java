@@ -1,12 +1,9 @@
 package mono.hg.helpers;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.preference.PreferenceManager;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -29,13 +26,13 @@ public class IconPackHelper {
     private static HashMap<String, String> mPackagesDrawables = new HashMap<>();
 
     // Load and cache icon pack's appfilter.
-    public void loadIconPack(Context context) {
+    public void loadIconPack(PackageManager packageManager) {
         String iconPackageName = PreferenceHelper.getIconPackName();
         XmlPullParser iconFilterXml = null;
         Resources iconRes = null;
 
         try {
-            iconRes = context.getPackageManager().getResourcesForApplication(iconPackageName);
+            iconRes = packageManager.getResourcesForApplication(iconPackageName);
         } catch (PackageManager.NameNotFoundException e) {
             Utils.sendLog(3, e.toString());
         }
@@ -109,22 +106,20 @@ public class IconPackHelper {
     }
 
     // Load icon from the cached appfilter.
-    public Drawable getIconDrawable(Context context, String appPackageName) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String iconPackageName = prefs.getString("icon_pack", "default");
-        PackageManager pm = context.getPackageManager();
-        Intent launchIntent = pm.getLaunchIntentForPackage(appPackageName);
+    public Drawable getIconDrawable(PackageManager packageManager, String appPackageName) {
+        Intent launchIntent = packageManager.getLaunchIntentForPackage(appPackageName);
+        String iconPackageName = PreferenceHelper.getIconPackName();
         String componentName = null;
         Resources iconRes = null;
 
         try {
-            iconRes = context.getPackageManager().getResourcesForApplication(iconPackageName);
+            iconRes = packageManager.getResourcesForApplication(iconPackageName);
         } catch (PackageManager.NameNotFoundException e) {
             Utils.sendLog(3, e.toString());
         }
 
         if (launchIntent != null)
-            componentName = pm.getLaunchIntentForPackage(appPackageName).getComponent().toString();
+            componentName = packageManager.getLaunchIntentForPackage(appPackageName).getComponent().toString();
 
         String drawable = mPackagesDrawables.get(componentName);
         if (drawable != null && iconRes != null) {
