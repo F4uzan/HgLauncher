@@ -222,11 +222,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "app_theme":
             case "shade_view_switch":
             case "comfy_padding":
-            case "icon_pack":
             case "dummy_restore":
             case "favourites_panel_switch":
             case "icon_hide_switch":
             case "list_order":
+                recreate();
+                break;
+            case "icon_pack":
+                IconPackHelper.clearDrawableCache();
                 recreate();
                 break;
             case "removedApp":

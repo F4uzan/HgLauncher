@@ -97,6 +97,10 @@ public class IconPackHelper {
         }
     }
 
+    public static void clearDrawableCache() {
+        mPackagesDrawables.clear();
+    }
+
     private Drawable loadDrawable(Resources resources, String drawableName, String iconPackageName) {
         int icon = resources.getIdentifier(drawableName, "drawable", iconPackageName);
         if (icon > 0)
