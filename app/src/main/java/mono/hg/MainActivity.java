@@ -694,13 +694,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 searchBarText = searchBar.getText().toString().trim();
                 searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
 
-                // Instantly dismiss the search snackbar if there is nothing to search.
-                if (!searchBarText.isEmpty() && s.length() > 0) {
-                    searchSnack.setText(searchHint);
-                } else {
-                    searchSnack.dismiss();
-                }
-
                 // Begin filtering our list.
                 apps.getFilter().filter(s);
                 if (apps.shouldUpdateFilter())
@@ -718,9 +711,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 if (s.length() > 0 && s.charAt(0) == ' ')
                     s.delete(0, 1);
 
-                // Scroll back down to the start of the list if search query is empty.
                 if (s.length() == 0) {
+                    // Scroll back down to the start of the list if search query is empty.
                     list.getLayoutManager().scrollToPosition(app_count);
+
+                    // Dismiss the search snackbar.
+                    searchSnack.dismiss();
+
                     // Summon our favourites panel back.
                     if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0) {
                         parseAction("hide_favourites", null);
@@ -729,7 +726,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         parseAction("show_favourites_animate", null);
                     }
                 } else if (s.length() > 0 && PreferenceHelper.promptSearch()) {
+                    // Temporarily hide the favourites panel.
                     parseAction("replace_favourites", null);
+
+                    // Update the snackbar text.
+                    searchSnack.setText(searchHint);
+
                     // Prompt user if they want to search their query online.
                     searchSnack.setAction(R.string.search_web_button, new View.OnClickListener() {
                         @Override
