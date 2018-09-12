@@ -757,13 +757,25 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void addListListeners() {
-        pinnedAppsContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                // Scroll app list down when favourites panel is being pushed by the keyboard.
-                list.scrollToPosition(list.getAdapter().getItemCount() - 1);
-            }
-        });
+        // If favourites panel is enabled and it has pinned apps, we listen for its layout change.
+        // If not, then we rely of the app list to supply its own listener.
+        if (PreferenceHelper.isFavouritesEnabled() && pinnedAppList.size() > 0) {
+            pinnedAppsContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    // Scroll app list down when favourites panel is being pushed by the keyboard.
+                    list.scrollToPosition(list.getAdapter().getItemCount() - 1);
+                }
+            });
+        } else {
+            list.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    // Scroll app list down when being pushed by the keyboard.
+                    list.scrollToPosition(list.getAdapter().getItemCount() - 1);
+                }
+            });
+        }
 
         // Listen for app list scroll to hide/show favourites panel.
         // Only do this when the user has favourites panel enabled.
