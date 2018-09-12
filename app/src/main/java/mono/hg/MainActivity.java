@@ -161,8 +161,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Start loading apps and initialising click listeners.
         loadApps();
-        addListeners();
+        addSearchBarListener();
         addGestureListener();
+        addListListeners();
 
         registerForContextMenu(touchReceiver);
 
@@ -675,7 +676,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         });
     }
 
-    private void addListeners() {
+    private void addSearchBarListener() {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
             String searchBarText, searchHint;
@@ -760,7 +761,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 return false;
             }
         });
+    }
 
+    private void addListListeners() {
         // Scroll app list down when it is being pushed by the keyboard.
         list.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
