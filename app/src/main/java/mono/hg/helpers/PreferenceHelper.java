@@ -1,8 +1,6 @@
 package mono.hg.helpers;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 public class PreferenceHelper {
     private static boolean icon_hide, list_order, shade_view,
@@ -73,8 +71,7 @@ public class PreferenceHelper {
         return search_provider;
     }
 
-    public static void fetchPreference(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    public static void fetchPreference(SharedPreferences prefs) {
         launch_anim = prefs.getString("launch_anim", "default");
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
         icon_pack = prefs.getString("icon_pack", "default");

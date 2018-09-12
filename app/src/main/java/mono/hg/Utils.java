@@ -23,13 +23,13 @@ import mono.hg.helpers.PreferenceHelper;
 //TODO: Documentations?
 
 public class Utils {
-    public static int getStatusBarHeight(Context context, Resources resources) {
-        int idStatusBarHeight = resources.getIdentifier("status_bar_height", "dimen", "android");
+    public static int getStatusBarHeight(Resources resource) {
+        int idStatusBarHeight = resource.getIdentifier("status_bar_height", "dimen", "android");
         if (idStatusBarHeight > 0) {
-            return context.getResources().getDimensionPixelSize(idStatusBarHeight);
+            return resource.getDimensionPixelSize(idStatusBarHeight);
         } else {
             // Return fallback size if we can't get the value from the system.
-            return context.getResources().getDimensionPixelSize(R.dimen.status_bar_height_fallback);
+            return resource.getDimensionPixelSize(R.dimen.status_bar_height_fallback);
         }
     }
 
@@ -91,9 +91,8 @@ public class Utils {
         return false;
     }
 
-    public static void loadSingleApp(Context context, String packageName,
+    public static void loadSingleApp(PackageManager manager, String packageName,
                                      RecyclerView.Adapter adapter, List<AppDetail> list, Boolean forFavourites) {
-        PackageManager manager = context.getPackageManager();
         ApplicationInfo applicationInfo;
 
         if (manager.getLaunchIntentForPackage(packageName) != null &&

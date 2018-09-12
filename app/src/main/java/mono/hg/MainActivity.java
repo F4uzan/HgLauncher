@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Get pinned apps.
         pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
         for (String pinnedApp : pinnedAppSet) {
-            Utils.loadSingleApp(this, pinnedApp, pinnedApps, pinnedAppList, true);
+            Utils.loadSingleApp(manager, pinnedApp, pinnedApps, pinnedAppList, true);
         }
 
         applyPrefToViews();
@@ -508,7 +508,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome.getLayoutParams();
-            homeParams.topMargin = Utils.getStatusBarHeight(this, getResources());
+            homeParams.topMargin = Utils.getStatusBarHeight(getResources());
         }
 
         // Empty out margins if they are not needed.
@@ -539,7 +539,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         editPrefs = prefs.edit();
 
-        PreferenceHelper.fetchPreference(this);
+        PreferenceHelper.fetchPreference(prefs);
 
         if (isInit) {
             prefs.registerOnSharedPreferenceChangeListener(this);
@@ -610,7 +610,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pin:
-                        Utils.loadSingleApp(MainActivity.this, packageName, pinnedApps, pinnedAppList, true);
+                        Utils.loadSingleApp(getPackageManager(), packageName, pinnedApps, pinnedAppList, true);
                         pinnedAppSet.add(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
                         if (!PreferenceHelper.isFavouritesEnabled())

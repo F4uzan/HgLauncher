@@ -3,6 +3,7 @@ package mono.hg;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import mono.hg.fragments.BackupRestoreFragment;
@@ -17,7 +18,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Load appropriate theme before creating the activity.
-        PreferenceHelper.fetchPreference(this);
+        PreferenceHelper.fetchPreference(PreferenceManager.getDefaultSharedPreferences(this));
 
         switch (PreferenceHelper.appTheme()) {
             default:
