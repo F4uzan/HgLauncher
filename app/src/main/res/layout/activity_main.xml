@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mono.hg.wrappers.ZeroInsetsFrameLayout
+<mono.hg.views.ZeroInsetsFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -113,4 +113,4 @@
 
         </FrameLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
-</mono.hg.wrappers.ZeroInsetsFrameLayout>
+</mono.hg.views.ZeroInsetsFrameLayout>

@@ -1,4 +1,4 @@
-package mono.hg.wrappers;
+package mono.hg.views;
 
 import android.content.Context;
 import android.os.Bundle;
