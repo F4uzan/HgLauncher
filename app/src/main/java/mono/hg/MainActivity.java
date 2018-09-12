@@ -494,11 +494,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "hide_favourites":
                 pinnedAppsContainer.setVisibility(View.GONE);
                 break;
-            case "replace_favourites":
-                pinnedAppsContainer.setVisibility(View.INVISIBLE);
-                // Tell the favourites panel to not show itself for now.
-                shouldShowFavourites = false;
-                break;
         }
     }
 
@@ -726,9 +721,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         parseAction("show_favourites_animate", null);
                     }
                 } else if (s.length() > 0 && PreferenceHelper.promptSearch()) {
-                    // Temporarily hide the favourites panel.
-                    parseAction("replace_favourites", null);
-
                     // Update the snackbar text.
                     searchSnack.setText(searchHint);
 
