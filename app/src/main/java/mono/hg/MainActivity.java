@@ -209,13 +209,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 intent = new Intent(Intent.ACTION_SET_WALLPAPER);
                 startActivity(Intent.createChooser(intent, getString(R.string.action_wallpaper)));
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         switch (key) {
+            default:
+                // No-op.
+                break;
             case "app_theme":
             case "shade_view_switch":
             case "comfy_padding":
