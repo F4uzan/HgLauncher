@@ -7,8 +7,11 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ViewTreeObserver;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,6 +50,17 @@ public class Utils {
                 Log.e(tag, message);
                 break;
         }
+    }
+
+    public static void disableSnackbarSwipe(final Snackbar snackbar) {
+        snackbar.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                snackbar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
+                ((CoordinatorLayout.LayoutParams) snackbar.getView().getLayoutParams()).setBehavior(null);
+                return true;
+            }
+        });
     }
 
     public static void openLink(Context context, String link) {

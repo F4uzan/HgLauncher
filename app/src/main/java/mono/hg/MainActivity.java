@@ -19,7 +19,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArraySet;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -36,7 +35,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -718,7 +716,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     s.delete(0, 1);
 
                 // Scroll back down to the start of the list if search query is empty.
-                if (s.length() <= 0) {
+                if (s.length() == 0) {
                     list.getLayoutManager().scrollToPosition(app_count);
                     // Summon our favourites panel back.
                     if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0) {
@@ -741,14 +739,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     }).show();
 
                     // Disable search snackbar swipe-to-dismiss.
-                    searchSnack.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            searchSnack.getView().getViewTreeObserver().removeOnPreDrawListener(this);
-                            ((CoordinatorLayout.LayoutParams) searchSnack.getView().getLayoutParams()).setBehavior(null);
-                            return true;
-                        }
-                    });
+                    Utils.disableSnackbarSwipe(searchSnack);
                 }
             }
         });
