@@ -760,10 +760,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void addListListeners() {
-        // Scroll app list down when it is being pushed by the keyboard.
-        list.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+        pinnedAppsContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
-            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom) {
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                // Scroll app list down when favourites panel is being pushed by the keyboard.
                 list.scrollToPosition(list.getAdapter().getItemCount() - 1);
             }
         });
