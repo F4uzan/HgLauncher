@@ -58,6 +58,7 @@ import mono.hg.helpers.IconPackHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.helpers.RecyclerClick;
 import mono.hg.receivers.PackageChangesReceiver;
+import mono.hg.wrappers.SimpleScrollUpListener;
 import mono.hg.wrappers.OnTouchListener;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -489,12 +490,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             @Override
                             public void onAnimationEnd(Animator animator) {
                                 super.onAnimationEnd(animator);
-                                pinnedAppsContainer.clearAnimation();
                                 pinnedAppsContainer.setVisibility(View.GONE);
                             }
                         });
-
-                pinnedAppsContainer.setVisibility(View.GONE);
                 break;
             case "hide_favourites":
                 pinnedAppsContainer.setVisibility(View.GONE);
@@ -764,23 +762,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Listen for app list scroll to hide/show favourites panel.
         // Only do this when the user has favourites panel enabled.
         if (PreferenceHelper.isFavouritesEnabled()) {
-            final int visibleItemPosition = ((LinearLayoutManager) list.getLayoutManager()).findFirstVisibleItemPosition();
-
-            list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            list.addOnScrollListener(new SimpleScrollUpListener(0) {
                 @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
+                public void onScrollUp() {
+                    if (shouldShowFavourites && pinnedAppList.size() > 0)
+                        parseAction("hide_favourites_animate", null);
+                }
 
-                    int currentVisible = ((LinearLayoutManager) list.getLayoutManager()).findFirstVisibleItemPosition();
-                    // When the favourites panel is replaced/swapped out,
-                    // we should not be calling it until we are told to.
-                    if (pinnedAppList.size() > 0) {
-                        if (!recyclerView.canScrollVertically(1) && shouldShowFavourites) {
-                            parseAction("show_favourites", null);
-                        } else if (currentVisible > visibleItemPosition && shouldShowFavourites) {
-                            parseAction("hide_favourites_animate", null);
-                        }
-                    }
+                @Override
+                public void onEnd() {
+                    if (shouldShowFavourites && pinnedAppList.size() > 0)
+                        parseAction("show_favourites", null);
                 }
             });
         }
