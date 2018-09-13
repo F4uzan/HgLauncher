@@ -769,9 +769,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     // we should not be calling it until we are told to.
                     if (pinnedAppList.size() > 0) {
                         if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && shouldShowFavourites) {
-                            parseAction("show_favourites", null);
+                            parseAction("show_favourites_animate", null);
                         } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP) && shouldShowFavourites) {
-                            parseAction("hide_favourites", null);
+                            parseAction("hide_favourites_animate", null);
                         }
                     }
                 }
