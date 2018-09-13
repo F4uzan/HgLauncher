@@ -744,7 +744,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((!appList.isEmpty() && searchBar.getText().length() > 0) &&
                         (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
-                    launchApp(appList.get(0).getPackageName());
+                    if (!list.canScrollVertically(RecyclerView.FOCUS_UP)
+                            && !list.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+                        launchApp(appList.get(appList.size() - 1).getPackageName());
+                    } else {
+                        launchApp(appList.get(0).getPackageName());
+                    }
                     return true;
                 }
                 return false;
