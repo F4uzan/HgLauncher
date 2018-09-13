@@ -461,25 +461,23 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
                 break;
             case "show_favourites":
-                if (PreferenceHelper.isFavouritesEnabled() && pinnedAppList.size() > 0) {
-                    pinnedAppsContainer.animate()
-                            .translationY(0f)
-                            .setInterpolator(new FastOutSlowInInterpolator())
-                            .setDuration(animateTime)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationStart(Animator animator) {
-                                    super.onAnimationStart(animator);
-                                    pinnedAppsContainer.setVisibility(View.VISIBLE);
-                                }
+                pinnedAppsContainer.animate()
+                        .translationY(0f)
+                        .setInterpolator(new FastOutSlowInInterpolator())
+                        .setDuration(animateTime)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationStart(Animator animator) {
+                                super.onAnimationStart(animator);
+                                pinnedAppsContainer.setVisibility(View.VISIBLE);
+                            }
 
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    super.onAnimationEnd(animator);
-                                    pinnedAppsContainer.clearAnimation();
-                                }
-                            });
-                }
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                super.onAnimationEnd(animator);
+                                pinnedAppsContainer.clearAnimation();
+                            }
+                        });
                 break;
             case "hide_favourites":
                 pinnedAppsContainer.animate()
