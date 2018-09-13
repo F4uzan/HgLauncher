@@ -1,6 +1,7 @@
 package mono.hg.helpers;
 
 import android.util.Pair;
+
 import java.util.ArrayList;
 
 /**
@@ -27,6 +28,11 @@ public class KissFuzzySearch {
         String matchTo = queryMatch.toLowerCase().trim();
 
         boolean match = false;
+
+        // We have a precise match. Return and retrieve.
+        if (source.equals(matchTo)) {
+            return -1;
+        }
 
         for (char cApp : source.toCharArray()) {
             if (queryPos < matchTo.length() && matchTo.charAt(queryPos) == cApp) {
