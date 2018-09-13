@@ -460,7 +460,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     actionContext.requestFocus();
                 }
                 break;
-            case "show_favourites_animate":
+            case "show_favourites":
                 pinnedAppsContainer.animate().cancel();
 
                 if (PreferenceHelper.isFavouritesEnabled() && pinnedAppList.size() > 0) {
@@ -489,9 +489,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 pinnedAppsContainer.setVisibility(View.GONE);
                             }
                         });
-                break;
-            case "show_favourites":
-                pinnedAppsContainer.setVisibility(View.VISIBLE);
                 break;
             case "hide_favourites":
                 pinnedAppsContainer.setVisibility(View.GONE);
@@ -716,10 +713,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                     // Summon our favourites panel back.
                     if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0) {
-                        parseAction("hide_favourites", null);
+                        parseAction("hide_favourites_animate", null);
                     } else {
                         shouldShowFavourites = true;
-                        parseAction("show_favourites_animate", null);
+                        parseAction("show_favourites", null);
                     }
                 } else if (s.length() > 0 && PreferenceHelper.promptSearch()) {
                     // Update the snackbar text.
@@ -768,7 +765,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     // we should not be calling it until we are told to.
                     if (pinnedAppList.size() > 0) {
                         if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && shouldShowFavourites) {
-                            parseAction("show_favourites_animate", null);
+                            parseAction("show_favourites", null);
                         } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP) && shouldShowFavourites) {
                             parseAction("hide_favourites_animate", null);
                         }
