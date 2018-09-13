@@ -305,7 +305,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Utils.sendLog(3, "KeyUp received");
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.isCtrlPressed()) {
             // Get selected text for cut and copy.
             int start = searchBar.getSelectionStart();
