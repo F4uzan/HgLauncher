@@ -354,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
 
-        if (!PreferenceHelper.isListInverted()) {
+        if (PreferenceHelper.isListInverted()) {
             Collections.sort(availableActivities, Collections
                     .reverseOrder(new ResolveInfo.DisplayNameComparator(manager)));
         } else {

@@ -6,8 +6,10 @@ public class PreferenceHelper {
     private static boolean icon_hide, list_order, shade_view,
             keyboard_focus, web_search_enabled, comfy_padding,
             tap_to_drawer, favourites_panel, dismiss_panel;
-    private static String launch_anim, search_provider, app_theme, search_provider_set,
-            icon_pack;
+    private static String launch_anim;
+    private static String app_theme;
+    private static String search_provider_set;
+    private static String icon_pack;
 
     public static String getLaunchAnim() {
         return launch_anim;
@@ -20,7 +22,7 @@ public class PreferenceHelper {
     public static String getIconPackName() { return icon_pack; }
 
     public static boolean isListInverted() {
-        return list_order;
+        return !list_order;
     }
 
     public static boolean useWallpaperShade() {
@@ -56,6 +58,8 @@ public class PreferenceHelper {
     }
 
     public static String getSearchProvider() {
+        String search_provider;
+
         switch (search_provider_set) {
             default:
             case "google":

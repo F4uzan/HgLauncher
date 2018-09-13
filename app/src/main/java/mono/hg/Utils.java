@@ -123,7 +123,7 @@ public class Utils {
             }
 
             if (!forFavourites) {
-                if (!PreferenceHelper.isListInverted()) {
+                if (PreferenceHelper.isListInverted()) {
                     Collections.sort(list, new Comparator<AppDetail>() {
                         @Override
                         public int compare(AppDetail nameL, AppDetail nameR) {
