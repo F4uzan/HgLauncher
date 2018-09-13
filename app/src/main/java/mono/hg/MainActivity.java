@@ -481,7 +481,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             });
                 }
                 break;
-            case "hide_favourites_animate":
+            case "hide_favourites":
                 pinnedAppsContainer.animate()
                         .translationY(pinnedAppsContainer.getHeight())
                         .setInterpolator(new FastOutSlowInInterpolator())
@@ -493,9 +493,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 pinnedAppsContainer.setVisibility(View.GONE);
                             }
                         });
-                break;
-            case "hide_favourites":
-                pinnedAppsContainer.setVisibility(View.GONE);
                 break;
         }
     }
@@ -519,7 +516,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
         if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0)
-            parseAction("hide_favourites", null);
+            pinnedAppsContainer.setVisibility(View.GONE);
 
         // Switch on wallpaper shade.
         if (PreferenceHelper.useWallpaperShade()) {
@@ -623,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         pinnedAppSet.remove(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
                         if (pinnedAppList.size() == 0)
-                            parseAction("hide_favourites_animate", null);
+                            parseAction("hide_favourites", null);
                         break;
                     case R.id.action_info:
                         startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -717,7 +714,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                     // Summon our favourites panel back.
                     if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0) {
-                        parseAction("hide_favourites_animate", null);
+                        parseAction("hide_favourites", null);
                     } else {
                         shouldShowFavourites = true;
                         parseAction("show_favourites", null);
@@ -766,7 +763,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 @Override
                 public void onScrollUp() {
                     if (shouldShowFavourites && pinnedAppList.size() > 0)
-                        parseAction("hide_favourites_animate", null);
+                        parseAction("hide_favourites", null);
                 }
 
                 @Override
