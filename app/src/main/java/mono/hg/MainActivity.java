@@ -758,15 +758,20 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Listen for app list scroll to hide/show favourites panel.
         // Only do this when the user has favourites panel enabled.
         if (PreferenceHelper.isFavouritesEnabled()) {
+            final int visibleItemPosition = ((LinearLayoutManager) list.getLayoutManager()).findFirstVisibleItemPosition();
+
             list.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    int currentVisible = ((LinearLayoutManager) list.getLayoutManager()).findFirstVisibleItemPosition();
                     // When the favourites panel is replaced/swapped out,
                     // we should not be calling it until we are told to.
                     if (pinnedAppList.size() > 0) {
-                        if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && shouldShowFavourites) {
+                        if (!recyclerView.canScrollVertically(1) && shouldShowFavourites) {
                             parseAction("show_favourites", null);
-                        } else if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP) && shouldShowFavourites) {
+                        } else if (currentVisible > visibleItemPosition && shouldShowFavourites) {
                             parseAction("hide_favourites_animate", null);
                         }
                     }
