@@ -613,7 +613,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         if (!PreferenceHelper.isFavouritesEnabled())
                             Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
                         if (PreferenceHelper.isFavouritesEnabled() && pinnedAppList.size() == 1) {
-                            parseAction("show_favourites_animate", null);
                             shouldShowFavourites = true;
                         }
                         break;
