@@ -39,6 +39,7 @@
                 android:id="@+id/apps_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/desc_apps_list"
                 android:splitMotionEvents="false"
                 android:layout_above="@id/bottom_list_container"
                 app:fastScrollThumbInactiveColor="@color/colorPrimary"
@@ -88,7 +89,8 @@
             <View
                 android:id="@+id/touch_receiver"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/desc_touch_receiver" />
 
             <include layout="@layout/layout_searchbar" />
 
