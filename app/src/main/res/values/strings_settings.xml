@@ -35,10 +35,11 @@
     <string name="backup_complete">Backup saved!</string>
     <string name="backup_empty">Backup name cannot be empty.</string>
 
-    <!-- Libraries license dialogue.  -->
-    <string name="about_libraries_dialogue_title">Licenses</string>
-    <string name="about_libraries">Open source licenses</string>
-    <string name="about_libraries_desc">License for libraries used in this launcher.</string>
+    <!-- Libraries licence dialogue.  -->
+    <!-- TODO: Somehow splitting this to en-US and en-UK is a good idea in my mind. -->
+    <string name="about_libraries_dialogue_title">Licences</string>
+    <string name="about_libraries">Open source licences</string>
+    <string name="about_libraries_desc">Licence for libraries used in this launcher.</string>
 
     <!-- Libraries name and license link. Ignore this when translating. -->
     <string name="lib_slidinguppanel" translatable="false">SlidingUpPanel</string>
