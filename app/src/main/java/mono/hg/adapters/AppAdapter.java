@@ -125,10 +125,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                         // The search has found a precise match, narrow everything down to it.
                         narrowResult = true;
                         filteredList.add(item);
-                    } else if (fuzzyScore >= 30) {
-                        if (!narrowResult) {
-                            filteredList.add(item);
-                        }
+                    } else if (fuzzyScore >= 30 && !narrowResult) {
+                        filteredList.add(item);
                     }
                 }
             }
