@@ -63,7 +63,7 @@ import mono.hg.wrappers.OnTouchListener;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private boolean shouldShowFavourites;
+    private boolean shouldShowFavourites = true;
     private Integer app_count, animateTime;
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
@@ -513,8 +513,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
-        if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0)
+        if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0) {
             pinnedAppsContainer.setVisibility(View.GONE);
+            shouldShowFavourites = false;
+        }
 
         // Switch on wallpaper shade.
         if (PreferenceHelper.useWallpaperShade()) {
@@ -709,14 +711,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                     // Dismiss the search snackbar.
                     searchSnack.dismiss();
-
-                    // Summon our favourites panel back.
-                    if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0) {
-                        parseAction("hide_favourites", null);
-                    } else {
-                        shouldShowFavourites = true;
-                        parseAction("show_favourites", null);
-                    }
                 } else if (s.length() > 0 && PreferenceHelper.promptSearch()) {
                     // Update the snackbar text.
                     searchSnack.setText(searchHint);
