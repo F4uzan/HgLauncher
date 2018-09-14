@@ -23,11 +23,11 @@ public class KissFuzzySearch {
         int matchedWordStarts = 0;
         int totalWordStarts = 0;
 
-        // Normalise query and source (app name).
-        String source = sourceName.toLowerCase();
-        String matchTo = queryMatch.toLowerCase().trim();
-
         boolean match = false;
+
+        // Normalise query and source (app name).
+        String source = sourceName.toLowerCase().replaceAll("\\s+", "");
+        String matchTo = queryMatch.toLowerCase().trim();
 
         // We have a precise match. Return and retrieve.
         if (source.equals(matchTo)) {
@@ -43,8 +43,10 @@ public class KissFuzzySearch {
                 }
 
                 // If we are at the beginning of a word, add it to matchedWordStarts
-                if (appPos == 0 || Character.isWhitespace(source.charAt(appPos - 1)))
+                if (appPos == 0 || Character.isWhitespace(source.charAt(appPos - 1))) {
                     matchedWordStarts += 1;
+                    totalWordStarts += 1;
+                }
 
                 // Increment the position in the query
                 queryPos++;
@@ -52,10 +54,6 @@ public class KissFuzzySearch {
                 matchPositions.add(Pair.create(beginMatch, appPos));
                 match = false;
             }
-
-            // If we are at the beginning of a word, add it to totalWordsStarts
-            if (appPos == 0 || Character.isWhitespace(source.charAt(appPos - 1)))
-                totalWordStarts += 1;
 
             appPos++;
         }
@@ -71,7 +69,7 @@ public class KissFuzzySearch {
             relevance += (int) (((double) matchedWordStarts / totalWordStarts) * 60);
 
             // The more fragmented the matches are, the less the result is important
-            relevance = (int) (relevance * (0.2 + 0.8 * (1.0 / matchPositions.size())));
+            relevance = (int) (relevance * (0.1 + 0.6 * (1.0 / matchPositions.size())));
         }
         return relevance;
     }
