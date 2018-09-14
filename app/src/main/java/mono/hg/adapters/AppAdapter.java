@@ -117,18 +117,18 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 filteredList.addAll(originalList);
             } else {
                 final String filterPattern = charSequence.toString();
+                boolean narrowResult = false;
                 for (AppDetail item : originalList) {
                     // Do a fuzzy comparison instead of checking for absolute match.
                     int fuzzyScore = KissFuzzySearch.doFuzzy(item.getAppName(), filterPattern);
-                    if (fuzzyScore >= 30) {
+                    if (fuzzyScore == -1) {
+                        // The search has found a precise match, narrow everything down to it.
+                        narrowResult = true;
                         filteredList.add(item);
-                    } else if (fuzzyScore == -1) {
-                        // The search has found a precise match, no need to fuzzy anymore.
-                        filteredList.clear();
-                        filteredList.add(item);
-                        results.values = filteredList;
-                        results.count = filteredList.size();
-                        return results;
+                    } else if (fuzzyScore >= 30) {
+                        if (!narrowResult) {
+                            filteredList.add(item);
+                        }
                     }
                 }
             }
