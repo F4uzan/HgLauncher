@@ -63,25 +63,113 @@ import mono.hg.wrappers.OnTouchListener;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    /*
+     * Should the favourites panel listen for scroll?
+     */
     private boolean shouldShowFavourites = true;
-    private Integer app_count, animateTime;
+
+    /*
+     * Count of currently installed apps.
+     * TODO: Better manage this.
+     */
+    private int app_count;
+
+    /*
+     * Animation duration; fetched from system's duration.
+     */
+    private int animateTime;
+
+    /*
+     * List of installed apps.
+     */
     private ArrayList<AppDetail> appList = new ArrayList<>();
-    private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
-    private Set<String> excludedAppList = new ArraySet<>();
-    private Set<String> pinnedAppSet;
-    private PackageManager manager;
-    private PinnedAppAdapter pinnedApps = new PinnedAppAdapter(pinnedAppList);
+
+    /*
+     * Adapter for installed apps.
+     */
     private AppAdapter apps = new AppAdapter(appList);
-    private RecyclerView list, pinned_list;
-    private FrameLayout searchContainer, pinnedAppsContainer;
+
+    /*
+     * List of pinned apps.
+     */
+    private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
+    private Set<String> pinnedAppSet;
+
+    /*
+     * Adapter for pinned apps.
+     */
+    private PinnedAppAdapter pinnedApps = new PinnedAppAdapter(pinnedAppList);
+
+    /*
+     * List of excluded apps. These will not be shown in the app list.
+     */
+    private Set<String> excludedAppList = new ArraySet<>();
+
+    /*
+     * Package manager; casted through getPackageManager().
+     */
+    private PackageManager manager;
+
+    /*
+     * RecyclerView for app list.
+     */
+    private RecyclerView list;
+
+    /*
+     * RecyclerView for pinned apps; shown in favourites panel.
+     */
+    private RecyclerView pinned_list;
+
+    /*
+     * Parent layout containing search bar.
+     */
+    private FrameLayout searchContainer;
+
+    /*
+     * Parent layout of pinned apps' RecyclerView.
+     */
+    private FrameLayout pinnedAppsContainer;
+
+    /*
+     * Parent layout for installed app list.
+     */
     private RelativeLayout appListContainer;
+
+    /*
+     * The search bar. Contained in searchContainer.
+     */
     private EditText searchBar;
+
+    /*
+     * Sliding up panel. Shows the app list when pulled down and
+      * a parent to the other containers.
+     */
     private SlidingUpPanelLayout slidingHome;
-    private View snackHolder, touchReceiver;
+
+    /*
+     * CoordinatorLayout hosting the search snackbar.
+     */
+    private View snackHolder;
+
+    /*
+     * A view used to intercept gestures and taps in the desktop.
+     */
+    private View touchReceiver;
+
+    /*
+     * SharedPreferences method, used to add/remove and get preferences.
+     */
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
+
+    /*
+     * Menu shown when long-pressing apps.
+     */
     private PopupMenu appMenu;
 
+    /*
+     * Listener for package un/installation.
+     */
     private PackageChangesReceiver packageReceiver;
 
     @Override
@@ -134,13 +222,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (savedInstanceState != null) {
             // The search bar shouldn't be invisible when the panel is pulled down,
             // and it shouldn't be visible when the panel isn't visible.
-            if (savedInstanceState.getInt("searchVisibility") == View.INVISIBLE
+            int searchVisibility = (savedInstanceState.getInt("searchVisibility"));
+            if (searchVisibility == View.INVISIBLE
                     && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                 searchContainer.setVisibility(View.VISIBLE);
-            } else if (savedInstanceState.getInt("searchVisibility") == View.VISIBLE
+            } else if (searchVisibility == View.VISIBLE
                     && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                 searchContainer.setVisibility(View.INVISIBLE);
-            } else if (savedInstanceState.getInt("searchVisibility") == View.GONE) {
+            } else if (searchVisibility == View.GONE) {
                 // This can happen and we don't want it.
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                     searchContainer.setVisibility(View.VISIBLE);

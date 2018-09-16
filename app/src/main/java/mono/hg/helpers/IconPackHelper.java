@@ -25,7 +25,12 @@ import mono.hg.Utils;
 public class IconPackHelper {
     private static HashMap<String, String> mPackagesDrawables = new HashMap<>();
 
-    // Load and cache icon pack's appfilter.
+    /**
+     * Fetches icon from an icon pack by reading through its appfilter.xml content.
+     *
+     * @param packageManager PackageManager object used to fetch resources from the
+     *                       icon pack.
+     */
     public void loadIconPack(PackageManager packageManager) {
         String iconPackageName = PreferenceHelper.getIconPackName();
         XmlPullParser iconFilterXml = null;
@@ -94,6 +99,9 @@ public class IconPackHelper {
         }
     }
 
+    /**
+     * Clears cached icon pack.
+     */
     public static void clearDrawableCache() {
         mPackagesDrawables.clear();
     }
@@ -105,6 +113,17 @@ public class IconPackHelper {
         return null;
     }
 
+    /**
+     * Loads an icon from the icon pack based on the received package name.
+     *
+     * @param packageManager PackageManager object to determine the launch intent of
+     *                       the package name.
+     *
+     * @param appPackageName Package name of the app whose icon is to be loaded.
+     *
+     * @return Drawable Will return null if there is no icon associated with the package name,
+     *         otherwise an associated icon from the icon pack will be returned.
+     */
     // Load icon from the cached appfilter.
     public Drawable getIconDrawable(PackageManager packageManager, String appPackageName) {
         Intent launchIntent = packageManager.getLaunchIntentForPackage(appPackageName);

@@ -20,9 +20,16 @@ import java.util.List;
 import mono.hg.helpers.IconPackHelper;
 import mono.hg.helpers.PreferenceHelper;
 
-//TODO: Documentations?
-
 public class Utils {
+
+    /**
+     * Fetch statusbar height from system's dimension.
+     *
+     * @param resource Resources object used to fetch the statusbar height.
+     *
+     * @return int Size of the statusbar. Returns the fallback value of 24dp if the
+     *         associated dimen value cannot be found.
+     */
     public static int getStatusBarHeight(Resources resource) {
         int idStatusBarHeight = resource.getIdentifier("status_bar_height", "dimen", "android");
         if (idStatusBarHeight > 0) {
@@ -33,6 +40,15 @@ public class Utils {
         }
     }
 
+    /**
+     * Sends log using a predefined tag. This is used to better debug or to catch errors.
+     * Logging should always use sendLog to coalesce logs into one single place.
+     *
+     * @param level Urgency level of the log to send. 3 is the ceiling and will
+     *              send errors. Defaults to debug message when the level is invalid.
+     *
+     * @param message The message to send to logcat.
+     */
     public static void sendLog(int level, String message) {
         String tag = "HgLogger";
         switch (level) {
@@ -52,6 +68,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Disable snackbar swipe behaviour.
+     *
+     * @param snackbar Snackbar whose behaviour is to be modified.
+     */
     public static void disableSnackbarSwipe(final Snackbar snackbar) {
         snackbar.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -63,11 +84,27 @@ public class Utils {
         });
     }
 
+    /**
+     * Opens a URL/link from a string object.
+     *
+     * @param context Context object for use with startActivity.
+     * @param link The link to be opened.
+     */
     public static void openLink(Context context, String link) {
         Intent linkIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
         context.startActivity(linkIntent);
     }
 
+    /**
+     * Checks if a certain application is installed, regardless of their launch intent.
+     *
+     * @param packageManager PackageManager object to use for checking the requested
+     *                       package's existence.
+     *
+     * @param packageName Application package name to check.
+     *
+     * @return boolean True or false depending on the existence of the package.
+     */
     public static boolean isAppInstalled(PackageManager packageManager, String packageName) {
         try {
             // Get application info while handling exception spawning from it.
@@ -79,9 +116,19 @@ public class Utils {
         }
     }
 
-    public static boolean isSystemApp(PackageManager manager, String packageName) {
+    /**
+     * Checks with its package name, if an application is a system app, or is the app
+     * is installed as a system app.
+     * 
+     * @param packageManager PackageManager object used to receive application info.
+     *
+     * @param packageName Application package name to check against.
+     *
+     * @return boolean True if the application is a system app, false if otherwise.
+     */
+    public static boolean isSystemApp(PackageManager packageManager, String packageName) {
         try {
-            ApplicationInfo appFlags = manager.getApplicationInfo(packageName, 0);
+            ApplicationInfo appFlags = packageManager.getApplicationInfo(packageName, 0);
             if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1)
                 return true;
         } catch (PackageManager.NameNotFoundException e) {
@@ -91,22 +138,38 @@ public class Utils {
         return false;
     }
 
-    public static void loadSingleApp(PackageManager manager, String packageName,
+    /**
+     * Loads an app to a list hosting the AppDetail object. The loaded app will have
+     * a custom icon loaded if it's available at all, and the list associated with it
+     * can have the order arranged.
+     *
+     * @param packageManager PackageManager object used to fetch information regarding
+     *                       the app that is being loaded.
+     *
+     * @param packageName The package name to load and fetch.
+     *
+     * @param adapter Which adapter should we notify update to?
+     *
+     * @param list Which List object should be updated?
+     *
+     * @param forFavourites Is this app used for the favourites panel?
+     */
+    public static void loadSingleApp(PackageManager packageManager, String packageName,
                                      RecyclerView.Adapter adapter, List<AppDetail> list, Boolean forFavourites) {
         ApplicationInfo applicationInfo;
 
-        if (manager.getLaunchIntentForPackage(packageName) != null &&
+        if (packageManager.getLaunchIntentForPackage(packageName) != null &&
                 !list.contains(new AppDetail(null, null, packageName, false))) {
             try {
-                applicationInfo = manager.getApplicationInfo(packageName, 0);
-                String appName = manager.getApplicationLabel(applicationInfo).toString();
+                applicationInfo = packageManager.getApplicationInfo(packageName, 0);
+                String appName = packageManager.getApplicationLabel(applicationInfo).toString();
                 Drawable icon = null;
                 Drawable getIcon = null;
                 if (PreferenceHelper.shouldHideIcon() || forFavourites) {
                     if (!PreferenceHelper.getIconPackName().equals("default"))
-                        getIcon = new IconPackHelper().getIconDrawable(manager, packageName);
+                        getIcon = new IconPackHelper().getIconDrawable(packageManager, packageName);
                     if (getIcon == null) {
-                        icon = manager.getApplicationIcon(packageName);
+                        icon = packageManager.getApplicationIcon(packageName);
                     } else {
                         icon = getIcon;
                     }
