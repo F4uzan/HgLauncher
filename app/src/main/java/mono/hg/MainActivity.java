@@ -843,6 +843,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     // Hide keyboard if container is invisible.
                     parseAction("hide_keyboard", searchBar);
 
+                    // Stop scrolling, the panel is being dismissed.
+                    list.stopScroll();
+
                     // Also animate the container when it's disappearing.
                     searchContainer.animate().alpha(0.0f).setDuration(animateTime)
                             .setListener(new AnimatorListenerAdapter() {
