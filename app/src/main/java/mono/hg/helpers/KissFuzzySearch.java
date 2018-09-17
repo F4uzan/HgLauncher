@@ -26,7 +26,7 @@ public class KissFuzzySearch {
         boolean match = false;
 
         // Normalise query and source (app name).
-        String source = sourceName.toLowerCase().replaceAll("\\s+", "");
+        String source = sourceName.toLowerCase();
         String matchTo = queryMatch.toLowerCase().trim();
 
         // We have a precise match. Return and retrieve.
