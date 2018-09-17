@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.util.ArraySet;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
@@ -27,8 +26,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import mono.hg.AppDetail;
 import mono.hg.R;
@@ -42,7 +41,7 @@ public class HiddenAppsFragment extends Fragment {
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
     private PackageManager manager;
-    private Set<String> excludedAppList = new ArraySet<>();
+    private HashSet<String> excludedAppList = new HashSet<>();
     private ListView list;
 
     @Override

@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.util.ArraySet;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -51,7 +50,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import mono.hg.adapters.AppAdapter;
 import mono.hg.adapters.PinnedAppAdapter;
@@ -59,8 +57,8 @@ import mono.hg.helpers.IconPackHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.helpers.RecyclerClick;
 import mono.hg.receivers.PackageChangesReceiver;
-import mono.hg.wrappers.SimpleScrollUpListener;
 import mono.hg.wrappers.OnTouchListener;
+import mono.hg.wrappers.SimpleScrollUpListener;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
      * List of pinned apps.
      */
     private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
-    private Set<String> pinnedAppSet;
+    private HashSet<String> pinnedAppSet;
 
     /*
      * Adapter for pinned apps.
@@ -104,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     /*
      * List of excluded apps. These will not be shown in the app list.
      */
-    private Set<String> excludedAppList = new ArraySet<>();
+    private HashSet<String> excludedAppList = new HashSet<>();
 
     /*
      * Package manager; casted through getPackageManager().
