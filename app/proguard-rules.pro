@@ -15,3 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn com.simplecityapps.recyclerview_fastscroll.views.FastScrollPopup
+-dontwarn com.sothree.slidinguppanel.SlidingUpPanelLayout
