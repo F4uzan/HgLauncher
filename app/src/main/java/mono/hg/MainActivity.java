@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Get icons from icon pack.
         if (!"default".equals(PreferenceHelper.getIconPackName())) {
-            if (Utils.isAppInstalled(getPackageManager(), PreferenceHelper.getIconPackName())) {
+            if (Utils.isAppInstalled(manager, PreferenceHelper.getIconPackName())) {
                 new getIconTask(this).execute();
             } else {
                 // We can't find the icon pack, so revert back to the default pack.
@@ -516,7 +516,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         protected Void doInBackground(Void... params) {
             MainActivity activity = activityRef.get();
             if (activity != null)
-                new IconPackHelper().loadIconPack(activity.getPackageManager());
+                new IconPackHelper().loadIconPack(activity.manager);
             return null;
         }
     }
@@ -681,7 +681,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Remove uninstall menu if the app is a system app.
-        if (Utils.isSystemApp(getPackageManager(), packageName)) {
+        if (Utils.isSystemApp(manager, packageName)) {
             appMenu.getMenu().removeItem(R.id.action_uninstall);
         }
 
@@ -692,7 +692,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pin:
-                        Utils.loadSingleApp(getPackageManager(), packageName, pinnedApps, pinnedAppList, true);
+                        Utils.loadSingleApp(manager, packageName, pinnedApps, pinnedAppList, true);
                         pinnedAppSet.add(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
                         if (!PreferenceHelper.isFavouritesEnabled())

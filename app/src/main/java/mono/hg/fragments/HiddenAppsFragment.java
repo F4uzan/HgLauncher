@@ -198,7 +198,7 @@ public class HiddenAppsFragment extends Fragment {
                 }
 
                 // Remove uninstall menu if the app is a system app.
-                if (Utils.isSystemApp(getActivity().getPackageManager(), packageName)) {
+                if (Utils.isSystemApp(manager, packageName)) {
                     appMenu.getMenu().removeItem(R.id.action_uninstall);
                 }
 
