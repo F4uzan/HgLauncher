@@ -2,6 +2,7 @@ package mono.hg.fragments;
 
 import android.Manifest;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -150,10 +151,7 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new HiddenAppsFragment(), "HiddenApps")
-                        .addToBackStack(null)
-                        .commit();
+                replaceFragment(new HiddenAppsFragment(), "HiddenApps");
                 return false;
             }
         });
@@ -166,10 +164,7 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                     Bundle fragmentBundle = new Bundle();
                     fragmentBundle.putBoolean("isRestore", false);
                     backupRestoreFragment.setArguments(fragmentBundle);
-                    getActivity().getFragmentManager().beginTransaction()
-                            .replace(android.R.id.content, backupRestoreFragment, "BackupRestore")
-                            .addToBackStack(null)
-                            .commit();
+                    replaceFragment(backupRestoreFragment, "BackupRestore");
                     return false;
                 } else {
                     return false;
@@ -185,16 +180,21 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                     Bundle fragmentBundle = new Bundle();
                     fragmentBundle.putBoolean("isRestore", true);
                     backupRestoreFragment.setArguments(fragmentBundle);
-                    getActivity().getFragmentManager().beginTransaction()
-                            .replace(android.R.id.content, backupRestoreFragment, "BackupRestore")
-                            .addToBackStack(null)
-                            .commit();
+                    replaceFragment(backupRestoreFragment, "BackupRestore");
                     return false;
                 } else {
                     return false;
                 }
             }
         });
+    }
+
+    // Replace the view with a fragment.
+    private void replaceFragment(Fragment fragment, String tag) {
+        getActivity().getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, fragment, tag)
+                .addToBackStack(null)
+                .commit();
     }
 
     // Used to check for storage permission.
