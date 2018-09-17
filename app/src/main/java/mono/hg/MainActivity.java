@@ -3,6 +3,7 @@ package mono.hg;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
@@ -170,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     /*
      * Listener for package un/installation.
      */
-    private PackageChangesReceiver packageReceiver;
+    private BroadcastReceiver packageReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -353,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onDestroy() {
         try {
             if (packageReceiver != null) {
-                unregisterReceiver(packageReceiver);
+                this.unregisterReceiver(packageReceiver);
             }
         } catch (IllegalArgumentException e) {
             Utils.sendLog(3, e.toString());
@@ -654,7 +655,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
         intentFilter.addDataScheme("package");
         packageReceiver = new PackageChangesReceiver();
-        registerReceiver(packageReceiver, intentFilter);
+        this.registerReceiver(packageReceiver, intentFilter);
     }
 
     private void createAppMenu(View v, Boolean isPinned, final String packageName) {
