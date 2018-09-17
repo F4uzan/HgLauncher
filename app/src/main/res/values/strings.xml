@@ -27,8 +27,7 @@
     <string name="warn_pinning">Enable favourites panel to see pinned apps.</string>
 
     <!-- Error toast -->
-    <string name="err_activity_not_found">Cannot start activity</string>
-    <string name="err_activity_null">Cannot start application</string>
+    <string name="err_activity_null">Cannot start application.</string>
 
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Desktop view</string>

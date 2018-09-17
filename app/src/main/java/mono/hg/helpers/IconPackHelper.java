@@ -60,9 +60,7 @@ public class IconPackHelper {
                 iconFilterXml = factory.newPullParser();
                 iconFilterXml.setInput(iconAsset, "utf-8");
             }
-        } catch (IOException e) {
-            Utils.sendLog(3, e.toString());
-        } catch (XmlPullParserException e) {
+        } catch (IOException | XmlPullParserException e) {
             Utils.sendLog(3, e.toString());
         }
 
@@ -91,9 +89,7 @@ public class IconPackHelper {
                     }
                     eventType = iconFilterXml.next();
                 }
-            } catch (XmlPullParserException e) {
-                Utils.sendLog(3, e.toString());
-            } catch (IOException e) {
+            } catch (IOException | XmlPullParserException e) {
                 Utils.sendLog(3, e.toString());
             }
         }

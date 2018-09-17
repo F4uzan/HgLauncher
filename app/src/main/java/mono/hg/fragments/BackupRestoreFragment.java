@@ -292,11 +292,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
                 }
             }
             edit.apply();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | ClassNotFoundException e) {
             Utils.sendLog(3, e.toString());
         } catch (IOException e) {
-            Utils.sendLog(3, e.toString());
-        } catch (ClassNotFoundException e) {
             Utils.sendLog(3, e.toString());
         } finally {
             try {

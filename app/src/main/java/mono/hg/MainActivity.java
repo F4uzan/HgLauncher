@@ -501,10 +501,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     // Don't override when we have the default value.
                     break;
             }
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(MainActivity.this, R.string.err_activity_not_found, Toast.LENGTH_LONG).show();
-        } catch (NullPointerException e) {
+        } catch (ActivityNotFoundException | NullPointerException e) {
             Toast.makeText(MainActivity.this, R.string.err_activity_null, Toast.LENGTH_LONG).show();
+            Utils.sendLog(3, "Can't start " + packageName + "!");
         }
     }
 
