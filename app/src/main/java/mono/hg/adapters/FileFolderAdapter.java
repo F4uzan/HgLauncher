@@ -35,8 +35,7 @@ public class FileFolderAdapter extends BaseAdapter {
             convertView = Utils.requireNonNull(inflater).inflate(R.layout.files_folder_list, parent, false);
 
             holder = new ViewHolder();
-            holder.folder = convertView.findViewById(R.id.item_folder);
-            holder.file = convertView.findViewById(R.id.item_file);
+            holder.content = convertView.findViewById(R.id.item_content);
             holder.name = convertView.findViewById(R.id.item_content_name);
 
             convertView.setTag(holder);
@@ -45,9 +44,9 @@ public class FileFolderAdapter extends BaseAdapter {
         }
 
         if (files.get(position).isFolder()) {
-            holder.folder.setVisibility(View.VISIBLE);
+            holder.content.setImageResource(R.drawable.ic_folder);
         } else {
-            holder.file.setVisibility(View.VISIBLE);
+            holder.content.setImageResource(R.drawable.ic_file);
         }
 
         holder.name.setText(files.get(position).getName());
@@ -60,7 +59,7 @@ public class FileFolderAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        private ImageView folder, file;
+        private ImageView content;
         private TextView name;
     }
 

@@ -11,19 +11,10 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/item_folder"
+        android:id="@+id/item_content"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="start"
-        android:visibility="gone"
-        app:srcCompat="@drawable/ic_folder" />
-
-    <ImageView
-        android:id="@+id/item_file"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="start"
-        android:visibility="gone"
         app:srcCompat="@drawable/ic_file" />
 
     <TextView
