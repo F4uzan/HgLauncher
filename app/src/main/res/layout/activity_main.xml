@@ -42,6 +42,8 @@
                 android:contentDescription="@string/desc_apps_list"
                 android:splitMotionEvents="false"
                 android:layout_above="@id/bottom_list_container"
+                android:nextFocusDown="@id/search"
+                android:nextFocusForward="@id/search"
                 app:fastScrollThumbInactiveColor="@color/colorPrimary"
                 app:fastScrollPopupBgColor="@color/colorPrimaryDark"
                 app:fastScrollPopupTextColor="@android:color/primary_text_dark"

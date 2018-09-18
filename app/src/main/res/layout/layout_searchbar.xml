@@ -7,6 +7,8 @@
     android:layout_height="48dp"
     android:orientation="horizontal"
     android:background="?attr/cardColor"
+    android:nextFocusUp="@id/apps_list"
+    android:nextFocusForward="@id/apps_list"
     android:layout_marginStart="@dimen/uniform_panel_margin"
     android:layout_marginEnd="@dimen/uniform_panel_margin"
     android:layout_marginLeft="@dimen/uniform_panel_margin"

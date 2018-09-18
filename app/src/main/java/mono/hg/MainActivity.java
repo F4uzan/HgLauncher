@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     /*
      * Adapter for installed apps.
      */
-    private AppAdapter apps = new AppAdapter(appList);
+    private AppAdapter apps = new AppAdapter(this, appList);
 
     /*
      * List of pinned apps.

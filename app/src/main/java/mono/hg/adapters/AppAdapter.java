@@ -1,5 +1,6 @@
 package mono.hg.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,24 +19,24 @@ import java.util.List;
 import mono.hg.AppDetail;
 import mono.hg.R;
 import mono.hg.helpers.KissFuzzySearch;
+import mono.hg.wrappers.InputTrackingRecyclerViewAdapter;
 
-public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable,
+public class AppAdapter extends InputTrackingRecyclerViewAdapter<AppAdapter.ViewHolder> implements Filterable,
         FastScrollRecyclerView.SectionedAdapter {
     private List<AppDetail> apps;
     private AppFilter filter;
     private Boolean updateFilter = false;
 
-    public AppAdapter(List<AppDetail> apps) {
+    public AppAdapter(Context context, List<AppDetail> apps) {
+        super(context);
         this.apps = apps;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private AppDetail app;
         private TextView name;
         private ImageView icon;
 
         private void setItem(AppDetail app) {
-            this.app = app;
             name.setText(app.getAppName());
             icon.setImageDrawable(app.getIcon());
         }
