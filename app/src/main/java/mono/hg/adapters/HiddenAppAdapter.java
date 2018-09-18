@@ -27,22 +27,39 @@ public class HiddenAppAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.hidden_app_list, parent, false);
 
-        ImageView icon = view.findViewById(R.id.item_app_icon);
-        TextView name = view.findViewById(R.id.item_app_name);
-        AppCompatCheckBox hiddenState = view.findViewById(R.id.item_app_hidden_state);
+        ViewHolder appHolder;
 
-        if (apps.get(position).isHidden()) {
-            hiddenState.setChecked(true);
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.hidden_app_list, parent, false);
+
+            appHolder = new ViewHolder();
+
+            appHolder.icon = convertView.findViewById(R.id.item_app_icon);
+            appHolder.name = convertView.findViewById(R.id.item_app_name);
+            appHolder.hiddenState = convertView.findViewById(R.id.item_app_hidden_state);
+
+            convertView.setTag(appHolder);
         } else {
-            hiddenState.setChecked(false);
+            appHolder = (ViewHolder) convertView.getTag();
         }
 
-        icon.setImageDrawable(apps.get(position).getIcon());
-        name.setText(apps.get(position).getAppName());
+        if (apps.get(position).isHidden()) {
+            appHolder.hiddenState.setChecked(true);
+        } else {
+            appHolder.hiddenState.setChecked(false);
+        }
 
-        return view;
+        appHolder.icon.setImageDrawable(apps.get(position).getIcon());
+        appHolder.name.setText(apps.get(position).getAppName());
+
+        return convertView;
+    }
+
+    private static class ViewHolder {
+        private ImageView icon;
+        private TextView name;
+        private AppCompatCheckBox hiddenState;
     }
 
     @Override

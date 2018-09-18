@@ -27,25 +27,40 @@ public class FileFolderAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.files_folder_list, parent, false);
 
-        ImageView folder = view.findViewById(R.id.item_folder);
-        ImageView file = view.findViewById(R.id.item_file);
-        TextView name = view.findViewById(R.id.item_content_name);
+        ViewHolder holder;
+
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.files_folder_list, parent, false);
+
+            holder = new ViewHolder();
+            holder.folder = convertView.findViewById(R.id.item_folder);
+            holder.file = convertView.findViewById(R.id.item_file);
+            holder.name = convertView.findViewById(R.id.item_content_name);
+
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
         if (files.get(position).isFolder()) {
-            folder.setVisibility(View.VISIBLE);
+            holder.folder.setVisibility(View.VISIBLE);
         } else {
-            file.setVisibility(View.VISIBLE);
+            holder.file.setVisibility(View.VISIBLE);
         }
 
-        name.setText(files.get(position).getName());
+        holder.name.setText(files.get(position).getName());
 
         if (files.get(position).shouldHighlight()) {
-            name.setTypeface(null, Typeface.BOLD);
+            holder.name.setTypeface(null, Typeface.BOLD);
         }
 
-        return view;
+        return convertView;
+    }
+
+    private static class ViewHolder {
+        private ImageView folder, file;
+        private TextView name;
     }
 
     @Override
