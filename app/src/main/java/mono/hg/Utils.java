@@ -69,7 +69,7 @@ public class Utils {
     }
 
     /**
-     * Checks if an object is null; throws a NullPointerException if it is.
+     * Checks if an object is null; throws an IllegalArgumentException if it is.
      *
      * @param obj The object to check for.
      *
@@ -79,7 +79,7 @@ public class Utils {
      */
     public static <T> T requireNonNull(T obj) {
         if (obj == null)
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         return obj;
     }
 
