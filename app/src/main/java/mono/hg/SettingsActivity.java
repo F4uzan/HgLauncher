@@ -1,12 +1,10 @@
 package mono.hg;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 
 import mono.hg.fragments.BackupRestoreFragment;
 import mono.hg.fragments.CustomizePreferenceFragment;
@@ -57,10 +55,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-            if (inputMethodManager != null) {
-                inputMethodManager.hideSoftInputFromWindow(Utils.requireNonNull(getCurrentFocus()).getWindowToken(), 0);
-            }
+            Utils.hideSoftKeyboard(this);
             super.onBackPressed();
             return true;
         }

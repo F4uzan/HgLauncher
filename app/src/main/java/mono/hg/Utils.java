@@ -1,5 +1,6 @@
 package mono.hg;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -12,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -97,6 +99,18 @@ public class Utils {
                 return true;
             }
         });
+    }
+
+    /**
+     * Hides the software keyboard.
+     *
+     * @param activity The activity where the keyboard focus is being achieved.
+     */
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(Utils.requireNonNull(activity.getCurrentFocus()).getWindowToken(), 0);
+        }
     }
 
     /**

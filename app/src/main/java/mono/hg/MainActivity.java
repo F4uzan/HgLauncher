@@ -549,8 +549,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
             case "hide_keyboard":
-                if (inputManager != null && actionContext != null)
-                    inputManager.hideSoftInputFromWindow(actionContext.getWindowToken(), 0);
+                Utils.hideSoftKeyboard(this);
                 break;
             case "show_keyboard":
                 if (inputManager != null && actionContext != null) {
