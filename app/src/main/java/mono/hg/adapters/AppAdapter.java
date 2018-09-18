@@ -19,9 +19,9 @@ import java.util.List;
 import mono.hg.AppDetail;
 import mono.hg.R;
 import mono.hg.helpers.KissFuzzySearch;
-import mono.hg.wrappers.InputTrackingRecyclerViewAdapter;
+import mono.hg.wrappers.InputTrackingAdapter;
 
-public class AppAdapter extends InputTrackingRecyclerViewAdapter<AppAdapter.ViewHolder> implements Filterable,
+public class AppAdapter extends InputTrackingAdapter<AppAdapter.ViewHolder> implements Filterable,
         FastScrollRecyclerView.SectionedAdapter {
     private List<AppDetail> apps;
     private AppFilter filter;

@@ -11,13 +11,12 @@ import android.view.View;
  *
  * Based on adapter code by zevektor/Vektor at https://github.com/zevektor/KeyboardRecyclerView
  */
-public abstract class InputTrackingRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH>{
-
+public abstract class InputTrackingAdapter<ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder>{
     private Context mContext;
     private int mSelectedItem = 0;
     private RecyclerView mRecyclerView;
 
-    public InputTrackingRecyclerViewAdapter(Context context) {
+    public InputTrackingAdapter(Context context) {
         mContext = context;
     }
 
