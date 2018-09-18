@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 
-import java.util.Objects;
-
 import mono.hg.Utils;
 
 /**
@@ -45,9 +43,9 @@ public abstract class InputTrackingAdapter<V extends RecyclerView.ViewHolder> ex
                         return true;
                     } else {
                         if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                            return tryMoveSelection(RecyclerView.FOCUS_DOWN);
+                            return tryMoveSelection(1);
                         } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                            return tryMoveSelection(RecyclerView.FOCUS_UP);
+                            return tryMoveSelection(-1);
                         }
                     }
                 } else if (event.getAction() == KeyEvent.ACTION_UP && isConfirmButton(event)
