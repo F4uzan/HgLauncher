@@ -426,6 +426,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 default:
                     return super.onKeyUp(keyCode, event);
             }
+        } else {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_ESCAPE:
+                    parseAction("panel_up", null);
+                    return true;
+            }
         }
         return super.onKeyUp(keyCode, event);
     }
