@@ -801,7 +801,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                 if (s.length() == 0) {
                     // Scroll back down to the start of the list if search query is empty.
-                    list.getLayoutManager().scrollToPosition(app_count);
+                    Utils.requireNonNull(list.getLayoutManager()).scrollToPosition(app_count);
 
                     // Dismiss the search snackbar.
                     searchSnack.dismiss();
