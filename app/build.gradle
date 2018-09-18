@@ -7,8 +7,8 @@ android {
         applicationId "mono.hg"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 10
-        versionName "1.3.4"
+        versionCode 11
+        versionName "1.3.4.1"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -29,11 +29,15 @@ android {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
+
+    // Android support libraries.
     implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
     implementation 'com.android.support:support-v4:28.0.0-rc02'
     implementation 'com.android.support:recyclerview-v7:28.0.0-rc02'
     implementation 'com.android.support:design:28.0.0-rc02'
     implementation 'com.android.support:support-media-compat:28.0.0-rc02'
+
+    // Third-party UI components libraries.
     implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.18'
     implementation 'com.fnp:material-preferences:0.1.4'
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
