@@ -166,11 +166,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
      */
     private PopupMenu appMenu;
 
-    /*
-     * Listener for package un/installation.
-     */
-    private BroadcastReceiver packageReceiver;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -257,8 +252,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         registerForContextMenu(touchReceiver);
 
-        if (packageReceiver == null)
-            registerPackageReceiver();
+        registerPackageReceiver();
 
         // Get pinned apps.
         pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
@@ -349,29 +343,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     @Override
-    public void onDestroy() {
-        try {
-            if (packageReceiver != null) {
-                this.unregisterReceiver(packageReceiver);
-            }
-        } catch (IllegalArgumentException e) {
-            Utils.sendLog(3, e.toString());
-        }
-        super.onDestroy();
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
-
-        try {
-            if (packageReceiver != null) {
-                this.unregisterReceiver(packageReceiver);
-            }
-        } catch (IllegalArgumentException e) {
-            Utils.sendLog(3, e.toString());
-        }
-
         // You shouldn't be visible.
         if (appMenu != null)
             appMenu.dismiss();
@@ -661,7 +634,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
         intentFilter.addDataScheme("package");
-        packageReceiver = new PackageChangesReceiver();
+        BroadcastReceiver packageReceiver = new PackageChangesReceiver();
         this.registerReceiver(packageReceiver, intentFilter);
     }
 

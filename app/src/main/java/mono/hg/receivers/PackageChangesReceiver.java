@@ -27,5 +27,9 @@ public class PackageChangesReceiver extends BroadcastReceiver {
             editor.putBoolean("removedApp", true).apply();
             editor.putString("removed_app", intent.getDataString().replace("package:", "")).apply();
         }
+
+        // HACK: Unregister immediately because we don't need the receiver anymore.
+        // We shouldn't need this, but I don't like the log spam that comes with _not_ doing this.
+        context.unregisterReceiver(this);
     }
 }
