@@ -29,17 +29,18 @@ public class FileFolderAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         ViewHolder holder;
+        View view = convertView;
 
-        if (convertView == null) {
-            convertView = Utils.requireNonNull(inflater).inflate(R.layout.files_folder_list, parent, false);
+        if (view == null) {
+            view = Utils.requireNonNull(inflater).inflate(R.layout.files_folder_list, parent, false);
 
             holder = new ViewHolder();
-            holder.content = convertView.findViewById(R.id.item_content);
-            holder.name = convertView.findViewById(R.id.item_content_name);
+            holder.content = view.findViewById(R.id.item_content);
+            holder.name = view.findViewById(R.id.item_content_name);
 
-            convertView.setTag(holder);
+            view.setTag(holder);
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) view.getTag();
         }
 
         if (files.get(position).isFolder()) {
@@ -50,7 +51,7 @@ public class FileFolderAdapter extends BaseAdapter {
 
         holder.name.setText(files.get(position).getName());
 
-        return convertView;
+        return view;
     }
 
     private static class ViewHolder {

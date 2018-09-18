@@ -30,19 +30,20 @@ public class HiddenAppAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         ViewHolder appHolder;
+        View view = convertView;
 
-        if (convertView == null) {
-            convertView = Utils.requireNonNull(inflater).inflate(R.layout.hidden_app_list, parent, false);
+        if (view == null) {
+            view = Utils.requireNonNull(inflater).inflate(R.layout.hidden_app_list, parent, false);
 
             appHolder = new ViewHolder();
 
-            appHolder.icon = convertView.findViewById(R.id.item_app_icon);
-            appHolder.name = convertView.findViewById(R.id.item_app_name);
-            appHolder.hiddenState = convertView.findViewById(R.id.item_app_hidden_state);
+            appHolder.icon = view.findViewById(R.id.item_app_icon);
+            appHolder.name = view.findViewById(R.id.item_app_name);
+            appHolder.hiddenState = view.findViewById(R.id.item_app_hidden_state);
 
-            convertView.setTag(appHolder);
+            view.setTag(appHolder);
         } else {
-            appHolder = (ViewHolder) convertView.getTag();
+            appHolder = (ViewHolder) view.getTag();
         }
 
         if (apps.get(position).isHidden()) {
@@ -54,7 +55,7 @@ public class HiddenAppAdapter extends BaseAdapter {
         appHolder.icon.setImageDrawable(apps.get(position).getIcon());
         appHolder.name.setText(apps.get(position).getAppName());
 
-        return convertView;
+        return view;
     }
 
     private static class ViewHolder {
