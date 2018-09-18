@@ -38,4 +38,9 @@ public class AppDetail {
         AppDetail alt = (AppDetail) object;
         return this == object || getClass() != object.getClass() || getPackageName().equals(alt.getPackageName());
     }
+
+    @Override
+    public int hashCode() {
+        return packageName.hashCode();
+    }
 }
