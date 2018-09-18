@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import mono.hg.FileFolder;
 import mono.hg.R;
+import mono.hg.Utils;
 
 public class FileFolderAdapter extends BaseAdapter {
     private ArrayList<FileFolder> files;
@@ -31,7 +32,7 @@ public class FileFolderAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.files_folder_list, parent, false);
+            convertView = Utils.requireNonNull(inflater).inflate(R.layout.files_folder_list, parent, false);
 
             holder = new ViewHolder();
             holder.folder = convertView.findViewById(R.id.item_folder);

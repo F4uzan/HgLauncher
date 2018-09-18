@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import mono.hg.AppDetail;
 import mono.hg.R;
+import mono.hg.Utils;
 
 public class HiddenAppAdapter extends BaseAdapter {
     private ArrayList<AppDetail> apps;
@@ -31,7 +32,7 @@ public class HiddenAppAdapter extends BaseAdapter {
         ViewHolder appHolder;
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.hidden_app_list, parent, false);
+            convertView = Utils.requireNonNull(inflater).inflate(R.layout.hidden_app_list, parent, false);
 
             appHolder = new ViewHolder();
 
