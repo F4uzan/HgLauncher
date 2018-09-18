@@ -36,6 +36,6 @@ public class AppDetail {
 
     public boolean equals(Object object) {
         AppDetail alt = (AppDetail) object;
-        return this == object ||getClass() == object.getClass() || getPackageName().equals(alt.getPackageName());
+        return this == object || getClass() != object.getClass() || getPackageName().equals(alt.getPackageName());
     }
 }
