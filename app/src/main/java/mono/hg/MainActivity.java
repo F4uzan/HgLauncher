@@ -431,6 +431,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 case KeyEvent.KEYCODE_ESCAPE:
                     parseAction("panel_up", null);
                     return true;
+                case KeyEvent.KEYCODE_SPACE:
+                    if (!searchBar.hasFocus())
+                        parseAction("panel_down", null);
+                    return true;
                 default:
                     return super.onKeyUp(keyCode, event);
             }
