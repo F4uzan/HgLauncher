@@ -9,6 +9,7 @@
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
+        android:resizeableActivity="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
@@ -19,7 +20,7 @@
             android:stateNotNeeded="true"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
-            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
