@@ -6,12 +6,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 
+import java.util.Objects;
+
+import mono.hg.Utils;
+
 /**
  * A RecyclerView adapter that scrolls when receiving keyboard up/down press.
  *
  * Based on adapter code by zevektor/Vektor at https://github.com/zevektor/KeyboardRecyclerView
  */
-public abstract class InputTrackingAdapter<ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder>{
+public abstract class InputTrackingAdapter<V extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<V>{
     private Context mContext;
     private int mSelectedItem = 0;
     private RecyclerView mRecyclerView;
@@ -34,21 +38,22 @@ public abstract class InputTrackingAdapter<ViewHolder extends RecyclerView.ViewH
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (isConfirmButton(event)) {
                         if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) == KeyEvent.FLAG_LONG_PRESS) {
-                            mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem).itemView.performLongClick();
+                            Utils.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem)).itemView.performLongClick();
                         } else {
                             event.startTracking();
                         }
                         return true;
                     } else {
                         if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                            return tryMoveSelection(1);
+                            return tryMoveSelection(RecyclerView.FOCUS_DOWN);
                         } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                            return tryMoveSelection(-1);
+                            return tryMoveSelection(RecyclerView.FOCUS_UP);
                         }
                     }
                 } else if (event.getAction() == KeyEvent.ACTION_UP && isConfirmButton(event)
-                        && ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != KeyEvent.FLAG_LONG_PRESS)) {
-                    mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem).itemView.performClick();
+                        && ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != KeyEvent.FLAG_LONG_PRESS)
+                        && mSelectedItem != -1) {
+                    Utils.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem)).itemView.performClick();
                     return true;
                 }
                 return false;
@@ -77,8 +82,6 @@ public abstract class InputTrackingAdapter<ViewHolder extends RecyclerView.ViewH
     private static boolean isConfirmButton(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.KEYCODE_ENTER:
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-            case KeyEvent.KEYCODE_BUTTON_A:
                 return true;
             default:
                 return false;

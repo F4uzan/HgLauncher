@@ -1,5 +1,6 @@
 package mono.hg.helpers;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -54,7 +55,7 @@ public class IconPackHelper {
             if (appFilterXml > 0) {
                 iconFilterXml = iconRes.getXml(appFilterXml);
             } else {
-                iconAsset = iconRes.getAssets().open("appfilter.xml");
+                iconAsset = Utils.requireNonNull(iconRes).getAssets().open("appfilter.xml");
                 XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                 factory.setNamespaceAware(true);
                 iconFilterXml = factory.newPullParser();
@@ -133,8 +134,10 @@ public class IconPackHelper {
             Utils.sendLog(3, e.toString());
         }
 
-        if (launchIntent != null)
-            componentName = packageManager.getLaunchIntentForPackage(appPackageName).getComponent().toString();
+        if (launchIntent != null) {
+            ComponentName component = Utils.requireNonNull(packageManager.getLaunchIntentForPackage(appPackageName)).getComponent();
+            componentName = Utils.requireNonNull(component).toString();
+        }
 
         String drawable = mPackagesDrawables.get(componentName);
         if (drawable != null && iconRes != null) {

@@ -20,7 +20,7 @@ public class OnTouchListener implements View.OnTouchListener {
     private float endX;
     private float endY;
 
-    public OnTouchListener(Context context) {
+    protected OnTouchListener(Context context) {
         gestureDetector = new GestureDetector(context, new GestureListener());
     }
 

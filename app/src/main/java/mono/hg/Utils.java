@@ -69,6 +69,21 @@ public class Utils {
     }
 
     /**
+     * Checks if an object is null; throws a NullPointerException if it is.
+     *
+     * @param obj The object to check for.
+     *
+     * @param <T> The type of the referenced object.
+     *
+     * @return Object if not null.
+     */
+    public static <T> T requireNonNull(T obj) {
+        if (obj == null)
+            throw new NullPointerException();
+        return obj;
+    }
+
+    /**
      * Disable snackbar swipe behaviour.
      *
      * @param snackbar Snackbar whose behaviour is to be modified.
@@ -88,6 +103,7 @@ public class Utils {
      * Opens a URL/link from a string object.
      *
      * @param context Context object for use with startActivity.
+     *
      * @param link The link to be opened.
      */
     public static void openLink(Context context, String link) {
