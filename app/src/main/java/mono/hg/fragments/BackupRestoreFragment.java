@@ -144,7 +144,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         menu.clear();
         // Hide 'Backup' menu item in restore mode.
         if (!isInRestore) {
-            menu.add(0, 1, 100, getString(R.string.pref_header_backup));
+            menu.add(0, 1, 100, getString(R.string.action_backup));
             menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
         super.onCreateOptionsMenu(menu, inflater);
