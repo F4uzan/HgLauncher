@@ -24,6 +24,7 @@ public class PinnedAppAdapter extends RecyclerView.Adapter<PinnedAppAdapter.View
 
         private void setItem(AppDetail app) {
             icon.setImageDrawable(app.getIcon());
+            icon.setContentDescription(app.getAppName());
         }
 
         ViewHolder(View view) {
