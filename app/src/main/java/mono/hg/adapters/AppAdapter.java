@@ -21,6 +21,12 @@ public class AppAdapter extends FlexibleAdapter<AppDetail> {
         this.apps = apps;
     }
 
+    // Resets the filter constraint.
+    public void resetFilter() {
+        setFilter("");
+        filterItems();
+    }
+
     @Override
     public String onCreateBubbleText(int position) {
         return apps.get(position).getAppName().substring(0, 1).toUpperCase();
