@@ -654,7 +654,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (isPinned) {
             position = pinnedAppList.indexOf(selectedPackage);
         } else {
-            position = appList.indexOf(selectedPackage);
+            position = apps.getGlobalPositionOf(selectedPackage);
         }
 
         // Inflate the app menu.
@@ -712,14 +712,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         excludedAppList.add(packageName);
                         editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
                         // Reload the app list!
-                        appList.remove(new AppDetail(null, null, packageName, false));
-                        apps.notifyItemRemoved(finalPosition);
-                        //if (searchBar.getText().toString().equals("")) {
-                            //apps.setUpdateFilter(true);
-                        //} else {
-                            //TODO: Remove this when loadApps become less of a behemoth.
-                        //    recreate();
-                        //}
+                        appList.remove(apps.getItem(finalPosition));
+                        apps.removeItem(finalPosition);
                         break;
                     default:
                         // There is nothing to do.
