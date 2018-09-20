@@ -29,11 +29,6 @@ public class KissFuzzySearch {
         String source = sourceName.toLowerCase();
         String matchTo = queryMatch.toLowerCase().trim();
 
-        // We have a precise match. Return and retrieve.
-        if (source.equals(matchTo)) {
-            return -1;
-        }
-
         for (char cApp : source.toCharArray()) {
             if (queryPos < matchTo.length() && matchTo.charAt(queryPos) == cApp) {
                 // If we aren't already matching something, let's save the beginning of the match
