@@ -8,4 +8,5 @@
     <color name="colorCardBackgroundWhite">#F4F4F4</color>
     <color name="colorCardBackgroundGray">#101010</color>
     <color name="navigationBarShade">#80000000</color>
+    <color name="fast_scroller_handle_idle">@color/colorPrimaryDark</color>
 </resources>

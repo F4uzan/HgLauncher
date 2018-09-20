@@ -37,8 +37,8 @@ dependencies {
     implementation 'com.android.support:design:28.0.0-rc02'
     implementation 'com.android.support:support-media-compat:28.0.0-rc02'
 
-    // Third-party UI components libraries.
-    implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.18'
+    // Other third-party libraries.
     implementation 'com.fnp:material-preferences:0.1.4'
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
+    implementation 'eu.davidea:flexible-adapter:5.0.6'
 }

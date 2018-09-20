@@ -51,6 +51,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import eu.davidea.fastscroller.FastScroller;
 import mono.hg.adapters.AppAdapter;
 import mono.hg.adapters.PinnedAppAdapter;
 import mono.hg.helpers.IconPackHelper;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     /*
      * Adapter for installed apps.
      */
-    private AppAdapter apps = new AppAdapter(this, appList);
+    private AppAdapter apps = new AppAdapter(appList);
 
     /*
      * List of pinned apps.
@@ -188,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         appListContainer = findViewById(R.id.app_list_container);
         searchContainer = findViewById(R.id.search_container);
         pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
+        FastScroller fastScroller = findViewById(R.id.fast_scroller);
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
         touchReceiver = findViewById(R.id.touch_receiver);
@@ -197,7 +199,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         animateTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-        apps.setHasStableIds(true);
         pinnedApps.setHasStableIds(true);
 
         list.setDrawingCacheEnabled(true);
@@ -211,6 +212,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         pinned_list.setAdapter(pinnedApps);
         pinned_list.setLayoutManager(pinnedAppsManager);
         pinned_list.setHasFixedSize(true);
+
+        fastScroller.setRecyclerView(list);
+        apps.setFastScroller(fastScroller);
 
         // Restore search bar visibility when available.
         if (savedInstanceState != null) {
@@ -348,8 +352,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // You shouldn't be visible.
         if (appMenu != null)
             appMenu.dismiss();
-        if (!searchBar.getText().toString().isEmpty())
-            apps.getFilter().filter(null);
     }
 
     @Override
@@ -362,7 +364,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             parseAction("panel_up", null);
 
         searchBar.setText(null);
-        apps.setUpdateFilter(true);
     }
 
     @Override
@@ -435,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
-        apps.notifyItemRangeChanged(0, 0);
+        apps.clear();
 
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
@@ -456,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
                 AppDetail app = new AppDetail(icon, appName, packageName,false);
                 appList.add(app);
-                apps.notifyItemInserted(appList.size());
+                apps.addItem(app);
             }
         }
 
@@ -706,12 +707,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         // Reload the app list!
                         appList.remove(new AppDetail(null, null, packageName, false));
                         apps.notifyItemRemoved(finalPosition);
-                        if (searchBar.getText().toString().equals("")) {
-                            apps.setUpdateFilter(true);
-                        } else {
+                        //if (searchBar.getText().toString().equals("")) {
+                            //apps.setUpdateFilter(true);
+                        //} else {
                             //TODO: Remove this when loadApps become less of a behemoth.
-                            recreate();
-                        }
+                        //    recreate();
+                        //}
                         break;
                     default:
                         // There is nothing to do.
@@ -759,9 +760,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
 
                 // Begin filtering our list.
-                apps.getFilter().filter(s);
-                if (apps.shouldUpdateFilter())
-                    apps.setUpdateFilter(false);
+                apps.setFilter(s.toString());
+                apps.filterItems();
             }
 
             @Override
@@ -789,10 +789,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     searchSnack.setAction(R.string.search_web_button, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            synchronized (this) {
-                                Utils.openLink(MainActivity.this, PreferenceHelper.getSearchProvider() + searchBarText);
-                                apps.getFilter().filter(null);
-                            }
+                            Utils.openLink(MainActivity.this, PreferenceHelper.getSearchProvider() + searchBarText);
                         }
                     }).show();
 
@@ -844,10 +841,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         RecyclerClick.addTo(list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                synchronized (this) {
-                    launchApp(appList.get(position).getPackageName());
-                    apps.getFilter().filter(null);
-                }
+                launchApp(appList.get(position).getPackageName());
             }
         });
 

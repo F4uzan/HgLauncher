@@ -35,7 +35,7 @@
             android:layout_marginLeft="@dimen/uniform_panel_margin"
             android:layout_marginRight="@dimen/uniform_panel_margin">
 
-            <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/apps_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -43,11 +43,16 @@
                 android:splitMotionEvents="false"
                 android:layout_above="@id/bottom_list_container"
                 android:nextFocusDown="@id/search"
-                android:nextFocusForward="@id/search"
-                app:fastScrollThumbInactiveColor="@color/colorPrimary"
-                app:fastScrollPopupBgColor="@color/colorPrimaryDark"
-                app:fastScrollPopupTextColor="@android:color/primary_text_dark"
-                app:fastScrollThumbColor="@color/colorPrimaryDark" />
+                android:nextFocusForward="@id/search" />
+
+            <eu.davidea.fastscroller.FastScroller
+                android:id="@+id/fast_scroller"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_above="@id/bottom_list_container"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true" />
 
             <FrameLayout
                 android:id="@+id/bottom_list_container"

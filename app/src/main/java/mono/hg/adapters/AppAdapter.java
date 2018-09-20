@@ -1,150 +1,91 @@
 package mono.hg.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
-
-import java.util.ArrayList;
 import java.util.List;
 
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.AppDetail;
-import mono.hg.R;
-import mono.hg.helpers.KissFuzzySearch;
-import mono.hg.wrappers.InputTrackingAdapter;
+import mono.hg.Utils;
 
-public class AppAdapter extends InputTrackingAdapter<AppAdapter.ViewHolder> implements Filterable,
-        FastScrollRecyclerView.SectionedAdapter {
+public class AppAdapter extends FlexibleAdapter<AppDetail> {
     private List<AppDetail> apps;
-    private AppFilter filter;
-    private Boolean updateFilter = false;
+    private int mSelectedItem = 0;
+    private RecyclerView mRecyclerView;
 
-    public AppAdapter(Context context, List<AppDetail> apps) {
-        super(context);
+    public AppAdapter(List<AppDetail> apps) {
+        super(apps);
         this.apps = apps;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView name;
-        private ImageView icon;
-
-        private void setItem(AppDetail app) {
-            name.setText(app.getAppName());
-            icon.setImageDrawable(app.getIcon());
-        }
-
-        ViewHolder(View view) {
-            super(view);
-            name = view.findViewById(R.id.item_app_name);
-            icon = view.findViewById(R.id.item_app_icon);
-        }
-    }
-
-    @NonNull
     @Override
-    public AppAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View inflate = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.app_list, parent, false);
-        return new AppAdapter.ViewHolder(inflate);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull AppAdapter.ViewHolder holder, int position) {
-        final AppDetail fetchItem = apps.get(position);
-        holder.setItem(fetchItem);
-    }
-
-    @Override
-    public Filter getFilter() {
-        if (filter == null || updateFilter)
-            filter = new AppFilter(apps);
-        return filter;
-    }
-
-    public Boolean shouldUpdateFilter() {
-        return updateFilter;
-    }
-
-    public void setUpdateFilter(Boolean shouldUpdate) {
-        this.updateFilter = shouldUpdate;
-    }
-
-    @Override
-    public int getItemViewType(int pos) {
-        return pos;
-    }
-
-    @Override
-    public int getItemCount() {
-        return apps.size();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return apps.get(position).hashCode();
-    }
-
-    @NonNull
-    @Override
-    public String getSectionName(int position) {
+    public String onCreateBubbleText(int position) {
         return apps.get(position).getAppName().substring(0, 1).toUpperCase();
     }
 
-    // Basic filter class
-    private class AppFilter extends Filter {
-        private final ArrayList<AppDetail> originalList;
-        private final ArrayList<AppDetail> filteredList;
+    /**
+     * Keyboard navigation code is taken from the adapter code by zevektor/Vektor (https://github.com/zevektor/KeyboardRecyclerView)
+     */
+    @Override
+    public void onAttachedToRecyclerView(@NonNull final RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
 
-        private AppFilter(List<AppDetail> originalList) {
-            super();
-            this.originalList = new ArrayList<>(originalList);
-            this.filteredList = new ArrayList<>();
-        }
+        mRecyclerView = recyclerView;
 
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-            filteredList.clear();
-            final FilterResults results = new FilterResults();
-
-            if (charSequence == null || charSequence.length() == 0 || updateFilter) {
-                filteredList.addAll(originalList);
-            } else {
-                final String filterPattern = charSequence.toString();
-                boolean narrowResult = false;
-                for (AppDetail item : originalList) {
-                    // Do a fuzzy comparison instead of checking for absolute match.
-                    int fuzzyScore = KissFuzzySearch.doFuzzy(item.getAppName(), filterPattern);
-                    if (fuzzyScore == -1) {
-                        // The search has found a precise match, narrow everything down to it.
-                        narrowResult = true;
-                        filteredList.add(item);
-                    } else if (fuzzyScore >= 30 && !narrowResult) {
-                        filteredList.add(item);
+        // Handle key up and key down and attempt to move selection.
+        recyclerView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // Return false if scrolled to the bounds and allow focus to move off the list.
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (isConfirmButton(event)) {
+                        if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) == KeyEvent.FLAG_LONG_PRESS) {
+                            Utils.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem)).itemView.performLongClick();
+                        } else {
+                            event.startTracking();
+                        }
+                        return true;
+                    } else {
+                        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+                            return tryMoveSelection(1);
+                        } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                            return tryMoveSelection(-1);
+                        }
                     }
+                } else if (event.getAction() == KeyEvent.ACTION_UP && isConfirmButton(event)
+                        && ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != KeyEvent.FLAG_LONG_PRESS)
+                        && mSelectedItem != -1) {
+                    Utils.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem)).itemView.performClick();
+                    return true;
                 }
+                return false;
             }
+        });
+    }
 
-            results.values = filteredList;
-            results.count = filteredList.size();
-            return results;
+    private boolean tryMoveSelection(int direction) {
+        int nextSelectItem = mSelectedItem + direction;
+
+        // If still within valid bounds, move the selection, notify to redraw, and scroll.
+        if (nextSelectItem >= 0 && nextSelectItem < getItemCount()) {
+            notifyItemChanged(mSelectedItem);
+            mSelectedItem = nextSelectItem;
+            notifyItemChanged(mSelectedItem);
+            mRecyclerView.smoothScrollToPosition(mSelectedItem);
+            return true;
         }
+        return false;
+    }
 
-        @SuppressWarnings("unchecked")
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            if (filterResults.values != null) {
-                apps.clear();
-                apps.addAll((ArrayList<AppDetail>) filterResults.values);
-                notifyDataSetChanged();
-            }
+    private static boolean isConfirmButton(KeyEvent event) {
+        switch (event.getKeyCode()) {
+            case KeyEvent.KEYCODE_ENTER:
+                return true;
+            default:
+                return false;
         }
     }
 }

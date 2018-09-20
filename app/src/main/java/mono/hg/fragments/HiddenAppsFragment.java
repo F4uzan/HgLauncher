@@ -191,7 +191,7 @@ public class HiddenAppsFragment extends Fragment {
                 appMenu.getMenuInflater().inflate(R.menu.menu_hidden_app, appMenu.getMenu());
 
                 // Don't show hide action if the app is already hidden.
-                if (appList.get(position).isHidden()) {
+                if (appList.get(position).isAppHidden()) {
                     appMenu.getMenu().removeItem(R.id.action_hide);
                 } else {
                     appMenu.getMenu().removeItem(R.id.action_show);
