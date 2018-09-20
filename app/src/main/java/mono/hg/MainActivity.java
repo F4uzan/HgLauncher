@@ -366,8 +366,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         if (PreferenceHelper.shouldDismissOnLeave())
             parseAction("panel_up", null);
-
-        searchBar.setText(null);
     }
 
     @Override
@@ -471,9 +469,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     // A method to launch an app based on package name.
     private void launchApp(String packageName) {
-        // We don't want to stay filtered when launching app, as that'll break the app list.
-        apps.resetFilter();
-
         Intent i = manager.getLaunchIntentForPackage(packageName);
         // Attempt to catch exceptions instead of crash landing directly to the floor.
         try {
@@ -790,8 +785,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     searchSnack.setAction(R.string.search_web_button, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // Reset the filter
-                            apps.resetFilter();
                             Utils.openLink(MainActivity.this, PreferenceHelper.getSearchProvider() + searchBarText);
                         }
                     }).show();
