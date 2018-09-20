@@ -46,7 +46,7 @@ public class HiddenAppAdapter extends BaseAdapter {
             appHolder = (ViewHolder) view.getTag();
         }
 
-        if (apps.get(position).isHidden()) {
+        if (apps.get(position).isAppHidden()) {
             appHolder.hiddenState.setChecked(true);
         } else {
             appHolder.hiddenState.setChecked(false);

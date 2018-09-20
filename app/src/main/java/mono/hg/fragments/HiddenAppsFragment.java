@@ -161,9 +161,9 @@ public class HiddenAppsFragment extends Fragment {
         editPrefs.putBoolean("dummy_restore", true).apply();
         // Reload the app list!
         if (excludedAppList.contains(packageName)) {
-            appList.get(position).setHidden(true);
+            appList.get(position).setAppHidden(true);
         } else {
-            appList.get(position).setHidden(false);
+            appList.get(position).setAppHidden(false);
         }
         apps.notifyDataSetChanged();
 

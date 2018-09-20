@@ -16,14 +16,14 @@ import mono.hg.helpers.KissFuzzySearch;
 
 public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder> implements IFilterable<String> {
     private String appName, packageName;
-    private Boolean isHidden;
+    private Boolean isAppHidden;
     private Drawable icon;
 
-    public AppDetail(Drawable icon, String appName, String packageName, Boolean isHidden) {
+    public AppDetail(Drawable icon, String appName, String packageName, Boolean isAppHidden) {
         this.packageName = packageName;
         this.appName = appName;
         this.icon = icon;
-        this.isHidden = isHidden;
+        this.isAppHidden = isAppHidden;
     }
 
     public String getAppName() {
@@ -39,11 +39,11 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder> implem
     }
 
     public boolean isAppHidden() {
-        return isHidden;
+        return isAppHidden;
     }
 
-    public void setHidden(Boolean hidden) {
-        isHidden = hidden;
+    public void setAppHidden(Boolean hidden) {
+        isAppHidden = hidden;
     }
 
     public boolean equals(Object object) {
