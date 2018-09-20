@@ -807,9 +807,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
                     if (!list.canScrollVertically(RecyclerView.FOCUS_UP)
                             && !list.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                        launchApp(appList.get(appList.size() - 1).getPackageName());
+                        launchApp(apps.getItem(apps.getItemCount() - 1).getPackageName());
                     } else {
-                        launchApp(appList.get(0).getPackageName());
+                        launchApp(apps.getItem(0).getPackageName());
                     }
                     return true;
                 }
@@ -841,7 +841,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         RecyclerClick.addTo(list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                launchApp(appList.get(position).getPackageName());
+                launchApp(apps.getItem(position).getPackageName());
             }
         });
 
@@ -850,7 +850,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
-                final String packageName = appList.get(position).getPackageName();
+                final String packageName = apps.getItem(position).getPackageName();
                 createAppMenu(v, false, packageName);
                 return false;
             }
