@@ -1,4 +1,4 @@
-package mono.hg;
+package mono.hg.items;
 
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -12,6 +12,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.flexibleadapter.items.IFilterable;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.FlexibleViewHolder;
+import mono.hg.R;
 import mono.hg.helpers.KissFuzzySearch;
 
 public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder> implements IFilterable<String> {
@@ -79,8 +80,8 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder> implem
     }
 
     class ViewHolder extends FlexibleViewHolder {
-        private TextView name;
-        private ImageView icon;
+        TextView name;
+        ImageView icon;
 
         ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);

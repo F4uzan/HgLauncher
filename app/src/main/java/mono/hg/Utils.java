@@ -19,8 +19,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.helpers.IconPackHelper;
 import mono.hg.helpers.PreferenceHelper;
+import mono.hg.items.AppDetail;
+import mono.hg.items.PinnedAppDetail;
 
 public class Utils {
 
@@ -169,9 +172,46 @@ public class Utils {
     }
 
     /**
+     * Pins an app to the favourites panel.
+     *
+     * @param packageManager PackageManager object used to fetch information regarding
+     *                       the app that is being loaded.
+     *
+     * @param packageName The package name to load and fetch.
+     *
+     * @param adapter Which adapter should we notify update to?
+     *
+     * @param list Which List object should be updated?
+     *
+     */
+    public static void pinApp(PackageManager packageManager, String packageName,
+                              FlexibleAdapter<PinnedAppDetail> adapter, List<PinnedAppDetail> list) {
+        if (!adapter.contains(new PinnedAppDetail(null, packageName))) {
+            try {
+                Drawable icon;
+                Drawable getIcon = null;
+                if (!PreferenceHelper.getIconPackName().equals("default"))
+                    getIcon = new IconPackHelper().getIconDrawable(packageManager, packageName);
+                if (getIcon == null) {
+                    icon = packageManager.getApplicationIcon(packageName);
+                } else {
+                    icon = getIcon;
+                }
+                PinnedAppDetail app = new PinnedAppDetail(icon, packageName);
+                list.add(app);
+                adapter.updateDataSet(list);
+            } catch (PackageManager.NameNotFoundException e) {
+                sendLog(3, e.toString());
+            }
+        }
+    }
+
+    /**
      * Loads an app to a list hosting the AppDetail object. The loaded app will have
      * a custom icon loaded if it's available at all, and the list associated with it
      * can have the order arranged.
+     *
+     * This is deprecated for now.
      *
      * @param packageManager PackageManager object used to fetch information regarding
      *                       the app that is being loaded.
@@ -184,6 +224,7 @@ public class Utils {
      *
      * @param forFavourites Is this app used for the favourites panel?
      */
+    @Deprecated
     public static void loadSingleApp(PackageManager packageManager, String packageName,
                                      RecyclerView.Adapter adapter, List<AppDetail> list, Boolean forFavourites) {
         ApplicationInfo applicationInfo;

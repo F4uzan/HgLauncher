@@ -8,7 +8,7 @@ import android.view.View;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import mono.hg.AppDetail;
+import mono.hg.items.AppDetail;
 import mono.hg.Utils;
 
 public class AppAdapter extends FlexibleAdapter<AppDetail> {

@@ -52,11 +52,13 @@ import java.util.HashSet;
 import java.util.List;
 
 import eu.davidea.fastscroller.FastScroller;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
-import mono.hg.adapters.PinnedAppAdapter;
 import mono.hg.helpers.IconPackHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.helpers.RecyclerClick;
+import mono.hg.items.AppDetail;
+import mono.hg.items.PinnedAppDetail;
 import mono.hg.receivers.PackageChangesReceiver;
 import mono.hg.wrappers.OnTouchListener;
 import mono.hg.wrappers.SimpleScrollUpListener;
@@ -92,13 +94,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     /*
      * List of pinned apps.
      */
-    private ArrayList<AppDetail> pinnedAppList = new ArrayList<>();
+    private ArrayList<PinnedAppDetail> pinnedAppList = new ArrayList<>();
     private HashSet<String> pinnedAppSet;
 
     /*
      * Adapter for pinned apps.
      */
-    private PinnedAppAdapter pinnedApps = new PinnedAppAdapter(pinnedAppList);
+    private FlexibleAdapter<PinnedAppDetail> pinnedApps = new FlexibleAdapter<>(pinnedAppList);
 
     /*
      * List of excluded apps. These will not be shown in the app list.
@@ -199,8 +201,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         animateTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-        pinnedApps.setHasStableIds(true);
-
         list.setDrawingCacheEnabled(true);
         list.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         list.setHasFixedSize(true);
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Get pinned apps.
         pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
         for (String pinnedApp : pinnedAppSet) {
-            Utils.loadSingleApp(manager, pinnedApp, pinnedApps, pinnedAppList, true);
+            Utils.pinApp(manager, pinnedApp, pinnedApps, pinnedAppList);
         }
 
         applyPrefToViews();
@@ -642,13 +642,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void createAppMenu(View v, Boolean isPinned, final String packageName) {
-        AppDetail selectedPackage = new AppDetail(null, null, packageName, false);
         final Uri packageNameUri = Uri.parse("package:" + packageName);
 
         int position;
         if (isPinned) {
-            position = pinnedAppList.indexOf(selectedPackage);
+            PinnedAppDetail selectedPackage = new PinnedAppDetail(null, packageName);
+            position = pinnedApps.getGlobalPositionOf(selectedPackage);
         } else {
+            AppDetail selectedPackage = new AppDetail(null, null, packageName, false);
             position = apps.getGlobalPositionOf(selectedPackage);
         }
 
@@ -661,7 +662,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             appMenu.getMenu().removeItem(R.id.action_hide);
         } else {
             // Don't show the 'pin' action when the app is already pinned.
-            if (pinnedAppList.contains(selectedPackage))
+            if (pinnedAppSet.contains(packageName))
                 appMenu.getMenu().removeItem(R.id.action_pin);
             appMenu.getMenu().removeItem(R.id.action_unpin);
         }
@@ -678,21 +679,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pin:
-                        Utils.loadSingleApp(manager, packageName, pinnedApps, pinnedAppList, true);
+                        Utils.pinApp(manager, packageName, pinnedApps, pinnedAppList);
                         pinnedAppSet.add(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
                         if (!PreferenceHelper.isFavouritesEnabled())
                             Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
-                        if (PreferenceHelper.isFavouritesEnabled() && pinnedAppList.size() == 1) {
+                        if (PreferenceHelper.isFavouritesEnabled() && pinnedApps.getItemCount() == 1) {
                             shouldShowFavourites = true;
                         }
                         break;
                     case R.id.action_unpin:
-                        pinnedAppList.remove(finalPosition);
-                        pinnedApps.notifyItemRemoved(finalPosition);
+                        pinnedAppList.remove(pinnedApps.getItem(finalPosition));
+                        pinnedApps.removeItem(finalPosition);
                         pinnedAppSet.remove(packageName);
                         editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
-                        if (pinnedAppList.size() == 0)
+                        if (pinnedApps.isEmpty())
                             parseAction("hide_favourites", null);
                         break;
                     case R.id.action_info:
@@ -821,13 +822,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             list.addOnScrollListener(new SimpleScrollUpListener(0) {
                 @Override
                 public void onScrollUp() {
-                    if (shouldShowFavourites && pinnedAppList.size() > 0)
+                    if (shouldShowFavourites && !pinnedApps.isEmpty())
                         parseAction("hide_favourites", null);
                 }
 
                 @Override
                 public void onEnd() {
-                    if (shouldShowFavourites && pinnedAppList.size() > 0)
+                    if (shouldShowFavourites && !pinnedApps.isEmpty())
                         parseAction("show_favourites", null);
                 }
             });
