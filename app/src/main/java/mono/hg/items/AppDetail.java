@@ -79,9 +79,9 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder> implem
         return fuzzyScore >= 30;
     }
 
-    class ViewHolder extends FlexibleViewHolder {
-        TextView name;
-        ImageView icon;
+    protected class ViewHolder extends FlexibleViewHolder {
+        protected TextView name;
+        protected ImageView icon;
 
         ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
