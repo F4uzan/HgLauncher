@@ -757,7 +757,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
 
                 // Begin filtering our list.
-                apps.setFilter(s.toString());
+                apps.setFilter(searchBarText);
                 apps.filterItems();
             }
 
