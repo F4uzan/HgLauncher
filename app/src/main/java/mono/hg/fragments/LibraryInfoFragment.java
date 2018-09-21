@@ -40,6 +40,10 @@ public class LibraryInfoFragment extends DialogFragment {
                         // material-preferences.
                         Utils.openLink(getActivity(), getString(R.string.lib_material_preferences_url));
                         break;
+                    case 3:
+                        // material-preferences.
+                        Utils.openLink(getActivity(), getString(R.string.lib_flexibleadapter_url));
+                        break;
                     default:
                         // Nada.
                         break;

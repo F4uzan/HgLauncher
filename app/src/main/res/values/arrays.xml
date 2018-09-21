@@ -36,6 +36,7 @@
         <item>@string/lib_slidinguppanel</item>
         <item>@string/lib_recyclerview_fastscroll</item>
         <item>@string/lib_material_preferences</item>
+        <item>@string/lib_flexibleadapter</item>
     </string-array>
 
     <string-array name="pref_app_theme_title">
