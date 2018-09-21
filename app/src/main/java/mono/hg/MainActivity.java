@@ -51,7 +51,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import eu.davidea.fastscroller.FastScroller;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
 import mono.hg.helpers.IconPackHelper;
@@ -191,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         appListContainer = findViewById(R.id.app_list_container);
         searchContainer = findViewById(R.id.search_container);
         pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
-        FastScroller fastScroller = findViewById(R.id.fast_scroller);
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
         touchReceiver = findViewById(R.id.touch_receiver);
@@ -212,9 +210,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         pinned_list.setAdapter(pinnedApps);
         pinned_list.setLayoutManager(pinnedAppsManager);
         pinned_list.setHasFixedSize(true);
-
-        fastScroller.setRecyclerView(list);
-        apps.setFastScroller(fastScroller);
 
         // Restore search bar visibility when available.
         if (savedInstanceState != null) {

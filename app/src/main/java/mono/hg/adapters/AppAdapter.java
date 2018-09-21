@@ -5,13 +5,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import mono.hg.items.AppDetail;
 import mono.hg.Utils;
+import mono.hg.items.AppDetail;
 
-public class AppAdapter extends FlexibleAdapter<AppDetail> {
+public class AppAdapter extends FlexibleAdapter<AppDetail> implements FastScrollRecyclerView.SectionedAdapter {
     private List<AppDetail> apps;
     private int mSelectedItem = 0;
     private RecyclerView mRecyclerView;
@@ -27,8 +29,9 @@ public class AppAdapter extends FlexibleAdapter<AppDetail> {
         filterItems();
     }
 
+    @NonNull
     @Override
-    public String onCreateBubbleText(int position) {
+    public String getSectionName(int position) {
         return apps.get(position).getAppName().substring(0, 1).toUpperCase();
     }
 
