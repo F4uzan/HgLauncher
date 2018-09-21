@@ -16,5 +16,5 @@
 #   public *;
 #}
 
--dontwarn com.simplecityapps.recyclerview_fastscroll.views.FastScrollPopup
 -dontwarn com.sothree.slidinguppanel.SlidingUpPanelLayout
+-keep class com.sothree.slidinguppanel.SlidingUpPanelLayout
