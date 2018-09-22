@@ -4,7 +4,16 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -23,7 +32,7 @@ import mono.hg.Utils;
  * (https://stackoverflow.com/questions/24937890/using-icon-packs-in-my-app)
  */
 
-public class IconPackHelper {
+public class LauncherIconHelper {
     private static HashMap<String, String> mPackagesDrawables = new HashMap<>();
 
     /**
@@ -108,6 +117,77 @@ public class IconPackHelper {
         if (icon > 0)
             return resources.getDrawable(icon);
         return null;
+    }
+
+    /**
+     * Converts Drawable to Bitmap when BitmapDrawable is not feasible.
+     *
+     * @param drawable The drawable to parse and draw.
+     * @return Bitmap drawn from the drawable.
+     */
+    @NonNull
+    public static Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
+        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bmp;
+    }
+
+    /**
+     * Adds a shadow to a Bitmap.
+     *
+     * TODO: Make this return Drawable for our use case.
+     *
+     * @author schwiz (https://stackoverflow.com/a/24579764)
+     *
+     * @param bm The bitmap to use when drawing the shadow.
+     *
+     * @param dstHeight Height of the returned bitmap.
+     *
+     * @param dstWidth Width of the returned bitmap.
+     *
+     * @param color Colour of the drawn shadow.
+     *
+     * @param size Size of the drawn shadow.
+     *
+     * @param dx Shadow x direction.
+     *
+     * @param dy Shadow y direction.
+     *
+     * @return Bitmap with resulting shadow.
+     *
+     */
+    public static Bitmap addShadow(final Bitmap bm, final int dstHeight, final int dstWidth, int color, int size, float dx, float dy) {
+        final Bitmap mask = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ALPHA_8);
+
+        final Matrix scaleToFit = new Matrix();
+        final RectF src = new RectF(0, 0, bm.getWidth(), bm.getHeight());
+        final RectF dst = new RectF(0, 0, dstWidth - dx, dstHeight - dy);
+        scaleToFit.setRectToRect(src, dst, Matrix.ScaleToFit.CENTER);
+
+        final Matrix dropShadow = new Matrix(scaleToFit);
+        dropShadow.postTranslate(dx, dy);
+
+        final Canvas maskCanvas = new Canvas(mask);
+        final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        maskCanvas.drawBitmap(bm, scaleToFit, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
+        maskCanvas.drawBitmap(bm, dropShadow, paint);
+
+        final BlurMaskFilter filter = new BlurMaskFilter(size, BlurMaskFilter.Blur.NORMAL);
+        paint.reset();
+        paint.setAntiAlias(true);
+        paint.setColor(color);
+        paint.setMaskFilter(filter);
+        paint.setFilterBitmap(true);
+
+        final Bitmap ret = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888);
+        final Canvas retCanvas = new Canvas(ret);
+        retCanvas.drawBitmap(mask, 0,  0, paint);
+        retCanvas.drawBitmap(bm, scaleToFit, null);
+        mask.recycle();
+        return ret;
     }
 
     /**

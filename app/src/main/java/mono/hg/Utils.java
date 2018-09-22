@@ -20,7 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import mono.hg.helpers.IconPackHelper;
+import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.items.AppDetail;
 import mono.hg.items.PinnedAppDetail;
@@ -191,7 +191,7 @@ public class Utils {
                 Drawable icon;
                 Drawable getIcon = null;
                 if (!PreferenceHelper.getIconPackName().equals("default"))
-                    getIcon = new IconPackHelper().getIconDrawable(packageManager, packageName);
+                    getIcon = new LauncherIconHelper().getIconDrawable(packageManager, packageName);
                 if (getIcon == null) {
                     icon = packageManager.getApplicationIcon(packageName);
                 } else {
@@ -238,7 +238,7 @@ public class Utils {
                 Drawable getIcon = null;
                 if (PreferenceHelper.shouldHideIcon() || forFavourites) {
                     if (!PreferenceHelper.getIconPackName().equals("default"))
-                        getIcon = new IconPackHelper().getIconDrawable(packageManager, packageName);
+                        getIcon = new LauncherIconHelper().getIconDrawable(packageManager, packageName);
                     if (getIcon == null) {
                         icon = packageManager.getApplicationIcon(packageName);
                     } else {

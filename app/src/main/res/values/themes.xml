@@ -5,7 +5,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="cardColor">@color/colorCardBackgroundWhite</item>
-        <item name="backgroundColor">@android:color/background_light</item>
+        <item name="backgroundColor">#F5F5F5</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat">

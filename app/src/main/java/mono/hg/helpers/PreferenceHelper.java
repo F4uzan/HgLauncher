@@ -6,7 +6,7 @@ public class PreferenceHelper {
     private static boolean icon_hide, list_order, shade_view,
             keyboard_focus, web_search_enabled, comfy_padding,
             tap_to_drawer, favourites_panel, dismiss_panel,
-            static_favourites_panel;
+            static_favourites_panel, adaptive_shade;
     private static String launch_anim;
     private static String app_theme;
     private static String search_provider_set;
@@ -18,6 +18,10 @@ public class PreferenceHelper {
 
     public static boolean shouldHideIcon() {
         return icon_hide;
+    }
+
+    public static boolean shadeAdaptiveIcon() {
+        return adaptive_shade;
     }
 
     public static String getIconPackName() { return icon_pack; }
@@ -95,6 +99,7 @@ public class PreferenceHelper {
         search_provider_set = prefs.getString("search_provider", "google");
         favourites_panel = prefs.getBoolean("favourites_panel_switch", true);
         static_favourites_panel = prefs.getBoolean("static_favourites_panel_switch", false);
+        adaptive_shade = prefs.getBoolean("adaptive_shade_switch", false);
     }
 
 }

@@ -90,6 +90,13 @@
             android:title="@string/pref_icon_view"
             android:widgetLayout="@layout/mp_preference_switch" />
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="adaptive_shade_switch"
+            android:summary="@string/shadow_adaptive_icon_desc"
+            android:title="@string/shadow_adaptive_icon"
+            android:widgetLayout="@layout/mp_preference_switch" />
+
         <mono.hg.views.MenuPreference
             android:defaultValue="default"
             android:key="icon_pack"

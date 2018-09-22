@@ -87,6 +87,9 @@
     <string name="tap_to_drawer">Tap to open app list</string>
     <string name="tap_to_drawer_desc">Open the app list by tapping anywhere on the desktop.</string>
 
+    <string name="shadow_adaptive_icon">Shadow for Adaptive Icons</string>
+    <string name="shadow_adaptive_icon_desc">Shade adaptive icons with a slight shadow. May reduce performance.</string>
+
     <string name="pref_icon_view">Hide icons</string>
     <string name="pref_icon_view_desc">Recommended if you have a slower device.</string>
 

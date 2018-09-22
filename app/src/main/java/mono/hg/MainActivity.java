@@ -13,6 +13,10 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -53,7 +57,7 @@ import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
-import mono.hg.helpers.IconPackHelper;
+import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.helpers.RecyclerClick;
 import mono.hg.items.AppDetail;
@@ -312,8 +316,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "list_order":
                 recreate();
                 break;
+            case "adaptive_shade_switch":
             case "icon_pack":
-                IconPackHelper.clearDrawableCache();
+                LauncherIconHelper.clearDrawableCache();
                 recreate();
                 break;
             case "removedApp":
@@ -445,9 +450,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 // Only show icons if user chooses so.
                 if (!PreferenceHelper.shouldHideIcon()) {
                     if (!PreferenceHelper.getIconPackName().equals("default"))
-                        getIcon = new IconPackHelper().getIconDrawable(manager, packageName);
+                        getIcon = new LauncherIconHelper().getIconDrawable(manager, packageName);
                     if (getIcon == null) {
-                        icon = ri.activityInfo.loadIcon(manager);
+                        Drawable baseIcon = ri.activityInfo.loadIcon(manager);
+                        icon = baseIcon;
+                        Bitmap bitmapIcon;
+                        if  (PreferenceHelper.appTheme().equals("light")
+                                && PreferenceHelper.shadeAdaptiveIcon()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                                    && baseIcon instanceof AdaptiveIconDrawable) {
+                                bitmapIcon = LauncherIconHelper.getBitmapFromDrawable(baseIcon);
+                                bitmapIcon = LauncherIconHelper.addShadow(bitmapIcon, baseIcon.getIntrinsicHeight(), baseIcon.getIntrinsicWidth(),
+                                        Color.LTGRAY, 4, 1, 3);
+                                icon = new BitmapDrawable(getResources(), bitmapIcon);
+                            }
+                        }
                     } else {
                         icon = getIcon;
                     }
@@ -498,7 +515,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         protected Void doInBackground(Void... params) {
             MainActivity activity = activityRef.get();
             if (activity != null)
-                new IconPackHelper().loadIconPack(activity.manager);
+                new LauncherIconHelper().loadIconPack(activity.manager);
             return null;
         }
     }
