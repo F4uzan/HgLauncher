@@ -460,7 +460,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                                     && baseIcon instanceof AdaptiveIconDrawable) {
                                 bitmapIcon = LauncherIconHelper.getBitmapFromDrawable(baseIcon);
-                                bitmapIcon = LauncherIconHelper.addShadow(bitmapIcon, baseIcon.getIntrinsicHeight(), baseIcon.getIntrinsicWidth(),
+                                bitmapIcon = LauncherIconHelper.addShadow(bitmapIcon, bitmapIcon.getHeight(), bitmapIcon.getWidth(),
                                         Color.LTGRAY, 4, 1, 3);
                                 icon = new BitmapDrawable(getResources(), bitmapIcon);
                             }
