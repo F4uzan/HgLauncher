@@ -1,6 +1,7 @@
 package mono.hg.items;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder> implem
     private Boolean isAppHidden;
     private Drawable icon;
 
-    public AppDetail(Drawable icon, String appName, String packageName, Boolean isAppHidden) {
+    public AppDetail(Drawable icon, String appName, @NonNull String packageName, Boolean isAppHidden) {
         this.packageName = packageName;
         this.appName = appName;
         this.icon = icon;

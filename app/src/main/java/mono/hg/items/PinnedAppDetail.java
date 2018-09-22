@@ -1,6 +1,7 @@
 package mono.hg.items;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import mono.hg.R;
 
 public class PinnedAppDetail extends AppDetail {
 
-    public PinnedAppDetail(Drawable icon, String packageName) {
+    public PinnedAppDetail(Drawable icon, @NonNull String packageName) {
         super(icon, null, packageName, false);
     }
 

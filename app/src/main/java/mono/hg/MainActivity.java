@@ -459,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Update our view cache size, now that we have got all apps on the list
-        list.setItemViewCacheSize(appList.size() - 1);
+        list.setItemViewCacheSize(apps.getItemCount() - 1);
     }
 
     // A method to launch an app based on package name.
@@ -581,7 +581,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
-        if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppList.size() == 0) {
+        if (!PreferenceHelper.isFavouritesEnabled() || pinnedApps.isEmpty()) {
             pinnedAppsContainer.setVisibility(View.GONE);
             shouldShowFavourites = false;
         }
@@ -795,13 +795,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         searchBar.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((!appList.isEmpty() && searchBar.getText().length() > 0) &&
+                if ((!apps.isEmpty() && searchBar.getText().length() > 0) &&
                         (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
                     if (!list.canScrollVertically(RecyclerView.FOCUS_UP)
                             && !list.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                        launchApp(apps.getItem(apps.getItemCount() - 1).getPackageName());
+                        launchApp(Utils.requireNonNull(apps.getItem(apps.getItemCount() - 1)).getPackageName());
                     } else {
-                        launchApp(apps.getItem(0).getPackageName());
+                        launchApp(Utils.requireNonNull(apps.getItem(0)).getPackageName());
                     }
                     return true;
                 }
@@ -833,7 +833,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         RecyclerClick.addTo(list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                launchApp(apps.getItem(position).getPackageName());
+                launchApp(Utils.requireNonNull(apps.getItem(position)).getPackageName());
             }
         });
 
@@ -842,7 +842,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
-                final String packageName = apps.getItem(position).getPackageName();
+                final String packageName = Utils.requireNonNull(apps.getItem(position)).getPackageName();
                 createAppMenu(v, false, packageName);
                 return false;
             }
@@ -853,7 +853,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
-                final String packageName = pinnedAppList.get(position).getPackageName();
+                final String packageName = Utils.requireNonNull(pinnedApps.getItem(position)).getPackageName();
                 createAppMenu(v, true, packageName);
                 return false;
             }
@@ -862,7 +862,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         RecyclerClick.addTo(pinned_list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                launchApp(pinnedAppList.get(position).getPackageName());
+                launchApp(Utils.requireNonNull(pinnedApps.getItem(position)).getPackageName());
             }
         });
     }
