@@ -108,6 +108,14 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="static_favourites_panel_switch"
+            android:dependency="favourites_panel_switch"
+            android:summary="@string/static_favourites_desc"
+            android:title="@string/static_favourites"
+            android:widgetLayout="@layout/mp_preference_switch" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="comfy_padding"
             android:summary="@string/comfy_padding_desc"
             android:title="@string/comfy_padding"

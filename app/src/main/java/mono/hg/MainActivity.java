@@ -817,13 +817,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             list.addOnScrollListener(new SimpleScrollUpListener(0) {
                 @Override
                 public void onScrollUp() {
-                    if (shouldShowFavourites && !pinnedApps.isEmpty())
+                    if (shouldShowFavourites && !pinnedApps.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll())
                         parseAction("hide_favourites", null);
                 }
 
                 @Override
                 public void onEnd() {
-                    if (shouldShowFavourites && !pinnedApps.isEmpty())
+                    if (shouldShowFavourites && !pinnedApps.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll())
                         parseAction("show_favourites", null);
                 }
             });

@@ -5,7 +5,8 @@ import android.content.SharedPreferences;
 public class PreferenceHelper {
     private static boolean icon_hide, list_order, shade_view,
             keyboard_focus, web_search_enabled, comfy_padding,
-            tap_to_drawer, favourites_panel, dismiss_panel;
+            tap_to_drawer, favourites_panel, dismiss_panel,
+            static_favourites_panel;
     private static String launch_anim;
     private static String app_theme;
     private static String search_provider_set;
@@ -57,6 +58,10 @@ public class PreferenceHelper {
         return favourites_panel;
     }
 
+    public static boolean favouritesIgnoreScroll() {
+        return static_favourites_panel;
+    }
+
     public static String getSearchProvider() {
         String search_provider;
 
@@ -89,6 +94,7 @@ public class PreferenceHelper {
         web_search_enabled = prefs.getBoolean("web_search_enabled", true);
         search_provider_set = prefs.getString("search_provider", "google");
         favourites_panel = prefs.getBoolean("favourites_panel_switch", true);
+        static_favourites_panel = prefs.getBoolean("static_favourites_panel_switch", false);
     }
 
 }
