@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.view.MenuItem;
@@ -37,6 +38,13 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
 
         ListPreference appTheme = (ListPreference) findPreference("app_theme");
         final ListPreference iconList = (ListPreference) findPreference("icon_pack");
+
+        // Adaptive icon is not available before Android O/API 26.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            PreferenceCategory appListPreference = (PreferenceCategory) findPreference("app_list");
+            Preference adaptiveShadePreference = findPreference("adaptive_shade_switch");
+            appListPreference.removePreference(adaptiveShadePreference);
+        }
 
         setIconList(iconList);
 
