@@ -156,7 +156,7 @@ public class LauncherIconHelper {
      * @return Bitmap with resulting shadow.
      *
      */
-    public static Bitmap addShadow(final Drawable drawable, final int dstHeight, final int dstWidth, int color, int size, float dx, float dy) {
+    private static Bitmap addShadow(final Drawable drawable, final int dstHeight, final int dstWidth, int color, int size, float dx, float dy) {
         final Bitmap bm = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(bm);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
