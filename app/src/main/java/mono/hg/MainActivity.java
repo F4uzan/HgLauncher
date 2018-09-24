@@ -451,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName;
-            if (!excludedAppList.contains(packageName)) {
+            if (!excludedAppList.contains(packageName) && !packageName.equals(getPackageName())) {
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = null;
                 Drawable getIcon = null;
