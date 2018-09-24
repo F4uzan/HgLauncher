@@ -16,13 +16,13 @@ public class PackageChangesReceiver extends BroadcastReceiver {
             // Receive intent from broadcast and simply let the launcher know it needs a refresh.
             if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")
                     || intent.getAction().equals("android.intent.action.PACKAGE_CHANGED")
-                    && !intent.getDataString().contains("f4.hg")) {
+                    && !intent.getDataString().contains(context.getPackageName())) {
                 editor.putBoolean("addApp", true).apply();
                 editor.putString("added_app", intent.getDataString().replace("package:", "")).apply();
             }
 
             if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")
-                    && !intent.getDataString().contains("f4.hg")) {
+                    && !intent.getDataString().contains(context.getPackageName())) {
                 editor.putBoolean("removedApp", true).apply();
                 editor.putString("removed_app", intent.getDataString().replace("package:", "")).apply();
             }
