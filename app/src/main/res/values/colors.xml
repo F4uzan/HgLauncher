@@ -5,8 +5,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorBackgroundGray">#202020</color>
+    <color name="colorBackgroundWhite">#F5F5F5</color>
     <color name="colorCardBackgroundWhite">#242424</color>
     <color name="colorCardBackgroundGray">#101010</color>
     <color name="navigationBarShade">#80000000</color>
-    <color name="fast_scroller_handle_idle">@color/colorPrimaryDark</color>
+    <color name="black">#000</color>
+    <color name="white">#FFF</color>
 </resources>

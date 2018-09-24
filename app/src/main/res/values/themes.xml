@@ -5,7 +5,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="cardColor">@color/colorCardBackgroundWhite</item>
-        <item name="backgroundColor">#F5F5F5</item>
+        <item name="backgroundColor">@color/colorBackgroundWhite</item>
+        <item name="textDefaultColor">@color/black</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat">
@@ -14,6 +15,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="cardColor">@color/colorCardBackgroundGray</item>
         <item name="backgroundColor">@android:color/background_dark</item>
+        <item name="textDefaultColor">@color/white</item>
     </style>
 
     <style name="AppTheme.Gray" parent="AppTheme.Dark">
