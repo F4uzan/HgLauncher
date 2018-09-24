@@ -29,9 +29,5 @@ public class PackageChangesReceiver extends BroadcastReceiver {
                 editor.putString("removed_app", packageName).apply();
             }
         }
-
-        // HACK: Unregister immediately because we don't need the receiver anymore.
-        // We shouldn't need this, but I don't like the log spam that comes with _not_ doing this.
-        context.unregisterReceiver(this);
     }
 }

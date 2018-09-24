@@ -169,6 +169,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
      */
     private PopupMenu appMenu;
 
+    /*
+     * The receiver handling package installation/uninstallation.
+     */
+    private PackageChangesReceiver packageReceiver = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -287,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 startActivity(intent);
                 return true;
             case R.id.action_force_refresh:
-                recreate();
+                reload();
                 return true;
             case R.id.update_wallpaper:
                 intent = new Intent(Intent.ACTION_SET_WALLPAPER);
@@ -311,12 +316,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "favourites_panel_switch":
             case "icon_hide_switch":
             case "list_order":
-                recreate();
+                reload();
                 break;
             case "adaptive_shade_switch":
             case "icon_pack":
                 LauncherIconHelper.clearDrawableCache();
-                recreate();
+                reload();
                 break;
             case "removedApp":
                 editPrefs.putBoolean("removedApp", false).apply();
@@ -324,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 parseAction("panel_up", null);
                 // HACK: Recreate, recreate.
                 // Sometimes we receive inconsistent result, so just kick the bucket here.
-                recreate();
+                reload();
                 break;
             case "addApp":
                 editPrefs.putBoolean("addApp", false).apply();
@@ -332,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 parseAction("panel_up", null);
                 // HACK: Recreate after receiving installation.
                 // A workaround for app list getting stuck in search result due to filters.
-                recreate();
+                reload();
                 break;
         }
     }
@@ -418,6 +423,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Save search bar visibility state.
         savedInstanceState.putInt("searchVisibility", searchContainer.getVisibility());
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private void reload() {
+        try {
+            unregisterReceiver(packageReceiver);
+        } catch (IllegalArgumentException ignored) {
+            // FIXME: Don't ignore this please.
+        }
+        recreate();
     }
 
     private void loadApps() {
