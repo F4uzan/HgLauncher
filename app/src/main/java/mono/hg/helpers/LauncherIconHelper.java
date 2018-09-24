@@ -164,7 +164,7 @@ public class LauncherIconHelper {
         final Matrix scaleToFit = new Matrix();
         final RectF src = new RectF(0, 0, bm.getWidth(), bm.getHeight());
         final RectF dst = new RectF(0, 0, dstWidth - dx, dstHeight - dy);
-        scaleToFit.setRectToRect(src, dst, Matrix.ScaleToFit.CENTER);
+        scaleToFit.setRectToRect(src, dst, Matrix.ScaleToFit.FILL);
 
         final Matrix dropShadow = new Matrix(scaleToFit);
         dropShadow.postTranslate(dx, dy);
@@ -175,7 +175,7 @@ public class LauncherIconHelper {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
         maskCanvas.drawBitmap(bm, dropShadow, paint);
 
-        final BlurMaskFilter filter = new BlurMaskFilter(size, BlurMaskFilter.Blur.NORMAL);
+        final BlurMaskFilter filter = new BlurMaskFilter(size, BlurMaskFilter.Blur.SOLID);
         paint.reset();
         paint.setAntiAlias(true);
         paint.setColor(color);
