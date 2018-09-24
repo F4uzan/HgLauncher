@@ -13,10 +13,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -452,17 +449,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     if (!PreferenceHelper.getIconPackName().equals("default"))
                         getIcon = new LauncherIconHelper().getIconDrawable(manager, packageName);
                     if (getIcon == null) {
-                        Drawable baseIcon = ri.activityInfo.loadIcon(manager);
-                        icon = baseIcon;
-                        Bitmap bitmapIcon;
+                        icon = ri.activityInfo.loadIcon(manager);
                         if  (PreferenceHelper.appTheme().equals("light")
                                 && PreferenceHelper.shadeAdaptiveIcon()) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                                    && baseIcon instanceof AdaptiveIconDrawable) {
-                                bitmapIcon = LauncherIconHelper.getBitmapFromDrawable(baseIcon);
-                                bitmapIcon = LauncherIconHelper.addShadow(bitmapIcon, bitmapIcon.getHeight(), bitmapIcon.getWidth(),
-                                        Color.LTGRAY, 4, 1, 3);
-                                icon = new BitmapDrawable(getResources(), bitmapIcon);
+                                    && icon instanceof AdaptiveIconDrawable) {
+                                icon = LauncherIconHelper.drawAdaptiveShadow(icon);
                             }
                         }
                     } else {

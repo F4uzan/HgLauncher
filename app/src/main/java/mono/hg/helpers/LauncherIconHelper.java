@@ -7,13 +7,14 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -120,18 +121,14 @@ public class LauncherIconHelper {
     }
 
     /**
-     * Converts Drawable to Bitmap when BitmapDrawable is not feasible.
      *
-     * @param drawable The drawable to parse and draw.
-     * @return Bitmap drawn from the drawable.
+     * @param icon Foreground layer to which the shadows will be drawn.
+     *
+     * @return BitmapDrawable masked with shadow.
      */
-    @NonNull
-    public static Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
-        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bmp);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bmp;
+    public static BitmapDrawable drawAdaptiveShadow(final Drawable icon) {
+        return new BitmapDrawable(addShadow(icon, icon.getIntrinsicHeight(), icon.getIntrinsicWidth(),
+                Color.LTGRAY, 4, 1, 3));
     }
 
     /**
@@ -141,7 +138,8 @@ public class LauncherIconHelper {
      *
      * @author schwiz (https://stackoverflow.com/a/24579764)
      *
-     * @param bm The bitmap to use when drawing the shadow.
+     * @param drawable Drawable that should be used as the foreground layer
+     *                 of the shadow.
      *
      * @param dstHeight Height of the returned bitmap.
      *
@@ -158,7 +156,12 @@ public class LauncherIconHelper {
      * @return Bitmap with resulting shadow.
      *
      */
-    public static Bitmap addShadow(final Bitmap bm, final int dstHeight, final int dstWidth, int color, int size, float dx, float dy) {
+    public static Bitmap addShadow(final Drawable drawable, final int dstHeight, final int dstWidth, int color, int size, float dx, float dy) {
+        final Bitmap bm = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bm);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
         final Bitmap mask = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ALPHA_8);
 
         final Matrix scaleToFit = new Matrix();
