@@ -359,7 +359,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onResume() {
         super.onResume();
         loadPref(false);
-        registerPackageReceiver();
 
         if (PreferenceHelper.shouldDismissOnLeave())
             parseAction("panel_up", null);
