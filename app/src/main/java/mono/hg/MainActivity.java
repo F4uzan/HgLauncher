@@ -462,11 +462,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     if (getIcon == null) {
                         icon = ri.activityInfo.loadIcon(manager);
                         if  (PreferenceHelper.appTheme().equals("light")
-                                && PreferenceHelper.shadeAdaptiveIcon()) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                                    && icon instanceof AdaptiveIconDrawable) {
-                                icon = LauncherIconHelper.drawAdaptiveShadow(icon);
-                            }
+                                && PreferenceHelper.shadeAdaptiveIcon()
+                                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                                && icon instanceof AdaptiveIconDrawable) {
+                            icon = LauncherIconHelper.drawAdaptiveShadow(icon);
                         }
                     } else {
                         icon = getIcon;
