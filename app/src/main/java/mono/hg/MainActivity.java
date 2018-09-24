@@ -327,16 +327,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 editPrefs.putBoolean("removedApp", false).apply();
                 editPrefs.remove("removed_app").apply();
                 parseAction("panel_up", null);
-                // HACK: Recreate, recreate.
-                // Sometimes we receive inconsistent result, so just kick the bucket here.
+                // FIXME: Stop using recreate here; it's bad for the UX.
                 reload();
                 break;
             case "addApp":
                 editPrefs.putBoolean("addApp", false).apply();
                 editPrefs.remove("added_app").apply();
                 parseAction("panel_up", null);
-                // HACK: Recreate after receiving installation.
-                // A workaround for app list getting stuck in search result due to filters.
+                // FIXME: Recreate after receiving installation to handle frozen app list.
                 reload();
                 break;
         }
