@@ -350,6 +350,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onPause() {
         super.onPause();
 
+        // Check if we need to dismiss the panel.
+        if (PreferenceHelper.shouldDismissOnLeave())
+            parseAction("panel_up", null);
+
         // You shouldn't be visible.
         if (appMenu != null)
             appMenu.dismiss();
@@ -362,9 +366,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onResume() {
         super.onResume();
         loadPref(false);
-
-        if (PreferenceHelper.shouldDismissOnLeave())
-            parseAction("panel_up", null);
     }
 
     @Override
@@ -900,12 +901,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
                         Utils.showSoftKeyboard(MainActivity.this, searchBar);
                     }
+
                     // Animate search container entering the view.
-                    searchContainer.animate().alpha(1.0f).setDuration(animateTime)
+                    searchContainer.animate().alpha(1f).setDuration(animateTime)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
                                     searchContainer.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    searchContainer.clearAnimation();
                                 }
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
@@ -915,12 +922,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     // Stop scrolling, the panel is being dismissed.
                     list.stopScroll();
 
+                    searchContainer.setVisibility(View.INVISIBLE);
+
                     // Also animate the container when it's disappearing.
-                    searchContainer.animate().alpha(0.0f).setDuration(animateTime)
+                    searchContainer.animate().alpha(0).setDuration(animateTime)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-                                    searchContainer.setVisibility(View.INVISIBLE);
+                                    searchContainer.clearAnimation();
                                 }
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
