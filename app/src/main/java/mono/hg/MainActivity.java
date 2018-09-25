@@ -444,6 +444,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } else {
             Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
         }
+
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
         apps.clear();
@@ -537,15 +538,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
                         || slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-                break;
-            case "hide_keyboard":
-                Utils.hideSoftKeyboard(this);
-                break;
-            case "show_keyboard":
-                if (inputManager != null && actionContext != null) {
-                    inputManager.showSoftInput(actionContext, InputMethodManager.SHOW_IMPLICIT);
-                    actionContext.requestFocus();
-                }
                 break;
             case "show_favourites":
                 pinnedAppsContainer.animate()
@@ -891,7 +883,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onPanelSlide(View view, float v) {
                 // Hide the keyboard at slide.
-                parseAction("hide_keyboard", searchBar);
+                Utils.hideSoftKeyboard(MainActivity.this);
             }
 
             @Override
@@ -904,7 +896,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     // Automatically show keyboard when the panel is called.
                     if (PreferenceHelper.shouldFocusKeyboard()
                             && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                        parseAction("show_keyboard", searchBar);
+                        Utils.showSoftKeyboard(MainActivity.this, searchBar);
                     }
                     // Animate search container entering the view.
                     searchContainer.animate().alpha(1.0f).setDuration(animateTime)
@@ -916,7 +908,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     // Hide keyboard if container is invisible.
-                    parseAction("hide_keyboard", searchBar);
+                    Utils.hideSoftKeyboard(MainActivity.this);
 
                     // Stop scrolling, the panel is being dismissed.
                     list.stopScroll();
