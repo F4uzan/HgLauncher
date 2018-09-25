@@ -879,6 +879,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
                 if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED
                         || newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
+
+                    // Unregister context menu for touchReceiver as we don't want
+                    // the user to accidentally show it during search.
+                    unregisterForContextMenu(touchReceiver);
+
                     // Empty out search bar text
                     searchBar.setText(null);
 
@@ -902,6 +907,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 }
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    
+                    // Re-register touchReceiver context menu.
+                    registerForContextMenu(touchReceiver);
+
                     // Hide keyboard if container is invisible.
                     Utils.hideSoftKeyboard(MainActivity.this);
 
