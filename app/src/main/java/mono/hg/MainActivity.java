@@ -20,7 +20,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +35,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
@@ -329,14 +327,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case "removedApp":
                 editPrefs.putBoolean("removedApp", false).apply();
                 editPrefs.remove("removed_app").apply();
-                parseAction("panel_up", null);
+                parseAction("panel_up");
                 // FIXME: Stop using recreate here; it's bad for the UX.
                 reload();
                 break;
             case "addApp":
                 editPrefs.putBoolean("addApp", false).apply();
                 editPrefs.remove("added_app").apply();
-                parseAction("panel_up", null);
+                parseAction("panel_up");
                 // FIXME: Recreate after receiving installation to handle frozen app list.
                 reload();
                 break;
@@ -346,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onBackPressed() {
         // Hides the panel if back is pressed.
-        parseAction("panel_up", null);
+        parseAction("panel_up");
     }
 
     @Override
@@ -355,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Check if we need to dismiss the panel.
         if (PreferenceHelper.shouldDismissOnLeave())
-            parseAction("panel_up", null);
+            parseAction("panel_up");
 
         // You shouldn't be visible.
         if (appMenu != null)
@@ -408,11 +406,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } else {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_ESCAPE:
-                    parseAction("panel_up", null);
+                    parseAction("panel_up");
                     return true;
                 case KeyEvent.KEYCODE_SPACE:
                     if (!searchBar.hasFocus())
-                        parseAction("panel_down", null);
+                        parseAction("panel_down");
                     return true;
                 default:
                     return super.onKeyUp(keyCode, event);
@@ -529,9 +527,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    private void parseAction(String action, @Nullable View actionContext) {
-        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
+    private void parseAction(String action) {
         switch (action) {
             default:
                 // Don't do anything.
@@ -706,7 +702,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         pinnedAppString = pinnedAppString.replace(packageName + ";", "");
                         editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
                         if (pinnedApps.isEmpty())
-                            parseAction("hide_favourites", null);
+                            parseAction("hide_favourites");
                         break;
                     case R.id.action_info:
                         startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -738,7 +734,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onSwipeDown() {
                 // Show the app panel.
-                parseAction("panel_down", null);
+                parseAction("panel_down");
             }
 
             @Override
@@ -751,7 +747,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public void onClick() {
                 // Imitate sliding panel drag view behaviour; show the app panel on click.
                 if (PreferenceHelper.allowTapToOpen())
-                    parseAction("panel_down", null);
+                    parseAction("panel_down");
             }
         });
     }
@@ -835,13 +831,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 @Override
                 public void onScrollUp() {
                     if (shouldShowFavourites && !pinnedApps.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll())
-                        parseAction("hide_favourites", null);
+                        parseAction("hide_favourites");
                 }
 
                 @Override
                 public void onEnd() {
                     if (shouldShowFavourites && !pinnedApps.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll())
-                        parseAction("show_favourites", null);
+                        parseAction("show_favourites");
                 }
             });
         }
