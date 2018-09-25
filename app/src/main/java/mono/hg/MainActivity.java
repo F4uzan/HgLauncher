@@ -474,9 +474,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
                 AppDetail app = new AppDetail(icon, appName, packageName,false);
                 appList.add(app);
-                apps.addItem(app);
             }
         }
+
+        // Add the fetched apps here.
+        apps.addItems(0, appList);
 
         // Update our view cache size, now that we have got all apps on the list
         list.setItemViewCacheSize(apps.getItemCount() - 1);
