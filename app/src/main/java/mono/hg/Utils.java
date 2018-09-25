@@ -215,7 +215,7 @@ public class Utils {
                 }
                 PinnedAppDetail app = new PinnedAppDetail(icon, packageName);
                 list.add(app);
-                adapter.updateDataSet(list);
+                adapter.updateDataSet(list, false);
             } catch (PackageManager.NameNotFoundException e) {
                 sendLog(3, e.toString());
             }
