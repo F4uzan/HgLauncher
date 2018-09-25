@@ -220,19 +220,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             // The search bar shouldn't be invisible when the panel is pulled down,
             // and it shouldn't be visible when the panel isn't visible.
             int searchVisibility = (savedInstanceState.getInt("searchVisibility"));
-            if (searchVisibility == View.INVISIBLE
-                    && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+            if (searchVisibility == View.INVISIBLE && Utils.isPanelVisible(slidingHome)) {
                 searchContainer.setVisibility(View.VISIBLE);
-            } else if (searchVisibility == View.VISIBLE
-                    && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            } else if (searchVisibility == View.VISIBLE && !Utils.isPanelVisible(slidingHome)) {
                 searchContainer.setVisibility(View.INVISIBLE);
-            } else if (searchVisibility == View.GONE) {
-                // This can happen and we don't want it.
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                    searchContainer.setVisibility(View.VISIBLE);
-                } else if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    searchContainer.setVisibility(View.INVISIBLE);
-                }
             }
         }
 
@@ -533,12 +524,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 // Don't do anything.
                 break;
             case "panel_down":
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED)
+                if (!Utils.isPanelVisible(slidingHome))
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 break;
             case "panel_up":
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
-                        || slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)
+                if (Utils.isPanelVisible(slidingHome))
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 break;
             case "show_favourites":

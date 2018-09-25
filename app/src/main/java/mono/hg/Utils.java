@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -185,6 +187,19 @@ public class Utils {
             return false;
         }
         return false;
+    }
+
+    /**
+     * Checks if a SlidingUpPanelLayout is visible within view.
+     *
+     * @param panel SlidingUpPanelLayout whose visibility is to be checked.
+     *
+     * @return true if panel is neither collapsed, dragging, or anchored.
+     */
+    public static boolean isPanelVisible(SlidingUpPanelLayout panel) {
+        return panel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
+                || panel.getPanelState() == SlidingUpPanelLayout.PanelState.DRAGGING
+                || panel.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED;
     }
 
     /**
