@@ -334,6 +334,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onPause() {
         super.onPause();
+        
+        // Reset the app list filter.
+        apps.resetFilter();
 
         // Check if we need to dismiss the panel.
         if (PreferenceHelper.shouldDismissOnLeave())
@@ -342,9 +345,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // You shouldn't be visible.
         if (appMenu != null)
             appMenu.dismiss();
-
-        // Reset the app list filter.
-        apps.resetFilter();
     }
 
     @Override
@@ -907,7 +907,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 }
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    
+
                     // Re-register touchReceiver context menu.
                     registerForContextMenu(touchReceiver);
 
