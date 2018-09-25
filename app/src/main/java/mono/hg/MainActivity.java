@@ -334,9 +334,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onPause() {
         super.onPause();
-        
-        // Reset the app list filter.
-        apps.resetFilter();
 
         // Check if we need to dismiss the panel.
         if (PreferenceHelper.shouldDismissOnLeave())
@@ -351,6 +348,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onResume() {
         super.onResume();
         loadPref(false);
+        
+        // Reset the app list filter.
+        apps.resetFilter();
     }
 
     @Override
