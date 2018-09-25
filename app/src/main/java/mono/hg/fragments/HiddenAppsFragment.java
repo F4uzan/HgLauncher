@@ -146,9 +146,10 @@ public class HiddenAppsFragment extends Fragment {
                     isHidden = true;
                 AppDetail app = new AppDetail(icon, appName, packageName, isHidden);
                 appList.add(app);
-                apps.notifyDataSetChanged();
             }
         }
+
+        apps.notifyDataSetChanged();
     }
 
     private void toggleHiddenState(int position) {
