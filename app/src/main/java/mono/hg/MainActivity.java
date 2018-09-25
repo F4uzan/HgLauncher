@@ -215,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         pinned_list.setAdapter(pinnedApps);
         pinned_list.setLayoutManager(pinnedAppsManager);
-        pinned_list.setHasFixedSize(true);
 
         // Restore search bar visibility when available.
         if (savedInstanceState != null) {
