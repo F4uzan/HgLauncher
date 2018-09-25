@@ -48,6 +48,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
      * List of pinned apps.
      */
     private ArrayList<PinnedAppDetail> pinnedAppList = new ArrayList<>();
-    private HashSet<String> pinnedAppSet;
+    private String pinnedAppString;
 
     /*
      * Adapter for pinned apps.
@@ -259,9 +260,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         registerPackageReceiver();
 
         // Get pinned apps.
-        pinnedAppSet = new HashSet<>(prefs.getStringSet("pinned_apps", new HashSet<String>()));
-        for (String pinnedApp : pinnedAppSet) {
-            Utils.pinApp(manager, pinnedApp, pinnedApps, pinnedAppList);
+        pinnedAppString = prefs.getString("pinned_apps_list", "");
+
+        if (!pinnedAppString.isEmpty()) {
+            for (String pinnedApp : Arrays.asList(pinnedAppString.split(";"))) {
+                Utils.pinApp(manager, pinnedApp, pinnedApps, pinnedAppList);
+            }
         }
 
         applyPrefToViews();
@@ -670,7 +674,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             appMenu.getMenu().removeItem(R.id.action_hide);
         } else {
             // Don't show the 'pin' action when the app is already pinned.
-            if (pinnedAppSet.contains(packageName))
+            if (pinnedAppString.contains(packageName))
                 appMenu.getMenu().removeItem(R.id.action_pin);
             appMenu.getMenu().removeItem(R.id.action_unpin);
         }
@@ -688,8 +692,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 switch (item.getItemId()) {
                     case R.id.action_pin:
                         Utils.pinApp(manager, packageName, pinnedApps, pinnedAppList);
-                        pinnedAppSet.add(packageName);
-                        editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
+                        pinnedAppString = pinnedAppString.concat(packageName + ";");
+                        editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
                         if (!PreferenceHelper.isFavouritesEnabled())
                             Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
                         if (PreferenceHelper.isFavouritesEnabled() && pinnedApps.getItemCount() == 1) {
@@ -699,8 +703,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     case R.id.action_unpin:
                         pinnedAppList.remove(pinnedApps.getItem(finalPosition));
                         pinnedApps.removeItem(finalPosition);
-                        pinnedAppSet.remove(packageName);
-                        editPrefs.putStringSet("pinned_apps", pinnedAppSet).apply();
+                        pinnedAppString = pinnedAppString.replace(packageName + ";", "");
+                        editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
                         if (pinnedApps.isEmpty())
                             parseAction("hide_favourites", null);
                         break;
