@@ -929,6 +929,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                } else if (newState == SlidingUpPanelLayout.PanelState.HIDDEN) {
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 }
             }
         });
