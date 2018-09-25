@@ -216,16 +216,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         pinned_list.setLayoutManager(pinnedAppsManager);
 
         // Restore search bar visibility when available.
-        if (savedInstanceState != null) {
-            // The search bar shouldn't be invisible when the panel is pulled down,
-            // and it shouldn't be visible when the panel isn't visible.
-            int searchVisibility = (savedInstanceState.getInt("searchVisibility"));
-            if (searchVisibility == View.INVISIBLE && Utils.isPanelVisible(slidingHome)) {
-                searchContainer.setVisibility(View.VISIBLE);
-            } else if (searchVisibility == View.VISIBLE && !Utils.isPanelVisible(slidingHome)) {
-                searchContainer.setVisibility(View.INVISIBLE);
-            }
-        }
+        if (savedInstanceState != null)
+            searchContainer.setVisibility(savedInstanceState.getInt("searchVisibility"));
 
         // Get icons from icon pack.
         if (!"default".equals(PreferenceHelper.getIconPackName())) {
@@ -412,7 +404,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save search bar visibility state.
-        savedInstanceState.putInt("searchVisibility", searchContainer.getVisibility());
+        if (Utils.isPanelVisible(slidingHome)) {
+            savedInstanceState.putInt("searchVisibility", View.VISIBLE);
+        } else {
+            savedInstanceState.putInt("searchVisibility", View.INVISIBLE);
+        }
         super.onSaveInstanceState(savedInstanceState);
     }
 
