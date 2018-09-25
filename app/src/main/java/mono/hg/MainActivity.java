@@ -873,6 +873,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public void onPanelSlide(View view, float v) {
                 // Hide the keyboard at slide.
                 Utils.hideSoftKeyboard(MainActivity.this);
+
+                // Dismiss any visible menu.
+                if (appMenu != null)
+                    appMenu.dismiss();
             }
 
             @Override
