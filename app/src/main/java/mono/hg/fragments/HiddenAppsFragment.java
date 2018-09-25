@@ -130,9 +130,10 @@ public class HiddenAppsFragment extends Fragment {
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
 
         Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
+
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
-        apps.notifyDataSetChanged();
+        apps.notifyDataSetInvalidated();
 
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
