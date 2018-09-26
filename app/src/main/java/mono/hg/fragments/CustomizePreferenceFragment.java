@@ -111,24 +111,24 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if (counter > 0) {
+                    if (counter > 1) {
+                        if (counterToast != null)
+                            counterToast.cancel();
+
+                        if (counter < 8) {
+                            counterToast = Toast.makeText(getActivity(),
+                                    String.format(getString(R.string.version_key_toast_plural), counter), Toast.LENGTH_SHORT);
+                            counterToast.show();
+                        }
+
                         counter--;
                     } else if (counter == 0) {
                         editor.putBoolean("is_grandma", true).apply();
                         versionMenu.setTitle(R.string.version_key_name);
-                    }
-
-                    if (counter < 7 && counter > 1) {
-                        if (counterToast != null) {
-                            counterToast.cancel();
-                        }
-                        counterToast = Toast.makeText(getActivity(),
-                                String.format(getString(R.string.version_key_toast_plural), counter), Toast.LENGTH_SHORT);
-                        counterToast.show();
                     } else if (counter == 1) {
-                        if (counterToast != null) {
+                        if (counterToast != null)
                             counterToast.cancel();
-                        }
+
                         counterToast = Toast.makeText(getActivity(), R.string.version_key_toast, Toast.LENGTH_SHORT);
                         counterToast.show();
                     }
