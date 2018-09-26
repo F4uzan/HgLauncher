@@ -522,11 +522,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
             case "panel_down":
                 if (!Utils.isPanelVisible(slidingHome))
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED, false);
                 break;
             case "panel_up":
                 if (Utils.isPanelVisible(slidingHome))
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
                 break;
             case "show_favourites":
                 pinnedAppsContainer.animate()
@@ -932,9 +932,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 }
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
                 } else if (newState == SlidingUpPanelLayout.PanelState.HIDDEN) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
                 }
             }
         });

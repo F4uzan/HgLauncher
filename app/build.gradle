@@ -40,6 +40,6 @@ dependencies {
     // Other third-party libraries.
     implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.18'
     implementation 'com.fnp:material-preferences:0.1.4'
-    implementation 'com.sothree.slidinguppanel:library:3.4.0'
     implementation 'eu.davidea:flexible-adapter:5.0.6'
+    implementation project(':slidinguppanel')
 }

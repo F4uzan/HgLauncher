@@ -1,0 +1,26 @@
+apply plugin: 'com.android.library'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:support-annotations:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+}
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.2"
+    lintOptions {
+        abortOnError false
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 17
+        versionName "3.4.0"
+    }
+}
