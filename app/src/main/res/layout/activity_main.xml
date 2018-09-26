@@ -41,7 +41,7 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/desc_apps_list"
                 android:splitMotionEvents="false"
-                android:layout_above="@id/pinned_apps_container"
+                android:layout_above="@id/bottom_panel_container"
                 android:nextFocusDown="@id/search"
                 android:nextFocusForward="@id/search"
                 app:fastScrollPopupBgColor="@color/colorPrimaryDark"
@@ -49,20 +49,28 @@
                 app:fastScrollThumbInactiveColor="@color/colorPrimaryDark" />
 
             <FrameLayout
-                android:id="@+id/pinned_apps_container"
+                android:id="@+id/bottom_panel_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="?attr/cardColor"
+                android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/pinned_apps_list"
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    android:id="@+id/pinned_apps_container"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/search_bar_size"
-                    android:layout_gravity="center_horizontal"
-                    android:overScrollMode="never"
-                    android:splitMotionEvents="false" />
+                    android:background="?attr/cardColor">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/pinned_apps_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/search_bar_size"
+                        android:layout_gravity="center"
+                        android:overScrollMode="never"
+                        android:splitMotionEvents="false" />
+
+                </FrameLayout>
 
                 <android.support.design.widget.CoordinatorLayout
                     android:id="@+id/snack_holder"
