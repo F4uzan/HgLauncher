@@ -204,6 +204,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         animateTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
+        slidingHome.disallowHiding(true);
+
         list.setDrawingCacheEnabled(true);
         list.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         list.setHasFixedSize(true);
@@ -932,8 +934,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                                 }
                             });
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
-                } else if (newState == SlidingUpPanelLayout.PanelState.HIDDEN) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
                 }
             }
