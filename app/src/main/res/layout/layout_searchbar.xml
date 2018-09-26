@@ -25,7 +25,7 @@
         android:maxLines="1"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/secondary_text_dark"
+        android:textColorHint="@color/editTextHint"
         android:imeOptions="actionSearch|flagNoExtractUi"
         android:hint="@string/search_hint"
         android:background="@android:color/transparent" />

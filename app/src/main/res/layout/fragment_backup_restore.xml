@@ -28,7 +28,7 @@
             android:inputType="textNoSuggestions"
             android:imeOptions="actionDone|flagNoExtractUi"
             android:textColor="@android:color/white"
-            android:textColorHint="@android:color/secondary_text_dark"
+            android:textColorHint="@color/editTextHint"
             android:hint="@string/backup_name_hint"
             android:background="@android:color/transparent" />
 

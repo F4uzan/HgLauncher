@@ -9,6 +9,7 @@
     <color name="colorCardBackgroundWhite">#242424</color>
     <color name="colorCardBackgroundGray">#101010</color>
     <color name="navigationBarShade">#80000000</color>
+    <color name="editTextHint">#bebebe</color> <!-- from @android:color/dim_foreground_dark -->
     <color name="black">#000</color>
     <color name="white">#FFF</color>
 </resources>
