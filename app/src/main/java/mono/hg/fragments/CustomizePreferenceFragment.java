@@ -115,7 +115,6 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                         counter--;
                     } else if (counter == 0) {
                         editor.putBoolean("is_grandma", true).apply();
-                        versionMenu.setEnabled(false);
                         versionMenu.setTitle(R.string.version_key_name);
                     }
 
