@@ -53,8 +53,9 @@ public class KissFuzzySearch {
             appPos++;
         }
 
-        if (match)
+        if (match) {
             matchPositions.add(Pair.create(beginMatch, appPos));
+        }
 
         if (queryPos == matchTo.length()) {
             // Add percentage of matched letters at a weight of 100

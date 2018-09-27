@@ -16,7 +16,8 @@ import eu.davidea.viewholders.FlexibleViewHolder;
 import mono.hg.R;
 import mono.hg.helpers.KissFuzzySearch;
 
-public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder> implements IFilterable<String> {
+public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
+        implements IFilterable<String> {
     private String appName, packageName;
     private Boolean isAppHidden;
     private Drawable icon;

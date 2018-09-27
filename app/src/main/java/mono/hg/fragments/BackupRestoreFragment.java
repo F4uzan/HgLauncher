@@ -302,8 +302,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
             Utils.sendLog(3, e.toString());
         } finally {
             try {
-                if (input != null)
+                if (input != null) {
                     input.close();
+                }
             } catch (IOException e) {
                 Utils.sendLog(3, e.toString());
             }

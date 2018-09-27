@@ -113,8 +113,9 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     if (counter > 1) {
-                        if (counterToast != null)
+                        if (counterToast != null) {
                             counterToast.cancel();
+                        }
 
                         if (counter < 8) {
                             counterToast = Toast.makeText(getActivity(),
@@ -128,8 +129,9 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                         editor.putBoolean("is_grandma", true).apply();
                         versionMenu.setTitle(R.string.version_key_name);
                     } else if (counter == 1) {
-                        if (counterToast != null)
+                        if (counterToast != null) {
                             counterToast.cancel();
+                        }
 
                         counterToast = Toast.makeText(getActivity(), R.string.version_key_toast,
                                 Toast.LENGTH_SHORT);

@@ -58,7 +58,8 @@ import mono.hg.receivers.PackageChangesReceiver;
 import mono.hg.wrappers.OnTouchListener;
 import mono.hg.wrappers.SimpleScrollUpListener;
 
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     /*
      * Should the favourites panel listen for scroll?
@@ -219,8 +220,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         pinnedAppsRecyclerView.setItemAnimator(null);
 
         // Restore search bar visibility when available.
-        if (savedInstanceState != null)
+        if (savedInstanceState != null) {
             searchContainer.setVisibility(savedInstanceState.getInt("searchVisibility"));
+        }
 
         // Get icons from icon pack.
         if (!"default".equals(PreferenceHelper.getIconPackName())) {
@@ -332,12 +334,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onPause();
 
         // Check if we need to dismiss the panel.
-        if (PreferenceHelper.shouldDismissOnLeave())
+        if (PreferenceHelper.shouldDismissOnLeave()) {
             parseAction("panel_up");
+        }
 
         // You shouldn't be visible.
-        if (appMenu != null)
+        if (appMenu != null) {
             appMenu.dismiss();
+        }
     }
 
     @Override public void onResume() {
@@ -380,8 +384,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     parseAction("panel_up");
                     return true;
                 case KeyEvent.KEYCODE_SPACE:
-                    if (!searchBar.hasFocus())
+                    if (!searchBar.hasFocus()) {
                         parseAction("panel_down");
+                    }
                     return true;
                 default:
                     return super.onKeyUp(keyCode, event);
@@ -434,8 +439,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Drawable getIcon = null;
                 // Only show icons if user chooses so.
                 if (!PreferenceHelper.shouldHideIcon()) {
-                    if (!PreferenceHelper.getIconPackName().equals("default"))
+                    if (!PreferenceHelper.getIconPackName().equals("default")) {
                         getIcon = new LauncherIconHelper().getIconDrawable(manager, packageName);
+                    }
                     if (getIcon == null) {
                         icon = ri.activityInfo.loadIcon(manager);
                         if (PreferenceHelper.appTheme().equals("light")
@@ -491,12 +497,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 // Don't do anything.
                 break;
             case "panel_down":
-                if (!Utils.isPanelVisible(slidingHome))
+                if (!Utils.isPanelVisible(slidingHome)) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED, false);
+                }
                 break;
             case "panel_up":
-                if (Utils.isPanelVisible(slidingHome))
+                if (Utils.isPanelVisible(slidingHome)) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
+                }
                 break;
             case "show_favourites":
                 pinnedAppsContainer.animate()
@@ -630,8 +638,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             appMenu.getMenu().removeItem(R.id.action_hide);
         } else {
             // Don't show the 'pin' action when the app is already pinned.
-            if (pinnedAppString.contains(packageName))
+            if (pinnedAppString.contains(packageName)) {
                 appMenu.getMenu().removeItem(R.id.action_pin);
+            }
             appMenu.getMenu().removeItem(R.id.action_unpin);
         }
 
@@ -650,9 +659,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         Utils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
                         editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
-                        if (!PreferenceHelper.isFavouritesEnabled())
+                        if (!PreferenceHelper.isFavouritesEnabled()) {
                             Toast.makeText(MainActivity.this, R.string.warn_pinning,
                                     Toast.LENGTH_SHORT).show();
+                        }
                         if (PreferenceHelper.isFavouritesEnabled() && pinnedAppsAdapter.getItemCount() == 1) {
                             shouldShowFavourites = true;
                         }
@@ -662,8 +672,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         pinnedAppsAdapter.removeItem(finalPosition);
                         pinnedAppString = pinnedAppString.replace(packageName + ";", "");
                         editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
-                        if (pinnedAppsAdapter.isEmpty())
+                        if (pinnedAppsAdapter.isEmpty()) {
                             parseAction("hide_favourites");
+                        }
                         break;
                     case R.id.action_info:
                         startActivity(new Intent(
@@ -708,8 +719,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onClick() {
                 // Imitate sliding panel drag view behaviour; show the app panel on click.
-                if (PreferenceHelper.allowTapToOpen())
+                if (PreferenceHelper.allowTapToOpen()) {
                     parseAction("panel_down");
+                }
             }
         });
     }
@@ -741,8 +753,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void afterTextChanged(Editable s) {
                 // Don't allow spamming of empty spaces.
-                if (s.length() > 0 && s.charAt(0) == ' ')
+                if (s.length() > 0 && s.charAt(0) == ' ') {
                     s.delete(0, 1);
+                }
 
                 if (s.length() == 0) {
                     // Scroll back down to the start of the list if search query is empty.
@@ -798,14 +811,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             appsRecyclerView.addOnScrollListener(new SimpleScrollUpListener(0) {
                 @Override
                 public void onScrollUp() {
-                    if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll())
+                    if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
                         parseAction("hide_favourites");
+                    }
                 }
 
                 @Override
                 public void onEnd() {
-                    if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll())
+                    if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
                         parseAction("show_favourites");
+                    }
                 }
             });
         }
@@ -863,8 +878,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Utils.hideSoftKeyboard(MainActivity.this);
 
                 // Dismiss any visible menu.
-                if (appMenu != null)
+                if (appMenu != null) {
                     appMenu.dismiss();
+                }
             }
 
             @Override public void onPanelStateChanged(View panel,
@@ -935,8 +951,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         @Override
         protected Void doInBackground(Void... params) {
             MainActivity activity = activityRef.get();
-            if (activity != null)
+            if (activity != null) {
                 new LauncherIconHelper().loadIconPack(activity.manager);
+            }
             return null;
         }
     }

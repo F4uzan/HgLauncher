@@ -12,7 +12,8 @@ import mono.hg.fragments.HiddenAppsFragment;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.wrappers.BackHandledFragment;
 
-public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity implements BackHandledFragment.BackHandlerInterface {
+public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity
+        implements BackHandledFragment.BackHandlerInterface {
     private BackHandledFragment selectedFragment;
 
     @Override public void onCreate(Bundle savedInstanceState) {

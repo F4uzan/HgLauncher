@@ -83,8 +83,9 @@ public class Utils {
      * @return Object if not null.
      */
     public static <T> T requireNonNull(T obj) {
-        if (obj == null)
+        if (obj == null) {
             throw new IllegalArgumentException();
+        }
         return obj;
     }
 
@@ -180,8 +181,9 @@ public class Utils {
     public static boolean isSystemApp(PackageManager packageManager, String packageName) {
         try {
             ApplicationInfo appFlags = packageManager.getApplicationInfo(packageName, 0);
-            if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1)
+            if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
                 return true;
+            }
         } catch (PackageManager.NameNotFoundException e) {
             Utils.sendLog(3, e.toString());
             return false;
@@ -209,12 +211,13 @@ public class Utils {
      * @param text     Text to copy.
      */
     public static void copyToClipboard(Activity activity, String text) {
-        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(
-                Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboardManager = (ClipboardManager) activity
+                .getSystemService(Context.CLIPBOARD_SERVICE);
 
         ClipData clipData = ClipData.newPlainText(null, text);
-        if (clipboardManager != null)
+        if (clipboardManager != null) {
             clipboardManager.setPrimaryClip(clipData);
+        }
     }
 
     /**
@@ -225,8 +228,8 @@ public class Utils {
      * @return CharSequence text from clipboard, empty if there isn't any.
      */
     public static CharSequence pasteFromClipboard(Activity activity) {
-        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(
-                Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboardManager = (ClipboardManager) activity
+                .getSystemService(Context.CLIPBOARD_SERVICE);
 
         if (clipboardManager != null && clipboardManager.hasPrimaryClip()
                 && clipboardManager.getPrimaryClipDescription()
@@ -252,8 +255,9 @@ public class Utils {
             try {
                 Drawable icon;
                 Drawable getIcon = null;
-                if (!PreferenceHelper.getIconPackName().equals("default"))
+                if (!PreferenceHelper.getIconPackName().equals("default")) {
                     getIcon = new LauncherIconHelper().getIconDrawable(packageManager, packageName);
+                }
                 if (getIcon == null) {
                     icon = packageManager.getApplicationIcon(packageName);
                 } else {

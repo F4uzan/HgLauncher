@@ -44,13 +44,11 @@ public class HiddenAppsFragment extends Fragment {
     private HashSet<String> excludedAppList = new HashSet<>();
     private ListView appsListView;
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_hidden_apps, container, false);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         super.onCreate(savedInstanceState);
@@ -63,8 +61,9 @@ public class HiddenAppsFragment extends Fragment {
             toolbar.setTitle(R.string.pref_header_hidden_apps);
         } else {
             ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
-            if (actionBar != null)
+            if (actionBar != null) {
                 actionBar.setTitle(R.string.pref_header_hidden_apps);
+            }
         }
 
         setHasOptionsMenu(true);
@@ -84,16 +83,14 @@ public class HiddenAppsFragment extends Fragment {
         addListeners();
     }
 
-    @Override
-    public void onDetach() {
+    @Override public void onDetach() {
         super.onDetach();
         if (prefs.getBoolean("dummy_restore", false)) {
             editPrefs.remove("dummy_restore").apply();
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         if (excludedAppList.size() > 0) {
             menu.add(0, 1, 100, getString(R.string.action_hidden_app_reset));
@@ -102,8 +99,7 @@ public class HiddenAppsFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             getActivity().onBackPressed();
@@ -142,8 +138,9 @@ public class HiddenAppsFragment extends Fragment {
                 Boolean isHidden = false;
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = ri.activityInfo.loadIcon(manager);
-                if (excludedAppList.contains(packageName))
+                if (excludedAppList.contains(packageName)) {
                     isHidden = true;
+                }
                 AppDetail app = new AppDetail(icon, appName, packageName, isHidden);
                 appList.add(app);
             }

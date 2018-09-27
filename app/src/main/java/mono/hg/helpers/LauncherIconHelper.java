@@ -193,8 +193,9 @@ public class LauncherIconHelper {
      */
     private Drawable loadDrawable(Resources resources, String drawableName, String iconPackageName) {
         int icon = resources.getIdentifier(drawableName, "drawable", iconPackageName);
-        if (icon > 0)
+        if (icon > 0) {
             return resources.getDrawable(icon);
+        }
         return null;
     }
 
@@ -241,8 +242,9 @@ public class LauncherIconHelper {
                                             .toLowerCase(Locale.getDefault())
                                             .replace(".", "_")
                                             .replace("/", "_");
-                    if (iconRes.getIdentifier(drawable, "drawable", iconPackageName) > 0)
+                    if (iconRes.getIdentifier(drawable, "drawable", iconPackageName) > 0) {
                         return loadDrawable(iconRes, drawable, iconPackageName);
+                    }
                 }
             }
         }
