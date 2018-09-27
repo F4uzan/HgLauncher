@@ -219,8 +219,8 @@ public class MainActivity extends AppCompatActivity
         pinnedAppsRecyclerView.setLayoutManager(pinnedAppsManager);
         pinnedAppsRecyclerView.setItemAnimator(null);
 
-        // Restore search bar visibility when available.
-        if (savedInstanceState != null) {
+        // Restore search bar visibility when panel is pulled down.
+        if (savedInstanceState != null && Utils.isPanelVisible(slidingHome)) {
             searchContainer.setVisibility(savedInstanceState.getInt("searchVisibility"));
         }
 
