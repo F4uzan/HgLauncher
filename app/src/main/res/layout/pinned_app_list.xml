@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:gravity="center"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/item_app_icon"

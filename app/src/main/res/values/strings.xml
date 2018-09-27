@@ -22,7 +22,6 @@
     <string name="search_hint">Search…</string>
     <string name="search_web_hint">Search for \'%1$s\' online.</string>
     <string name="search_web_button">Go</string>
-    <string name="desc_icon">App icon</string>
 
     <!-- Warning/Information toast -->
     <string name="warn_pinning">Enable favourites panel to see pinned apps.</string>
@@ -33,4 +32,6 @@
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Desktop view</string>
     <string name="desc_apps_list">Application list</string>
+    <string name="desc_icon">Application</string>
+    <string name="desc_file">File</string>
 </resources>
