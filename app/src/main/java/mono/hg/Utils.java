@@ -13,7 +13,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -21,14 +20,11 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
-import mono.hg.items.AppDetail;
 import mono.hg.items.PinnedAppDetail;
 
 public class Utils {
@@ -269,76 +265,6 @@ public class Utils {
                 adapter.updateDataSet(list, false);
             } catch (PackageManager.NameNotFoundException e) {
                 sendLog(3, e.toString());
-            }
-        }
-    }
-
-    /**
-     * Loads an app to a list hosting the AppDetail object. The loaded app will have
-     * a custom icon loaded if it's available at all, and the list associated with it
-     * can have the order arranged.
-     *
-     * This is deprecated for now.
-     *
-     * @param packageManager PackageManager object used to fetch information regarding
-     *                       the app that is being loaded.
-     *
-     * @param packageName The package name to load and fetch.
-     *
-     * @param adapter Which adapter should we notify update to?
-     *
-     * @param list Which List object should be updated?
-     *
-     * @param forFavourites Is this app used for the favourites panel?
-     */
-    @Deprecated
-    public static void loadSingleApp(PackageManager packageManager, String packageName,
-                                     RecyclerView.Adapter adapter, List<AppDetail> list, Boolean forFavourites) {
-        ApplicationInfo applicationInfo;
-
-        if (packageManager.getLaunchIntentForPackage(packageName) != null &&
-                !list.contains(new AppDetail(null, null, packageName, false))) {
-            try {
-                applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-                String appName = packageManager.getApplicationLabel(applicationInfo).toString();
-                Drawable icon = null;
-                Drawable getIcon = null;
-                if (PreferenceHelper.shouldHideIcon() || forFavourites) {
-                    if (!PreferenceHelper.getIconPackName().equals("default"))
-                        getIcon = new LauncherIconHelper().getIconDrawable(packageManager, packageName);
-                    if (getIcon == null) {
-                        icon = packageManager.getApplicationIcon(packageName);
-                    } else {
-                        icon = getIcon;
-                    }
-                }
-                AppDetail app = new AppDetail(icon, appName, packageName, false);
-                list.add(app);
-                if (forFavourites) {
-                    adapter.notifyDataSetChanged();
-                } else {
-                    adapter.notifyItemInserted(list.size());
-                }
-            } catch (PackageManager.NameNotFoundException e) {
-                sendLog(3, e.toString());
-            }
-
-            if (!forFavourites) {
-                if (PreferenceHelper.isListInverted()) {
-                    Collections.sort(list, new Comparator<AppDetail>() {
-                        @Override
-                        public int compare(AppDetail nameL, AppDetail nameR) {
-                            return nameR.getAppName().compareToIgnoreCase(nameL.getAppName());
-                        }
-                    });
-                } else {
-                    Collections.sort(list, Collections.reverseOrder(new Comparator<AppDetail>() {
-                        @Override
-                        public int compare(AppDetail nameL, AppDetail nameR) {
-                            return nameR.getAppName().compareToIgnoreCase(nameL.getAppName());
-                        }
-                    }));
-                }
             }
         }
     }
