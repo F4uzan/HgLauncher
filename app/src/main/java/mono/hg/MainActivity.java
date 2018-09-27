@@ -99,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     /*
      * Adapter for pinned apps.
      */
-    private FlexibleAdapter<PinnedAppDetail> pinnedAppsAdapter = new FlexibleAdapter<>(pinnedAppList);
+    private FlexibleAdapter<PinnedAppDetail> pinnedAppsAdapter = new FlexibleAdapter<>(
+            pinnedAppList);
 
     /*
      * List of excluded apps. These will not be shown in the app list.
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     /*
      * Sliding up panel. Shows the app list when pulled down and
-      * a parent to the other containers.
+     * a parent to the other containers.
      */
     private SlidingUpPanelLayout slidingHome;
 
@@ -173,8 +174,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
      */
     private PackageChangesReceiver packageReceiver = null;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Load preferences before setting layout to allow for quick theme change.
@@ -259,20 +259,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         current_app_count = appsList.size() - 1;
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    @Override public boolean onContextItemSelected(MenuItem item) {
         return onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -290,8 +287,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
+    @Override public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         switch (key) {
             default:
                 // No-op.
@@ -327,14 +323,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    @Override
-    public void onBackPressed() {
+    @Override public void onBackPressed() {
         // Hides the panel if back is pressed.
         parseAction("panel_up");
     }
 
-    @Override
-    public void onPause() {
+    @Override public void onPause() {
         super.onPause();
 
         // Check if we need to dismiss the panel.
@@ -346,17 +340,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             appMenu.dismiss();
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
         loadPref(false);
-        
+
         // Reset the app list filter.
         appsAdapter.resetFilter();
     }
 
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
+    @Override public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.isCtrlPressed()) {
             // Get selected text for cut and copy.
             int start = searchBar.getSelectionStart();
@@ -374,8 +366,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     Utils.copyToClipboard(this, text);
                     return true;
                 case KeyEvent.KEYCODE_V:
-                    searchBar.setText(searchBar.getText().replace(Math.min(start, end), Math.max(start, end),
-                            Utils.pasteFromClipboard(this), 0, Utils.pasteFromClipboard(this).length()));
+                    searchBar.setText(
+                            searchBar.getText().replace(Math.min(start, end), Math.max(start, end),
+                                    Utils.pasteFromClipboard(this), 0,
+                                    Utils.pasteFromClipboard(this).length()));
                     return true;
                 default:
                     return super.onKeyUp(keyCode, event);
@@ -395,8 +389,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    @Override public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save search bar visibility state.
         if (Utils.isPanelVisible(slidingHome)) {
             savedInstanceState.putInt("searchVisibility", View.VISIBLE);
@@ -445,7 +438,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         getIcon = new LauncherIconHelper().getIconDrawable(manager, packageName);
                     if (getIcon == null) {
                         icon = ri.activityInfo.loadIcon(manager);
-                        if  (PreferenceHelper.appTheme().equals("light")
+                        if (PreferenceHelper.appTheme().equals("light")
                                 && PreferenceHelper.shadeAdaptiveIcon()
                                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                                 && icon instanceof AdaptiveIconDrawable) {
@@ -455,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         icon = getIcon;
                     }
                 }
-                AppDetail app = new AppDetail(icon, appName, packageName,false);
+                AppDetail app = new AppDetail(icon, appName, packageName, false);
                 appsList.add(app);
             }
         }
@@ -492,22 +485,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    private static class getIconTask extends AsyncTask<Void, Void, Void> {
-        private WeakReference<MainActivity> activityRef;
-
-        getIconTask(MainActivity context) {
-            activityRef = new WeakReference<>(context);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            MainActivity activity = activityRef.get();
-            if (activity != null)
-                new LauncherIconHelper().loadIconPack(activity.manager);
-            return null;
-        }
-    }
-
     private void parseAction(String action) {
         switch (action) {
             default:
@@ -523,35 +500,35 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
             case "show_favourites":
                 pinnedAppsContainer.animate()
-                        .translationY(0f)
-                        .setInterpolator(new FastOutSlowInInterpolator())
-                        .setDuration(animateDuration)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationStart(Animator animator) {
-                                super.onAnimationStart(animator);
-                                pinnedAppsContainer.setVisibility(View.VISIBLE);
-                            }
+                                   .translationY(0f)
+                                   .setInterpolator(new FastOutSlowInInterpolator())
+                                   .setDuration(animateDuration)
+                                   .setListener(new AnimatorListenerAdapter() {
+                                       @Override
+                                       public void onAnimationStart(Animator animator) {
+                                           super.onAnimationStart(animator);
+                                           pinnedAppsContainer.setVisibility(View.VISIBLE);
+                                       }
 
-                            @Override
-                            public void onAnimationEnd(Animator animator) {
-                                super.onAnimationEnd(animator);
-                                pinnedAppsContainer.clearAnimation();
-                            }
-                        });
+                                       @Override
+                                       public void onAnimationEnd(Animator animator) {
+                                           super.onAnimationEnd(animator);
+                                           pinnedAppsContainer.clearAnimation();
+                                       }
+                                   });
                 break;
             case "hide_favourites":
                 pinnedAppsContainer.animate()
-                        .translationY(pinnedAppsContainer.getHeight())
-                        .setInterpolator(new FastOutSlowInInterpolator())
-                        .setDuration(animateDuration)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animator) {
-                                super.onAnimationEnd(animator);
-                                pinnedAppsContainer.setVisibility(View.GONE);
-                            }
-                        });
+                                   .translationY(pinnedAppsContainer.getHeight())
+                                   .setInterpolator(new FastOutSlowInInterpolator())
+                                   .setDuration(animateDuration)
+                                   .setListener(new AnimatorListenerAdapter() {
+                                       @Override
+                                       public void onAnimationEnd(Animator animator) {
+                                           super.onAnimationEnd(animator);
+                                           pinnedAppsContainer.setVisibility(View.GONE);
+                                       }
+                                   });
                 break;
         }
     }
@@ -567,8 +544,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Empty out margins if they are not needed.
         if (!PreferenceHelper.usesComfyPadding()) {
-            ViewGroup.MarginLayoutParams searchParams = (ViewGroup.MarginLayoutParams) searchContainer.getLayoutParams();
-            ViewGroup.MarginLayoutParams listParams = (ViewGroup.MarginLayoutParams) appListContainer.getLayoutParams();
+            ViewGroup.MarginLayoutParams searchParams = (ViewGroup.MarginLayoutParams) searchContainer
+                    .getLayoutParams();
+            ViewGroup.MarginLayoutParams listParams = (ViewGroup.MarginLayoutParams) appListContainer
+                    .getLayoutParams();
             searchParams.setMargins(0, 0, 0, 0);
             listParams.setMargins(0, 0, 0, 0);
         }
@@ -584,7 +563,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             View wallpaperShade = findViewById(R.id.wallpaper_shade);
             // Tints the navigation bar with a semi-transparent shade.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarShade));
+                getWindow().setNavigationBarColor(
+                        getResources().getColor(R.color.navigationBarShade));
             }
             wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
         }
@@ -671,7 +651,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
                         editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
                         if (!PreferenceHelper.isFavouritesEnabled())
-                            Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.warn_pinning,
+                                    Toast.LENGTH_SHORT).show();
                         if (PreferenceHelper.isFavouritesEnabled() && pinnedAppsAdapter.getItemCount() == 1) {
                             shouldShowFavourites = true;
                         }
@@ -685,7 +666,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             parseAction("hide_favourites");
                         break;
                     case R.id.action_info:
-                        startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        startActivity(new Intent(
+                                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                 packageNameUri));
                         break;
                     case R.id.action_uninstall:
@@ -736,13 +718,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
             String searchBarText, searchHint;
-            Snackbar searchSnack = Snackbar.make(snackHolder, searchHint, Snackbar.LENGTH_INDEFINITE);
+            Snackbar searchSnack = Snackbar.make(snackHolder, searchHint,
+                    Snackbar.LENGTH_INDEFINITE);
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // Fetch texts for the snackbar.
                 searchBarText = searchBar.getText().toString().trim();
-                searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
+                searchHint = String.format(getResources().getString(R.string.search_web_hint),
+                        searchBarText);
 
                 // Begin filtering our list.
                 appsAdapter.setFilter(searchBarText);
@@ -762,7 +746,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                 if (s.length() == 0) {
                     // Scroll back down to the start of the list if search query is empty.
-                    Utils.requireNonNull(appsRecyclerView.getLayoutManager()).scrollToPosition(current_app_count);
+                    Utils.requireNonNull(appsRecyclerView.getLayoutManager())
+                         .scrollToPosition(current_app_count);
 
                     // Dismiss the search snackbar.
                     searchSnack.dismiss();
@@ -774,7 +759,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     searchSnack.setAction(R.string.search_web_button, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Utils.openLink(MainActivity.this, PreferenceHelper.getSearchProvider() + searchBarText);
+                            Utils.openLink(MainActivity.this,
+                                    PreferenceHelper.getSearchProvider() + searchBarText);
                         }
                     }).show();
 
@@ -792,7 +778,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
                     if (!appsRecyclerView.canScrollVertically(RecyclerView.FOCUS_UP)
                             && !appsRecyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                        launchApp(Utils.requireNonNull(appsAdapter.getItem(appsAdapter.getItemCount() - 1)).getPackageName());
+                        launchApp(Utils.requireNonNull(
+                                appsAdapter.getItem(appsAdapter.getItemCount() - 1))
+                                       .getPackageName());
                     } else {
                         launchApp(Utils.requireNonNull(appsAdapter.getItem(0)).getPackageName());
                     }
@@ -823,47 +811,54 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Add short click/click listener to the app list.
-        RecyclerClick.addTo(appsRecyclerView).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
-            @Override
-            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                launchApp(Utils.requireNonNull(appsAdapter.getItem(position)).getPackageName());
-            }
-        });
+        RecyclerClick.addTo(appsRecyclerView)
+                     .setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
+                         @Override
+                         public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                             launchApp(Utils.requireNonNull(appsAdapter.getItem(position))
+                                            .getPackageName());
+                         }
+                     });
 
         // Add long click action to app list. Long click shows a menu to manage selected app.
-        RecyclerClick.addTo(appsRecyclerView).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
-                // Parse package URI for use in uninstallation and package info call.
-                final String packageName = Utils.requireNonNull(appsAdapter.getItem(position)).getPackageName();
-                createAppMenu(v, false, packageName);
-                return false;
-            }
-        });
+        RecyclerClick.addTo(appsRecyclerView)
+                     .setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
+                         @Override
+                         public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
+                             // Parse package URI for use in uninstallation and package info call.
+                             final String packageName = Utils.requireNonNull(
+                                     appsAdapter.getItem(position)).getPackageName();
+                             createAppMenu(v, false, packageName);
+                             return false;
+                         }
+                     });
 
         // Add long click action to pinned apps.
-        RecyclerClick.addTo(pinnedAppsRecyclerView).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
-                // Parse package URI for use in uninstallation and package info call.
-                final String packageName = Utils.requireNonNull(pinnedAppsAdapter.getItem(position)).getPackageName();
-                createAppMenu(v, true, packageName);
-                return false;
-            }
-        });
+        RecyclerClick.addTo(pinnedAppsRecyclerView)
+                     .setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
+                         @Override
+                         public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
+                             // Parse package URI for use in uninstallation and package info call.
+                             final String packageName = Utils.requireNonNull(
+                                     pinnedAppsAdapter.getItem(position)).getPackageName();
+                             createAppMenu(v, true, packageName);
+                             return false;
+                         }
+                     });
 
-        RecyclerClick.addTo(pinnedAppsRecyclerView).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
-            @Override
-            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                launchApp(Utils.requireNonNull(pinnedAppsAdapter.getItem(position)).getPackageName());
-            }
-        });
+        RecyclerClick.addTo(pinnedAppsRecyclerView)
+                     .setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
+                         @Override
+                         public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                             launchApp(Utils.requireNonNull(pinnedAppsAdapter.getItem(position))
+                                            .getPackageName());
+                         }
+                     });
     }
 
     private void addPanelListener() {
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View view, float v) {
+            @Override public void onPanelSlide(View view, float v) {
                 // Hide the keyboard at slide.
                 Utils.hideSoftKeyboard(MainActivity.this);
 
@@ -872,11 +867,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     appMenu.dismiss();
             }
 
-            @Override
-            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+            @Override public void onPanelStateChanged(View panel,
+                    SlidingUpPanelLayout.PanelState previousState,
+                    SlidingUpPanelLayout.PanelState newState) {
                 if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED
                         || newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
-
                     // Unregister context menu for touchReceiver as we don't want
                     // the user to accidentally show it during search.
                     unregisterForContextMenu(touchReceiver);
@@ -892,19 +887,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                     // Animate search container entering the view.
                     searchContainer.animate().alpha(1f).setDuration(animateDuration)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-                                    searchContainer.setVisibility(View.VISIBLE);
-                                }
+                                   .setListener(new AnimatorListenerAdapter() {
+                                       @Override
+                                       public void onAnimationStart(Animator animation) {
+                                           searchContainer.setVisibility(View.VISIBLE);
+                                       }
 
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    searchContainer.clearAnimation();
-                                }
-                            });
+                                       @Override
+                                       public void onAnimationEnd(Animator animation) {
+                                           searchContainer.clearAnimation();
+                                       }
+                                   });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
-
                     // Re-register touchReceiver context menu.
                     registerForContextMenu(touchReceiver);
 
@@ -918,16 +912,32 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                     // Also animate the container when it's disappearing.
                     searchContainer.animate().alpha(0).setDuration(animateDuration)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    searchContainer.clearAnimation();
-                                }
-                            });
+                                   .setListener(new AnimatorListenerAdapter() {
+                                       @Override
+                                       public void onAnimationEnd(Animator animation) {
+                                           searchContainer.clearAnimation();
+                                       }
+                                   });
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
                 }
             }
         });
+    }
+
+    private static class getIconTask extends AsyncTask<Void, Void, Void> {
+        private WeakReference<MainActivity> activityRef;
+
+        getIconTask(MainActivity context) {
+            activityRef = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            MainActivity activity = activityRef.get();
+            if (activity != null)
+                new LauncherIconHelper().loadIconPack(activity.manager);
+            return null;
+        }
     }
 }

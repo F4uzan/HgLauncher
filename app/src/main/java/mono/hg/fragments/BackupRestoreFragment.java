@@ -40,11 +40,11 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 
-import mono.hg.models.FileFolder;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.Utils;
 import mono.hg.adapters.FileFolderAdapter;
+import mono.hg.models.FileFolder;
 import mono.hg.wrappers.BackHandledFragment;
 
 public class BackupRestoreFragment extends BackHandledFragment {
@@ -55,13 +55,12 @@ public class BackupRestoreFragment extends BackHandledFragment {
     private SharedPreferences prefs;
     private EditText backupNameField;
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(@NonNull LayoutInflater inflater,
+            ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_backup_restore, container, false);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         super.onCreate(savedInstanceState);
@@ -115,12 +114,17 @@ public class BackupRestoreFragment extends BackHandledFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Open and traverse to directory.
                 if (fileFoldersList.get(position).isFolder()) {
-                    currentPath = new File(currentPath + File.separator + fileFoldersList.get(position).getName());
+                    currentPath = new File(
+                            currentPath + File.separator + fileFoldersList.get(position).getName());
                     traverseStorage(currentPath);
                 } else {
                     // Restore backup when clicking a file, but only do so in restore mode.
-                    File possibleBackup = new File(currentPath + File.separator + fileFoldersList.get(position).getName());
-                    if (isInRestore && possibleBackup.isFile() && fileFoldersList.get(position).getName().indexOf('.') > 0) {
+                    File possibleBackup = new File(
+                            currentPath + File.separator + fileFoldersList.get(position).getName());
+                    if (isInRestore && possibleBackup.isFile() && fileFoldersList.get(position)
+                                                                                 .getName()
+                                                                                 .indexOf(
+                                                                                         '.') > 0) {
                         new restoreBackupTask(BackupRestoreFragment.this, possibleBackup).execute();
                     }
                 }
@@ -128,8 +132,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         });
     }
 
-    @Override
-    public boolean onBackPressed() {
+    @Override public boolean onBackPressed() {
         if (!currentPath.getPath().equals(Environment.getExternalStorageDirectory().getPath())) {
             currentPath = new File(currentPath.getParent());
             traverseStorage(currentPath);
@@ -139,8 +142,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         // Hide 'Backup' menu item in restore mode.
         if (!isInRestore) {
@@ -150,8 +152,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
@@ -160,23 +161,29 @@ public class BackupRestoreFragment extends BackHandledFragment {
             case 1:
                 // Send our backup signal!
                 if (!backupNameField.getText().toString().equals("")) {
-                    final File backupName = new File(currentPath + File.separator + backupNameField.getText().toString() + ".xml");
+                    final File backupName = new File(
+                            currentPath + File.separator + backupNameField.getText()
+                                                                          .toString() + ".xml");
                     if (backupName.exists() && backupName.isFile()) {
-                        final AlertDialog.Builder overwriteDialog = new AlertDialog.Builder(getActivity());
+                        final AlertDialog.Builder overwriteDialog = new AlertDialog.Builder(
+                                getActivity());
                         overwriteDialog.setTitle(getString(R.string.pref_header_backup));
                         overwriteDialog.setMessage(getString(R.string.backup_exist));
-                        overwriteDialog.setNegativeButton(getString(R.string.backup_exist_cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing.
-                            }
-                        });
-                        overwriteDialog.setPositiveButton(getString(R.string.backup_exist_overwrite), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                saveBackup(backupName);
-                            }
-                        });
+                        overwriteDialog.setNegativeButton(getString(R.string.backup_exist_cancel),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Do nothing.
+                                    }
+                                });
+                        overwriteDialog.setPositiveButton(
+                                getString(R.string.backup_exist_overwrite),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        saveBackup(backupName);
+                                    }
+                                });
                         overwriteDialog.show();
                     } else {
                         saveBackup(backupName);
@@ -200,7 +207,8 @@ public class BackupRestoreFragment extends BackHandledFragment {
         if (isInRestore) {
             contents = path.listFiles(new FileFilter() {
                 public boolean accept(File dir) {
-                    return dir.getName().toLowerCase().endsWith(".xml") || dir.isDirectory() && !dir.isFile();
+                    return dir.getName().toLowerCase().endsWith(".xml") || dir.isDirectory() && !dir
+                            .isFile();
                 }
             });
         } else {
@@ -281,7 +289,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
                     edit.putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
                     edit.putLong(key, (Long) v);
-                } else if (v instanceof Set){
+                } else if (v instanceof Set) {
                     edit.putStringSet(key, (Set<String>) v);
                 } else if (v instanceof String) {
                     edit.putString(key, ((String) v));
@@ -335,7 +343,8 @@ public class BackupRestoreFragment extends BackHandledFragment {
             super.onPostExecute(result);
             progress.dismiss();
             fragment.getActivity().recreate();
-            Toast.makeText(fragmentRef.get().getActivity(), R.string.restore_complete, Toast.LENGTH_LONG).show();
+            Toast.makeText(fragmentRef.get().getActivity(), R.string.restore_complete,
+                    Toast.LENGTH_LONG).show();
         }
     }
 }

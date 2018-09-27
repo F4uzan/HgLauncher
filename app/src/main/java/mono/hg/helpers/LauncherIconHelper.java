@@ -37,6 +37,82 @@ public class LauncherIconHelper {
     private static HashMap<String, String> mPackagesDrawables = new HashMap<>();
 
     /**
+     * Clears cached icon pack.
+     */
+    public static void clearDrawableCache() {
+        mPackagesDrawables.clear();
+    }
+
+    /**
+     * Draws a shadow below a drawable.
+     *
+     * @param icon Foreground layer to which the shadows will be drawn.
+     *
+     * @return BitmapDrawable masked with shadow.
+     */
+    public static BitmapDrawable drawAdaptiveShadow(final Drawable icon) {
+        return new BitmapDrawable(
+                addShadow(icon, icon.getIntrinsicHeight(), icon.getIntrinsicWidth(),
+                        Color.LTGRAY, 4, 1, 3));
+    }
+
+    /**
+     * Adds a shadow to a Bitmap.
+     * <p>
+     * TODO: Make this return Drawable for our use case.
+     *
+     * @param drawable  Drawable that should be used as the foreground layer
+     *                  of the shadow.
+     * @param dstHeight Height of the returned bitmap.
+     * @param dstWidth  Width of the returned bitmap.
+     * @param color     Colour of the drawn shadow.
+     * @param size      Size of the drawn shadow.
+     * @param dx        Shadow x direction.
+     * @param dy        Shadow y direction.
+     *
+     * @return Bitmap with resulting shadow.
+     *
+     * @author schwiz (https://stackoverflow.com/a/24579764)
+     */
+    private static Bitmap addShadow(final Drawable drawable, final int dstHeight, final int dstWidth, int color, int size, float dx, float dy) {
+        final Bitmap bm = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bm);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        final Bitmap mask = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ALPHA_8);
+
+        final Matrix scaleToFit = new Matrix();
+        final RectF src = new RectF(0, 0, bm.getWidth(), bm.getHeight());
+        final RectF dst = new RectF(0, 0, dstWidth - dx, dstHeight - dy);
+        scaleToFit.setRectToRect(src, dst, Matrix.ScaleToFit.FILL);
+
+        final Matrix dropShadow = new Matrix(scaleToFit);
+        dropShadow.postTranslate(dx, dy);
+
+        final Canvas maskCanvas = new Canvas(mask);
+        final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        maskCanvas.drawBitmap(bm, scaleToFit, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
+        maskCanvas.drawBitmap(bm, dropShadow, paint);
+
+        final BlurMaskFilter filter = new BlurMaskFilter(size, BlurMaskFilter.Blur.SOLID);
+        paint.reset();
+        paint.setAntiAlias(true);
+        paint.setColor(color);
+        paint.setMaskFilter(filter);
+        paint.setFilterBitmap(true);
+
+        final Bitmap ret = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888);
+        final Canvas retCanvas = new Canvas(ret);
+        retCanvas.drawBitmap(mask, 0, 0, paint);
+        retCanvas.drawBitmap(bm, scaleToFit, null);
+        mask.recycle();
+        return ret;
+    }
+
+    /**
      * Fetches icon from an icon pack by reading through its appfilter.xml content.
      *
      * @param packageManager PackageManager object used to fetch resources from the
@@ -107,12 +183,14 @@ public class LauncherIconHelper {
     }
 
     /**
-     * Clears cached icon pack.
+     * Loads drawable from icon pack.
+     *
+     * @param resources       Resources object to use with getIdentifier() and getDrawable().
+     * @param drawableName    Name of drawable (usually package name) to load.
+     * @param iconPackageName Package name of the icon pack.
+     *
+     * @return null if there is no such icon associated with the name of the requested drawable.
      */
-    public static void clearDrawableCache() {
-        mPackagesDrawables.clear();
-    }
-
     private Drawable loadDrawable(Resources resources, String drawableName, String iconPackageName) {
         int icon = resources.getIdentifier(drawableName, "drawable", iconPackageName);
         if (icon > 0)
@@ -121,88 +199,14 @@ public class LauncherIconHelper {
     }
 
     /**
-     *
-     * @param icon Foreground layer to which the shadows will be drawn.
-     *
-     * @return BitmapDrawable masked with shadow.
-     */
-    public static BitmapDrawable drawAdaptiveShadow(final Drawable icon) {
-        return new BitmapDrawable(addShadow(icon, icon.getIntrinsicHeight(), icon.getIntrinsicWidth(),
-                Color.LTGRAY, 4, 1, 3));
-    }
-
-    /**
-     * Adds a shadow to a Bitmap.
-     *
-     * TODO: Make this return Drawable for our use case.
-     *
-     * @author schwiz (https://stackoverflow.com/a/24579764)
-     *
-     * @param drawable Drawable that should be used as the foreground layer
-     *                 of the shadow.
-     *
-     * @param dstHeight Height of the returned bitmap.
-     *
-     * @param dstWidth Width of the returned bitmap.
-     *
-     * @param color Colour of the drawn shadow.
-     *
-     * @param size Size of the drawn shadow.
-     *
-     * @param dx Shadow x direction.
-     *
-     * @param dy Shadow y direction.
-     *
-     * @return Bitmap with resulting shadow.
-     *
-     */
-    private static Bitmap addShadow(final Drawable drawable, final int dstHeight, final int dstWidth, int color, int size, float dx, float dy) {
-        final Bitmap bm = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bm);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-
-        final Bitmap mask = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ALPHA_8);
-
-        final Matrix scaleToFit = new Matrix();
-        final RectF src = new RectF(0, 0, bm.getWidth(), bm.getHeight());
-        final RectF dst = new RectF(0, 0, dstWidth - dx, dstHeight - dy);
-        scaleToFit.setRectToRect(src, dst, Matrix.ScaleToFit.FILL);
-
-        final Matrix dropShadow = new Matrix(scaleToFit);
-        dropShadow.postTranslate(dx, dy);
-
-        final Canvas maskCanvas = new Canvas(mask);
-        final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        maskCanvas.drawBitmap(bm, scaleToFit, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
-        maskCanvas.drawBitmap(bm, dropShadow, paint);
-
-        final BlurMaskFilter filter = new BlurMaskFilter(size, BlurMaskFilter.Blur.SOLID);
-        paint.reset();
-        paint.setAntiAlias(true);
-        paint.setColor(color);
-        paint.setMaskFilter(filter);
-        paint.setFilterBitmap(true);
-
-        final Bitmap ret = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888);
-        final Canvas retCanvas = new Canvas(ret);
-        retCanvas.drawBitmap(mask, 0,  0, paint);
-        retCanvas.drawBitmap(bm, scaleToFit, null);
-        mask.recycle();
-        return ret;
-    }
-
-    /**
      * Loads an icon from the icon pack based on the received package name.
      *
      * @param packageManager PackageManager object to determine the launch intent of
      *                       the package name.
-     *
      * @param appPackageName Package name of the app whose icon is to be loaded.
      *
      * @return Drawable Will return null if there is no icon associated with the package name,
-     *         otherwise an associated icon from the icon pack will be returned.
+     * otherwise an associated icon from the icon pack will be returned.
      */
     // Load icon from the cached appfilter.
     public Drawable getIconDrawable(PackageManager packageManager, String appPackageName) {
@@ -218,7 +222,8 @@ public class LauncherIconHelper {
         }
 
         if (launchIntent != null) {
-            ComponentName component = Utils.requireNonNull(packageManager.getLaunchIntentForPackage(appPackageName)).getComponent();
+            ComponentName component = Utils.requireNonNull(
+                    packageManager.getLaunchIntentForPackage(appPackageName)).getComponent();
             componentName = Utils.requireNonNull(component).toString();
         }
 
@@ -230,9 +235,12 @@ public class LauncherIconHelper {
             // Manually retrieve resource by brute-forcing its component name.
             if (componentName != null) {
                 int start = componentName.indexOf("{") + 1;
-                int end = componentName.indexOf("}",  start);
+                int end = componentName.indexOf("}", start);
                 if (end > start && iconRes != null) {
-                    drawable = componentName.substring(start,end).toLowerCase(Locale.getDefault()).replace(".","_").replace("/", "_");
+                    drawable = componentName.substring(start, end)
+                                            .toLowerCase(Locale.getDefault())
+                                            .replace(".", "_")
+                                            .replace("/", "_");
                     if (iconRes.getIdentifier(drawable, "drawable", iconPackageName) > 0)
                         return loadDrawable(iconRes, drawable, iconPackageName);
                 }

@@ -9,7 +9,7 @@ import android.view.View;
  * Detects touch events across a view.
  * Based on OnTouchListener originally written by Edward Brey at StackOverflow,
  * (https://stackoverflow.com/a/19506010)
- *
+ * <p>
  * Modified to add swipe up, swipe down, single tap, and long press events.
  */
 public class OnTouchListener implements View.OnTouchListener {

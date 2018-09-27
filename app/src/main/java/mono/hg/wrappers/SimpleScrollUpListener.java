@@ -1,5 +1,6 @@
 package mono.hg.wrappers;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
 public abstract class SimpleScrollUpListener extends RecyclerView.OnScrollListener {
@@ -11,7 +12,7 @@ public abstract class SimpleScrollUpListener extends RecyclerView.OnScrollListen
         this.HIDE_THRESHOLD = threshold;
     }
 
-    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
         if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {

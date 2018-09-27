@@ -50,32 +50,30 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder> implem
 
     public boolean equals(Object object) {
         AppDetail alt = (AppDetail) object;
-        return this == object || getClass() != object.getClass() || getPackageName().equals(alt.getPackageName());
+        return this == object || getClass() != object.getClass() || getPackageName().equals(
+                alt.getPackageName());
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return packageName.hashCode();
     }
 
-    @Override
-    public int getLayoutRes() {
+    @Override public int getLayoutRes() {
         return R.layout.app_list;
     }
 
-    @Override
-    public AppDetail.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
+    @Override public AppDetail.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
         return new ViewHolder(view, adapter);
     }
 
-    @Override
-    public void bindViewHolder(FlexibleAdapter<IFlexible> adapter, AppDetail.ViewHolder holder, int position, List<Object> payloads) {
+    @Override public void bindViewHolder(FlexibleAdapter<IFlexible> adapter,
+            AppDetail.ViewHolder holder, int position,
+            List<Object> payloads) {
         holder.name.setText(getAppName());
         holder.icon.setImageDrawable(getIcon());
     }
 
-    @Override
-    public boolean filter(String constraint) {
+    @Override public boolean filter(String constraint) {
         int fuzzyScore = KissFuzzySearch.doFuzzy(getAppName(), constraint);
         return fuzzyScore >= 30;
     }

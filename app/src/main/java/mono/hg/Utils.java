@@ -35,7 +35,7 @@ public class Utils {
      * @param resource Resources object used to fetch the statusbar height.
      *
      * @return int Size of the statusbar. Returns the fallback value of 24dp if the
-     *         associated dimen value cannot be found.
+     * associated dimen value cannot be found.
      */
     public static int getStatusBarHeight(Resources resource) {
         int idStatusBarHeight = resource.getIdentifier("status_bar_height", "dimen", "android");
@@ -51,9 +51,8 @@ public class Utils {
      * Sends log using a predefined tag. This is used to better debug or to catch errors.
      * Logging should always use sendLog to coalesce logs into one single place.
      *
-     * @param level Urgency level of the log to send. 3 is the ceiling and will
-     *              send errors. Defaults to debug message when the level is invalid.
-     *
+     * @param level   Urgency level of the log to send. 3 is the ceiling and will
+     *                send errors. Defaults to debug message when the level is invalid.
      * @param message The message to send to logcat.
      */
     public static void sendLog(int level, String message) {
@@ -79,7 +78,6 @@ public class Utils {
      * Checks if an object is null; throws an IllegalArgumentException if it is.
      *
      * @param obj The object to check for.
-     *
      * @param <T> The type of the referenced object.
      *
      * @return Object if not null.
@@ -96,14 +94,18 @@ public class Utils {
      * @param snackbar Snackbar whose behaviour is to be modified.
      */
     public static void disableSnackbarSwipe(final Snackbar snackbar) {
-        snackbar.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                snackbar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
-                ((CoordinatorLayout.LayoutParams) snackbar.getView().getLayoutParams()).setBehavior(null);
-                return true;
-            }
-        });
+        snackbar.getView()
+                .getViewTreeObserver()
+                .addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        snackbar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
+                        ((CoordinatorLayout.LayoutParams) snackbar.getView()
+                                                                  .getLayoutParams()).setBehavior(
+                                null);
+                        return true;
+                    }
+                });
     }
 
     /**
@@ -112,9 +114,11 @@ public class Utils {
      * @param activity The activity where the keyboard focus is being achieved.
      */
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(
+                Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null && activity.getCurrentFocus() != null) {
-            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
+                    0);
         }
     }
 
@@ -122,11 +126,11 @@ public class Utils {
      * Show the software keyboard and request focus to a certain input field.
      *
      * @param activity The activity hosting the view to be in focus.
-     *
-     * @param view The view requesting focus.
+     * @param view     The view requesting focus.
      */
     public static void showSoftKeyboard(Activity activity, View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(
+                Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null && view.isFocusable()) {
             inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
             view.requestFocus();
@@ -137,8 +141,7 @@ public class Utils {
      * Opens a URL/link from a string object.
      *
      * @param context Context object for use with startActivity.
-     *
-     * @param link The link to be opened.
+     * @param link    The link to be opened.
      */
     public static void openLink(Context context, String link) {
         Intent linkIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
@@ -150,8 +153,7 @@ public class Utils {
      *
      * @param packageManager PackageManager object to use for checking the requested
      *                       package's existence.
-     *
-     * @param packageName Application package name to check.
+     * @param packageName    Application package name to check.
      *
      * @return boolean True or false depending on the existence of the package.
      */
@@ -169,10 +171,9 @@ public class Utils {
     /**
      * Checks with its package name, if an application is a system app, or is the app
      * is installed as a system app.
-     * 
-     * @param packageManager PackageManager object used to receive application info.
      *
-     * @param packageName Application package name to check against.
+     * @param packageManager PackageManager object used to receive application info.
+     * @param packageName    Application package name to check against.
      *
      * @return boolean True if the application is a system app, false if otherwise.
      */
@@ -205,11 +206,11 @@ public class Utils {
      * Copies text to keyboard.
      *
      * @param activity Activity where CLIPBOARD_SERVICE can be fetched.
-     *
-     * @param text Text to copy.
+     * @param text     Text to copy.
      */
     public static void copyToClipboard(Activity activity, String text) {
-        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(
+                Context.CLIPBOARD_SERVICE);
 
         ClipData clipData = ClipData.newPlainText(null, text);
         if (clipboardManager != null)
@@ -224,10 +225,12 @@ public class Utils {
      * @return CharSequence text from clipboard, empty if there isn't any.
      */
     public static CharSequence pasteFromClipboard(Activity activity) {
-        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(
+                Context.CLIPBOARD_SERVICE);
 
         if (clipboardManager != null && clipboardManager.hasPrimaryClip()
-                && clipboardManager.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                && clipboardManager.getPrimaryClipDescription()
+                                   .hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
             return clipboardManager.getPrimaryClip().getItemAt(0).getText();
         } else {
             return "";
@@ -239,16 +242,12 @@ public class Utils {
      *
      * @param packageManager PackageManager object used to fetch information regarding
      *                       the app that is being loaded.
-     *
-     * @param packageName The package name to load and fetch.
-     *
-     * @param adapter Which adapter should we notify update to?
-     *
-     * @param list Which List object should be updated?
-     *
+     * @param packageName    The package name to load and fetch.
+     * @param adapter        Which adapter should we notify update to?
+     * @param list           Which List object should be updated?
      */
     public static void pinApp(PackageManager packageManager, String packageName,
-                              FlexibleAdapter<PinnedAppDetail> adapter, List<PinnedAppDetail> list) {
+            FlexibleAdapter<PinnedAppDetail> adapter, List<PinnedAppDetail> list) {
         if (!adapter.contains(new PinnedAppDetail(null, packageName))) {
             try {
                 Drawable icon;

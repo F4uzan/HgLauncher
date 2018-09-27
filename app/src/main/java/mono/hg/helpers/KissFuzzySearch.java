@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Fuzzy search class, code taken from works of saveman71 at KISS Launcher.
  * https://github.com/Neamar/KISS/commit/41aaec1e27da79fea7c929146cbababe3acac64e
- *
+ * <p>
  * Parts have been slightly altered to fit our codes here.
  */
 

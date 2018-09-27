@@ -14,8 +14,7 @@ import mono.hg.Utils;
 
 public class LibraryInfoFragment extends DialogFragment {
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_library_dialogue, null);
@@ -34,11 +33,13 @@ public class LibraryInfoFragment extends DialogFragment {
                         break;
                     case 1:
                         // RecyclerView-FastScroll.
-                        Utils.openLink(getActivity(), getString(R.string.lib_recyclerview_fastscroll_url));
+                        Utils.openLink(getActivity(),
+                                getString(R.string.lib_recyclerview_fastscroll_url));
                         break;
                     case 2:
                         // material-preferences.
-                        Utils.openLink(getActivity(), getString(R.string.lib_material_preferences_url));
+                        Utils.openLink(getActivity(),
+                                getString(R.string.lib_material_preferences_url));
                         break;
                     case 3:
                         // material-preferences.
@@ -50,6 +51,7 @@ public class LibraryInfoFragment extends DialogFragment {
                 }
             }
         });
+
         return builder.create();
     }
 }

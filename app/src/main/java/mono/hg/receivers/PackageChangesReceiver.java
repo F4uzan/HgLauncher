@@ -8,13 +8,12 @@ import android.preference.PreferenceManager;
 
 public class PackageChangesReceiver extends BroadcastReceiver {
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
+    @Override public void onReceive(Context context, Intent intent) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
         if (intent.getAction() != null && intent.getData() != null) {
             String packageName = intent.getData().getEncodedSchemeSpecificPart();
-            
+
             // Receive intent from broadcast and simply let the launcher know it needs a refresh.
             if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")
                     || intent.getAction().equals("android.intent.action.PACKAGE_CHANGED")

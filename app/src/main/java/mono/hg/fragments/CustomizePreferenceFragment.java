@@ -82,7 +82,7 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
 
         // Fetch all available icon pack.
         Intent intent = new Intent("org.adw.launcher.THEMES");
-        List<ResolveInfo> info = manager.queryIntentActivities (intent,
+        List<ResolveInfo> info = manager.queryIntentActivities(intent,
                 PackageManager.GET_META_DATA);
         for (ResolveInfo resolveInfo : info) {
             ActivityInfo activityInfo = resolveInfo.activityInfo;
@@ -106,7 +106,8 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         if (!prefs.getBoolean("is_grandma", false)) {
             versionMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 int counter = 9;
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(
+                        getActivity()).edit();
                 Toast counterToast;
 
                 @Override
@@ -117,7 +118,8 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
 
                         if (counter < 8) {
                             counterToast = Toast.makeText(getActivity(),
-                                    String.format(getString(R.string.version_key_toast_plural), counter), Toast.LENGTH_SHORT);
+                                    String.format(getString(R.string.version_key_toast_plural),
+                                            counter), Toast.LENGTH_SHORT);
                             counterToast.show();
                         }
 
@@ -129,7 +131,8 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                         if (counterToast != null)
                             counterToast.cancel();
 
-                        counterToast = Toast.makeText(getActivity(), R.string.version_key_toast, Toast.LENGTH_SHORT);
+                        counterToast = Toast.makeText(getActivity(), R.string.version_key_toast,
+                                Toast.LENGTH_SHORT);
                         counterToast.show();
                     }
                     return false;
@@ -199,16 +202,17 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
     // Replace the view with a fragment.
     private void replaceFragment(Fragment fragment, String tag) {
         getActivity().getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, fragment, tag)
-                .addToBackStack(null)
-                .commit();
+                     .replace(android.R.id.content, fragment, tag)
+                     .addToBackStack(null)
+                     .commit();
     }
 
     // Used to check for storage permission.
     // Throws true when API is less than M.
     private boolean hasStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (getContext().checkSelfPermission(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4200);
             } else {

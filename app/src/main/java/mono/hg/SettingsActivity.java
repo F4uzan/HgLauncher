@@ -15,8 +15,7 @@ import mono.hg.wrappers.BackHandledFragment;
 public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity implements BackHandledFragment.BackHandlerInterface {
     private BackHandledFragment selectedFragment;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         // Load appropriate theme before creating the activity.
         PreferenceHelper.fetchPreference(PreferenceManager.getDefaultSharedPreferences(this));
 
@@ -38,21 +37,18 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
         setPreferenceFragment(new CustomizePreferenceFragment());
     }
 
-    @Override
-    public void onBackPressed() {
+    @Override public void onBackPressed() {
         if (selectedFragment == null || !selectedFragment.onBackPressed()) {
             // Selected fragment did not consume the back press event.
             super.onBackPressed();
         }
     }
 
-    @Override
-    public void setSelectedFragment(BackHandledFragment selectedFragment) {
+    @Override public void setSelectedFragment(BackHandledFragment selectedFragment) {
         this.selectedFragment = selectedFragment;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             Utils.hideSoftKeyboard(this);

@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import mono.hg.models.FileFolder;
 import mono.hg.R;
 import mono.hg.Utils;
+import mono.hg.models.FileFolder;
 
 public class FileFolderAdapter extends BaseAdapter {
     private ArrayList<FileFolder> filesList;
@@ -23,8 +23,7 @@ public class FileFolderAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @Override public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -32,7 +31,8 @@ public class FileFolderAdapter extends BaseAdapter {
         View view = convertView;
 
         if (view == null) {
-            view = Utils.requireNonNull(inflater).inflate(R.layout.files_folder_list, parent, false);
+            view = Utils.requireNonNull(inflater)
+                        .inflate(R.layout.files_folder_list, parent, false);
 
             holder = new ViewHolder();
             holder.content = view.findViewById(R.id.item_content);
@@ -54,28 +54,24 @@ public class FileFolderAdapter extends BaseAdapter {
         return view;
     }
 
-    private static class ViewHolder {
-        private ImageView content;
-        private TextView name;
-    }
-
-    @Override
-    public int getCount() {
+    @Override public int getCount() {
         return filesList.size();
     }
 
-    @Override
-    public Object getItem(int position) {
+    @Override public Object getItem(int position) {
         return filesList.get(position);
     }
 
-    @Override
-    public long getItemId(int position) {
+    @Override public long getItemId(int position) {
         return position;
     }
 
-    @Override
-    public boolean hasStableIds() {
+    @Override public boolean hasStableIds() {
         return true;
+    }
+
+    private static class ViewHolder {
+        private ImageView content;
+        private TextView name;
     }
 }

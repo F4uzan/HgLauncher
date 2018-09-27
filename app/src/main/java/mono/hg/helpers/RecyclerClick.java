@@ -21,7 +21,8 @@ public class RecyclerClick {
             if (mOnItemClickListener != null) {
                 RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(v);
                 if (holder.getAdapterPosition() != -1) {
-                    mOnItemClickListener.onItemClicked(mRecyclerView, holder.getAdapterPosition(), v);
+                    mOnItemClickListener.onItemClicked(mRecyclerView,
+                            holder.getAdapterPosition(), v);
                 }
             }
         }
@@ -33,7 +34,8 @@ public class RecyclerClick {
             if (mOnItemLongClickListener != null) {
                 RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(v);
                 if (holder.getAdapterPosition() != -1) {
-                    return mOnItemLongClickListener.onItemLongClicked(mRecyclerView, holder.getAdapterPosition(), v);
+                    return mOnItemLongClickListener.onItemLongClicked(mRecyclerView,
+                            holder.getAdapterPosition(), v);
                 }
             }
             return false;

@@ -13,7 +13,8 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.Utils;
 import mono.hg.models.AppDetail;
 
-public class AppAdapter extends FlexibleAdapter<AppDetail> implements FastScrollRecyclerView.SectionedAdapter {
+public class AppAdapter extends FlexibleAdapter<AppDetail>
+        implements FastScrollRecyclerView.SectionedAdapter {
     private List<AppDetail> appsList;
     private int mSelectedItem = 0;
     private RecyclerView mRecyclerView;
@@ -21,6 +22,15 @@ public class AppAdapter extends FlexibleAdapter<AppDetail> implements FastScroll
     public AppAdapter(List<AppDetail> apps) {
         super(apps);
         this.appsList = apps;
+    }
+
+    private static boolean isConfirmButton(KeyEvent event) {
+        switch (event.getKeyCode()) {
+            case KeyEvent.KEYCODE_ENTER:
+                return true;
+            default:
+                return false;
+        }
     }
 
     // Resets the filter constraint.
@@ -38,8 +48,7 @@ public class AppAdapter extends FlexibleAdapter<AppDetail> implements FastScroll
     /**
      * Keyboard navigation code is taken from the adapter code by zevektor/Vektor (https://github.com/zevektor/KeyboardRecyclerView)
      */
-    @Override
-    public void onAttachedToRecyclerView(@NonNull final RecyclerView recyclerView) {
+    @Override public void onAttachedToRecyclerView(@NonNull final RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
 
         mRecyclerView = recyclerView;
@@ -52,7 +61,9 @@ public class AppAdapter extends FlexibleAdapter<AppDetail> implements FastScroll
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (isConfirmButton(event)) {
                         if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) == KeyEvent.FLAG_LONG_PRESS) {
-                            Utils.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem)).itemView.performLongClick();
+                            Utils.requireNonNull(
+                                    mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem))
+                                    .itemView.performLongClick();
                         } else {
                             event.startTracking();
                         }
@@ -67,7 +78,9 @@ public class AppAdapter extends FlexibleAdapter<AppDetail> implements FastScroll
                 } else if (event.getAction() == KeyEvent.ACTION_UP && isConfirmButton(event)
                         && ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != KeyEvent.FLAG_LONG_PRESS)
                         && mSelectedItem != -1) {
-                    Utils.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem)).itemView.performClick();
+                    Utils.requireNonNull(
+                            mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem))
+                            .itemView.performClick();
                     return true;
                 }
                 return false;
@@ -87,14 +100,5 @@ public class AppAdapter extends FlexibleAdapter<AppDetail> implements FastScroll
             return true;
         }
         return false;
-    }
-
-    private static boolean isConfirmButton(KeyEvent event) {
-        switch (event.getKeyCode()) {
-            case KeyEvent.KEYCODE_ENTER:
-                return true;
-            default:
-                return false;
-        }
     }
 }

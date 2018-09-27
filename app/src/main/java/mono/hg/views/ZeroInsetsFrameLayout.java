@@ -31,8 +31,7 @@ public final class ZeroInsetsFrameLayout extends FrameLayout {
         return mInsets;
     }
 
-    @Override
-    public WindowInsets computeSystemWindowInsets(WindowInsets in, Rect outLocalInsets) {
+    @Override public WindowInsets computeSystemWindowInsets(WindowInsets in, Rect outLocalInsets) {
         outLocalInsets.left = 0;
         outLocalInsets.top = 0;
         outLocalInsets.right = 0;
@@ -40,8 +39,7 @@ public final class ZeroInsetsFrameLayout extends FrameLayout {
         return super.computeSystemWindowInsets(in, outLocalInsets);
     }
 
-    @Override
-    protected final boolean fitSystemWindows(@NonNull Rect insets) {
+    @Override protected final boolean fitSystemWindows(@NonNull Rect insets) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // Intentionally do not modify the bottom inset. For some reason,
             // if the bottom inset is modified, window resizing stops working.

@@ -22,13 +22,11 @@ public class MenuPreference extends ListPreference {
         super(context, attrs);
     }
 
-    @Override
-    protected View onCreateView(ViewGroup parent) {
+    @Override protected View onCreateView(ViewGroup parent) {
         return anchor = super.onCreateView(parent);
     }
 
-    @Override
-    protected void showDialog(Bundle state) {
+    @Override protected void showDialog(Bundle state) {
         final PopupMenu popup = new PopupMenu(getContext(), anchor, Gravity.TOP);
         final Menu menu = popup.getMenu();
 

@@ -29,11 +29,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import mono.hg.models.AppDetail;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.Utils;
 import mono.hg.adapters.HiddenAppAdapter;
+import mono.hg.models.AppDetail;
 
 public class HiddenAppsFragment extends Fragment {
     private ArrayList<AppDetail> appList = new ArrayList<>();
@@ -213,7 +213,8 @@ public class HiddenAppsFragment extends Fragment {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_info:
-                                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                startActivity(new Intent(
+                                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                         packageNameUri));
                                 break;
                             case R.id.action_uninstall:

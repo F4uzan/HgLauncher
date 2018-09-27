@@ -24,7 +24,9 @@ public class PreferenceHelper {
         return adaptive_shade;
     }
 
-    public static String getIconPackName() { return icon_pack; }
+    public static String getIconPackName() {
+        return icon_pack;
+    }
 
     public static boolean isListInverted() {
         return !list_order;

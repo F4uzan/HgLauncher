@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import mono.hg.models.AppDetail;
 import mono.hg.R;
 import mono.hg.Utils;
+import mono.hg.models.AppDetail;
 
 public class HiddenAppAdapter extends BaseAdapter {
     private ArrayList<AppDetail> hiddenAppsList;
@@ -24,8 +24,7 @@ public class HiddenAppAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @Override public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -58,29 +57,25 @@ public class HiddenAppAdapter extends BaseAdapter {
         return view;
     }
 
+    @Override public int getCount() {
+        return hiddenAppsList.size();
+    }
+
+    @Override public Object getItem(int position) {
+        return hiddenAppsList.get(position);
+    }
+
+    @Override public long getItemId(int position) {
+        return position;
+    }
+
+    @Override public boolean hasStableIds() {
+        return true;
+    }
+
     private static class ViewHolder {
         private ImageView icon;
         private TextView name;
         private AppCompatCheckBox hiddenState;
-    }
-
-    @Override
-    public int getCount() {
-        return hiddenAppsList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return hiddenAppsList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return true;
     }
 }

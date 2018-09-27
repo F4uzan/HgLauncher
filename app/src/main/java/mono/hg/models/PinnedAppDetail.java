@@ -16,18 +16,17 @@ public class PinnedAppDetail extends AppDetail {
         super(icon, null, packageName, false);
     }
 
-    @Override
-    public int getLayoutRes() {
+    @Override public int getLayoutRes() {
         return R.layout.pinned_app_list;
     }
 
-    @Override
-    public PinnedAppDetail.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
+    @Override public PinnedAppDetail.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
         return new ViewHolder(view, adapter);
     }
 
-    @Override
-    public void bindViewHolder(FlexibleAdapter<IFlexible> adapter, PinnedAppDetail.ViewHolder holder, int position, List<Object> payloads) {
+    @Override public void bindViewHolder(FlexibleAdapter<IFlexible> adapter,
+            PinnedAppDetail.ViewHolder holder, int position,
+            List<Object> payloads) {
         holder.icon.setImageDrawable(getIcon());
     }
 }
