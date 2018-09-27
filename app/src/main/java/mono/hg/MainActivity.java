@@ -55,6 +55,7 @@ import mono.hg.helpers.RecyclerClick;
 import mono.hg.models.AppDetail;
 import mono.hg.models.PinnedAppDetail;
 import mono.hg.receivers.PackageChangesReceiver;
+import mono.hg.views.IndeterminateMaterialProgressBar;
 import mono.hg.wrappers.OnTouchListener;
 import mono.hg.wrappers.SimpleScrollUpListener;
 
@@ -160,6 +161,11 @@ public class MainActivity extends AppCompatActivity
     private View touchReceiver;
 
     /*
+     * Progress bar shown when populating app list.
+     */
+    private IndeterminateMaterialProgressBar loadProgress;
+
+    /*
      * SharedPreferences method, used to add/remove and get preferences.
      */
     private SharedPreferences prefs;
@@ -202,6 +208,7 @@ public class MainActivity extends AppCompatActivity
         snackHolder = findViewById(R.id.snack_holder);
         appsRecyclerView = findViewById(R.id.apps_list);
         pinnedAppsRecyclerView = findViewById(R.id.pinned_apps_list);
+        loadProgress = findViewById(R.id.load_progress);
 
         animateDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -960,6 +967,16 @@ public class MainActivity extends AppCompatActivity
         }
 
         @Override
+        protected void onPreExecute() {
+            MainActivity activity = activityRef.get();
+
+            // Show the progress bar so the list wouldn't look empty.
+            if (activity != null) {
+                activity.loadProgress.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
         protected Void doInBackground(Void... params) {
             MainActivity activity = activityRef.get();
             if (activity != null) {
@@ -972,6 +989,10 @@ public class MainActivity extends AppCompatActivity
         protected void onPostExecute(Void results) {
             MainActivity activity = activityRef.get();
             if (activity != null) {
+                // Remove the progress bar.
+                activity.loadProgress.setVisibility(View.GONE);
+                activity.loadProgress.invalidate();
+
                 // Add the fetched apps and update item view cache.
                 activity.appsAdapter.addItems(0, activity.appsList);
                 activity.appsRecyclerView.setItemViewCacheSize(activity

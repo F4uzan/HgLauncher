@@ -36,6 +36,14 @@
             android:layout_marginLeft="@dimen/uniform_panel_margin"
             android:layout_marginRight="@dimen/uniform_panel_margin">
 
+            <mono.hg.views.IndeterminateMaterialProgressBar
+                android:id="@+id/load_progress"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:visibility="gone"
+                android:indeterminate="true"
+                android:layout_centerInParent="true" />
+
             <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
                 android:id="@+id/apps_list"
                 android:layout_width="match_parent"
