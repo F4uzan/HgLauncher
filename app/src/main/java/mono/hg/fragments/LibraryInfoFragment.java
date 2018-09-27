@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -16,8 +15,7 @@ public class LibraryInfoFragment extends DialogFragment {
 
     @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_library_dialogue, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_library_dialogue, null);
 
         builder.setTitle(R.string.about_libraries_dialogue_title);
         builder.setView(view);
