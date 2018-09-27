@@ -50,7 +50,7 @@ import mono.hg.wrappers.BackHandledFragment;
 public class BackupRestoreFragment extends BackHandledFragment {
     private ArrayList<FileFolder> fileFoldersList = new ArrayList<>();
     private FileFolderAdapter fileFolderAdapter;
-    private File path;
+    private File currentPath;
     private Boolean isInRestore = false;
     private SharedPreferences prefs;
     private EditText backupNameField;
@@ -108,18 +108,18 @@ public class BackupRestoreFragment extends BackHandledFragment {
         }
 
         // Check for storage permission if we're in Marshmallow and up.
-        path = Environment.getExternalStorageDirectory();
-        traverseStorage(path);
+        currentPath = Environment.getExternalStorageDirectory();
+        traverseStorage(currentPath);
         fileFolders.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Open and traverse to directory.
                 if (fileFoldersList.get(position).isFolder()) {
-                    path = new File(path + File.separator + fileFoldersList.get(position).getName());
-                    traverseStorage(path);
+                    currentPath = new File(currentPath + File.separator + fileFoldersList.get(position).getName());
+                    traverseStorage(currentPath);
                 } else {
                     // Restore backup when clicking a file, but only do so in restore mode.
-                    File possibleBackup = new File(path + File.separator + fileFoldersList.get(position).getName());
+                    File possibleBackup = new File(currentPath + File.separator + fileFoldersList.get(position).getName());
                     if (isInRestore && possibleBackup.isFile() && fileFoldersList.get(position).getName().indexOf('.') > 0) {
                         new restoreBackupTask(BackupRestoreFragment.this, possibleBackup).execute();
                     }
@@ -130,9 +130,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
 
     @Override
     public boolean onBackPressed() {
-        if (!path.getPath().equals(Environment.getExternalStorageDirectory().getPath())) {
-            path = new File(path.getParent());
-            traverseStorage(path);
+        if (!currentPath.getPath().equals(Environment.getExternalStorageDirectory().getPath())) {
+            currentPath = new File(currentPath.getParent());
+            traverseStorage(currentPath);
             return true;
         } else {
             return false;
@@ -160,7 +160,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
             case 1:
                 // Send our backup signal!
                 if (!backupNameField.getText().toString().equals("")) {
-                    final File backupName = new File(path + File.separator + backupNameField.getText().toString() + ".xml");
+                    final File backupName = new File(currentPath + File.separator + backupNameField.getText().toString() + ".xml");
                     if (backupName.exists() && backupName.isFile()) {
                         final AlertDialog.Builder overwriteDialog = new AlertDialog.Builder(getActivity());
                         overwriteDialog.setTitle(getString(R.string.pref_header_backup));
@@ -255,7 +255,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
             } catch (IOException e) {
                 Utils.sendLog(3, e.toString());
             }
-            traverseStorage(this.path);
+            traverseStorage(this.currentPath);
             Toast.makeText(getActivity(), R.string.backup_complete, Toast.LENGTH_SHORT).show();
         }
     }

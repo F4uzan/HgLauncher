@@ -69,38 +69,42 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
      * Count of currently installed apps.
      * TODO: Better manage this.
      */
-    private int app_count;
+    private int current_app_count;
 
     /*
      * Animation duration; fetched from system's duration.
      */
-    private int animateTime;
+    private int animateDuration;
 
     /*
-     * List of installed apps.
+     * List containing installed apps.
      */
-    private ArrayList<AppDetail> appList = new ArrayList<>();
+    private ArrayList<AppDetail> appsList = new ArrayList<>();
 
     /*
      * Adapter for installed apps.
      */
-    private AppAdapter apps = new AppAdapter(appList);
+    private AppAdapter appsAdapter = new AppAdapter(appsList);
 
     /*
-     * List of pinned apps.
+     * List containing pinned apps.
      */
     private ArrayList<PinnedAppDetail> pinnedAppList = new ArrayList<>();
+
+    /*
+     * String containing pinned apps. Delimited by ';'.
+     */
     private String pinnedAppString;
 
     /*
      * Adapter for pinned apps.
      */
-    private FlexibleAdapter<PinnedAppDetail> pinnedApps = new FlexibleAdapter<>(pinnedAppList);
+    private FlexibleAdapter<PinnedAppDetail> pinnedAppsAdapter = new FlexibleAdapter<>(pinnedAppList);
 
     /*
      * List of excluded apps. These will not be shown in the app list.
      */
-    private HashSet<String> excludedAppList = new HashSet<>();
+    private HashSet<String> excludedAppsList = new HashSet<>();
 
     /*
      * Package manager; casted through getPackageManager().
@@ -110,12 +114,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     /*
      * RecyclerView for app list.
      */
-    private RecyclerView list;
+    private RecyclerView appsRecyclerView;
 
     /*
      * RecyclerView for pinned apps; shown in favourites panel.
      */
-    private RecyclerView pinned_list;
+    private RecyclerView pinnedAppsRecyclerView;
 
     /*
      * Parent layout containing search bar.
@@ -195,24 +199,24 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         slidingHome = findViewById(R.id.slide_home);
         touchReceiver = findViewById(R.id.touch_receiver);
         snackHolder = findViewById(R.id.snack_holder);
-        list = findViewById(R.id.apps_list);
-        pinned_list = findViewById(R.id.pinned_apps_list);
+        appsRecyclerView = findViewById(R.id.apps_list);
+        pinnedAppsRecyclerView = findViewById(R.id.pinned_apps_list);
 
-        animateTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        animateDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         slidingHome.disallowHiding(true);
 
-        list.setDrawingCacheEnabled(true);
-        list.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-        list.setHasFixedSize(true);
+        appsRecyclerView.setDrawingCacheEnabled(true);
+        appsRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
+        appsRecyclerView.setHasFixedSize(true);
 
-        list.setAdapter(apps);
-        list.setLayoutManager(appListManager);
-        list.setItemAnimator(new DefaultItemAnimator());
+        appsRecyclerView.setAdapter(appsAdapter);
+        appsRecyclerView.setLayoutManager(appListManager);
+        appsRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        pinned_list.setAdapter(pinnedApps);
-        pinned_list.setLayoutManager(pinnedAppsManager);
-        pinned_list.setItemAnimator(null);
+        pinnedAppsRecyclerView.setAdapter(pinnedAppsAdapter);
+        pinnedAppsRecyclerView.setLayoutManager(pinnedAppsManager);
+        pinnedAppsRecyclerView.setItemAnimator(null);
 
         // Restore search bar visibility when available.
         if (savedInstanceState != null)
@@ -244,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         if (!pinnedAppString.isEmpty()) {
             for (String pinnedApp : Arrays.asList(pinnedAppString.split(";"))) {
-                Utils.pinApp(manager, pinnedApp, pinnedApps, pinnedAppList);
+                Utils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
             }
         }
 
@@ -252,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Save our current app count.
         //TODO: There are better ways to accomplish this.
-        app_count = appList.size() - 1;
+        current_app_count = appsList.size() - 1;
     }
 
     @Override
@@ -348,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         loadPref(false);
         
         // Reset the app list filter.
-        apps.resetFilter();
+        appsAdapter.resetFilter();
     }
 
     @Override
@@ -425,13 +429,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Clear the list to make sure that we aren't just adding over an existing list.
-        appList.clear();
-        apps.clear();
+        appsList.clear();
+        appsAdapter.clear();
 
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName;
-            if (!excludedAppList.contains(packageName) && !packageName.equals(getPackageName())) {
+            if (!excludedAppsList.contains(packageName) && !packageName.equals(getPackageName())) {
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = null;
                 Drawable getIcon = null;
@@ -452,15 +456,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     }
                 }
                 AppDetail app = new AppDetail(icon, appName, packageName,false);
-                appList.add(app);
+                appsList.add(app);
             }
         }
 
         // Add the fetched apps here.
-        apps.addItems(0, appList);
+        appsAdapter.addItems(0, appsList);
 
         // Update our view cache size, now that we have got all apps on the list
-        list.setItemViewCacheSize(apps.getItemCount() - 1);
+        appsRecyclerView.setItemViewCacheSize(appsAdapter.getItemCount() - 1);
     }
 
     // A method to launch an app based on package name.
@@ -521,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 pinnedAppsContainer.animate()
                         .translationY(0f)
                         .setInterpolator(new FastOutSlowInInterpolator())
-                        .setDuration(animateTime)
+                        .setDuration(animateDuration)
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationStart(Animator animator) {
@@ -540,7 +544,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 pinnedAppsContainer.animate()
                         .translationY(pinnedAppsContainer.getHeight())
                         .setInterpolator(new FastOutSlowInInterpolator())
-                        .setDuration(animateTime)
+                        .setDuration(animateDuration)
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animator) {
@@ -570,7 +574,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
-        if (!PreferenceHelper.isFavouritesEnabled() || pinnedApps.isEmpty()) {
+        if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppsAdapter.isEmpty()) {
             pinnedAppsContainer.setVisibility(View.GONE);
             shouldShowFavourites = false;
         }
@@ -597,7 +601,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             prefs.registerOnSharedPreferenceChangeListener(this);
 
             // Get a list of our hidden apps, default to null if there aren't any.
-            excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
+            excludedAppsList.addAll(prefs.getStringSet("hidden_apps", excludedAppsList));
 
             // Set the app theme!
             switch (PreferenceHelper.appTheme()) {
@@ -631,10 +635,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         int position;
         if (isPinned) {
             PinnedAppDetail selectedPackage = new PinnedAppDetail(null, packageName);
-            position = pinnedApps.getGlobalPositionOf(selectedPackage);
+            position = pinnedAppsAdapter.getGlobalPositionOf(selectedPackage);
         } else {
             AppDetail selectedPackage = new AppDetail(null, null, packageName, false);
-            position = apps.getGlobalPositionOf(selectedPackage);
+            position = appsAdapter.getGlobalPositionOf(selectedPackage);
         }
 
         // Inflate the app menu.
@@ -663,21 +667,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pin:
-                        Utils.pinApp(manager, packageName, pinnedApps, pinnedAppList);
+                        Utils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
                         editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
                         if (!PreferenceHelper.isFavouritesEnabled())
                             Toast.makeText(MainActivity.this, R.string.warn_pinning, Toast.LENGTH_SHORT).show();
-                        if (PreferenceHelper.isFavouritesEnabled() && pinnedApps.getItemCount() == 1) {
+                        if (PreferenceHelper.isFavouritesEnabled() && pinnedAppsAdapter.getItemCount() == 1) {
                             shouldShowFavourites = true;
                         }
                         break;
                     case R.id.action_unpin:
-                        pinnedAppList.remove(pinnedApps.getItem(finalPosition));
-                        pinnedApps.removeItem(finalPosition);
+                        pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
+                        pinnedAppsAdapter.removeItem(finalPosition);
                         pinnedAppString = pinnedAppString.replace(packageName + ";", "");
                         editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
-                        if (pinnedApps.isEmpty())
+                        if (pinnedAppsAdapter.isEmpty())
                             parseAction("hide_favourites");
                         break;
                     case R.id.action_info:
@@ -689,11 +693,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         break;
                     case R.id.action_hide:
                         // Add the app's package name to the exclusion list.
-                        excludedAppList.add(packageName);
-                        editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
+                        excludedAppsList.add(packageName);
+                        editPrefs.putStringSet("hidden_apps", excludedAppsList).apply();
                         // Reload the app list!
-                        appList.remove(apps.getItem(finalPosition));
-                        apps.removeItem(finalPosition);
+                        appsList.remove(appsAdapter.getItem(finalPosition));
+                        appsAdapter.removeItem(finalPosition);
                         break;
                     default:
                         // There is nothing to do.
@@ -741,8 +745,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 searchHint = String.format(getResources().getString(R.string.search_web_hint), searchBarText);
 
                 // Begin filtering our list.
-                apps.setFilter(searchBarText);
-                apps.filterItems();
+                appsAdapter.setFilter(searchBarText);
+                appsAdapter.filterItems();
             }
 
             @Override
@@ -758,7 +762,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                 if (s.length() == 0) {
                     // Scroll back down to the start of the list if search query is empty.
-                    Utils.requireNonNull(list.getLayoutManager()).scrollToPosition(app_count);
+                    Utils.requireNonNull(appsRecyclerView.getLayoutManager()).scrollToPosition(current_app_count);
 
                     // Dismiss the search snackbar.
                     searchSnack.dismiss();
@@ -784,13 +788,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         searchBar.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((!apps.isEmpty() && searchBar.getText().length() > 0) &&
+                if ((!appsAdapter.isEmpty() && searchBar.getText().length() > 0) &&
                         (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
-                    if (!list.canScrollVertically(RecyclerView.FOCUS_UP)
-                            && !list.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                        launchApp(Utils.requireNonNull(apps.getItem(apps.getItemCount() - 1)).getPackageName());
+                    if (!appsRecyclerView.canScrollVertically(RecyclerView.FOCUS_UP)
+                            && !appsRecyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+                        launchApp(Utils.requireNonNull(appsAdapter.getItem(appsAdapter.getItemCount() - 1)).getPackageName());
                     } else {
-                        launchApp(Utils.requireNonNull(apps.getItem(0)).getPackageName());
+                        launchApp(Utils.requireNonNull(appsAdapter.getItem(0)).getPackageName());
                     }
                     return true;
                 }
@@ -803,55 +807,55 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Listen for app list scroll to hide/show favourites panel.
         // Only do this when the user has favourites panel enabled.
         if (PreferenceHelper.isFavouritesEnabled()) {
-            list.addOnScrollListener(new SimpleScrollUpListener(0) {
+            appsRecyclerView.addOnScrollListener(new SimpleScrollUpListener(0) {
                 @Override
                 public void onScrollUp() {
-                    if (shouldShowFavourites && !pinnedApps.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll())
+                    if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll())
                         parseAction("hide_favourites");
                 }
 
                 @Override
                 public void onEnd() {
-                    if (shouldShowFavourites && !pinnedApps.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll())
+                    if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll())
                         parseAction("show_favourites");
                 }
             });
         }
 
         // Add short click/click listener to the app list.
-        RecyclerClick.addTo(list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
+        RecyclerClick.addTo(appsRecyclerView).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                launchApp(Utils.requireNonNull(apps.getItem(position)).getPackageName());
+                launchApp(Utils.requireNonNull(appsAdapter.getItem(position)).getPackageName());
             }
         });
 
         // Add long click action to app list. Long click shows a menu to manage selected app.
-        RecyclerClick.addTo(list).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
+        RecyclerClick.addTo(appsRecyclerView).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
-                final String packageName = Utils.requireNonNull(apps.getItem(position)).getPackageName();
+                final String packageName = Utils.requireNonNull(appsAdapter.getItem(position)).getPackageName();
                 createAppMenu(v, false, packageName);
                 return false;
             }
         });
 
         // Add long click action to pinned apps.
-        RecyclerClick.addTo(pinned_list).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
+        RecyclerClick.addTo(pinnedAppsRecyclerView).setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
                 // Parse package URI for use in uninstallation and package info call.
-                final String packageName = Utils.requireNonNull(pinnedApps.getItem(position)).getPackageName();
+                final String packageName = Utils.requireNonNull(pinnedAppsAdapter.getItem(position)).getPackageName();
                 createAppMenu(v, true, packageName);
                 return false;
             }
         });
 
-        RecyclerClick.addTo(pinned_list).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
+        RecyclerClick.addTo(pinnedAppsRecyclerView).setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                launchApp(Utils.requireNonNull(pinnedApps.getItem(position)).getPackageName());
+                launchApp(Utils.requireNonNull(pinnedAppsAdapter.getItem(position)).getPackageName());
             }
         });
     }
@@ -887,7 +891,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     }
 
                     // Animate search container entering the view.
-                    searchContainer.animate().alpha(1f).setDuration(animateTime)
+                    searchContainer.animate().alpha(1f).setDuration(animateDuration)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
@@ -908,12 +912,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     Utils.hideSoftKeyboard(MainActivity.this);
 
                     // Stop scrolling, the panel is being dismissed.
-                    list.stopScroll();
+                    appsRecyclerView.stopScroll();
 
                     searchContainer.setVisibility(View.INVISIBLE);
 
                     // Also animate the container when it's disappearing.
-                    searchContainer.animate().alpha(0).setDuration(animateTime)
+                    searchContainer.animate().alpha(0).setDuration(animateDuration)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {

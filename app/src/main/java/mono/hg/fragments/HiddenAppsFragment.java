@@ -37,12 +37,12 @@ import mono.hg.adapters.HiddenAppAdapter;
 
 public class HiddenAppsFragment extends Fragment {
     private ArrayList<AppDetail> appList = new ArrayList<>();
-    private HiddenAppAdapter apps;
+    private HiddenAppAdapter hiddenAppAdapter;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editPrefs;
     private PackageManager manager;
     private HashSet<String> excludedAppList = new HashSet<>();
-    private ListView list;
+    private ListView appsListView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,10 +72,10 @@ public class HiddenAppsFragment extends Fragment {
         manager = getActivity().getPackageManager();
         editPrefs = prefs.edit();
 
-        list = getActivity().findViewById(R.id.ex_apps_list);
-        apps = new HiddenAppAdapter(appList, getActivity());
+        appsListView = getActivity().findViewById(R.id.ex_apps_list);
+        hiddenAppAdapter = new HiddenAppAdapter(appList, getActivity());
 
-        list.setAdapter(apps);
+        appsListView.setAdapter(hiddenAppAdapter);
 
         // Get our app list.
         excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
@@ -133,7 +133,7 @@ public class HiddenAppsFragment extends Fragment {
 
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
-        apps.notifyDataSetInvalidated();
+        hiddenAppAdapter.notifyDataSetInvalidated();
 
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
@@ -149,7 +149,7 @@ public class HiddenAppsFragment extends Fragment {
             }
         }
 
-        apps.notifyDataSetChanged();
+        hiddenAppAdapter.notifyDataSetChanged();
     }
 
     private void toggleHiddenState(int position) {
@@ -169,21 +169,21 @@ public class HiddenAppsFragment extends Fragment {
         } else {
             appList.get(position).setAppHidden(false);
         }
-        apps.notifyDataSetChanged();
+        hiddenAppAdapter.notifyDataSetChanged();
 
         // Toggle the state of the 'restore all' button.
         getActivity().invalidateOptionsMenu();
     }
 
     private void addListeners() {
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        appsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 toggleHiddenState(position);
             }
         });
 
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        appsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 // Parse package URI for use in uninstallation and package info call.

@@ -15,11 +15,11 @@ import mono.hg.R;
 import mono.hg.Utils;
 
 public class FileFolderAdapter extends BaseAdapter {
-    private ArrayList<FileFolder> files;
+    private ArrayList<FileFolder> filesList;
     private Context context;
 
-    public FileFolderAdapter(ArrayList<FileFolder> list, Context context) {
-        this.files = list;
+    public FileFolderAdapter(ArrayList<FileFolder> files, Context context) {
+        this.filesList = files;
         this.context = context;
     }
 
@@ -43,13 +43,13 @@ public class FileFolderAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        if (files.get(position).isFolder()) {
+        if (filesList.get(position).isFolder()) {
             holder.content.setImageResource(R.drawable.ic_folder);
         } else {
             holder.content.setImageResource(R.drawable.ic_file);
         }
 
-        holder.name.setText(files.get(position).getName());
+        holder.name.setText(filesList.get(position).getName());
 
         return view;
     }
@@ -61,12 +61,12 @@ public class FileFolderAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return files.size();
+        return filesList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return files.get(position);
+        return filesList.get(position);
     }
 
     @Override

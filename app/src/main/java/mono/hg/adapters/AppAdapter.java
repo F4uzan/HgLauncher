@@ -14,13 +14,13 @@ import mono.hg.Utils;
 import mono.hg.items.AppDetail;
 
 public class AppAdapter extends FlexibleAdapter<AppDetail> implements FastScrollRecyclerView.SectionedAdapter {
-    private List<AppDetail> apps;
+    private List<AppDetail> appsList;
     private int mSelectedItem = 0;
     private RecyclerView mRecyclerView;
 
     public AppAdapter(List<AppDetail> apps) {
         super(apps);
-        this.apps = apps;
+        this.appsList = apps;
     }
 
     // Resets the filter constraint.
@@ -32,7 +32,7 @@ public class AppAdapter extends FlexibleAdapter<AppDetail> implements FastScroll
     @NonNull
     @Override
     public String getSectionName(int position) {
-        return apps.get(position).getAppName().substring(0, 1).toUpperCase();
+        return appsList.get(position).getAppName().substring(0, 1).toUpperCase();
     }
 
     /**

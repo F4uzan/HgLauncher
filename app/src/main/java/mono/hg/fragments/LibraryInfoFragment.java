@@ -22,9 +22,9 @@ public class LibraryInfoFragment extends DialogFragment {
 
         builder.setTitle(R.string.about_libraries_dialogue_title);
         builder.setView(view);
-        ListView list = view.findViewById(R.id.libs_list);
+        ListView libsListView = view.findViewById(R.id.libs_list);
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        libsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {

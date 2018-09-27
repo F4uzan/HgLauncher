@@ -16,11 +16,11 @@ import mono.hg.R;
 import mono.hg.Utils;
 
 public class HiddenAppAdapter extends BaseAdapter {
-    private ArrayList<AppDetail> apps;
+    private ArrayList<AppDetail> hiddenAppsList;
     private Context context;
 
-    public HiddenAppAdapter(ArrayList<AppDetail> apps, Context context) {
-        this.apps = apps;
+    public HiddenAppAdapter(ArrayList<AppDetail> hiddenApps, Context context) {
+        this.hiddenAppsList = hiddenApps;
         this.context = context;
     }
 
@@ -46,14 +46,14 @@ public class HiddenAppAdapter extends BaseAdapter {
             appHolder = (ViewHolder) view.getTag();
         }
 
-        if (apps.get(position).isAppHidden()) {
+        if (hiddenAppsList.get(position).isAppHidden()) {
             appHolder.hiddenState.setChecked(true);
         } else {
             appHolder.hiddenState.setChecked(false);
         }
 
-        appHolder.icon.setImageDrawable(apps.get(position).getIcon());
-        appHolder.name.setText(apps.get(position).getAppName());
+        appHolder.icon.setImageDrawable(hiddenAppsList.get(position).getIcon());
+        appHolder.name.setText(hiddenAppsList.get(position).getAppName());
 
         return view;
     }
@@ -66,12 +66,12 @@ public class HiddenAppAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return apps.size();
+        return hiddenAppsList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return apps.get(position);
+        return hiddenAppsList.get(position);
     }
 
     @Override
