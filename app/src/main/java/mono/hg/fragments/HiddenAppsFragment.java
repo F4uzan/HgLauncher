@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import mono.hg.items.AppDetail;
+import mono.hg.models.AppDetail;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.Utils;

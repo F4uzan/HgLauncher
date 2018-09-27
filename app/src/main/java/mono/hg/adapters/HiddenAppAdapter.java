@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import mono.hg.items.AppDetail;
+import mono.hg.models.AppDetail;
 import mono.hg.R;
 import mono.hg.Utils;
 

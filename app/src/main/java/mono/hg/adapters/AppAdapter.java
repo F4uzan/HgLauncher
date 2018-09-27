@@ -11,7 +11,7 @@ import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.Utils;
-import mono.hg.items.AppDetail;
+import mono.hg.models.AppDetail;
 
 public class AppAdapter extends FlexibleAdapter<AppDetail> implements FastScrollRecyclerView.SectionedAdapter {
     private List<AppDetail> appsList;

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import mono.hg.FileFolder;
+import mono.hg.models.FileFolder;
 import mono.hg.R;
 import mono.hg.Utils;
 

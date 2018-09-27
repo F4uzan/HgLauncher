@@ -40,7 +40,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 
-import mono.hg.FileFolder;
+import mono.hg.models.FileFolder;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.Utils;

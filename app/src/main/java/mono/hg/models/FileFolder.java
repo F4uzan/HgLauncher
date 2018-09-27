@@ -1,4 +1,4 @@
-package mono.hg;
+package mono.hg.models;
 
 public class FileFolder {
     private Boolean isFolder;

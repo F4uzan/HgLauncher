@@ -25,7 +25,7 @@ import java.util.List;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
-import mono.hg.items.PinnedAppDetail;
+import mono.hg.models.PinnedAppDetail;
 
 public class Utils {
 

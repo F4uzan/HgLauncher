@@ -1,4 +1,4 @@
-package mono.hg.items;
+package mono.hg.models;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
