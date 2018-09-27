@@ -214,6 +214,11 @@ public class SlidingUpPanelLayout extends ViewGroup {
      */
     private boolean mHidingDisallowed;
 
+    /*
+     * Flag to indicate whether panel state should always be reset.
+     */
+    private boolean mAlwaysResetState;
+
     private float mPrevMotionX;
     private float mPrevMotionY;
     private float mInitialMotionX;
@@ -511,6 +516,15 @@ public class SlidingUpPanelLayout extends ViewGroup {
      */
     public void disallowHiding(boolean disallow) {
         mHidingDisallowed = disallow;
+    }
+
+    /**
+     * Never restore panel state when resuming.
+     *
+     * @param reset whether state should always be reset.
+     */
+    public void alwaysResetState(boolean reset) {
+        mAlwaysResetState = reset;
     }
 
     /**
@@ -1396,15 +1410,20 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
     @Override
     public Parcelable onSaveInstanceState() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("superState", super.onSaveInstanceState());
-        bundle.putSerializable(SLIDING_STATE, mSlideState != PanelState.DRAGGING ? mSlideState : mLastNotDraggingSlideState);
-        return bundle;
+        if (!mAlwaysResetState) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("superState", super.onSaveInstanceState());
+            bundle.putSerializable(SLIDING_STATE,
+                    mSlideState != PanelState.DRAGGING ? mSlideState : mLastNotDraggingSlideState);
+            return bundle;
+        } else {
+            return super.onSaveInstanceState();
+        }
     }
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof Bundle) {
+        if (state instanceof Bundle && !mAlwaysResetState) {
             Bundle bundle = (Bundle) state;
             mSlideState = (PanelState) bundle.getSerializable(SLIDING_STATE);
             mSlideState = mSlideState == null ? DEFAULT_SLIDE_STATE : mSlideState;
