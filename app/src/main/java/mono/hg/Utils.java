@@ -200,7 +200,6 @@ public class Utils {
      */
     public static boolean isPanelVisible(SlidingUpPanelLayout panel) {
         return panel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
-                || panel.getPanelState() == SlidingUpPanelLayout.PanelState.DRAGGING
                 || panel.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED;
     }
 
