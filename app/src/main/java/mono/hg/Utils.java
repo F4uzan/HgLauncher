@@ -1,6 +1,9 @@
 package mono.hg;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -200,6 +203,39 @@ public class Utils {
         return panel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
                 || panel.getPanelState() == SlidingUpPanelLayout.PanelState.DRAGGING
                 || panel.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED;
+    }
+
+    /**
+     * Copies text to keyboard.
+     *
+     * @param activity Activity where CLIPBOARD_SERVICE can be fetched.
+     *
+     * @param text Text to copy.
+     */
+    public static void copyToClipboard(Activity activity, String text) {
+        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        ClipData clipData = ClipData.newPlainText(null, text);
+        if (clipboardManager != null)
+            clipboardManager.setPrimaryClip(clipData);
+    }
+
+    /**
+     * Pastes the first clip item containing the mimetype text.
+     *
+     * @param activity Activity where CLIPBOARD_SERVICE can be fetched.
+     *
+     * @return CharSequence text from clipboard, empty if there isn't any.
+     */
+    public static CharSequence pasteFromClipboard(Activity activity) {
+        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        if (clipboardManager != null && clipboardManager.hasPrimaryClip()
+                && clipboardManager.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+            return clipboardManager.getPrimaryClip().getItemAt(0).getText();
+        } else {
+            return "";
+        }
     }
 
     /**

@@ -4,10 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
-import android.content.ClipDescription;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -363,8 +359,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             int end = searchBar.getSelectionEnd();
             final String text = searchBar.getText().toString().substring(start, end);
 
-            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-
             switch (keyCode) {
                 case KeyEvent.KEYCODE_A:
                     searchBar.selectAll();
@@ -373,18 +367,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     searchBar.setText(searchBar.getText().toString().replace(text, ""));
                     return true;
                 case KeyEvent.KEYCODE_C:
-                    ClipData clipData = ClipData.newPlainText(null, text);
-                    if (clipboardManager != null) {
-                        clipboardManager.setPrimaryClip(clipData);
-                    }
+                    Utils.copyToClipboard(this, text);
                     return true;
                 case KeyEvent.KEYCODE_V:
-                    if (clipboardManager != null && clipboardManager.hasPrimaryClip()
-                            && clipboardManager.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                        CharSequence textToPaste = clipboardManager.getPrimaryClip().getItemAt(0).getText();
-                        searchBar.setText(searchBar.getText().replace(Math.min(start, end), Math.max(start, end),
-                                textToPaste, 0, textToPaste.length()));
-                    }
+                    searchBar.setText(searchBar.getText().replace(Math.min(start, end), Math.max(start, end),
+                            Utils.pasteFromClipboard(this), 0, Utils.pasteFromClipboard(this).length()));
                     return true;
                 default:
                     return super.onKeyUp(keyCode, event);
