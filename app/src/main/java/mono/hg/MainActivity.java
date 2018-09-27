@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Start loading apps and initialising click listeners.
-        loadApps();
+        new getAppTask(this).execute();
         addSearchBarListener();
         addGestureListener();
         addListListeners();
@@ -458,12 +458,6 @@ public class MainActivity extends AppCompatActivity
                 appsList.add(app);
             }
         }
-
-        // Add the fetched apps here.
-        appsAdapter.addItems(0, appsList);
-
-        // Update our view cache size, now that we have got all apps on the list
-        appsRecyclerView.setItemViewCacheSize(appsAdapter.getItemCount() - 1);
     }
 
     // A method to launch an app based on package name.
@@ -955,6 +949,34 @@ public class MainActivity extends AppCompatActivity
                 new LauncherIconHelper().loadIconPack(activity.manager);
             }
             return null;
+        }
+    }
+
+    private static class getAppTask extends AsyncTask<Void, Void, Void> {
+        private WeakReference<MainActivity> activityRef;
+
+        getAppTask(MainActivity context) {
+            activityRef = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            MainActivity activity = activityRef.get();
+            if (activity != null) {
+                activity.loadApps();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void results) {
+            MainActivity activity = activityRef.get();
+            if (activity != null) {
+                // Add the fetched apps and update item view cache.
+                activity.appsAdapter.addItems(0, activity.appsList);
+                activity.appsRecyclerView.setItemViewCacheSize(activity
+                        .appsAdapter.getItemCount() - 1);
+            }
         }
     }
 }
