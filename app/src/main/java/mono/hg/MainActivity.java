@@ -214,6 +214,9 @@ public class MainActivity extends AppCompatActivity
 
         slidingHome.disallowHiding(true);
 
+        // Let the launcher handle state of the panel.
+        slidingHome.alwaysResetState(true);
+
         appsRecyclerView.setDrawingCacheEnabled(true);
         appsRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         appsRecyclerView.setHasFixedSize(true);
