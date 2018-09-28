@@ -331,14 +331,14 @@ public class MainActivity extends AppCompatActivity
             case "removedApp":
                 editPrefs.putBoolean("removedApp", false).apply();
                 editPrefs.remove("removed_app").apply();
-                parseAction("panel_up");
+                doThis("hide_panel");
                 // FIXME: Stop using recreate here; it's bad for the UX.
                 reload();
                 break;
             case "addApp":
                 editPrefs.putBoolean("addApp", false).apply();
                 editPrefs.remove("added_app").apply();
-                parseAction("panel_up");
+                doThis("hide_panel");
                 // FIXME: Recreate after receiving installation to handle frozen app list.
                 reload();
                 break;
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override public void onBackPressed() {
         // Hides the panel if back is pressed.
-        parseAction("panel_up");
+        doThis("hide_panel");
     }
 
     @Override public void onPause() {
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity
 
         // Check if we need to dismiss the panel.
         if (PreferenceHelper.shouldDismissOnLeave()) {
-            parseAction("panel_up");
+            doThis("hide_panel");
         }
 
         // You shouldn't be visible.
@@ -401,11 +401,11 @@ public class MainActivity extends AppCompatActivity
         } else {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_ESCAPE:
-                    parseAction("panel_up");
+                    doThis("hide_panel");
                     return true;
                 case KeyEvent.KEYCODE_SPACE:
                     if (!searchBar.hasFocus()) {
-                        parseAction("panel_down");
+                        doThis("show_panel");
                     }
                     return true;
                 default:
@@ -505,18 +505,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void parseAction(String action) {
+    private void doThis(String action) {
         switch (action) {
             default:
                 // Don't do anything.
                 break;
-            case "panel_down":
+            case "show_panel":
                 if (!ViewUtils.isPanelVisible(slidingHome)) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
                             ActivityServiceUtils.isPowerSaving(this));
                 }
                 break;
-            case "panel_up":
+            case "hide_panel":
                 if (ViewUtils.isPanelVisible(slidingHome)) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
                             ActivityServiceUtils.isPowerSaving(this));
@@ -689,7 +689,7 @@ public class MainActivity extends AppCompatActivity
                         pinnedAppString = pinnedAppString.replace(packageName + ";", "");
                         editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
                         if (pinnedAppsAdapter.isEmpty()) {
-                            parseAction("hide_favourites");
+                            doThis("hide_favourites");
                         }
                         break;
                     case R.id.action_info:
@@ -723,7 +723,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onSwipeDown() {
                 // Show the app panel.
-                parseAction("panel_down");
+                doThis("show_panel");
             }
 
             @Override
@@ -736,7 +736,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick() {
                 // Imitate sliding panel drag view behaviour; show the app panel on click.
                 if (PreferenceHelper.allowTapToOpen()) {
-                    parseAction("panel_down");
+                    doThis("show_panel");
                 }
             }
         });
@@ -828,14 +828,14 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onScrollUp() {
                     if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
-                        parseAction("hide_favourites");
+                        doThis("hide_favourites");
                     }
                 }
 
                 @Override
                 public void onEnd() {
                     if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
-                        parseAction("show_favourites");
+                        doThis("show_favourites");
                     }
                 }
             });
