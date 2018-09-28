@@ -11,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
+import android.os.PowerManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -201,6 +203,19 @@ public class Utils {
     public static boolean isPanelVisible(SlidingUpPanelLayout panel) {
         return panel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
                 || panel.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED;
+    }
+
+    /**
+     * Checks if the system is currently in battery saver mode.
+     *
+     * @param activity The activity where getSystemService can be received.
+     * @return false if battery saver is not enabled.
+     */
+    public static boolean isPowerSaving(Activity activity) {
+        PowerManager powerManager = (PowerManager) activity
+                .getSystemService(Context.POWER_SERVICE);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && powerManager != null && powerManager.isPowerSaveMode();
     }
 
     /**

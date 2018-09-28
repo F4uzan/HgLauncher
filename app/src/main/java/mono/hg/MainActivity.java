@@ -508,12 +508,14 @@ public class MainActivity extends AppCompatActivity
                 break;
             case "panel_down":
                 if (!Utils.isPanelVisible(slidingHome)) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED, false);
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
+                            Utils.isPowerSaving(this));
                 }
                 break;
             case "panel_up":
                 if (Utils.isPanelVisible(slidingHome)) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
+                            Utils.isPowerSaving(this));
                 }
                 break;
             case "show_favourites":
@@ -954,7 +956,8 @@ public class MainActivity extends AppCompatActivity
                                        }
                                    });
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
+                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
+                            Utils.isPowerSaving(MainActivity.this));
                 }
             }
         });
