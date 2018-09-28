@@ -56,6 +56,7 @@ import mono.hg.models.AppDetail;
 import mono.hg.models.PinnedAppDetail;
 import mono.hg.receivers.PackageChangesReceiver;
 import mono.hg.views.IndeterminateMaterialProgressBar;
+import mono.hg.views.TogglingLinearLayoutManager;
 import mono.hg.wrappers.OnTouchListener;
 import mono.hg.wrappers.SimpleScrollUpListener;
 
@@ -118,6 +119,11 @@ public class MainActivity extends AppCompatActivity
      * RecyclerView for app list.
      */
     private RecyclerView appsRecyclerView;
+
+    /*
+     * LinearLayoutManager used in appsRecyclerView.
+     */
+    private TogglingLinearLayoutManager appsLayoutManager;
 
     /*
      * RecyclerView for pinned apps; shown in favourites panel.
@@ -191,10 +197,10 @@ public class MainActivity extends AppCompatActivity
 
         manager = getPackageManager();
 
-        LinearLayoutManager appListManager = new LinearLayoutManager(this,
+        appsLayoutManager = new TogglingLinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
 
-        appListManager.setStackFromEnd(true);
+        appsLayoutManager.setStackFromEnd(true);
 
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
@@ -222,7 +228,7 @@ public class MainActivity extends AppCompatActivity
         appsRecyclerView.setHasFixedSize(true);
 
         appsRecyclerView.setAdapter(appsAdapter);
-        appsRecyclerView.setLayoutManager(appListManager);
+        appsRecyclerView.setLayoutManager(appsLayoutManager);
         appsRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         pinnedAppsRecyclerView.setAdapter(pinnedAppsAdapter);
@@ -878,6 +884,8 @@ public class MainActivity extends AppCompatActivity
     private void addPanelListener() {
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override public void onPanelSlide(View view, float v) {
+                appsLayoutManager.setVerticalScrollEnabled(false);
+
                 // Hide the keyboard at slide.
                 Utils.hideSoftKeyboard(MainActivity.this);
 
@@ -892,6 +900,11 @@ public class MainActivity extends AppCompatActivity
                     SlidingUpPanelLayout.PanelState newState) {
                 if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED
                         || newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
+
+                    if (newState != SlidingUpPanelLayout.PanelState.DRAGGING) {
+                        appsLayoutManager.setVerticalScrollEnabled(true);
+                    }
+
                     // Unregister context menu for touchReceiver as we don't want
                     // the user to accidentally show it during search.
                     unregisterForContextMenu(touchReceiver);
@@ -919,6 +932,8 @@ public class MainActivity extends AppCompatActivity
                                        }
                                    });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    appsLayoutManager.setVerticalScrollEnabled(false);
+
                     // Re-register touchReceiver context menu.
                     registerForContextMenu(touchReceiver);
 
