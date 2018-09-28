@@ -25,7 +25,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Locale;
 
-import mono.hg.Utils;
+import mono.hg.utils.Utils;
 
 /*
  * A class used to handle icon packs.

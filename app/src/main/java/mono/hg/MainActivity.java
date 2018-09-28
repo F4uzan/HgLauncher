@@ -55,6 +55,10 @@ import mono.hg.helpers.RecyclerClick;
 import mono.hg.models.AppDetail;
 import mono.hg.models.PinnedAppDetail;
 import mono.hg.receivers.PackageChangesReceiver;
+import mono.hg.utils.ActivityServiceUtils;
+import mono.hg.utils.AppUtils;
+import mono.hg.utils.Utils;
+import mono.hg.utils.ViewUtils;
 import mono.hg.views.IndeterminateMaterialProgressBar;
 import mono.hg.views.TogglingLinearLayoutManager;
 import mono.hg.wrappers.OnTouchListener;
@@ -236,13 +240,13 @@ public class MainActivity extends AppCompatActivity
         pinnedAppsRecyclerView.setItemAnimator(null);
 
         // Restore search bar visibility when panel is pulled down.
-        if (savedInstanceState != null && Utils.isPanelVisible(slidingHome)) {
+        if (savedInstanceState != null && ViewUtils.isPanelVisible(slidingHome)) {
             searchContainer.setVisibility(savedInstanceState.getInt("searchVisibility"));
         }
 
         // Get icons from icon pack.
         if (!"default".equals(PreferenceHelper.getIconPackName())) {
-            if (Utils.isAppInstalled(manager, PreferenceHelper.getIconPackName())) {
+            if (AppUtils.isAppInstalled(manager, PreferenceHelper.getIconPackName())) {
                 new getIconTask(this).execute();
             } else {
                 // We can't find the icon pack, so revert back to the default pack.
@@ -266,7 +270,7 @@ public class MainActivity extends AppCompatActivity
 
         if (!pinnedAppString.isEmpty()) {
             for (String pinnedApp : Arrays.asList(pinnedAppString.split(";"))) {
-                Utils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
+                AppUtils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
             }
         }
 
@@ -383,13 +387,13 @@ public class MainActivity extends AppCompatActivity
                     searchBar.setText(searchBar.getText().toString().replace(text, ""));
                     return true;
                 case KeyEvent.KEYCODE_C:
-                    Utils.copyToClipboard(this, text);
+                    ActivityServiceUtils.copyToClipboard(this, text);
                     return true;
                 case KeyEvent.KEYCODE_V:
                     searchBar.setText(
                             searchBar.getText().replace(Math.min(start, end), Math.max(start, end),
-                                    Utils.pasteFromClipboard(this), 0,
-                                    Utils.pasteFromClipboard(this).length()));
+                                    ActivityServiceUtils.pasteFromClipboard(this), 0,
+                                    ActivityServiceUtils.pasteFromClipboard(this).length()));
                     return true;
                 default:
                     return super.onKeyUp(keyCode, event);
@@ -412,7 +416,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save search bar visibility state.
-        if (Utils.isPanelVisible(slidingHome)) {
+        if (ViewUtils.isPanelVisible(slidingHome)) {
             savedInstanceState.putInt("searchVisibility", View.VISIBLE);
         } else {
             savedInstanceState.putInt("searchVisibility", View.INVISIBLE);
@@ -507,15 +511,15 @@ public class MainActivity extends AppCompatActivity
                 // Don't do anything.
                 break;
             case "panel_down":
-                if (!Utils.isPanelVisible(slidingHome)) {
+                if (!ViewUtils.isPanelVisible(slidingHome)) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
-                            Utils.isPowerSaving(this));
+                            ActivityServiceUtils.isPowerSaving(this));
                 }
                 break;
             case "panel_up":
-                if (Utils.isPanelVisible(slidingHome)) {
+                if (ViewUtils.isPanelVisible(slidingHome)) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
-                            Utils.isPowerSaving(this));
+                            ActivityServiceUtils.isPowerSaving(this));
                 }
                 break;
             case "show_favourites":
@@ -559,7 +563,7 @@ public class MainActivity extends AppCompatActivity
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome.getLayoutParams();
-            homeParams.topMargin = Utils.getStatusBarHeight(getResources());
+            homeParams.topMargin = ViewUtils.getStatusBarHeight(getResources());
         }
 
         // Empty out margins if they are not needed.
@@ -657,7 +661,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Remove uninstall menu if the app is a system app.
-        if (Utils.isSystemApp(manager, packageName)) {
+        if (AppUtils.isSystemApp(manager, packageName)) {
             appMenu.getMenu().removeItem(R.id.action_uninstall);
         }
 
@@ -668,7 +672,7 @@ public class MainActivity extends AppCompatActivity
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pin:
-                        Utils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
+                        AppUtils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
                         editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
                         if (!PreferenceHelper.isFavouritesEnabled()) {
@@ -790,7 +794,7 @@ public class MainActivity extends AppCompatActivity
                     }).show();
 
                     // Disable search snackbar swipe-to-dismiss.
-                    Utils.disableSnackbarSwipe(searchSnack);
+                    ViewUtils.disableSnackbarSwipe(searchSnack);
                 }
             }
         });
@@ -889,7 +893,7 @@ public class MainActivity extends AppCompatActivity
                 appsLayoutManager.setVerticalScrollEnabled(false);
 
                 // Hide the keyboard at slide.
-                Utils.hideSoftKeyboard(MainActivity.this);
+                ActivityServiceUtils.hideSoftKeyboard(MainActivity.this);
 
                 // Dismiss any visible menu.
                 if (appMenu != null) {
@@ -917,7 +921,7 @@ public class MainActivity extends AppCompatActivity
                     // Automatically show keyboard when the panel is called.
                     if (PreferenceHelper.shouldFocusKeyboard()
                             && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                        Utils.showSoftKeyboard(MainActivity.this, searchBar);
+                        ActivityServiceUtils.showSoftKeyboard(MainActivity.this, searchBar);
                     }
 
                     // Animate search container entering the view.
@@ -940,7 +944,7 @@ public class MainActivity extends AppCompatActivity
                     registerForContextMenu(touchReceiver);
 
                     // Hide keyboard if container is invisible.
-                    Utils.hideSoftKeyboard(MainActivity.this);
+                    ActivityServiceUtils.hideSoftKeyboard(MainActivity.this);
 
                     // Stop scrolling, the panel is being dismissed.
                     appsRecyclerView.stopScroll();
@@ -957,7 +961,7 @@ public class MainActivity extends AppCompatActivity
                                    });
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
                     slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
-                            Utils.isPowerSaving(MainActivity.this));
+                            ActivityServiceUtils.isPowerSaving(MainActivity.this));
                 }
             }
         });

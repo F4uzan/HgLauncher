@@ -9,7 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import mono.hg.R;
-import mono.hg.Utils;
+import mono.hg.utils.Utils;
 
 public class LibraryInfoFragment extends DialogFragment {
 

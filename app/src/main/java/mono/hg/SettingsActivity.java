@@ -10,6 +10,7 @@ import mono.hg.fragments.BackupRestoreFragment;
 import mono.hg.fragments.CustomizePreferenceFragment;
 import mono.hg.fragments.HiddenAppsFragment;
 import mono.hg.helpers.PreferenceHelper;
+import mono.hg.utils.ActivityServiceUtils;
 import mono.hg.wrappers.BackHandledFragment;
 
 public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity
@@ -52,7 +53,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            Utils.hideSoftKeyboard(this);
+            ActivityServiceUtils.hideSoftKeyboard(this);
             super.onBackPressed();
             return true;
         }

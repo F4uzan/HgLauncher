@@ -10,7 +10,7 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import mono.hg.Utils;
+import mono.hg.utils.Utils;
 import mono.hg.models.AppDetail;
 
 public class AppAdapter extends FlexibleAdapter<AppDetail>

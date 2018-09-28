@@ -42,7 +42,7 @@ import java.util.Set;
 
 import mono.hg.R;
 import mono.hg.SettingsActivity;
-import mono.hg.Utils;
+import mono.hg.utils.Utils;
 import mono.hg.adapters.FileFolderAdapter;
 import mono.hg.models.FileFolder;
 import mono.hg.wrappers.BackHandledFragment;
