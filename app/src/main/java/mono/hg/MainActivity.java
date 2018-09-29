@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity
         // Get icons from icon pack.
         if (!"default".equals(PreferenceHelper.getIconPackName())) {
             if (AppUtils.isAppInstalled(manager, PreferenceHelper.getIconPackName())) {
-                new getIconTask(this).execute();
+                new LauncherIconHelper().loadIconPack(manager);
             } else {
                 // We can't find the icon pack, so revert back to the default pack.
                 editPrefs.putString("icon_pack", "default").apply();
@@ -969,24 +969,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
-
-    private static class getIconTask extends AsyncTask<Void, Void, Void> {
-        private WeakReference<MainActivity> activityRef;
-
-        getIconTask(MainActivity context) {
-            activityRef = new WeakReference<>(context);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            MainActivity activity = activityRef.get();
-            if (activity != null) {
-                new LauncherIconHelper().loadIconPack(activity.manager);
-            }
-            return null;
-        }
-    }
-
+    
     private static class getAppTask extends AsyncTask<Void, Void, Void> {
         private WeakReference<MainActivity> activityRef;
 
