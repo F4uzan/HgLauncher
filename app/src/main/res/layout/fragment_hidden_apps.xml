@@ -9,7 +9,7 @@
     <include layout="@layout/layout_toolbar" />
 
     <ListView
-        android:id="@+id/ex_apps_list"
+        android:id="@+id/hidden_apps_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"

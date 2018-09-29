@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#8B46B7</color>
+    <!-- App theme -->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- Icon background colour; used in adaptive icons. -->
+    <color name="ic_launcher_background">#8B46B7</color>
+
+    <!-- UI colours. -->
     <color name="colorBackgroundGray">#202020</color>
     <color name="colorBackgroundWhite">#F5F5F5</color>
     <color name="colorCardBackgroundWhite">#242424</color>
     <color name="colorCardBackgroundGray">#101010</color>
     <color name="navigationBarShade">#80000000</color>
-    <color name="editTextHint">#bebebe</color> <!-- from @android:color/dim_foreground_dark -->
+    <color name="editTextHint">#BEBEBE</color> <!-- from @android:color/dim_foreground_dark -->
+
+    <!-- Generic colours. -->
     <color name="black">#000</color>
     <color name="white">#FFF</color>
 </resources>

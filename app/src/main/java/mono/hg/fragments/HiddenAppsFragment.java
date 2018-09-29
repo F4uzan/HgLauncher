@@ -71,7 +71,7 @@ public class HiddenAppsFragment extends Fragment {
         manager = getActivity().getPackageManager();
         editPrefs = prefs.edit();
 
-        appsListView = getActivity().findViewById(R.id.ex_apps_list);
+        appsListView = getActivity().findViewById(R.id.hidden_apps_list);
         hiddenAppAdapter = new HiddenAppAdapter(appList, getActivity());
 
         appsListView.setAdapter(hiddenAppAdapter);

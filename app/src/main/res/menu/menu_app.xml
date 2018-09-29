@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="mono.hubby.f4.hg.MainActivity">
+    tools:context="mono.hg.MainActivity">
 
     <item
         android:id="@+id/action_unpin"

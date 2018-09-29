@@ -4,8 +4,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
