@@ -18,6 +18,7 @@ public class AppAdapter extends FlexibleAdapter<AppDetail>
     private List<AppDetail> appsList;
     private int mSelectedItem = 0;
     private RecyclerView mRecyclerView;
+    private boolean finishedLoading = false;
 
     public AppAdapter(List<AppDetail> apps) {
         super(apps);
@@ -53,7 +54,6 @@ public class AppAdapter extends FlexibleAdapter<AppDetail>
         }
     }
 
-    // Resets the filter constraint.
     public void resetFilter() {
         setFilter("");
         filterItems();
@@ -106,6 +106,26 @@ public class AppAdapter extends FlexibleAdapter<AppDetail>
                 return false;
             }
         });
+    }
+
+    /**
+     * Checks if the adapter has finished loading its data.
+     * The adapter itself does not set this flag; and the flag
+     * does not actually do anything internally.
+     *
+     * @return true if the adapter has been notified that it has finished loading.
+     */
+    public boolean hasFinishedLoading() {
+        return finishedLoading;
+    }
+
+    /**
+     * Notifies the adapter that its data has been loaded.
+     *
+     * @param finished the new state of the adapter.
+     */
+    public void finishedLoading(boolean finished) {
+        finishedLoading = finished;
     }
 
     private boolean tryMoveSelection(int direction) {

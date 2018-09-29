@@ -757,8 +757,10 @@ public class MainActivity extends AppCompatActivity
                         searchBarText);
 
                 // Begin filtering our list.
-                appsAdapter.setFilter(searchBarText);
-                appsAdapter.filterItems();
+                if (appsAdapter.hasFinishedLoading()) {
+                    appsAdapter.setFilter(searchBarText);
+                    appsAdapter.filterItems();
+                }
             }
 
             @Override
@@ -1021,6 +1023,8 @@ public class MainActivity extends AppCompatActivity
                 activity.appsAdapter.addItems(0, activity.appsList);
                 activity.appsRecyclerView.setItemViewCacheSize(activity
                         .appsAdapter.getItemCount() - 1);
+
+                activity.appsAdapter.finishedLoading(true);
             }
         }
     }
