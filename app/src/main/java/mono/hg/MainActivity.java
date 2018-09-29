@@ -482,11 +482,13 @@ public class MainActivity extends AppCompatActivity
 
     // A method to launch an app based on package name.
     private void launchApp(String packageName) {
-        Intent i = manager.getLaunchIntentForPackage(packageName);
+        Intent intent = manager.getLaunchIntentForPackage(packageName);
         // Attempt to catch exceptions instead of crash landing directly to the floor.
         try {
+            Utils.requireNonNull(intent).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
             // Override app launch animation when needed.
-            startActivity(i);
             switch (PreferenceHelper.getLaunchAnim()) {
                 case "pull_up":
                     overridePendingTransition(R.anim.pull_up, 0);
