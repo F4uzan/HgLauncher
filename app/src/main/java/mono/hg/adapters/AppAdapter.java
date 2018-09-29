@@ -10,8 +10,8 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import mono.hg.utils.Utils;
 import mono.hg.models.AppDetail;
+import mono.hg.utils.Utils;
 
 public class AppAdapter extends FlexibleAdapter<AppDetail>
         implements FastScrollRecyclerView.SectionedAdapter {
@@ -27,6 +27,26 @@ public class AppAdapter extends FlexibleAdapter<AppDetail>
     private static boolean isConfirmButton(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.KEYCODE_ENTER:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private static boolean isUp(int keycode) {
+        switch (keycode) {
+            case KeyEvent.KEYCODE_SYSTEM_NAVIGATION_UP:
+            case KeyEvent.KEYCODE_DPAD_UP:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private static boolean isDown(int keycode) {
+        switch (keycode) {
+            case KeyEvent.KEYCODE_SYSTEM_NAVIGATION_DOWN:
+            case KeyEvent.KEYCODE_DPAD_DOWN:
                 return true;
             default:
                 return false;
@@ -69,9 +89,9 @@ public class AppAdapter extends FlexibleAdapter<AppDetail>
                         }
                         return true;
                     } else {
-                        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+                        if (isDown(keyCode)) {
                             return tryMoveSelection(1);
-                        } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                        } else if (isUp(keyCode)) {
                             return tryMoveSelection(-1);
                         }
                     }
