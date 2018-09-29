@@ -960,8 +960,7 @@ public class MainActivity extends AppCompatActivity
                                        }
                                    });
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
-                            ActivityServiceUtils.isPowerSaving(MainActivity.this));
+                    doThis("show_panel");
                 }
             }
         });
