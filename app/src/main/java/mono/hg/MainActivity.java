@@ -446,10 +446,6 @@ public class MainActivity extends AppCompatActivity
             Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
         }
 
-        // Clear the list to make sure that we aren't just adding over an existing list.
-        appsList.clear();
-        appsAdapter.clear();
-
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName;
@@ -969,7 +965,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
-    
+
     private static class getAppTask extends AsyncTask<Void, Void, Void> {
         private WeakReference<MainActivity> activityRef;
 
@@ -981,9 +977,15 @@ public class MainActivity extends AppCompatActivity
         protected void onPreExecute() {
             MainActivity activity = activityRef.get();
 
-            // Show the progress bar so the list wouldn't look empty.
             if (activity != null) {
+                // Show the progress bar so the list wouldn't look empty.
                 activity.loadProgress.setVisibility(View.VISIBLE);
+
+                // Clear the list before populating.
+                if (!activity.appsAdapter.isEmpty()) {
+                    activity.appsList.clear();
+                    activity.appsAdapter.clear();
+                }
             }
         }
 
