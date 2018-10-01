@@ -700,7 +700,7 @@ public class MainActivity extends AppCompatActivity
                                 packageNameUri));
                         break;
                     case R.id.action_uninstall:
-                        startActivity(new Intent(Intent.ACTION_DELETE, packageNameUri));
+                        startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageNameUri));
                         break;
                     case R.id.action_hide:
                         // Add the app's package name to the exclusion list.
