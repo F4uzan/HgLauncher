@@ -561,7 +561,7 @@ public class MainActivity extends AppCompatActivity
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome.getLayoutParams();
-            homeParams.topMargin = ViewUtils.getStatusBarHeight(getResources());
+            homeParams.topMargin = ViewUtils.getStatusBarHeight();
         }
 
         // Empty out margins if they are not needed.

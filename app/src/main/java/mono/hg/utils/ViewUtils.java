@@ -14,18 +14,16 @@ public class ViewUtils {
     /**
      * Fetch statusbar height from system's dimension.
      *
-     * @param resource Resources object used to fetch the statusbar height.
-     *
      * @return int Size of the statusbar. Returns the fallback value of 24dp if the
      * associated dimen value cannot be found.
      */
-    public static int getStatusBarHeight(Resources resource) {
-        int idStatusBarHeight = resource.getIdentifier("status_bar_height", "dimen", "android");
+    public static int getStatusBarHeight() {
+        int idStatusBarHeight = Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android");
         if (idStatusBarHeight > 0) {
-            return resource.getDimensionPixelSize(idStatusBarHeight);
+            return Resources.getSystem().getDimensionPixelSize(idStatusBarHeight);
         } else {
             // Return fallback size if we can't get the value from the system.
-            return resource.getDimensionPixelSize(R.dimen.status_bar_height_fallback);
+            return Resources.getSystem().getDimensionPixelSize(R.dimen.status_bar_height_fallback);
         }
     }
 
