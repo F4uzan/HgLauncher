@@ -41,7 +41,7 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
 
         // Adaptive icon is not available before Android O/API 26.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            PreferenceCategory appListPreference = (PreferenceCategory) findPreference("app_list");
+            PreferenceCategory appListPreference = (PreferenceCategory) findPreference("icon_prefs");
             Preference adaptiveShadePreference = findPreference("adaptive_shade_switch");
             appListPreference.removePreference(adaptiveShadePreference);
         }
