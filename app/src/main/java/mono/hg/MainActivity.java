@@ -499,7 +499,7 @@ public class MainActivity extends AppCompatActivity
             }
         } catch (ActivityNotFoundException | NullPointerException e) {
             Toast.makeText(MainActivity.this, R.string.err_activity_null, Toast.LENGTH_LONG).show();
-            Utils.sendLog(3, "Can't start " + packageName + "!");
+            Utils.sendLog(3, "Cannot start " + packageName + "; missing package?");
         }
     }
 
