@@ -504,6 +504,9 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    /**
+     * Recreates the activity whilst unregistering any receivers left around.
+     */
     private void reload() {
         try {
             unregisterReceiver(packageReceiver);
@@ -513,6 +516,11 @@ public class MainActivity extends AppCompatActivity
         recreate();
     }
 
+    /**
+     * Populates the internal app list.
+     * <p>
+     * LOAD THIS ASYNCHRONOUSLY; IT IS VERY SLOW.
+     */
     private void loadApps() {
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -556,7 +564,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // A method to launch an app based on package name.
+    /**
+     * Launches an app as a new task.
+     *
+     * @param packageName The package name of the app.
+     */
     private void launchApp(String packageName) {
         Intent intent = manager.getLaunchIntentForPackage(packageName);
         // Attempt to catch exceptions instead of crash landing directly to the floor.
@@ -583,6 +595,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * A shorthand for various toggles and visibility checks/sets.
+     *
+     * @param action What to do?
+     */
     private void doThis(String action) {
         switch (action) {
             default:
@@ -635,6 +652,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Modifies various views parameters and visibility based on the user preferences.
+     */
     private void applyPrefToViews() {
         // Workaround v21+ statusbar transparency issue.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -672,7 +692,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // Load available preferences.
+    /**
+     * Loads available preferences and updates PreferenceHelpers.
+     *
+     * @param isInit Are we loading for onCreate?
+     */
     private void loadPref(Boolean isInit) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         editPrefs = prefs.edit();
@@ -701,6 +725,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Registers the package changes receiver.
+     */
     private void registerPackageReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -711,7 +738,14 @@ public class MainActivity extends AppCompatActivity
         this.registerReceiver(packageReceiver, intentFilter);
     }
 
-    private void createAppMenu(View v, Boolean isPinned, final String packageName) {
+    /**
+     * Creates a PopupMenu to use in a long-pressed app object.
+     *
+     * @param view        View for the PopupMenu to anchor to.
+     * @param isPinned    Is this a pinned app?
+     * @param packageName Package name of the app.
+     */
+    private void createAppMenu(View view, Boolean isPinned, final String packageName) {
         final Uri packageNameUri = Uri.parse("package:" + packageName);
 
         int position;
@@ -724,7 +758,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Inflate the app menu.
-        appMenu = new PopupMenu(MainActivity.this, v);
+        appMenu = new PopupMenu(MainActivity.this, view);
         appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
 
         if (isPinned) {
@@ -795,6 +829,10 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * Listeners for touch receivers.
+     * TODO: Implement more swipe actions and listen for them.
+     */
     private void addGestureListener() {
         // Handle touch events in touchReceiver.
         touchReceiver.setOnTouchListener(new OnTouchListener(this) {
@@ -820,6 +858,9 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * Listeners for the search bar.
+     */
     private void addSearchBarListener() {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
@@ -900,6 +941,10 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * Listeners for the app list.
+     * TODO: Some of these can be moved internally to the adapters.
+     */
     private void addListListeners() {
         // Listen for app list scroll to hide/show favourites panel.
         // Only do this when the user has favourites panel enabled.
@@ -967,6 +1012,9 @@ public class MainActivity extends AppCompatActivity
                      });
     }
 
+    /**
+     * Listeners for the app panel.
+     */
     private void addPanelListener() {
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override public void onPanelSlide(View view, float v) {
@@ -1052,6 +1100,11 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * Adds a widget to the desktop.
+     *
+     * @param data Intent used to receive the ID of the widget being added.
+     */
     private void addWidget(Intent data) {
         int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
         AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
@@ -1084,12 +1137,19 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Removes widget from the desktop and resets the configuration
+     * relating to widgets.
+     */
     private void removeWidget() {
         AppWidgetHostView widget = (AppWidgetHostView) appWidgetContainer.getChildAt(0);
         appWidgetContainer.removeView(widget);
         editPrefs.remove("widget_id").putBoolean("has_widget", false).apply();
     }
 
+    /**
+     * AsyncTask used to load/populate the app list.
+     */
     private static class getAppTask extends AsyncTask<Void, Void, Void> {
         private WeakReference<MainActivity> activityRef;
 
