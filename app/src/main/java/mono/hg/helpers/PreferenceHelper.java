@@ -6,11 +6,15 @@ public class PreferenceHelper {
     private static boolean icon_hide, list_order, shade_view,
             keyboard_focus, web_search_enabled, comfy_padding,
             tap_to_drawer, favourites_panel, dismiss_panel,
-            static_favourites_panel, adaptive_shade;
+            static_favourites_panel, adaptive_shade, has_widget;
     private static String launch_anim;
     private static String app_theme;
     private static String search_provider_set;
     private static String icon_pack;
+
+    public static boolean hasWidget() {
+        return has_widget;
+    }
 
     public static String getLaunchAnim() {
         return launch_anim;
@@ -87,6 +91,7 @@ public class PreferenceHelper {
     }
 
     public static void fetchPreference(SharedPreferences prefs) {
+        has_widget = prefs.getBoolean("has_widget", false);
         launch_anim = prefs.getString("launch_anim", "default");
         icon_hide = prefs.getBoolean("icon_hide_switch", false);
         icon_pack = prefs.getString("icon_pack", "default");

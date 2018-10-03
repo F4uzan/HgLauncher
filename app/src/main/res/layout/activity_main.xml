@@ -101,6 +101,12 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/desc_touch_receiver" />
 
+            <FrameLayout
+                android:id="@+id/widget_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
             <include layout="@layout/layout_searchbar" />
 
         </FrameLayout>
