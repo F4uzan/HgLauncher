@@ -1,12 +1,17 @@
 package mono.hg.utils;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.widget.Toast;
 
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import mono.hg.R;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.PinnedAppDetail;
@@ -83,6 +88,38 @@ public class AppUtils {
             } catch (PackageManager.NameNotFoundException e) {
                 Utils.sendLog(3, e.toString());
             }
+        }
+    }
+
+
+    /**
+     * Launches an app as a new task.
+     *
+     * @param packageName The package name of the app.
+     */
+    public static void launchApp(Activity activity, String packageName) {
+        Intent intent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
+        // Attempt to catch exceptions instead of crash landing directly to the floor.
+        try {
+            Utils.requireNonNull(intent).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(intent);
+
+            // Override app launch animation when needed.
+            switch (PreferenceHelper.getLaunchAnim()) {
+                case "pull_up":
+                    activity.overridePendingTransition(R.anim.pull_up, 0);
+                    break;
+                case "slide_in":
+                    activity.overridePendingTransition(R.anim.slide_in, 0);
+                    break;
+                default:
+                case "default":
+                    // Don't override when we have the default value.
+                    break;
+            }
+        } catch (ActivityNotFoundException | NullPointerException e) {
+            Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show();
+            Utils.sendLog(3, "Cannot start " + packageName + "; missing package?");
         }
     }
 

@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -284,9 +283,6 @@ public class MainActivity extends AppCompatActivity
 
         registerPackageReceiver();
 
-        // Get pinned apps.
-        pinnedAppString = prefs.getString("pinned_apps_list", "");
-
         if (!pinnedAppString.isEmpty()) {
             for (String pinnedApp : Arrays.asList(pinnedAppString.split(";"))) {
                 AppUtils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
@@ -294,14 +290,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         applyPrefToViews();
-
-        // Load widgets if there are any.
-        if (PreferenceHelper.hasWidget()) {
-            Intent widgetIntent = new Intent();
-            widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    prefs.getInt("widget_id", -1));
-            addWidget(widgetIntent);
-        }
 
         // Save our current app count.
         //TODO: There are better ways to accomplish this.
@@ -565,37 +553,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Launches an app as a new task.
-     *
-     * @param packageName The package name of the app.
-     */
-    private void launchApp(String packageName) {
-        Intent intent = manager.getLaunchIntentForPackage(packageName);
-        // Attempt to catch exceptions instead of crash landing directly to the floor.
-        try {
-            Utils.requireNonNull(intent).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-
-            // Override app launch animation when needed.
-            switch (PreferenceHelper.getLaunchAnim()) {
-                case "pull_up":
-                    overridePendingTransition(R.anim.pull_up, 0);
-                    break;
-                case "slide_in":
-                    overridePendingTransition(R.anim.slide_in, 0);
-                    break;
-                default:
-                case "default":
-                    // Don't override when we have the default value.
-                    break;
-            }
-        } catch (ActivityNotFoundException | NullPointerException e) {
-            Toast.makeText(MainActivity.this, R.string.err_activity_null, Toast.LENGTH_LONG).show();
-            Utils.sendLog(3, "Cannot start " + packageName + "; missing package?");
-        }
-    }
-
-    /**
      * A shorthand for various toggles and visibility checks/sets.
      *
      * @param action What to do?
@@ -690,6 +647,14 @@ public class MainActivity extends AppCompatActivity
             }
             wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
         }
+
+        // Load widgets if there are any.
+        if (PreferenceHelper.hasWidget()) {
+            Intent widgetIntent = new Intent();
+            widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    prefs.getInt("widget_id", -1));
+            addWidget(widgetIntent);
+        }
     }
 
     /**
@@ -708,6 +673,9 @@ public class MainActivity extends AppCompatActivity
 
             // Get a list of our hidden apps, default to null if there aren't any.
             excludedAppsList.addAll(prefs.getStringSet("hidden_apps", excludedAppsList));
+
+            // Get pinned apps.
+            pinnedAppString = prefs.getString("pinned_apps_list", "");
 
             // Set the app theme!
             switch (PreferenceHelper.appTheme()) {
@@ -928,11 +896,12 @@ public class MainActivity extends AppCompatActivity
                         (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
                     if (!appsRecyclerView.canScrollVertically(RecyclerView.FOCUS_UP)
                             && !appsRecyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                        launchApp(Utils.requireNonNull(
+                        AppUtils.launchApp(MainActivity.this, Utils.requireNonNull(
                                 appsAdapter.getItem(appsAdapter.getItemCount() - 1))
-                                       .getPackageName());
+                                                                   .getPackageName());
                     } else {
-                        launchApp(Utils.requireNonNull(appsAdapter.getItem(0)).getPackageName());
+                        AppUtils.launchApp(MainActivity.this, Utils.requireNonNull(
+                                appsAdapter.getItem(0)).getPackageName());
                     }
                     return true;
                 }
@@ -971,8 +940,9 @@ public class MainActivity extends AppCompatActivity
                      .setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
                          @Override
                          public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                             launchApp(Utils.requireNonNull(appsAdapter.getItem(position))
-                                            .getPackageName());
+                             AppUtils.launchApp(MainActivity.this,
+                                     Utils.requireNonNull(appsAdapter.getItem(position))
+                                          .getPackageName());
                          }
                      });
 
@@ -1006,8 +976,9 @@ public class MainActivity extends AppCompatActivity
                      .setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
                          @Override
                          public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                             launchApp(Utils.requireNonNull(pinnedAppsAdapter.getItem(position))
-                                            .getPackageName());
+                             AppUtils.launchApp(MainActivity.this,
+                                     Utils.requireNonNull(pinnedAppsAdapter.getItem(position))
+                                          .getPackageName());
                          }
                      });
     }
