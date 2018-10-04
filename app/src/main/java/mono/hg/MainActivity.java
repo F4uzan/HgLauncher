@@ -1089,6 +1089,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             // Notify widget of the available minimum space.
             appWidgetHostView.setMinimumHeight(appWidgetInfo.minHeight);
+            appWidgetHostView.setMinimumWidth(appWidgetInfo.minWidth);
             appWidgetHostView.setAppWidget(widgetId, appWidgetInfo);
             if (Build.VERSION.SDK_INT > 15) {
                 appWidgetHostView.updateAppWidgetSize(null, appWidgetInfo.minWidth,
