@@ -90,29 +90,26 @@
 
         </RelativeLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/bottom_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/layout_searchbar" />
+            <FrameLayout
+                android:id="@+id/widget_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom" />
 
             <View
                 android:id="@+id/touch_receiver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="top|center"
                 android:contentDescription="@string/desc_touch_receiver" />
 
-            <FrameLayout
-                android:id="@+id/widget_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:layout_gravity="bottom|center" />
+            <include layout="@layout/layout_searchbar" />
 
-        </LinearLayout>
+        </FrameLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 </mono.hg.views.ZeroInsetsFrameLayout>
