@@ -668,14 +668,14 @@ public class MainActivity extends AppCompatActivity
 
         PreferenceHelper.fetchPreference(prefs);
 
+        // Get pinned apps.
+        pinnedAppString = prefs.getString("pinned_apps_list", "");
+
         if (isInit) {
             prefs.registerOnSharedPreferenceChangeListener(this);
 
             // Get a list of our hidden apps, default to null if there aren't any.
             excludedAppsList.addAll(prefs.getStringSet("hidden_apps", excludedAppsList));
-
-            // Get pinned apps.
-            pinnedAppString = prefs.getString("pinned_apps_list", "");
 
             // Set the app theme!
             switch (PreferenceHelper.appTheme()) {
