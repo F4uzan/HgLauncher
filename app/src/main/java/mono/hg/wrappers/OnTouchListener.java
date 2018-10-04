@@ -15,6 +15,7 @@ import android.view.View;
 public class OnTouchListener implements View.OnTouchListener {
 
     private final GestureDetector gestureDetector;
+    private MotionEvent event;
     private float startX;
     private float startY;
     private float endX;
@@ -48,6 +49,10 @@ public class OnTouchListener implements View.OnTouchListener {
         // Do tap/click action.
     }
 
+    public MotionEvent getEvent() {
+        return event;
+    }
+
     public float getStartX() {
         return startX;
     }
@@ -65,6 +70,7 @@ public class OnTouchListener implements View.OnTouchListener {
     }
 
     public boolean onTouch(View v, MotionEvent event) {
+        this.event = event;
         return gestureDetector.onTouchEvent(event);
     }
 
