@@ -819,7 +819,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick() {
                 // Imitate sliding panel drag view behaviour; show the app panel on click.
-                if (PreferenceHelper.allowTapToOpen() && !PreferenceHelper.hasWidget()) {
+                if (PreferenceHelper.allowTapToOpen()) {
                     doThis("show_panel");
                 }
             }
