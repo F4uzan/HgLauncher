@@ -78,8 +78,7 @@ public class AppUtils {
                 String componentPackage = getPackageName(packageName);
 
                 if (!PreferenceHelper.getIconPackName().equals("default")) {
-                    getIcon = new LauncherIconHelper().getIconDrawable(packageManager,
-                            componentPackage);
+                    getIcon = new LauncherIconHelper().getIconDrawable(packageManager, packageName);
                 }
                 if (getIcon == null) {
                     icon = packageManager.getApplicationIcon(componentPackage);
