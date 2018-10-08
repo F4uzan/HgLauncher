@@ -524,7 +524,7 @@ public class MainActivity extends AppCompatActivity
 
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
-            String packageName = ri.activityInfo.packageName;
+            String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
             if (!excludedAppsList.contains(packageName) && !packageName.equals(getPackageName())) {
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = null;
@@ -532,7 +532,7 @@ public class MainActivity extends AppCompatActivity
                 // Only show icons if user chooses so.
                 if (!PreferenceHelper.shouldHideIcon()) {
                     if (!PreferenceHelper.getIconPackName().equals("default")) {
-                        getIcon = new LauncherIconHelper().getIconDrawable(manager, packageName);
+                        getIcon = new LauncherIconHelper().getIconDrawable(manager, AppUtils.getPackageName(packageName));
                     }
                     if (getIcon == null) {
                         icon = ri.activityInfo.loadIcon(manager);

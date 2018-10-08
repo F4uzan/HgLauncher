@@ -75,14 +75,18 @@ public class AppUtils {
             try {
                 Drawable icon;
                 Drawable getIcon = null;
+                String componentPackage = getPackageName(packageName);
+
                 if (!PreferenceHelper.getIconPackName().equals("default")) {
-                    getIcon = new LauncherIconHelper().getIconDrawable(packageManager, packageName);
+                    getIcon = new LauncherIconHelper().getIconDrawable(packageManager,
+                            componentPackage);
                 }
                 if (getIcon == null) {
-                    icon = packageManager.getApplicationIcon(packageName);
+                    icon = packageManager.getApplicationIcon(componentPackage);
                 } else {
                     icon = getIcon;
                 }
+
                 PinnedAppDetail app = new PinnedAppDetail(icon, packageName);
                 list.add(app);
                 adapter.updateDataSet(list, false);
@@ -99,14 +103,11 @@ public class AppUtils {
      * @param packageName The package name of the app.
      */
     public static void launchApp(Activity activity, String packageName) {
-        Intent intent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
+        ComponentName componentName = ComponentName.unflattenFromString(packageName);
 
         // Attempt to catch exceptions instead of crash landing directly to the floor.
         try {
-            ComponentName componentName = Utils.requireNonNull(intent).getComponent();
-            Intent launchIntent = Intent.makeRestartActivityTask(componentName);
-
-            activity.startActivity(launchIntent);
+            activity.startActivity(Intent.makeMainActivity(componentName));
 
             // Override app launch animation when needed.
             switch (PreferenceHelper.getLaunchAnim()) {
@@ -127,4 +128,15 @@ public class AppUtils {
         }
     }
 
+    /**
+     * Get simple package name from a flattened ComponentName.
+     *
+     * @param componentName The flattened ComponentName whose package name is to be returned.
+     *
+     * @return String the package name if not null.
+     */
+    public static String getPackageName(String componentName) {
+        return Utils.requireNonNull(ComponentName.unflattenFromString(componentName))
+                    .getPackageName();
+    }
 }
