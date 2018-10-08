@@ -1,7 +1,5 @@
 package mono.hg.helpers;
 
-import android.content.ComponentName;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -23,7 +21,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Locale;
 
 import mono.hg.utils.Utils;
 
@@ -211,9 +208,8 @@ public class LauncherIconHelper {
      */
     // Load icon from the cached appfilter.
     public Drawable getIconDrawable(PackageManager packageManager, String appPackageName) {
-        Intent launchIntent = packageManager.getLaunchIntentForPackage(appPackageName);
         String iconPackageName = PreferenceHelper.getIconPackName();
-        String componentName = null;
+        String componentName = "ComponentInfo{" + appPackageName + "}";
         Resources iconRes = null;
 
         try {
@@ -222,29 +218,21 @@ public class LauncherIconHelper {
             Utils.sendLog(3, e.toString());
         }
 
-        if (launchIntent != null) {
-            ComponentName component = Utils.requireNonNull(
-                    packageManager.getLaunchIntentForPackage(appPackageName)).getComponent();
-            componentName = Utils.requireNonNull(component).toString();
-        }
-
         String drawable = mPackagesDrawables.get(componentName);
         if (drawable != null && iconRes != null) {
             // Load and return.
             return loadDrawable(iconRes, drawable, iconPackageName);
         } else {
             // Manually retrieve resource by brute-forcing its component name.
-            if (componentName != null) {
-                int start = componentName.indexOf("{") + 1;
-                int end = componentName.indexOf("}", start);
-                if (end > start && iconRes != null) {
-                    drawable = componentName.substring(start, end)
-                                            .toLowerCase(Locale.getDefault())
-                                            .replace(".", "_")
-                                            .replace("/", "_");
-                    if (iconRes.getIdentifier(drawable, "drawable", iconPackageName) > 0) {
-                        return loadDrawable(iconRes, drawable, iconPackageName);
-                    }
+            int start = componentName.indexOf("{") + 1;
+            int end = componentName.indexOf("}", start);
+            if (end > start && iconRes != null) {
+                drawable = componentName.substring(start, end)
+                                        .toLowerCase()
+                                        .replace(".", "_")
+                                        .replace("/", "_");
+                if (iconRes.getIdentifier(drawable, "drawable", iconPackageName) > 0) {
+                    return loadDrawable(iconRes, drawable, iconPackageName);
                 }
             }
         }

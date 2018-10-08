@@ -532,7 +532,7 @@ public class MainActivity extends AppCompatActivity
                 // Only show icons if user chooses so.
                 if (!PreferenceHelper.shouldHideIcon()) {
                     if (!PreferenceHelper.getIconPackName().equals("default")) {
-                        getIcon = new LauncherIconHelper().getIconDrawable(manager, AppUtils.getPackageName(packageName));
+                        getIcon = new LauncherIconHelper().getIconDrawable(manager, packageName);
                     }
                     if (getIcon == null) {
                         icon = ri.activityInfo.loadIcon(manager);
