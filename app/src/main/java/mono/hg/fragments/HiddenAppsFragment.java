@@ -133,7 +133,7 @@ public class HiddenAppsFragment extends Fragment {
 
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
-            String packageName = ri.activityInfo.packageName;
+            String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
             if (!packageName.equals(getActivity().getPackageName())) {
                 Boolean isHidden = false;
                 String appName = ri.loadLabel(manager).toString();
