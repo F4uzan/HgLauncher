@@ -2,6 +2,7 @@ package mono.hg.utils;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -99,10 +100,13 @@ public class AppUtils {
      */
     public static void launchApp(Activity activity, String packageName) {
         Intent intent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
+
         // Attempt to catch exceptions instead of crash landing directly to the floor.
         try {
-            Utils.requireNonNull(intent).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            activity.startActivity(intent);
+            ComponentName componentName = Utils.requireNonNull(intent).getComponent();
+            Intent launchIntent = Intent.makeRestartActivityTask(componentName);
+
+            activity.startActivity(launchIntent);
 
             // Override app launch animation when needed.
             switch (PreferenceHelper.getLaunchAnim()) {
