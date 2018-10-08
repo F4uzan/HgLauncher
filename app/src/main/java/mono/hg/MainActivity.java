@@ -525,7 +525,7 @@ public class MainActivity extends AppCompatActivity
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
-            if (!excludedAppsList.contains(packageName) && !packageName.equals(getPackageName())) {
+            if (!excludedAppsList.contains(packageName) && !packageName.contains(getPackageName())) {
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = null;
                 Drawable getIcon = null;
