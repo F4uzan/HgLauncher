@@ -714,7 +714,7 @@ public class MainActivity extends AppCompatActivity
      * @param packageName Package name of the app.
      */
     private void createAppMenu(View view, Boolean isPinned, final String packageName) {
-        final Uri packageNameUri = Uri.parse("package:" + packageName);
+        final Uri packageNameUri = Uri.parse("package:" + AppUtils.getPackageName(packageName));
 
         int position;
         if (isPinned) {
