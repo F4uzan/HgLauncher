@@ -346,14 +346,12 @@ public class MainActivity extends AppCompatActivity
                 break;
             case "removedApp":
                 PreferenceHelper.getEditor().putBoolean("removedApp", false).apply();
-                PreferenceHelper.getEditor().remove("removed_app").apply();
                 doThis("hide_panel");
                 // FIXME: Stop using recreate here; it's bad for the UX.
                 reload();
                 break;
             case "addApp":
                 PreferenceHelper.getEditor().putBoolean("addApp", false).apply();
-                PreferenceHelper.getEditor().remove("added_app").apply();
                 doThis("hide_panel");
                 // FIXME: Recreate after receiving installation to handle frozen app list.
                 reload();
