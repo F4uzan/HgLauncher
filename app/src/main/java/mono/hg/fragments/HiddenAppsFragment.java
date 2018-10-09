@@ -48,8 +48,6 @@ public class HiddenAppsFragment extends Fragment {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PreferenceHelper.initPreference(getActivity());
-
         // Make a toolbar when the preference library doesn't give us anything.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Toolbar toolbar = getActivity().findViewById(R.id.toolbar);

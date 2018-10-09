@@ -101,7 +101,6 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
     }
 
     private void addVersionCounterListener() {
-        PreferenceHelper.initPreference(getActivity());
         final Preference versionMenu = findPreference("version_key");
 
         if (!PreferenceHelper.getPreference().getBoolean("is_grandma", false)) {

@@ -60,8 +60,6 @@ public class BackupRestoreFragment extends BackHandledFragment {
 
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        PreferenceHelper.initPreference(getActivity());
 
         /*
          * Show our own toolbar if we are running below Lollipop.
