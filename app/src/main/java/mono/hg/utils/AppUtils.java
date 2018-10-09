@@ -138,7 +138,11 @@ public class AppUtils {
      * @return String The package name if not null.
      */
     public static String getPackageName(String componentName) {
-        return Utils.requireNonNull(ComponentName.unflattenFromString(componentName))
-                    .getPackageName();
+        ComponentName unflattened = ComponentName.unflattenFromString(componentName);
+        if (unflattened != null){
+            return unflattened.getPackageName();
+        } else {
+            return "";
+        }
     }
 }
