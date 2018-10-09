@@ -43,13 +43,14 @@ public class AppUtils {
      * is installed as a system app.
      *
      * @param packageManager PackageManager object used to receive application info.
-     * @param packageName    Application package name to check against.
+     * @param componentName  Application package name to check against.
      *
      * @return boolean True if the application is a system app, false if otherwise.
      */
-    public static boolean isSystemApp(PackageManager packageManager, String packageName) {
+    public static boolean isSystemApp(PackageManager packageManager, String componentName) {
         try {
-            ApplicationInfo appFlags = packageManager.getApplicationInfo(getPackageName(packageName), 0);
+            ApplicationInfo appFlags = packageManager.getApplicationInfo(
+                    getPackageName(componentName), 0);
             if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
                 return true;
             }
@@ -65,28 +66,28 @@ public class AppUtils {
      *
      * @param packageManager PackageManager object used to fetch information regarding
      *                       the app that is being loaded.
-     * @param packageName    The package name to load and fetch.
+     * @param componentName  The package name to load and fetch.
      * @param adapter        Which adapter should we notify update to?
      * @param list           Which List object should be updated?
      */
-    public static void pinApp(PackageManager packageManager, String packageName,
+    public static void pinApp(PackageManager packageManager, String componentName,
             FlexibleAdapter<PinnedAppDetail> adapter, List<PinnedAppDetail> list) {
-        if (!adapter.contains(new PinnedAppDetail(null, packageName))) {
+        if (!adapter.contains(new PinnedAppDetail(null, componentName))) {
             try {
                 Drawable icon;
                 Drawable getIcon = null;
-                String componentPackage = getPackageName(packageName);
 
                 if (!PreferenceHelper.getIconPackName().equals("default")) {
-                    getIcon = new LauncherIconHelper().getIconDrawable(packageManager, packageName);
+                    getIcon = new LauncherIconHelper().getIconDrawable(packageManager,
+                            componentName);
                 }
                 if (getIcon == null) {
-                    icon = packageManager.getApplicationIcon(componentPackage);
+                    icon = packageManager.getApplicationIcon(getPackageName(componentName));
                 } else {
                     icon = getIcon;
                 }
 
-                PinnedAppDetail app = new PinnedAppDetail(icon, packageName);
+                PinnedAppDetail app = new PinnedAppDetail(icon, componentName);
                 list.add(app);
                 adapter.updateDataSet(list, false);
             } catch (PackageManager.NameNotFoundException e) {
@@ -99,11 +100,11 @@ public class AppUtils {
     /**
      * Launches an app as a new task.
      *
-     * @param packageName The package name of the app.
+     * @param componentName The package name of the app.
      */
-    public static void launchApp(Activity activity, String packageName) {
-        ComponentName componentName = ComponentName.unflattenFromString(packageName);
-        Intent intent = Intent.makeMainActivity(componentName);
+    public static void launchApp(Activity activity, String componentName) {
+        ComponentName component = ComponentName.unflattenFromString(componentName);
+        Intent intent = Intent.makeMainActivity(component);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         // Attempt to catch exceptions instead of crash landing directly to the floor.
@@ -125,7 +126,7 @@ public class AppUtils {
             }
         } catch (ActivityNotFoundException | NullPointerException e) {
             Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show();
-            Utils.sendLog(3, "Cannot start " + packageName + "; missing package?");
+            Utils.sendLog(3, "Cannot start " + componentName + "; missing package?");
         }
     }
 
