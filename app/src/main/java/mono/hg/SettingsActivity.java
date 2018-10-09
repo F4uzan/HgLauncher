@@ -18,6 +18,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
 
     @Override public void onCreate(Bundle savedInstanceState) {
         // Load appropriate theme before creating the activity.
+        PreferenceHelper.initPreference(this);
         PreferenceHelper.fetchPreference();
 
         switch (PreferenceHelper.appTheme()) {
