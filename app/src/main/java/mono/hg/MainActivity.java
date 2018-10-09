@@ -344,14 +344,8 @@ public class MainActivity extends AppCompatActivity
                 LauncherIconHelper.clearDrawableCache();
                 reload();
                 break;
-            case "removedApp":
-                PreferenceHelper.getEditor().putBoolean("removedApp", false).apply();
-                doThis("hide_panel");
-                // FIXME: Stop using recreate here; it's bad for the UX.
-                reload();
-                break;
-            case "addApp":
-                PreferenceHelper.getEditor().putBoolean("addApp", false).apply();
+            case "refreshList":
+                PreferenceHelper.getEditor().putBoolean("refreshList", false).apply();
                 doThis("hide_panel");
                 // FIXME: Recreate after receiving installation to handle frozen app list.
                 reload();
