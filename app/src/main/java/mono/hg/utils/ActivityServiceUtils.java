@@ -45,6 +45,7 @@ public class ActivityServiceUtils {
      * Checks if the system is currently in battery saver mode.
      *
      * @param activity The activity where getSystemService can be received.
+     *
      * @return false if battery saver is not enabled.
      */
     public static boolean isPowerSaving(Activity activity) {

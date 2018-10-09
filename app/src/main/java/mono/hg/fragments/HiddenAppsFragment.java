@@ -71,7 +71,8 @@ public class HiddenAppsFragment extends Fragment {
         appsListView.setAdapter(hiddenAppAdapter);
 
         // Get our app list.
-        excludedAppList.addAll(PreferenceHelper.getPreference().getStringSet("hidden_apps", excludedAppList));
+        excludedAppList.addAll(
+                PreferenceHelper.getPreference().getStringSet("hidden_apps", excludedAppList));
         loadApps();
 
         addListeners();

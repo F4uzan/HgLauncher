@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
      * Progress bar shown when populating app list.
      */
     private IndeterminateMaterialProgressBar loadProgress;
-    
+
     /*
      * Menu shown when long-pressing apps.
      */
@@ -508,7 +508,8 @@ public class MainActivity extends AppCompatActivity
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
-            if (!excludedAppsList.contains(packageName) && !packageName.contains(getPackageName())) {
+            if (!excludedAppsList.contains(packageName) && !packageName.contains(
+                    getPackageName())) {
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = null;
                 Drawable getIcon = null;
@@ -656,7 +657,8 @@ public class MainActivity extends AppCompatActivity
             PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
 
             // Get a list of our hidden apps, default to null if there aren't any.
-            excludedAppsList.addAll(PreferenceHelper.getPreference().getStringSet("hidden_apps", excludedAppsList));
+            excludedAppsList.addAll(
+                    PreferenceHelper.getPreference().getStringSet("hidden_apps", excludedAppsList));
 
             // Set the app theme!
             switch (PreferenceHelper.appTheme()) {
@@ -735,7 +737,9 @@ public class MainActivity extends AppCompatActivity
                     case R.id.action_pin:
                         AppUtils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
-                        PreferenceHelper.getEditor().putString("pinned_apps_list", pinnedAppString).apply();
+                        PreferenceHelper.getEditor()
+                                        .putString("pinned_apps_list", pinnedAppString)
+                                        .apply();
                         if (!PreferenceHelper.isFavouritesEnabled()) {
                             Toast.makeText(MainActivity.this, R.string.warn_pinning,
                                     Toast.LENGTH_SHORT).show();
@@ -748,7 +752,9 @@ public class MainActivity extends AppCompatActivity
                         pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
                         pinnedAppsAdapter.removeItem(finalPosition);
                         pinnedAppString = pinnedAppString.replace(packageName + ";", "");
-                        PreferenceHelper.getEditor().putString("pinned_apps_list", pinnedAppString).apply();
+                        PreferenceHelper.getEditor()
+                                        .putString("pinned_apps_list", pinnedAppString)
+                                        .apply();
                         if (pinnedAppsAdapter.isEmpty()) {
                             doThis("hide_favourites");
                         }
@@ -764,7 +770,9 @@ public class MainActivity extends AppCompatActivity
                     case R.id.action_hide:
                         // Add the app's package name to the exclusion list.
                         excludedAppsList.add(packageName);
-                        PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppsList).apply();
+                        PreferenceHelper.getEditor()
+                                        .putStringSet("hidden_apps", excludedAppsList)
+                                        .apply();
                         // Reload the app list!
                         appsList.remove(appsAdapter.getItem(finalPosition));
                         appsAdapter.removeItem(finalPosition);
@@ -1081,7 +1089,9 @@ public class MainActivity extends AppCompatActivity
             appWidgetHost.startListening();
 
             // Apply preference changes.
-            PreferenceHelper.getEditor().putInt("widget_id", widgetId).putBoolean("has_widget", true);
+            PreferenceHelper.getEditor()
+                            .putInt("widget_id", widgetId)
+                            .putBoolean("has_widget", true);
             PreferenceHelper.getEditor().apply();
         }
     }

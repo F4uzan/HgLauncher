@@ -18,7 +18,8 @@ public class ViewUtils {
      * associated dimen value cannot be found.
      */
     public static int getStatusBarHeight() {
-        int idStatusBarHeight = Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android");
+        int idStatusBarHeight = Resources.getSystem()
+                                         .getIdentifier("status_bar_height", "dimen", "android");
         if (idStatusBarHeight > 0) {
             return Resources.getSystem().getDimensionPixelSize(idStatusBarHeight);
         } else {
