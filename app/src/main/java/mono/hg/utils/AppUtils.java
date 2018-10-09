@@ -103,10 +103,12 @@ public class AppUtils {
      */
     public static void launchApp(Activity activity, String packageName) {
         ComponentName componentName = ComponentName.unflattenFromString(packageName);
+        Intent intent = Intent.makeMainActivity(componentName);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         // Attempt to catch exceptions instead of crash landing directly to the floor.
         try {
-            activity.startActivity(Intent.makeMainActivity(componentName));
+            activity.startActivity(intent);
 
             // Override app launch animation when needed.
             switch (PreferenceHelper.getLaunchAnim()) {
