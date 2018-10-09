@@ -23,14 +23,14 @@ public class AppUtils {
      *
      * @param packageManager PackageManager object to use for checking the requested
      *                       package's existence.
-     * @param componentName  Application package name to check.
+     * @param packageName    Application package name to check.
      *
      * @return boolean True or false depending on the existence of the package.
      */
-    public static boolean isAppInstalled(PackageManager packageManager, String componentName) {
+    public static boolean isAppInstalled(PackageManager packageManager, String packageName) {
         try {
             // Get application info while handling exception spawning from it.
-            packageManager.getApplicationInfo(getPackageName(componentName), 0);
+            packageManager.getApplicationInfo(packageName, 0);
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             // No, it's not installed.
