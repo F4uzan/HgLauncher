@@ -49,7 +49,7 @@ public class AppUtils {
      */
     public static boolean isSystemApp(PackageManager packageManager, String packageName) {
         try {
-            ApplicationInfo appFlags = packageManager.getApplicationInfo(packageName, 0);
+            ApplicationInfo appFlags = packageManager.getApplicationInfo(getPackageName(packageName), 0);
             if ((appFlags.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
                 return true;
             }
