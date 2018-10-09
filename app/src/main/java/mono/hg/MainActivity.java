@@ -75,12 +75,6 @@ public class MainActivity extends AppCompatActivity
     private boolean shouldShowFavourites = true;
 
     /*
-     * Count of currently installed apps.
-     * TODO: Better manage this.
-     */
-    private int current_app_count;
-
-    /*
      * Animation duration; fetched from system's duration.
      */
     private int animateDuration;
@@ -283,10 +277,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         applyPrefToViews();
-
-        // Save our current app count.
-        //TODO: There are better ways to accomplish this.
-        current_app_count = appsList.size() - 1;
     }
 
     @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -854,10 +844,6 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 if (s.length() == 0) {
-                    // Scroll back down to the start of the list if search query is empty.
-                    Utils.requireNonNull(appsRecyclerView.getLayoutManager())
-                         .scrollToPosition(current_app_count);
-
                     // Dismiss the search snackbar.
                     searchSnack.dismiss();
                 } else if (s.length() > 0 && PreferenceHelper.promptSearch()) {
