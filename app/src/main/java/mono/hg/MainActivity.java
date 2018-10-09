@@ -18,7 +18,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
@@ -182,13 +181,7 @@ public class MainActivity extends AppCompatActivity
      * Progress bar shown when populating app list.
      */
     private IndeterminateMaterialProgressBar loadProgress;
-
-    /*
-     * SharedPreferences method, used to add/remove and get preferences.
-     */
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editPrefs;
-
+    
     /*
      * Menu shown when long-pressing apps.
      */
@@ -268,7 +261,7 @@ public class MainActivity extends AppCompatActivity
                 new LauncherIconHelper().loadIconPack(manager);
             } else {
                 // We can't find the icon pack, so revert back to the default pack.
-                editPrefs.putString("icon_pack", "default").apply();
+                PreferenceHelper.getEditor().putString("icon_pack", "default").apply();
             }
         }
 
@@ -331,7 +324,7 @@ public class MainActivity extends AppCompatActivity
                 return true;
             case R.id.action_remove_widget:
                 removeWidget();
-                PreferenceHelper.fetchPreference(prefs);
+                PreferenceHelper.fetchPreference();
                 return true;
             case R.id.update_wallpaper:
                 intent = new Intent(Intent.ACTION_SET_WALLPAPER);
@@ -362,15 +355,15 @@ public class MainActivity extends AppCompatActivity
                 reload();
                 break;
             case "removedApp":
-                editPrefs.putBoolean("removedApp", false).apply();
-                editPrefs.remove("removed_app").apply();
+                PreferenceHelper.getEditor().putBoolean("removedApp", false).apply();
+                PreferenceHelper.getEditor().remove("removed_app").apply();
                 doThis("hide_panel");
                 // FIXME: Stop using recreate here; it's bad for the UX.
                 reload();
                 break;
             case "addApp":
-                editPrefs.putBoolean("addApp", false).apply();
-                editPrefs.remove("added_app").apply();
+                PreferenceHelper.getEditor().putBoolean("addApp", false).apply();
+                PreferenceHelper.getEditor().remove("added_app").apply();
                 doThis("hide_panel");
                 // FIXME: Recreate after receiving installation to handle frozen app list.
                 reload();
@@ -652,7 +645,7 @@ public class MainActivity extends AppCompatActivity
         if (PreferenceHelper.hasWidget()) {
             Intent widgetIntent = new Intent();
             widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    prefs.getInt("widget_id", -1));
+                    PreferenceHelper.getPreference().getInt("widget_id", -1));
             addWidget(widgetIntent);
         }
     }
@@ -663,19 +656,17 @@ public class MainActivity extends AppCompatActivity
      * @param isInit Are we loading for onCreate?
      */
     private void loadPref(Boolean isInit) {
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        editPrefs = prefs.edit();
-
-        PreferenceHelper.fetchPreference(prefs);
+        PreferenceHelper.initPreference(this);
+        PreferenceHelper.fetchPreference();
 
         // Get pinned apps.
-        pinnedAppString = prefs.getString("pinned_apps_list", "");
+        pinnedAppString = PreferenceHelper.getPreference().getString("pinned_apps_list", "");
 
         if (isInit) {
-            prefs.registerOnSharedPreferenceChangeListener(this);
+            PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
 
             // Get a list of our hidden apps, default to null if there aren't any.
-            excludedAppsList.addAll(prefs.getStringSet("hidden_apps", excludedAppsList));
+            excludedAppsList.addAll(PreferenceHelper.getPreference().getStringSet("hidden_apps", excludedAppsList));
 
             // Set the app theme!
             switch (PreferenceHelper.appTheme()) {
@@ -754,7 +745,7 @@ public class MainActivity extends AppCompatActivity
                     case R.id.action_pin:
                         AppUtils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
-                        editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
+                        PreferenceHelper.getEditor().putString("pinned_apps_list", pinnedAppString).apply();
                         if (!PreferenceHelper.isFavouritesEnabled()) {
                             Toast.makeText(MainActivity.this, R.string.warn_pinning,
                                     Toast.LENGTH_SHORT).show();
@@ -767,7 +758,7 @@ public class MainActivity extends AppCompatActivity
                         pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
                         pinnedAppsAdapter.removeItem(finalPosition);
                         pinnedAppString = pinnedAppString.replace(packageName + ";", "");
-                        editPrefs.putString("pinned_apps_list", pinnedAppString).apply();
+                        PreferenceHelper.getEditor().putString("pinned_apps_list", pinnedAppString).apply();
                         if (pinnedAppsAdapter.isEmpty()) {
                             doThis("hide_favourites");
                         }
@@ -783,7 +774,7 @@ public class MainActivity extends AppCompatActivity
                     case R.id.action_hide:
                         // Add the app's package name to the exclusion list.
                         excludedAppsList.add(packageName);
-                        editPrefs.putStringSet("hidden_apps", excludedAppsList).apply();
+                        PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppsList).apply();
                         // Reload the app list!
                         appsList.remove(appsAdapter.getItem(finalPosition));
                         appsAdapter.removeItem(finalPosition);
@@ -1104,8 +1095,8 @@ public class MainActivity extends AppCompatActivity
             appWidgetHost.startListening();
 
             // Apply preference changes.
-            editPrefs.putInt("widget_id", widgetId).putBoolean("has_widget", true);
-            editPrefs.apply();
+            PreferenceHelper.getEditor().putInt("widget_id", widgetId).putBoolean("has_widget", true);
+            PreferenceHelper.getEditor().apply();
         }
     }
 
@@ -1116,7 +1107,7 @@ public class MainActivity extends AppCompatActivity
     private void removeWidget() {
         AppWidgetHostView widget = (AppWidgetHostView) appWidgetContainer.getChildAt(0);
         appWidgetContainer.removeView(widget);
-        editPrefs.remove("widget_id").putBoolean("has_widget", false).apply();
+        PreferenceHelper.getEditor().remove("widget_id").putBoolean("has_widget", false).apply();
     }
 
     /**

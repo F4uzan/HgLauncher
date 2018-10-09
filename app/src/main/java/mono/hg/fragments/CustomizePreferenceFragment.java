@@ -23,6 +23,7 @@ import java.util.List;
 
 import mono.hg.R;
 import mono.hg.SettingsActivity;
+import mono.hg.helpers.PreferenceHelper;
 
 public class CustomizePreferenceFragment extends com.fnp.materialpreferences.PreferenceFragment {
 
@@ -100,10 +101,10 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
     }
 
     private void addVersionCounterListener() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        PreferenceHelper.initPreference(getActivity());
         final Preference versionMenu = findPreference("version_key");
 
-        if (!prefs.getBoolean("is_grandma", false)) {
+        if (!PreferenceHelper.getPreference().getBoolean("is_grandma", false)) {
             versionMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 int counter = 9;
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(

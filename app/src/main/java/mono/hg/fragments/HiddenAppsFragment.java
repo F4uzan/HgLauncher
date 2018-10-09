@@ -2,14 +2,12 @@ package mono.hg.fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -31,15 +29,14 @@ import java.util.List;
 
 import mono.hg.R;
 import mono.hg.SettingsActivity;
-import mono.hg.utils.AppUtils;
 import mono.hg.adapters.HiddenAppAdapter;
+import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.AppDetail;
+import mono.hg.utils.AppUtils;
 
 public class HiddenAppsFragment extends Fragment {
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private HiddenAppAdapter hiddenAppAdapter;
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editPrefs;
     private PackageManager manager;
     private HashSet<String> excludedAppList = new HashSet<>();
     private ListView appsListView;
@@ -49,9 +46,9 @@ public class HiddenAppsFragment extends Fragment {
     }
 
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
         super.onCreate(savedInstanceState);
+
+        PreferenceHelper.initPreference(getActivity());
 
         // Make a toolbar when the preference library doesn't give us anything.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -69,7 +66,6 @@ public class HiddenAppsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         manager = getActivity().getPackageManager();
-        editPrefs = prefs.edit();
 
         appsListView = getActivity().findViewById(R.id.hidden_apps_list);
         hiddenAppAdapter = new HiddenAppAdapter(appList, getActivity());
@@ -77,7 +73,7 @@ public class HiddenAppsFragment extends Fragment {
         appsListView.setAdapter(hiddenAppAdapter);
 
         // Get our app list.
-        excludedAppList.addAll(prefs.getStringSet("hidden_apps", excludedAppList));
+        excludedAppList.addAll(PreferenceHelper.getPreference().getStringSet("hidden_apps", excludedAppList));
         loadApps();
 
         addListeners();
@@ -85,8 +81,8 @@ public class HiddenAppsFragment extends Fragment {
 
     @Override public void onDetach() {
         super.onDetach();
-        if (prefs.getBoolean("dummy_restore", false)) {
-            editPrefs.remove("dummy_restore").apply();
+        if (PreferenceHelper.getPreference().getBoolean("dummy_restore", false)) {
+            PreferenceHelper.getEditor().remove("dummy_restore").apply();
         }
     }
 
@@ -106,8 +102,8 @@ public class HiddenAppsFragment extends Fragment {
             return true;
         } else if (id == 1) {
             excludedAppList.clear();
-            editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
-            editPrefs.putBoolean("dummy_restore", true).apply();
+            PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppList).apply();
+            PreferenceHelper.getEditor().putBoolean("dummy_restore", true).apply();
 
             // Recreate the toolbar menu to hide the 'restore all' button.
             getActivity().invalidateOptionsMenu();
@@ -154,12 +150,12 @@ public class HiddenAppsFragment extends Fragment {
         // Check if package is already in exclusion.
         if (excludedAppList.contains(packageName)) {
             excludedAppList.remove(packageName);
-            editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
+            PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppList).apply();
         } else {
             excludedAppList.add(packageName);
-            editPrefs.putStringSet("hidden_apps", excludedAppList).apply();
+            PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppList).apply();
         }
-        editPrefs.putBoolean("dummy_restore", true).apply();
+        PreferenceHelper.getEditor().putBoolean("dummy_restore", true).apply();
         // Reload the app list!
         if (excludedAppList.contains(packageName)) {
             appList.get(position).setAppHidden(true);

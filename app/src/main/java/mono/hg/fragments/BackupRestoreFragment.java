@@ -3,12 +3,10 @@ package mono.hg.fragments;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -42,9 +40,10 @@ import java.util.Set;
 
 import mono.hg.R;
 import mono.hg.SettingsActivity;
-import mono.hg.utils.Utils;
 import mono.hg.adapters.FileFolderAdapter;
+import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.FileFolder;
+import mono.hg.utils.Utils;
 import mono.hg.wrappers.BackHandledFragment;
 
 public class BackupRestoreFragment extends BackHandledFragment {
@@ -52,7 +51,6 @@ public class BackupRestoreFragment extends BackHandledFragment {
     private FileFolderAdapter fileFolderAdapter;
     private File currentPath;
     private Boolean isInRestore = false;
-    private SharedPreferences prefs;
     private EditText backupNameField;
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater,
@@ -61,9 +59,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
     }
 
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
         super.onCreate(savedInstanceState);
+        
+        PreferenceHelper.initPreference(getActivity());
 
         /*
          * Show our own toolbar if we are running below Lollipop.
@@ -249,7 +247,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         ObjectOutputStream out = null;
         try {
             out = new ObjectOutputStream(new FileOutputStream(path));
-            out.writeObject(prefs.getAll());
+            out.writeObject(PreferenceHelper.getPreference().getAll());
         } catch (FileNotFoundException e) {
             Utils.sendLog(3, e.toString());
         } catch (IOException e) {
@@ -274,28 +272,27 @@ public class BackupRestoreFragment extends BackHandledFragment {
         ObjectInputStream input = null;
         try {
             input = new ObjectInputStream(new FileInputStream(path));
-            SharedPreferences.Editor edit = prefs.edit();
-            edit.clear();
+            PreferenceHelper.getEditor().clear();
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
             for (Map.Entry<String, ?> entry : entries.entrySet()) {
                 Object v = entry.getValue();
                 String key = entry.getKey();
 
                 if (v instanceof Boolean) {
-                    edit.putBoolean(key, (Boolean) v);
+                    PreferenceHelper.getEditor().putBoolean(key, (Boolean) v);
                 } else if (v instanceof Float) {
-                    edit.putFloat(key, (Float) v);
+                    PreferenceHelper.getEditor().putFloat(key, (Float) v);
                 } else if (v instanceof Integer) {
-                    edit.putInt(key, (Integer) v);
+                    PreferenceHelper.getEditor().putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
-                    edit.putLong(key, (Long) v);
+                    PreferenceHelper.getEditor().putLong(key, (Long) v);
                 } else if (v instanceof Set) {
-                    edit.putStringSet(key, (Set<String>) v);
+                    PreferenceHelper.getEditor().putStringSet(key, (Set<String>) v);
                 } else if (v instanceof String) {
-                    edit.putString(key, ((String) v));
+                    PreferenceHelper.getEditor().putString(key, ((String) v));
                 }
             }
-            edit.apply();
+            PreferenceHelper.getEditor().apply();
         } catch (FileNotFoundException | ClassNotFoundException e) {
             Utils.sendLog(3, e.toString());
         } catch (IOException e) {

@@ -1,6 +1,8 @@
 package mono.hg.helpers;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class PreferenceHelper {
     private static boolean icon_hide, list_order, shade_view,
@@ -11,6 +13,9 @@ public class PreferenceHelper {
     private static String app_theme;
     private static String search_provider_set;
     private static String icon_pack;
+
+    private static SharedPreferences preferences;
+    private static SharedPreferences.Editor editor;
 
     public static boolean hasWidget() {
         return has_widget;
@@ -90,23 +95,36 @@ public class PreferenceHelper {
         return search_provider;
     }
 
-    public static void fetchPreference(SharedPreferences prefs) {
-        has_widget = prefs.getBoolean("has_widget", false);
-        launch_anim = prefs.getString("launch_anim", "default");
-        icon_hide = prefs.getBoolean("icon_hide_switch", false);
-        icon_pack = prefs.getString("icon_pack", "default");
-        list_order = prefs.getString("list_order", "alphabetical").equals("invertedAlphabetical");
-        shade_view = prefs.getBoolean("shade_view_switch", false);
-        keyboard_focus = prefs.getBoolean("keyboard_focus", false);
-        comfy_padding = prefs.getBoolean("comfy_padding", false);
-        dismiss_panel = prefs.getBoolean("dismiss_panel", true);
-        tap_to_drawer = prefs.getBoolean("tap_to_drawer", true);
-        app_theme = prefs.getString("app_theme", "light");
-        web_search_enabled = prefs.getBoolean("web_search_enabled", true);
-        search_provider_set = prefs.getString("search_provider", "google");
-        favourites_panel = prefs.getBoolean("favourites_panel_switch", true);
-        static_favourites_panel = prefs.getBoolean("static_favourites_panel_switch", false);
-        adaptive_shade = prefs.getBoolean("adaptive_shade_switch", false);
+    public static SharedPreferences getPreference() {
+        return preferences;
     }
 
+    public static SharedPreferences.Editor getEditor() {
+        return editor;
+    }
+
+    public static void initPreference(Context context) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        editor = preferences.edit();
+    }
+
+    public static void fetchPreference() {
+        has_widget = preferences.getBoolean("has_widget", false);
+        launch_anim = preferences.getString("launch_anim", "default");
+        icon_hide = preferences.getBoolean("icon_hide_switch", false);
+        icon_pack = preferences.getString("icon_pack", "default");
+        list_order = preferences.getString("list_order", "alphabetical")
+                                .equals("invertedAlphabetical");
+        shade_view = preferences.getBoolean("shade_view_switch", false);
+        keyboard_focus = preferences.getBoolean("keyboard_focus", false);
+        comfy_padding = preferences.getBoolean("comfy_padding", false);
+        dismiss_panel = preferences.getBoolean("dismiss_panel", true);
+        tap_to_drawer = preferences.getBoolean("tap_to_drawer", true);
+        app_theme = preferences.getString("app_theme", "light");
+        web_search_enabled = preferences.getBoolean("web_search_enabled", true);
+        search_provider_set = preferences.getString("search_provider", "google");
+        favourites_panel = preferences.getBoolean("favourites_panel_switch", true);
+        static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
+        adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
+    }
 }
