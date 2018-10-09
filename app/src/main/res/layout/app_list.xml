@@ -23,8 +23,8 @@
         android:ellipsize="end"
         android:textColor="?attr/textDefaultColor"
         android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:paddingLeft="10dp"
+        android:paddingStart="14dp"
+        android:paddingLeft="14dp"
         android:paddingRight="10dp" />
 
 </LinearLayout>
