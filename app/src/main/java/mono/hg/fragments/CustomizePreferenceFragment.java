@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -107,8 +105,6 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         if (!PreferenceHelper.getPreference().getBoolean("is_grandma", false)) {
             versionMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 int counter = 9;
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(
-                        getActivity()).edit();
                 Toast counterToast;
 
                 @Override
@@ -127,7 +123,7 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
 
                         counter--;
                     } else if (counter == 0) {
-                        editor.putBoolean("is_grandma", true).apply();
+                        PreferenceHelper.getEditor().putBoolean("is_grandma", true).apply();
                         versionMenu.setTitle(R.string.version_key_name);
                     } else if (counter == 1) {
                         if (counterToast != null) {
