@@ -137,6 +137,8 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                         counterToast = Toast.makeText(getActivity(), R.string.version_key_toast,
                                 Toast.LENGTH_SHORT);
                         counterToast.show();
+
+                        counter--;
                     }
                     return false;
                 }
