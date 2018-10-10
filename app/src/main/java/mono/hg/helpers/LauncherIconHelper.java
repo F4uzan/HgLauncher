@@ -115,7 +115,7 @@ public class LauncherIconHelper {
      * @param packageManager PackageManager object used to fetch resources from the
      *                       icon pack.
      */
-    public void loadIconPack(PackageManager packageManager) {
+    public static void loadIconPack(PackageManager packageManager) {
         String iconPackageName = PreferenceHelper.getIconPackName();
         XmlPullParser iconFilterXml = null;
         Resources iconRes = null;
@@ -188,7 +188,7 @@ public class LauncherIconHelper {
      *
      * @return null if there is no such icon associated with the name of the requested drawable.
      */
-    private Drawable loadDrawable(Resources resources, String drawableName, String iconPackageName) {
+    private static Drawable loadDrawable(Resources resources, String drawableName, String iconPackageName) {
         int icon = resources.getIdentifier(drawableName, "drawable", iconPackageName);
         if (icon > 0) {
             return resources.getDrawable(icon);
@@ -207,7 +207,7 @@ public class LauncherIconHelper {
      * otherwise an associated icon from the icon pack will be returned.
      */
     // Load icon from the cached appfilter.
-    public Drawable getIconDrawable(PackageManager packageManager, String appPackageName) {
+    public static Drawable getIconDrawable(PackageManager packageManager, String appPackageName) {
         String iconPackageName = PreferenceHelper.getIconPackName();
         String componentName = "ComponentInfo{" + appPackageName + "}";
         Resources iconRes = null;
