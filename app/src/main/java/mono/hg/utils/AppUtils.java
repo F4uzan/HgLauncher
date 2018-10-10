@@ -78,7 +78,7 @@ public class AppUtils {
                 Drawable getIcon = null;
 
                 if (!PreferenceHelper.getIconPackName().equals("default")) {
-                    getIcon = new LauncherIconHelper().getIconDrawable(packageManager,
+                    getIcon = LauncherIconHelper.getIconDrawable(packageManager,
                             componentName);
                 }
                 if (getIcon == null) {
@@ -95,7 +95,6 @@ public class AppUtils {
             }
         }
     }
-
 
     /**
      * Launches an app as a new task.
