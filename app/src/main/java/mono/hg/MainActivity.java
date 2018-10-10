@@ -296,8 +296,7 @@ public class MainActivity extends AppCompatActivity
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_force_refresh:
                 reload();
@@ -313,7 +312,7 @@ public class MainActivity extends AppCompatActivity
                 PreferenceHelper.fetchPreference();
                 return true;
             case R.id.update_wallpaper:
-                intent = new Intent(Intent.ACTION_SET_WALLPAPER);
+                Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
                 startActivity(Intent.createChooser(intent, getString(R.string.action_wallpaper)));
                 return true;
             default:
@@ -471,10 +470,10 @@ public class MainActivity extends AppCompatActivity
      * LOAD THIS ASYNCHRONOUSLY; IT IS VERY SLOW.
      */
     private void loadApps() {
-        Intent i = new Intent(Intent.ACTION_MAIN, null);
-        i.addCategory(Intent.CATEGORY_LAUNCHER);
+        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
+        List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
 
         if (PreferenceHelper.isListInverted()) {
             Collections.sort(availableActivities, Collections
