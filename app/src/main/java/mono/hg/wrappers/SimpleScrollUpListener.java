@@ -14,6 +14,7 @@ public abstract class SimpleScrollUpListener extends RecyclerView.OnScrollListen
 
     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
+        onScroll();
 
         if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
             onEnd();
@@ -37,4 +38,6 @@ public abstract class SimpleScrollUpListener extends RecyclerView.OnScrollListen
     public abstract void onEnd();
 
     public abstract void onScrollUp();
+
+    public abstract void onScroll();
 }
