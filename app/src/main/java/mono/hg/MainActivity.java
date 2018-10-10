@@ -873,7 +873,6 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Listeners for the app list.
-     * TODO: Some of these can be moved internally to the adapters.
      */
     private void addListListeners() {
         // Listen for app list scroll to hide/show favourites panel.
@@ -925,7 +924,6 @@ public class MainActivity extends AppCompatActivity
 
         // Add long click listener to apps in the apps list.
         // This shows a menu to manage the selected app.
-        // FIXME: Handle nulls.
         appsAdapter.addListener(new FlexibleAdapter.OnItemLongClickListener() {
             @Override public void onItemLongClick(int position) {
                 final String packageName = Utils.requireNonNull(
@@ -934,8 +932,8 @@ public class MainActivity extends AppCompatActivity
                 // We need to rely on the LayoutManager here
                 // because app list is populated asynchronously,
                 // and will throw nulls if we try to directly ask RecyclerView for its child.
-                createAppMenu(appsRecyclerView.getLayoutManager().findViewByPosition(position),
-                        false, packageName);
+                createAppMenu(Utils.requireNonNull(appsRecyclerView.getLayoutManager())
+                                   .findViewByPosition(position), false, packageName);
             }
         });
 
