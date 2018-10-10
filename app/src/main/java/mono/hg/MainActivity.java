@@ -888,6 +888,13 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 @Override
+                public void onScroll() {
+                    if (appMenu != null) {
+                        appMenu.dismiss();
+                    }
+                }
+
+                @Override
                 public void onEnd() {
                     if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
                         doThis("show_favourites");
