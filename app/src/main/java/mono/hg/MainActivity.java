@@ -246,13 +246,13 @@ public class MainActivity extends AppCompatActivity
 
         // Restore search bar visibility when panel is pulled down.
         if (savedInstanceState != null && ViewUtils.isPanelVisible(slidingHome)) {
-            searchContainer.setVisibility(savedInstanceState.getInt("searchVisibility"));
+            searchContainer.setVisibility(View.VISIBLE);
         }
 
         // Get icons from icon pack.
         if (!"default".equals(PreferenceHelper.getIconPackName())) {
             if (AppUtils.isAppInstalled(manager, PreferenceHelper.getIconPackName())) {
-                new LauncherIconHelper().loadIconPack(manager);
+                LauncherIconHelper.loadIconPack(manager);
             } else {
                 // We can't find the icon pack, so revert back to the default pack.
                 PreferenceHelper.getEditor().putString("icon_pack", "default").apply();
@@ -457,16 +457,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save search bar visibility state.
-        if (ViewUtils.isPanelVisible(slidingHome)) {
-            savedInstanceState.putInt("searchVisibility", View.VISIBLE);
-        } else {
-            savedInstanceState.putInt("searchVisibility", View.INVISIBLE);
-        }
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
     /**
      * Recreates the activity whilst unregistering any receivers left around.
      */
@@ -508,7 +498,7 @@ public class MainActivity extends AppCompatActivity
                 // Only show icons if user chooses so.
                 if (!PreferenceHelper.shouldHideIcon()) {
                     if (!PreferenceHelper.getIconPackName().equals("default")) {
-                        getIcon = new LauncherIconHelper().getIconDrawable(manager, packageName);
+                        getIcon = LauncherIconHelper.getIconDrawable(manager, packageName);
                     }
                     if (getIcon == null) {
                         icon = ri.activityInfo.loadIcon(manager);
