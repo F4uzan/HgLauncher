@@ -2,12 +2,9 @@ package mono.hg;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.view.MenuItem;
 
-import mono.hg.fragments.BackupRestoreFragment;
 import mono.hg.fragments.CustomizePreferenceFragment;
-import mono.hg.fragments.HiddenAppsFragment;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.utils.ActivityServiceUtils;
 import mono.hg.wrappers.BackHandledFragment;
@@ -35,7 +32,6 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
         }
 
         super.onCreate(savedInstanceState);
-        setTitle(R.string.title_activity_settings);
         setPreferenceFragment(new CustomizePreferenceFragment());
     }
 
@@ -58,17 +54,6 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Stops fragment injection in malicious applications.
-     * Make sure to deny any unknown fragments here.
-     */
-    protected boolean isValidFragment(String fragmentName) {
-        return PreferenceFragment.class.getName().equals(fragmentName)
-                || CustomizePreferenceFragment.class.getName().equals(fragmentName)
-                || HiddenAppsFragment.class.getName().equals(fragmentName)
-                || BackupRestoreFragment.class.getName().equals(fragmentName);
     }
 
     // Called when the activity needs to be restarted (i.e when a theme change occurs).

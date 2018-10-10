@@ -36,6 +36,7 @@
             android:name="mono.hg.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:excludeFromRecents="true"
+            android:exported="false"
             android:theme="@style/SettingTheme">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
