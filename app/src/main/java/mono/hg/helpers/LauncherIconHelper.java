@@ -115,15 +115,18 @@ public class LauncherIconHelper {
      * @param packageManager PackageManager object used to fetch resources from the
      *                       icon pack.
      */
-    public static void loadIconPack(PackageManager packageManager) {
+    public static int loadIconPack(PackageManager packageManager) {
         String iconPackageName = PreferenceHelper.getIconPackName();
         XmlPullParser iconFilterXml = null;
-        Resources iconRes = null;
+        Resources iconRes;
 
         try {
             iconRes = packageManager.getResourcesForApplication(iconPackageName);
         } catch (PackageManager.NameNotFoundException e) {
-            Utils.sendLog(3, e.toString());
+            Utils.sendLog(3,
+                    "Cannot find icon resources for " + iconPackageName + "!");
+            Utils.sendLog(1, "Loading default icon.");
+            return 0;
         }
 
         // Get appfilter from the icon pack.
@@ -177,6 +180,7 @@ public class LauncherIconHelper {
                 Utils.sendLog(3, e.toString());
             }
         }
+        return 1;
     }
 
     /**

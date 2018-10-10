@@ -250,13 +250,9 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Get icons from icon pack.
-        if (!"default".equals(PreferenceHelper.getIconPackName())) {
-            if (AppUtils.isAppInstalled(manager, PreferenceHelper.getIconPackName())) {
-                LauncherIconHelper.loadIconPack(manager);
-            } else {
-                // We can't find the icon pack, so revert back to the default pack.
-                PreferenceHelper.getEditor().putString("icon_pack", "default").apply();
-            }
+        if (!"default".equals(PreferenceHelper.getIconPackName()) &&
+                LauncherIconHelper.loadIconPack(manager) == 0) {
+            PreferenceHelper.getEditor().putString("icon_pack", "default").apply();
         }
 
         // Start loading apps and initialising click listeners.
