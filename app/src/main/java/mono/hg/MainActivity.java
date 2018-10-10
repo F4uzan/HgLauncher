@@ -53,7 +53,6 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
-import mono.hg.helpers.RecyclerClick;
 import mono.hg.models.AppDetail;
 import mono.hg.models.PinnedAppDetail;
 import mono.hg.receivers.PackageChangesReceiver;
@@ -897,52 +896,50 @@ public class MainActivity extends AppCompatActivity
             });
         }
 
-        // Add short click/click listener to the app list.
-        RecyclerClick.addTo(appsRecyclerView)
-                     .setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
-                         @Override
-                         public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                             AppUtils.launchApp(MainActivity.this,
-                                     Utils.requireNonNull(appsAdapter.getItem(position))
-                                          .getPackageName());
-                         }
-                     });
+        // Add item click action to app list.
+        appsAdapter.addListener(new FlexibleAdapter.OnItemClickListener() {
+            @Override public boolean onItemClick(View view, int position) {
+                AppUtils.launchApp(MainActivity.this,
+                        Utils.requireNonNull(appsAdapter.getItem(position))
+                             .getPackageName());
+                return true;
+            }
+        });
 
-        // Add long click action to app list. Long click shows a menu to manage selected app.
-        RecyclerClick.addTo(appsRecyclerView)
-                     .setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
-                         @Override
-                         public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
-                             // Parse package URI for use in uninstallation and package info call.
-                             final String packageName = Utils.requireNonNull(
-                                     appsAdapter.getItem(position)).getPackageName();
-                             createAppMenu(v, false, packageName);
-                             return false;
-                         }
-                     });
+        // Add item click action to the favourites panel.
+        pinnedAppsAdapter.addListener(new FlexibleAdapter.OnItemClickListener() {
+            @Override public boolean onItemClick(View view, int position) {
+                AppUtils.launchApp(MainActivity.this,
+                        Utils.requireNonNull(pinnedAppsAdapter.getItem(position))
+                             .getPackageName());
+                return true;
+            }
+        });
 
-        // Add long click action to pinned apps.
-        RecyclerClick.addTo(pinnedAppsRecyclerView)
-                     .setOnItemLongClickListener(new RecyclerClick.OnItemLongClickListener() {
-                         @Override
-                         public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
-                             // Parse package URI for use in uninstallation and package info call.
-                             final String packageName = Utils.requireNonNull(
-                                     pinnedAppsAdapter.getItem(position)).getPackageName();
-                             createAppMenu(v, true, packageName);
-                             return false;
-                         }
-                     });
+        // Add long click listener to apps in the apps list.
+        // This shows a menu to manage the selected app.
+        // FIXME: Handle nulls.
+        appsAdapter.addListener(new FlexibleAdapter.OnItemLongClickListener() {
+            @Override public void onItemLongClick(int position) {
+                final String packageName = Utils.requireNonNull(
+                        appsAdapter.getItem(position)).getPackageName();
 
-        RecyclerClick.addTo(pinnedAppsRecyclerView)
-                     .setOnItemClickListener(new RecyclerClick.OnItemClickListener() {
-                         @Override
-                         public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                             AppUtils.launchApp(MainActivity.this,
-                                     Utils.requireNonNull(pinnedAppsAdapter.getItem(position))
-                                          .getPackageName());
-                         }
-                     });
+                // We need to rely on the LayoutManager here
+                // because app list is populated asynchronously,
+                // and will throw nulls if we try to directly ask RecyclerView for its child.
+                createAppMenu(appsRecyclerView.getLayoutManager().findViewByPosition(position),
+                        false, packageName);
+            }
+        });
+
+        // Also add a similar long click action for the favourites panel.
+        pinnedAppsAdapter.addListener(new FlexibleAdapter.OnItemLongClickListener() {
+            @Override public void onItemLongClick(int position) {
+                final String packageName = Utils.requireNonNull(
+                        pinnedAppsAdapter.getItem(position)).getPackageName();
+                createAppMenu(pinnedAppsRecyclerView.getChildAt(position), true, packageName);
+            }
+        });
     }
 
     /**
