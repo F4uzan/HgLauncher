@@ -8,7 +8,8 @@ public class PreferenceHelper {
     private static boolean icon_hide, list_order, shade_view,
             keyboard_focus, web_search_enabled, comfy_padding,
             tap_to_drawer, favourites_panel, dismiss_panel,
-            static_favourites_panel, adaptive_shade, has_widget;
+            static_favourites_panel, adaptive_shade, has_widget,
+            is_testing;
     private static String launch_anim;
     private static String app_theme;
     private static String search_provider_set;
@@ -16,6 +17,10 @@ public class PreferenceHelper {
 
     private static SharedPreferences preferences;
     private static SharedPreferences.Editor editor;
+
+    public static boolean isTesting() {
+        return is_testing;
+    }
 
     public static boolean hasWidget() {
         return has_widget;
@@ -109,6 +114,7 @@ public class PreferenceHelper {
     }
 
     public static void fetchPreference() {
+        is_testing = preferences.getBoolean("is_grandma", false);
         has_widget = preferences.getBoolean("has_widget", false);
         launch_anim = preferences.getString("launch_anim", "default");
         icon_hide = preferences.getBoolean("icon_hide_switch", false);

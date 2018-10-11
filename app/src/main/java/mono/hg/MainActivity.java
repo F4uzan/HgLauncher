@@ -279,7 +279,11 @@ public class MainActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
-        if (PreferenceHelper.hasWidget()) {
+        // Only show widget options when the user is in testing mode.
+        if (!PreferenceHelper.isTesting()) {
+            menu.removeItem(R.id.action_remove_widget);
+            menu.removeItem(R.id.action_add_widget);
+        } else if (PreferenceHelper.hasWidget()) {
             // When there is a widget, we don't want 'add widget' menu to be visible.
             menu.removeItem(R.id.action_add_widget);
         } else {
