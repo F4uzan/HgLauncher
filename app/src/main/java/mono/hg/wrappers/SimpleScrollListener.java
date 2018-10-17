@@ -3,12 +3,12 @@ package mono.hg.wrappers;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
-public abstract class SimpleScrollUpListener extends RecyclerView.OnScrollListener {
+public abstract class SimpleScrollListener extends RecyclerView.OnScrollListener {
 
     private int HIDE_THRESHOLD;
     private int mScrolledDistance = 0;
 
-    protected SimpleScrollUpListener(int threshold) {
+    protected SimpleScrollListener(int threshold) {
         this.HIDE_THRESHOLD = threshold;
     }
 
@@ -35,9 +35,13 @@ public abstract class SimpleScrollUpListener extends RecyclerView.OnScrollListen
         mScrolledDistance = 0;
     }
 
-    public abstract void onEnd();
+    public void onEnd() {
+        // No-op. Overridden when needed.
+    }
 
-    public abstract void onScrollUp();
+    public void onScrollUp() {
+        // No-op. Overridden when needed.
+    }
 
     public abstract void onScroll();
 }

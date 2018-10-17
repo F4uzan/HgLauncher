@@ -64,7 +64,7 @@ import mono.hg.utils.ViewUtils;
 import mono.hg.views.IndeterminateMaterialProgressBar;
 import mono.hg.views.TogglingLinearLayoutManager;
 import mono.hg.wrappers.OnTouchListener;
-import mono.hg.wrappers.SimpleScrollUpListener;
+import mono.hg.wrappers.SimpleScrollListener;
 
 public class MainActivity extends AppCompatActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -895,7 +895,7 @@ public class MainActivity extends AppCompatActivity
         // Listen for app list scroll to hide/show favourites panel.
         // Only do this when the user has favourites panel enabled.
         if (PreferenceHelper.isFavouritesEnabled()) {
-            appsRecyclerView.addOnScrollListener(new SimpleScrollUpListener(0) {
+            appsRecyclerView.addOnScrollListener(new SimpleScrollListener(0) {
                 @Override
                 public void onScrollUp() {
                     if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
