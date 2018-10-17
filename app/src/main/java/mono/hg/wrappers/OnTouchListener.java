@@ -120,6 +120,7 @@ public class OnTouchListener implements View.OnTouchListener {
                 } else {
                     onSwipeUp();
                 }
+                return true;
             }
             return false;
         }
