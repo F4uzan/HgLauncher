@@ -989,10 +989,10 @@ public class MainActivity extends AppCompatActivity
 
                     if (newState != SlidingUpPanelLayout.PanelState.DRAGGING) {
                         appsLayoutManager.setVerticalScrollEnabled(true);
-                    }
 
-                    // Hide widgets when the panel is showing.
-                    appWidgetContainer.setVisibility(View.INVISIBLE);
+                        // Hide the widget when the panel is showing.
+                        appWidgetContainer.setVisibility(View.INVISIBLE);
+                    }
 
                     // Unregister context menu for touchReceiver as we don't want
                     // the user to accidentally show it during search.
@@ -1023,7 +1023,7 @@ public class MainActivity extends AppCompatActivity
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     appsLayoutManager.setVerticalScrollEnabled(false);
 
-                    // Hide widgets when the panel is showing.
+                    // Show back the widget when the panel is showing.
                     appWidgetContainer.setVisibility(View.VISIBLE);
 
                     // Re-register touchReceiver context menu.
