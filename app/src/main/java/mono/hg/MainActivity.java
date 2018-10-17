@@ -2,7 +2,6 @@ package mono.hg;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
@@ -51,6 +50,8 @@ import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
+import mono.hg.appwidget.LauncherAppWidgetHost;
+import mono.hg.appwidget.LauncherAppWidgetHostView;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.AppDetail;
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity
      * Used to handle and add widgets to widgetContainer.
      */
     private AppWidgetManager appWidgetManager;
-    private AppWidgetHost appWidgetHost;
+    private LauncherAppWidgetHost appWidgetHost;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,7 +223,7 @@ public class MainActivity extends AppCompatActivity
         loadProgress = findViewById(R.id.load_progress);
 
         appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-        appWidgetHost = new AppWidgetHost(getApplicationContext(), 0);
+        appWidgetHost = new LauncherAppWidgetHost(getApplicationContext(), 0);
 
         animateDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -618,6 +619,8 @@ public class MainActivity extends AppCompatActivity
             widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     PreferenceHelper.getPreference().getInt("widget_id", -1));
             addWidget(widgetIntent);
+            registerForContextMenu(appWidgetContainer.getChildAt(0));
+            addWidgetActionListener();
         }
     }
 
@@ -791,6 +794,18 @@ public class MainActivity extends AppCompatActivity
                 if (PreferenceHelper.allowTapToOpen()) {
                     doThis("show_panel");
                 }
+            }
+        });
+    }
+
+    /**
+     * Listener(s) for widget long click action.
+     */
+    private void addWidgetActionListener() {
+        appWidgetContainer.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override public boolean onLongClick(View view) {
+                appWidgetContainer.getChildAt(0).showContextMenu();
+                return true;
             }
         });
     }
@@ -1084,7 +1099,7 @@ public class MainActivity extends AppCompatActivity
      * relating to widgets.
      */
     private void removeWidget() {
-        AppWidgetHostView widget = (AppWidgetHostView) appWidgetContainer.getChildAt(0);
+        LauncherAppWidgetHostView widget = (LauncherAppWidgetHostView) appWidgetContainer.getChildAt(0);
         appWidgetContainer.removeView(widget);
         PreferenceHelper.getEditor().remove("widget_id").putBoolean("has_widget", false).apply();
     }

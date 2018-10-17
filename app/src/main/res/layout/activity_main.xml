@@ -67,17 +67,17 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/widget_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center" />
-
             <View
                 android:id="@+id/touch_receiver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/desc_touch_receiver" />
+
+            <FrameLayout
+                android:id="@+id/widget_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center" />
 
             <include layout="@layout/layout_searchbar" />
 
