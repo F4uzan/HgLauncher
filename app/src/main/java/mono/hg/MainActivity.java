@@ -619,8 +619,6 @@ public class MainActivity extends AppCompatActivity
             widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     PreferenceHelper.getPreference().getInt("widget_id", -1));
             addWidget(widgetIntent);
-            registerForContextMenu(appWidgetContainer.getChildAt(0));
-            addWidgetActionListener();
         }
     }
 
@@ -1085,6 +1083,8 @@ public class MainActivity extends AppCompatActivity
 
             // Immediately listens for the widget.
             appWidgetHost.startListening();
+            registerForContextMenu(appWidgetContainer.getChildAt(0));
+            addWidgetActionListener();
 
             // Apply preference changes.
             PreferenceHelper.getEditor()
