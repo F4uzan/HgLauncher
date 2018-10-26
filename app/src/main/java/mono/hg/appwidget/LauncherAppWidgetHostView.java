@@ -109,7 +109,7 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
             }
         }
 
-        void rememberWindowAttachCount() {
+        private void rememberWindowAttachCount() {
             mOriginalWindowAttachCount = getWindowAttachCount();
         }
     }
