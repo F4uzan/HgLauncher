@@ -138,10 +138,40 @@ public class AppUtils {
      */
     public static String getPackageName(String componentName) {
         ComponentName unflattened = ComponentName.unflattenFromString(componentName);
-        if (unflattened != null){
+        if (unflattened != null) {
             return unflattened.getPackageName();
         } else {
             return "";
+        }
+    }
+
+    /**
+     * Counts the number of installed package in the system.
+     *
+     * @param packageManager PackageManager to use for counting the list of installed packages.
+     *
+     * @return The number of installed packages. Zero if any exception occurs.
+     */
+    public static int countInstalledPackage(PackageManager packageManager) {
+        return packageManager.getInstalledApplications(0).size();
+    }
+
+    /**
+     * Checks if there has been a new package installed into the device.
+     *
+     * @param packageManager PackageManager used to count the installed packages, which are then
+     *                       compared to the internal count saved by the launcher during its onCreate.
+     *
+     * @return boolean True if there is a change in number.
+     */
+    public static boolean hasNewPackage(PackageManager packageManager) {
+        if (PreferenceHelper.getPreference().getInt("package_count", 0) != countInstalledPackage(
+                packageManager)) {
+            PreferenceHelper.getEditor()
+                            .putInt("package_count", countInstalledPackage(packageManager));
+            return true;
+        } else {
+            return false;
         }
     }
 }

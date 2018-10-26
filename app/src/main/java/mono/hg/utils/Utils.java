@@ -1,13 +1,9 @@
 package mono.hg.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.util.Log;
-
-import mono.hg.receivers.PackageChangesReceiver;
 
 public class Utils {
 
@@ -62,34 +58,5 @@ public class Utils {
     public static void openLink(Context context, String link) {
         Intent linkIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
         context.startActivity(linkIntent);
-    }
-
-    /**
-     * Registers a PackageChangesReceiver that monitors installed/removed apps.
-     *
-     * @param activity        The activity where the receiver should be used.
-     * @param packageReceiver The PackageChangesReceiver to be registered.
-     */
-    public static void registerPackageReceiver(Activity activity, PackageChangesReceiver packageReceiver) {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-        intentFilter.addDataScheme("package");
-        activity.registerReceiver(packageReceiver, intentFilter);
-    }
-
-    /**
-     * Unregister a PackageChangesReceiver while (safely) trying to ignore any IllegalArgumentsException.
-     *
-     * @param activity        The activity where the receiver should be used.
-     * @param packageReceiver The PackageChangesReceiver to be registered.
-     */
-    public static void unregisterPackageReceiver(Activity activity, PackageChangesReceiver packageReceiver) {
-        try {
-            activity.unregisterReceiver(packageReceiver);
-        } catch (IllegalArgumentException ignored) {
-            // FIXME: Don't ignore this please.
-        }
     }
 }

@@ -54,7 +54,6 @@ import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.AppDetail;
 import mono.hg.models.PinnedAppDetail;
-import mono.hg.receivers.PackageChangesReceiver;
 import mono.hg.utils.ActivityServiceUtils;
 import mono.hg.utils.AppUtils;
 import mono.hg.utils.Utils;
@@ -179,11 +178,6 @@ public class MainActivity extends AppCompatActivity
      */
     private PopupMenu appMenu;
 
-    /*
-     * The receiver handling package installation/uninstallation.
-     */
-    private PackageChangesReceiver packageReceiver = new PackageChangesReceiver();
-
     /**
      * Used to handle and add widgets to widgetContainer.
      */
@@ -262,7 +256,7 @@ public class MainActivity extends AppCompatActivity
 
         registerForContextMenu(touchReceiver);
 
-        Utils.registerPackageReceiver(this, packageReceiver);
+        PreferenceHelper.getEditor().putInt("package_count", AppUtils.countInstalledPackage(manager));
 
         if (!pinnedAppString.isEmpty()) {
             for (String pinnedApp : Arrays.asList(pinnedAppString.split(";"))) {
@@ -345,7 +339,7 @@ public class MainActivity extends AppCompatActivity
                 PreferenceHelper.getEditor().putBoolean("refreshList", false).apply();
                 doThis("hide_panel");
                 // FIXME: Recreate after receiving installation to handle frozen app list.
-                recreate();
+                new getAppTask(this).execute();
                 break;
         }
     }
@@ -357,6 +351,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override public void onPause() {
         super.onPause();
+
+        if (AppUtils.hasNewPackage(manager)) {
+            PreferenceHelper.getEditor().putBoolean("refreshList", true).apply();
+        }
 
         // Check if we need to dismiss the panel.
         if (PreferenceHelper.shouldDismissOnLeave()) {
@@ -373,15 +371,16 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         loadPref(false);
 
+        if (AppUtils.hasNewPackage(manager)) {
+            PreferenceHelper.getEditor().putBoolean("refreshList", true).apply();
+        }
+
         // Reset the app list filter.
         appsAdapter.resetFilter();
     }
 
     @Override public void onStart() {
         super.onStart();
-
-        Utils.registerPackageReceiver(this, packageReceiver);
-
         if (PreferenceHelper.hasWidget()) {
             appWidgetHost.startListening();
         }
@@ -390,7 +389,9 @@ public class MainActivity extends AppCompatActivity
     @Override public void onStop() {
         super.onStop();
 
-        Utils.unregisterPackageReceiver(this, packageReceiver);
+        if (AppUtils.hasNewPackage(manager)) {
+            PreferenceHelper.getEditor().putBoolean("refreshList", true).apply();
+        }
 
         if (PreferenceHelper.hasWidget()) {
             appWidgetHost.stopListening();
@@ -466,6 +467,9 @@ public class MainActivity extends AppCompatActivity
      * LOAD THIS ASYNCHRONOUSLY; IT IS VERY SLOW.
      */
     private void loadApps() {
+        appsAdapter.removeRange(0, appsList.size());
+        appsList.clear();
+
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
@@ -1100,12 +1104,6 @@ public class MainActivity extends AppCompatActivity
             if (activity != null) {
                 // Show the progress bar so the list wouldn't look empty.
                 activity.loadProgress.setVisibility(View.VISIBLE);
-
-                // Clear the list before populating.
-                if (!activity.appsAdapter.isEmpty()) {
-                    activity.appsList.clear();
-                    activity.appsAdapter.clear();
-                }
             }
         }
 
