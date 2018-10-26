@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -24,6 +24,9 @@ import mono.hg.SettingsActivity;
 import mono.hg.helpers.PreferenceHelper;
 
 public class CustomizePreferenceFragment extends com.fnp.materialpreferences.PreferenceFragment {
+
+    private static final int PERMISSION_STORAGE_CODE = 4200;
+    private boolean isRestore = false;
 
     @Override
     public int addPreferencesFromResource() {
@@ -171,15 +174,9 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (hasStoragePermission()) {
-                    BackupRestoreFragment backupRestoreFragment = new BackupRestoreFragment();
-                    Bundle fragmentBundle = new Bundle();
-                    fragmentBundle.putBoolean("isRestore", false);
-                    backupRestoreFragment.setArguments(fragmentBundle);
-                    replaceFragment(backupRestoreFragment, "BackupRestore");
-                    return false;
-                } else {
-                    return false;
+                    isRestore = false;
                 }
+                return false;
             }
         });
 
@@ -187,15 +184,9 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (hasStoragePermission()) {
-                    BackupRestoreFragment backupRestoreFragment = new BackupRestoreFragment();
-                    Bundle fragmentBundle = new Bundle();
-                    fragmentBundle.putBoolean("isRestore", true);
-                    backupRestoreFragment.setArguments(fragmentBundle);
-                    replaceFragment(backupRestoreFragment, "BackupRestore");
-                    return false;
-                } else {
-                    return false;
+                    isRestore = true;
                 }
+                return false;
             }
         });
     }
@@ -212,16 +203,36 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
     // Throws true when API is less than M.
     private boolean hasStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (getContext().checkSelfPermission(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4200);
-            } else {
-                return true;
-            }
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERMISSION_STORAGE_CODE);
         } else {
+            openBackupRestore(isRestore);
             return true;
         }
         return false;
+    }
+
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+            @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_STORAGE_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openBackupRestore(isRestore);
+                }
+                break;
+        }
+    }
+
+    /**
+     * Opens the backup & restore fragment.
+     *
+     * @param isRestore Are we calling the fragment to restore a backup?
+     */
+    private void openBackupRestore(boolean isRestore) {
+        BackupRestoreFragment backupRestoreFragment = new BackupRestoreFragment();
+        Bundle fragmentBundle = new Bundle();
+        fragmentBundle.putBoolean("isRestore", isRestore);
+        backupRestoreFragment.setArguments(fragmentBundle);
+        replaceFragment(backupRestoreFragment, "BackupRestore");
     }
 }
