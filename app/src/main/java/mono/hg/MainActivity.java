@@ -5,9 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -184,7 +182,7 @@ public class MainActivity extends AppCompatActivity
     /*
      * The receiver handling package installation/uninstallation.
      */
-    private PackageChangesReceiver packageReceiver = null;
+    private PackageChangesReceiver packageReceiver = new PackageChangesReceiver();
 
     /**
      * Used to handle and add widgets to widgetContainer.
@@ -264,7 +262,7 @@ public class MainActivity extends AppCompatActivity
 
         registerForContextMenu(touchReceiver);
 
-        registerPackageReceiver();
+        Utils.registerPackageReceiver(this, packageReceiver);
 
         if (!pinnedAppString.isEmpty()) {
             for (String pinnedApp : Arrays.asList(pinnedAppString.split(";"))) {
@@ -303,7 +301,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_force_refresh:
-                reload();
+                recreate();
                 return true;
             case R.id.action_add_widget:
                 int appWidgetId = appWidgetHost.allocateAppWidgetId();
@@ -336,18 +334,18 @@ public class MainActivity extends AppCompatActivity
             case "favourites_panel_switch":
             case "icon_hide_switch":
             case "list_order":
-                reload();
+                recreate();
                 break;
             case "adaptive_shade_switch":
             case "icon_pack":
                 LauncherIconHelper.clearDrawableCache();
-                reload();
+                recreate();
                 break;
             case "refreshList":
                 PreferenceHelper.getEditor().putBoolean("refreshList", false).apply();
                 doThis("hide_panel");
                 // FIXME: Recreate after receiving installation to handle frozen app list.
-                reload();
+                recreate();
                 break;
         }
     }
@@ -381,6 +379,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override public void onStart() {
         super.onStart();
+
+        Utils.registerPackageReceiver(this, packageReceiver);
+
         if (PreferenceHelper.hasWidget()) {
             appWidgetHost.startListening();
         }
@@ -388,6 +389,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override public void onStop() {
         super.onStop();
+
+        Utils.unregisterPackageReceiver(this, packageReceiver);
+
         if (PreferenceHelper.hasWidget()) {
             appWidgetHost.stopListening();
         }
@@ -454,18 +458,6 @@ public class MainActivity extends AppCompatActivity
                     return super.onKeyUp(keyCode, event);
             }
         }
-    }
-
-    /**
-     * Recreates the activity whilst unregistering any receivers left around.
-     */
-    private void reload() {
-        try {
-            unregisterReceiver(packageReceiver);
-        } catch (IllegalArgumentException ignored) {
-            // FIXME: Don't ignore this please.
-        }
-        recreate();
     }
 
     /**
@@ -655,19 +647,6 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
         }
-    }
-
-    /**
-     * Registers the package changes receiver.
-     */
-    private void registerPackageReceiver() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-        intentFilter.addDataScheme("package");
-        BroadcastReceiver packageReceiver = new PackageChangesReceiver();
-        this.registerReceiver(packageReceiver, intentFilter);
     }
 
     /**
