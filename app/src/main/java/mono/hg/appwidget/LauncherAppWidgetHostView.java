@@ -18,7 +18,6 @@ package mono.hg.appwidget;
 
 import android.appwidget.AppWidgetHostView;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -30,11 +29,11 @@ import android.view.ViewGroup;
 public class LauncherAppWidgetHostView extends AppWidgetHostView {
     private boolean mHasPerformedLongPress;
     private CheckForLongPress mPendingCheckForLongPress;
-    private LayoutInflater mInflater;
+    //private LayoutInflater mInflater;
 
     public LauncherAppWidgetHostView(Context context) {
         super(context);
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -53,10 +52,9 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
         // Watch for longpress events at this level to make sure
         // users can always pick up this widget
         switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
+            case MotionEvent.ACTION_DOWN:
                 postCheckForLongClick();
                 break;
-            }
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -65,28 +63,14 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
                     removeCallbacks(mPendingCheckForLongPress);
                 }
                 break;
+
+            default:
+                // No-op.
+                break;
         }
 
         // Otherwise continue letting touch events fall through to children
         return false;
-    }
-
-    class CheckForLongPress implements Runnable {
-        private int mOriginalWindowAttachCount;
-
-        public void run() {
-            if ((getParent() != null) && hasWindowFocus()
-                    && mOriginalWindowAttachCount == getWindowAttachCount()
-                    && !mHasPerformedLongPress) {
-                if (performLongClick()) {
-                    mHasPerformedLongPress = true;
-                }
-            }
-        }
-
-        public void rememberWindowAttachCount() {
-            mOriginalWindowAttachCount = getWindowAttachCount();
-        }
     }
 
     private void postCheckForLongClick() {
@@ -112,5 +96,21 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
     @Override
     public int getDescendantFocusability() {
         return ViewGroup.FOCUS_BLOCK_DESCENDANTS;
+    }
+
+    class CheckForLongPress implements Runnable {
+        private int mOriginalWindowAttachCount;
+
+        public void run() {
+            if ((getParent() != null) && hasWindowFocus()
+                    && mOriginalWindowAttachCount == getWindowAttachCount()
+                    && !mHasPerformedLongPress && performLongClick()) {
+                mHasPerformedLongPress = true;
+            }
+        }
+
+        void rememberWindowAttachCount() {
+            mOriginalWindowAttachCount = getWindowAttachCount();
+        }
     }
 }

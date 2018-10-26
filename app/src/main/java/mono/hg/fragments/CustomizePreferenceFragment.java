@@ -220,6 +220,9 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                     openBackupRestore(isRestore);
                 }
                 break;
+            default:
+                // No-op.
+                break;
         }
     }
 
