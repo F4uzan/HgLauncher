@@ -8,9 +8,6 @@ import android.appwidget.AppWidgetProviderInfo;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -42,9 +39,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
@@ -256,7 +251,8 @@ public class MainActivity extends AppCompatActivity
 
         registerForContextMenu(touchReceiver);
 
-        PreferenceHelper.getEditor().putInt("package_count", AppUtils.countInstalledPackage(manager));
+        PreferenceHelper.getEditor()
+                        .putInt("package_count", AppUtils.countInstalledPackage(manager));
 
         if (!pinnedAppString.isEmpty()) {
             for (String pinnedApp : Arrays.asList(pinnedAppString.split(";"))) {
@@ -462,58 +458,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Populates the internal app list.
-     * <p>
-     * LOAD THIS ASYNCHRONOUSLY; IT IS VERY SLOW.
-     */
-    private void loadApps() {
-        appsAdapter.removeRange(0, appsList.size());
-        appsList.clear();
-
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
-
-        if (PreferenceHelper.isListInverted()) {
-            Collections.sort(availableActivities, Collections
-                    .reverseOrder(new ResolveInfo.DisplayNameComparator(manager)));
-        } else {
-            Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
-        }
-
-        // Fetch and add every app into our list, but ignore those that are in the exclusion list.
-        for (ResolveInfo ri : availableActivities) {
-            String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
-            if (!excludedAppsList.contains(packageName) && !packageName.contains(
-                    getPackageName())) {
-                String appName = ri.loadLabel(manager).toString();
-                Drawable icon = null;
-                Drawable getIcon = null;
-                // Only show icons if user chooses so.
-                if (!PreferenceHelper.shouldHideIcon()) {
-                    if (!PreferenceHelper.getIconPackName().equals("default")) {
-                        getIcon = LauncherIconHelper.getIconDrawable(manager, packageName);
-                    }
-                    if (getIcon == null) {
-                        icon = ri.activityInfo.loadIcon(manager);
-                        if (PreferenceHelper.appTheme().equals("light")
-                                && PreferenceHelper.shadeAdaptiveIcon()
-                                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                                && icon instanceof AdaptiveIconDrawable) {
-                            icon = LauncherIconHelper.drawAdaptiveShadow(icon);
-                        }
-                    } else {
-                        icon = getIcon;
-                    }
-                }
-                AppDetail app = new AppDetail(icon, appName, packageName, false);
-                appsList.add(app);
-            }
-        }
-    }
-
-    /**
      * A shorthand for various toggles and visibility checks/sets.
      *
      * @param action What to do?
@@ -634,8 +578,7 @@ public class MainActivity extends AppCompatActivity
             PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
 
             // Get a list of our hidden apps, default to null if there aren't any.
-            excludedAppsList.addAll(
-                    PreferenceHelper.getPreference().getStringSet("hidden_apps", excludedAppsList));
+            excludedAppsList.addAll(PreferenceHelper.getExclusionList());
 
             // Set the app theme!
             switch (PreferenceHelper.appTheme()) {
@@ -1082,7 +1025,8 @@ public class MainActivity extends AppCompatActivity
      * relating to widgets.
      */
     private void removeWidget() {
-        LauncherAppWidgetHostView widget = (LauncherAppWidgetHostView) appWidgetContainer.getChildAt(0);
+        LauncherAppWidgetHostView widget = (LauncherAppWidgetHostView) appWidgetContainer.getChildAt(
+                0);
         appWidgetContainer.removeView(widget);
         PreferenceHelper.getEditor().remove("widget_id").putBoolean("has_widget", false).apply();
     }
@@ -1092,6 +1036,7 @@ public class MainActivity extends AppCompatActivity
      */
     private static class getAppTask extends AsyncTask<Void, Void, Void> {
         private WeakReference<MainActivity> activityRef;
+        private ArrayList<AppDetail> tempList = new ArrayList<>();
 
         getAppTask(MainActivity context) {
             activityRef = new WeakReference<>(context);
@@ -1111,7 +1056,7 @@ public class MainActivity extends AppCompatActivity
         protected Void doInBackground(Void... params) {
             MainActivity activity = activityRef.get();
             if (activity != null) {
-                activity.loadApps();
+                tempList.addAll(AppUtils.loadApps(activity));
             }
             return null;
         }
@@ -1124,8 +1069,13 @@ public class MainActivity extends AppCompatActivity
                 activity.loadProgress.setVisibility(View.GONE);
                 activity.loadProgress.invalidate();
 
+                // Clear the apps list first so we wouldn't add over an existing list.
+                activity.appsAdapter.removeRange(0, activity.appsList.size());
+                activity.appsList.clear();
+
                 // Add the fetched apps and update item view cache.
-                activity.appsAdapter.addItems(0, activity.appsList);
+                activity.appsList = tempList;
+                activity.appsAdapter.addItems(0, tempList);
                 activity.appsRecyclerView.setItemViewCacheSize(activity
                         .appsAdapter.getItemCount() - 1);
 

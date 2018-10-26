@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.HashSet;
+
 public class PreferenceHelper {
     private static boolean icon_hide, list_order, shade_view,
             keyboard_focus, web_search_enabled, comfy_padding,
             tap_to_drawer, favourites_panel, dismiss_panel,
             static_favourites_panel, adaptive_shade, has_widget,
             is_testing;
+    private static HashSet<String> exclusion_list;
     private static String launch_anim;
     private static String app_theme;
     private static String search_provider_set;
@@ -24,6 +27,10 @@ public class PreferenceHelper {
 
     public static boolean hasWidget() {
         return has_widget;
+    }
+
+    public static HashSet<String> getExclusionList() {
+        return exclusion_list;
     }
 
     public static String getLaunchAnim() {
@@ -132,5 +139,7 @@ public class PreferenceHelper {
         favourites_panel = preferences.getBoolean("favourites_panel_switch", true);
         static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
         adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
+
+        exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps", null);
     }
 }

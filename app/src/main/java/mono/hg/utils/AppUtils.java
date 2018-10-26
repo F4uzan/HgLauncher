@@ -6,15 +6,21 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.R;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
+import mono.hg.models.AppDetail;
 import mono.hg.models.PinnedAppDetail;
 
 public class AppUtils {
@@ -173,5 +179,61 @@ public class AppUtils {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Populates the internal app list. This method must be loaded asynchronously to avoid
+     * performance degradation.
+     *
+     * @param activity The activity where the app list resides and is needed.
+     *
+     * @return List an AppDetail List containing the app list itself
+     */
+    public static List<AppDetail> loadApps(Activity activity) {
+        PackageManager manager = activity.getPackageManager();
+        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+        List<AppDetail> appsList = new ArrayList<>();
+
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
+
+        if (PreferenceHelper.isListInverted()) {
+            Collections.sort(availableActivities, Collections
+                    .reverseOrder(new ResolveInfo.DisplayNameComparator(manager)));
+        } else {
+            Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
+        }
+
+        // Fetch and add every app into our list, but ignore those that are in the exclusion list.
+        for (ResolveInfo ri : availableActivities) {
+            String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
+            if (!PreferenceHelper.getExclusionList().contains(packageName) && !packageName.contains(
+                    activity.getPackageName())) {
+                String appName = ri.loadLabel(manager).toString();
+                Drawable icon = null;
+                Drawable getIcon = null;
+                // Only show icons if user chooses so.
+                if (!PreferenceHelper.shouldHideIcon()) {
+                    if (!PreferenceHelper.getIconPackName().equals("default")) {
+                        getIcon = LauncherIconHelper.getIconDrawable(manager, packageName);
+                    }
+                    if (getIcon == null) {
+                        icon = ri.activityInfo.loadIcon(manager);
+                        if (PreferenceHelper.appTheme().equals("light")
+                                && PreferenceHelper.shadeAdaptiveIcon()
+                                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                                && icon instanceof AdaptiveIconDrawable) {
+                            icon = LauncherIconHelper.drawAdaptiveShadow(icon);
+                        }
+                    } else {
+                        icon = getIcon;
+                    }
+                }
+                AppDetail app = new AppDetail(icon, appName, packageName, false);
+                appsList.add(app);
+            }
+        }
+        return appsList;
     }
 }
