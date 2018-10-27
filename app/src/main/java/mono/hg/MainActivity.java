@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -50,6 +51,7 @@ import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.AppDetail;
 import mono.hg.models.PinnedAppDetail;
+import mono.hg.receivers.PackageChangesReceiver;
 import mono.hg.utils.ActivityServiceUtils;
 import mono.hg.utils.AppUtils;
 import mono.hg.utils.Utils;
@@ -173,6 +175,11 @@ public class MainActivity extends AppCompatActivity
      * Menu shown when long-pressing apps.
      */
     private PopupMenu appMenu;
+
+    /*
+     * Receiver used to listen to installed/uninstalled packages.
+     */
+    private PackageChangesReceiver packageReceiver;
 
     /**
      * Used to handle and add widgets to widgetContainer.
@@ -348,6 +355,8 @@ public class MainActivity extends AppCompatActivity
     @Override public void onPause() {
         super.onPause();
 
+        unregisterPackageReceiver();
+
         if (AppUtils.hasNewPackage(manager)) {
             PreferenceHelper.getEditor().putBoolean("refreshList", true).apply();
         }
@@ -366,6 +375,8 @@ public class MainActivity extends AppCompatActivity
     @Override public void onResume() {
         super.onResume();
         loadPref(false);
+
+        registerPackageReceiver();
 
         if (AppUtils.hasNewPackage(manager)) {
             PreferenceHelper.getEditor().putBoolean("refreshList", true).apply();
@@ -1029,6 +1040,24 @@ public class MainActivity extends AppCompatActivity
                 0);
         appWidgetContainer.removeView(widget);
         PreferenceHelper.getEditor().remove("widget_id").putBoolean("has_widget", false).apply();
+    }
+
+    public void registerPackageReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        intentFilter.addDataScheme("package");
+        packageReceiver = new PackageChangesReceiver();
+        registerReceiver(packageReceiver, intentFilter);
+    }
+
+    public void unregisterPackageReceiver() {
+        try {
+            unregisterReceiver(packageReceiver);
+        } catch (IllegalArgumentException w) {
+            // FIXME: Don't ignore this please.
+            Utils.sendLog(0, "Failed to remove receiver!");
+        }
     }
 
     /**
