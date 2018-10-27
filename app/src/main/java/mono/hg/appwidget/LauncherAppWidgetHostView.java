@@ -18,17 +18,18 @@ package mono.hg.appwidget;
 
 import android.appwidget.AppWidgetHostView;
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
-/**
- * {@inheritDoc}
- */
 public class LauncherAppWidgetHostView extends AppWidgetHostView {
+    private float oldX = 0;
+    private float oldY = 0;
+    private float newX = 0;
+    private float newY = 0;
     private boolean mHasPerformedLongPress;
-    private CheckForLongPress mPendingCheckForLongPress;
     //private LayoutInflater mInflater;
 
     public LauncherAppWidgetHostView(Context context) {
@@ -36,8 +37,7 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
         //mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    @Override
-    protected View getErrorView() {
+    @Override protected View getErrorView() {
         //return mInflater.inflate(R.layout.appwidget_error, this, false);
         return null;
     }
@@ -50,18 +50,24 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
         }
 
         // Watch for longpress events at this level to make sure
-        // users can always pick up this widget
-        switch (ev.getAction()) {
+        // users can always pick up this widget.
+        //
+        // In DOWN and MOVE, we save our X and Y values to check whether user is swiping or tapping.
+        switch (ev.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
+                oldX = ev.getX();
+                oldY = ev.getY();
                 postCheckForLongClick();
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                newX = ev.getX();
+                newY = ev.getY();
                 break;
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                mHasPerformedLongPress = false;
-                if (mPendingCheckForLongPress != null) {
-                    removeCallbacks(mPendingCheckForLongPress);
-                }
+                cancelLongPress();
                 break;
 
             default:
@@ -75,42 +81,34 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
 
     private void postCheckForLongClick() {
         mHasPerformedLongPress = false;
-
-        if (mPendingCheckForLongPress == null) {
-            mPendingCheckForLongPress = new CheckForLongPress();
-        }
-        mPendingCheckForLongPress.rememberWindowAttachCount();
-        postDelayed(mPendingCheckForLongPress, ViewConfiguration.getLongPressTimeout());
+        checkForLongPress();
     }
 
-    @Override
-    public void cancelLongPress() {
+    @Override public void cancelLongPress() {
         super.cancelLongPress();
-
         mHasPerformedLongPress = false;
-        if (mPendingCheckForLongPress != null) {
-            removeCallbacks(mPendingCheckForLongPress);
-        }
     }
 
-    @Override
-    public int getDescendantFocusability() {
+    @Override public int getDescendantFocusability() {
         return ViewGroup.FOCUS_BLOCK_DESCENDANTS;
     }
 
-    class CheckForLongPress implements Runnable {
-        private int mOriginalWindowAttachCount;
+    private void checkForLongPress() {
+        final int maxDistance = 10;
+        int timeout = ViewConfiguration.getLongPressTimeout();
 
-        public void run() {
-            if ((getParent() != null) && hasWindowFocus()
-                    && mOriginalWindowAttachCount == getWindowAttachCount()
-                    && !mHasPerformedLongPress && performLongClick()) {
-                mHasPerformedLongPress = true;
+        new CountDownTimer(timeout, timeout) {
+            public void onTick(long millisUntilFinished) {
+                // No-op.
             }
-        }
 
-        private void rememberWindowAttachCount() {
-            mOriginalWindowAttachCount = getWindowAttachCount();
-        }
+            public void onFinish() {
+                if ((Math.abs(newX - oldX) < maxDistance)
+                        && (Math.abs(newY - oldY) < maxDistance)
+                        && performLongClick() && !mHasPerformedLongPress) {
+                    mHasPerformedLongPress = true;
+                }
+            }
+        }.start();
     }
 }
