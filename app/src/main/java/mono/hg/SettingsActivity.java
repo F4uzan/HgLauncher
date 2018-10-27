@@ -2,6 +2,7 @@ package mono.hg;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.MenuItem;
 
 import mono.hg.fragments.CustomizePreferenceFragment;
@@ -39,6 +40,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
         if (selectedFragment == null || !selectedFragment.onBackPressed()) {
             // Selected fragment did not consume the back press event.
             super.onBackPressed();
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 
@@ -62,7 +64,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
         Intent intent = getIntent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        finish();
+        ActivityCompat.finishAfterTransition(this);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         startActivity(intent);
     }
