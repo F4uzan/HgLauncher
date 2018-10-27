@@ -335,8 +335,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case "refreshList":
                 PreferenceHelper.getEditor().putBoolean("refreshList", false).apply();
-                doThis("hide_panel");
-                // FIXME: Recreate after receiving installation to handle frozen app list.
                 new getAppTask(this).execute();
                 break;
         }
