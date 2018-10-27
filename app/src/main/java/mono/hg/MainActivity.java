@@ -1045,7 +1045,6 @@ public class MainActivity extends AppCompatActivity
     public void registerPackageReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         intentFilter.addDataScheme("package");
         packageReceiver = new PackageChangesReceiver();
         registerReceiver(packageReceiver, intentFilter);
@@ -1055,7 +1054,6 @@ public class MainActivity extends AppCompatActivity
         try {
             unregisterReceiver(packageReceiver);
         } catch (IllegalArgumentException w) {
-            // FIXME: Don't ignore this please.
             Utils.sendLog(0, "Failed to remove receiver!");
         }
     }
