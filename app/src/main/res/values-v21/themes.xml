@@ -8,6 +8,7 @@
     <style name="SettingTheme.Dark" parent="AppTheme.Dark">
         <item name="windowNoTitle">false</item>
         <item name="windowActionBar">true</item>
+        <item name="android:windowBackground">@color/black</item>
     </style>
 
     <style name="SettingTheme.Gray" parent="SettingTheme.Dark">
