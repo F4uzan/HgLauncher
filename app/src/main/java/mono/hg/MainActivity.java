@@ -324,10 +324,10 @@ public class MainActivity extends AppCompatActivity
             case "comfy_padding":
             case "dummy_restore":
             case "favourites_panel_switch":
-            case "icon_hide_switch":
             case "list_order":
                 recreate();
                 break;
+            case "icon_hide_switch":
             case "adaptive_shade_switch":
             case "icon_pack":
                 LauncherIconHelper.clearDrawableCache();
