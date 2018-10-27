@@ -18,22 +18,18 @@ package mono.hg.appwidget;
 
 import android.appwidget.AppWidgetHostView;
 import android.content.Context;
-import android.os.CountDownTimer;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
 public class LauncherAppWidgetHostView extends AppWidgetHostView {
-    private float oldX = 0;
-    private float oldY = 0;
-    private float newX = 0;
-    private float newY = 0;
-    private boolean mHasPerformedLongPress;
+    private final GestureDetector gestureDetector;
     //private LayoutInflater mInflater;
 
     public LauncherAppWidgetHostView(Context context) {
         super(context);
+        gestureDetector = new GestureDetector(context, new GestureListener());
         //mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -42,73 +38,38 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
         return null;
     }
 
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        // Consume any touch events for ourselves after longpress is triggered
-        if (mHasPerformedLongPress) {
-            mHasPerformedLongPress = false;
-            return true;
-        }
-
-        // Watch for longpress events at this level to make sure
-        // users can always pick up this widget.
-        //
-        // In DOWN and MOVE, we save our X and Y values to check whether user is swiping or tapping.
-        switch (ev.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                oldX = ev.getX();
-                oldY = ev.getY();
-                postCheckForLongClick();
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                newX = ev.getX();
-                newY = ev.getY();
-                break;
-
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                cancelLongPress();
-                break;
-
-            default:
-                // No-op.
-                break;
-        }
-
-        // Otherwise continue letting touch events fall through to children
-        return false;
-    }
-
-    private void postCheckForLongClick() {
-        mHasPerformedLongPress = false;
-        checkForLongPress();
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
     }
 
     @Override public void cancelLongPress() {
         super.cancelLongPress();
-        mHasPerformedLongPress = false;
     }
 
     @Override public int getDescendantFocusability() {
         return ViewGroup.FOCUS_BLOCK_DESCENDANTS;
     }
 
-    private void checkForLongPress() {
-        final int maxDistance = 10;
-        int timeout = ViewConfiguration.getLongPressTimeout();
+    private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return false;
+        }
 
-        new CountDownTimer(timeout, timeout) {
-            public void onTick(long millisUntilFinished) {
-                // No-op.
-            }
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return performClick();
+        }
 
-            public void onFinish() {
-                if ((Math.abs(newX - oldX) < maxDistance)
-                        && (Math.abs(newY - oldY) < maxDistance)
-                        && performLongClick() && !mHasPerformedLongPress) {
-                    mHasPerformedLongPress = true;
-                }
-            }
-        }.start();
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return true;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            super.onLongPress(e);
+            performLongClick();
+        }
     }
 }
