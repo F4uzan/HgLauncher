@@ -39,7 +39,6 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
         if (selectedFragment == null || !selectedFragment.onBackPressed()) {
             // Selected fragment did not consume the back press event.
             super.onBackPressed();
-            startActivity(new Intent(this, MainActivity.class));
         }
     }
 

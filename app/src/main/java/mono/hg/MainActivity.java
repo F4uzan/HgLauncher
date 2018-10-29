@@ -14,7 +14,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -187,6 +186,11 @@ public class MainActivity extends AppCompatActivity
     private AppWidgetManager appWidgetManager;
     private LauncherAppWidgetHost appWidgetHost;
 
+    /**
+     * A boolean that indicates whether the activity has a SharedPreferences listener.
+     */
+    private static boolean hasPreferenceListener = false;
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -297,7 +301,6 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
-                ActivityCompat.finishAfterTransition(this);
                 return true;
             case R.id.action_force_refresh:
                 recreate();
@@ -585,7 +588,10 @@ public class MainActivity extends AppCompatActivity
         pinnedAppString = PreferenceHelper.getPreference().getString("pinned_apps_list", "");
 
         if (isInit) {
-            PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
+            if (!hasPreferenceListener) {
+                PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
+                hasPreferenceListener = true;
+            }
 
             // Get a list of our hidden apps, default to null if there aren't any.
             excludedAppsList.addAll(PreferenceHelper.getExclusionList());
