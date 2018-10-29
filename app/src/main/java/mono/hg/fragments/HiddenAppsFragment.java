@@ -87,7 +87,7 @@ public class HiddenAppsFragment extends Fragment {
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        if (excludedAppList.size() > 0) {
+        if (excludedAppList.isEmpty()) {
             menu.add(0, 1, 100, getString(R.string.action_hidden_app_reset));
             menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
