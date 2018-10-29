@@ -68,7 +68,6 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
 
         @Override
         public void onLongPress(MotionEvent e) {
-            super.onLongPress(e);
             performLongClick();
         }
     }
