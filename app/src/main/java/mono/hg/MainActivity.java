@@ -355,8 +355,12 @@ public class MainActivity extends AppCompatActivity
     @Override public void onPause() {
         super.onPause();
 
-        unregisterPackageReceiver();
+        // Menu shouldn't be visible.
+        if (appMenu != null) {
+            appMenu.dismiss();
+        }
 
+        unregisterPackageReceiver();
         if (AppUtils.hasNewPackage(manager)) {
             PreferenceHelper.getEditor().putBoolean("refreshList", true).apply();
         }
@@ -365,11 +369,6 @@ public class MainActivity extends AppCompatActivity
         if (PreferenceHelper.shouldDismissOnLeave()) {
             doThis("hide_panel");
         }
-
-        // You shouldn't be visible.
-        if (appMenu != null) {
-            appMenu.dismiss();
-        }
     }
 
     @Override public void onResume() {
@@ -377,20 +376,20 @@ public class MainActivity extends AppCompatActivity
         loadPref(false);
 
         registerPackageReceiver();
-
         if (AppUtils.hasNewPackage(manager)) {
             PreferenceHelper.getEditor().putBoolean("refreshList", true).apply();
         }
-
-        // Reset the app list filter.
-        appsAdapter.resetFilter();
     }
 
     @Override public void onStart() {
         super.onStart();
+
         if (PreferenceHelper.hasWidget()) {
             appWidgetHost.startListening();
         }
+
+        // Reset the app list filter.
+        appsAdapter.resetFilter();
     }
 
     @Override public void onStop() {
