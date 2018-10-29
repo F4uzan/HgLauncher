@@ -19,23 +19,25 @@ package mono.hg.appwidget;
 import android.appwidget.AppWidgetHostView;
 import android.content.Context;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import mono.hg.R;
+
 public class LauncherAppWidgetHostView extends AppWidgetHostView {
     private final GestureDetector gestureDetector;
-    //private LayoutInflater mInflater;
+    private LayoutInflater mInflater;
 
     public LauncherAppWidgetHostView(Context context) {
         super(context);
         gestureDetector = new GestureDetector(context, new GestureListener());
-        //mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override protected View getErrorView() {
-        //return mInflater.inflate(R.layout.appwidget_error, this, false);
-        return null;
+        return mInflater.inflate(R.layout.layout_appwidget_error, this, false);
     }
 
     public boolean onInterceptTouchEvent(MotionEvent event) {

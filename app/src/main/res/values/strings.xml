@@ -25,11 +25,12 @@
     <string name="search_web_hint">Search for \'%1$s\' online.</string>
     <string name="search_web_button">Go</string>
 
-    <!-- Warning/Information toast -->
+    <!-- Warning/Information messages -->
     <string name="warn_pinning">Enable favourites panel to see pinned apps.</string>
 
-    <!-- Error toast -->
+    <!-- Error messages -->
     <string name="err_activity_null">Cannot start application.</string>
+    <string name="err_widget_invalid">Error loading widget.</string>
 
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Desktop view</string>
