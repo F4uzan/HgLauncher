@@ -173,20 +173,16 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         backupMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (hasStoragePermission()) {
-                    isRestore = false;
-                }
-                return false;
+                isRestore = false;
+                return hasStoragePermission();
             }
         });
 
         restoreMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (hasStoragePermission()) {
-                    isRestore = true;
-                }
-                return false;
+                isRestore = true;
+                return hasStoragePermission();
             }
         });
     }
