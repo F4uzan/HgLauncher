@@ -14,6 +14,7 @@ public class PackageChangesReceiver extends BroadcastReceiver {
 
             // Receive intent from broadcast and simply let the launcher know it needs a refresh.
             if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")
+                    || intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")
                     && !packageName.contains(context.getPackageName())) {
                 Intent mainIntent = new Intent(context, MainActivity.class);
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
