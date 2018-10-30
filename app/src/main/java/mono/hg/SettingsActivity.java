@@ -15,8 +15,11 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
     private BackHandledFragment selectedFragment;
 
     @Override public void onCreate(Bundle savedInstanceState) {
+        if (PreferenceHelper.getPreference() == null) {
+            PreferenceHelper.initPreference(this);
+        }
         PreferenceHelper.fetchPreference();
-        
+
         // Load the appropriate theme.
         switch (PreferenceHelper.appTheme()) {
             default:
