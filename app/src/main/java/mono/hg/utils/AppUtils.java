@@ -174,7 +174,7 @@ public class AppUtils {
         if (PreferenceHelper.getPreference().getInt("package_count", 0) != countInstalledPackage(
                 packageManager)) {
             PreferenceHelper.getEditor()
-                            .putInt("package_count", countInstalledPackage(packageManager));
+                            .putInt("package_count", countInstalledPackage(packageManager)).apply();
             return true;
         }
         return false;

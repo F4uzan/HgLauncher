@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity
         registerForContextMenu(touchReceiver);
 
         PreferenceHelper.getEditor()
-                        .putInt("package_count", AppUtils.countInstalledPackage(manager));
+                        .putInt("package_count", AppUtils.countInstalledPackage(manager)).apply();
 
         if (!pinnedAppString.isEmpty()) {
             for (String pinnedApp : Arrays.asList(pinnedAppString.split(";"))) {
