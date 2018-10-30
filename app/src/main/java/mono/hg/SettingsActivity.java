@@ -47,10 +47,9 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            ActivityServiceUtils.hideSoftKeyboard(this);
+        if (item.getItemId() == android.R.id.home) {
             super.onBackPressed();
+            ActivityServiceUtils.hideSoftKeyboard(this);
             return true;
         }
         return super.onOptionsItemSelected(item);

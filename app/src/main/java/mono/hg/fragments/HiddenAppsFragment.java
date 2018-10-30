@@ -87,10 +87,9 @@ public class HiddenAppsFragment extends Fragment {
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        if (excludedAppList.isEmpty()) {
-            menu.add(0, 1, 100, getString(R.string.action_hidden_app_reset));
-            menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        }
+        menu.add(0, 1, 100, getString(R.string.action_hidden_app_reset));
+        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.getItem(0).setVisible(excludedAppList.isEmpty());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -115,10 +114,10 @@ public class HiddenAppsFragment extends Fragment {
     }
 
     private void loadApps() {
-        Intent i = new Intent(Intent.ACTION_MAIN, null);
-        i.addCategory(Intent.CATEGORY_LAUNCHER);
+        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
+        List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
 
         Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
 
@@ -130,12 +129,9 @@ public class HiddenAppsFragment extends Fragment {
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
             if (!packageName.equals(getActivity().getPackageName())) {
-                Boolean isHidden = false;
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = ri.activityInfo.loadIcon(manager);
-                if (excludedAppList.contains(packageName)) {
-                    isHidden = true;
-                }
+                boolean isHidden = excludedAppList.contains(packageName);
                 AppDetail app = new AppDetail(icon, appName, packageName, isHidden);
                 appList.add(app);
             }
@@ -146,6 +142,7 @@ public class HiddenAppsFragment extends Fragment {
 
     private void toggleHiddenState(int position) {
         String packageName = appList.get(position).getPackageName();
+
         // Check if package is already in exclusion.
         if (excludedAppList.contains(packageName)) {
             excludedAppList.remove(packageName);
@@ -155,12 +152,9 @@ public class HiddenAppsFragment extends Fragment {
             PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppList).apply();
         }
         PreferenceHelper.getEditor().putBoolean("dummy_restore", true).apply();
+        appList.get(position).setAppHidden(excludedAppList.contains(packageName));
+
         // Reload the app list!
-        if (excludedAppList.contains(packageName)) {
-            appList.get(position).setAppHidden(true);
-        } else {
-            appList.get(position).setAppHidden(false);
-        }
         hiddenAppAdapter.notifyDataSetChanged();
 
         // Toggle the state of the 'restore all' button.
@@ -194,9 +188,9 @@ public class HiddenAppsFragment extends Fragment {
                 }
 
                 // Remove uninstall menu if the app is a system app.
-                if (AppUtils.isSystemApp(manager, packageName)) {
-                    appMenu.getMenu().removeItem(R.id.action_uninstall);
-                }
+                appMenu.getMenu()
+                       .getItem(R.id.action_uninstall)
+                       .setVisible(AppUtils.isSystemApp(manager, packageName));
 
                 appMenu.show();
 

@@ -66,22 +66,22 @@ public class BackupRestoreFragment extends BackHandledFragment {
          * This is needed because the preference library does not supply toolbars
          * for fragments that it isn't managing.
          */
+        isInRestore = getArguments().getBoolean("isRestore", false);
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
             ((SettingsActivity) getActivity()).setSupportActionBar(toolbar);
             toolbar.setVisibility(View.VISIBLE);
-            if (this.getArguments().getBoolean("isRestore", false)) {
+            if (isInRestore) {
                 toolbar.setTitle(R.string.pref_header_restore);
-                isInRestore = true;
             } else {
                 toolbar.setTitle(R.string.pref_header_backup);
             }
         } else {
             ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
             if (actionBar != null) {
-                if (this.getArguments().getBoolean("isRestore", false)) {
+                if (isInRestore) {
                     actionBar.setTitle(R.string.pref_header_restore);
-                    isInRestore = true;
                 } else {
                     actionBar.setTitle(R.string.pref_header_backup);
                 }
@@ -140,11 +140,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        // Hide 'Backup' menu item in restore mode.
-        if (!isInRestore) {
-            menu.add(0, 1, 100, getString(R.string.action_backup));
-            menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        }
+        menu.add(0, 1, 100, getString(R.string.action_backup));
+        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.getItem(0).setVisible(!isInRestore);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -166,12 +164,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
                         overwriteDialog.setTitle(getString(R.string.pref_header_backup));
                         overwriteDialog.setMessage(getString(R.string.backup_exist));
                         overwriteDialog.setNegativeButton(getString(R.string.backup_exist_cancel),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // Do nothing.
-                                    }
-                                });
+                                null);
                         overwriteDialog.setPositiveButton(
                                 getString(R.string.backup_exist_overwrite),
                                 new DialogInterface.OnClickListener() {
@@ -213,13 +206,10 @@ public class BackupRestoreFragment extends BackHandledFragment {
 
         if (contents != null && contents.length > 0) {
             for (File availableContents : contents) {
-                // Don't show hidden (.hidden) files/folders.
+                // Don't show hidden (.dot) files/folders.
                 if (!availableContents.isHidden()) {
-                    if (availableContents.isDirectory()) {
-                        fileFoldersList.add(new FileFolder(availableContents.getName(), true));
-                    } else if (availableContents.isFile()) {
-                        fileFoldersList.add(new FileFolder(availableContents.getName(), false));
-                    }
+                    fileFoldersList.add(new FileFolder(availableContents.getName(),
+                            availableContents.isDirectory()));
                 }
             }
             fileFolderAdapter.notifyDataSetChanged();
@@ -239,8 +229,11 @@ public class BackupRestoreFragment extends BackHandledFragment {
         });
     }
 
-    // Save backup to XML.
-    // Resulting backup may be unreadable and jumbled.
+    /**
+     * Saves preferences to a local file.
+     *
+     * @param path Where should the preferences be saved to?
+     */
     public void saveBackup(File path) {
         ObjectOutputStream out = null;
         try {
@@ -264,7 +257,11 @@ public class BackupRestoreFragment extends BackHandledFragment {
         }
     }
 
-    // Restore backup from a specified file.
+    /**
+     * Restores a local backup and exports all the preferences stored.
+     *
+     * @param path Where does the backup reside in?
+     */
     @SuppressWarnings("unchecked")
     public void restoreBackup(File path) {
         ObjectInputStream input = null;
@@ -329,18 +326,22 @@ public class BackupRestoreFragment extends BackHandledFragment {
         @Override
         protected Void doInBackground(Void... params) {
             BackupRestoreFragment fragment = fragmentRef.get();
-            fragment.restoreBackup(path);
+            if (fragment != null) {
+                fragment.restoreBackup(path);
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            BackupRestoreFragment fragment = fragmentRef.get();
             super.onPostExecute(result);
-            progress.dismiss();
-            fragment.getActivity().recreate();
-            Toast.makeText(fragmentRef.get().getActivity(), R.string.restore_complete,
-                    Toast.LENGTH_LONG).show();
+            BackupRestoreFragment fragment = fragmentRef.get();
+            if (fragment != null) {
+                progress.dismiss();
+                fragment.getActivity().recreate();
+                Toast.makeText(fragmentRef.get().getActivity(), R.string.restore_complete,
+                        Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

@@ -63,133 +63,109 @@ import mono.hg.wrappers.SimpleScrollListener;
 public class MainActivity extends AppCompatActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    /**
+     * A boolean that indicates whether the activity has a SharedPreferences listener.
+     */
+    private static boolean hasPreferenceListener = false;
     /*
      * Should the favourites panel listen for scroll?
      */
     private boolean shouldShowFavourites = true;
-
     /*
      * Animation duration; fetched from system's duration.
      */
     private int animateDuration;
-
     /*
      * List containing installed apps.
      */
     private ArrayList<AppDetail> appsList = new ArrayList<>();
-
     /*
      * Adapter for installed apps.
      */
     private AppAdapter appsAdapter = new AppAdapter(appsList);
-
     /*
      * List containing pinned apps.
      */
     private ArrayList<PinnedAppDetail> pinnedAppList = new ArrayList<>();
-
     /*
      * String containing pinned apps. Delimited by ';'.
      */
     private String pinnedAppString;
-
     /*
      * Adapter for pinned apps.
      */
     private FlexibleAdapter<PinnedAppDetail> pinnedAppsAdapter = new FlexibleAdapter<>(
             pinnedAppList);
-
     /*
      * List of excluded apps. These will not be shown in the app list.
      */
     private HashSet<String> excludedAppsList = new HashSet<>();
-
     /*
      * Package manager; casted through getPackageManager().
      */
     private PackageManager manager;
-
     /*
      * RecyclerView for app list.
      */
     private RecyclerView appsRecyclerView;
-
     /*
      * LinearLayoutManager used in appsRecyclerView.
      */
     private TogglingLinearLayoutManager appsLayoutManager;
-
     /*
      * RecyclerView for pinned apps; shown in favourites panel.
      */
     private RecyclerView pinnedAppsRecyclerView;
-
     /*
      * Parent layout containing search bar.
      */
     private FrameLayout searchContainer;
-
     /*
      * Parent layout of pinned apps' RecyclerView.
      */
     private FrameLayout pinnedAppsContainer;
-
     /*
      * Parent layout for installed app list.
      */
     private RelativeLayout appListContainer;
-
     /*
      * The search bar. Contained in searchContainer.
      */
     private EditText searchBar;
-
     /*
      * Sliding up panel. Shows the app list when pulled down and
      * a parent to the other containers.
      */
     private SlidingUpPanelLayout slidingHome;
-
     /*
      * CoordinatorLayout hosting the search snackbar.
      */
     private View snackHolder;
-
     /*
      * A view used to intercept gestures and taps in the desktop.
      */
     private View touchReceiver;
-
     /*
      * View containing widget in the desktop.
      */
     private FrameLayout appWidgetContainer;
-
     /*
      * Progress bar shown when populating app list.
      */
     private IndeterminateMaterialProgressBar loadProgress;
-
     /*
      * Menu shown when long-pressing apps.
      */
     private PopupMenu appMenu;
-
     /*
      * Receiver used to listen to installed/uninstalled packages.
      */
     private PackageChangesReceiver packageReceiver;
-
     /**
      * Used to handle and add widgets to widgetContainer.
      */
     private AppWidgetManager appWidgetManager;
     private LauncherAppWidgetHost appWidgetHost;
-
-    /**
-     * A boolean that indicates whether the activity has a SharedPreferences listener.
-     */
-    private static boolean hasPreferenceListener = false;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -344,8 +320,10 @@ public class MainActivity extends AppCompatActivity
                 recreate();
                 break;
             case "refreshList":
-                PreferenceHelper.getEditor().putBoolean("refreshList", false).apply();
-                new getAppTask(this).execute();
+                if (PreferenceHelper.getPreference().getBoolean("refreshList", false)) {
+                    PreferenceHelper.getEditor().putBoolean("refreshList", false).apply();
+                    new getAppTask(this).execute();
+                }
                 break;
         }
     }
@@ -364,9 +342,9 @@ public class MainActivity extends AppCompatActivity
         }
 
         unregisterPackageReceiver();
-        if (AppUtils.hasNewPackage(manager)) {
-            PreferenceHelper.getEditor().putBoolean("refreshList", true).apply();
-        }
+        PreferenceHelper.getEditor()
+                        .putBoolean("refreshList", AppUtils.hasNewPackage(manager))
+                        .apply();
 
         // Check if we need to dismiss the panel.
         if (PreferenceHelper.shouldDismissOnLeave()) {
@@ -379,9 +357,9 @@ public class MainActivity extends AppCompatActivity
         loadPref(false);
 
         registerPackageReceiver();
-        if (AppUtils.hasNewPackage(manager)) {
-            PreferenceHelper.getEditor().putBoolean("refreshList", true).apply();
-        }
+        PreferenceHelper.getEditor()
+                        .putBoolean("refreshList", AppUtils.hasNewPackage(manager))
+                        .apply();
     }
 
     @Override public void onStart() {
@@ -398,9 +376,9 @@ public class MainActivity extends AppCompatActivity
     @Override public void onStop() {
         super.onStop();
 
-        if (AppUtils.hasNewPackage(manager)) {
-            PreferenceHelper.getEditor().putBoolean("refreshList", true).apply();
-        }
+        PreferenceHelper.getEditor()
+                        .putBoolean("refreshList", AppUtils.hasNewPackage(manager))
+                        .apply();
 
         if (PreferenceHelper.hasWidget()) {
             appWidgetHost.stopListening();
@@ -647,9 +625,9 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Remove uninstall menu if the app is a system app.
-        if (AppUtils.isSystemApp(manager, packageName)) {
-            appMenu.getMenu().removeItem(R.id.action_uninstall);
-        }
+        appMenu.getMenu()
+               .getItem(R.id.action_uninstall)
+               .setVisible(AppUtils.isSystemApp(manager, packageName));
 
         appMenu.show();
 
@@ -1031,8 +1009,8 @@ public class MainActivity extends AppCompatActivity
             // Apply preference changes.
             PreferenceHelper.getEditor()
                             .putInt("widget_id", widgetId)
-                            .putBoolean("has_widget", true);
-            PreferenceHelper.getEditor().apply();
+                            .putBoolean("has_widget", true)
+                            .apply();
         }
     }
 
