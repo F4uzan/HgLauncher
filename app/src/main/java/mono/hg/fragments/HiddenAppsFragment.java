@@ -95,20 +95,21 @@ public class HiddenAppsFragment extends Fragment {
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            getActivity().onBackPressed();
-            return true;
-        } else if (id == 1) {
-            excludedAppList.clear();
-            PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppList).apply();
-            PreferenceHelper.getEditor().putBoolean("dummy_restore", true).apply();
+        switch (id) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+            case 1:
+                excludedAppList.clear();
+                PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppList).apply();
+                PreferenceHelper.getEditor().putBoolean("dummy_restore", true).apply();
 
-            // Recreate the toolbar menu to hide the 'restore all' button.
-            getActivity().invalidateOptionsMenu();
+                // Recreate the toolbar menu to hide the 'restore all' button.
+                getActivity().invalidateOptionsMenu();
 
-            // Reload the list.
-            loadApps();
-            return true;
+                // Reload the list.
+                loadApps();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

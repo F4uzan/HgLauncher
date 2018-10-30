@@ -319,12 +319,6 @@ public class MainActivity extends AppCompatActivity
                 LauncherIconHelper.clearDrawableCache();
                 recreate();
                 break;
-            case "refreshList":
-                if (PreferenceHelper.getPreference().getBoolean("refreshList", false)) {
-                    PreferenceHelper.getEditor().putBoolean("refreshList", false).apply();
-                    new getAppTask(this).execute();
-                }
-                break;
         }
     }
 
@@ -342,10 +336,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         unregisterPackageReceiver();
-        PreferenceHelper.getEditor()
-                        .putBoolean("refreshList", AppUtils.hasNewPackage(manager))
-                        .apply();
-
         // Check if we need to dismiss the panel.
         if (PreferenceHelper.shouldDismissOnLeave()) {
             doThis("hide_panel");
@@ -357,14 +347,13 @@ public class MainActivity extends AppCompatActivity
         loadPref(false);
 
         registerPackageReceiver();
-        PreferenceHelper.getEditor()
-                        .putBoolean("refreshList", AppUtils.hasNewPackage(manager))
-                        .apply();
+        if (AppUtils.hasNewPackage(manager)) {
+            new getAppTask(this).execute();
+        }
     }
 
     @Override public void onStart() {
         super.onStart();
-
         if (PreferenceHelper.hasWidget()) {
             appWidgetHost.startListening();
         }
@@ -375,11 +364,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override public void onStop() {
         super.onStop();
-
-        PreferenceHelper.getEditor()
-                        .putBoolean("refreshList", AppUtils.hasNewPackage(manager))
-                        .apply();
-
         if (PreferenceHelper.hasWidget()) {
             appWidgetHost.stopListening();
         }
