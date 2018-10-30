@@ -140,6 +140,6 @@ public class PreferenceHelper {
         static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
         adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
 
-        exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps", null);
+        exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps", new HashSet<String>());
     }
 }
