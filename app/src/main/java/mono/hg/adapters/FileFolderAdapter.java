@@ -11,8 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import mono.hg.R;
-import mono.hg.utils.Utils;
 import mono.hg.models.FileFolder;
+import mono.hg.utils.Utils;
 
 public class FileFolderAdapter extends BaseAdapter {
     private ArrayList<FileFolder> filesList;
