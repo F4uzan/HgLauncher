@@ -89,7 +89,7 @@ public class HiddenAppsFragment extends Fragment {
         menu.clear();
         menu.add(0, 1, 100, getString(R.string.action_hidden_app_reset));
         menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menu.getItem(0).setVisible(excludedAppList.isEmpty());
+        menu.getItem(0).setVisible(!excludedAppList.isEmpty());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
