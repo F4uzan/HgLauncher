@@ -101,7 +101,7 @@ public class HiddenAppsFragment extends Fragment {
                 return true;
             case 1:
                 excludedAppList.clear();
-                PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppList).apply();
+                PreferenceHelper.getEditor().putStringSet("hidden_apps", new HashSet<String>()).apply();
                 PreferenceHelper.getEditor().putBoolean("dummy_restore", true).apply();
 
                 // Recreate the toolbar menu to hide the 'restore all' button.
