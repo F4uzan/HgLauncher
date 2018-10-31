@@ -550,11 +550,6 @@ public class MainActivity extends AppCompatActivity
         pinnedAppString = PreferenceHelper.getPreference().getString("pinned_apps_list", "");
 
         if (isInit) {
-            if (!hasPreferenceListener) {
-                PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
-                hasPreferenceListener = true;
-            }
-
             // Get a list of our hidden apps, default to null if there aren't any.
             excludedAppsList.addAll(PreferenceHelper.getExclusionList());
 
@@ -572,6 +567,13 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
         }
+
+        // Register preference change listener only if it's nonexistent.
+        if (!hasPreferenceListener) {
+            PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
+            hasPreferenceListener = true;
+        }
+
     }
 
     /**
