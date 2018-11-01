@@ -63,105 +63,129 @@ import mono.hg.wrappers.SimpleScrollListener;
 public class MainActivity extends AppCompatActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    /**
+    /*
      * A boolean that indicates whether the activity has a SharedPreferences listener.
      */
     private static boolean hasPreferenceListener = false;
+
     /*
      * Should the favourites panel listen for scroll?
      */
     private boolean shouldShowFavourites = true;
+
     /*
      * Animation duration; fetched from system's duration.
      */
     private int animateDuration;
+
     /*
      * List containing installed apps.
      */
     private ArrayList<AppDetail> appsList = new ArrayList<>();
+
     /*
      * Adapter for installed apps.
      */
     private AppAdapter appsAdapter = new AppAdapter(appsList);
+
     /*
      * List containing pinned apps.
      */
     private ArrayList<PinnedAppDetail> pinnedAppList = new ArrayList<>();
+
     /*
-     * String containing pinned apps. Delimited by ';'.
+     * String containing pinned apps. Delimited by a semicolon (;).
      */
     private String pinnedAppString;
+
     /*
      * Adapter for pinned apps.
      */
     private FlexibleAdapter<PinnedAppDetail> pinnedAppsAdapter = new FlexibleAdapter<>(
             pinnedAppList);
+
     /*
      * List of excluded apps. These will not be shown in the app list.
      */
     private HashSet<String> excludedAppsList = new HashSet<>();
+
     /*
      * Package manager; casted through getPackageManager().
      */
     private PackageManager manager;
+
     /*
      * RecyclerView for app list.
      */
     private RecyclerView appsRecyclerView;
+
     /*
      * LinearLayoutManager used in appsRecyclerView.
      */
     private TogglingLinearLayoutManager appsLayoutManager;
+
     /*
      * RecyclerView for pinned apps; shown in favourites panel.
      */
     private RecyclerView pinnedAppsRecyclerView;
+
     /*
      * Parent layout containing search bar.
      */
     private FrameLayout searchContainer;
+
     /*
      * Parent layout of pinned apps' RecyclerView.
      */
     private FrameLayout pinnedAppsContainer;
+
     /*
      * Parent layout for installed app list.
      */
     private RelativeLayout appListContainer;
+
     /*
      * The search bar. Contained in searchContainer.
      */
     private EditText searchBar;
+
     /*
      * Sliding up panel. Shows the app list when pulled down and
      * a parent to the other containers.
      */
     private SlidingUpPanelLayout slidingHome;
+
     /*
      * CoordinatorLayout hosting the search snackbar.
      */
     private View snackHolder;
+
     /*
      * A view used to intercept gestures and taps in the desktop.
      */
     private View touchReceiver;
+
     /*
      * View containing widget in the desktop.
      */
     private FrameLayout appWidgetContainer;
+
     /*
      * Progress bar shown when populating app list.
      */
     private IndeterminateMaterialProgressBar loadProgress;
+
     /*
      * Menu shown when long-pressing apps.
      */
     private PopupMenu appMenu;
+
     /*
      * Receiver used to listen to installed/uninstalled packages.
      */
     private PackageChangesReceiver packageReceiver;
-    /**
+
+    /*
      * Used to handle and add widgets to widgetContainer.
      */
     private AppWidgetManager appWidgetManager;
@@ -204,7 +228,7 @@ public class MainActivity extends AppCompatActivity
 
         slidingHome.disallowHiding(true);
 
-        // Let the launcher handle state of the panel.
+        // Let the launcher handle state of the sliding panel.
         slidingHome.alwaysResetState(true);
 
         appsRecyclerView.setDrawingCacheEnabled(true);
@@ -323,6 +347,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override public void onBackPressed() {
+        // Don't call super.onBackPressed because we don't want the launcher to close.
+
         // Hides the panel if back is pressed.
         doThis("hide_panel");
     }
@@ -341,6 +367,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override public void onResume() {
         super.onResume();
+
         loadPref(false);
 
         registerPackageReceiver();
@@ -351,6 +378,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override public void onStart() {
         super.onStart();
+
         if (PreferenceHelper.hasWidget()) {
             appWidgetHost.startListening();
         }
@@ -570,7 +598,6 @@ public class MainActivity extends AppCompatActivity
             PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
             hasPreferenceListener = true;
         }
-
     }
 
     /**
