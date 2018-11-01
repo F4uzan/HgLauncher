@@ -65,10 +65,6 @@ public class PreferenceHelper {
         return comfy_padding;
     }
 
-    public static boolean shouldDismissOnLeave() {
-        return dismiss_panel;
-    }
-
     public static boolean allowTapToOpen() {
         return tap_to_drawer;
     }
@@ -131,7 +127,6 @@ public class PreferenceHelper {
         shade_view = preferences.getBoolean("shade_view_switch", false);
         keyboard_focus = preferences.getBoolean("keyboard_focus", false);
         comfy_padding = preferences.getBoolean("comfy_padding", false);
-        dismiss_panel = preferences.getBoolean("dismiss_panel", true);
         tap_to_drawer = preferences.getBoolean("tap_to_drawer", true);
         app_theme = preferences.getString("app_theme", "light");
         web_search_enabled = preferences.getBoolean("web_search_enabled", true);

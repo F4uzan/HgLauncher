@@ -330,16 +330,13 @@ public class MainActivity extends AppCompatActivity
     @Override public void onPause() {
         super.onPause();
 
-        // Menu shouldn't be visible.
+        // Dismiss any visible menu as well as the app panel.
         if (appMenu != null) {
             appMenu.dismiss();
         }
+        doThis("hide_panel");
 
         unregisterPackageReceiver();
-        // Check if we need to dismiss the panel.
-        if (PreferenceHelper.shouldDismissOnLeave()) {
-            doThis("hide_panel");
-        }
     }
 
     @Override public void onResume() {
