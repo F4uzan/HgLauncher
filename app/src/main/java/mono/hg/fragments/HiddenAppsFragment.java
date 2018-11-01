@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,7 +30,6 @@ import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.AppDetail;
-import mono.hg.utils.AppUtils;
 
 public class HiddenAppsFragment extends Fragment {
     private ArrayList<AppDetail> appList = new ArrayList<>();
@@ -101,7 +98,9 @@ public class HiddenAppsFragment extends Fragment {
                 return true;
             case 1:
                 excludedAppList.clear();
-                PreferenceHelper.getEditor().putStringSet("hidden_apps", new HashSet<String>()).apply();
+                PreferenceHelper.getEditor()
+                                .putStringSet("hidden_apps", new HashSet<String>())
+                                .apply();
                 PreferenceHelper.getEditor().putBoolean("dummy_restore", true).apply();
 
                 // Recreate the toolbar menu to hide the 'restore all' button.
@@ -167,58 +166,6 @@ public class HiddenAppsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 toggleHiddenState(position);
-            }
-        });
-
-        appsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                // Parse package URI for use in uninstallation and package info call.
-                final String packageName = appList.get(position).getPackageName();
-                final Uri packageNameUri = Uri.parse("package:" + packageName);
-
-                // Inflate the app menu.
-                PopupMenu appMenu = new PopupMenu(getActivity(), view);
-                appMenu.getMenuInflater().inflate(R.menu.menu_hidden_app, appMenu.getMenu());
-
-                // Don't show hide action if the app is already hidden.
-                if (appList.get(position).isAppHidden()) {
-                    appMenu.getMenu().removeItem(R.id.action_hide);
-                } else {
-                    appMenu.getMenu().removeItem(R.id.action_show);
-                }
-
-                // Remove uninstall menu if the app is a system app.
-                if (AppUtils.isSystemApp(manager, packageName)) {
-                    appMenu.getMenu().removeItem(R.id.action_uninstall);
-                }
-
-                appMenu.show();
-
-                // Set listener for the menu.
-                appMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_info:
-                                startActivity(new Intent(
-                                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                        packageNameUri));
-                                break;
-                            case R.id.action_uninstall:
-                                startActivity(new Intent(Intent.ACTION_DELETE, packageNameUri));
-                                break;
-                            case R.id.action_hide:
-                            case R.id.action_show:
-                                toggleHiddenState(position);
-                                break;
-                            default:
-                                // Don't do anything.
-                                break;
-                        }
-                        return true;
-                    }
-                });
-                return false;
             }
         });
     }
