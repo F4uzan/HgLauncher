@@ -623,21 +623,19 @@ public class MainActivity extends AppCompatActivity
         appMenu = new PopupMenu(MainActivity.this, view);
         appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
 
-        if (isPinned) {
-            appMenu.getMenu().removeItem(R.id.action_pin);
-            appMenu.getMenu().removeItem(R.id.action_hide);
-        } else {
-            // Don't show the 'pin' action when the app is already pinned.
-            if (pinnedAppString.contains(packageName)) {
-                appMenu.getMenu().removeItem(R.id.action_pin);
-            }
-            appMenu.getMenu().removeItem(R.id.action_unpin);
-        }
+        // Hide 'pin' if the app is already pinned or isPinned is set.
+        appMenu.getMenu().findItem(R.id.action_pin)
+               .setVisible(!isPinned && !pinnedAppString.contains(packageName));
 
-        // Remove uninstall menu if the app is a system app.
-        if (AppUtils.isSystemApp(manager, packageName)) {
-            appMenu.getMenu().removeItem(R.id.action_uninstall);
-        }
+        // We can't hide an app from the favourites panel.
+        appMenu.getMenu().findItem(R.id.action_hide).setVisible(!isPinned);
+
+        // Only show the 'unpin' option if isPinned is set.
+        appMenu.getMenu().findItem(R.id.action_unpin).setVisible(isPinned);
+
+        // Show uninstall menu if the app is not a system app.
+        appMenu.getMenu().findItem(R.id.action_uninstall)
+               .setVisible(!AppUtils.isSystemApp(manager, packageName));
 
         appMenu.show();
 
