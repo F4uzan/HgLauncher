@@ -569,6 +569,12 @@ public class MainActivity extends AppCompatActivity
         // Get pinned apps.
         pinnedAppString = PreferenceHelper.getPreference().getString("pinned_apps_list", "");
 
+        // Register preference change listener only if it's nonexistent.
+        if (!hasPreferenceListener) {
+            PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
+            hasPreferenceListener = true;
+        }
+
         if (isInit) {
             // Get a list of our hidden apps, default to null if there aren't any.
             excludedAppsList.addAll(PreferenceHelper.getExclusionList());
@@ -586,12 +592,6 @@ public class MainActivity extends AppCompatActivity
                     setTheme(R.style.AppTheme_Dark_NoActionBar);
                     break;
             }
-        }
-
-        // Register preference change listener only if it's nonexistent.
-        if (!hasPreferenceListener) {
-            PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
-            hasPreferenceListener = true;
         }
     }
 
