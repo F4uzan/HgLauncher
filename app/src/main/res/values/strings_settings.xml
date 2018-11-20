@@ -23,9 +23,9 @@
     <string name="pref_header_restore_desc">Restore a saved configuration.</string>
 
     <!-- Easter egg -->
-    <string name="version_key_toast_plural">Tap %1$d more times to enable secrets.</string>
+    <string name="version_key_toast_plural">Tap %1$d more times to enable testing mode.</string>
     <string name="version_key_toast">Tap once again to confirm.</string>
-    <string name="version_key_name">Re:HgLauncher</string>
+    <string name="version_key_name">HgLauncher (testing)</string>
 
     <!-- Dialogue and toast messages -->
     <string name="backup_exist">A file with the same name as the backup already exists.</string>
