@@ -5,12 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +20,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import mono.hg.R;
-import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.AppDetail;
@@ -45,6 +41,8 @@ public class HiddenAppsFragment extends Fragment {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*
+         * TODO: We probably won't need all this, but rewrite it just in case.
         // Make a toolbar when the preference library doesn't give us anything.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
@@ -56,7 +54,7 @@ public class HiddenAppsFragment extends Fragment {
             if (actionBar != null) {
                 actionBar.setTitle(R.string.pref_header_hidden_apps);
             }
-        }
+        } */
 
         setHasOptionsMenu(true);
 

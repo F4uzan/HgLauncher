@@ -2,9 +2,9 @@ package mono.hg;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.view.MenuItem;
 
+import androidx.core.app.ActivityCompat;
 import mono.hg.fragments.CustomizePreferenceFragment;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.utils.ActivityServiceUtils;

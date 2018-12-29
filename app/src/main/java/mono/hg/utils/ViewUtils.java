@@ -1,12 +1,12 @@
 package mono.hg.utils;
 
 import android.content.res.Resources;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.view.ViewTreeObserver;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import mono.hg.R;
 
 public class ViewUtils {

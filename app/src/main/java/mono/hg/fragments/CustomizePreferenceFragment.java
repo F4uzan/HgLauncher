@@ -12,13 +12,13 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
-import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.helpers.PreferenceHelper;

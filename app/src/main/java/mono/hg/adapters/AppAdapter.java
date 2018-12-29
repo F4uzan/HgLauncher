@@ -1,7 +1,5 @@
 package mono.hg.adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -9,6 +7,8 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.models.AppDetail;
 import mono.hg.utils.Utils;

@@ -14,7 +14,7 @@
         android:layout_height="@dimen/search_bar_size"
         android:background="?attr/cardColor">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pinned_apps_list"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/search_bar_size"
@@ -24,7 +24,7 @@
 
     </FrameLayout>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/snack_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

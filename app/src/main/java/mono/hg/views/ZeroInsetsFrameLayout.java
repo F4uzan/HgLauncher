@@ -3,10 +3,11 @@ package mono.hg.views;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.WindowInsets;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 
 /*
  * Huge thanks and credits to Hogun (https://stackoverflow.com/a/41448403) for the class.

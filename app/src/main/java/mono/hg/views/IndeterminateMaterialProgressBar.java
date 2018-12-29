@@ -1,11 +1,11 @@
 package mono.hg.views;
 
 import android.content.Context;
-import android.support.v4.widget.CircularProgressDrawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.widget.ProgressBar;
 
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import mono.hg.R;
 
 public class IndeterminateMaterialProgressBar extends ProgressBar {

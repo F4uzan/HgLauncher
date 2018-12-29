@@ -1,13 +1,13 @@
 package mono.hg.models;
 
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.flexibleadapter.items.IFilterable;

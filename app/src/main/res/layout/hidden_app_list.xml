@@ -26,7 +26,7 @@
         android:paddingRight="10dp"
         android:layout_weight="1" />
 
-    <android.support.v7.widget.AppCompatCheckBox
+    <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/item_app_hidden_state"
         android:checked="false"
         android:layout_width="wrap_content"

@@ -3,11 +3,11 @@ package mono.hg.fragments;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AlertDialog;
 import mono.hg.R;
 import mono.hg.utils.Utils;
 

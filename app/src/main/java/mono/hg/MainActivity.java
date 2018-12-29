@@ -13,12 +13,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
@@ -35,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.lang.ref.WeakReference;
@@ -42,6 +37,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
 import mono.hg.appwidget.LauncherAppWidgetHost;

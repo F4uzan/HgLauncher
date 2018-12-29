@@ -4,13 +4,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,8 +33,9 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import mono.hg.R;
-import mono.hg.SettingsActivity;
 import mono.hg.adapters.FileFolderAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.FileFolder;
@@ -68,6 +64,8 @@ public class BackupRestoreFragment extends BackHandledFragment {
          */
         isInRestore = getArguments().getBoolean("isRestore", false);
 
+        /*
+         * TODO: We probably won't need all this, but rewrite it just in case.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
             ((SettingsActivity) getActivity()).setSupportActionBar(toolbar);
@@ -86,7 +84,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
                     actionBar.setTitle(R.string.pref_header_backup);
                 }
             }
-        }
+        } */
 
         setHasOptionsMenu(true);
 
