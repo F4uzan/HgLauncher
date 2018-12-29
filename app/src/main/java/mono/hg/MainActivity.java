@@ -1060,6 +1060,10 @@ public class MainActivity extends AppCompatActivity
             MainActivity activity = activityRef.get();
 
             if (activity != null) {
+                // Clear the apps list first so we wouldn't add over an existing list.
+                activity.appsList.clear();
+                activity.appsAdapter.removeRange(0, activity.appsList.size());
+
                 // Show the progress bar so the list wouldn't look empty.
                 activity.loadProgress.setVisibility(View.VISIBLE);
             }
@@ -1082,13 +1086,9 @@ public class MainActivity extends AppCompatActivity
                 activity.loadProgress.setVisibility(View.GONE);
                 activity.loadProgress.invalidate();
 
-                // Clear the apps list first so we wouldn't add over an existing list.
-                activity.appsAdapter.removeRange(0, activity.appsList.size());
-                activity.appsList.clear();
-
                 // Add the fetched apps and update item view cache.
-                activity.appsList = tempList;
-                activity.appsAdapter.addItems(0, tempList);
+                activity.appsList.addAll(tempList);
+                activity.appsAdapter.updateDataSet(tempList);
                 activity.appsRecyclerView.setItemViewCacheSize(activity
                         .appsAdapter.getItemCount() - 1);
 
