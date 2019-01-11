@@ -2,41 +2,46 @@ package mono.hg.fragments;
 
 import android.Manifest;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceFragmentCompat;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.helpers.PreferenceHelper;
+import mono.hg.utils.ViewUtils;
 
-public class CustomizePreferenceFragment extends com.fnp.materialpreferences.PreferenceFragment {
+public class PreferenceFragment extends PreferenceFragmentCompat {
 
     private static final int PERMISSION_STORAGE_CODE = 4200;
     private boolean isRestore = false;
 
-    @Override
-    public int addPreferencesFromResource() {
-        return R.xml.pref_customization;
+    @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        addPreferencesFromResource(R.xml.pref_customization);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.title_activity_settings);
+        }
 
         ListPreference appTheme = (ListPreference) findPreference("app_theme");
         final ListPreference iconList = (ListPreference) findPreference("icon_pack");
@@ -63,17 +68,6 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         addFragmentListener();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // Let the activity handle the back press.
-            getActivity().onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     protected void setIconList(ListPreference list) {
         PackageManager manager = getActivity().getPackageManager();
         List<String> entries = new ArrayList<>();
@@ -95,8 +89,8 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
             entryValues.add(packageName);
         }
 
-        CharSequence[] finalEntries = entries.toArray(new CharSequence[entries.size()]);
-        CharSequence[] finalEntryValues = entryValues.toArray(new CharSequence[entryValues.size()]);
+        CharSequence[] finalEntries = entries.toArray(new CharSequence[0]);
+        CharSequence[] finalEntryValues = entryValues.toArray(new CharSequence[0]);
 
         list.setEntries(finalEntries);
         list.setEntryValues(finalEntryValues);
@@ -165,7 +159,7 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                replaceFragment(new HiddenAppsFragment(), "HiddenApps");
+                ViewUtils.replaceFragment((SettingsActivity) getActivity(), new HiddenAppsFragment(), "hidden_apps");
                 return false;
             }
         });
@@ -185,14 +179,6 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
                 return hasStoragePermission();
             }
         });
-    }
-
-    // Replace the view with a fragment.
-    private void replaceFragment(Fragment fragment, String tag) {
-        getActivity().getFragmentManager().beginTransaction()
-                     .replace(android.R.id.content, fragment, tag)
-                     .addToBackStack(null)
-                     .commit();
     }
 
     // Used to check for storage permission.
@@ -232,6 +218,7 @@ public class CustomizePreferenceFragment extends com.fnp.materialpreferences.Pre
         Bundle fragmentBundle = new Bundle();
         fragmentBundle.putBoolean("isRestore", isRestore);
         backupRestoreFragment.setArguments(fragmentBundle);
-        replaceFragment(backupRestoreFragment, "BackupRestore");
+        ViewUtils.replaceFragment((SettingsActivity) getActivity(), backupRestoreFragment, "backup_restore");
     }
+
 }

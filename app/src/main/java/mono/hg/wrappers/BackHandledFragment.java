@@ -1,7 +1,8 @@
 package mono.hg.wrappers;
 
-import android.app.Fragment;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 
 /*
  * A fragment class meant to handle back button press.
@@ -9,7 +10,7 @@ import android.os.Bundle;
  */
 
 public abstract class BackHandledFragment extends Fragment {
-    protected BackHandlerInterface backHandlerInterface;
+    private BackHandlerInterface backHandlerInterface;
 
     public abstract boolean onBackPressed();
 

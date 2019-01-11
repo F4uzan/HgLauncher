@@ -1,6 +1,5 @@
 package mono.hg.fragments;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -22,12 +21,15 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import mono.hg.R;
+import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.AppDetail;
+import mono.hg.wrappers.BackHandledFragment;
 
-public class HiddenAppsFragment extends Fragment {
+public class HiddenAppsFragment extends BackHandledFragment {
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private HiddenAppAdapter hiddenAppAdapter;
     private PackageManager manager;
@@ -41,20 +43,10 @@ public class HiddenAppsFragment extends Fragment {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*
-         * TODO: We probably won't need all this, but rewrite it just in case.
-        // Make a toolbar when the preference library doesn't give us anything.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-            ((SettingsActivity) getActivity()).setSupportActionBar(toolbar);
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar.setTitle(R.string.pref_header_hidden_apps);
-        } else {
-            ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setTitle(R.string.pref_header_hidden_apps);
-            }
-        } */
+        ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.pref_header_hidden_apps);
+        }
 
         setHasOptionsMenu(true);
 
@@ -73,11 +65,8 @@ public class HiddenAppsFragment extends Fragment {
         addListeners();
     }
 
-    @Override public void onDetach() {
-        super.onDetach();
-        if (PreferenceHelper.getPreference().getBoolean("dummy_restore", false)) {
-            PreferenceHelper.getEditor().remove("dummy_restore").apply();
-        }
+    @Override public boolean onBackPressed() {
+        return false;
     }
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -99,7 +88,6 @@ public class HiddenAppsFragment extends Fragment {
                 PreferenceHelper.getEditor()
                                 .putStringSet("hidden_apps", new HashSet<String>())
                                 .apply();
-                PreferenceHelper.getEditor().putBoolean("dummy_restore", true).apply();
 
                 // Recreate the toolbar menu to hide the 'restore all' button.
                 getActivity().invalidateOptionsMenu();
@@ -149,7 +137,6 @@ public class HiddenAppsFragment extends Fragment {
             excludedAppList.add(packageName);
             PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppList).apply();
         }
-        PreferenceHelper.getEditor().putBoolean("dummy_restore", true).apply();
         appList.get(position).setAppHidden(excludedAppList.contains(packageName));
 
         // Reload the app list!

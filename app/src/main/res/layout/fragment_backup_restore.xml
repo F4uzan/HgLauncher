@@ -6,8 +6,6 @@
     android:orientation="vertical"
     android:background="?android:windowBackground">
 
-    <include layout="@layout/layout_toolbar" />
-
     <FrameLayout
         android:id="@+id/file_input_container"
         android:layout_width="match_parent"

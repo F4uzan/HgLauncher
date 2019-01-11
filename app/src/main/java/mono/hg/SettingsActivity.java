@@ -4,15 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import mono.hg.fragments.CustomizePreferenceFragment;
+import androidx.fragment.app.FragmentManager;
+import mono.hg.fragments.PreferenceFragment;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.utils.ActivityServiceUtils;
+import mono.hg.utils.ViewUtils;
 import mono.hg.wrappers.BackHandledFragment;
 
-public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActivity
+public class SettingsActivity extends AppCompatActivity
         implements BackHandledFragment.BackHandlerInterface {
     private BackHandledFragment selectedFragment;
+
+    FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override public void onCreate(Bundle savedInstanceState) {
         if (PreferenceHelper.getPreference() == null) {
@@ -35,12 +40,18 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
         }
 
         super.onCreate(savedInstanceState);
-        setPreferenceFragment(new CustomizePreferenceFragment());
+        setContentView(R.layout.activity_settings);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        fragmentManager.popBackStack("fragment_root", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        ViewUtils.setFragment(this, new PreferenceFragment());
     }
 
     @Override public void onBackPressed() {
         if (selectedFragment == null || !selectedFragment.onBackPressed()) {
             // Selected fragment did not consume the back press event.
+            getSupportActionBar().setTitle(R.string.title_activity_settings);
             super.onBackPressed();
         }
     }
@@ -51,6 +62,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            getSupportActionBar().setTitle(R.string.title_activity_settings);
             super.onBackPressed();
             ActivityServiceUtils.hideSoftKeyboard(this);
             return true;
@@ -64,6 +76,7 @@ public class SettingsActivity extends com.fnp.materialpreferences.PreferenceActi
         Intent intent = getIntent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         ActivityCompat.finishAfterTransition(this);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         startActivity(intent);

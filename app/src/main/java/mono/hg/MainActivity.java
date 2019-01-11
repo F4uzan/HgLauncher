@@ -7,7 +7,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -60,13 +59,7 @@ import mono.hg.views.TogglingLinearLayoutManager;
 import mono.hg.wrappers.OnTouchListener;
 import mono.hg.wrappers.SimpleScrollListener;
 
-public class MainActivity extends AppCompatActivity
-        implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-    /*
-     * A boolean that indicates whether the activity has a SharedPreferences listener.
-     */
-    private static boolean hasPreferenceListener = false;
+public class MainActivity extends AppCompatActivity {
 
     /*
      * Should the favourites panel listen for scroll?
@@ -295,7 +288,7 @@ public class MainActivity extends AppCompatActivity
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivityForResult(new Intent(this, SettingsActivity.class), 12);
                 return true;
             case R.id.action_force_refresh:
                 recreate();
@@ -316,28 +309,6 @@ public class MainActivity extends AppCompatActivity
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
-        switch (key) {
-            default:
-                // No-op.
-                break;
-            case "app_theme":
-            case "shade_view_switch":
-            case "comfy_padding":
-            case "dummy_restore":
-            case "favourites_panel_switch":
-            case "list_order":
-                recreate();
-                break;
-            case "icon_hide_switch":
-            case "adaptive_shade_switch":
-            case "icon_pack":
-                LauncherIconHelper.clearDrawableCache();
-                recreate();
-                break;
         }
     }
 
@@ -390,6 +361,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Handle preference change. 12 is arbitrary, but it should always be the same as
+        // startActivity's requestCode.
+        if (requestCode == 12) {
+            recreate();
+        }
+
         if (resultCode == RESULT_OK && data != null) {
             int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
             AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
@@ -568,12 +545,6 @@ public class MainActivity extends AppCompatActivity
 
         // Get pinned apps.
         pinnedAppString = PreferenceHelper.getPreference().getString("pinned_apps_list", "");
-
-        // Register preference change listener only if it's nonexistent.
-        if (!hasPreferenceListener) {
-            PreferenceHelper.getPreference().registerOnSharedPreferenceChangeListener(this);
-            hasPreferenceListener = true;
-        }
 
         if (isInit) {
             // Get a list of our hidden apps, default to null if there aren't any.

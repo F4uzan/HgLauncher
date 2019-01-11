@@ -1,192 +1,179 @@
-<PreferenceScreen
+<androidx.preference.PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:key="settings"
     android:title="@string/title_activity_settings"
     tools:ignore="UnusedAttribute">
 
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_interface"
         android:key="interface">
 
-        <mono.hg.views.MenuPreference
+        <androidx.preference.ListPreference
             android:defaultValue="light"
             android:entries="@array/pref_app_theme_title"
             android:entryValues="@array/pref_app_theme_values"
             android:key="app_theme"
-            android:recycleEnabled="false"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:summary="%s"
             android:title="@string/app_theme" />
 
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_wall"
         android:key="desktop">
 
-        <CheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="shade_view_switch"
             android:summary="@string/pref_shade_view_desc"
-            android:title="@string/pref_shade_view"
-            android:widgetLayout="@layout/mp_preference_switch" />
+            android:title="@string/pref_shade_view" />
 
-        <CheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="tap_to_drawer"
             android:summary="@string/tap_to_drawer_desc"
-            android:title="@string/tap_to_drawer"
-            android:widgetLayout="@layout/mp_preference_switch" />
+            android:title="@string/tap_to_drawer" />
 
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_search_bar"
         android:key="search_bar">
 
-        <CheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="web_search_enabled"
             android:title="@string/web_search"
-            android:summary="@string/web_search_desc"
-            android:widgetLayout="@layout/mp_preference_switch" />
+            android:summary="@string/web_search_desc" />
 
-        <mono.hg.views.MenuPreference
+        <androidx.preference.ListPreference
             android:defaultValue="google"
             android:dependency="web_search_enabled"
             android:entries="@array/pref_search_provider_title"
             android:entryValues="@array/pref_search_provider_values"
-            android:recycleEnabled="false"
             android:key="search_provider"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:summary="%s"
             android:title="@string/pref_search_provider" />
 
-        <CheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="keyboard_focus"
             android:summary="@string/keyboard_focus_desc"
-            android:title="@string/keyboard_focus"
-            android:widgetLayout="@layout/mp_preference_switch" />
+            android:title="@string/keyboard_focus" />
 
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_icons"
         android:key="icon_prefs">
 
-        <CheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="icon_hide_switch"
             android:summary="@string/pref_icon_view_desc"
-            android:title="@string/pref_icon_view"
-            android:widgetLayout="@layout/mp_preference_switch" />
+            android:title="@string/pref_icon_view" />
 
-        <mono.hg.views.MenuPreference
+        <androidx.preference.ListPreference
             android:defaultValue="default"
             android:key="icon_pack"
-            android:recycleEnabled="false"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:summary="%s"
             android:title="@string/icon_pack" />
 
-        <CheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="adaptive_shade_switch"
             android:summary="@string/shadow_adaptive_icon_desc"
-            android:title="@string/shadow_adaptive_icon"
-            android:widgetLayout="@layout/mp_preference_switch" />
+            android:title="@string/shadow_adaptive_icon" />
 
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_list"
         android:key="app_list">
 
-        <Preference
+        <androidx.preference.Preference
             android:key="hidden_apps_menu"
             android:summary="@string/pref_header_hidden_apps_desc"
             android:title="@string/pref_header_hidden_apps" />
 
-        <CheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="favourites_panel_switch"
             android:summary="@string/favourites_panel_desc"
-            android:title="@string/favourites_panel_title"
-            android:widgetLayout="@layout/mp_preference_switch" />
+            android:title="@string/favourites_panel_title" />
 
-        <CheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="static_favourites_panel_switch"
             android:dependency="favourites_panel_switch"
             android:summary="@string/static_favourites_desc"
-            android:title="@string/static_favourites"
-            android:widgetLayout="@layout/mp_preference_switch" />
+            android:title="@string/static_favourites" />
 
-        <CheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="comfy_padding"
             android:summary="@string/comfy_padding_desc"
             android:title="@string/comfy_padding"
-            android:widgetLayout="@layout/mp_preference_switch" />
+             />
 
-        <mono.hg.views.MenuPreference
+        <androidx.preference.ListPreference
             android:defaultValue="alphabetical"
             android:entries="@array/pref_app_list_order_titles"
             android:entryValues="@array/pref_app_list_order_values"
             android:key="list_order"
-            android:recycleEnabled="false"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:summary="%s"
             android:title="@string/pref_title_app_list_order" />
 
-        <mono.hg.views.MenuPreference
+        <androidx.preference.ListPreference
             android:defaultValue="default"
             android:entries="@array/pref_app_launch_anim_title"
             android:entryValues="@array/pref_app_launch_anim_values"
             android:key="launch_anim"
-            android:recycleEnabled="false"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:summary="%s"
             android:title="@string/pref_app_launch_anim" />
 
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_backup_restore"
         android:key="backup_restore">
 
-        <Preference
+        <androidx.preference.Preference
             android:key="backup"
             android:summary="@string/pref_header_backup_desc"
             android:title="@string/pref_header_backup" />
 
-        <Preference
+        <androidx.preference.Preference
             android:key="restore"
             android:summary="@string/pref_header_restore_desc"
             android:title="@string/pref_header_restore" />
 
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_about"
         android:key="about_credit">
 
-        <Preference
+        <androidx.preference.Preference
             android:key="about_libraries"
             android:summary="@string/about_libraries_desc"
             android:title="@string/about_libraries" />
 
-        <Preference
+        <androidx.preference.Preference
             android:key="version_key"
             android:summary="@string/app_version"
             android:title="@string/app_name" />
 
-    </PreferenceCategory>
-</PreferenceScreen>
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

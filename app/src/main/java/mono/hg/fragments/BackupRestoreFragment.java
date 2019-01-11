@@ -35,7 +35,9 @@ import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import mono.hg.R;
+import mono.hg.SettingsActivity;
 import mono.hg.adapters.FileFolderAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.FileFolder;
@@ -64,27 +66,14 @@ public class BackupRestoreFragment extends BackHandledFragment {
          */
         isInRestore = getArguments().getBoolean("isRestore", false);
 
-        /*
-         * TODO: We probably won't need all this, but rewrite it just in case.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-            ((SettingsActivity) getActivity()).setSupportActionBar(toolbar);
-            toolbar.setVisibility(View.VISIBLE);
+        ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
             if (isInRestore) {
-                toolbar.setTitle(R.string.pref_header_restore);
+                actionBar.setTitle(R.string.pref_header_restore);
             } else {
-                toolbar.setTitle(R.string.pref_header_backup);
+                actionBar.setTitle(R.string.pref_header_backup);
             }
-        } else {
-            ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
-            if (actionBar != null) {
-                if (isInRestore) {
-                    actionBar.setTitle(R.string.pref_header_restore);
-                } else {
-                    actionBar.setTitle(R.string.pref_header_backup);
-                }
-            }
-        } */
+        }
 
         setHasOptionsMenu(true);
 

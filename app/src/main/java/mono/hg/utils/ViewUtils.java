@@ -6,7 +6,10 @@ import android.view.ViewTreeObserver;
 import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import mono.hg.R;
 
 public class ViewUtils {
@@ -58,5 +61,33 @@ public class ViewUtils {
     public static boolean isPanelVisible(SlidingUpPanelLayout panel) {
         return panel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
                 || panel.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED;
+    }
+
+    /**
+     * Sets initial fragment. This fragment is not added to the backstack.
+     *
+     * @param activity The activity where the fragment is being contained.
+     * @param fragment The fragment to use.
+     */
+    public static void setFragment(AppCompatActivity activity, Fragment fragment) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                       .replace(R.id.fragment_container, fragment)
+                       .commit();
+    }
+
+    /**
+     * Replace existing fragment with another. This adds the fragment to the back stack.
+     *
+     * @param activity The activity where the fragment is being contained.
+     * @param fragment The fragment to use.
+     * @param tag      The tag used for the fragment.
+     */
+    public static void replaceFragment(AppCompatActivity activity, Fragment fragment, String tag) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                       .add(R.id.fragment_container, fragment)
+                       .addToBackStack(tag)
+                       .commit();
     }
 }
