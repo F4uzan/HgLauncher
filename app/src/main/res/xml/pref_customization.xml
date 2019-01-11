@@ -9,7 +9,7 @@
         android:title="@string/pref_header_interface"
         android:key="interface">
 
-        <androidx.preference.ListPreference
+        <androidx.preference.DropDownPreference
             android:defaultValue="light"
             android:entries="@array/pref_app_theme_title"
             android:entryValues="@array/pref_app_theme_values"
@@ -49,7 +49,7 @@
             android:title="@string/web_search"
             android:summary="@string/web_search_desc" />
 
-        <androidx.preference.ListPreference
+        <androidx.preference.DropDownPreference
             android:defaultValue="google"
             android:dependency="web_search_enabled"
             android:entries="@array/pref_search_provider_title"
@@ -78,7 +78,7 @@
             android:summary="@string/pref_icon_view_desc"
             android:title="@string/pref_icon_view" />
 
-        <androidx.preference.ListPreference
+        <androidx.preference.DropDownPreference
             android:defaultValue="default"
             android:key="icon_pack"
             android:negativeButtonText="@null"
@@ -123,7 +123,7 @@
             android:title="@string/comfy_padding"
              />
 
-        <androidx.preference.ListPreference
+        <androidx.preference.DropDownPreference
             android:defaultValue="alphabetical"
             android:entries="@array/pref_app_list_order_titles"
             android:entryValues="@array/pref_app_list_order_values"
@@ -133,7 +133,7 @@
             android:summary="%s"
             android:title="@string/pref_title_app_list_order" />
 
-        <androidx.preference.ListPreference
+        <androidx.preference.DropDownPreference
             android:defaultValue="default"
             android:entries="@array/pref_app_launch_anim_title"
             android:entryValues="@array/pref_app_launch_anim_values"
