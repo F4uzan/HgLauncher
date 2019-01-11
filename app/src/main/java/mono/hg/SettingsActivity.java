@@ -25,6 +25,10 @@ public class SettingsActivity extends AppCompatActivity
         }
         PreferenceHelper.fetchPreference();
 
+        // Check the caller of this activity.
+        // If it's coming from the launcher itself, it will always have a calling activity.
+        checkCaller();
+
         // Load the appropriate theme.
         switch (PreferenceHelper.appTheme()) {
             default:
@@ -68,6 +72,14 @@ public class SettingsActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void checkCaller() {
+        // If this activity is called from anywhere else but the launcher,
+        // then the launcher needs to be informed of the changes made that it may not be aware of.
+        if (getCallingActivity() == null && !PreferenceHelper.wasAlien()) {
+            PreferenceHelper.isAlien(true);
+        }
     }
 
     // Called when the activity needs to be restarted (i.e when a theme change occurs).

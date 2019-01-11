@@ -345,6 +345,12 @@ public class MainActivity extends AppCompatActivity {
     @Override public void onStart() {
         super.onStart();
 
+        // Restart the launcher in case of an alien call.
+        if (PreferenceHelper.wasAlien()) {
+            PreferenceHelper.isAlien(false);
+            recreate();
+        }
+
         if (PreferenceHelper.hasWidget()) {
             appWidgetHost.startListening();
         }
@@ -363,7 +369,10 @@ public class MainActivity extends AppCompatActivity {
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Handle preference change. 12 is arbitrary, but it should always be the same as
         // startActivity's requestCode.
-        if (requestCode == 12) {
+        //
+        // We also don't restart when an alien caller is detected because a recreate() would already
+        // be on its way from onStart.
+        if (requestCode == 12 && !PreferenceHelper.wasAlien()) {
             recreate();
         }
 

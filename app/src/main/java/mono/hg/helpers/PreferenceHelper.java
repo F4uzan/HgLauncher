@@ -7,11 +7,19 @@ import android.preference.PreferenceManager;
 import java.util.HashSet;
 
 public class PreferenceHelper {
-    private static boolean icon_hide, list_order, shade_view,
-            keyboard_focus, web_search_enabled, comfy_padding,
-            tap_to_drawer, favourites_panel, dismiss_panel,
-            static_favourites_panel, adaptive_shade, has_widget,
-            is_testing;
+    private static boolean icon_hide;
+    private static boolean list_order;
+    private static boolean shade_view;
+    private static boolean keyboard_focus;
+    private static boolean web_search_enabled;
+    private static boolean comfy_padding;
+    private static boolean tap_to_drawer;
+    private static boolean favourites_panel;
+    private static boolean static_favourites_panel;
+    private static boolean adaptive_shade;
+    private static boolean has_widget;
+    private static boolean is_testing;
+    private static boolean was_alien;
     private static HashSet<String> exclusion_list;
     private static String launch_anim;
     private static String app_theme;
@@ -83,6 +91,14 @@ public class PreferenceHelper {
 
     public static boolean favouritesIgnoreScroll() {
         return static_favourites_panel;
+    }
+
+    public static boolean wasAlien() {
+        return was_alien;
+    }
+
+    public static void isAlien(boolean alien) {
+        was_alien = alien;
     }
 
     public static String getSearchProvider() {
