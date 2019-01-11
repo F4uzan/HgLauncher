@@ -7,8 +7,8 @@ android {
         applicationId "mono.hg"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 18
-        versionName "1.3.5.4"
+        versionCode 19
+        versionName "1.3.5.5"
         vectorDrawables.useSupportLibrary = true
     }
 
