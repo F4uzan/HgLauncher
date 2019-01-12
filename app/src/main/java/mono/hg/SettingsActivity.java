@@ -15,9 +15,9 @@ import mono.hg.wrappers.BackHandledFragment;
 
 public class SettingsActivity extends AppCompatActivity
         implements BackHandledFragment.BackHandlerInterface {
-    private BackHandledFragment selectedFragment;
 
-    FragmentManager fragmentManager = getSupportFragmentManager();
+    private BackHandledFragment selectedFragment;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override public void onCreate(Bundle savedInstanceState) {
         if (PreferenceHelper.getPreference() == null) {

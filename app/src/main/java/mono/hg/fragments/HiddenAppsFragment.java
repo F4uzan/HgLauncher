@@ -95,8 +95,9 @@ public class HiddenAppsFragment extends BackHandledFragment {
                 // Reload the list.
                 loadApps();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void loadApps() {

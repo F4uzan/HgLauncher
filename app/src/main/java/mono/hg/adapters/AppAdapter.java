@@ -15,14 +15,12 @@ import mono.hg.utils.Utils;
 
 public class AppAdapter extends FlexibleAdapter<AppDetail>
         implements FastScrollRecyclerView.SectionedAdapter {
-    private List<AppDetail> appsList;
     private int mSelectedItem = 0;
     private RecyclerView mRecyclerView;
     private boolean finishedLoading = false;
 
     public AppAdapter(List<AppDetail> apps) {
         super(apps);
-        this.appsList = apps;
     }
 
     private static boolean isConfirmButton(KeyEvent event) {
