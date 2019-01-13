@@ -33,7 +33,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -260,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                         .putInt("package_count", AppUtils.countInstalledPackage(manager)).apply();
 
         if (!pinnedAppString.isEmpty()) {
-            for (String pinnedApp : Arrays.asList(pinnedAppString.split(";"))) {
+            for (String pinnedApp : pinnedAppString.split(";")) {
                 AppUtils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
             }
         }
@@ -425,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_ESCAPE:
-                    doThis("hide_panel");
+                    onBackPressed();
                     return true;
                 case KeyEvent.KEYCODE_SPACE:
                     if (!searchBar.hasFocus()) {
