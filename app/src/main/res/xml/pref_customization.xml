@@ -38,6 +38,13 @@
             android:positiveButtonText="@null"
             android:summary="%s"
             android:title="@string/gestures_right" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="tap_to_drawer"
+            android:summary="@string/tap_to_drawer_desc"
+            android:title="@string/tap_to_drawer" />
+        
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
@@ -59,12 +66,6 @@
             android:key="shade_view_switch"
             android:summary="@string/pref_shade_view_desc"
             android:title="@string/pref_shade_view" />
-
-        <androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="tap_to_drawer"
-            android:summary="@string/tap_to_drawer_desc"
-            android:title="@string/tap_to_drawer" />
 
     </androidx.preference.PreferenceCategory>
 
