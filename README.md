@@ -14,7 +14,7 @@ HgLauncher is a launcher with a design philosophy of 'if it works, it works.' Co
 
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
-![Homescreen](https://github.com/F4uzan/HgLauncher/raw/master/readme/1-home.png "Homescreen") | ![App list](https://github.com/F4uzan/HgLauncher/raw/master/readme/2-list.png "List all your apps") | ![App search](https://github.com/F4uzan/HgLauncher/raw/master/readme/3-search.png "Search and find apps")
+![Homescreen](https://github.com/F4uzan/HgLauncher/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.png "Homescreen") | ![App list](https://github.com/F4uzan/HgLauncher/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.png "List all your apps") | ![App search](https://github.com/F4uzan/HgLauncher/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.png "Search and find apps")
 
 ### Where can I get it?
 
