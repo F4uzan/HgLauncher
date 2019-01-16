@@ -561,13 +561,18 @@ public class ViewDragHelper {
      * @param child Child view to capture and animate
      * @param finalLeft Final left position of child
      * @param finalTop Final top position of child
+     * @param durationMult Multiplier of animation duration
      * @return true if animation should continue through {@link #continueSettling(boolean)} calls
      */
-    public boolean smoothSlideViewTo(View child, int finalLeft, int finalTop) {
+    public boolean smoothSlideViewTo(View child, int finalLeft, int finalTop, float durationMult) {
         mCapturedView = child;
         mActivePointerId = INVALID_POINTER;
 
-        return forceSettleCapturedViewAt(finalLeft, finalTop, 0, 0);
+        if (durationMult == 0) {
+            return forceSettleCapturedViewAt(finalLeft, finalTop, 0, 0, 0);
+        } else {
+            return forceSettleCapturedViewAt(finalLeft, finalTop, 0, 0, durationMult);
+        }
     }
 
     /**
@@ -589,7 +594,7 @@ public class ViewDragHelper {
 
         return forceSettleCapturedViewAt(finalLeft, finalTop,
                 (int) mVelocityTracker.getXVelocity(mActivePointerId),
-                (int) mVelocityTracker.getYVelocity(mActivePointerId));
+                (int) mVelocityTracker.getYVelocity(mActivePointerId), 0);
     }
 
     /**
@@ -599,9 +604,10 @@ public class ViewDragHelper {
      * @param finalTop Target top position for the captured view
      * @param xvel Horizontal velocity
      * @param yvel Vertical velocity
+     * @param durationMult Multiplier for animation duration
      * @return true if animation should continue through {@link #continueSettling(boolean)} calls
      */
-    private boolean forceSettleCapturedViewAt(int finalLeft, int finalTop, int xvel, int yvel) {
+    private boolean forceSettleCapturedViewAt(int finalLeft, int finalTop, int xvel, int yvel, float durationMult) {
         final int startLeft = mCapturedView.getLeft();
         final int startTop = mCapturedView.getTop();
         final int dx = finalLeft - startLeft;
@@ -614,8 +620,14 @@ public class ViewDragHelper {
             return false;
         }
 
-        final int duration = computeSettleDuration(mCapturedView, dx, dy, xvel, yvel);
-        mScroller.startScroll(startLeft, startTop, dx, dy, duration);
+        final int settleDuration = computeSettleDuration(mCapturedView, dx, dy, xvel, yvel);
+
+        if (durationMult == 0) {
+            mScroller.startScroll(startLeft, startTop, dx, dy, settleDuration);
+        } else {
+            mScroller.startScroll(startLeft, startTop, dx, dy,
+                    (int) (settleDuration * durationMult));
+        }
 
         setDragState(STATE_SETTLING);
         return true;

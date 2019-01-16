@@ -44,7 +44,7 @@
             android:key="tap_to_drawer"
             android:summary="@string/tap_to_drawer_desc"
             android:title="@string/tap_to_drawer" />
-        
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory

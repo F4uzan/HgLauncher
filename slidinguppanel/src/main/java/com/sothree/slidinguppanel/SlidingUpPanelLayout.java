@@ -10,7 +10,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
-import androidx.core.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +24,8 @@ import com.sothree.slidinguppanel.library.R;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import androidx.core.view.ViewCompat;
 
 public class SlidingUpPanelLayout extends ViewGroup {
 
@@ -94,6 +95,11 @@ public class SlidingUpPanelLayout extends ViewGroup {
     private static final int DEFAULT_PARALLAX_OFFSET = 0;
 
     /**
+     * Default slide duration multiplier.
+     */
+    private static final float DEFAULT_SLIDE_DURATION_MULTIPLIER = 0f;
+
+    /**
      * The paint used to dim the main layout when sliding
      */
     private final Paint mCoveredFadePaint = new Paint();
@@ -117,6 +123,11 @@ public class SlidingUpPanelLayout extends ViewGroup {
      * Parallax offset
      */
     private int mParallaxOffset = -1;
+
+    /**
+     * Panel duration multiplier.
+     */
+    private float mDurationMultiplier = DEFAULT_SLIDE_DURATION_MULTIPLIER;
 
     /**
      * True if the collapsed panel should be dragged up.
@@ -488,7 +499,23 @@ public class SlidingUpPanelLayout extends ViewGroup {
     }
 
     /**
-     * @return The current minimin fling velocity
+     * @return Current animation duration multiplier.
+     */
+    public float getPanelDurationMultiplier() {
+        return mDurationMultiplier;
+    }
+
+    /**
+     * Sets the multiplier for animation duration
+     *
+     * @param val the new multiplier value
+     */
+    public void setPanelDurationMultiplier(float val) {
+        mDurationMultiplier = val;
+    }
+
+    /**
+     * @return The current minimum fling velocity
      */
     public int getMinFlingVelocity() {
         return mMinFlingVelocity;
@@ -1301,7 +1328,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
         int panelTop = computePanelTopPosition(slideOffset);
 
-        if (mDragHelper.smoothSlideViewTo(mSlideableView, mSlideableView.getLeft(), panelTop)) {
+        if (mDragHelper.smoothSlideViewTo(mSlideableView, mSlideableView.getLeft(), panelTop, getPanelDurationMultiplier())) {
             setAllChildrenVisible();
             ViewCompat.postInvalidateOnAnimation(this);
             return true;

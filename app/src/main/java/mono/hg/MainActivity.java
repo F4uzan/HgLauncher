@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
@@ -222,6 +223,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Let the launcher handle state of the sliding panel.
         slidingHome.alwaysResetState(true);
+        slidingHome.setPanelDurationMultiplier(Settings.System.getFloat(getContentResolver(),
+                Settings.System.TRANSITION_ANIMATION_SCALE, 0));
 
         appsRecyclerView.setDrawingCacheEnabled(true);
         appsRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
@@ -736,7 +739,7 @@ public class MainActivity extends AppCompatActivity {
                     AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeRight());
                 }
             }
-            
+
             @Override
             public void onSwipeLeft() {
                 if (!PreferenceHelper.doSwipeLeft().equals("none")) {
