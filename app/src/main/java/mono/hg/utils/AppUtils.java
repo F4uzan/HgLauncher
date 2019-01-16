@@ -79,6 +79,8 @@ public class AppUtils {
     public static void pinApp(PackageManager packageManager, String componentName,
             FlexibleAdapter<PinnedAppDetail> adapter, List<PinnedAppDetail> list) {
         if (!adapter.contains(new PinnedAppDetail(null, componentName))) {
+            ComponentName iconComponent = ComponentName.unflattenFromString(componentName);
+
             try {
                 Drawable icon;
                 Drawable getIcon = null;
@@ -88,7 +90,7 @@ public class AppUtils {
                             componentName);
                 }
                 if (getIcon == null) {
-                    icon = packageManager.getApplicationIcon(getPackageName(componentName));
+                    icon = packageManager.getActivityIcon(iconComponent);
                 } else {
                     icon = getIcon;
                 }
