@@ -3,9 +3,12 @@
  [![Build Status](https://travis-ci.org/F4uzan/HgLauncher.svg?branch=master)](https://travis-ci.org/F4uzan/HgLauncher)
  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7b102385347b4be5b180ce56391d1bd1)](https://app.codacy.com/app/F4uzan/HgLauncher?utm_source=github.com&utm_medium=referral&utm_content=F4uzan/HgLauncher&utm_campaign=Badge_Grade_Dashboard)
 
+ [![GitHub Release](https://img.shields.io/github/release/F4uzan/HgLauncher.svg?logo=github)](https://github.com/F4uzan/HgLauncher/releases) ![F-Droid](https://img.shields.io/f-droid/v/mono.hg.svg)
+
+
 HgLauncher is a launcher with a design philosophy of 'if it works, it works.' Consisting of simply a scrolling list of apps, there is very little visual cue to disturb you. If all you want in a launcher is for it to just launch apps _ASAP_, then you may be looking at the right launcher.
 
-Try it out now!
+[Try it out now!](https://github.com/F4uzan/HgLauncher#where-can-i-get-it)
 
 ### What does it look like?
 
