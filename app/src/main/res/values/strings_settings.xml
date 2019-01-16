@@ -6,6 +6,7 @@
     <!-- Header/category names -->
     <string name="pref_header_about">About</string>
     <string name="pref_header_cust">Customizations</string>
+    <string name="pref_header_gestures">Gestures</string>
     <string name="pref_header_wall">Desktop</string>
     <string name="pref_header_list">App list</string>
     <string name="pref_header_interface">Interface</string>
@@ -67,6 +68,11 @@
     <string name="windowbar_mode_status">Hide status bar</string>
     <string name="windowbar_mode_nav">Hide navigation bar</string>
     <string name="windowbar_mode_both">Hide both</string>
+
+    <string name="gestures_left">Left swipe</string>
+    <string name="gestures_right">Right swipe</string>
+    <string name="gestures_default">None</string>
+    <string name="gestures_default_value" translatable="false">none</string>
     
     <string name="pref_title_app_list_order">App list order</string>
     <string name="app_list_order_normal">A to Z</string>

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,8 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         ListPreference appTheme = (ListPreference) findPreference("app_theme");
         final ListPreference iconList = (ListPreference) findPreference("icon_pack");
+        ListPreference gestureLeftList = (ListPreference) findPreference("gesture_left");
+        ListPreference gestureRightList = (ListPreference) findPreference("gesture_right");
 
         // Adaptive icon is not available before Android O/API 26.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -63,6 +66,8 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         }
 
         setIconList(iconList);
+        setAppList(gestureLeftList);
+        setAppList(gestureRightList);
 
         appTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -74,6 +79,38 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         addVersionCounterListener();
         addFragmentListener();
+    }
+
+    private void setAppList(ListPreference list) {
+        PackageManager manager = getActivity().getPackageManager();
+        List<String> entries = new ArrayList<>();
+        List<String> entryValues = new ArrayList<>();
+
+        // Get default value.
+        entries.add(getString(R.string.gestures_default));
+        entryValues.add(getString(R.string.gestures_default_value));
+
+        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
+
+        Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
+
+        // Fetch apps and feed it into our list.
+        for (ResolveInfo resolveInfo : availableActivities) {
+            String appName = resolveInfo.loadLabel(manager).toString();
+            String packageName = resolveInfo.activityInfo.packageName + "/" + resolveInfo.activityInfo.name;
+            entries.add(appName);
+            entryValues.add(packageName);
+        }
+
+        CharSequence[] finalEntries = entries.toArray(new CharSequence[0]);
+        CharSequence[] finalEntryValues = entryValues.toArray(new CharSequence[0]);
+
+        list.setEntries(finalEntries);
+        list.setEntryValues(finalEntryValues);
+
     }
 
     private void setIconList(ListPreference list) {

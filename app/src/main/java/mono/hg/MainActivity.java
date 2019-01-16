@@ -731,6 +731,20 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onSwipeRight() {
+                if (!PreferenceHelper.doSwipeRight().equals("none")) {
+                    AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeRight());
+                }
+            }
+            
+            @Override
+            public void onSwipeLeft() {
+                if (!PreferenceHelper.doSwipeLeft().equals("none")) {
+                    AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeLeft());
+                }
+            }
+
+            @Override
             public void onLongPress() {
                 // Show context menu when touchReceiver is long pressed.
                 touchReceiver.showContextMenu();

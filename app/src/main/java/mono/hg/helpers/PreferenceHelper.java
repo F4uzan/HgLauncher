@@ -25,6 +25,8 @@ public class PreferenceHelper {
     private static String app_theme;
     private static String search_provider_set;
     private static String icon_pack;
+    private static String gesture_left_action;
+    private static String gesture_right_action;
     private static String windowbar_mode;
 
     private static SharedPreferences preferences;
@@ -102,6 +104,14 @@ public class PreferenceHelper {
         was_alien = alien;
     }
 
+    public static String doSwipeRight() {
+        return gesture_right_action;
+    }
+
+    public static String doSwipeLeft() {
+        return gesture_left_action;
+    }
+
     public static String getWindowBarMode() {
         return windowbar_mode;
     }
@@ -156,6 +166,8 @@ public class PreferenceHelper {
         static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
         adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
         windowbar_mode = preferences.getString("windowbar_mode", "none");
+        gesture_left_action = preferences.getString("gesture_left", "none");
+        gesture_right_action = preferences.getString("gesture_right", "none");
 
         exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps", new HashSet<String>());
     }
