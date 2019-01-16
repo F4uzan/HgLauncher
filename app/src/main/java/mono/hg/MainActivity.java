@@ -223,8 +223,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Let the launcher handle state of the sliding panel.
         slidingHome.alwaysResetState(true);
-        slidingHome.setPanelDurationMultiplier(Settings.System.getFloat(getContentResolver(),
-                Settings.System.TRANSITION_ANIMATION_SCALE, 0));
 
         appsRecyclerView.setDrawingCacheEnabled(true);
         appsRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
@@ -337,6 +335,10 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         loadPref(false);
+
+        // Set app list animation duration.
+        slidingHome.setPanelDurationMultiplier(Settings.System.getFloat(getContentResolver(),
+                Settings.System.TRANSITION_ANIMATION_SCALE, 0));
 
         if (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty()) {
             // Stupid logic: if it has finished loading, then it can't be empty.
