@@ -76,7 +76,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         addFragmentListener();
     }
 
-    protected void setIconList(ListPreference list) {
+    private void setIconList(ListPreference list) {
         PackageManager manager = getActivity().getPackageManager();
         List<String> entries = new ArrayList<>();
         List<String> entryValues = new ArrayList<>();
