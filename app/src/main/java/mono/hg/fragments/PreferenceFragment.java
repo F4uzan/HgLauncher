@@ -54,6 +54,14 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             appListPreference.removePreference(adaptiveShadePreference);
         }
 
+        // Window bar hiding works only reliably in KitKat and above.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            PreferenceCategory desktopPreference = (PreferenceCategory) findPreference(
+                    "desktop");
+            Preference windowBarPreference = findPreference("windowbar_mode");
+            desktopPreference.removePreference(windowBarPreference);
+        }
+
         setIconList(iconList);
 
         appTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

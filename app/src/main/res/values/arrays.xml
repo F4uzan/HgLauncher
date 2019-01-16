@@ -49,4 +49,17 @@
         <item>dark</item>
         <item>black</item>
     </string-array>
+
+    <string-array name="pref_windowbar_title">
+        <item>@string/windowbar_mode_none</item>
+        <item>@string/windowbar_mode_status</item>
+        <item>@string/windowbar_mode_nav</item>
+        <item>@string/windowbar_mode_both</item>
+    </string-array>
+    <string-array name="pref_windowbar_values">
+        <item>none</item>
+        <item>status</item>
+        <item>nav</item>
+        <item>both</item>
+    </string-array>
 </resources>

@@ -25,6 +25,7 @@ public class PreferenceHelper {
     private static String app_theme;
     private static String search_provider_set;
     private static String icon_pack;
+    private static String windowbar_mode;
 
     private static SharedPreferences preferences;
     private static SharedPreferences.Editor editor;
@@ -101,6 +102,10 @@ public class PreferenceHelper {
         was_alien = alien;
     }
 
+    public static String getWindowBarMode() {
+        return windowbar_mode;
+    }
+
     public static String getSearchProvider() {
         String search_provider;
 
@@ -150,6 +155,7 @@ public class PreferenceHelper {
         favourites_panel = preferences.getBoolean("favourites_panel_switch", true);
         static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
         adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
+        windowbar_mode = preferences.getString("windowbar_mode", "none");
 
         exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps", new HashSet<String>());
     }
