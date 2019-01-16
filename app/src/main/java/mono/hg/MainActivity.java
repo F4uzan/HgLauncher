@@ -335,6 +335,12 @@ public class MainActivity extends AppCompatActivity {
 
         loadPref(false);
 
+        if (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty()) {
+            // Stupid logic: if it has finished loading, then it can't be empty.
+            // Try to reload to see if it's a fault on our side.
+            new getAppTask(this).execute();
+        }
+
         registerPackageReceiver();
         if (AppUtils.hasNewPackage(manager)) {
             new getAppTask(this).execute();
