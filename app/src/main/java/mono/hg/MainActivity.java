@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -514,31 +515,27 @@ public class MainActivity extends AppCompatActivity {
             case "show_favourites":
                 pinnedAppsContainer.animate()
                                    .translationY(0f)
-                                   .setInterpolator(new FastOutSlowInInterpolator())
+                                   .setInterpolator(new LinearOutSlowInInterpolator())
                                    .setDuration(animateDuration)
                                    .setListener(new AnimatorListenerAdapter() {
                                        @Override
                                        public void onAnimationStart(Animator animator) {
-                                           super.onAnimationStart(animator);
                                            pinnedAppsContainer.setVisibility(View.VISIBLE);
-                                       }
-
-                                       @Override
-                                       public void onAnimationEnd(Animator animator) {
-                                           super.onAnimationEnd(animator);
-                                           pinnedAppsContainer.clearAnimation();
                                        }
                                    });
                 break;
             case "hide_favourites":
+                appsRecyclerView.animate()
+                                .translationY(1f)
+                                .setInterpolator(new OvershootInterpolator())
+                                .setDuration(animateDuration);
                 pinnedAppsContainer.animate()
-                                   .translationY(pinnedAppsContainer.getHeight())
-                                   .setInterpolator(new FastOutSlowInInterpolator())
+                                   .translationY(pinnedAppsContainer.getMeasuredHeight())
+                                   .setInterpolator(new LinearOutSlowInInterpolator())
                                    .setDuration(animateDuration)
                                    .setListener(new AnimatorListenerAdapter() {
                                        @Override
                                        public void onAnimationEnd(Animator animator) {
-                                           super.onAnimationEnd(animator);
                                            pinnedAppsContainer.setVisibility(View.GONE);
                                        }
                                    });
@@ -867,7 +864,7 @@ public class MainActivity extends AppCompatActivity {
         // Listen for app list scroll to hide/show favourites panel.
         // Only do this when the user has favourites panel enabled.
         if (PreferenceHelper.isFavouritesEnabled()) {
-            appsRecyclerView.addOnScrollListener(new SimpleScrollListener(0) {
+            appsRecyclerView.addOnScrollListener(new SimpleScrollListener(48) {
                 @Override
                 public void onScrollUp() {
                     if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
