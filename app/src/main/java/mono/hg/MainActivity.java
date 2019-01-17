@@ -236,6 +236,8 @@ public class MainActivity extends AppCompatActivity {
         pinnedAppsRecyclerView.setLayoutManager(pinnedAppsManager);
         pinnedAppsRecyclerView.setItemAnimator(null);
 
+        pinnedAppsAdapter.setLongPressDragEnabled(true);
+
         // Restore search bar visibility when panel is pulled down.
         if (savedInstanceState != null && ViewUtils.isPanelVisible(slidingHome)) {
             searchContainer.setVisibility(View.VISIBLE);
@@ -251,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
         new getAppTask(this).execute();
         addSearchBarListener();
         addGestureListener();
+        addAdapterListener();
         addListListeners();
         addPanelListener();
 
@@ -929,6 +932,42 @@ public class MainActivity extends AppCompatActivity {
                 final String packageName = Utils.requireNonNull(
                         pinnedAppsAdapter.getItem(position)).getPackageName();
                 createAppMenu(pinnedAppsRecyclerView.getChildAt(position), true, packageName);
+            }
+        });
+    }
+
+    /**
+     * Listener for adapters.
+     * TODO: Maybe this can be moved to ListListener (or that can go here instead)?
+     */
+    private void addAdapterListener() {
+        pinnedAppsAdapter.addListener(new FlexibleAdapter.OnItemMoveListener() {
+            @Override public boolean shouldMoveItem(int fromPosition, int toPosition) {
+                return true;
+            }
+
+            @Override public void onItemMove(int fromPosition, int toPosition) {
+                // Close app menu when we're dragging.
+                appMenu.dismiss();
+
+                // Shuffle our apps around.
+                pinnedAppsAdapter.swapItems(pinnedAppList, fromPosition, toPosition);
+                pinnedAppsAdapter.notifyItemMoved(fromPosition, toPosition);
+            }
+
+            @Override public void onActionStateChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+                String orderedPinnedApps = "";
+
+                // Iterate through the list to get package name of each pinned apps, then stringify them.
+                for(int i = 0; i < pinnedAppList.size(); i++) {
+                    orderedPinnedApps = orderedPinnedApps.concat(pinnedAppList.get(i).getPackageName() + ";");
+                }
+
+                // Update the saved pinned apps.
+                PreferenceHelper.getEditor().putString("pinned_apps_list", orderedPinnedApps).apply();
+
+                // Also update pinnedAppString for future references.
+                pinnedAppString = orderedPinnedApps;
             }
         });
     }
