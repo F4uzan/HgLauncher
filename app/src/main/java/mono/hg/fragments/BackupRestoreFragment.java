@@ -66,7 +66,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
          */
         isInRestore = getArguments().getBoolean("isRestore", false);
 
-        ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((SettingsActivity) requireActivity()).getSupportActionBar();
         if (actionBar != null) {
             if (isInRestore) {
                 actionBar.setTitle(R.string.pref_header_restore);
@@ -77,10 +77,10 @@ public class BackupRestoreFragment extends BackHandledFragment {
 
         setHasOptionsMenu(true);
 
-        fileFolderAdapter = new FileFolderAdapter(fileFoldersList, getActivity());
-        FrameLayout fileInputContainer = getActivity().findViewById(R.id.file_input_container);
-        ListView fileFolders = getActivity().findViewById(R.id.files_list);
-        backupNameField = getActivity().findViewById(R.id.file_input_entry);
+        fileFolderAdapter = new FileFolderAdapter(fileFoldersList, requireActivity());
+        FrameLayout fileInputContainer = requireActivity().findViewById(R.id.file_input_container);
+        ListView fileFolders = requireActivity().findViewById(R.id.files_list);
+        backupNameField = requireActivity().findViewById(R.id.file_input_entry);
 
         fileFolders.setAdapter(fileFolderAdapter);
 
@@ -137,7 +137,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
-                getActivity().onBackPressed();
+                requireActivity().onBackPressed();
                 return true;
             case 1:
                 // Send our backup signal!
@@ -147,7 +147,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
                                                                           .toString() + ".xml");
                     if (backupName.exists() && backupName.isFile()) {
                         final AlertDialog.Builder overwriteDialog = new AlertDialog.Builder(
-                                getActivity());
+                                requireActivity());
                         overwriteDialog.setTitle(getString(R.string.pref_header_backup));
                         overwriteDialog.setMessage(getString(R.string.backup_exist));
                         overwriteDialog.setNegativeButton(getString(R.string.backup_exist_cancel),
@@ -165,7 +165,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
                         saveBackup(backupName);
                     }
                 } else {
-                    Toast.makeText(getActivity(), R.string.backup_empty, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), R.string.backup_empty, Toast.LENGTH_SHORT).show();
                 }
                 return true;
             default:
@@ -240,7 +240,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
                 Utils.sendLog(3, e.toString());
             }
             traverseStorage(this.currentPath);
-            Toast.makeText(getActivity(), R.string.backup_complete, Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), R.string.backup_complete, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -303,7 +303,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progress = new ProgressDialog(fragmentRef.get().getActivity());
+            progress = new ProgressDialog(fragmentRef.get().requireActivity());
             progress.setMessage(fragmentRef.get().getString(R.string.backup_restore_dialogue));
             progress.setIndeterminate(false);
             progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -325,8 +325,8 @@ public class BackupRestoreFragment extends BackHandledFragment {
             BackupRestoreFragment fragment = fragmentRef.get();
             if (fragment != null) {
                 progress.dismiss();
-                fragment.getActivity().recreate();
-                Toast.makeText(fragmentRef.get().getActivity(), R.string.restore_complete,
+                fragment.requireActivity().recreate();
+                Toast.makeText(fragmentRef.get().requireActivity(), R.string.restore_complete,
                         Toast.LENGTH_LONG).show();
             }
         }

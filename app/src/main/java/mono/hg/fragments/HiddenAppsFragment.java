@@ -43,17 +43,17 @@ public class HiddenAppsFragment extends BackHandledFragment {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((SettingsActivity) requireActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(R.string.pref_header_hidden_apps);
         }
 
         setHasOptionsMenu(true);
 
-        manager = getActivity().getPackageManager();
+        manager = requireActivity().getPackageManager();
 
-        appsListView = getActivity().findViewById(R.id.hidden_apps_list);
-        hiddenAppAdapter = new HiddenAppAdapter(appList, getActivity());
+        appsListView = requireActivity().findViewById(R.id.hidden_apps_list);
+        hiddenAppAdapter = new HiddenAppAdapter(appList, requireActivity());
 
         appsListView.setAdapter(hiddenAppAdapter);
 
@@ -81,7 +81,7 @@ public class HiddenAppsFragment extends BackHandledFragment {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
-                getActivity().onBackPressed();
+                requireActivity().onBackPressed();
                 return true;
             case 1:
                 excludedAppList.clear();
@@ -90,7 +90,7 @@ public class HiddenAppsFragment extends BackHandledFragment {
                                 .apply();
 
                 // Recreate the toolbar menu to hide the 'restore all' button.
-                getActivity().invalidateOptionsMenu();
+                requireActivity().invalidateOptionsMenu();
 
                 // Reload the list.
                 loadApps();
@@ -115,7 +115,7 @@ public class HiddenAppsFragment extends BackHandledFragment {
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
-            if (!packageName.equals(getActivity().getPackageName())) {
+            if (!packageName.equals(requireActivity().getPackageName())) {
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = ri.activityInfo.loadIcon(manager);
                 boolean isHidden = excludedAppList.contains(packageName);
@@ -144,7 +144,7 @@ public class HiddenAppsFragment extends BackHandledFragment {
         hiddenAppAdapter.notifyDataSetChanged();
 
         // Toggle the state of the 'restore all' button.
-        getActivity().invalidateOptionsMenu();
+        requireActivity().invalidateOptionsMenu();
     }
 
     private void addListeners() {

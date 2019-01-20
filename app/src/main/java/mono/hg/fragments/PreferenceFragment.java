@@ -39,7 +39,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ActionBar actionBar = ((SettingsActivity) getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((SettingsActivity) requireActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(R.string.title_activity_settings);
         }
@@ -72,7 +72,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         appTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                ((SettingsActivity) getActivity()).restartActivity();
+                ((SettingsActivity) requireActivity()).restartActivity();
                 return true;
             }
         });
@@ -82,7 +82,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     }
 
     private void setAppList(ListPreference list) {
-        PackageManager manager = getActivity().getPackageManager();
+        PackageManager manager = requireActivity().getPackageManager();
         List<String> entries = new ArrayList<>();
         List<String> entryValues = new ArrayList<>();
 
@@ -114,7 +114,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     }
 
     private void setIconList(ListPreference list) {
-        PackageManager manager = getActivity().getPackageManager();
+        PackageManager manager = requireActivity().getPackageManager();
         List<String> entries = new ArrayList<>();
         List<String> entryValues = new ArrayList<>();
 
@@ -157,7 +157,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                         }
 
                         if (counter < 8) {
-                            counterToast = Toast.makeText(getActivity(),
+                            counterToast = Toast.makeText(requireActivity(),
                                     String.format(getString(R.string.version_key_toast_plural),
                                             counter), Toast.LENGTH_SHORT);
                             counterToast.show();
@@ -172,7 +172,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                             counterToast.cancel();
                         }
 
-                        counterToast = Toast.makeText(getActivity(), R.string.version_key_toast,
+                        counterToast = Toast.makeText(requireActivity(), R.string.version_key_toast,
                                 Toast.LENGTH_SHORT);
                         counterToast.show();
 
@@ -196,7 +196,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 DialogFragment librariesInfo = new LibraryInfoFragment();
-                librariesInfo.show(getActivity().getFragmentManager(), "LibrariesInfo");
+                librariesInfo.show(requireActivity().getFragmentManager(), "LibrariesInfo");
                 return false;
             }
         });
@@ -204,7 +204,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                ViewUtils.replaceFragment((SettingsActivity) getActivity(), new HiddenAppsFragment(), "hidden_apps");
+                ViewUtils.replaceFragment((SettingsActivity) requireActivity(), new HiddenAppsFragment(), "hidden_apps");
                 return false;
             }
         });
@@ -263,7 +263,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         Bundle fragmentBundle = new Bundle();
         fragmentBundle.putBoolean("isRestore", isRestore);
         backupRestoreFragment.setArguments(fragmentBundle);
-        ViewUtils.replaceFragment((SettingsActivity) getActivity(), backupRestoreFragment, "backup_restore");
+        ViewUtils.replaceFragment((SettingsActivity) requireActivity(), backupRestoreFragment, "backup_restore");
     }
 
 }
