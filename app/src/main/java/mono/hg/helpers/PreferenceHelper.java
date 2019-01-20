@@ -16,6 +16,7 @@ public class PreferenceHelper {
     private static boolean tap_to_drawer;
     private static boolean favourites_panel;
     private static boolean static_favourites_panel;
+    private static boolean static_app_list;
     private static boolean adaptive_shade;
     private static boolean has_widget;
     private static boolean is_testing;
@@ -96,6 +97,10 @@ public class PreferenceHelper {
         return static_favourites_panel;
     }
 
+    public static boolean keepAppList() {
+        return static_app_list;
+    }
+
     public static boolean wasAlien() {
         return was_alien;
     }
@@ -164,6 +169,7 @@ public class PreferenceHelper {
         search_provider_set = preferences.getString("search_provider", "google");
         favourites_panel = preferences.getBoolean("favourites_panel_switch", true);
         static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
+        static_app_list = preferences.getBoolean("static_app_list_switch", false);
         adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
         windowbar_mode = preferences.getString("windowbar_mode", "none");
         gesture_left_action = preferences.getString("gesture_left", "none");

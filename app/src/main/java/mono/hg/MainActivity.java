@@ -220,9 +220,8 @@ public class MainActivity extends AppCompatActivity {
 
         animateDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-        slidingHome.disallowHiding(true);
-
         // Let the launcher handle state of the sliding panel.
+        slidingHome.disallowHiding(true);
         slidingHome.alwaysResetState(true);
 
         appsRecyclerView.setDrawingCacheEnabled(true);
@@ -270,6 +269,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         applyPrefToViews();
+
+        // Show the app list once all the views are set up.
+        if (PreferenceHelper.keepAppList()) {
+            doThis("show_panel");
+        }
     }
 
     @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -326,11 +330,13 @@ public class MainActivity extends AppCompatActivity {
     @Override public void onPause() {
         super.onPause();
 
-        // Dismiss any visible menu as well as the app panel.
+        // Dismiss any visible menu as well as the app panel when it is not needed.
         if (appMenu != null) {
             appMenu.dismiss();
         }
-        doThis("hide_panel");
+        if (!PreferenceHelper.keepAppList()) {
+            doThis("hide_panel");
+        }
 
         unregisterPackageReceiver();
     }
@@ -353,6 +359,11 @@ public class MainActivity extends AppCompatActivity {
         registerPackageReceiver();
         if (AppUtils.hasNewPackage(manager)) {
             new getAppTask(this).execute();
+        }
+
+        // Show the app list when needed.
+        if (PreferenceHelper.keepAppList()) {
+            doThis("show_panel");
         }
     }
 
