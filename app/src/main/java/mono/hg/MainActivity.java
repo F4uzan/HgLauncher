@@ -34,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.lang.ref.WeakReference;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -836,7 +837,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             Utils.openLink(MainActivity.this,
-                                    PreferenceHelper.getSearchProvider() + searchBarText);
+                                    PreferenceHelper.getSearchProvider() + URLEncoder.encode(searchBarText));
                         }
                     }).show();
 
