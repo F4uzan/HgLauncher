@@ -1,6 +1,7 @@
 package mono.hg.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import androidx.appcompat.widget.AppCompatCheckBox;
 import mono.hg.R;
 import mono.hg.models.AppDetail;
 import mono.hg.utils.Utils;
@@ -32,27 +32,27 @@ public class HiddenAppAdapter extends BaseAdapter {
         View view = convertView;
 
         if (view == null) {
-            view = Utils.requireNonNull(inflater).inflate(R.layout.hidden_app_list, parent, false);
+            view = Utils.requireNonNull(inflater).inflate(R.layout.app_list, parent, false);
 
             appHolder = new ViewHolder();
 
             appHolder.icon = view.findViewById(R.id.item_app_icon);
             appHolder.name = view.findViewById(R.id.item_app_name);
-            appHolder.hiddenState = view.findViewById(R.id.item_app_hidden_state);
 
             view.setTag(appHolder);
         } else {
             appHolder = (ViewHolder) view.getTag();
         }
 
-        if (hiddenAppsList.get(position).isAppHidden()) {
-            appHolder.hiddenState.setChecked(true);
-        } else {
-            appHolder.hiddenState.setChecked(false);
-        }
-
-        appHolder.icon.setImageDrawable(hiddenAppsList.get(position).getIcon());
         appHolder.name.setText(hiddenAppsList.get(position).getAppName());
+
+        if (hiddenAppsList.get(position).isAppHidden()) {
+            appHolder.icon.setImageResource(R.drawable.ic_check);
+            appHolder.name.setTypeface(Typeface.DEFAULT_BOLD);
+        } else {
+            appHolder.icon.setImageDrawable(hiddenAppsList.get(position).getIcon());
+            appHolder.name.setTypeface(Typeface.DEFAULT);
+        }
 
         return view;
     }
@@ -76,6 +76,5 @@ public class HiddenAppAdapter extends BaseAdapter {
     private static class ViewHolder {
         private ImageView icon;
         private TextView name;
-        private AppCompatCheckBox hiddenState;
     }
 }
