@@ -33,7 +33,8 @@ public class HiddenAppsFragment extends BackHandledFragment {
     private ArrayList<AppDetail> appList = new ArrayList<>();
     private HiddenAppAdapter hiddenAppAdapter;
     private PackageManager manager;
-    private HashSet<String> excludedAppList = new HashSet<>();
+    private HashSet<String> excludedAppList = new HashSet<>(
+            PreferenceHelper.getPreference().getStringSet("hidden_apps", new HashSet<String>()));
     private ListView appsListView;
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,8 +59,6 @@ public class HiddenAppsFragment extends BackHandledFragment {
         appsListView.setAdapter(hiddenAppAdapter);
 
         // Get our app list.
-        excludedAppList.addAll(
-                PreferenceHelper.getPreference().getStringSet("hidden_apps", excludedAppList));
         loadApps();
 
         addListeners();
