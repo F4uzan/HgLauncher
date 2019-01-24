@@ -111,10 +111,10 @@ public class HiddenAppsFragment extends BackHandledFragment {
         appList.clear();
         hiddenAppAdapter.notifyDataSetInvalidated();
 
-        // Fetch and add every app into our list, but ignore those that are in the exclusion list.
+        // Fetch and add every app into our list,
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
-            if (!packageName.equals(requireActivity().getPackageName())) {
+            if (!ri.activityInfo.packageName.equals(requireActivity().getPackageName())) {
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = ri.activityInfo.loadIcon(manager);
                 boolean isHidden = excludedAppList.contains(packageName);
