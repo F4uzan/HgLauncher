@@ -107,9 +107,9 @@ public class OnTouchListener implements View.OnTouchListener {
                     && Math.abs(distanceX) > SWIPE_DISTANCE_THRESHOLD
                     && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                 if (distanceX > 0) {
-                    onSwipeLeft();
-                } else {
                     onSwipeRight();
+                } else {
+                    onSwipeLeft();
                 }
                 return true;
             } else if (Math.abs(distanceY) > Math.abs(distanceX)
