@@ -1,0 +1,40 @@
+<resources>
+    <!-- App information -->
+    <string name="app_name">HgLauncher</string>
+
+    <!-- Menu actions -->
+    <string name="action_settings">Ezarpenak</string>
+    <string name="action_wallpaper">Horma-papera aldatu</string>
+    <string name="action_force_refresh">Freskatu</string>
+    <string name="action_add_widget">Widgeta gehitu</string>
+    <string name="action_remove_widget">Widgeta kendu</string>
+    <string name="action_hidden_app_reset">Dena berrezarri</string>
+    <string name="action_save_backup">Gorde</string>
+
+    <!-- App menu actions -->
+    <string name="action_pin">Finkatu</string>
+    <string name="action_unpin">Askatu</string>
+    <string name="action_hide">Ezkutatu</string>
+    <string name="action_show">Berrezarri</string>
+    <string name="action_backup">Babes-kopia egin</string>
+    <string name="action_uninstall">Desinstalatu</string>
+    <string name="action_info">Aplikazioaren informazioa</string>
+
+    <!-- Misc -->
+    <string name="search_hint">Bilatu…</string>
+    <string name="search_web_hint">Bilatu \'%1$s\' sarean.</string>
+    <string name="search_web_button">Joan</string>
+
+    <!-- Warning/Information messages -->
+    <string name="warn_pinning">Gogokoen panela gaitu finkatutako aplikazioak ikusteko.</string>
+
+    <!-- Error messages -->
+    <string name="err_activity_null">Ezin da aplikazioa hasi.</string>
+    <string name="err_widget_invalid">Akatsa widgeta kargatzerakoan.</string>
+
+    <!-- Accessibility string -->
+    <string name="desc_touch_receiver">Mahaigaineko ikuspegia</string>
+    <string name="desc_apps_list">Aplikazioen zerrenda</string>
+    <string name="desc_icon">Aplikazioa</string>
+    <string name="desc_file">Fitxategia</string>
+</resources>
