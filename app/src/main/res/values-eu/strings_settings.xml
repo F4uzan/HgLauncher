@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Strings for Settings (and all activity related to it -->
+    <string name="title_activity_settings">Ezarpenak</string>
+
+    <!-- Header/category names -->
+    <string name="pref_header_about">Honi buruz</string>
+    <string name="pref_header_cust">Pertsonalizazioak</string>
+    <string name="pref_header_gestures">Keinuak</string>
+    <string name="pref_header_wall">Mahaigaina</string>
+    <string name="pref_header_list">Aplikazioen zerrenda</string>
+    <string name="pref_header_interface">Interfazea</string>
+    <string name="pref_header_search_bar">Bilaketa barra</string>
+    <string name="pref_header_backup_restore">Babes-kopia eta berrezartzea</string>
+    <string name="pref_header_icons">Ikonoak</string>
+
+    <!-- Preference names -->
+    <string name="pref_header_hidden_apps">Ezkutatutako aplikazioak</string>
+    <string name="pref_header_hidden_apps_desc">Ezkutatutako aplikazioen zerrenda kudeatu.</string>
+    <string name="pref_header_backup">Babes-kopia</string>
+    <string name="pref_header_backup_desc">Oraingo konfigurazioaren babes-kopia egin.</string>
+    <string name="backup_name_hint">Babes-kopiaren izena…</string>
+    <string name="pref_header_restore">Berrezarri</string>
+    <string name="pref_header_restore_desc">Berrezarri gordetako konfigurazio bat.</string>
+
+    <!-- Easter egg -->
+    <string name="version_key_toast_plural">Sakatu %1$d aldiz gehiago froga modua gaitzeko.</string>
+    <string name="version_key_toast">Sakatu beste behin baieztatzeko.</string>
+    <string name="version_key_name">HgLauncher (testing)</string>
+
+    <!-- Dialogue and toast messages -->
+    <string name="backup_exist">Babes-kopiaren izen berdina duen fitxategia bat existitzen da dagoeneko.</string>
+    <string name="backup_exist_overwrite">Gainidatzi</string>
+    <string name="backup_exist_cancel">Utzi</string>
+    <string name="backup_restore_dialogue">Berrezartzen…</string>
+    <string name="restore_complete">Berrezartzea osatu da!</string>
+    <string name="backup_complete">Babes-kopia gorde da!</string>
+    <string name="backup_empty">Babes-kopiaren izena ezin da hutsik egon.</string>
+
+    <!-- Libraries licence dialogue.  -->
+    <!-- TODO: Somehow splitting this to en-US and en-GB is a good idea in my mind. -->
+    <string name="about_libraries_dialogue_title">Lizentziak</string>
+    <string name="about_libraries">Iturburu irekiko lizentziak</string>
+    <string name="about_libraries_desc">Abiarazle honetan erabilitako liburutegien lizentziak.</string>
+
+    <!-- Customizations -->
+    <string name="app_theme">Aplikazioaren itxura</string>
+    <string name="app_theme_light">Argia</string>
+    <string name="app_theme_dark">Iluna</string>
+    <string name="app_theme_black">Beltza</string>
+
+    <string name="dark_theme">Itxura iluna</string>
+    <string name="dark_theme_black">Benetako beltza erabili</string>
+    <string name="dark_theme_black_desc">Aldatu gris iluna benetako beltzarekin itxura ilunean.</string>
+
+    <string name="windowbar_mode">Sistemaren barrak ezkutatu</string>
+    <string name="windowbar_mode_none">Ezgaituta</string>
+    <string name="windowbar_mode_status">Egoera barra ezkutatu</string>
+    <string name="windowbar_mode_nav">Nabigazio barra ezkutatu</string>
+    <string name="windowbar_mode_both">Biak ezkutatu</string>
+
+    <string name="gestures_left">Ezkerretik irristatu</string>
+    <string name="gestures_right">Eskuinetik irristatu</string>
+    <string name="gestures_default">Bat ere ez</string>
+    
+    <string name="pref_title_app_list_order">Aplikazioen zerrendaren ordena</string>
+    <string name="app_list_order_normal">Atik Zra</string>
+    <string name="app_list_order_inverse">Ztik Ara</string>
+
+    <string name="static_app_list">Ireki beti aplikazioen zerrenda</string>
+    <string name="static_app_list_desc">Ireki aplikazioen zerrenda abiarazlean sartzerakoan. Ez du hura ixtea galarazten.</string>
+
+    <string name="pref_app_launch_anim">Aplikazioak abiarazteko animazioa</string>
+    <string name="anim_list_default">Sistemal ezarritakoa</string>
+    <string name="anim_list_pull_up">Goruntz igo</string>
+    <string name="anim_list_slide_in">Albo batetik atera</string>
+
+    <string name="favourites_panel_title">Gogokoenen panela</string>
+    <string name="favourites_panel_desc">Aplikazioak finkatzeko erabiltzen den panela erakutsi edo ezkutatu.</string>
+
+    <string name="pref_search_provider">Sareko bilaketen hornitzailea</string>
+
+    <string name="keyboard_focus">Teklatuaren fokua</string>
+    <string name="keyboard_focus_desc">Teklatua automatikoki erakutsi aplikazioen panela beheruntz irekitzen bada.</string>
+
+    <string name="web_search">Sarean bilaketa egitea eskeini</string>
+    <string name="web_search_desc">Zure kontsulta sarean bilatzea eskini.</string>
+
+    <string name="tap_to_drawer">Sakatu aplikazioen zerrenda irekitzeko</string>
+    <string name="tap_to_drawer_desc">Ireki aplikazioen zerrenda mahaigaineko edozein tokitan ukituz. Widgetek deuseztatu dezakete.</string>
+
+    <string name="shadow_adaptive_icon">Ikono moldagarrientzako itzala</string>
+    <string name="shadow_adaptive_icon_desc">Itzala eman ikono moldagarriei. Errendimendua jaitsi dezake.</string>
+
+    <string name="pref_icon_view">Ikonoak ezkutatu</string>
+    <string name="pref_icon_view_desc">Gailu moteletan gomendagarria.</string>
+
+    <string name="pref_shade_view">Itzala horma-paperaren gainean</string>
+    <string name="pref_shade_view_desc">Itzala gehitzen du horma-paperaren gainean. Horma-paper argientzako gomendagarria.</string>
+
+    <string name="comfy_padding">Betegarri eroso modua</string>
+    <string name="comfy_padding_desc">Zati betegarri bat marrazten du aplikazioen panelaren inguruan itxura uniforme bat lortzeko.</string>
+
+    <string name="static_favourites">Gogokoenen panel iraunkorra</string>
+    <string name="static_favourites_desc">Gogokoenen panelaren ikusgaitasuna mantendu desplazamendu gertaerak alde batera utzita.</string>
+
+    <string name="icon_pack">Ikonoen paketea</string>
+    <string name="icon_pack_default">Lehenetsia</string>
+</resources>
