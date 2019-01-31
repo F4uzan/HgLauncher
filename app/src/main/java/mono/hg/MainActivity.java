@@ -613,7 +613,9 @@ public class MainActivity extends AppCompatActivity {
      * @param isInit Are we loading for onCreate?
      */
     private void loadPref(Boolean isInit) {
-        PreferenceHelper.initPreference(this);
+        if (!PreferenceHelper.hasEditor()) {
+            PreferenceHelper.initPreference(this);
+        }
         PreferenceHelper.fetchPreference();
 
         // Get pinned apps.

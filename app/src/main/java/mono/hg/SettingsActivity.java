@@ -20,7 +20,7 @@ public class SettingsActivity extends AppCompatActivity
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override public void onCreate(Bundle savedInstanceState) {
-        if (PreferenceHelper.getPreference() == null) {
+        if (!PreferenceHelper.hasEditor()) {
             PreferenceHelper.initPreference(this);
         }
         PreferenceHelper.fetchPreference();

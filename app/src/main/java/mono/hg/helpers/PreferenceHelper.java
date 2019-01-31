@@ -147,6 +147,10 @@ public class PreferenceHelper {
         return editor;
     }
 
+    public static boolean hasEditor() {
+        return editor != null;
+    }
+
     public static void initPreference(Context context) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         editor = preferences.edit();
