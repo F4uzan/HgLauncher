@@ -12,6 +12,10 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
+    lintOptions{
+        disable 'MissingTranslation'
+    }
+
     buildTypes {
         debug {
             versionNameSuffix "-debug"
