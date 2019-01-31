@@ -46,7 +46,9 @@ public class SettingsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         fragmentManager.popBackStack("fragment_root", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         ViewUtils.setFragment(this, new PreferenceFragment());
@@ -55,7 +57,9 @@ public class SettingsActivity extends AppCompatActivity
     @Override public void onBackPressed() {
         if (selectedFragment == null || !selectedFragment.onBackPressed()) {
             // Selected fragment did not consume the back press event.
-            getSupportActionBar().setTitle(R.string.title_activity_settings);
+            if (getSupportActionBar() != null){
+                getSupportActionBar().setTitle(R.string.title_activity_settings);
+            }
             super.onBackPressed();
         }
     }
@@ -66,7 +70,9 @@ public class SettingsActivity extends AppCompatActivity
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            getSupportActionBar().setTitle(R.string.title_activity_settings);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(R.string.title_activity_settings);
+            }
             super.onBackPressed();
             ActivityServiceUtils.hideSoftKeyboard(this);
             return true;
