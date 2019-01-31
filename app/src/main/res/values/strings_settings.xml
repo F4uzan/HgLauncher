@@ -14,7 +14,7 @@
     <string name="pref_header_backup_restore">Backup &amp; Restore</string>
     <string name="pref_header_icons">Icons</string>
 
-    <!-- Preference names -->
+    <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Hidden apps</string>
     <string name="pref_header_hidden_apps_desc">Manage your list of hidden apps.</string>
     <string name="pref_header_backup">Backup</string>
@@ -22,6 +22,11 @@
     <string name="backup_name_hint">Backup name…</string>
     <string name="pref_header_restore">Restore</string>
     <string name="pref_header_restore_desc">Restore a saved configuration.</string>
+    <string name="reset_preference">Reset configuration</string>
+    <string name="reset_preference_desc">Reset current configuration and restore defaults.</string>
+    <string name="reset_preference_warn">Proceeding will reset your entire configuration. Once done, you cannot undo the operation!</string>
+    <string name="reset_preference_positive">Understood</string>
+    <string name="reset_preference_toast">Configuration has been reset.</string>
 
     <!-- Easter egg -->
     <string name="version_key_toast_plural">Tap %1$d more times to enable testing mode.</string>

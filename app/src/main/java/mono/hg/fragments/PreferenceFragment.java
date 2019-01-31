@@ -2,6 +2,7 @@ package mono.hg.fragments;
 
 import android.Manifest;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -191,6 +193,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         Preference restoreMenu = findPreference("restore");
         Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
         final Preference backupMenu = findPreference("backup");
+        Preference resetMenu = findPreference("reset");
 
         librariesDialogue.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -222,6 +225,24 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 isRestore = true;
                 return hasStoragePermission();
+            }
+        });
+
+        resetMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override public boolean onPreferenceClick(Preference preference) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
+                alert.setTitle(getString(R.string.reset_preference))
+                     .setMessage(getString(R.string.reset_preference_warn))
+                     .setNegativeButton(getString(android.R.string.cancel), null)
+                     .setPositiveButton(R.string.reset_preference_positive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        PreferenceHelper.getEditor().clear().apply();
+                        ((SettingsActivity) requireActivity()).restartActivity();
+                        Toast.makeText(requireContext(), R.string.reset_preference_toast, Toast.LENGTH_LONG).show();
+                    }
+                }).show();
+                return false;
             }
         });
     }

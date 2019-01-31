@@ -14,7 +14,7 @@
     <string name="pref_header_backup_restore">Babes-kopia eta berrezartzea</string>
     <string name="pref_header_icons">Ikonoak</string>
 
-    <!-- Preference names -->
+    <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Ezkutatutako aplikazioak</string>
     <string name="pref_header_hidden_apps_desc">Ezkutatutako aplikazioen zerrenda kudeatu.</string>
     <string name="pref_header_backup">Babes-kopia</string>
