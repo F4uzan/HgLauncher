@@ -23,6 +23,7 @@
     <!-- Misc -->
     <string name="search_hint">Search…</string>
     <string name="search_web_hint">Search for \'%1$s\' online.</string>
+    <string name="search_web_button_prompt">With</string>
     <string name="search_web_button">Go</string>
 
     <!-- Warning/Information messages -->
@@ -37,4 +38,10 @@
     <string name="desc_apps_list">Application list</string>
     <string name="desc_icon">Application</string>
     <string name="desc_file">File</string>
+
+    <!-- Built-in search providers -->
+    <string name="search_provider_none">Always ask</string>
+    <string name="search_provider_google" translatable="false">Google</string>
+    <string name="search_provider_ddg" translatable="false">DuckDuckGo</string>
+    <string name="search_provider_searx" translatable="false">searX</string>
 </resources>

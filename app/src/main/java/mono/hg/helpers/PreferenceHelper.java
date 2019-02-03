@@ -125,7 +125,6 @@ public class PreferenceHelper {
         String search_provider;
 
         switch (search_provider_set) {
-            default:
             case "google":
                 search_provider = "https://www.google.com/search?q=";
                 break;
@@ -135,6 +134,29 @@ public class PreferenceHelper {
             case "searx":
                 search_provider = "https://www.searx.me/?q=";
                 break;
+            default:
+            case "none":
+                search_provider = "none";
+                break;
+        }
+        return search_provider;
+    }
+
+    public static String getSearchProvider(String provider_id) {
+        String search_provider = "";
+
+        switch (provider_id) {
+            case "google":
+                search_provider = "https://www.google.com/search?q=";
+                break;
+            case "ddg":
+                search_provider = "https://www.duckduckgo.com/?q=";
+                break;
+            case "searx":
+                search_provider = "https://www.searx.me/?q=";
+                break;
+            default:
+                // No-op;
         }
         return search_provider;
     }

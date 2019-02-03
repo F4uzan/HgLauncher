@@ -566,7 +566,8 @@ public class MainActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome.getLayoutParams();
+                ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome
+                        .getLayoutParams();
                 homeParams.topMargin = ViewUtils.getStatusBarHeight();
             }
         }
@@ -834,12 +835,51 @@ public class MainActivity extends AppCompatActivity {
                     // Update the snackbar text.
                     searchSnack.setText(searchHint);
 
+                    String searchSnackAction;
+
+                    if (PreferenceHelper.getSearchProvider().equals("none")) {
+                        searchSnackAction = getString(R.string.search_web_button_prompt);
+                    } else {
+                        searchSnackAction = getString(R.string.search_web_button);
+                    }
+
                     // Prompt user if they want to search their query online.
-                    searchSnack.setAction(R.string.search_web_button, new View.OnClickListener() {
+                    searchSnack.setAction(searchSnackAction, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Utils.openLink(MainActivity.this,
-                                    PreferenceHelper.getSearchProvider() + URLEncoder.encode(searchBarText));
+                            if (!PreferenceHelper.getSearchProvider().equals("none")) {
+                                Utils.openLink(MainActivity.this,
+                                        PreferenceHelper.getSearchProvider() + URLEncoder.encode(
+                                                searchBarText));
+                            } else {
+                                appMenu = new PopupMenu(MainActivity.this, view);
+                                appMenu.getMenuInflater().inflate(R.menu.menu_search, appMenu.getMenu());
+                                appMenu.setOnMenuItemClickListener(
+                                        new PopupMenu.OnMenuItemClickListener() {
+                                            @Override public boolean onMenuItemClick(MenuItem menuItem) {
+                                                String provider_id = "";
+                                                switch (menuItem.getItemId()) {
+                                                    case R.id.provider_google:
+                                                        provider_id = "google";
+                                                        break;
+                                                    case R.id.provider_ddg:
+                                                        provider_id = "ddg";
+                                                        break;
+                                                    case R.id.provider_searx:
+                                                        provider_id = "searx";
+                                                        break;
+                                                    default:
+                                                        // No-op.
+                                                }
+                                                Utils.openLink(MainActivity.this,
+                                                        PreferenceHelper.getSearchProvider(
+                                                                provider_id) + URLEncoder.encode(
+                                                                searchBarText));
+                                                return true;
+                                            }
+                                        });
+                                appMenu.show();
+                            }
                         }
                     }).show();
 
@@ -970,12 +1010,15 @@ public class MainActivity extends AppCompatActivity {
                 String orderedPinnedApps = "";
 
                 // Iterate through the list to get package name of each pinned apps, then stringify them.
-                for(int i = 0; i < pinnedAppList.size(); i++) {
-                    orderedPinnedApps = orderedPinnedApps.concat(pinnedAppList.get(i).getPackageName() + ";");
+                for (int i = 0; i < pinnedAppList.size(); i++) {
+                    orderedPinnedApps = orderedPinnedApps.concat(
+                            pinnedAppList.get(i).getPackageName() + ";");
                 }
 
                 // Update the saved pinned apps.
-                PreferenceHelper.getEditor().putString("pinned_apps_list", orderedPinnedApps).apply();
+                PreferenceHelper.getEditor()
+                                .putString("pinned_apps_list", orderedPinnedApps)
+                                .apply();
 
                 // Also update pinnedAppString for future references.
                 pinnedAppString = orderedPinnedApps;
