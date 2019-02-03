@@ -871,6 +871,7 @@ public class MainActivity extends AppCompatActivity {
                                                     default:
                                                         // No-op.
                                                 }
+                                                appsAdapter.resetFilter();
                                                 Utils.openLink(MainActivity.this,
                                                         PreferenceHelper.getSearchProvider(
                                                                 provider_id) + URLEncoder.encode(
