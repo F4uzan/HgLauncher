@@ -122,43 +122,31 @@ public class PreferenceHelper {
     }
 
     public static String getSearchProvider() {
-        String search_provider;
-
         switch (search_provider_set) {
             case "google":
-                search_provider = "https://www.google.com/search?q=";
-                break;
+                return "https://www.google.com/search?q=";
             case "ddg":
-                search_provider = "https://www.duckduckgo.com/?q=";
-                break;
+                return "https://www.duckduckgo.com/?q=";
             case "searx":
-                search_provider = "https://www.searx.me/?q=";
-                break;
+                return "https://www.searx.me/?q=";
             default:
             case "none":
-                search_provider = "none";
-                break;
+                return "none";
         }
-        return search_provider;
     }
 
     public static String getSearchProvider(String provider_id) {
-        String search_provider = "";
-
         switch (provider_id) {
             case "google":
-                search_provider = "https://www.google.com/search?q=";
-                break;
+                return "https://www.google.com/search?q=";
             case "ddg":
-                search_provider = "https://www.duckduckgo.com/?q=";
-                break;
+                return "https://www.duckduckgo.com/?q=";
             case "searx":
-                search_provider = "https://www.searx.me/?q=";
-                break;
+                return "https://www.searx.me/?q=";
             default:
-                // No-op;
+                // We can't go here. Return an empty string just in case.
+               return "";
         }
-        return search_provider;
     }
 
     public static SharedPreferences getPreference() {
