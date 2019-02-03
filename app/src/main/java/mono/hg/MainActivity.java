@@ -252,7 +252,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Start loading apps and initialising click listeners.
         new getAppTask(this).execute();
-        addSearchBarListener();
+        addSearchBarTextListener();
+        addSearchBarEditorListener();
         addGestureListener();
         addAdapterListener();
         addListListeners();
@@ -792,9 +793,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Listeners for the search bar.
+     * Listeners for the search bar query.
      */
-    private void addSearchBarListener() {
+    private void addSearchBarTextListener() {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
             String searchBarText, searchHint;
@@ -863,8 +864,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        // Listen for keyboard enter/search key input.
+    /**
+     * Listener for search bar editor (keyboard) action.
+     */
+    private void addSearchBarEditorListener() {
         searchBar.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
