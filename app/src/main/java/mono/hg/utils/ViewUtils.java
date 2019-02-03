@@ -1,16 +1,21 @@
 package mono.hg.utils;
 
 import android.content.res.Resources;
+import android.view.MenuItem;
 import android.view.ViewTreeObserver;
+import android.widget.PopupMenu;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import java.net.URLEncoder;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import mono.hg.R;
+import mono.hg.helpers.PreferenceHelper;
 
 public class ViewUtils {
 
@@ -89,5 +94,39 @@ public class ViewUtils {
                        .add(R.id.fragment_container, fragment)
                        .addToBackStack(tag)
                        .commit();
+    }
+
+    /**
+     * Creates a PopupMenu containing available search provider.
+     *
+     * @param activity  Activity where the PopupMenu resides.
+     * @param popupMenu The PopupMenu to populate and show.
+     * @param query     Search query to launch when a provider is selected.
+     */
+    public static void createSearchMenu(final AppCompatActivity activity, PopupMenu popupMenu, final String query) {
+        popupMenu.getMenuInflater().inflate(R.menu.menu_search, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(
+                new PopupMenu.OnMenuItemClickListener() {
+                    @Override public boolean onMenuItemClick(MenuItem menuItem) {
+                        String provider_id = "";
+                        switch (menuItem.getItemId()) {
+                            case R.id.provider_google:
+                                provider_id = "google";
+                                break;
+                            case R.id.provider_ddg:
+                                provider_id = "ddg";
+                                break;
+                            case R.id.provider_searx:
+                                provider_id = "searx";
+                                break;
+                            default:
+                                // No-op.
+                        }
+                        Utils.openLink(activity, PreferenceHelper.getSearchProvider(
+                                provider_id) + URLEncoder.encode(query));
+                        return true;
+                    }
+                });
+        popupMenu.show();
     }
 }

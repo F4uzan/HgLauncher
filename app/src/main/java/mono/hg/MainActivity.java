@@ -561,15 +561,14 @@ public class MainActivity extends AppCompatActivity {
     private void applyPrefToViews() {
         // Workaround v21+ status bar transparency issue.
         // This is disabled if the status bar is hidden.
-        if (PreferenceHelper.getWindowBarMode().equals("none")
-                || PreferenceHelper.getWindowBarMode().equals("nav")) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().getDecorView().setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome
-                        .getLayoutParams();
-                homeParams.topMargin = ViewUtils.getStatusBarHeight();
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && (PreferenceHelper.getWindowBarMode().equals("none")
+                || PreferenceHelper.getWindowBarMode().equals("nav"))) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            ViewGroup.MarginLayoutParams homeParams = (ViewGroup.MarginLayoutParams) slidingHome
+                    .getLayoutParams();
+            homeParams.topMargin = ViewUtils.getStatusBarHeight();
         }
 
         // Empty out margins if they are not needed.
@@ -853,33 +852,8 @@ public class MainActivity extends AppCompatActivity {
                                                 searchBarText));
                             } else {
                                 appMenu = new PopupMenu(MainActivity.this, view);
-                                appMenu.getMenuInflater().inflate(R.menu.menu_search, appMenu.getMenu());
-                                appMenu.setOnMenuItemClickListener(
-                                        new PopupMenu.OnMenuItemClickListener() {
-                                            @Override public boolean onMenuItemClick(MenuItem menuItem) {
-                                                String provider_id = "";
-                                                switch (menuItem.getItemId()) {
-                                                    case R.id.provider_google:
-                                                        provider_id = "google";
-                                                        break;
-                                                    case R.id.provider_ddg:
-                                                        provider_id = "ddg";
-                                                        break;
-                                                    case R.id.provider_searx:
-                                                        provider_id = "searx";
-                                                        break;
-                                                    default:
-                                                        // No-op.
-                                                }
-                                                appsAdapter.resetFilter();
-                                                Utils.openLink(MainActivity.this,
-                                                        PreferenceHelper.getSearchProvider(
-                                                                provider_id) + URLEncoder.encode(
-                                                                searchBarText));
-                                                return true;
-                                            }
-                                        });
-                                appMenu.show();
+                                ViewUtils.createSearchMenu(MainActivity.this, appMenu,
+                                        URLEncoder.encode(searchBarText));
                             }
                         }
                     }).show();
