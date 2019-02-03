@@ -1057,13 +1057,7 @@ public class MainActivity extends AppCompatActivity {
                     searchContainer.setVisibility(View.INVISIBLE);
 
                     // Also animate the container when it's disappearing.
-                    searchContainer.animate().alpha(0).setDuration(animateDuration)
-                                   .setListener(new AnimatorListenerAdapter() {
-                                       @Override
-                                       public void onAnimationEnd(Animator animation) {
-                                           searchContainer.clearAnimation();
-                                       }
-                                   });
+                    searchContainer.animate().alpha(0f).setDuration(animateDuration);
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
                     doThis("show_panel");
                 }
