@@ -8,8 +8,6 @@ import android.widget.PopupMenu;
 import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.net.URLEncoder;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -123,7 +121,7 @@ public class ViewUtils {
                                 // No-op.
                         }
                         Utils.openLink(activity, PreferenceHelper.getSearchProvider(
-                                provider_id) + URLEncoder.encode(query));
+                                provider_id) + query);
                         return true;
                     }
                 });
