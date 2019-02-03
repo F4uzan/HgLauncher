@@ -711,9 +711,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         break;
                     case R.id.action_info:
-                        startActivity(new Intent(
-                                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                packageNameUri));
+                        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageNameUri));
                         break;
                     case R.id.action_uninstall:
                         startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageNameUri));
