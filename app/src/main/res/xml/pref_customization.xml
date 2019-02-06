@@ -212,6 +212,7 @@
             android:title="@string/about_libraries" />
 
         <androidx.preference.Preference
+            android:icon="@mipmap/ic_launcher"
             android:key="version_key"
             android:summary="@string/app_version"
             android:title="@string/app_name" />
