@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -223,8 +222,8 @@ public class AppUtils {
                         icon = ri.activityInfo.loadIcon(manager);
                         if (PreferenceHelper.appTheme().equals("light")
                                 && PreferenceHelper.shadeAdaptiveIcon()
-                                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                                && icon instanceof AdaptiveIconDrawable) {
+                                && (Utils.atLeastOreo()
+                                && icon instanceof AdaptiveIconDrawable)) {
                             icon = LauncherIconHelper.drawAdaptiveShadow(icon);
                         }
                     } else {

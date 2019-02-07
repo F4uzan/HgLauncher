@@ -3,6 +3,7 @@ package mono.hg.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 public class Utils {
@@ -32,6 +33,44 @@ public class Utils {
                 Log.e(tag, message);
                 break;
         }
+    }
+
+    /**
+     * Checks whether the system SDK version is around the specified version.
+     *
+     * @param version Version expected to compare against the system's SDK.
+     *
+     * @return True if system SDK version is equal to or more than the specified version.
+     */
+    public static boolean sdkIsAround(int version) {
+        return Build.VERSION.SDK_INT >= version;
+    }
+
+    /**
+     * Checks whether the system is at least KitKat.
+     *
+     * @return True when system SDK version is equal to or more than 19 (KitKat).
+     */
+    public static boolean atLeastKitKat() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+    }
+
+    /**
+     * Checks whether the system is at least Lollipop.
+     *
+     * @return True when the system SDK is equal to or more than 21 (L).
+     */
+    public static boolean atLeastLollipop() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    }
+
+    /**
+     * Checks whether the system is at least Oreo.
+     *
+     * @return True when the system SDK is equal to or more than 26 (O).
+     */
+    public static boolean atLeastOreo() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
     /**

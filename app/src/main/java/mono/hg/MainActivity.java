@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Editable;
@@ -397,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
         // See if any of the system bars needed hiding.
         switch (PreferenceHelper.getWindowBarMode()) {
             case "status":
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                if (Utils.atLeastKitKat()) {
                     getWindow().getDecorView().setSystemUiVisibility(
                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -406,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case "nav":
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                if (Utils.atLeastKitKat()) {
                     getWindow().getDecorView().setSystemUiVisibility(
                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -415,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case "both":
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                if (Utils.atLeastKitKat()) {
                     getWindow().getDecorView().setSystemUiVisibility(
                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -562,7 +561,7 @@ public class MainActivity extends AppCompatActivity {
     private void applyPrefToViews() {
         // Workaround v21+ status bar transparency issue.
         // This is disabled if the status bar is hidden.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+        if (Utils.atLeastLollipop()
                 && (PreferenceHelper.getWindowBarMode().equals("none")
                 || PreferenceHelper.getWindowBarMode().equals("nav"))) {
             getWindow().getDecorView().setSystemUiVisibility(
@@ -592,7 +591,7 @@ public class MainActivity extends AppCompatActivity {
         if (PreferenceHelper.useWallpaperShade()) {
             View wallpaperShade = findViewById(R.id.wallpaper_shade);
             // Tints the navigation bar with a semi-transparent shade.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Utils.atLeastLollipop()) {
                 getWindow().setNavigationBarColor(
                         getResources().getColor(R.color.navigationBarShade));
             }
@@ -1106,7 +1105,7 @@ public class MainActivity extends AppCompatActivity {
             appWidgetHostView.setMinimumHeight(appWidgetInfo.minHeight);
             appWidgetHostView.setMinimumWidth(appWidgetInfo.minWidth);
             appWidgetHostView.setAppWidget(widgetId, appWidgetInfo);
-            if (Build.VERSION.SDK_INT > 15) {
+            if (Utils.sdkIsAround(16)) {
                 appWidgetHostView.updateAppWidgetSize(null, appWidgetInfo.minWidth,
                         appWidgetInfo.minHeight, appWidgetInfo.minWidth, appWidgetInfo.minHeight);
             }
