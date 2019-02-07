@@ -65,6 +65,15 @@ public class Utils {
     }
 
     /**
+     * Checks whether the system is at least Marshmallow.
+     *
+     * @return True when the system SDK is equal to or more than 23 (M).
+     */
+    public static boolean atLeastMarshmallow() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    }
+
+    /**
      * Checks whether the system is at least Oreo.
      *
      * @return True when the system SDK is equal to or more than 26 (O).
