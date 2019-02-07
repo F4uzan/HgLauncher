@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -22,11 +21,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.helpers.PreferenceHelper;
+import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
 
 public class PreferenceFragment extends PreferenceFragmentCompat {
@@ -52,19 +51,13 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         ListPreference gestureRightList = (ListPreference) findPreference("gesture_right");
 
         // Adaptive icon is not available before Android O/API 26.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            PreferenceCategory appListPreference = (PreferenceCategory) findPreference(
-                    "icon_prefs");
-            Preference adaptiveShadePreference = findPreference("adaptive_shade_switch");
-            appListPreference.removePreference(adaptiveShadePreference);
+        if (Utils.atLeastOreo()) {
+            findPreference("adaptive_shade_switch").setVisible(true);
         }
 
         // Window bar hiding works only reliably in KitKat and above.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            PreferenceCategory desktopPreference = (PreferenceCategory) findPreference(
-                    "desktop");
-            Preference windowBarPreference = findPreference("windowbar_mode");
-            desktopPreference.removePreference(windowBarPreference);
+        if (Utils.atLeastKitKat()) {
+            findPreference("windowbar_mode").setVisible(true);
         }
 
         setIconList(iconList);
@@ -250,7 +243,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     // Used to check for storage permission.
     // Throws true when API is less than M.
     private boolean hasStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Utils.atLeastMarshmallow()) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     PERMISSION_STORAGE_CODE);
         } else {

@@ -1,13 +1,14 @@
 <androidx.preference.PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:key="settings"
     android:title="@string/title_activity_settings"
     tools:ignore="UnusedAttribute">
 
     <androidx.preference.PreferenceCategory
-        android:title="@string/pref_header_interface"
-        android:key="interface">
+        android:key="interface"
+        android:title="@string/pref_header_interface">
 
         <androidx.preference.DropDownPreference
             android:defaultValue="light"
@@ -22,8 +23,8 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
-        android:title="@string/pref_header_gestures"
-        android:key="gestures">
+        android:key="gestures"
+        android:title="@string/pref_header_gestures">
 
         <androidx.preference.ListPreference
             android:defaultValue="none"
@@ -48,13 +49,14 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
-        android:title="@string/pref_header_wall"
-        android:key="desktop">
+        android:key="desktop"
+        android:title="@string/pref_header_wall">
 
         <androidx.preference.DropDownPreference
             android:defaultValue="none"
             android:entries="@array/pref_windowbar_title"
             android:entryValues="@array/pref_windowbar_values"
+            app:isPreferenceVisible="false"
             android:key="windowbar_mode"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
@@ -70,14 +72,14 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
-        android:title="@string/pref_header_search_bar"
-        android:key="search_bar">
+        android:key="search_bar"
+        android:title="@string/pref_header_search_bar">
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="web_search_enabled"
-            android:title="@string/web_search"
-            android:summary="@string/web_search_desc" />
+            android:summary="@string/web_search_desc"
+            android:title="@string/web_search" />
 
         <androidx.preference.DropDownPreference
             android:defaultValue="none"
@@ -99,8 +101,8 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
-        android:title="@string/pref_header_icons"
-        android:key="icon_prefs">
+        android:key="icon_prefs"
+        android:title="@string/pref_header_icons">
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
@@ -120,13 +122,14 @@
             android:defaultValue="false"
             android:key="adaptive_shade_switch"
             android:summary="@string/shadow_adaptive_icon_desc"
-            android:title="@string/shadow_adaptive_icon" />
+            android:title="@string/shadow_adaptive_icon"
+            app:isPreferenceVisible="false" />
 
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
-        android:title="@string/pref_header_list"
-        android:key="app_list">
+        android:key="app_list"
+        android:title="@string/pref_header_list">
 
         <androidx.preference.Preference
             android:key="hidden_apps_menu"
@@ -141,8 +144,8 @@
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
-            android:key="static_favourites_panel_switch"
             android:dependency="favourites_panel_switch"
+            android:key="static_favourites_panel_switch"
             android:summary="@string/static_favourites_desc"
             android:title="@string/static_favourites" />
 
@@ -150,8 +153,7 @@
             android:defaultValue="false"
             android:key="comfy_padding"
             android:summary="@string/comfy_padding_desc"
-            android:title="@string/comfy_padding"
-             />
+            android:title="@string/comfy_padding" />
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
@@ -182,8 +184,8 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
-        android:title="@string/pref_header_backup_restore"
-        android:key="backup_restore">
+        android:key="backup_restore"
+        android:title="@string/pref_header_backup_restore">
 
         <androidx.preference.Preference
             android:key="backup"
@@ -203,8 +205,8 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
-        android:title="@string/pref_header_about"
-        android:key="about_credit">
+        android:key="about_credit"
+        android:title="@string/pref_header_about">
 
         <androidx.preference.Preference
             android:key="about_libraries"
