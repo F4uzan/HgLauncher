@@ -153,11 +153,11 @@ public class AppUtils {
     }
 
     /**
-     * Counts the number of installed package in the system.
+     * Counts the number of installed package in the system. This function leaves out disabled packages.
      *
      * @param packageManager PackageManager to use for counting the list of installed packages.
      *
-     * @return The number of installed packages. Zero if any exception occurs.
+     * @return The number of installed packages, but without disabled packages.
      */
     public static int countInstalledPackage(PackageManager packageManager) {
         int count = 0;
