@@ -351,16 +351,11 @@ public class MainActivity extends AppCompatActivity {
         slidingHome.setPanelDurationMultiplier(Settings.System.getFloat(getContentResolver(),
                 Settings.System.TRANSITION_ANIMATION_SCALE, 0));
 
-        if (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty()) {
-            // Stupid logic: if it has finished loading, then it can't be empty.
-            // Try to reload to see if it's a fault on our side.
+        if (AppUtils.hasNewPackage(manager) || (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty())) {
             new getAppTask(this).execute();
         }
 
         registerPackageReceiver();
-        if (AppUtils.hasNewPackage(manager)) {
-            new getAppTask(this).execute();
-        }
 
         // Show the app list when needed.
         if (PreferenceHelper.keepAppList()) {

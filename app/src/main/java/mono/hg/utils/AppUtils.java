@@ -160,7 +160,13 @@ public class AppUtils {
      * @return The number of installed packages. Zero if any exception occurs.
      */
     public static int countInstalledPackage(PackageManager packageManager) {
-        return packageManager.getInstalledApplications(0).size();
+        int count = 0;
+        for (ApplicationInfo applicationInfo : packageManager.getInstalledApplications(0)) {
+            if (applicationInfo.enabled) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
