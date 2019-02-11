@@ -4,10 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/libs_list"
+    <TextView
+        android:id="@+id/credits_placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:entries="@array/pref_libraries" />
+        android:paddingTop="5dp"
+        android:paddingStart="19dp"
+        android:paddingLeft="19dp"
+        android:paddingEnd="15dp"
+        android:paddingRight="15dp"
+        android:textIsSelectable="true" />
 
 </LinearLayout>

@@ -182,17 +182,17 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     }
 
     private void addFragmentListener() {
-        final Preference librariesDialogue = findPreference("about_libraries");
+        final Preference credits = findPreference("about_credits");
         Preference restoreMenu = findPreference("restore");
         Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
         final Preference backupMenu = findPreference("backup");
         Preference resetMenu = findPreference("reset");
 
-        librariesDialogue.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        credits.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                DialogFragment librariesInfo = new LibraryInfoFragment();
-                librariesInfo.show(requireActivity().getFragmentManager(), "LibrariesInfo");
+                DialogFragment creditsInfo = new CreditsDialogFragment();
+                creditsInfo.show(requireActivity().getFragmentManager(), "CreditsDialog");
                 return false;
             }
         });

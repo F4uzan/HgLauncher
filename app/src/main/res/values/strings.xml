@@ -25,6 +25,7 @@
     <string name="search_web_hint">Search for \'%1$s\' online.</string>
     <string name="search_web_button_prompt">With</string>
     <string name="search_web_button">Go</string>
+    <string name="dialogue_action_close">Close</string>
 
     <!-- Warning/Information messages -->
     <string name="warn_pinning">Enable favourites panel to see pinned apps.</string>

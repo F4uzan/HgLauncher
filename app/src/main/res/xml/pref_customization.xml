@@ -209,9 +209,9 @@
         android:title="@string/pref_header_about">
 
         <androidx.preference.Preference
-            android:key="about_libraries"
-            android:summary="@string/about_libraries_desc"
-            android:title="@string/about_libraries" />
+            android:key="about_credits"
+            android:summary="@string/about_credits_desc"
+            android:title="@string/about_credits" />
 
         <androidx.preference.Preference
             android:icon="@mipmap/ic_launcher"

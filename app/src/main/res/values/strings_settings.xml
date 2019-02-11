@@ -42,22 +42,10 @@
     <string name="backup_complete">Backup saved!</string>
     <string name="backup_empty">Backup name cannot be empty.</string>
 
-    <!-- Libraries licence dialogue.  -->
-    <!-- TODO: Somehow splitting this to en-US and en-GB is a good idea in my mind. -->
-    <string name="about_libraries_dialogue_title">Licences</string>
-    <string name="about_libraries">Open source licences</string>
-    <string name="about_libraries_desc">Licence for libraries used in this launcher.</string>
-
-    <!-- Libraries name and license link. Ignore this when translating. -->
-    <string name="lib_slidinguppanel" translatable="false">SlidingUpPanel</string>
-    <string name="lib_slidinguppanel_url" translatable="false">https://github.com/umano/AndroidSlidingUpPanel/blob/master/LICENSE.txt</string>
-    <string name="lib_material_preferences" translatable="false">material-preferences</string>
-    <string name="lib_material_preferences_url" translatable="false">https://github.com/ferrannp/material-preferences/blob/master/LICENSE</string>
-    <string name="lib_recyclerview_fastscroll" translatable="false">RecyclerView-FastScroll</string>
-    <string name="lib_recyclerview_fastscroll_url" translatable="false">https://github.com/timusus/RecyclerView-FastScroll/blob/master/NOTICE</string>
-    <string name="lib_flexibleadapter" translatable="false">FlexibleAdapter</string>
-    <string name="lib_flexibleadapter_url" translatable="false">https://github.com/davideas/FlexibleAdapter/blob/master/LICENSE</string>
-
+    <!-- Credits dialogue. -->
+    <string name="about_credits_dialogue_title">Credits</string>
+    <string name="about_credits">Credits</string>
+    <string name="about_credits_desc">Credits for everyone involved in this launcher.</string>
     <!-- Customizations -->
     <string name="app_theme">App theme</string>
     <string name="app_theme_light">Light</string>

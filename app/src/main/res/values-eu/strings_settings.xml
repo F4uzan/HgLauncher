@@ -37,12 +37,6 @@
     <string name="backup_complete">Babes-kopia gorde da!</string>
     <string name="backup_empty">Babes-kopiaren izena ezin da hutsik egon.</string>
 
-    <!-- Libraries licence dialogue.  -->
-    <!-- TODO: Somehow splitting this to en-US and en-GB is a good idea in my mind. -->
-    <string name="about_libraries_dialogue_title">Lizentziak</string>
-    <string name="about_libraries">Iturburu irekiko lizentziak</string>
-    <string name="about_libraries_desc">Abiarazle honetan erabilitako liburutegien lizentziak.</string>
-
     <!-- Customizations -->
     <string name="app_theme">Aplikazioaren itxura</string>
     <string name="app_theme_light">Argia</string>

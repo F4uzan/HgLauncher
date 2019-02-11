@@ -1,0 +1,9 @@
+Icon Design: tebriz159 (https://github.com/tebriz159)
+
+Translators:
+- Basque: Aitor Beriain (https://github.com/beriain)
+
+Libraries:
+- AndroidSlidingUpPanel: Original work by umano (https://github.com/umano/AndroidSlidingUpPanel), modified for HgLauncher by F4 (https://github.com/F4uzan/AndroidSlidingUpPanel). Licensed under Apache v2.
+- RecyclerView-FastScroll: Tim Malseed (https://github.com/timusus/RecyclerView-FastScroll). Licensed under Apache v2.
+- FlexibleAdapter: Davide Steduto (https://github.com/davideas/FlexibleAdapter). Licensed under Apache v2.
