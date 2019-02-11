@@ -8,6 +8,5 @@
       android:fillColor="#202020"/>
   <path
       android:pathData="M-1,0h256v512h-256z"
-      android:strokeWidth="0"
       android:fillColor="#fff"/>
 </vector>
