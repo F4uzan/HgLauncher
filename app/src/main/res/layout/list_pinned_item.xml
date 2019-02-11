@@ -9,7 +9,7 @@
     android:foreground="?android:attr/selectableItemBackground">
 
     <ImageView
-        android:id="@+id/item_app_icon"
+        android:id="@+id/item_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center"

@@ -32,11 +32,11 @@ public class FileFolderAdapter extends BaseAdapter {
 
         if (view == null) {
             view = Utils.requireNonNull(inflater)
-                        .inflate(R.layout.files_folder_list, parent, false);
+                        .inflate(R.layout.list_generic_item, parent, false);
 
             holder = new ViewHolder();
-            holder.content = view.findViewById(R.id.item_content);
-            holder.name = view.findViewById(R.id.item_content_name);
+            holder.content = view.findViewById(R.id.item_icon);
+            holder.name = view.findViewById(R.id.item_name);
 
             view.setTag(holder);
         } else {

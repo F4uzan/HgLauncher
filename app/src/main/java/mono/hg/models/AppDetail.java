@@ -60,7 +60,7 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
     }
 
     @Override public int getLayoutRes() {
-        return R.layout.app_list;
+        return R.layout.list_generic_item;
     }
 
     @Override public AppDetail.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
@@ -85,8 +85,8 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
 
         ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
-            name = view.findViewById(R.id.item_app_name);
-            icon = view.findViewById(R.id.item_app_icon);
+            name = view.findViewById(R.id.item_name);
+            icon = view.findViewById(R.id.item_icon);
         }
     }
 }

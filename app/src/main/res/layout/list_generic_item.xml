@@ -9,14 +9,14 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/item_app_icon"
+        android:id="@+id/item_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="start"
         android:contentDescription="@string/desc_icon" />
 
     <TextView
-        android:id="@+id/item_app_name"
+        android:id="@+id/item_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"

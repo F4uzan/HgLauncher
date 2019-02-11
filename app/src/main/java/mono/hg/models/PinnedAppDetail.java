@@ -17,7 +17,7 @@ public class PinnedAppDetail extends AppDetail {
     }
 
     @Override public int getLayoutRes() {
-        return R.layout.pinned_app_list;
+        return R.layout.list_pinned_item;
     }
 
     @Override public PinnedAppDetail.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {

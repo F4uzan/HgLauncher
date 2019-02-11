@@ -32,12 +32,12 @@ public class HiddenAppAdapter extends BaseAdapter {
         View view = convertView;
 
         if (view == null) {
-            view = Utils.requireNonNull(inflater).inflate(R.layout.app_list, parent, false);
+            view = Utils.requireNonNull(inflater).inflate(R.layout.list_generic_item, parent, false);
 
             appHolder = new ViewHolder();
 
-            appHolder.icon = view.findViewById(R.id.item_app_icon);
-            appHolder.name = view.findViewById(R.id.item_app_name);
+            appHolder.icon = view.findViewById(R.id.item_icon);
+            appHolder.name = view.findViewById(R.id.item_name);
 
             view.setTag(appHolder);
         } else {
