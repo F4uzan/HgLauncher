@@ -351,7 +351,8 @@ public class MainActivity extends AppCompatActivity {
         slidingHome.setPanelDurationMultiplier(Settings.System.getFloat(getContentResolver(),
                 Settings.System.TRANSITION_ANIMATION_SCALE, 0));
 
-        if (AppUtils.hasNewPackage(manager) || (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty())) {
+        if (AppUtils.hasNewPackage(
+                manager) || (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty())) {
             new getAppTask(this).execute();
         }
 
@@ -705,7 +706,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         break;
                     case R.id.action_info:
-                        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageNameUri));
+                        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                packageNameUri));
                         break;
                     case R.id.action_uninstall:
                         startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageNameUri));
@@ -982,9 +984,8 @@ public class MainActivity extends AppCompatActivity {
                 String orderedPinnedApps = "";
 
                 // Iterate through the list to get package name of each pinned apps, then stringify them.
-                for (int i = 0; i < pinnedAppList.size(); i++) {
-                    orderedPinnedApps = orderedPinnedApps.concat(
-                            pinnedAppList.get(i).getPackageName() + ";");
+                for (AppDetail appDetail : pinnedAppList) {
+                    orderedPinnedApps = orderedPinnedApps.concat(appDetail.getPackageName() + ";");
                 }
 
                 // Update the saved pinned apps.
