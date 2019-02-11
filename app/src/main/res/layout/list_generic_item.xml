@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:weightSum="10"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:weightSum="10">
 
     <ImageView
         android:id="@+id/item_icon"
@@ -19,12 +18,12 @@
         android:id="@+id/item_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
         android:ellipsize="end"
-        android:textColor="?attr/textDefaultColor"
-        android:paddingEnd="10dp"
+        android:gravity="center_vertical"
         android:paddingStart="14dp"
         android:paddingLeft="14dp"
-        android:paddingRight="10dp" />
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
+        android:textColor="?attr/textDefaultColor" />
 
 </LinearLayout>

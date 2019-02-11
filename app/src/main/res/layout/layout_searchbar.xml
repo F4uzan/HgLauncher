@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/search_container"
-    android:visibility="invisible"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:orientation="horizontal"
+    android:layout_marginStart="@dimen/uniform_panel_margin"
+    android:layout_marginLeft="@dimen/uniform_panel_margin"
+    android:layout_marginEnd="@dimen/uniform_panel_margin"
+    android:layout_marginRight="@dimen/uniform_panel_margin"
     android:background="?attr/cardColor"
     android:nextFocusUp="@id/apps_list"
     android:nextFocusForward="@id/apps_list"
-    android:layout_marginStart="@dimen/uniform_panel_margin"
-    android:layout_marginEnd="@dimen/uniform_panel_margin"
-    android:layout_marginLeft="@dimen/uniform_panel_margin"
-    android:layout_marginRight="@dimen/uniform_panel_margin">
+    android:orientation="horizontal"
+    android:visibility="invisible">
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="@dimen/uniform_panel_margin"
-        android:paddingEnd="@dimen/uniform_panel_margin"
-        android:paddingLeft="@dimen/uniform_panel_margin"
-        android:paddingRight="@dimen/uniform_panel_margin"
-        android:maxLines="1"
-        android:inputType="text"
-        android:textColor="@android:color/white"
-        android:textColorHint="@color/editTextHint"
-        android:imeOptions="actionSearch|flagNoExtractUi"
+        android:background="@android:color/transparent"
         android:hint="@string/search_hint"
-        android:background="@android:color/transparent" />
+        android:imeOptions="actionSearch|flagNoExtractUi"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingStart="@dimen/uniform_panel_margin"
+        android:paddingLeft="@dimen/uniform_panel_margin"
+        android:paddingEnd="@dimen/uniform_panel_margin"
+        android:paddingRight="@dimen/uniform_panel_margin"
+        android:textColor="@android:color/white"
+        android:textColorHint="@color/editTextHint" />
 
 </FrameLayout>
