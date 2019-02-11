@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import java.io.Closeable;
+import java.io.IOException;
+
 public class Utils {
 
     /**
@@ -106,5 +109,20 @@ public class Utils {
     public static void openLink(Context context, String link) {
         Intent linkIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
         context.startActivity(linkIntent);
+    }
+
+    /**
+     * Closes a Closeable instance if it is not null.
+     *
+     * @param stream The Closeable instance to close.
+     */
+    public static void closeStream(Closeable stream) {
+        try {
+            if (stream != null) {
+                stream.close();
+            }
+        } catch (IOException ignored) {
+            // Do nothing.
+        }
     }
 }

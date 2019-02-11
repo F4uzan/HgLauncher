@@ -22,6 +22,7 @@ public class CreditsDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = View.inflate(getActivity(), R.layout.fragment_credits_dialogue, null);
         StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader br = null;
 
         builder.setTitle(R.string.about_credits_dialogue_title);
         builder.setView(view);
@@ -29,7 +30,7 @@ public class CreditsDialogFragment extends DialogFragment {
         TextView creditsText = view.findViewById(R.id.credits_placeholder);
 
         try {
-            BufferedReader br = new BufferedReader(
+            br = new BufferedReader(
                     new InputStreamReader(getActivity().getAssets().open("credits.txt")));
             String line;
             while ((line = br.readLine()) != null) {
@@ -38,6 +39,8 @@ public class CreditsDialogFragment extends DialogFragment {
             }
         } catch (IOException e) {
             Utils.sendLog(3, e.toString());
+        } finally {
+            Utils.closeStream(br);
         }
 
         creditsText.setText(stringBuilder.toString());
