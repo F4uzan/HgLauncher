@@ -1,13 +1,17 @@
 package mono.hg.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
 import java.io.Closeable;
 import java.io.IOException;
+
+import mono.hg.receivers.PackageChangesReceiver;
 
 public class Utils {
 
@@ -123,6 +127,33 @@ public class Utils {
             }
         } catch (IOException ignored) {
             // Do nothing.
+        }
+    }
+
+    /**
+     * Registers a PackageChangesReceiver on an activity.
+     *
+     * @param activity        The activity where PackageChangesReceiver is to be registered.
+     * @param packageReceiver The receiver itself.
+     */
+    public static void registerPackageReceiver(Activity activity, PackageChangesReceiver packageReceiver) {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        intentFilter.addDataScheme("package");
+        activity.registerReceiver(packageReceiver, intentFilter);
+    }
+
+    /**
+     * Unregisters a PackageChangesReceiver from an activity.
+     *
+     * @param activity        The activity where PackageChangesReceiver is to be registered.
+     * @param packageReceiver The receiver itself.
+     */
+    public static void unregisterPackageReceiver(Activity activity, PackageChangesReceiver packageReceiver) {
+        try {
+            activity.unregisterReceiver(packageReceiver);
+        } catch (IllegalArgumentException w) {
+            Utils.sendLog(0, "Failed to remove receiver!");
         }
     }
 }

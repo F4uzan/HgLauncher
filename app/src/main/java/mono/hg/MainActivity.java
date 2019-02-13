@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -177,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
     /*
      * Receiver used to listen to installed/uninstalled packages.
      */
-    private PackageChangesReceiver packageReceiver;
+    private PackageChangesReceiver packageReceiver = new PackageChangesReceiver();
 
     /*
      * Used to handle and add widgets to widgetContainer.
@@ -343,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
             doThis("hide_panel");
         }
 
-        unregisterPackageReceiver();
+        Utils.unregisterPackageReceiver(this, packageReceiver);
     }
 
     @Override public void onResume() {
@@ -360,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
             new getAppTask(this).execute();
         }
 
-        registerPackageReceiver();
+        Utils.registerPackageReceiver(this, packageReceiver);
 
         // Show the app list when needed.
         if (PreferenceHelper.keepAppList()) {
@@ -1136,22 +1135,6 @@ public class MainActivity extends AppCompatActivity {
                 0);
         appWidgetContainer.removeView(widget);
         PreferenceHelper.getEditor().remove("widget_id").putBoolean("has_widget", false).apply();
-    }
-
-    public void registerPackageReceiver() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        intentFilter.addDataScheme("package");
-        packageReceiver = new PackageChangesReceiver();
-        registerReceiver(packageReceiver, intentFilter);
-    }
-
-    public void unregisterPackageReceiver() {
-        try {
-            unregisterReceiver(packageReceiver);
-        } catch (IllegalArgumentException w) {
-            Utils.sendLog(0, "Failed to remove receiver!");
-        }
     }
 
     /**
