@@ -1,7 +1,10 @@
 package mono.hg.utils;
 
+import android.annotation.TargetApi;
 import android.content.res.Resources;
+import android.os.Build;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.PopupMenu;
 
@@ -31,6 +34,29 @@ public class ViewUtils {
         } else {
             // Return fallback size if we can't get the value from the system.
             return Resources.getSystem().getDimensionPixelSize(R.dimen.status_bar_height_fallback);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public static int setWindowbarMode(String mode) {
+        int baseLayout = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        int noStatusLayout = baseLayout
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        int noNavLayout = baseLayout
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+
+        switch (mode) {
+            case "status":
+                return noStatusLayout;
+            case "nav":
+                return noNavLayout;
+            case "both":
+                return noStatusLayout | noNavLayout;
+            case "none":
+            default:
+                return View.SYSTEM_UI_LAYOUT_FLAGS;
         }
     }
 

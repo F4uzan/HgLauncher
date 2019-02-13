@@ -60,124 +60,103 @@ import mono.hg.wrappers.OnTouchListener;
 import mono.hg.wrappers.SimpleScrollListener;
 
 public class MainActivity extends AppCompatActivity {
-
+    
+    private static int SETTINGS_RETURN_CODE = 12;
+    private static int WIDGET_CONFIG_RETURN_CODE = 2;
     /*
      * Should the favourites panel listen for scroll?
      */
     private boolean shouldShowFavourites = true;
-
     /*
      * Animation duration; fetched from system's duration.
      */
     private int animateDuration;
-
     /*
      * List containing installed apps.
      */
     private ArrayList<AppDetail> appsList = new ArrayList<>();
-
     /*
      * Adapter for installed apps.
      */
     private AppAdapter appsAdapter = new AppAdapter(appsList);
-
     /*
      * List containing pinned apps.
      */
     private ArrayList<PinnedAppDetail> pinnedAppList = new ArrayList<>();
-
     /*
      * String containing pinned apps. Delimited by a semicolon (;).
      */
     private String pinnedAppString;
-
     /*
      * Adapter for pinned apps.
      */
     private FlexibleAdapter<PinnedAppDetail> pinnedAppsAdapter = new FlexibleAdapter<>(
             pinnedAppList);
-
     /*
      * List of excluded apps. These will not be shown in the app list.
      */
     private HashSet<String> excludedAppsList = new HashSet<>();
-
     /*
      * Package manager; casted through getPackageManager().
      */
     private PackageManager manager;
-
     /*
      * RecyclerView for app list.
      */
     private RecyclerView appsRecyclerView;
-
     /*
      * LinearLayoutManager used in appsRecyclerView.
      */
     private TogglingLinearLayoutManager appsLayoutManager;
-
     /*
      * RecyclerView for pinned apps; shown in favourites panel.
      */
     private RecyclerView pinnedAppsRecyclerView;
-
     /*
      * Parent layout containing search bar.
      */
     private FrameLayout searchContainer;
-
     /*
      * Parent layout of pinned apps' RecyclerView.
      */
     private FrameLayout pinnedAppsContainer;
-
     /*
      * Parent layout for installed app list.
      */
     private RelativeLayout appListContainer;
-
     /*
      * The search bar. Contained in searchContainer.
      */
     private EditText searchBar;
-
     /*
      * Sliding up panel. Shows the app list when pulled down and
      * a parent to the other containers.
      */
     private SlidingUpPanelLayout slidingHome;
-
     /*
      * CoordinatorLayout hosting the search snackbar.
      */
     private View snackHolder;
-
     /*
      * A view used to intercept gestures and taps in the desktop.
      */
     private View touchReceiver;
-
     /*
      * View containing widget in the desktop.
      */
     private FrameLayout appWidgetContainer;
-
     /*
      * Progress bar shown when populating app list.
      */
     private IndeterminateMaterialProgressBar loadProgress;
-
     /*
      * Menu shown when long-pressing apps.
      */
     private PopupMenu appMenu;
-
     /*
      * Receiver used to listen to installed/uninstalled packages.
      */
     private PackageChangesReceiver packageReceiver = new PackageChangesReceiver();
-
     /*
      * Used to handle and add widgets to widgetContainer.
      */
@@ -300,7 +279,8 @@ public class MainActivity extends AppCompatActivity {
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivityForResult(new Intent(this, SettingsActivity.class), 12);
+                startActivityForResult(new Intent(this, SettingsActivity.class),
+                        SETTINGS_RETURN_CODE);
                 return true;
             case R.id.action_force_refresh:
                 recreate();
@@ -393,49 +373,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override public void onWindowFocusChanged(boolean hasFocus) {
         // See if any of the system bars needed hiding.
-        switch (PreferenceHelper.getWindowBarMode()) {
-            case "status":
-                if (Utils.atLeastKitKat()) {
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                }
-                break;
-            case "nav":
-                if (Utils.atLeastKitKat()) {
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                }
-                break;
-            case "both":
-                if (Utils.atLeastKitKat()) {
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                }
-                break;
-            case "none":
-            default:
-                // Do nothing.
+        if (Utils.atLeastKitKat()) {
+            getWindow().getDecorView()
+                       .setSystemUiVisibility(
+                               ViewUtils.setWindowbarMode(PreferenceHelper.getWindowBarMode()));
         }
+
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Handle preference change. 12 is arbitrary, but it should always be the same as
-        // startActivity's requestCode.
-        //
-        // We also don't restart when an alien caller is detected because a recreate() would already
-        // be on its way from onStart.
-        if (requestCode == 12 && !PreferenceHelper.wasAlien()) {
+        // Handle preference change. Refresh when necessary.
+        if (requestCode == SETTINGS_RETURN_CODE && !PreferenceHelper.wasAlien()) {
             recreate();
         }
 
@@ -443,11 +391,11 @@ public class MainActivity extends AppCompatActivity {
             int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
             AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
 
-            if (requestCode != 2 && appWidgetInfo.configure != null) {
+            if (requestCode != WIDGET_CONFIG_RETURN_CODE && appWidgetInfo.configure != null) {
                 Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
                 intent.setComponent(appWidgetInfo.configure);
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-                startActivityForResult(intent, 2);
+                startActivityForResult(intent, WIDGET_CONFIG_RETURN_CODE);
             } else {
                 addWidget(data);
             }
@@ -684,7 +632,8 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        shouldShowFavourites = PreferenceHelper.isFavouritesEnabled() && pinnedAppsAdapter.getItemCount() >= 1;
+                        shouldShowFavourites = PreferenceHelper.isFavouritesEnabled() && pinnedAppsAdapter
+                                .getItemCount() >= 1;
                         break;
                     case R.id.action_unpin:
                         pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
