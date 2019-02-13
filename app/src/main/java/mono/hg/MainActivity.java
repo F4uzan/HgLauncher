@@ -121,10 +121,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private FrameLayout pinnedAppsContainer;
     /*
-     * Parent layout for installed app list.
-     */
-    private RelativeLayout appListContainer;
-    /*
      * The search bar. Contained in searchContainer.
      */
     private EditText searchBar;
@@ -181,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
 
-        appListContainer = findViewById(R.id.app_list_container);
         searchContainer = findViewById(R.id.search_container);
         pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
         searchBar = findViewById(R.id.search);
