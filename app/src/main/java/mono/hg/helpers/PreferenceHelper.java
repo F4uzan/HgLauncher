@@ -161,6 +161,18 @@ public class PreferenceHelper {
         editor = preferences.edit();
     }
 
+    public static void updateStringSet(String id, HashSet<String> stringSet) {
+        getEditor().putStringSet(id, stringSet).apply();
+    }
+
+    public static void updateString(String id, String string) {
+        getEditor().putString(id, string).apply();
+    }
+
+    public static void updateInt(String id, int integer) {
+        getEditor().putInt(id, integer).apply();
+    }
+
     public static void fetchPreference() {
         is_testing = preferences.getBoolean("is_grandma", false);
         has_widget = preferences.getBoolean("has_widget", false);

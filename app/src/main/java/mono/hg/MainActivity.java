@@ -60,7 +60,7 @@ import mono.hg.wrappers.OnTouchListener;
 import mono.hg.wrappers.SimpleScrollListener;
 
 public class MainActivity extends AppCompatActivity {
-    
+
     private static int SETTINGS_RETURN_CODE = 12;
     private static int WIDGET_CONFIG_RETURN_CODE = 2;
     /*
@@ -238,8 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
         registerForContextMenu(touchReceiver);
 
-        PreferenceHelper.getEditor()
-                        .putInt("package_count", AppUtils.countInstalledPackage(manager)).apply();
+        PreferenceHelper.updateInt("package_count", AppUtils.countInstalledPackage(manager));
 
         if (!pinnedAppString.isEmpty()) {
             for (String pinnedApp : pinnedAppString.split(";")) {
@@ -624,9 +623,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_pin:
                         AppUtils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
-                        PreferenceHelper.getEditor()
-                                        .putString("pinned_apps_list", pinnedAppString)
-                                        .apply();
+                        PreferenceHelper.updateString("pinned_apps_list", pinnedAppString);
                         if (!PreferenceHelper.isFavouritesEnabled()) {
                             Toast.makeText(MainActivity.this, R.string.warn_pinning,
                                     Toast.LENGTH_SHORT).show();
@@ -639,9 +636,7 @@ public class MainActivity extends AppCompatActivity {
                         pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
                         pinnedAppsAdapter.removeItem(finalPosition);
                         pinnedAppString = pinnedAppString.replace(packageName + ";", "");
-                        PreferenceHelper.getEditor()
-                                        .putString("pinned_apps_list", pinnedAppString)
-                                        .apply();
+                        PreferenceHelper.updateString("pinned_apps_list", pinnedAppString);
                         if (pinnedAppsAdapter.isEmpty()) {
                             doThis("hide_favourites");
                         }
@@ -656,9 +651,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_hide:
                         // Add the app's package name to the exclusion list.
                         excludedAppsList.add(packageName);
-                        PreferenceHelper.getEditor()
-                                        .putStringSet("hidden_apps", excludedAppsList)
-                                        .apply();
+
+                        PreferenceHelper.updateStringSet("hidden_apps", excludedAppsList);
+
                         // Reload the app list!
                         appsList.remove(appsAdapter.getItem(finalPosition));
                         appsAdapter.removeItem(finalPosition);
@@ -929,9 +924,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // Update the saved pinned apps.
-                PreferenceHelper.getEditor()
-                                .putString("pinned_apps_list", orderedPinnedApps)
-                                .apply();
+                PreferenceHelper.updateString("pinned_apps_list", orderedPinnedApps);
 
                 // Also update pinnedAppString for future references.
                 pinnedAppString = orderedPinnedApps;

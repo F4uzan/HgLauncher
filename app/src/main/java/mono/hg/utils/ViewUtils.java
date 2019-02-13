@@ -72,8 +72,7 @@ public class ViewUtils {
                     @Override
                     public boolean onPreDraw() {
                         snackbar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
-                        ((CoordinatorLayout.LayoutParams) snackbar.getView()
-                                                                  .getLayoutParams()).setBehavior(
+                        ((CoordinatorLayout.LayoutParams) snackbar.getView().getLayoutParams()).setBehavior(
                                 null);
                         return true;
                     }
