@@ -140,7 +140,7 @@ public class PreferenceHelper {
                 return "https://www.searx.me/?q=";
             default:
                 // We can't go here. Return an empty string just in case.
-               return "";
+                return "";
         }
     }
 
@@ -161,15 +161,15 @@ public class PreferenceHelper {
         editor = preferences.edit();
     }
 
-    public static void updateStringSet(String id, HashSet<String> stringSet) {
+    public static void update(String id, HashSet<String> stringSet) {
         getEditor().putStringSet(id, stringSet).apply();
     }
 
-    public static void updateString(String id, String string) {
+    public static void update(String id, String string) {
         getEditor().putString(id, string).apply();
     }
 
-    public static void updateInt(String id, int integer) {
+    public static void update(String id, int integer) {
         getEditor().putInt(id, integer).apply();
     }
 
@@ -195,6 +195,7 @@ public class PreferenceHelper {
         gesture_left_action = preferences.getString("gesture_left", "none");
         gesture_right_action = preferences.getString("gesture_right", "none");
 
-        exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps", new HashSet<String>());
+        exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps",
+                new HashSet<String>());
     }
 }

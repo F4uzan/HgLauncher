@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
         registerForContextMenu(touchReceiver);
 
-        PreferenceHelper.updateInt("package_count", AppUtils.countInstalledPackage(manager));
+        PreferenceHelper.update("package_count", AppUtils.countInstalledPackage(manager));
 
         if (!pinnedAppString.isEmpty()) {
             for (String pinnedApp : pinnedAppString.split(";")) {
@@ -623,7 +623,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_pin:
                         AppUtils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
-                        PreferenceHelper.updateString("pinned_apps_list", pinnedAppString);
+                        PreferenceHelper.update("pinned_apps_list", pinnedAppString);
                         if (!PreferenceHelper.isFavouritesEnabled()) {
                             Toast.makeText(MainActivity.this, R.string.warn_pinning,
                                     Toast.LENGTH_SHORT).show();
@@ -636,7 +636,7 @@ public class MainActivity extends AppCompatActivity {
                         pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
                         pinnedAppsAdapter.removeItem(finalPosition);
                         pinnedAppString = pinnedAppString.replace(packageName + ";", "");
-                        PreferenceHelper.updateString("pinned_apps_list", pinnedAppString);
+                        PreferenceHelper.update("pinned_apps_list", pinnedAppString);
                         if (pinnedAppsAdapter.isEmpty()) {
                             doThis("hide_favourites");
                         }
@@ -652,7 +652,7 @@ public class MainActivity extends AppCompatActivity {
                         // Add the app's package name to the exclusion list.
                         excludedAppsList.add(packageName);
 
-                        PreferenceHelper.updateStringSet("hidden_apps", excludedAppsList);
+                        PreferenceHelper.update("hidden_apps", excludedAppsList);
 
                         // Reload the app list!
                         appsList.remove(appsAdapter.getItem(finalPosition));
@@ -924,7 +924,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // Update the saved pinned apps.
-                PreferenceHelper.updateString("pinned_apps_list", orderedPinnedApps);
+                PreferenceHelper.update("pinned_apps_list", orderedPinnedApps);
 
                 // Also update pinnedAppString for future references.
                 pinnedAppString = orderedPinnedApps;

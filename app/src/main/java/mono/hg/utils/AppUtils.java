@@ -193,7 +193,7 @@ public class AppUtils {
     public static boolean hasNewPackage(PackageManager packageManager) {
         if (PreferenceHelper.getPreference().getInt("package_count", 0) != countInstalledPackage(
                 packageManager)) {
-            PreferenceHelper.updateInt("package_count", countInstalledPackage(packageManager));
+            PreferenceHelper.update("package_count", countInstalledPackage(packageManager));
             return true;
         }
         return false;
