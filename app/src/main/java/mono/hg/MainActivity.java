@@ -19,12 +19,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -478,10 +476,6 @@ public class MainActivity extends AppCompatActivity {
                                    });
                 break;
             case "hide_favourites":
-                appsRecyclerView.animate()
-                                .translationY(1f)
-                                .setInterpolator(new OvershootInterpolator())
-                                .setDuration(animateDuration);
                 pinnedAppsContainer.animate()
                                    .translationY(pinnedAppsContainer.getMeasuredHeight())
                                    .setInterpolator(new LinearOutSlowInInterpolator())
