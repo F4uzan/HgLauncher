@@ -102,9 +102,6 @@
     <string name="pref_shade_view">Shadow over wallpaper</string>
     <string name="pref_shade_view_desc">Add a visible shadow to shade over wallpaper. Recommended for light wallpapers.</string>
 
-    <string name="comfy_padding">Comfortable padding mode</string>
-    <string name="comfy_padding_desc">Create padding around the app panel for a uniform look.</string>
-
     <string name="static_favourites">Persistent favourites panel</string>
     <string name="static_favourites_desc">Keep favourites panel visibility regardless of scroll events.</string>
 

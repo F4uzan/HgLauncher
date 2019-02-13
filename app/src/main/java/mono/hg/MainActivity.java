@@ -570,16 +570,6 @@ public class MainActivity extends AppCompatActivity {
             homeParams.topMargin = ViewUtils.getStatusBarHeight();
         }
 
-        // Empty out margins if they are not needed.
-        if (!PreferenceHelper.usesComfyPadding()) {
-            ViewGroup.MarginLayoutParams searchParams = (ViewGroup.MarginLayoutParams) searchContainer
-                    .getLayoutParams();
-            ViewGroup.MarginLayoutParams listParams = (ViewGroup.MarginLayoutParams) appListContainer
-                    .getLayoutParams();
-            searchParams.setMargins(0, 0, 0, 0);
-            listParams.setMargins(0, 0, 0, 0);
-        }
-
         // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
         if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppsAdapter.isEmpty()) {
             pinnedAppsContainer.setVisibility(View.GONE);

@@ -91,10 +91,7 @@
 
     <string name="pref_shade_view">Itzala horma-paperaren gainean</string>
     <string name="pref_shade_view_desc">Itzala gehitzen du horma-paperaren gainean. Horma-paper argientzako gomendagarria.</string>
-
-    <string name="comfy_padding">Betegarri eroso modua</string>
-    <string name="comfy_padding_desc">Zati betegarri bat marrazten du aplikazioen panelaren inguruan itxura uniforme bat lortzeko.</string>
-
+    
     <string name="static_favourites">Gogokoenen panel iraunkorra</string>
     <string name="static_favourites_desc">Gogokoenen panelaren ikusgaitasuna mantendu desplazamendu gertaerak alde batera utzita.</string>
 

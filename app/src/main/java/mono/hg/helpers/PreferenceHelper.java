@@ -12,7 +12,6 @@ public class PreferenceHelper {
     private static boolean shade_view;
     private static boolean keyboard_focus;
     private static boolean web_search_enabled;
-    private static boolean comfy_padding;
     private static boolean tap_to_drawer;
     private static boolean favourites_panel;
     private static boolean static_favourites_panel;
@@ -71,10 +70,6 @@ public class PreferenceHelper {
 
     public static boolean shouldFocusKeyboard() {
         return keyboard_focus;
-    }
-
-    public static boolean usesComfyPadding() {
-        return comfy_padding;
     }
 
     public static boolean allowTapToOpen() {
@@ -176,7 +171,6 @@ public class PreferenceHelper {
                                 .equals("invertedAlphabetical");
         shade_view = preferences.getBoolean("shade_view_switch", false);
         keyboard_focus = preferences.getBoolean("keyboard_focus", false);
-        comfy_padding = preferences.getBoolean("comfy_padding", false);
         tap_to_drawer = preferences.getBoolean("tap_to_drawer", true);
         app_theme = preferences.getString("app_theme", "light");
         web_search_enabled = preferences.getBoolean("web_search_enabled", true);
