@@ -265,7 +265,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (!pinnedAppString.isEmpty()) {
             for (String pinnedApp : pinnedAppString.split(";")) {
-                AppUtils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
+                if (AppUtils.doesComponentExist(manager, pinnedApp)) {
+                    AppUtils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
+                } else {
+                    Utils.sendLog(3, "Not pinning " + pinnedApp + "; is app installed?");
+                }
             }
         }
 

@@ -44,6 +44,19 @@ public class AppUtils {
     }
 
     /**
+     * Checks if a certain application is installed based off of its flattened component name.
+     *
+     * @param packageManager PackageManager object to use for checking the requested
+     *                       package's existence.
+     * @param componentName  The component name belonging to the application to be checked.
+     *
+     * @return True if application is installed.
+     */
+    public static boolean doesComponentExist(PackageManager packageManager, String componentName) {
+        return isAppInstalled(packageManager, getPackageName(componentName));
+    }
+
+    /**
      * Checks with its package name, if an application is a system app, or is the app
      * is installed as a system app.
      *
