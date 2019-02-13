@@ -693,9 +693,8 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, R.string.warn_pinning,
                                     Toast.LENGTH_SHORT).show();
                         }
-                        if (PreferenceHelper.isFavouritesEnabled() && pinnedAppsAdapter.getItemCount() == 1) {
-                            shouldShowFavourites = true;
-                        }
+
+                        shouldShowFavourites = PreferenceHelper.isFavouritesEnabled() && pinnedAppsAdapter.getItemCount() >= 1;
                         break;
                     case R.id.action_unpin:
                         pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
@@ -736,7 +735,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Listeners for touch receivers.
-     * TODO: Implement more swipe actions and listen for them.
      */
     private void addGestureListener() {
         // Handle touch events in touchReceiver.
