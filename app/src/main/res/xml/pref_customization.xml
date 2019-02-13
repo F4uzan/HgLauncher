@@ -148,13 +148,7 @@
             android:key="static_favourites_panel_switch"
             android:summary="@string/static_favourites_desc"
             android:title="@string/static_favourites" />
-
-        <androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="comfy_padding"
-            android:summary="@string/comfy_padding_desc"
-            android:title="@string/comfy_padding" />
-
+        
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="static_app_list_switch"
