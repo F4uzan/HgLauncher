@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private boolean shouldShowFavourites = true;
     /*
+     * Are we resuming this activity?
+     */
+    private boolean isResuming = false;
+    /*
      * Animation duration; fetched from system's duration.
      */
     private int animateDuration;
@@ -332,6 +336,8 @@ public class MainActivity extends AppCompatActivity {
         if (PreferenceHelper.keepAppList()) {
             doThis("show_panel");
         }
+
+        isResuming = true;
     }
 
     @Override public void onStart() {
@@ -365,7 +371,6 @@ public class MainActivity extends AppCompatActivity {
                        .setSystemUiVisibility(
                                ViewUtils.setWindowbarMode(PreferenceHelper.getWindowBarMode()));
         }
-
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -978,8 +983,12 @@ public class MainActivity extends AppCompatActivity {
 
                     searchContainer.setVisibility(View.INVISIBLE);
 
-                    // Also animate the container when it's disappearing.
-                    searchContainer.animate().alpha(0f).setDuration(animateDuration);
+                    // Also animate the container only when we are not resuming.
+                    if (!isResuming) {
+                        searchContainer.animate().alpha(0f).setDuration(animateDuration);
+                    }
+
+                    isResuming = false;
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
                     doThis("show_panel");
                 }
