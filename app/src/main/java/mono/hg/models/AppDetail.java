@@ -29,6 +29,11 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
         this.isAppHidden = isAppHidden;
     }
 
+    public AppDetail(@NonNull String packageName) {
+        this.packageName = packageName;
+        this.isAppHidden = false;
+    }
+
     public String getAppName() {
         return appName;
     }

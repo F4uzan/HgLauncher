@@ -68,7 +68,7 @@ public class HiddenAppsFragment extends BackHandledFragment {
         return false;
     }
 
-    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
         menu.add(0, 1, 100, getString(R.string.action_hidden_app_reset));
         menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -76,7 +76,7 @@ public class HiddenAppsFragment extends BackHandledFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
@@ -84,9 +84,7 @@ public class HiddenAppsFragment extends BackHandledFragment {
                 return true;
             case 1:
                 excludedAppList.clear();
-                PreferenceHelper.getEditor()
-                                .putStringSet("hidden_apps", new HashSet<String>())
-                                .apply();
+                PreferenceHelper.update("hidden_apps", new HashSet<String>());
 
                 // Recreate the toolbar menu to hide the 'restore all' button.
                 requireActivity().invalidateOptionsMenu();
@@ -132,10 +130,10 @@ public class HiddenAppsFragment extends BackHandledFragment {
         // Check if package is already in exclusion.
         if (excludedAppList.contains(packageName)) {
             excludedAppList.remove(packageName);
-            PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppList).apply();
+            PreferenceHelper.update("hidden_apps", excludedAppList);
         } else {
             excludedAppList.add(packageName);
-            PreferenceHelper.getEditor().putStringSet("hidden_apps", excludedAppList).apply();
+            PreferenceHelper.update("hidden_apps", excludedAppList);
         }
         appList.get(position).setAppHidden(excludedAppList.contains(packageName));
 

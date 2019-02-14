@@ -578,10 +578,10 @@ public class MainActivity extends AppCompatActivity {
 
         int position;
         if (isPinned) {
-            PinnedAppDetail selectedPackage = new PinnedAppDetail(null, packageName);
+            PinnedAppDetail selectedPackage = new PinnedAppDetail(packageName);
             position = pinnedAppsAdapter.getGlobalPositionOf(selectedPackage);
         } else {
-            AppDetail selectedPackage = new AppDetail(null, null, packageName, false);
+            AppDetail selectedPackage = new AppDetail(packageName);
             position = appsAdapter.getGlobalPositionOf(selectedPackage);
         }
 

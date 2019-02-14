@@ -16,6 +16,10 @@ public class PinnedAppDetail extends AppDetail {
         super(icon, null, packageName, false);
     }
 
+    public PinnedAppDetail(String packageName) {
+        super(packageName);
+    }
+
     @Override public int getLayoutRes() {
         return R.layout.list_pinned_item;
     }
