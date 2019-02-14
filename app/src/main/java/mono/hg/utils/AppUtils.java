@@ -90,7 +90,7 @@ public class AppUtils {
      */
     public static void pinApp(PackageManager packageManager, String componentName,
             FlexibleAdapter<PinnedAppDetail> adapter, List<PinnedAppDetail> list) {
-        if (!adapter.contains(new PinnedAppDetail(null, componentName))) {
+        if (!adapter.contains(new PinnedAppDetail(componentName))) {
             ComponentName iconComponent = ComponentName.unflattenFromString(componentName);
 
             try {

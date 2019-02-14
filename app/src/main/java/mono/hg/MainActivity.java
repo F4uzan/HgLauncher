@@ -233,15 +233,8 @@ public class MainActivity extends AppCompatActivity {
 
         PreferenceHelper.update("package_count", AppUtils.countInstalledPackage(manager));
 
-        if (!pinnedAppString.isEmpty()) {
-            for (String pinnedApp : pinnedAppString.split(";")) {
-                if (AppUtils.doesComponentExist(manager, pinnedApp)) {
-                    AppUtils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
-                } else {
-                    Utils.sendLog(3, "Not pinning " + pinnedApp + "; is app installed?");
-                }
-            }
-        }
+        // Start pinning apps.
+        updatePinnedApps(true);
 
         applyPrefToViews();
 
@@ -326,8 +319,10 @@ public class MainActivity extends AppCompatActivity {
         slidingHome.setPanelDurationMultiplier(Settings.System.getFloat(getContentResolver(),
                 Settings.System.TRANSITION_ANIMATION_SCALE, 0));
 
+        // Refresh app list and pinned apps if there is a change in package count.
         if (AppUtils.hasNewPackage(
                 manager) || (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty())) {
+            updatePinnedApps(true);
             new getAppTask(this).execute();
         }
 
@@ -905,18 +900,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override public void onActionStateChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-                String orderedPinnedApps = "";
-
-                // Iterate through the list to get package name of each pinned apps, then stringify them.
-                for (AppDetail appDetail : pinnedAppList) {
-                    orderedPinnedApps = orderedPinnedApps.concat(appDetail.getPackageName() + ";");
-                }
-
-                // Update the saved pinned apps.
-                PreferenceHelper.update("pinned_apps_list", orderedPinnedApps);
-
-                // Also update pinnedAppString for future references.
-                pinnedAppString = orderedPinnedApps;
+                updatePinnedApps(false);
             }
         });
     }
@@ -1054,6 +1038,37 @@ public class MainActivity extends AppCompatActivity {
                 0);
         appWidgetContainer.removeView(widget);
         PreferenceHelper.getEditor().remove("widget_id").putBoolean("has_widget", false).apply();
+    }
+
+    /**
+     * Updates the favourites panel.
+     *
+     * @param restart Should a complete adapter & list re-initialisation be done?
+     */
+    private void updatePinnedApps(Boolean restart) {
+        String newAppString = "";
+
+        if (!pinnedAppString.isEmpty() && restart) {
+            pinnedAppList.clear();
+            pinnedAppsAdapter.updateDataSet(pinnedAppList, false);
+
+            for (String pinnedApp : pinnedAppString.split(";")) {
+                if (AppUtils.doesComponentExist(manager, pinnedApp)) {
+                    AppUtils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
+                }
+            }
+        }
+
+        // Iterate through the list to get package name of each pinned apps, then stringify them.
+        for (AppDetail appDetail : pinnedAppList) {
+            newAppString = newAppString.concat(appDetail.getPackageName() + ";");
+        }
+
+        // Update the saved pinned apps.
+        PreferenceHelper.update("pinned_apps_list", newAppString);
+
+        pinnedAppString = newAppString;
+
     }
 
     /**
