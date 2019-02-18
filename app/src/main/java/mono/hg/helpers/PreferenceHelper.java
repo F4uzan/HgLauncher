@@ -188,6 +188,17 @@ public class PreferenceHelper {
         update("label_list", label_list_set);
     }
 
+    public static void deleteLabel(String packageName) {
+        label_list.remove(packageName);
+
+        // Clear then add the set.
+        label_list_set.clear();
+        for (Map.Entry<String, String> newPackage : label_list.entrySet()) {
+            label_list_set.add(newPackage.getKey() + "|" + newPackage.getValue());
+        }
+        update("label_list", label_list_set);
+    }
+
     public static void update(String id, HashSet<String> stringSet) {
         getEditor().putStringSet(id, stringSet).apply();
     }

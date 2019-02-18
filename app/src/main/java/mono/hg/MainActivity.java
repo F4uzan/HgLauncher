@@ -1101,8 +1101,15 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialogInterface, int i) {
-                PreferenceHelper.updateLabel(packageName,
-                        renameField.getText().toString().trim());
+                String newLabel = renameField.getText().toString().trim();
+
+                // Unset shorthand when it is empty.
+                if (!newLabel.isEmpty()) {
+                    PreferenceHelper.updateLabel(packageName,
+                            renameField.getText().toString().trim());
+                } else {
+                    PreferenceHelper.deleteLabel(packageName);
+                }
 
                 // Update the specified item.
                 AppDetail oldItem = appsAdapter.getItem(position);
