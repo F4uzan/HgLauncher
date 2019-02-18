@@ -13,7 +13,7 @@ import mono.hg.R;
 public class PinnedAppDetail extends AppDetail {
 
     public PinnedAppDetail(Drawable icon, @NonNull String packageName) {
-        super(icon, null, packageName, false);
+        super(icon, null, packageName, null, false);
     }
 
     public PinnedAppDetail(String packageName) {

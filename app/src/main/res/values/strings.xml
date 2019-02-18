@@ -19,12 +19,14 @@
     <string name="action_backup">Backup</string>
     <string name="action_uninstall">Uninstall</string>
     <string name="action_info">App info</string>
+    <string name="action_shorthand">Shorthand</string>
 
     <!-- Misc -->
     <string name="search_hint">Search…</string>
     <string name="search_web_hint">Search for \'%1$s\' online.</string>
     <string name="search_web_button_prompt">With</string>
     <string name="search_web_button">Go</string>
+    <string name="dialogue_title_shorthand">Set shorthand</string>
     <string name="dialogue_action_close">Close</string>
 
     <!-- Warning/Information messages -->

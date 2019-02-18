@@ -116,7 +116,7 @@ public class HiddenAppsFragment extends BackHandledFragment {
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = ri.activityInfo.loadIcon(manager);
                 boolean isHidden = excludedAppList.contains(packageName);
-                AppDetail app = new AppDetail(icon, appName, packageName, isHidden);
+                AppDetail app = new AppDetail(icon, appName, packageName, null, isHidden);
                 appList.add(app);
             }
         }

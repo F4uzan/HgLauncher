@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -596,6 +598,8 @@ public class MainActivity extends AppCompatActivity {
         // We can't hide an app from the favourites panel.
         appMenu.getMenu().findItem(R.id.action_hide).setVisible(!isPinned);
 
+        appMenu.getMenu().findItem(R.id.action_shorthand).setVisible(!isPinned);
+
         // Only show the 'unpin' option if isPinned is set.
         appMenu.getMenu().findItem(R.id.action_unpin).setVisible(isPinned);
 
@@ -636,6 +640,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_uninstall:
                         startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageNameUri));
+                        break;
+                    case R.id.action_shorthand:
+                        makeRenameDialog(packageName, finalPosition);
                         break;
                     case R.id.action_hide:
                         // Add the app's package name to the exclusion list.
@@ -1077,7 +1084,37 @@ public class MainActivity extends AppCompatActivity {
         PreferenceHelper.update("pinned_apps_list", newAppString);
 
         pinnedAppString = newAppString;
+    }
 
+    /**
+     * Creates a dialogue to set an app's shorthand.
+     *
+     * @param packageName The package name of the app.
+     * @param position    Adapter position of the app.
+     */
+    private void makeRenameDialog(final String packageName, final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final EditText renameField = new EditText(this);
+        renameField.setHint(PreferenceHelper.getLabel(packageName));
+        builder.setView(renameField);
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialogInterface, int i) {
+                PreferenceHelper.updateLabel(packageName,
+                        renameField.getText().toString().trim());
+
+                // Update the specified item.
+                AppDetail item = appsAdapter.getItem(position);
+                if (item != null) {
+                    appsAdapter.updateItem(new AppDetail(item.getIcon(), item.getAppName(),
+                            packageName, PreferenceHelper.getLabel(packageName), false));
+                }
+            }
+        })
+               .setNegativeButton(android.R.string.cancel, null)
+               .setTitle(R.string.dialogue_title_shorthand)
+               .show();
     }
 
     /**

@@ -29,6 +29,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_shorthand"
+        android:orderInCategory="100"
+        android:title="@string/action_shorthand"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_uninstall"
         android:orderInCategory="100"
         android:title="@string/action_uninstall"

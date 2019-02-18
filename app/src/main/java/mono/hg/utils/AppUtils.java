@@ -229,6 +229,7 @@ public class AppUtils {
             if (!PreferenceHelper.getExclusionList().contains(packageName) && !packageName.contains(
                     activity.getPackageName())) {
                 String appName = ri.loadLabel(manager).toString();
+                String hintName = PreferenceHelper.getLabel(packageName);
                 Drawable icon = null;
                 Drawable getIcon = null;
                 // Only show icons if user chooses so.
@@ -248,7 +249,7 @@ public class AppUtils {
                         icon = getIcon;
                     }
                 }
-                AppDetail app = new AppDetail(icon, appName, packageName, false);
+                AppDetail app = new AppDetail(icon, appName, packageName, hintName, false);
                 appsList.add(app);
             }
         }

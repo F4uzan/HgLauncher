@@ -18,13 +18,14 @@ import mono.hg.helpers.KissFuzzySearch;
 
 public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
         implements IFilterable<String> {
-    private String appName, packageName;
+    private String appName, packageName, hintName;
     private Boolean isAppHidden;
     private Drawable icon;
 
-    public AppDetail(Drawable icon, String appName, @NonNull String packageName, Boolean isAppHidden) {
+    public AppDetail(Drawable icon, String appName, @NonNull String packageName, String hintName, Boolean isAppHidden) {
         this.packageName = packageName;
         this.appName = appName;
+        this.hintName = hintName;
         this.icon = icon;
         this.isAppHidden = isAppHidden;
     }
@@ -42,6 +43,10 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
         return packageName;
     }
 
+    public String getHintName() {
+        return hintName;
+    }
+
     public Drawable getIcon() {
         return icon;
     }
@@ -52,6 +57,10 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
 
     public void setAppHidden(Boolean hidden) {
         isAppHidden = hidden;
+    }
+
+    public boolean hasHintName() {
+        return hintName != null;
     }
 
     public boolean equals(Object object) {
@@ -80,8 +89,21 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
     }
 
     @Override public boolean filter(String constraint) {
-        int fuzzyScore = KissFuzzySearch.doFuzzy(getAppName(), constraint);
-        return fuzzyScore >= 30;
+        int fuzzyScore = 0;
+
+        // See if we can match by hint names.
+        if (hasHintName()) {
+            fuzzyScore = KissFuzzySearch.doFuzzy(getHintName(), constraint);
+        }
+
+        // Is the hint name strong enough?
+        if (fuzzyScore >= 35) {
+            return true;
+        } else {
+            // Fall back to app name matching if it isn't.
+            fuzzyScore = KissFuzzySearch.doFuzzy(appName, constraint);
+            return fuzzyScore >= 30;
+        }
     }
 
     protected class ViewHolder extends FlexibleViewHolder {

@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import java.util.HashSet;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class PreferenceHelper {
     private static boolean icon_hide;
@@ -20,6 +22,8 @@ public class PreferenceHelper {
     private static boolean has_widget;
     private static boolean is_testing;
     private static boolean was_alien;
+    private static Map<String, String> label_list = new WeakHashMap<>();
+    private static HashSet<String> label_list_set = new HashSet<>();
     private static HashSet<String> exclusion_list;
     private static String launch_anim;
     private static String app_theme;
@@ -161,6 +165,29 @@ public class PreferenceHelper {
         editor = preferences.edit();
     }
 
+    private static void fetchLabels() {
+        String splitPackage[];
+        for (String packageName : label_list_set) {
+            splitPackage = packageName.split("\\|");
+            label_list.put(splitPackage[0], splitPackage[1]);
+        }
+    }
+
+    public static String getLabel(String packageName) {
+        return label_list.get(packageName);
+    }
+
+    public static void updateLabel(String packageName, String newLabel) {
+        label_list.put(packageName, newLabel);
+
+        // Clear then add the set.
+        label_list_set.clear();
+        for (Map.Entry<String, String> newPackage : label_list.entrySet()) {
+            label_list_set.add(newPackage.getKey() + "|" + newPackage.getValue());
+        }
+        update("label_list", label_list_set);
+    }
+
     public static void update(String id, HashSet<String> stringSet) {
         getEditor().putStringSet(id, stringSet).apply();
     }
@@ -197,5 +224,8 @@ public class PreferenceHelper {
 
         exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps",
                 new HashSet<String>());
+        HashSet<String> temp_label_list = (HashSet<String>) preferences.getStringSet("label_list", new HashSet<String>());
+        label_list_set.addAll(temp_label_list);
+        fetchLabels();
     }
 }
