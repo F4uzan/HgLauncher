@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseDialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -8,11 +9,6 @@
         android:id="@+id/credits_placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="5dp"
-        android:paddingStart="19dp"
-        android:paddingLeft="19dp"
-        android:paddingEnd="15dp"
-        android:paddingRight="15dp"
         android:textIsSelectable="true" />
 
 </LinearLayout>

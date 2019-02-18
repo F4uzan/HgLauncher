@@ -1,0 +1,9 @@
+<resources>
+    <style name="BaseDialog">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingStart">19dp</item>
+        <item name="android:paddingLeft">19dp</item>
+        <item name="android:paddingEnd">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+    </style>
+</resources>
