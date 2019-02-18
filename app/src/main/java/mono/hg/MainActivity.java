@@ -1094,38 +1094,38 @@ public class MainActivity extends AppCompatActivity {
      */
     private void makeRenameDialog(final String packageName, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = View.inflate(this, R.layout.layout_rename_dialogue, null);
 
-        final EditText renameField = new EditText(this);
+        final EditText renameField = view.findViewById(R.id.rename_field);
         renameField.setHint(PreferenceHelper.getLabel(packageName));
-        builder.setView(renameField);
+        builder.setView(view);
 
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialogInterface, int i) {
-                String newLabel = renameField.getText().toString().trim();
-
-                // Unset shorthand when it is empty.
-                if (!newLabel.isEmpty()) {
-                    PreferenceHelper.updateLabel(packageName,
-                            renameField.getText().toString().trim());
-                } else {
-                    PreferenceHelper.deleteLabel(packageName);
-                }
-
-                // Update the specified item.
-                AppDetail oldItem = appsAdapter.getItem(position);
-
-                if (oldItem != null) {
-                    AppDetail newItem = new AppDetail(oldItem.getIcon(), oldItem.getAppName(),
-                        packageName, PreferenceHelper.getLabel(packageName), false);
-
-                    appsList.set(position, newItem);
-                    appsAdapter.updateItem(newItem);
-                }
-            }
-        })
-               .setNegativeButton(android.R.string.cancel, null)
+        builder.setNegativeButton(android.R.string.cancel, null)
                .setTitle(R.string.dialogue_title_shorthand)
-               .show();
+               .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                   @Override public void onClick(DialogInterface dialogInterface, int i) {
+                       String newLabel = renameField.getText().toString().trim();
+
+                       // Unset shorthand when it is empty.
+                       if (!newLabel.isEmpty()) {
+                           PreferenceHelper.updateLabel(packageName,
+                                   renameField.getText().toString().trim());
+                       } else {
+                           PreferenceHelper.deleteLabel(packageName);
+                       }
+
+                       // Update the specified item.
+                       AppDetail oldItem = appsAdapter.getItem(position);
+
+                       if (oldItem != null) {
+                           AppDetail newItem = new AppDetail(oldItem.getIcon(), oldItem.getAppName(),
+                                   packageName, PreferenceHelper.getLabel(packageName), false);
+
+                           appsList.set(position, newItem);
+                           appsAdapter.updateItem(newItem);
+                       }
+                   }
+               }).show();
     }
 
     /**
