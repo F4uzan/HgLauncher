@@ -1104,12 +1104,11 @@ public class MainActivity extends AppCompatActivity {
                .setTitle(R.string.dialogue_title_shorthand)
                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                    @Override public void onClick(DialogInterface dialogInterface, int i) {
-                       String newLabel = renameField.getText().toString().trim();
+                       String newLabel = renameField.getText().toString().replaceAll("\\|", "").trim();
 
                        // Unset shorthand when it is empty.
                        if (!newLabel.isEmpty()) {
-                           PreferenceHelper.updateLabel(packageName,
-                                   renameField.getText().toString().trim());
+                           PreferenceHelper.updateLabel(packageName, newLabel);
                        } else {
                            PreferenceHelper.deleteLabel(packageName);
                        }
@@ -1119,7 +1118,7 @@ public class MainActivity extends AppCompatActivity {
 
                        if (oldItem != null) {
                            AppDetail newItem = new AppDetail(oldItem.getIcon(), oldItem.getAppName(),
-                                   packageName, PreferenceHelper.getLabel(packageName), false);
+                                   packageName, newLabel, false);
 
                            appsList.set(position, newItem);
                            appsAdapter.updateItem(newItem);
