@@ -1105,10 +1105,14 @@ public class MainActivity extends AppCompatActivity {
                         renameField.getText().toString().trim());
 
                 // Update the specified item.
-                AppDetail item = appsAdapter.getItem(position);
-                if (item != null) {
-                    appsAdapter.updateItem(new AppDetail(item.getIcon(), item.getAppName(),
-                            packageName, PreferenceHelper.getLabel(packageName), false));
+                AppDetail oldItem = appsAdapter.getItem(position);
+
+                if (oldItem != null) {
+                    AppDetail newItem = new AppDetail(oldItem.getIcon(), oldItem.getAppName(),
+                        packageName, PreferenceHelper.getLabel(packageName), false);
+
+                    appsList.set(position, newItem);
+                    appsAdapter.updateItem(newItem);
                 }
             }
         })
