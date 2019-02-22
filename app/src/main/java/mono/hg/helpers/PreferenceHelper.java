@@ -31,6 +31,7 @@ public class PreferenceHelper {
     private static String icon_pack;
     private static String gesture_left_action;
     private static String gesture_right_action;
+    private static String gesture_up_action;
     private static String windowbar_mode;
 
     private static SharedPreferences preferences;
@@ -114,6 +115,10 @@ public class PreferenceHelper {
 
     public static String doSwipeLeft() {
         return gesture_left_action;
+    }
+
+    public static String doSwipeUp() {
+        return gesture_up_action;
     }
 
     public static String getWindowBarMode() {
@@ -232,6 +237,7 @@ public class PreferenceHelper {
         windowbar_mode = preferences.getString("windowbar_mode", "none");
         gesture_left_action = preferences.getString("gesture_left", "none");
         gesture_right_action = preferences.getString("gesture_right", "none");
+        gesture_up_action = preferences.getString("gesture_up", "none");
 
         exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps",
                 new HashSet<String>());

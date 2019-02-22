@@ -690,6 +690,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onSwipeUp() {
+                if (!PreferenceHelper.doSwipeUp().equals("none")
+                        && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeUp());
+                }
+            }
+
+            @Override
             public void onLongPress() {
                 // Show context menu when touchReceiver is long pressed when the panel is expanded.
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {

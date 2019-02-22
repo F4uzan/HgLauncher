@@ -40,6 +40,13 @@
             android:summary="%s"
             android:title="@string/gestures_right" />
 
+        <androidx.preference.ListPreference
+            android:defaultValue="none"
+            android:key="gesture_up"
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:title="@string/gestures_up" />
+
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="tap_to_drawer"
