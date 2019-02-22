@@ -33,13 +33,13 @@ public class SettingsActivity extends AppCompatActivity
         switch (PreferenceHelper.appTheme()) {
             default:
             case "light":
-                setTheme(R.style.SettingTheme);
+                setTheme(R.style.AppTheme);
                 break;
             case "dark":
-                setTheme(R.style.SettingTheme_Gray);
+                setTheme(R.style.AppTheme_Gray);
                 break;
             case "black":
-                setTheme(R.style.SettingTheme_Dark);
+                setTheme(R.style.AppTheme_Dark);
                 break;
         }
 
@@ -57,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity
     @Override public void onBackPressed() {
         if (selectedFragment == null || !selectedFragment.onBackPressed()) {
             // Selected fragment did not consume the back press event.
-            if (getSupportActionBar() != null){
+            if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(R.string.title_activity_settings);
             }
             super.onBackPressed();

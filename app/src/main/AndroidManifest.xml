@@ -43,7 +43,7 @@
             android:excludeFromRecents="true"
             android:autoRemoveFromRecents="true"
             android:exported="false"
-            android:theme="@style/SettingTheme">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
             </intent-filter>
