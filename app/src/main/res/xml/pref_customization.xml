@@ -134,14 +134,7 @@
             android:title="@string/pref_header_hidden_apps" />
 
         <androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="favourites_panel_switch"
-            android:summary="@string/favourites_panel_desc"
-            android:title="@string/favourites_panel_title" />
-
-        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
-            android:dependency="favourites_panel_switch"
             android:key="static_favourites_panel_switch"
             android:summary="@string/static_favourites_desc"
             android:title="@string/static_favourites" />

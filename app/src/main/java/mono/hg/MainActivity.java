@@ -25,7 +25,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -509,7 +508,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
-        if (!PreferenceHelper.isFavouritesEnabled() || pinnedAppsAdapter.isEmpty()) {
+        if (pinnedAppsAdapter.isEmpty()) {
             pinnedAppsContainer.setVisibility(View.GONE);
             shouldShowFavourites = false;
         }
@@ -617,13 +616,7 @@ public class MainActivity extends AppCompatActivity {
                         AppUtils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
                         PreferenceHelper.update("pinned_apps_list", pinnedAppString);
-                        if (!PreferenceHelper.isFavouritesEnabled()) {
-                            Toast.makeText(MainActivity.this, R.string.warn_pinning,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        shouldShowFavourites = PreferenceHelper.isFavouritesEnabled() && pinnedAppsAdapter
-                                .getItemCount() >= 1;
+                        shouldShowFavourites = pinnedAppsAdapter.getItemCount() >= 1;
                         break;
                     case R.id.action_unpin:
                         pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
@@ -834,8 +827,7 @@ public class MainActivity extends AppCompatActivity {
     private void addListListeners() {
         // Listen for app list scroll to hide/show favourites panel.
         // Only do this when the user has favourites panel enabled.
-        if (PreferenceHelper.isFavouritesEnabled()) {
-            appsRecyclerView.addOnScrollListener(new SimpleScrollListener(48) {
+        appsRecyclerView.addOnScrollListener(new SimpleScrollListener(48) {
                 @Override
                 public void onScrollUp() {
                     if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
@@ -857,7 +849,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-        }
 
         // Add item click action to app list.
         appsAdapter.addListener(new FlexibleAdapter.OnItemClickListener() {

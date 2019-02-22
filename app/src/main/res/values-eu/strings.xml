@@ -25,9 +25,6 @@
     <string name="search_web_hint">Bilatu \'%1$s\' sarean.</string>
     <string name="search_web_button">Joan</string>
 
-    <!-- Warning/Information messages -->
-    <string name="warn_pinning">Gogokoen panela gaitu finkatutako aplikazioak ikusteko.</string>
-
     <!-- Error messages -->
     <string name="err_activity_null">Ezin da aplikazioa hasi.</string>
     <string name="err_widget_invalid">Akatsa widgeta kargatzerakoan.</string>

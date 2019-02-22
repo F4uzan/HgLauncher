@@ -15,7 +15,6 @@ public class PreferenceHelper {
     private static boolean keyboard_focus;
     private static boolean web_search_enabled;
     private static boolean tap_to_drawer;
-    private static boolean favourites_panel;
     private static boolean static_favourites_panel;
     private static boolean static_app_list;
     private static boolean adaptive_shade;
@@ -87,10 +86,6 @@ public class PreferenceHelper {
 
     public static boolean promptSearch() {
         return web_search_enabled;
-    }
-
-    public static boolean isFavouritesEnabled() {
-        return favourites_panel;
     }
 
     public static boolean favouritesIgnoreScroll() {
@@ -230,7 +225,6 @@ public class PreferenceHelper {
         app_theme = preferences.getString("app_theme", "light");
         web_search_enabled = preferences.getBoolean("web_search_enabled", true);
         search_provider_set = preferences.getString("search_provider", "google");
-        favourites_panel = preferences.getBoolean("favourites_panel_switch", true);
         static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
         static_app_list = preferences.getBoolean("static_app_list_switch", false);
         adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
