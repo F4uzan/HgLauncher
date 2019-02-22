@@ -993,9 +993,10 @@ public class MainActivity extends AppCompatActivity {
                     // Also animate the container only when we are not resuming.
                     if (!isResuming) {
                         searchContainer.animate().alpha(0f).setDuration(animateDuration);
+                        isResuming = false;
+                    } else if (ActivityServiceUtils.isPowerSaving(MainActivity.this)) {
+                        searchContainer.animate().alpha(0).setDuration(animateDuration);
                     }
-
-                    isResuming = false;
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
                     doThis("show_panel");
                 }
