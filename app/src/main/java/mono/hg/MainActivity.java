@@ -691,8 +691,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onLongPress() {
-                // Show context menu when touchReceiver is long pressed.
-                touchReceiver.showContextMenu();
+                // Show context menu when touchReceiver is long pressed when the panel is expanded.
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    touchReceiver.showContextMenu();
+                }
             }
 
             @Override
@@ -947,10 +949,6 @@ public class MainActivity extends AppCompatActivity {
                         appWidgetContainer.setVisibility(View.INVISIBLE);
                     }
 
-                    // Unregister context menu for touchReceiver as we don't want
-                    // the user to accidentally show it during search.
-                    unregisterForContextMenu(touchReceiver);
-
                     // Empty out search bar text
                     searchBar.setText(null);
 
@@ -978,9 +976,6 @@ public class MainActivity extends AppCompatActivity {
 
                     // Show back the widget when the panel is showing.
                     appWidgetContainer.setVisibility(View.VISIBLE);
-
-                    // Re-register touchReceiver context menu.
-                    registerForContextMenu(touchReceiver);
 
                     // Hide keyboard if container is invisible.
                     ActivityServiceUtils.hideSoftKeyboard(MainActivity.this);
