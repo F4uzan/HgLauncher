@@ -677,14 +677,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwipeRight() {
-                if (!PreferenceHelper.doSwipeRight().equals("none")) {
+                if (!PreferenceHelper.doSwipeRight().equals("none")
+                        && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeRight());
                 }
             }
 
             @Override
             public void onSwipeLeft() {
-                if (!PreferenceHelper.doSwipeLeft().equals("none")) {
+                if (!PreferenceHelper.doSwipeLeft().equals("none")
+                        && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeLeft());
                 }
             }
