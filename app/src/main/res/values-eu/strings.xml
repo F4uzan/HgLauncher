@@ -6,7 +6,6 @@
     <string name="action_settings">Ezarpenak</string>
     <string name="action_wallpaper">Horma-papera aldatu</string>
     <string name="action_force_refresh">Freskatu</string>
-    <string name="action_add_widget">Widgeta gehitu</string>
     <string name="action_remove_widget">Widgeta kendu</string>
     <string name="action_hidden_app_reset">Dena berrezarri</string>
     <string name="action_save_backup">Gorde</string>

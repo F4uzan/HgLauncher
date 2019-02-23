@@ -15,15 +15,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_add_widget"
+        android:id="@+id/action_view_widgets"
         android:orderInCategory="100"
-        android:title="@string/action_add_widget"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_remove_widget"
-        android:orderInCategory="100"
-        android:title="@string/action_remove_widget"
+        android:title="@string/action_view_widgets"
         app:showAsAction="never" />
 
     <item

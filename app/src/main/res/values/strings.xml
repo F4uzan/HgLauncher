@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_wallpaper">Change wallpaper</string>
     <string name="action_force_refresh">Refresh</string>
-    <string name="action_add_widget">Add widget</string>
+    <string name="action_view_widgets">View widgets</string>
     <string name="action_remove_widget">Remove widget</string>
     <string name="action_hidden_app_reset">Restore all</string>
     <string name="action_save_backup">Save</string>
@@ -26,8 +26,10 @@
     <string name="search_web_hint">Search for \'%1$s\' online.</string>
     <string name="search_web_button_prompt">With</string>
     <string name="search_web_button">Go</string>
+    <string name="dialogue_widget_hint">Tap to add widget.</string>
     <string name="dialogue_title_shorthand">Set shorthand</string>
     <string name="dialogue_action_close">Close</string>
+    <string name="dialogue_action_add">Add</string>
 
     <!-- Error messages -->
     <string name="err_activity_null">Cannot start application.</string>

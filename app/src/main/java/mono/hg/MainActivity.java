@@ -2,9 +2,6 @@ package mono.hg;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.appwidget.AppWidgetHostView;
-import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProviderInfo;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,7 +13,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +38,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
-import mono.hg.appwidget.LauncherAppWidgetHost;
-import mono.hg.appwidget.LauncherAppWidgetHostView;
+import mono.hg.fragments.WidgetsDialogFragment;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.AppDetail;
@@ -141,10 +136,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private View touchReceiver;
     /*
-     * View containing widget in the desktop.
-     */
-    private FrameLayout appWidgetContainer;
-    /*
      * Progress bar shown when populating app list.
      */
     private IndeterminateMaterialProgressBar loadProgress;
@@ -156,11 +147,6 @@ public class MainActivity extends AppCompatActivity {
      * Receiver used to listen to installed/uninstalled packages.
      */
     private PackageChangesReceiver packageReceiver = new PackageChangesReceiver();
-    /*
-     * Used to handle and add widgets to widgetContainer.
-     */
-    private AppWidgetManager appWidgetManager;
-    private LauncherAppWidgetHost appWidgetHost;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,14 +171,10 @@ public class MainActivity extends AppCompatActivity {
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
         touchReceiver = findViewById(R.id.touch_receiver);
-        appWidgetContainer = findViewById(R.id.widget_container);
         snackHolder = findViewById(R.id.snack_holder);
         appsRecyclerView = findViewById(R.id.apps_list);
         pinnedAppsRecyclerView = findViewById(R.id.pinned_apps_list);
         loadProgress = findViewById(R.id.load_progress);
-
-        appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-        appWidgetHost = new LauncherAppWidgetHost(getApplicationContext(), 0);
 
         animateDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -250,16 +232,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-
-        // Show the widget options when the user is in testing mode.
-        // Also show/hide them selectively based on widget availability.
-        menu.findItem(R.id.action_add_widget)
-            .setVisible(PreferenceHelper.isTesting() && !PreferenceHelper.hasWidget());
-        menu.findItem(R.id.action_remove_widget)
-            .setVisible(PreferenceHelper.isTesting() && PreferenceHelper.hasWidget());
+        getMenuInflater().inflate(R.menu.menu_main, menu);
     }
 
     @Override public boolean onContextItemSelected(MenuItem item) {
@@ -275,15 +248,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_force_refresh:
                 recreate();
                 return true;
-            case R.id.action_add_widget:
-                int appWidgetId = appWidgetHost.allocateAppWidgetId();
-                Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
-                pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                startActivityForResult(pickIntent, 1);
-                return true;
-            case R.id.action_remove_widget:
-                removeWidget();
-                PreferenceHelper.fetchPreference();
+            case R.id.action_view_widgets:
+                WidgetsDialogFragment widgetFragment = new WidgetsDialogFragment();
+                widgetFragment.show(getSupportFragmentManager(), "Widgets Dialog");
                 return true;
             case R.id.update_wallpaper:
                 Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
@@ -350,19 +317,8 @@ public class MainActivity extends AppCompatActivity {
             recreate();
         }
 
-        if (PreferenceHelper.hasWidget()) {
-            appWidgetHost.startListening();
-        }
-
         // Reset the app list filter.
         appsAdapter.resetFilter();
-    }
-
-    @Override public void onStop() {
-        super.onStop();
-        if (PreferenceHelper.hasWidget()) {
-            appWidgetHost.stopListening();
-        }
     }
 
     @Override public void onWindowFocusChanged(boolean hasFocus) {
@@ -380,24 +336,8 @@ public class MainActivity extends AppCompatActivity {
             recreate();
         }
 
-        if (resultCode == RESULT_OK && data != null) {
-            int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-            AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
-
-            if (requestCode != WIDGET_CONFIG_RETURN_CODE && appWidgetInfo.configure != null) {
-                Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
-                intent.setComponent(appWidgetInfo.configure);
-                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-                startActivityForResult(intent, WIDGET_CONFIG_RETURN_CODE);
-            } else {
-                addWidget(data);
-            }
-        } else if (resultCode == RESULT_CANCELED && data != null) {
-            int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-            if (widgetId != -1) {
-                appWidgetHost.deleteAppWidgetId(widgetId);
-            }
-        }
+        // Call super to handle anything else not handled here.
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -522,14 +462,6 @@ public class MainActivity extends AppCompatActivity {
                         getResources().getColor(R.color.navigationBarShade));
             }
             wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
-        }
-
-        // Load widgets if there are any.
-        if (PreferenceHelper.hasWidget()) {
-            Intent widgetIntent = new Intent();
-            widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    PreferenceHelper.getPreference().getInt("widget_id", -1));
-            addWidget(widgetIntent);
         }
     }
 
@@ -706,18 +638,6 @@ public class MainActivity extends AppCompatActivity {
                 if (PreferenceHelper.allowTapToOpen()) {
                     doThis("show_panel");
                 }
-            }
-        });
-    }
-
-    /**
-     * Listener(s) for widget long click action.
-     */
-    private void addWidgetActionListener() {
-        appWidgetContainer.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View view) {
-                appWidgetContainer.getChildAt(0).showContextMenu();
-                return true;
             }
         });
     }
@@ -945,9 +865,6 @@ public class MainActivity extends AppCompatActivity {
 
                     if (newState != SlidingUpPanelLayout.PanelState.DRAGGING) {
                         appsLayoutManager.setVerticalScrollEnabled(true);
-
-                        // Hide the widget when the panel is showing.
-                        appWidgetContainer.setVisibility(View.INVISIBLE);
                     }
 
                     // Empty out search bar text
@@ -975,9 +892,6 @@ public class MainActivity extends AppCompatActivity {
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     appsLayoutManager.setVerticalScrollEnabled(false);
 
-                    // Show back the widget when the panel is showing.
-                    appWidgetContainer.setVisibility(View.VISIBLE);
-
                     // Hide keyboard if container is invisible.
                     ActivityServiceUtils.hideSoftKeyboard(MainActivity.this);
 
@@ -998,59 +912,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    /**
-     * Adds a widget to the desktop.
-     *
-     * @param data Intent used to receive the ID of the widget being added.
-     */
-    private void addWidget(Intent data) {
-        int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-        AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
-        AppWidgetHostView appWidgetHostView = appWidgetHost.createView(getApplicationContext(),
-                widgetId, appWidgetInfo);
-
-        // Prevents crashing when the widget info can't be found.
-        // https://github.com/Neamar/KISS/commit/f81ae32ef5ff5c8befe0888e6ff818a41d8dedb4
-        if (appWidgetInfo == null) {
-            removeWidget();
-        } else {
-            // Notify widget of the available minimum space.
-            appWidgetHostView.setMinimumHeight(appWidgetInfo.minHeight);
-            appWidgetHostView.setMinimumWidth(appWidgetInfo.minWidth);
-            appWidgetHostView.setAppWidget(widgetId, appWidgetInfo);
-            if (Utils.sdkIsAround(16)) {
-                appWidgetHostView.updateAppWidgetSize(null, appWidgetInfo.minWidth,
-                        appWidgetInfo.minHeight, appWidgetInfo.minWidth, appWidgetInfo.minHeight);
-            }
-
-            // Remove existing widget if any and then add the new widget.
-            appWidgetContainer.removeAllViews();
-            appWidgetContainer.addView(appWidgetHostView, 0);
-
-            // Immediately listens for the widget.
-            appWidgetHost.startListening();
-            registerForContextMenu(appWidgetContainer.getChildAt(0));
-            addWidgetActionListener();
-
-            // Apply preference changes.
-            PreferenceHelper.getEditor()
-                            .putInt("widget_id", widgetId)
-                            .putBoolean("has_widget", true)
-                            .apply();
-        }
-    }
-
-    /**
-     * Removes widget from the desktop and resets the configuration
-     * relating to widgets.
-     */
-    private void removeWidget() {
-        LauncherAppWidgetHostView widget = (LauncherAppWidgetHostView) appWidgetContainer.getChildAt(
-                0);
-        appWidgetContainer.removeView(widget);
-        PreferenceHelper.getEditor().remove("widget_id").putBoolean("has_widget", false).apply();
     }
 
     /**
