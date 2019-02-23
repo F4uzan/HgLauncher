@@ -1,6 +1,5 @@
 package mono.hg.fragments;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
@@ -15,10 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.DialogFragment;
 import mono.hg.R;
@@ -51,16 +50,12 @@ public class WidgetsDialogFragment extends DialogFragment {
     }
 
     @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = View.inflate(getContext(), R.layout.fragment_widgets_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        View view = View.inflate(requireContext(), R.layout.fragment_widgets_dialog, null);
 
-        TextView placeholder = view.findViewById(R.id.widget_placeholder_hint);
         appWidgetContainer = view.findViewById(R.id.widget_container);
 
         if (PreferenceHelper.hasWidget()) {
-            placeholder.setVisibility(View.GONE);
-            placeholder.invalidate();
-
             Intent widgetIntent = new Intent();
             widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     PreferenceHelper.getPreference().getInt("widget_id", -1));
@@ -181,7 +176,6 @@ public class WidgetsDialogFragment extends DialogFragment {
         LauncherAppWidgetHostView widget = (LauncherAppWidgetHostView) appWidgetContainer.getChildAt(0);
         appWidgetContainer.removeView(widget);
         PreferenceHelper.getEditor().remove("widget_id").putBoolean("has_widget", false).apply();
-        Utils.sendLog(3, "Removed!");
     }
 
     private void addWidgetActionListener() {
