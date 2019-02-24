@@ -192,12 +192,11 @@ public class WidgetsDialogFragment extends DialogFragment {
                         switch (item.getItemId()) {
                             case R.id.action_remove_widget:
                                 removeWidget(view, (Integer) view.getTag());
-                                PreferenceHelper.fetchPreference();
+                                PreferenceHelper.updateWidgets();
                                 return true;
                             default:
-                                // Do nothing.
+                                return true;
                         }
-                        return false;
                     }
                 });
                 popupMenu.show();

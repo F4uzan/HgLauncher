@@ -204,6 +204,10 @@ public class PreferenceHelper {
         update("label_list", label_list_set);
     }
 
+    public static void updateWidgets() {
+        widgets_list = (HashSet<String>) preferences.getStringSet("widgets_list", new HashSet<String>());
+    }
+
     public static void update(String id, HashSet<String> stringSet) {
         getEditor().putStringSet(id, stringSet).apply();
     }
