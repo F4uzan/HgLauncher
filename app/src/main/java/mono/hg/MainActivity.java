@@ -56,7 +56,6 @@ import mono.hg.wrappers.SimpleScrollListener;
 public class MainActivity extends AppCompatActivity {
 
     private static int SETTINGS_RETURN_CODE = 12;
-    private static int WIDGET_CONFIG_RETURN_CODE = 2;
     /*
      * Should the favourites panel listen for scroll?
      */

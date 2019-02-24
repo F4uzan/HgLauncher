@@ -12,7 +12,7 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-    lintOptions{
+    lintOptions {
         disable 'MissingTranslation'
     }
 

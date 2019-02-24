@@ -33,6 +33,7 @@ public class WidgetsDialogFragment extends DialogFragment {
 
     private static int WIDGET_CONFIG_START_CODE = 1;
     private static int WIDGET_CONFIG_RETURN_CODE = 2;
+    private static int WIDGET_CONFIG_DEFAULT_CODE = -1;
     private static int WIDGET_HOST_ID = 314;
 
     /*
@@ -58,12 +59,12 @@ public class WidgetsDialogFragment extends DialogFragment {
         if (PreferenceHelper.hasWidget()) {
             Intent widgetIntent = new Intent();
             widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    PreferenceHelper.getPreference().getInt("widget_id", -1));
+                    PreferenceHelper.getPreference().getInt("widget_id", WIDGET_CONFIG_DEFAULT_CODE));
             addWidget(widgetIntent);
         }
 
         builder.setView(view);
-        builder.setTitle("Widgets");
+        builder.setTitle(R.string.dialogue_title_widgets);
         builder.setNegativeButton(R.string.dialogue_action_close, null);
         builder.setPositiveButton(R.string.dialogue_action_add, null);
 
@@ -94,7 +95,8 @@ public class WidgetsDialogFragment extends DialogFragment {
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && data != null) {
-            int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+            int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    WIDGET_CONFIG_DEFAULT_CODE);
             AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
 
             if (requestCode != WIDGET_CONFIG_RETURN_CODE && appWidgetInfo.configure != null) {
@@ -106,8 +108,8 @@ public class WidgetsDialogFragment extends DialogFragment {
                 addWidget(data);
             }
         } else if (resultCode == RESULT_CANCELED && data != null) {
-            int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-            if (widgetId != -1) {
+            int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE);
+            if (widgetId != WIDGET_CONFIG_DEFAULT_CODE) {
                 appWidgetHost.deleteAppWidgetId(widgetId);
             }
         }
@@ -134,7 +136,7 @@ public class WidgetsDialogFragment extends DialogFragment {
      * @param data Intent used to receive the ID of the widget being added.
      */
     private void addWidget(Intent data) {
-        int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+        int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE);
         AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
         AppWidgetHostView appWidgetHostView = appWidgetHost.createView(requireActivity().getApplicationContext(),
                 widgetId, appWidgetInfo);

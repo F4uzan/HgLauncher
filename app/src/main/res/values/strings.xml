@@ -28,6 +28,7 @@
     <string name="search_web_button">Go</string>
     <string name="dialogue_widget_hint">Tap to add widget.</string>
     <string name="dialogue_title_shorthand">Set shorthand</string>
+    <string name="dialogue_title_widgets">Widgets</string>
     <string name="dialogue_action_close">Close</string>
     <string name="dialogue_action_add">Add</string>
 
