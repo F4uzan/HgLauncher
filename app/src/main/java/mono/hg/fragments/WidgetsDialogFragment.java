@@ -8,7 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +20,6 @@ import java.util.HashSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.DialogFragment;
 import mono.hg.R;
 import mono.hg.appwidget.LauncherAppWidgetHost;
@@ -45,9 +44,14 @@ public class WidgetsDialogFragment extends DialogFragment {
     private LinearLayout appWidgetContainer;
 
     /*
-     * List containing widgets ID as well as order.
+     * List containing widgets ID.
      */
     private ArrayList<String> widgetsList = new ArrayList<>(PreferenceHelper.getWidgetList());
+
+    /*
+     * View calling the context menu.
+     */
+    private View callingView = null;
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +126,36 @@ public class WidgetsDialogFragment extends DialogFragment {
         }
     }
 
+    @Override public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        requireActivity().getMenuInflater().inflate(R.menu.menu_fragment_dialog, menu);
+
+        // Workaround for DialogFragment issue with context menu.
+        // Taken from: https://stackoverflow.com/a/18853634
+        MenuItem.OnMenuItemClickListener listener = new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                onContextItemSelected(item);
+                return true;
+            }
+        };
+
+        // We only have one item as of now.
+        // TODO: Maybe a more robust and automated way can be done for this.
+        menu.getItem(0).setOnMenuItemClickListener(listener);
+    }
+
+    @Override public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_remove_widget:
+                removeWidget(callingView, (Integer) callingView.getTag());
+                PreferenceHelper.updateWidgets();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
     /**
      * Adds a widget to the desktop.
      *
@@ -153,6 +187,7 @@ public class WidgetsDialogFragment extends DialogFragment {
             // Immediately listens for the widget.
             appWidgetHost.startListening();
             addWidgetActionListener(index);
+            registerForContextMenu(appWidgetContainer.getChildAt(index));
 
             if (newWidget) {
                 // Update our list.
@@ -169,6 +204,7 @@ public class WidgetsDialogFragment extends DialogFragment {
      * relating to widgets.
      */
     private void removeWidget(View view, int id) {
+        unregisterForContextMenu(view);
         appWidgetContainer.removeView(view);
 
         // Remove the widget from the list.
@@ -182,24 +218,11 @@ public class WidgetsDialogFragment extends DialogFragment {
      * Adds a long press action to widgets.
      * TODO: Remove this once we figure out ways to resize the widgets.
      */
-    private void addWidgetActionListener(final int index) {
+    private void addWidgetActionListener(int index) {
         appWidgetContainer.getChildAt(index).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(final View view) {
-                PopupMenu popupMenu = new PopupMenu(requireActivity(), view, Gravity.END, 0, R.style.WidgetPopup);
-                popupMenu.getMenuInflater().inflate(R.menu.menu_fragment_dialog, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_remove_widget:
-                                removeWidget(view, (Integer) view.getTag());
-                                PreferenceHelper.updateWidgets();
-                                return true;
-                            default:
-                                return true;
-                        }
-                    }
-                });
-                popupMenu.show();
+            @Override public boolean onLongClick(View view) {
+                callingView = view;
+                view.showContextMenu();
                 return true;
             }
         });

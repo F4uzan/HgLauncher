@@ -18,59 +18,45 @@ package mono.hg.appwidget;
 
 import android.appwidget.AppWidgetHostView;
 import android.content.Context;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 
-import mono.hg.R;
+import androidx.annotation.Nullable;
 
 public class LauncherAppWidgetHostView extends AppWidgetHostView {
-    private final GestureDetector gestureDetector;
-    private LayoutInflater mInflater;
+    private OnLongClickListener longClickListener;
+    private long downTime;
 
     public LauncherAppWidgetHostView(Context context) {
         super(context);
-        gestureDetector = new GestureDetector(context, new GestureListener());
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    @Override protected View getErrorView() {
-        return mInflater.inflate(R.layout.layout_appwidget_error, this, false);
+    @Override public void setOnLongClickListener(@Nullable OnLongClickListener listener) {
+        this.longClickListener = listener;
     }
 
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
-    }
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                downTime = System.currentTimeMillis();
+                break;
+            case MotionEvent.ACTION_UP:
+                boolean isLongPressing = System.currentTimeMillis() - downTime > 300L;
 
-    @Override public void cancelLongPress() {
-        super.cancelLongPress();
+                if (isLongPressing) {
+                    longClickListener.onLongClick(this);
+                    return true;
+                } else {
+                    return false;
+                }
+            default:
+                // Let the input fall through.
+                return false;
+        }
+        return super.onInterceptTouchEvent(event);
     }
 
     @Override public int getDescendantFocusability() {
         return ViewGroup.FOCUS_BLOCK_DESCENDANTS;
-    }
-
-    private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return false;
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            return performClick();
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            return true;
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-            performLongClick();
-        }
     }
 }
