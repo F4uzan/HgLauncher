@@ -24,7 +24,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.DialogFragment;
 import mono.hg.R;
 import mono.hg.appwidget.LauncherAppWidgetHost;
-import mono.hg.appwidget.LauncherAppWidgetHostView;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.utils.Utils;
 
@@ -137,7 +136,7 @@ public class WidgetsDialogFragment extends DialogFragment {
         // Prevents crashing when the widget info can't be found.
         // https://github.com/Neamar/KISS/commit/f81ae32ef5ff5c8befe0888e6ff818a41d8dedb4
         if (appWidgetInfo == null) {
-            removeWidget(index, widgetId);
+            removeWidget(appWidgetHostView, widgetId);
         } else {
             // Notify widget of the available minimum space.
             appWidgetHostView.setMinimumHeight(appWidgetInfo.minHeight);
@@ -169,9 +168,8 @@ public class WidgetsDialogFragment extends DialogFragment {
      * Removes widget from the desktop and resets the configuration
      * relating to widgets.
      */
-    private void removeWidget(int index, int id) {
-        LauncherAppWidgetHostView widget = (LauncherAppWidgetHostView) appWidgetContainer.getChildAt(index);
-        appWidgetContainer.removeView(widget);
+    private void removeWidget(View view, int id) {
+        appWidgetContainer.removeView(view);
 
         // Remove the widget from the list.
         widgetsList.remove(String.valueOf(id));
@@ -186,14 +184,14 @@ public class WidgetsDialogFragment extends DialogFragment {
      */
     private void addWidgetActionListener(final int index) {
         appWidgetContainer.getChildAt(index).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View view) {
+            @Override public boolean onLongClick(final View view) {
                 PopupMenu popupMenu = new PopupMenu(requireActivity(), view, Gravity.END, 0, R.style.WidgetPopup);
                 popupMenu.getMenuInflater().inflate(R.menu.menu_fragment_dialog, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_remove_widget:
-                                removeWidget(index, (Integer) appWidgetContainer.getChildAt(index).getTag());
+                                removeWidget(view, (Integer) view.getTag());
                                 PreferenceHelper.fetchPreference();
                                 return true;
                             default:
