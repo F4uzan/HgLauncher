@@ -50,11 +50,6 @@ public class WidgetsDialogFragment extends DialogFragment {
      */
     private ArrayList<String> widgetsList = new ArrayList<>(PreferenceHelper.getWidgetList());
 
-    /*
-     * Internal count of widgets.
-     */
-    private int widgetsCount = 0;
-
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -72,7 +67,7 @@ public class WidgetsDialogFragment extends DialogFragment {
             for (String widgets : widgetsList) {
                 Intent widgetIntent = new Intent();
                 widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Integer.parseInt(widgets));
-                addWidget(widgetIntent, widgetsCount++, false);
+                addWidget(widgetIntent, appWidgetContainer.getChildCount(), false);
             }
         }
 
@@ -118,7 +113,7 @@ public class WidgetsDialogFragment extends DialogFragment {
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
                 startActivityForResult(intent, WIDGET_CONFIG_RETURN_CODE);
             } else {
-                addWidget(data, widgetsCount++, true);
+                addWidget(data, appWidgetContainer.getChildCount(), true);
             }
         } else if (resultCode == RESULT_CANCELED && data != null) {
             int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE);
@@ -142,7 +137,7 @@ public class WidgetsDialogFragment extends DialogFragment {
         // Prevents crashing when the widget info can't be found.
         // https://github.com/Neamar/KISS/commit/f81ae32ef5ff5c8befe0888e6ff818a41d8dedb4
         if (appWidgetInfo == null) {
-            removeWidget(index);
+            removeWidget(index, widgetId);
         } else {
             // Notify widget of the available minimum space.
             appWidgetHostView.setMinimumHeight(appWidgetInfo.minHeight);
@@ -154,6 +149,7 @@ public class WidgetsDialogFragment extends DialogFragment {
 
             // Remove existing widget if any and then add the new widget.
             appWidgetContainer.addView(appWidgetHostView, index);
+            appWidgetContainer.getChildAt(index).setTag(widgetId);
 
             // Immediately listens for the widget.
             appWidgetHost.startListening();
@@ -173,15 +169,12 @@ public class WidgetsDialogFragment extends DialogFragment {
      * Removes widget from the desktop and resets the configuration
      * relating to widgets.
      */
-    private void removeWidget(int index) {
+    private void removeWidget(int index, int id) {
         LauncherAppWidgetHostView widget = (LauncherAppWidgetHostView) appWidgetContainer.getChildAt(index);
         appWidgetContainer.removeView(widget);
 
         // Remove the widget from the list.
-        widgetsList.remove(index);
-
-        // Reduce the counter.
-        widgetsCount--;
+        widgetsList.remove(String.valueOf(id));
 
         // Update the preference by having the new list on it.
         PreferenceHelper.update("widgets_list", new HashSet<>(widgetsList));
@@ -200,7 +193,7 @@ public class WidgetsDialogFragment extends DialogFragment {
                     @Override public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_remove_widget:
-                                removeWidget(index);
+                                removeWidget(index, (Integer) appWidgetContainer.getChildAt(index).getTag());
                                 PreferenceHelper.fetchPreference();
                                 return true;
                             default:
