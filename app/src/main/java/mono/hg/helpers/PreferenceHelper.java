@@ -23,6 +23,7 @@ public class PreferenceHelper {
     private static boolean was_alien;
     private static Map<String, String> label_list = new WeakHashMap<>();
     private static HashSet<String> label_list_set = new HashSet<>();
+    private static HashSet<String> widgets_list;
     private static HashSet<String> exclusion_list;
     private static String launch_anim;
     private static String app_theme;
@@ -46,6 +47,10 @@ public class PreferenceHelper {
 
     public static HashSet<String> getExclusionList() {
         return exclusion_list;
+    }
+
+    public static HashSet<String> getWidgetList() {
+        return widgets_list;
     }
 
     public static String getLaunchAnim() {
@@ -235,6 +240,7 @@ public class PreferenceHelper {
 
         exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps",
                 new HashSet<String>());
+        widgets_list = (HashSet<String>) preferences.getStringSet("widgets_list", new HashSet<String>());
         HashSet<String> temp_label_list = (HashSet<String>) preferences.getStringSet("label_list", new HashSet<String>());
         label_list_set.addAll(temp_label_list);
         fetchLabels();

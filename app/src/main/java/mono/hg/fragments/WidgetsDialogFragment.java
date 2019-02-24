@@ -8,12 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +43,17 @@ public class WidgetsDialogFragment extends DialogFragment {
      */
     private AppWidgetManager appWidgetManager;
     private LauncherAppWidgetHost appWidgetHost;
-    private FrameLayout appWidgetContainer;
+    private LinearLayout appWidgetContainer;
+
+    /*
+     * List containing widgets ID as well as order.
+     */
+    private ArrayList<String> widgetsList = new ArrayList<>(PreferenceHelper.getWidgetList());
+
+    /*
+     * Internal count of widgets.
+     */
+    private int widgetsCount = 0;
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +68,12 @@ public class WidgetsDialogFragment extends DialogFragment {
 
         appWidgetContainer = view.findViewById(R.id.widget_container);
 
-        if (PreferenceHelper.hasWidget()) {
-            Intent widgetIntent = new Intent();
-            widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    PreferenceHelper.getPreference().getInt("widget_id", WIDGET_CONFIG_DEFAULT_CODE));
-            addWidget(widgetIntent);
+        if (!widgetsList.isEmpty()) {
+            for (String widgets : widgetsList) {
+                Intent widgetIntent = new Intent();
+                widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Integer.parseInt(widgets));
+                addWidget(widgetIntent, widgetsCount++, false);
+            }
         }
 
         builder.setView(view);
@@ -105,7 +118,7 @@ public class WidgetsDialogFragment extends DialogFragment {
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
                 startActivityForResult(intent, WIDGET_CONFIG_RETURN_CODE);
             } else {
-                addWidget(data);
+                addWidget(data, widgetsCount++, true);
             }
         } else if (resultCode == RESULT_CANCELED && data != null) {
             int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE);
@@ -115,27 +128,12 @@ public class WidgetsDialogFragment extends DialogFragment {
         }
     }
 
-    @Override public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View view, ContextMenu.ContextMenuInfo menuInfo) {
-        requireActivity().getMenuInflater().inflate(R.menu.menu_fragment_dialog, menu);
-    }
-
-    @Override public boolean onContextItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_remove_widget:
-                removeWidget();
-                PreferenceHelper.fetchPreference();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     /**
      * Adds a widget to the desktop.
      *
      * @param data Intent used to receive the ID of the widget being added.
      */
-    private void addWidget(Intent data) {
+    private void addWidget(Intent data, int index, boolean newWidget) {
         int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE);
         AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
         AppWidgetHostView appWidgetHostView = appWidgetHost.createView(requireActivity().getApplicationContext(),
@@ -144,7 +142,7 @@ public class WidgetsDialogFragment extends DialogFragment {
         // Prevents crashing when the widget info can't be found.
         // https://github.com/Neamar/KISS/commit/f81ae32ef5ff5c8befe0888e6ff818a41d8dedb4
         if (appWidgetInfo == null) {
-            removeWidget();
+            removeWidget(index);
         } else {
             // Notify widget of the available minimum space.
             appWidgetHostView.setMinimumHeight(appWidgetInfo.minHeight);
@@ -155,18 +153,19 @@ public class WidgetsDialogFragment extends DialogFragment {
             }
 
             // Remove existing widget if any and then add the new widget.
-            appWidgetContainer.removeAllViews();
-            appWidgetContainer.addView(appWidgetHostView, 0);
+            appWidgetContainer.addView(appWidgetHostView, index);
 
             // Immediately listens for the widget.
             appWidgetHost.startListening();
-            addWidgetActionListener();
+            addWidgetActionListener(index);
 
-            // Apply preference changes.
-            PreferenceHelper.getEditor()
-                            .putInt("widget_id", widgetId)
-                            .putBoolean("has_widget", true)
-                            .apply();
+            if (newWidget) {
+                // Update our list.
+                widgetsList.add(String.valueOf(widgetId));
+
+                // Apply preference changes.
+                PreferenceHelper.update("widgets_list", new HashSet<>(widgetsList));
+            }
         }
     }
 
@@ -174,20 +173,39 @@ public class WidgetsDialogFragment extends DialogFragment {
      * Removes widget from the desktop and resets the configuration
      * relating to widgets.
      */
-    private void removeWidget() {
-        LauncherAppWidgetHostView widget = (LauncherAppWidgetHostView) appWidgetContainer.getChildAt(0);
+    private void removeWidget(int index) {
+        LauncherAppWidgetHostView widget = (LauncherAppWidgetHostView) appWidgetContainer.getChildAt(index);
         appWidgetContainer.removeView(widget);
-        PreferenceHelper.getEditor().remove("widget_id").putBoolean("has_widget", false).apply();
+
+        // Remove the widget from the list.
+        widgetsList.remove(index);
+
+        // Reduce the counter.
+        widgetsCount--;
+
+        // Update the preference by having the new list on it.
+        PreferenceHelper.update("widgets_list", new HashSet<>(widgetsList));
     }
 
-    private void addWidgetActionListener() {
-        appWidgetContainer.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
+    /**
+     * Adds a long press action to widgets.
+     * TODO: Remove this once we figure out ways to resize the widgets.
+     */
+    private void addWidgetActionListener(final int index) {
+        appWidgetContainer.getChildAt(index).setOnLongClickListener(new View.OnLongClickListener() {
             @Override public boolean onLongClick(View view) {
                 PopupMenu popupMenu = new PopupMenu(requireActivity(), view, Gravity.END, 0, R.style.WidgetPopup);
                 popupMenu.getMenuInflater().inflate(R.menu.menu_fragment_dialog, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override public boolean onMenuItemClick(MenuItem item) {
-                        onContextItemSelected(item);
+                        switch (item.getItemId()) {
+                            case R.id.action_remove_widget:
+                                removeWidget(index);
+                                PreferenceHelper.fetchPreference();
+                                return true;
+                            default:
+                                // Do nothing.
+                        }
                         return false;
                     }
                 });
