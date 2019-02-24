@@ -7,12 +7,12 @@ import android.view.View;
 
 /**
  * Detects touch events across a view.
- * Based on OnTouchListener originally written by Edward Brey at StackOverflow,
+ * Based on GestureListener originally written by Edward Brey at StackOverflow,
  * (https://stackoverflow.com/a/19506010)
  * <p>
  * Modified to add swipe up, swipe down, single tap, and long press events.
  */
-public class OnTouchListener implements View.OnTouchListener {
+public class GestureListener implements View.OnTouchListener {
 
     private final GestureDetector gestureDetector;
     private MotionEvent event;
@@ -21,8 +21,8 @@ public class OnTouchListener implements View.OnTouchListener {
     private float endX;
     private float endY;
 
-    protected OnTouchListener(Context context) {
-        gestureDetector = new GestureDetector(context, new GestureListener());
+    protected GestureListener(Context context) {
+        gestureDetector = new GestureDetector(context, new InternalGestureListener());
     }
 
     public void onSwipeLeft() {
@@ -74,7 +74,7 @@ public class OnTouchListener implements View.OnTouchListener {
         return gestureDetector.onTouchEvent(event);
     }
 
-    private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
+    private final class InternalGestureListener extends GestureDetector.SimpleOnGestureListener {
 
         private static final int SWIPE_DISTANCE_THRESHOLD = 100;
         private static final int SWIPE_VELOCITY_THRESHOLD = 100;
@@ -91,7 +91,7 @@ public class OnTouchListener implements View.OnTouchListener {
         }
 
         public void onLongPress(MotionEvent e) {
-            OnTouchListener.this.onLongPress();
+            GestureListener.this.onLongPress();
         }
 
         @Override

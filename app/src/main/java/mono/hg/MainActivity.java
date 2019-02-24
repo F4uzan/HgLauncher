@@ -50,7 +50,7 @@ import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
 import mono.hg.views.IndeterminateMaterialProgressBar;
 import mono.hg.views.TogglingLinearLayoutManager;
-import mono.hg.wrappers.OnTouchListener;
+import mono.hg.wrappers.GestureListener;
 import mono.hg.wrappers.SimpleScrollListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -592,7 +592,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void addGestureListener() {
         // Handle touch events in touchReceiver.
-        touchReceiver.setOnTouchListener(new OnTouchListener(this) {
+        touchReceiver.setOnTouchListener(new GestureListener(this) {
             @Override
             public void onSwipeDown() {
                 // Show the app panel.
