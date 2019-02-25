@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -23,7 +25,6 @@ public class PreferenceHelper {
     private static boolean was_alien;
     private static Map<String, String> label_list = new WeakHashMap<>();
     private static HashSet<String> label_list_set = new HashSet<>();
-    private static HashSet<String> widgets_list;
     private static HashSet<String> exclusion_list;
     private static String launch_anim;
     private static String app_theme;
@@ -33,6 +34,7 @@ public class PreferenceHelper {
     private static String gesture_right_action;
     private static String gesture_up_action;
     private static String windowbar_mode;
+    private static String widgets_list;
 
     private static SharedPreferences preferences;
     private static SharedPreferences.Editor editor;
@@ -47,10 +49,6 @@ public class PreferenceHelper {
 
     public static HashSet<String> getExclusionList() {
         return exclusion_list;
-    }
-
-    public static HashSet<String> getWidgetList() {
-        return widgets_list;
     }
 
     public static String getLaunchAnim() {
@@ -178,6 +176,14 @@ public class PreferenceHelper {
         }
     }
 
+    public static ArrayList<String> getWidgetList() {
+        ArrayList<String> tempList = new ArrayList<>();
+        if (!widgets_list.equals("")) {
+            Collections.addAll(tempList, widgets_list.split(";"));
+        }
+        return tempList;
+    }
+
     public static String getLabel(String packageName) {
         return label_list.get(packageName);
     }
@@ -204,8 +210,14 @@ public class PreferenceHelper {
         update("label_list", label_list_set);
     }
 
-    public static void updateWidgets() {
-        widgets_list = (HashSet<String>) preferences.getStringSet("widgets_list", new HashSet<String>());
+    public static void updateWidgets(ArrayList<String> list) {
+        String tempList = "";
+        for (String widgets : list) {
+            if (!widgets.equals("")) {
+                tempList = tempList.concat(widgets + ";");
+            }
+        }
+        update("widgets_list", tempList);
     }
 
     public static void update(String id, HashSet<String> stringSet) {
@@ -242,9 +254,10 @@ public class PreferenceHelper {
         gesture_right_action = preferences.getString("gesture_right", "none");
         gesture_up_action = preferences.getString("gesture_up", "none");
 
+        widgets_list = preferences.getString("widgets_list", "");
+
         exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps",
                 new HashSet<String>());
-        widgets_list = (HashSet<String>) preferences.getStringSet("widgets_list", new HashSet<String>());
         HashSet<String> temp_label_list = (HashSet<String>) preferences.getStringSet("label_list", new HashSet<String>());
         label_list_set.addAll(temp_label_list);
         fetchLabels();

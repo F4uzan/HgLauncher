@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -74,6 +73,8 @@ public class WidgetsDialogFragment extends DialogFragment {
             }
         }
 
+        Utils.sendLog(3, widgetsList.toString());
+
         builder.setView(view);
         builder.setTitle(R.string.dialogue_title_widgets);
         builder.setNegativeButton(R.string.dialogue_action_close, null);
@@ -107,7 +108,6 @@ public class WidgetsDialogFragment extends DialogFragment {
     @Override public void onStop() {
         super.onStop();
         appWidgetHost.stopListening();
-        PreferenceHelper.updateWidgets();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -115,7 +115,6 @@ public class WidgetsDialogFragment extends DialogFragment {
             int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     WIDGET_CONFIG_DEFAULT_CODE);
             AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
-
 
             if (requestCode != WIDGET_CONFIG_RETURN_CODE && appWidgetInfo.configure != null) {
                 Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
@@ -203,7 +202,7 @@ public class WidgetsDialogFragment extends DialogFragment {
                 widgetsList.add(String.valueOf(widgetId));
 
                 // Apply preference changes.
-                PreferenceHelper.update("widgets_list", new HashSet<>(widgetsList));
+                PreferenceHelper.updateWidgets(widgetsList);
             }
         }
     }
@@ -220,7 +219,7 @@ public class WidgetsDialogFragment extends DialogFragment {
         widgetsList.remove(String.valueOf(id));
 
         // Update the preference by having the new list on it.
-        PreferenceHelper.update("widgets_list", new HashSet<>(widgetsList));
+        PreferenceHelper.updateWidgets(widgetsList);
     }
 
     /**
