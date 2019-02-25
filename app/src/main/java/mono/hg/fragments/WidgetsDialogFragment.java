@@ -73,8 +73,6 @@ public class WidgetsDialogFragment extends DialogFragment {
             }
         }
 
-        Utils.sendLog(3, widgetsList.toString());
-
         builder.setView(view);
         builder.setTitle(R.string.dialogue_title_widgets);
         builder.setNegativeButton(R.string.dialogue_action_close, null);
