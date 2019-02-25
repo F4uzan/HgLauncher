@@ -107,6 +107,7 @@ public class WidgetsDialogFragment extends DialogFragment {
     @Override public void onStop() {
         super.onStop();
         appWidgetHost.stopListening();
+        PreferenceHelper.updateWidgets();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -114,6 +115,7 @@ public class WidgetsDialogFragment extends DialogFragment {
             int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     WIDGET_CONFIG_DEFAULT_CODE);
             AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
+
 
             if (requestCode != WIDGET_CONFIG_RETURN_CODE && appWidgetInfo.configure != null) {
                 Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
@@ -154,7 +156,6 @@ public class WidgetsDialogFragment extends DialogFragment {
         switch (item.getItemId()) {
             case R.id.action_remove_widget:
                 removeWidget(callingView, (Integer) callingView.getTag());
-                PreferenceHelper.updateWidgets();
                 return true;
             default:
                 return super.onContextItemSelected(item);
