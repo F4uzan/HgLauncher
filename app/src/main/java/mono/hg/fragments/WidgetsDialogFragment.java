@@ -136,6 +136,9 @@ public class WidgetsDialogFragment extends DialogFragment {
     @Override public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
         requireActivity().getMenuInflater().inflate(R.menu.menu_fragment_dialog, menu);
 
+        // Set the calling view.
+        callingView = v;
+
         // Workaround for DialogFragment issue with context menu.
         // Taken from: https://stackoverflow.com/a/18853634
         MenuItem.OnMenuItemClickListener listener = new MenuItem.OnMenuItemClickListener() {
@@ -227,7 +230,6 @@ public class WidgetsDialogFragment extends DialogFragment {
     private void addWidgetActionListener(int index) {
         appWidgetContainer.getChildAt(index).setOnLongClickListener(new View.OnLongClickListener() {
             @Override public boolean onLongClick(View view) {
-                callingView = view;
                 view.showContextMenu();
                 return true;
             }
