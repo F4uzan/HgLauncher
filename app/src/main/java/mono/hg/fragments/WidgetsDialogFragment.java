@@ -116,7 +116,7 @@ public class WidgetsDialogFragment extends DialogFragment {
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
                 startActivityForResult(intent, WIDGET_CONFIG_RETURN_CODE);
             } else {
-                addWidget(data, appWidgetContainer.getChildCount(), true);
+                addWidget(data, widgetsList.size(), true);
             }
         } else if (resultCode == RESULT_CANCELED && data != null) {
             int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE);
