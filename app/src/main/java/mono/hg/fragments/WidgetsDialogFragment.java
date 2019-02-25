@@ -60,7 +60,7 @@ public class WidgetsDialogFragment extends DialogFragment {
     }
 
     @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.WidgetDialog);
         View view = View.inflate(requireContext(), R.layout.fragment_widgets_dialog, null);
 
         appWidgetContainer = view.findViewById(R.id.widget_container);
