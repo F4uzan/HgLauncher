@@ -104,6 +104,11 @@ public class WidgetsDialogFragment extends DialogFragment {
         return widgetDialog;
     }
 
+    @Override public void onStop() {
+        super.onStop();
+        appWidgetHost.stopListening();
+    }
+
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && data != null) {
             int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
