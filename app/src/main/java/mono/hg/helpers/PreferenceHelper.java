@@ -187,7 +187,12 @@ public class PreferenceHelper {
     }
 
     public static String getProvider(String id) {
-        return provider_list.get(id);
+        if (getProviderList().containsKey(id)) {
+            return provider_list.get(id);
+        } else {
+            // Whoops.
+            return "none";
+        }
     }
 
     private static void fetchLabels() {
