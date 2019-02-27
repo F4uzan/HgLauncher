@@ -22,13 +22,11 @@ public class PreferenceHelper {
     private static boolean static_favourites_panel;
     private static boolean static_app_list;
     private static boolean adaptive_shade;
-    private static boolean has_widget;
     private static boolean is_testing;
     private static boolean was_alien;
     private static Map<String, String> label_list = new WeakHashMap<>();
     private static Map<String, String> provider_list = new WeakHashMap<>();
     private static HashSet<String> label_list_set = new HashSet<>();
-    private static HashSet<String> provider_exclusion_list = new HashSet<>();
     private static HashSet<String> exclusion_list;
     private static String launch_anim;
     private static String app_theme;
@@ -47,16 +45,8 @@ public class PreferenceHelper {
         return is_testing;
     }
 
-    public static boolean hasWidget() {
-        return has_widget;
-    }
-
     public static HashSet<String> getExclusionList() {
         return exclusion_list;
-    }
-
-    public static HashSet<String> getProviderExclusionList() {
-        return provider_exclusion_list;
     }
 
     public static Map<String, String> getProviderList() {
@@ -263,7 +253,6 @@ public class PreferenceHelper {
 
     public static void fetchPreference() {
         is_testing = preferences.getBoolean("is_grandma", false);
-        has_widget = preferences.getBoolean("has_widget", false);
         launch_anim = preferences.getString("launch_anim", "default");
         icon_hide = preferences.getBoolean("icon_hide_switch", false);
         icon_pack = preferences.getString("icon_pack", "default");
@@ -287,8 +276,6 @@ public class PreferenceHelper {
 
         exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps",
                 new HashSet<String>());
-        provider_exclusion_list = (HashSet<String>) preferences.getStringSet(
-                "provider_exclusion_list", new HashSet<String>());
         HashSet<String> temp_label_list = (HashSet<String>) preferences.getStringSet("label_list",
                 new HashSet<String>());
         parseProviders(
