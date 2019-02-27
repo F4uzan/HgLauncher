@@ -27,6 +27,9 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
     private OnLongClickListener longClickListener;
     private long downTime;
 
+    // Default duration before long press is triggered.
+    private static long LONG_PRESS_DURATION = 300L;
+
     public LauncherAppWidgetHostView(Context context) {
         super(context);
     }
@@ -41,7 +44,7 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
                 downTime = System.currentTimeMillis();
                 break;
             case MotionEvent.ACTION_UP:
-                boolean isLongPressing = System.currentTimeMillis() - downTime > 300L;
+                boolean isLongPressing = System.currentTimeMillis() - downTime > LONG_PRESS_DURATION;
 
                 if (isLongPressing) {
                     longClickListener.onLongClick(this);
