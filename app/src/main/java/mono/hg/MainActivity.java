@@ -963,13 +963,9 @@ public class MainActivity extends AppCompatActivity {
                    @Override public void onClick(DialogInterface dialogInterface, int i) {
                        String newLabel = renameField.getText().toString().replaceAll("\\|", "").trim();
 
-                       // Unset shorthand when it is empty.
-                       if (!newLabel.isEmpty()) {
-                           PreferenceHelper.updateLabel(packageName, newLabel);
-                       } else {
-                           PreferenceHelper.deleteLabel(packageName);
-                       }
-
+                       // Unset shorthand if it is empty.
+                       PreferenceHelper.updateLabel(packageName, newLabel, newLabel.isEmpty());
+                       
                        // Update the specified item.
                        AppDetail oldItem = appsAdapter.getItem(position);
 

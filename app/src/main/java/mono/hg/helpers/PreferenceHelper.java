@@ -184,30 +184,27 @@ public class PreferenceHelper {
         return tempList;
     }
 
+    private static void updateSeparatedSet(String pref_id, Map<String, String> map, HashSet<String> set) {
+        for (Map.Entry<String, String> newItem : map.entrySet()) {
+            set.add(newItem.getKey() + "|" + newItem.getValue());
+        }
+        update(pref_id, set);
+    }
+
     public static String getLabel(String packageName) {
         return label_list.get(packageName);
     }
 
-    public static void updateLabel(String packageName, String newLabel) {
-        label_list.put(packageName, newLabel);
+    public static void updateLabel(String packageName, String newLabel, boolean remove) {
+        if (remove) {
+            label_list.remove(packageName);
+        } else {
+            label_list.put(packageName, newLabel);
+        }
 
         // Clear then add the set.
         label_list_set.clear();
-        for (Map.Entry<String, String> newPackage : label_list.entrySet()) {
-            label_list_set.add(newPackage.getKey() + "|" + newPackage.getValue());
-        }
-        update("label_list", label_list_set);
-    }
-
-    public static void deleteLabel(String packageName) {
-        label_list.remove(packageName);
-
-        // Clear then add the set.
-        label_list_set.clear();
-        for (Map.Entry<String, String> newPackage : label_list.entrySet()) {
-            label_list_set.add(newPackage.getKey() + "|" + newPackage.getValue());
-        }
-        update("label_list", label_list_set);
+        updateSeparatedSet("label_list", label_list, label_list_set);
     }
 
     public static void updateWidgets(ArrayList<String> list) {
