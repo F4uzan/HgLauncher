@@ -28,6 +28,13 @@
     <string name="reset_preference_positive">Understood</string>
     <string name="reset_preference_toast">Configuration has been reset.</string>
 
+    <!-- Web search provider -->
+    <string name="pref_header_web_provider_title">Web search providers</string>
+    <string name="pref_header_web_provider_desc">Add or remove web search providers.</string>
+    <string name="pref_header_web_provider_short">Search providers</string>
+    <string name="web_provider_name_hint">Name (must be unique)</string>
+    <string name="web_provider_url_hint">https://{url}/search?q=</string>
+
     <!-- Easter egg -->
     <string name="version_key_toast_plural">Tap %1$d more times to enable testing mode.</string>
     <string name="version_key_toast">Tap once again to confirm.</string>
@@ -46,6 +53,7 @@
     <string name="about_credits_dialogue_title">Credits</string>
     <string name="about_credits">Credits</string>
     <string name="about_credits_desc">Credits for everyone involved in this launcher.</string>
+
     <!-- Customizations -->
     <string name="app_theme">App theme</string>
     <string name="app_theme_light">Light</string>

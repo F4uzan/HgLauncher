@@ -11,6 +11,8 @@ import android.widget.PopupMenu;
 import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.Map;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -115,7 +117,7 @@ public class ViewUtils {
     public static void replaceFragment(AppCompatActivity activity, Fragment fragment, String tag) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                       .add(R.id.fragment_container, fragment)
+                       .replace(R.id.fragment_container, fragment)
                        .addToBackStack(tag)
                        .commit();
     }
@@ -128,26 +130,16 @@ public class ViewUtils {
      * @param query     Search query to launch when a provider is selected.
      */
     public static void createSearchMenu(final AppCompatActivity activity, PopupMenu popupMenu, final String query) {
-        popupMenu.getMenuInflater().inflate(R.menu.menu_search, popupMenu.getMenu());
+
+        for (Map.Entry<String, String> provider : PreferenceHelper.getProviderList().entrySet()) {
+            popupMenu.getMenu().add(provider.getKey());
+        }
+
         popupMenu.setOnMenuItemClickListener(
                 new PopupMenu.OnMenuItemClickListener() {
                     @Override public boolean onMenuItemClick(MenuItem menuItem) {
-                        String provider_id = "";
-                        switch (menuItem.getItemId()) {
-                            case R.id.provider_google:
-                                provider_id = "google";
-                                break;
-                            case R.id.provider_ddg:
-                                provider_id = "ddg";
-                                break;
-                            case R.id.provider_searx:
-                                provider_id = "searx";
-                                break;
-                            default:
-                                // No-op.
-                        }
-                        Utils.openLink(activity, PreferenceHelper.getSearchProvider(
-                                provider_id) + query);
+                        Utils.openLink(activity, PreferenceHelper.getProvider(
+                                menuItem.getTitle().toString()) + query);
                         return true;
                     }
                 });

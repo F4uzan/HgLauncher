@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
     private static final int PERMISSION_STORAGE_CODE = 4200;
     private boolean isRestore = false;
+    private ListPreference providerList;
 
     @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_customization);
@@ -47,6 +49,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         ListPreference appTheme = (ListPreference) findPreference("app_theme");
         final ListPreference iconList = (ListPreference) findPreference("icon_pack");
+        providerList = (ListPreference) findPreference("search_provider");
         ListPreference gestureLeftList = (ListPreference) findPreference("gesture_left");
         ListPreference gestureRightList = (ListPreference) findPreference("gesture_right");
         ListPreference gestureUpList = (ListPreference) findPreference("gesture_up");
@@ -62,6 +65,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         }
 
         setIconList(iconList);
+        setProviderList(providerList);
         setAppList(gestureLeftList);
         setAppList(gestureRightList);
         setAppList(gestureUpList);
@@ -76,6 +80,46 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         addVersionCounterListener();
         addFragmentListener();
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+
+        // Set this here to make sure its values are updated every time we return to it.
+        setProviderList(providerList);
+    }
+
+    private void setProviderList(ListPreference list) {
+        List<String> entries = new ArrayList<>();
+        List<String> entryValues = new ArrayList<>();
+
+        entries.add(getString(R.string.search_provider_none));
+        entryValues.add(getString(R.string.gestures_default_value));
+
+        if (PreferenceHelper.getProviderList().isEmpty()) {
+            String[] defaultProvider = getResources().getStringArray(
+                    R.array.pref_search_provider_title);
+            String[] defaultProviderId = getResources().getStringArray(
+                    R.array.pref_search_provider_values);
+
+            for (int i = 1; i < defaultProvider.length; i++) {
+                entries.add(defaultProvider[i]);
+                entryValues.add(PreferenceHelper.getDefaultProvider(defaultProviderId[i]));
+            }
+        } else {
+            // We only need the key as the value is stored in PreferenceHelper's Map.
+            for (Map.Entry<String, String> provider : PreferenceHelper
+                    .getProviderList().entrySet()) {
+                entries.add(provider.getKey());
+                entryValues.add(provider.getKey());
+            }
+        }
+
+        CharSequence[] finalEntries = entries.toArray(new CharSequence[0]);
+        CharSequence[] finalEntryValues = entryValues.toArray(new CharSequence[0]);
+
+        list.setEntries(finalEntries);
+        list.setEntryValues(finalEntryValues);
     }
 
     private void setAppList(ListPreference list) {
@@ -107,7 +151,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         list.setEntries(finalEntries);
         list.setEntryValues(finalEntryValues);
-
     }
 
     private void setIconList(ListPreference list) {
@@ -187,6 +230,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         final Preference credits = findPreference("about_credits");
         Preference restoreMenu = findPreference("restore");
         Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
+        Preference webProviderMenu = findPreference("web_provider");
         final Preference backupMenu = findPreference("backup");
         Preference resetMenu = findPreference("reset");
 
@@ -203,6 +247,14 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 ViewUtils.replaceFragment((SettingsActivity) requireActivity(), new HiddenAppsFragment(), "hidden_apps");
+                return false;
+            }
+        });
+
+        webProviderMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                ViewUtils.replaceFragment((SettingsActivity) requireActivity(), new WebProviderFragment(), "WebProvider");
                 return false;
             }
         });
@@ -281,5 +333,4 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         backupRestoreFragment.setArguments(fragmentBundle);
         ViewUtils.replaceFragment((SettingsActivity) requireActivity(), backupRestoreFragment, "backup_restore");
     }
-
 }

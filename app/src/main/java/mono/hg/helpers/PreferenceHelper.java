@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import mono.hg.models.WebSearchProvider;
+
 public class PreferenceHelper {
     private static boolean icon_hide;
     private static boolean list_order;
@@ -24,7 +26,9 @@ public class PreferenceHelper {
     private static boolean is_testing;
     private static boolean was_alien;
     private static Map<String, String> label_list = new WeakHashMap<>();
+    private static Map<String, String> provider_list = new WeakHashMap<>();
     private static HashSet<String> label_list_set = new HashSet<>();
+    private static HashSet<String> provider_exclusion_list = new HashSet<>();
     private static HashSet<String> exclusion_list;
     private static String launch_anim;
     private static String app_theme;
@@ -49,6 +53,14 @@ public class PreferenceHelper {
 
     public static HashSet<String> getExclusionList() {
         return exclusion_list;
+    }
+
+    public static HashSet<String> getProviderExclusionList() {
+        return provider_exclusion_list;
+    }
+
+    public static Map<String, String> getProviderList() {
+        return provider_list;
     }
 
     public static String getLaunchAnim() {
@@ -124,20 +136,14 @@ public class PreferenceHelper {
     }
 
     public static String getSearchProvider() {
-        switch (search_provider_set) {
-            case "google":
-                return "https://www.google.com/search?q=";
-            case "ddg":
-                return "https://www.duckduckgo.com/?q=";
-            case "searx":
-                return "https://www.searx.me/?q=";
-            default:
-            case "none":
-                return "none";
+        if ("none".equals(search_provider_set)) {
+            return "none";
+        } else {
+            return getProvider(search_provider_set);
         }
     }
 
-    public static String getSearchProvider(String provider_id) {
+    public static String getDefaultProvider(String provider_id) {
         switch (provider_id) {
             case "google":
                 return "https://www.google.com/search?q=";
@@ -166,6 +172,32 @@ public class PreferenceHelper {
     public static void initPreference(Context context) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         editor = preferences.edit();
+    }
+
+    private static void parseProviders(HashSet<String> set) {
+        String toParse[];
+        for (String parse : set) {
+            toParse = parse.split("\\|");
+            provider_list.put(toParse[0], toParse[1]);
+        }
+    }
+
+    public static void updateProvider(ArrayList<WebSearchProvider> list) {
+        HashSet<String> tempList = new HashSet<>();
+
+        for (WebSearchProvider provider : list) {
+            tempList.add(provider.getName() + "|" + provider.getUrl());
+        }
+
+        update("provider_list", tempList);
+
+        // Clear and update our Map.
+        provider_list.clear();
+        parseProviders(tempList);
+    }
+
+    public static String getProvider(String id) {
+        return provider_list.get(id);
     }
 
     private static void fetchLabels() {
@@ -242,7 +274,7 @@ public class PreferenceHelper {
         tap_to_drawer = preferences.getBoolean("tap_to_drawer", true);
         app_theme = preferences.getString("app_theme", "light");
         web_search_enabled = preferences.getBoolean("web_search_enabled", true);
-        search_provider_set = preferences.getString("search_provider", "google");
+        search_provider_set = preferences.getString("search_provider", "none");
         static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
         static_app_list = preferences.getBoolean("static_app_list_switch", false);
         adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
@@ -255,7 +287,13 @@ public class PreferenceHelper {
 
         exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps",
                 new HashSet<String>());
-        HashSet<String> temp_label_list = (HashSet<String>) preferences.getStringSet("label_list", new HashSet<String>());
+        provider_exclusion_list = (HashSet<String>) preferences.getStringSet(
+                "provider_exclusion_list", new HashSet<String>());
+        HashSet<String> temp_label_list = (HashSet<String>) preferences.getStringSet("label_list",
+                new HashSet<String>());
+        parseProviders(
+                (HashSet<String>) preferences.getStringSet("provider_list", new HashSet<String>()));
+
         label_list_set.addAll(temp_label_list);
         fetchLabels();
     }

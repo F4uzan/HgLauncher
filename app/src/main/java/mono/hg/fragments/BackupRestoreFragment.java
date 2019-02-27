@@ -325,7 +325,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
             BackupRestoreFragment fragment = fragmentRef.get();
             if (fragment != null) {
                 progress.dismiss();
-                fragment.requireActivity().recreate();
+                ((SettingsActivity) fragment.requireActivity()).restartActivity();
                 Toast.makeText(fragmentRef.get().requireActivity(), R.string.restore_complete,
                         Toast.LENGTH_LONG).show();
             }
