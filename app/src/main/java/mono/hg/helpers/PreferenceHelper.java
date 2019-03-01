@@ -205,7 +205,7 @@ public class PreferenceHelper {
 
     public static ArrayList<String> getWidgetList() {
         ArrayList<String> tempList = new ArrayList<>();
-        if (!widgets_list.equals("")) {
+        if (!"".equals(widgets_list)) {
             Collections.addAll(tempList, widgets_list.split(";"));
         }
         return tempList;
@@ -237,7 +237,7 @@ public class PreferenceHelper {
     public static void updateWidgets(ArrayList<String> list) {
         String tempList = "";
         for (String widgets : list) {
-            if (!widgets.equals("")) {
+            if (!"".equals(widgets)) {
                 tempList = tempList.concat(widgets + ";");
             }
         }

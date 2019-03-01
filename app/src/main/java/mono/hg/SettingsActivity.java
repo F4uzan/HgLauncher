@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import mono.hg.fragments.PreferenceFragment;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.utils.ActivityServiceUtils;
+import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
 import mono.hg.wrappers.BackHandledFragment;
 
@@ -24,6 +25,10 @@ public class SettingsActivity extends AppCompatActivity
             PreferenceHelper.initPreference(this);
         }
         PreferenceHelper.fetchPreference();
+
+        if (PreferenceHelper.getProviderList().isEmpty()) {
+            Utils.setDefaultProviders(getResources());
+        }
 
         // Check the caller of this activity.
         // If it's coming from the launcher itself, it will always have a calling activity.

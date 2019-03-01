@@ -56,7 +56,7 @@ public class WebProviderAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        TextView title;
-        TextView url;
+        private TextView title;
+        private TextView url;
     }
 }

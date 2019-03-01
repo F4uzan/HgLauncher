@@ -96,23 +96,11 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         entries.add(getString(R.string.search_provider_none));
         entryValues.add(getString(R.string.gestures_default_value));
 
-        if (PreferenceHelper.getProviderList().isEmpty()) {
-            String[] defaultProvider = getResources().getStringArray(
-                    R.array.pref_search_provider_title);
-            String[] defaultProviderId = getResources().getStringArray(
-                    R.array.pref_search_provider_values);
-
-            for (int i = 1; i < defaultProvider.length; i++) {
-                entries.add(defaultProvider[i]);
-                entryValues.add(PreferenceHelper.getDefaultProvider(defaultProviderId[i]));
-            }
-        } else {
-            // We only need the key as the value is stored in PreferenceHelper's Map.
-            for (Map.Entry<String, String> provider : PreferenceHelper
-                    .getProviderList().entrySet()) {
-                entries.add(provider.getKey());
-                entryValues.add(provider.getKey());
-            }
+        // We only need the key as the value is stored in PreferenceHelper's Map.
+        for (Map.Entry<String, String> provider : PreferenceHelper
+                .getProviderList().entrySet()) {
+            entries.add(provider.getKey());
+            entryValues.add(provider.getKey());
         }
 
         CharSequence[] finalEntries = entries.toArray(new CharSequence[0]);
@@ -246,7 +234,8 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                ViewUtils.replaceFragment((SettingsActivity) requireActivity(), new HiddenAppsFragment(), "hidden_apps");
+                ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
+                        new HiddenAppsFragment(), "hidden_apps");
                 return false;
             }
         });
@@ -254,7 +243,8 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         webProviderMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                ViewUtils.replaceFragment((SettingsActivity) requireActivity(), new WebProviderFragment(), "WebProvider");
+                ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
+                        new WebProviderFragment(), "WebProvider");
                 return false;
             }
         });
@@ -281,14 +271,17 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                 alert.setTitle(getString(R.string.reset_preference))
                      .setMessage(getString(R.string.reset_preference_warn))
                      .setNegativeButton(getString(android.R.string.cancel), null)
-                     .setPositiveButton(R.string.reset_preference_positive, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        PreferenceHelper.getEditor().clear().apply();
-                        ((SettingsActivity) requireActivity()).restartActivity();
-                        Toast.makeText(requireContext(), R.string.reset_preference_toast, Toast.LENGTH_LONG).show();
-                    }
-                }).show();
+                     .setPositiveButton(R.string.reset_preference_positive,
+                             new DialogInterface.OnClickListener() {
+                                 @Override
+                                 public void onClick(DialogInterface dialog, int which) {
+                                     PreferenceHelper.getEditor().clear().apply();
+                                     ((SettingsActivity) requireActivity()).restartActivity();
+                                     Toast.makeText(requireContext(),
+                                             R.string.reset_preference_toast, Toast.LENGTH_LONG)
+                                          .show();
+                                 }
+                             }).show();
                 return false;
             }
         });
@@ -331,6 +324,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         Bundle fragmentBundle = new Bundle();
         fragmentBundle.putBoolean("isRestore", isRestore);
         backupRestoreFragment.setArguments(fragmentBundle);
-        ViewUtils.replaceFragment((SettingsActivity) requireActivity(), backupRestoreFragment, "backup_restore");
+        ViewUtils.replaceFragment((SettingsActivity) requireActivity(), backupRestoreFragment,
+                "backup_restore");
     }
 }

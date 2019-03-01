@@ -4,13 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import mono.hg.R;
+import mono.hg.helpers.PreferenceHelper;
+import mono.hg.models.WebSearchProvider;
 import mono.hg.receivers.PackageChangesReceiver;
 
 public class Utils {
@@ -155,5 +160,27 @@ public class Utils {
         } catch (IllegalArgumentException w) {
             Utils.sendLog(0, "Failed to remove receiver!");
         }
+    }
+
+
+    /**
+     * Set default providers for indeterminate search.
+     */
+    public static void setDefaultProviders(Resources resources) {
+        String[] defaultProvider = resources.getStringArray(
+                R.array.pref_search_provider_title);
+        String[] defaultProviderId = resources.getStringArray(
+                R.array.pref_search_provider_values);
+        ArrayList<WebSearchProvider> tempList = new ArrayList<>();
+
+        // defaultProvider will always be the same size as defaultProviderUrl.
+        // However, we start at 1 to ignore the 'Always ask' option.
+        for (int i = 1; i < defaultProvider.length; i++) {
+            tempList.add(new WebSearchProvider(defaultProvider[i],
+                    PreferenceHelper.getDefaultProvider(defaultProviderId[i]),
+                    defaultProvider[i]));
+        }
+
+        PreferenceHelper.updateProvider(tempList);
     }
 }

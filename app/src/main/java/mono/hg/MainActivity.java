@@ -43,7 +43,6 @@ import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.AppDetail;
 import mono.hg.models.PinnedAppDetail;
-import mono.hg.models.WebSearchProvider;
 import mono.hg.receivers.PackageChangesReceiver;
 import mono.hg.utils.ActivityServiceUtils;
 import mono.hg.utils.AppUtils;
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         loadPref(true);
 
         if (PreferenceHelper.getProviderList().isEmpty()) {
-            setDefaultProviders();
+            Utils.setDefaultProviders(getResources());
         }
 
         setContentView(R.layout.activity_main);
@@ -983,27 +982,6 @@ public class MainActivity extends AppCompatActivity {
                        }
                    }
                }).show();
-    }
-
-    /**
-     * Set default providers for indeterminate search.
-     */
-    private void setDefaultProviders() {
-        String[] defaultProvider = getResources().getStringArray(
-                R.array.pref_search_provider_title);
-        String[] defaultProviderId = getResources().getStringArray(
-                R.array.pref_search_provider_values);
-        ArrayList<WebSearchProvider> tempList = new ArrayList<>();
-
-        // defaultProvider will always be the same size as defaultProviderUrl.
-        // However, we start at 1 to ignore the 'Always ask' option.
-        for (int i = 1; i < defaultProvider.length; i++) {
-            tempList.add(new WebSearchProvider(defaultProvider[i],
-                    PreferenceHelper.getDefaultProvider(defaultProviderId[i]),
-                    defaultProvider[i]));
-        }
-
-        PreferenceHelper.updateProvider(tempList);
     }
 
     /**
