@@ -41,6 +41,8 @@
 
     <!-- Error messages -->
     <string name="err_activity_null">Cannot start application.</string>
+    <string name="err_invalid_url">Invalid URL.</string>
+    <string name="err_provider_exists">Provider name must be unique.</string>
     <string name="err_widget_invalid">Error loading widget.</string>
 
     <!-- Accessibility string -->

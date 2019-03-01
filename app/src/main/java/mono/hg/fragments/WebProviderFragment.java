@@ -2,6 +2,7 @@ package mono.hg.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -172,8 +174,20 @@ public class WebProviderFragment extends BackHandledFragment {
                .setNegativeButton(android.R.string.cancel, null)
                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                    @Override public void onClick(DialogInterface dialogInterface, int i) {
-                       String name = nameField.getText().toString().trim();
+                       String name = nameField.getText().toString().replaceAll("\\|", "").trim();
                        String url = urlField.getText().toString().trim();
+
+                       if (!Patterns.WEB_URL.matcher(url).matches()) {
+                           // This is an invalid URL, cancel.
+                           Toast.makeText(requireContext(), R.string.err_invalid_url, Toast.LENGTH_SHORT).show();
+                           return;
+                       }
+
+                       if (providerList.contains(new WebSearchProvider(name, null))) {
+                           // We already have that provider.
+                           Toast.makeText(requireContext(), R.string.err_provider_exists, Toast.LENGTH_SHORT).show();
+                           return;
+                       }
 
                        if (isEditing) {
                            providerList.set(position, new WebSearchProvider(name, url));
