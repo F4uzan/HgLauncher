@@ -8,6 +8,8 @@
     <string name="action_force_refresh">Refresh</string>
     <string name="action_view_widgets">View widgets</string>
     <string name="action_remove_widget">Remove widget</string>
+    <string name="action_up_widget">Move up</string>
+    <string name="action_down_widget">Move down</string>
     <string name="action_web_provider_remove">Remove</string>
     <string name="action_web_provider_exclude">Exclude</string>
     <string name="action_web_provider_edit">Edit</string>

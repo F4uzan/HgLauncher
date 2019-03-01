@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -131,10 +132,10 @@ public class WidgetsDialogFragment extends DialogFragment {
     }
 
     @Override public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        requireActivity().getMenuInflater().inflate(R.menu.menu_fragment_dialog, menu);
-
         // Set the calling view.
         callingView = v;
+
+        int index = appWidgetContainer.indexOfChild(v);
 
         // Workaround for DialogFragment issue with context menu.
         // Taken from: https://stackoverflow.com/a/18853634
@@ -146,16 +147,42 @@ public class WidgetsDialogFragment extends DialogFragment {
             }
         };
 
-        // We only have one item as of now.
+        // Generate menu.
         // TODO: Maybe a more robust and automated way can be done for this.
+        menu.clear();
+        menu.add(1, 0, 100, getString(R.string.action_remove_widget));
+        menu.add(1, 1, 100, getString(R.string.action_up_widget));
+        menu.add(1, 2, 100, getString(R.string.action_down_widget));
         menu.getItem(0).setOnMenuItemClickListener(listener);
+
+        // Move actions should only be added when there is more than one widget.
+        if (appWidgetContainer.getChildCount() > 1) {
+            if (index > 0) {
+                menu.getItem(1).setOnMenuItemClickListener(listener);
+            } else {
+                menu.getItem(1).setVisible(false);
+            }
+
+            if (index + 1 != appWidgetContainer.getChildCount()) {
+                menu.getItem(2).setOnMenuItemClickListener(listener);
+            } else {
+                menu.getItem(2).setVisible(false);
+            }
+        }
     }
 
     @Override public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int index = appWidgetContainer.indexOfChild(callingView);
 
         switch (item.getItemId()) {
-            case R.id.action_remove_widget:
+            case 0:
                 removeWidget(callingView, (Integer) callingView.getTag());
+                return true;
+            case 1:
+                swapWidget(index, index - 1);
+                return true;
+            case 2:
+                swapWidget(index, index + 1);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -218,6 +245,21 @@ public class WidgetsDialogFragment extends DialogFragment {
 
         // Update the preference by having the new list on it.
         PreferenceHelper.updateWidgets(widgetsList);
+    }
+
+    private void swapWidget(int one, int two) {
+        View top = appWidgetContainer.getChildAt(one);
+        View bottom = appWidgetContainer.getChildAt(two);
+
+        // Swap the list and update preferences.
+        Collections.swap(widgetsList, one, two);
+        PreferenceHelper.updateWidgets(widgetsList);
+
+        // Update our views.
+        appWidgetContainer.removeView(top);
+        appWidgetContainer.addView(top, two);
+        appWidgetContainer.removeView(bottom);
+        appWidgetContainer.addView(bottom, one);
     }
 
     /**
