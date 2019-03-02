@@ -183,8 +183,8 @@ public class WebProviderFragment extends BackHandledFragment {
                            return;
                        }
 
-                       if (!"none".equals(PreferenceHelper.getProvider(name))) {
-                           // We already have that provider.
+                       if (!"none".equals(PreferenceHelper.getProvider(name)) && !isEditing) {
+                           // We already have that provider and/or we aren't editing.
                            Toast.makeText(requireContext(), R.string.err_provider_exists, Toast.LENGTH_SHORT).show();
                            return;
                        }
