@@ -97,12 +97,12 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
         }
 
         // Is the hint name strong enough?
-        if (fuzzyScore >= 35) {
+        if (fuzzyScore >= 30) {
             return true;
         } else {
             // Fall back to app name matching if it isn't.
             fuzzyScore = KissFuzzySearch.doFuzzy(appName, constraint);
-            return fuzzyScore >= 30;
+            return fuzzyScore >= 25;
         }
     }
 
