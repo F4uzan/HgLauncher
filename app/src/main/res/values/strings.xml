@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_wallpaper">Change wallpaper</string>
     <string name="action_force_refresh">Refresh</string>
-    <string name="action_view_widgets">View widgets</string>
+    <string name="action_view_widgets">Widgetspace</string>
     <string name="action_remove_widget">Remove widget</string>
     <string name="action_up_widget">Move up</string>
     <string name="action_down_widget">Move down</string>
@@ -37,7 +37,7 @@
     <string name="dialogue_title_add_provider">Add provider</string>
     <string name="dialogue_title_edit_provider">Edit provider</string>
     <string name="dialogue_title_shorthand">Set shorthand</string>
-    <string name="dialogue_title_widgets">Widgets</string>
+    <string name="dialogue_title_widgets">Widgetspace</string>
     <string name="dialogue_action_close">Close</string>
     <string name="dialogue_action_add">Add</string>
 
@@ -45,7 +45,6 @@
     <string name="err_activity_null">Cannot start application.</string>
     <string name="err_invalid_url">Invalid URL.</string>
     <string name="err_provider_exists">Provider name must be unique.</string>
-    <string name="err_widget_invalid">Error loading widget.</string>
 
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Desktop view</string>
