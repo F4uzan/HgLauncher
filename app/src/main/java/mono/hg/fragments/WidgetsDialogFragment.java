@@ -156,17 +156,16 @@ public class WidgetsDialogFragment extends DialogFragment {
         menu.getItem(0).setOnMenuItemClickListener(listener);
 
         // Move actions should only be added when there is more than one widget.
+        menu.getItem(1).setVisible(appWidgetContainer.getChildCount() > 1);
+        menu.getItem(2).setVisible(appWidgetContainer.getChildCount() > 1);
+
         if (appWidgetContainer.getChildCount() > 1) {
             if (index > 0) {
                 menu.getItem(1).setOnMenuItemClickListener(listener);
-            } else {
-                menu.getItem(1).setVisible(false);
             }
 
             if (index + 1 != appWidgetContainer.getChildCount()) {
                 menu.getItem(2).setOnMenuItemClickListener(listener);
-            } else {
-                menu.getItem(2).setVisible(false);
             }
         }
     }
