@@ -183,7 +183,7 @@ public class WebProviderFragment extends BackHandledFragment {
                            return;
                        }
 
-                       if (providerList.contains(new WebSearchProvider(name, null))) {
+                       if (!"none".equals(PreferenceHelper.getProvider(name))) {
                            // We already have that provider.
                            Toast.makeText(requireContext(), R.string.err_provider_exists, Toast.LENGTH_SHORT).show();
                            return;
