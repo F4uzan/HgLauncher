@@ -6,9 +6,9 @@ import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import mono.hg.models.WebSearchProvider;
 
@@ -24,8 +24,8 @@ public class PreferenceHelper {
     private static boolean adaptive_shade;
     private static boolean is_testing;
     private static boolean was_alien;
-    private static Map<String, String> label_list = new WeakHashMap<>();
-    private static Map<String, String> provider_list = new WeakHashMap<>();
+    private static Map<String, String> label_list = new HashMap<>();
+    private static Map<String, String> provider_list = new HashMap<>();
     private static HashSet<String> label_list_set = new HashSet<>();
     private static HashSet<String> exclusion_list;
     private static String launch_anim;
