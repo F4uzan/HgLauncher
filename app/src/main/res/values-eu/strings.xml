@@ -26,7 +26,6 @@
 
     <!-- Error messages -->
     <string name="err_activity_null">Ezin da aplikazioa hasi.</string>
-    <string name="err_widget_invalid">Akatsa widgeta kargatzerakoan.</string>
 
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Mahaigaineko ikuspegia</string>
