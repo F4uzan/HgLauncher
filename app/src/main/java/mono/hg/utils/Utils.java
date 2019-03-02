@@ -59,6 +59,17 @@ public class Utils {
     }
 
     /**
+     * Checks whether the system SDK version is below a specified version.
+     *
+     * @param version Version expected to compare against the system's SDK.
+     *
+     * @return True if system SDK version is below the specified version.
+     */
+    public static boolean sdkIsBelow(int version) {
+        return Build.VERSION.SDK_INT < version;
+    }
+
+    /**
      * Checks whether the system is at least KitKat.
      *
      * @return True when system SDK version is equal to or more than 19 (KitKat).

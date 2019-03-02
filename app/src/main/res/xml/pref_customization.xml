@@ -55,6 +55,12 @@
         android:key="desktop"
         android:title="@string/pref_header_wall">
 
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="windowbar_status_switch"
+            android:title="@string/windowbar_mode_status"
+            app:isPreferenceVisible="false" />
+
         <androidx.preference.DropDownPreference
             android:defaultValue="none"
             android:entries="@array/pref_windowbar_title"

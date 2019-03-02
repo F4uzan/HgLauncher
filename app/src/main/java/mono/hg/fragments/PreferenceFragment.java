@@ -64,6 +64,10 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             findPreference("windowbar_mode").setVisible(true);
         }
 
+        if (Utils.sdkIsBelow(19)) {
+            findPreference("windowbar_status_switch").setVisible(true);
+        }
+
         setIconList(iconList);
         setProviderList(providerList);
         setAppList(gestureLeftList);

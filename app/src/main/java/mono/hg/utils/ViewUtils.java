@@ -39,7 +39,7 @@ public class ViewUtils {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static int setWindowbarMode(String mode) {
         int baseLayout = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         int noStatusLayout = baseLayout

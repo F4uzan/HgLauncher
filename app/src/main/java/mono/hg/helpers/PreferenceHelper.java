@@ -22,6 +22,7 @@ public class PreferenceHelper {
     private static boolean static_favourites_panel;
     private static boolean static_app_list;
     private static boolean adaptive_shade;
+    private static boolean windowbar_status_switch;
     private static boolean is_testing;
     private static boolean was_alien;
     private static Map<String, String> label_list = new HashMap<>();
@@ -83,6 +84,10 @@ public class PreferenceHelper {
 
     public static boolean allowTapToOpen() {
         return tap_to_drawer;
+    }
+
+    public static boolean shouldHideStatusBar() {
+        return windowbar_status_switch;
     }
 
     public static String appTheme() {
@@ -272,11 +277,11 @@ public class PreferenceHelper {
         static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
         static_app_list = preferences.getBoolean("static_app_list_switch", false);
         adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
+        windowbar_status_switch = preferences.getBoolean("windowbar_status_switch", false);
         windowbar_mode = preferences.getString("windowbar_mode", "none");
         gesture_left_action = preferences.getString("gesture_left", "none");
         gesture_right_action = preferences.getString("gesture_right", "none");
         gesture_up_action = preferences.getString("gesture_up", "none");
-
         widgets_list = preferences.getString("widgets_list", "");
 
         exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps",

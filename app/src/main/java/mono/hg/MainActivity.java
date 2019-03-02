@@ -330,6 +330,8 @@ public class MainActivity extends AppCompatActivity {
             getWindow().getDecorView()
                        .setSystemUiVisibility(
                                ViewUtils.setWindowbarMode(PreferenceHelper.getWindowBarMode()));
+        } else if (Utils.sdkIsBelow(19) && PreferenceHelper.shouldHideStatusBar()) {
+            getWindow().getDecorView().setSystemUiVisibility(ViewUtils.setWindowbarMode("status"));
         }
     }
 
