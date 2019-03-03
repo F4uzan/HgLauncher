@@ -287,6 +287,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override public void onResume() {
         super.onResume();
+        
+        // See if user has changed icon pack. Clear cache if true.
+        if (!PreferenceHelper.getPreference()
+                             .getString("icon_pack", "default")
+                             .equals(PreferenceHelper.getIconPackName())) {
+            LauncherIconHelper.clearDrawableCache();
+        }
 
         loadPref(false);
 
