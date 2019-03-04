@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         // Let the launcher handle state of the sliding panel.
         slidingHome.disallowHiding(true);
         slidingHome.alwaysResetState(true);
+        slidingHome.setAnchorPoint(0f);
 
         appsRecyclerView.setDrawingCacheEnabled(true);
         appsRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
@@ -287,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override public void onResume() {
         super.onResume();
-        
+
         // See if user has changed icon pack. Clear cache if true.
         if (!PreferenceHelper.getPreference()
                              .getString("icon_pack", "default")
@@ -889,18 +890,22 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // Animate search container entering the view.
-                    searchContainer.animate().alpha(1f).setDuration(animateDuration)
-                                   .setListener(new AnimatorListenerAdapter() {
-                                       @Override
-                                       public void onAnimationStart(Animator animation) {
-                                           searchContainer.setVisibility(View.VISIBLE);
-                                       }
+                    if (previousState == SlidingUpPanelLayout.PanelState.DRAGGING) {
+                        searchContainer.animate().alpha(1f).setDuration(animateDuration)
+                                       .setListener(new AnimatorListenerAdapter() {
+                                           @Override
+                                           public void onAnimationStart(Animator animation) {
+                                               searchContainer.setVisibility(View.VISIBLE);
+                                           }
 
-                                       @Override
-                                       public void onAnimationEnd(Animator animation) {
-                                           searchContainer.clearAnimation();
-                                       }
-                                   });
+                                           @Override
+                                           public void onAnimationEnd(Animator animation) {
+                                               searchContainer.clearAnimation();
+                                           }
+                                       });
+                    } else {
+                        searchContainer.setVisibility(View.VISIBLE);
+                    }
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     appsLayoutManager.setVerticalScrollEnabled(false);
 
