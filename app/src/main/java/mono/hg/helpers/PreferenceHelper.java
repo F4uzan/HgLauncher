@@ -254,6 +254,10 @@ public class PreferenceHelper {
         update("widgets_list", tempList);
     }
 
+    public static void applyWidgetsUpdate() {
+        widgets_list = preferences.getString("widgets_list", "");
+    }
+
     public static void update(String id, HashSet<String> stringSet) {
         getEditor().putStringSet(id, stringSet).apply();
     }

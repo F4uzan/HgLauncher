@@ -51,7 +51,7 @@ public class WidgetsDialogFragment extends DialogFragment {
     /*
      * View calling the context menu.
      */
-    private View callingView = null;
+    private AppWidgetHostView callingView = null;
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +107,8 @@ public class WidgetsDialogFragment extends DialogFragment {
     @Override public void onStop() {
         super.onStop();
         appWidgetHost.stopListening();
+
+        PreferenceHelper.applyWidgetsUpdate();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -133,7 +135,7 @@ public class WidgetsDialogFragment extends DialogFragment {
 
     @Override public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
         // Set the calling view.
-        callingView = v;
+        callingView = (AppWidgetHostView) v;
 
         int index = appWidgetContainer.indexOfChild(v);
 
@@ -175,7 +177,7 @@ public class WidgetsDialogFragment extends DialogFragment {
 
         switch (item.getItemId()) {
             case 0:
-                removeWidget(callingView, (Integer) callingView.getTag());
+                removeWidget(callingView, callingView.getAppWidgetId());
                 return true;
             case 1:
                 swapWidget(index, index - 1);
@@ -214,7 +216,6 @@ public class WidgetsDialogFragment extends DialogFragment {
 
             // Remove existing widget if any and then add the new widget.
             appWidgetContainer.addView(appWidgetHostView, index);
-            appWidgetContainer.getChildAt(index).setTag(widgetId);
 
             // Immediately listens for the widget.
             appWidgetHost.startListening();
