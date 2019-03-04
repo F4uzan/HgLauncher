@@ -53,6 +53,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         ListPreference gestureLeftList = (ListPreference) findPreference("gesture_left");
         ListPreference gestureRightList = (ListPreference) findPreference("gesture_right");
         ListPreference gestureUpList = (ListPreference) findPreference("gesture_up");
+        ListPreference gestureDoubleTapList = (ListPreference) findPreference("gesture_double_tap");
 
         // Adaptive icon is not available before Android O/API 26.
         if (Utils.atLeastOreo()) {
@@ -73,6 +74,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         setAppList(gestureLeftList);
         setAppList(gestureRightList);
         setAppList(gestureUpList);
+        setAppList(gestureDoubleTapList);
 
         appTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

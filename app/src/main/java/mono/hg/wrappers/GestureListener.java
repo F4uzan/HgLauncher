@@ -49,6 +49,10 @@ public class GestureListener implements View.OnTouchListener {
         // Do tap/click action.
     }
 
+    public void onDoubleTap() {
+        // Do double tap action.
+    }
+
     public MotionEvent getEvent() {
         return event;
     }
@@ -87,6 +91,12 @@ public class GestureListener implements View.OnTouchListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
             onClick();
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+            GestureListener.this.onDoubleTap();
             return true;
         }
 

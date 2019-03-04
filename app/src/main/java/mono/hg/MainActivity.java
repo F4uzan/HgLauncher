@@ -638,6 +638,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onDoubleTap() {
+                if (!PreferenceHelper.doDoubleTap().equals("none")
+                        && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    AppUtils.launchApp(MainActivity.this, PreferenceHelper.doDoubleTap());
+                }
+            }
+
+            @Override
             public void onLongPress() {
                 // Show context menu when touchReceiver is long pressed when the panel is expanded.
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
