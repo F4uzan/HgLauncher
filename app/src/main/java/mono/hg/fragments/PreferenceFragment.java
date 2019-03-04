@@ -32,6 +32,8 @@ import mono.hg.utils.ViewUtils;
 public class PreferenceFragment extends PreferenceFragmentCompat {
 
     private static final int PERMISSION_STORAGE_CODE = 4200;
+    private CharSequence[] appListEntries;
+    private CharSequence[] appListEntriesValue;
     private boolean isRestore = false;
     private ListPreference providerList;
 
@@ -46,6 +48,8 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         if (actionBar != null) {
             actionBar.setTitle(R.string.title_activity_settings);
         }
+
+        getAppList();
 
         ListPreference appTheme = (ListPreference) findPreference("app_theme");
         final ListPreference iconList = (ListPreference) findPreference("icon_pack");
@@ -117,6 +121,11 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     }
 
     private void setAppList(ListPreference list) {
+        list.setEntries(appListEntries);
+        list.setEntryValues(appListEntriesValue);
+    }
+
+    private void getAppList() {
         PackageManager manager = requireActivity().getPackageManager();
         List<String> entries = new ArrayList<>();
         List<String> entryValues = new ArrayList<>();
@@ -140,11 +149,8 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             entryValues.add(packageName);
         }
 
-        CharSequence[] finalEntries = entries.toArray(new CharSequence[0]);
-        CharSequence[] finalEntryValues = entryValues.toArray(new CharSequence[0]);
-
-        list.setEntries(finalEntries);
-        list.setEntryValues(finalEntryValues);
+        appListEntries = entries.toArray(new CharSequence[0]);
+        appListEntriesValue = entryValues.toArray(new CharSequence[0]);
     }
 
     private void setIconList(ListPreference list) {
