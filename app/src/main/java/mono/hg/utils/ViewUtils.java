@@ -5,16 +5,13 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.PopupMenu;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import mono.hg.R;
@@ -60,26 +57,6 @@ public class ViewUtils {
             default:
                 return View.SYSTEM_UI_LAYOUT_FLAGS;
         }
-    }
-
-    /**
-     * Disable snackbar swipe behaviour.
-     *
-     * @param snackbar Snackbar whose behaviour is to be modified.
-     */
-    public static void disableSnackbarSwipe(final Snackbar snackbar) {
-        snackbar.getView()
-                .getViewTreeObserver()
-                .addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                    @Override
-                    public boolean onPreDraw() {
-                        snackbar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
-                        ((CoordinatorLayout.LayoutParams) snackbar.getView()
-                                                                  .getLayoutParams()).setBehavior(
-                                null);
-                        return true;
-                    }
-                });
     }
 
     /**

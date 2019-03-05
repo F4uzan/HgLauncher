@@ -22,7 +22,6 @@ import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.lang.ref.WeakReference;
@@ -48,6 +47,7 @@ import mono.hg.utils.ActivityServiceUtils;
 import mono.hg.utils.AppUtils;
 import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
+import mono.hg.views.DagashiBar;
 import mono.hg.views.IndeterminateMaterialProgressBar;
 import mono.hg.views.TogglingLinearLayoutManager;
 import mono.hg.wrappers.GestureListener;
@@ -670,8 +670,8 @@ public class MainActivity extends AppCompatActivity {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
             String searchBarText, searchHint;
-            Snackbar searchSnack = Snackbar.make(snackHolder, searchHint,
-                    Snackbar.LENGTH_INDEFINITE);
+            DagashiBar searchSnack = DagashiBar.make(snackHolder, searchHint,
+                    DagashiBar.LENGTH_INDEFINITE);
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -730,8 +730,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).show();
 
-                    // Disable search snackbar swipe-to-dismiss.
-                    ViewUtils.disableSnackbarSwipe(searchSnack);
+                    searchSnack.setSwipeDisabled();
                 }
             }
         });
