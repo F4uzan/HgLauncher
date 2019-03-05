@@ -243,6 +243,22 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
         return this;
     }
 
+    @SuppressLint("RestrictedApi")
+    public void setLongPressAction(final View.OnLongClickListener listener) {
+        final SnackbarContentLayout contentLayout = (SnackbarContentLayout) this.view.getChildAt(0);
+        final TextView tv = contentLayout.getActionView();
+
+        tv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override public boolean onLongClick(View view) {
+                listener.onLongClick(view);
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Disables swipe-to-dismiss behavior.
+     */
     public void setSwipeDisabled() {
         setBehavior(new BaseTransientBottomBar.Behavior() {
             @Override
