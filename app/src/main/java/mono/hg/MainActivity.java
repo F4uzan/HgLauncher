@@ -615,32 +615,28 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwipeRight() {
-                if (!PreferenceHelper.doSwipeRight().equals("none")
-                        && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeRight());
                 }
             }
 
             @Override
             public void onSwipeLeft() {
-                if (!PreferenceHelper.doSwipeLeft().equals("none")
-                        && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeLeft());
                 }
             }
 
             @Override
             public void onSwipeUp() {
-                if (!PreferenceHelper.doSwipeUp().equals("none")
-                        && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeUp());
                 }
             }
 
             @Override
             public void onDoubleTap() {
-                if (!PreferenceHelper.doDoubleTap().equals("none")
-                        && slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     AppUtils.launchApp(MainActivity.this, PreferenceHelper.doDoubleTap());
                 }
             }

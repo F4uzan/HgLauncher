@@ -64,7 +64,6 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
     private static final int[] SNACKBAR_BUTTON_STYLE_ATTR = new int[]{R.attr.snackbarButtonStyle};
     private final AccessibilityManager accessibilityManager;
     private boolean hasAction;
-    private boolean swipeDisabled;
 
     private DagashiBar(
             ViewGroup parent,
@@ -133,8 +132,10 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
         return make(view, view.getResources().getText(resId), duration);
     }
 
-    private static ViewGroup findSuitableParent(View view) {
+    private static ViewGroup findSuitableParent(View attachView) {
         ViewGroup fallback = null;
+        View view = attachView;
+
         do {
             if (view instanceof CoordinatorLayout) {
                 // We've found a CoordinatorLayout, use it
