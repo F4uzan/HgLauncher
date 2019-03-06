@@ -177,7 +177,11 @@ public class WebProviderFragment extends BackHandledFragment {
                        String name = nameField.getText().toString().replaceAll("\\|", "").trim();
                        String url = urlField.getText().toString().trim();
 
-                       if (!Patterns.WEB_URL.matcher(url).matches()) {
+                       // Strip out %s as it triggers the matcher.
+                       // We won't use this URL, but we still need to check if the URL overall is valid.
+                       String safeUrl = url.replaceAll("%s", "+s");
+
+                       if (!Patterns.WEB_URL.matcher(safeUrl).matches()) {
                            // This is an invalid URL, cancel.
                            Toast.makeText(requireContext(), R.string.err_invalid_url, Toast.LENGTH_SHORT).show();
                            return;

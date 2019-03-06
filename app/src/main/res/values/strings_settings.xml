@@ -33,7 +33,7 @@
     <string name="pref_header_web_provider_desc">Add or remove web search providers.</string>
     <string name="pref_header_web_provider_short">Search providers</string>
     <string name="web_provider_name_hint">Name (must be unique)</string>
-    <string name="web_provider_url_hint" translatable="false">https://{url}/search?q=</string>
+    <string name="web_provider_url_hint" translatable="false">https://{url}/search?q=%s</string>
 
     <!-- Easter egg -->
     <string name="version_key_toast_plural">Tap %1$d more times to enable testing mode.</string>

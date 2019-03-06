@@ -115,8 +115,9 @@ public class ViewUtils {
         popupMenu.setOnMenuItemClickListener(
                 new PopupMenu.OnMenuItemClickListener() {
                     @Override public boolean onMenuItemClick(MenuItem menuItem) {
-                        Utils.openLink(activity, PreferenceHelper.getProvider(
-                                menuItem.getTitle().toString()) + query);
+                        Utils.doWebSearch(activity,
+                                PreferenceHelper.getProvider(menuItem.getTitle().toString()),
+                                query);
                         return true;
                     }
                 });

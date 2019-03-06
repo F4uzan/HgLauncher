@@ -151,11 +151,11 @@ public class PreferenceHelper {
     public static String getDefaultProvider(String provider_id) {
         switch (provider_id) {
             case "google":
-                return "https://www.google.com/search?q=";
+                return "https://www.google.com/search?q=%s";
             case "ddg":
-                return "https://www.duckduckgo.com/?q=";
+                return "https://www.duckduckgo.com/?q=%s";
             case "searx":
-                return "https://www.searx.me/?q=";
+                return "https://www.searx.me/?q=%s";
             default:
                 // We can't go here. Return an empty string just in case.
                 return "";

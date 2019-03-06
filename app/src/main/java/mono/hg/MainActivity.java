@@ -717,9 +717,9 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             if (!PreferenceHelper.getSearchProvider().equals("none")) {
-                                Utils.openLink(MainActivity.this,
-                                        PreferenceHelper.getSearchProvider() + URLEncoder.encode(
-                                                searchBarText));
+                                Utils.doWebSearch(MainActivity.this,
+                                        PreferenceHelper.getSearchProvider(),
+                                        URLEncoder.encode(searchBarText));
                                 searchSnack.dismiss();
                             } else {
                                 appMenu = new PopupMenu(MainActivity.this, view);
@@ -767,27 +767,27 @@ public class MainActivity extends AppCompatActivity {
         // Listen for app list scroll to hide/show favourites panel.
         // Only do this when the user has favourites panel enabled.
         appsRecyclerView.addOnScrollListener(new SimpleScrollListener(48) {
-                @Override
-                public void onScrollUp() {
-                    if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
-                        doThis("hide_favourites");
-                    }
+            @Override
+            public void onScrollUp() {
+                if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
+                    doThis("hide_favourites");
                 }
+            }
 
-                @Override
-                public void onScroll() {
-                    if (appMenu != null) {
-                        appMenu.dismiss();
-                    }
+            @Override
+            public void onScroll() {
+                if (appMenu != null) {
+                    appMenu.dismiss();
                 }
+            }
 
-                @Override
-                public void onEnd() {
-                    if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
-                        doThis("show_favourites");
-                    }
+            @Override
+            public void onEnd() {
+                if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
+                    doThis("show_favourites");
                 }
-            });
+            }
+        });
 
         // Add item click action to app list.
         appsAdapter.addListener(new FlexibleAdapter.OnItemClickListener() {
@@ -985,7 +985,10 @@ public class MainActivity extends AppCompatActivity {
                .setTitle(R.string.dialogue_title_shorthand)
                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                    @Override public void onClick(DialogInterface dialogInterface, int i) {
-                       String newLabel = renameField.getText().toString().replaceAll("\\|", "").trim();
+                       String newLabel = renameField.getText()
+                                                    .toString()
+                                                    .replaceAll("\\|", "")
+                                                    .trim();
 
                        // Unset shorthand if it is empty.
                        PreferenceHelper.updateLabel(packageName, newLabel, newLabel.isEmpty());
@@ -994,7 +997,8 @@ public class MainActivity extends AppCompatActivity {
                        AppDetail oldItem = appsAdapter.getItem(position);
 
                        if (oldItem != null) {
-                           AppDetail newItem = new AppDetail(oldItem.getIcon(), oldItem.getAppName(),
+                           AppDetail newItem = new AppDetail(oldItem.getIcon(),
+                                   oldItem.getAppName(),
                                    packageName, newLabel, false);
 
                            appsList.set(position, newItem);

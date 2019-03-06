@@ -132,6 +132,17 @@ public class Utils {
     }
 
     /**
+     * Parses a web provider URL then replaces its placeholder with the query.
+     *
+     * @param context  Context object for use with startActivity.
+     * @param provider The URL of the provider
+     * @param query    The query itself
+     */
+    public static void doWebSearch(Context context, String provider, String query) {
+        openLink(context, provider.replace("%s", query));
+    }
+
+    /**
      * Closes a Closeable instance if it is not null.
      *
      * @param stream The Closeable instance to close.
