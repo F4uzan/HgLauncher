@@ -681,10 +681,8 @@ public class MainActivity extends AppCompatActivity {
                         searchBarText);
 
                 // Begin filtering our list.
-                if (appsAdapter.hasFinishedLoading()) {
-                    appsAdapter.setFilter(searchBarText);
-                    appsAdapter.filterItems();
-                }
+                appsAdapter.setFilter(searchBarText);
+                appsAdapter.filterItems();
             }
 
             @Override
@@ -715,13 +713,14 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // Prompt user if they want to search their query online.
-                    searchSnack.setAction(searchSnackAction, new View.OnClickListener() {
+                    searchSnack.setNonDismissAction(searchSnackAction, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if (!PreferenceHelper.getSearchProvider().equals("none")) {
                                 Utils.openLink(MainActivity.this,
                                         PreferenceHelper.getSearchProvider() + URLEncoder.encode(
                                                 searchBarText));
+                                searchSnack.dismiss();
                             } else {
                                 appMenu = new PopupMenu(MainActivity.this, view);
                                 ViewUtils.createSearchMenu(MainActivity.this, appMenu,
