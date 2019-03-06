@@ -43,7 +43,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 /**
  * DagashiBar is a Snackbar clone tailored for use in HgLauncher.
- *
+ * <p>
  * Due to Snackbar being entirely limited, no class can extend from it.
  * DagashiBar is based off of (read: copied from) Google's Snackbar code.
  */
@@ -72,7 +72,8 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
             com.google.android.material.snackbar.ContentViewCallback contentViewCallback) {
         super(parent, content, contentViewCallback);
         accessibilityManager =
-                (AccessibilityManager) parent.getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
+                (AccessibilityManager) parent.getContext()
+                                             .getSystemService(Context.ACCESSIBILITY_SERVICE);
     }
 
     /**
@@ -207,7 +208,19 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
      */
     @NonNull
     public DagashiBar setAction(@StringRes int resId, View.OnClickListener listener) {
-        return setAction(getContext().getText(resId), listener);
+        return setAction(getContext().getText(resId), listener, true);
+    }
+
+    /**
+     * Set the action to be displayed. The action will not dismiss this {@link BaseTransientBottomBar}
+     *
+     * @param text     Text to display for the action
+     * @param listener callback to be invoked when the action is clicked
+     *
+     * @return
+     */
+    public DagashiBar setNonDismissAction(CharSequence text, View.OnClickListener listener) {
+        return setAction(text, listener, false);
     }
 
     /**
@@ -215,10 +228,11 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
      *
      * @param text     Text to display for the action
      * @param listener callback to be invoked when the action is clicked
+     * @param dismiss  Whether the action should dismiss the bar
      */
     @NonNull
     @SuppressLint("RestrictedApi")
-    public DagashiBar setAction(CharSequence text, final View.OnClickListener listener) {
+    public DagashiBar setAction(CharSequence text, final View.OnClickListener listener, final boolean dismiss) {
         final SnackbarContentLayout contentLayout = (SnackbarContentLayout) this.view.getChildAt(0);
         final TextView tv = contentLayout.getActionView();
 
@@ -235,8 +249,10 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
                         @Override
                         public void onClick(View view) {
                             listener.onClick(view);
-                            // Now dismiss the Snackbar
-                            dispatchDismiss(BaseCallback.DISMISS_EVENT_ACTION);
+                            // Dismiss when requested.
+                            if (dismiss) {
+                                dispatchDismiss(BaseCallback.DISMISS_EVENT_ACTION);
+                            }
                         }
                     });
         }
