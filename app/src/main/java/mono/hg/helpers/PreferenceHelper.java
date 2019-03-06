@@ -23,6 +23,7 @@ public class PreferenceHelper {
     private static boolean static_app_list;
     private static boolean adaptive_shade;
     private static boolean windowbar_status_switch;
+    private static boolean gesture_down_status;
     private static boolean is_testing;
     private static boolean was_alien;
     private static Map<String, String> label_list = new HashMap<>();
@@ -129,6 +130,10 @@ public class PreferenceHelper {
 
     public static String doDoubleTap() {
         return gesture_double_tap_action;
+    }
+
+    public static boolean shouldSwipeToExpand() {
+        return gesture_down_status;
     }
 
     public static String getWindowBarMode() {
@@ -288,6 +293,7 @@ public class PreferenceHelper {
         adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
         windowbar_status_switch = preferences.getBoolean("windowbar_status_switch", false);
         windowbar_mode = preferences.getString("windowbar_mode", "none");
+        gesture_down_status = preferences.getBoolean("gesture_down_status", false);
         gesture_left_action = preferences.getString("gesture_left", "none");
         gesture_right_action = preferences.getString("gesture_right", "none");
         gesture_up_action = preferences.getString("gesture_up", "none");

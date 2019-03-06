@@ -76,6 +76,9 @@
     <string name="gestures_double_tap">Double tap</string>
     <string name="gestures_default">None</string>
     <string name="gestures_default_value" translatable="false">none</string>
+
+    <string name="gestures_down_status">Swipe for status bar</string>
+    <string name="gestures_down_status_desc">Swipe down to expand the status bar. Requires tap to open to be enabled.</string>
     
     <string name="pref_title_app_list_order">App list order</string>
     <string name="app_list_order_normal">A to Z</string>

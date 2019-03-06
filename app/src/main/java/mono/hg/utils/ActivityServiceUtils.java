@@ -1,5 +1,6 @@
 package mono.hg.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -9,6 +10,8 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import java.lang.reflect.Method;
 
 public class ActivityServiceUtils {
 
@@ -88,6 +91,28 @@ public class ActivityServiceUtils {
             return clipboardManager.getPrimaryClip().getItemAt(0).getText();
         } else {
             return "";
+        }
+    }
+
+    /**
+     * Expands the status bar.
+     *
+     * @param activity The activity where status bar service can be retrieved.
+     */
+    @SuppressLint({"WrongConstant", "PrivateApi"})
+    public static void expandStatusBar(Activity activity) {
+        try {
+            Object service = activity.getSystemService("statusbar");
+            Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
+            Method showStatusbar;
+            if (Build.VERSION.SDK_INT >= 17) {
+                showStatusbar = statusbarManager.getMethod("expandNotificationsPanel");
+            } else {
+                showStatusbar = statusbarManager.getMethod("expand");
+            }
+            showStatusbar.invoke(service);
+        } catch (Exception w) {
+            Utils.sendLog(0, "Exception in expandStatusBar: " + w.toString());
         }
     }
 

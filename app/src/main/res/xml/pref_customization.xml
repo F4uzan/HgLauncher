@@ -50,6 +50,13 @@
             android:title="@string/gestures_double_tap" />
 
         <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="gesture_down_status"
+            android:summary="@string/gestures_down_status_desc"
+            android:title="@string/gestures_down_status"
+            app:dependency="tap_to_drawer" />
+
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="tap_to_drawer"
             android:summary="@string/tap_to_drawer_desc"

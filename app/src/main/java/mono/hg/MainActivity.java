@@ -609,8 +609,12 @@ public class MainActivity extends AppCompatActivity {
         touchReceiver.setOnTouchListener(new GestureListener(this) {
             @Override
             public void onSwipeDown() {
-                // Show the app panel.
-                doThis("show_panel");
+                if (PreferenceHelper.shouldSwipeToExpand()) {
+                    ActivityServiceUtils.expandStatusBar(MainActivity.this);
+                } else {
+                    // Show the app panel if swipe to expand is disabled.
+                    doThis("show_panel");
+                }
             }
 
             @Override
