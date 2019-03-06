@@ -106,7 +106,7 @@
             android:summary="@string/pref_header_web_provider_desc"
             android:title="@string/pref_header_web_provider_title" />
 
-        <androidx.preference.DropDownPreference
+        <androidx.preference.ListPreference
             android:defaultValue="none"
             android:dependency="web_search_enabled"
             android:entries="@array/pref_search_provider_title"
