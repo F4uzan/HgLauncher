@@ -57,6 +57,12 @@ public class AppAdapter extends FlexibleAdapter<AppDetail>
         filterItems();
     }
 
+    @Override public void filterItems() {
+        if (hasFinishedLoading()) {
+            super.filterItems();
+        }
+    }
+
     @NonNull
     @Override
     public String getSectionName(int position) {
