@@ -92,7 +92,7 @@
     <string name="anim_list_pull_up">Pull up</string>
     <string name="anim_list_slide_in">Slide in</string>
 
-    <string name="pref_search_provider">Online search provider</string>
+    <string name="pref_search_provider">Default web search provider</string>
 
     <string name="web_search_long_press">Extended search menu</string>
     <string name="web_search_long_press_desc">When search provider is not \'Always ask\', long-pressing \'Go\' allows selection of search provider.</string>
@@ -100,7 +100,7 @@
     <string name="keyboard_focus">Keyboard focus</string>
     <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down.</string>
 
-    <string name="web_search">Prompt for online search</string>
+    <string name="web_search">Prompt for web search</string>
     <string name="web_search_desc">Show a prompt to search for your query online.</string>
 
     <string name="tap_to_drawer">Tap to open app list</string>
