@@ -119,10 +119,16 @@ public class AppUtils {
     /**
      * Launches an app as a new task.
      *
-     * @param componentName The package name of the app.
+     * @param componentName The component name of the app.
      */
     public static void launchApp(Activity activity, String componentName) {
         ComponentName component = ComponentName.unflattenFromString(componentName);
+
+        // Forcibly end if we can't unflatten the string.
+        if (component == null) {
+            return;
+        }
+
         Intent intent = Intent.makeMainActivity(component);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
