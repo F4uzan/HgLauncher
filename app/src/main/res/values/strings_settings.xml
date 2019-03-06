@@ -94,6 +94,9 @@
 
     <string name="pref_search_provider">Online search provider</string>
 
+    <string name="web_search_long_press">Extended search menu</string>
+    <string name="web_search_long_press_desc">When search provider is not \'Always ask\', long-pressing \'Go\' allows selection of search provider.</string>
+
     <string name="keyboard_focus">Keyboard focus</string>
     <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down.</string>
 

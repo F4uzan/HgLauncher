@@ -101,6 +101,12 @@
             android:summary="@string/web_search_desc"
             android:title="@string/web_search" />
 
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="web_search_long_press"
+            android:summary="@string/web_search_long_press_desc"
+            android:title="@string/web_search_long_press" />
+
         <androidx.preference.Preference
             android:key="web_provider"
             android:summary="@string/pref_header_web_provider_desc"
@@ -108,7 +114,6 @@
 
         <androidx.preference.ListPreference
             android:defaultValue="none"
-            android:dependency="web_search_enabled"
             android:entries="@array/pref_search_provider_title"
             android:entryValues="@array/pref_search_provider_values"
             android:key="search_provider"

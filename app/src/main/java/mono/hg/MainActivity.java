@@ -729,6 +729,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).show();
 
+                    if (PreferenceHelper.extendedSearchMenu() && !PreferenceHelper.getSearchProvider().equals("none")) {
+                        searchSnack.setLongPressAction(new View.OnLongClickListener() {
+                            @Override public boolean onLongClick(View view) {
+                                appMenu = new PopupMenu(MainActivity.this, view);
+                                ViewUtils.createSearchMenu(MainActivity.this, appMenu,
+                                        URLEncoder.encode(searchBarText));
+                                return true;
+                            }
+                        });
+                    }
+
                     searchSnack.setSwipeDisabled();
                 }
             }

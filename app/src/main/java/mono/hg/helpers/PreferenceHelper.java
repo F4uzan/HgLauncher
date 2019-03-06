@@ -24,6 +24,7 @@ public class PreferenceHelper {
     private static boolean adaptive_shade;
     private static boolean windowbar_status_switch;
     private static boolean gesture_down_status;
+    private static boolean web_search_long_press;
     private static boolean is_testing;
     private static boolean was_alien;
     private static Map<String, String> label_list = new HashMap<>();
@@ -98,6 +99,10 @@ public class PreferenceHelper {
 
     public static boolean promptSearch() {
         return web_search_enabled;
+    }
+
+    public static boolean extendedSearchMenu() {
+        return web_search_long_press;
     }
 
     public static boolean favouritesIgnoreScroll() {
@@ -287,6 +292,7 @@ public class PreferenceHelper {
         tap_to_drawer = preferences.getBoolean("tap_to_drawer", true);
         app_theme = preferences.getString("app_theme", "light");
         web_search_enabled = preferences.getBoolean("web_search_enabled", true);
+        web_search_long_press = preferences.getBoolean("web_search_long_press", false);
         search_provider_set = preferences.getString("search_provider", "none");
         static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
         static_app_list = preferences.getBoolean("static_app_list_switch", false);
