@@ -609,7 +609,7 @@ public class MainActivity extends AppCompatActivity {
         touchReceiver.setOnTouchListener(new GestureListener(this) {
             @Override
             public void onSwipeDown() {
-                if (PreferenceHelper.shouldSwipeToExpand()) {
+                if (PreferenceHelper.allowSwipeToExpand() && PreferenceHelper.allowTapToOpen()) {
                     ActivityServiceUtils.expandStatusBar(MainActivity.this);
                 } else {
                     // Show the app panel if swipe to expand is disabled.

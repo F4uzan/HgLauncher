@@ -132,7 +132,7 @@ public class PreferenceHelper {
         return gesture_double_tap_action;
     }
 
-    public static boolean shouldSwipeToExpand() {
+    public static boolean allowSwipeToExpand() {
         return gesture_down_status;
     }
 
