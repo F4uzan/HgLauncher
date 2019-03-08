@@ -28,11 +28,11 @@
     <string name="version_key_toast">Sakatu beste behin baieztatzeko.</string>
     <string name="version_key_name">HgLauncher (testing)</string>
 
-    <!-- Dialogue and toast messages -->
+    <!-- Dialog and toast messages -->
     <string name="backup_exist">Babes-kopiaren izen berdina duen fitxategia bat existitzen da dagoeneko.</string>
     <string name="backup_exist_overwrite">Gainidatzi</string>
     <string name="backup_exist_cancel">Utzi</string>
-    <string name="backup_restore_dialogue">Berrezartzen…</string>
+    <string name="backup_restore_dialog">Berrezartzen…</string>
     <string name="restore_complete">Berrezartzea osatu da!</string>
     <string name="backup_complete">Babes-kopia gorde da!</string>
     <string name="backup_empty">Babes-kopiaren izena ezin da hutsik egon.</string>

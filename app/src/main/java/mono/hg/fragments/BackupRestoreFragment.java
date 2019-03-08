@@ -304,7 +304,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         protected void onPreExecute() {
             super.onPreExecute();
             progress = new ProgressDialog(fragmentRef.get().requireActivity());
-            progress.setMessage(fragmentRef.get().getString(R.string.backup_restore_dialogue));
+            progress.setMessage(fragmentRef.get().getString(R.string.backup_restore_dialog));
             progress.setIndeterminate(false);
             progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progress.show();

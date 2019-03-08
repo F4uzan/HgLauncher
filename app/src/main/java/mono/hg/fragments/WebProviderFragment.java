@@ -163,9 +163,9 @@ public class WebProviderFragment extends BackHandledFragment {
         }
 
         if (isEditing) {
-            title = getString(R.string.dialogue_title_edit_provider);
+            title = getString(R.string.dialog_title_edit_provider);
         } else {
-            title = getString(R.string.dialogue_title_add_provider);
+            title = getString(R.string.dialog_title_add_provider);
         }
 
         builder.setView(view);

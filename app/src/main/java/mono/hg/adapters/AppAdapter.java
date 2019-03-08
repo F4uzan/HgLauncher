@@ -66,7 +66,7 @@ public class AppAdapter extends FlexibleAdapter<AppDetail>
     @NonNull
     @Override
     public String getSectionName(int position) {
-        return getItem(position).getAppName().substring(0, 1).toUpperCase();
+        return Utils.requireNonNull(getItem(position)).getAppName().substring(0, 1).toUpperCase();
     }
 
     /**

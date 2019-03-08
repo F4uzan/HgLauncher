@@ -20,13 +20,13 @@ public class CreditsDialogFragment extends DialogFragment {
 
     @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = View.inflate(getActivity(), R.layout.fragment_credits_dialogue, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_credits_dialog, null);
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader br = null;
 
-        builder.setTitle(R.string.about_credits_dialogue_title);
+        builder.setTitle(R.string.about_credits_dialog_title);
         builder.setView(view);
-        builder.setPositiveButton(R.string.dialogue_action_close, null);
+        builder.setPositiveButton(R.string.dialog_action_close, null);
         TextView creditsText = view.findViewById(R.id.credits_placeholder);
 
         try {

@@ -40,17 +40,17 @@
     <string name="version_key_toast">Tap once again to confirm.</string>
     <string name="version_key_name">HgLauncher (testing)</string>
 
-    <!-- Dialogue and toast messages -->
+    <!-- Dialog and toast messages -->
     <string name="backup_exist">A file with the same name as the backup already exists.</string>
     <string name="backup_exist_overwrite">Overwrite</string>
     <string name="backup_exist_cancel">Cancel</string>
-    <string name="backup_restore_dialogue">Restoring…</string>
+    <string name="backup_restore_dialog">Restoring…</string>
     <string name="restore_complete">Restore complete!</string>
     <string name="backup_complete">Backup saved!</string>
     <string name="backup_empty">Backup name cannot be empty.</string>
 
-    <!-- Credits dialogue. -->
-    <string name="about_credits_dialogue_title">Credits</string>
+    <!-- Credits dialog. -->
+    <string name="about_credits_dialog_title">Credits</string>
     <string name="about_credits">Credits</string>
     <string name="about_credits_desc">Credits for everyone involved in this launcher.</string>
 
@@ -95,7 +95,7 @@
     <string name="pref_search_provider">Default web search provider</string>
 
     <string name="web_search_long_press">Extended search menu</string>
-    <string name="web_search_long_press_desc">When search provider is not \'Always ask\', long-pressing \'Go\' allows selection of search provider.</string>
+    <string name="web_search_long_press_desc">When search provider is not set to \'Always ask\', long-pressing \'Go\' allows selection of search provider.</string>
 
     <string name="keyboard_focus">Keyboard focus</string>
     <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down.</string>

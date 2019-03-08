@@ -33,13 +33,13 @@
     <string name="search_web_hint">Search for \'%1$s\' online.</string>
     <string name="search_web_button_prompt">With</string>
     <string name="search_web_button">Go</string>
-    <string name="dialogue_widget_hint">Tap to add widget.</string>
-    <string name="dialogue_title_add_provider">Add provider</string>
-    <string name="dialogue_title_edit_provider">Edit provider</string>
-    <string name="dialogue_title_shorthand">Set shorthand</string>
-    <string name="dialogue_title_widgets">Widgetspace</string>
-    <string name="dialogue_action_close">Close</string>
-    <string name="dialogue_action_add">Add</string>
+    <string name="dialog_widget_hint">Tap to add widget.</string>
+    <string name="dialog_title_add_provider">Add provider</string>
+    <string name="dialog_title_edit_provider">Edit provider</string>
+    <string name="dialog_title_shorthand">Set shorthand</string>
+    <string name="dialog_title_widgets">Widgetspace</string>
+    <string name="dialog_action_close">Close</string>
+    <string name="dialog_action_add">Add</string>
 
     <!-- Error messages -->
     <string name="err_activity_null">Cannot start application.</string>

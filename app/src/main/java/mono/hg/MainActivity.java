@@ -979,21 +979,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Creates a dialogue to set an app's shorthand.
+     * Creates a dialog to set an app's shorthand.
      *
      * @param packageName The package name of the app.
      * @param position    Adapter position of the app.
      */
     private void makeRenameDialog(final String packageName, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = View.inflate(this, R.layout.layout_rename_dialogue, null);
+        View view = View.inflate(this, R.layout.layout_rename_dialog, null);
 
         final EditText renameField = view.findViewById(R.id.rename_field);
         renameField.setHint(PreferenceHelper.getLabel(packageName));
         builder.setView(view);
 
         builder.setNegativeButton(android.R.string.cancel, null)
-               .setTitle(R.string.dialogue_title_shorthand)
+               .setTitle(R.string.dialog_title_shorthand)
                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                    @Override public void onClick(DialogInterface dialogInterface, int i) {
                        String newLabel = renameField.getText()

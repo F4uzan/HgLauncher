@@ -75,9 +75,9 @@ public class WidgetsDialogFragment extends DialogFragment {
         }
 
         builder.setView(view);
-        builder.setTitle(R.string.dialogue_title_widgets);
-        builder.setNegativeButton(R.string.dialogue_action_close, null);
-        builder.setPositiveButton(R.string.dialogue_action_add, null);
+        builder.setTitle(R.string.dialog_title_widgets);
+        builder.setNegativeButton(R.string.dialog_action_close, null);
+        builder.setPositiveButton(R.string.dialog_action_add, null);
 
         final AlertDialog widgetDialog = builder.create();
 
