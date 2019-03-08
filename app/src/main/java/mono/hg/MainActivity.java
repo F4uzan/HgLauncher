@@ -1048,7 +1048,7 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             MainActivity activity = activityRef.get();
             if (activity != null) {
-                tempList.addAll(AppUtils.loadApps(activity));
+                activity.appsList.addAll(AppUtils.loadApps(activity));
             }
             return null;
         }
@@ -1062,8 +1062,7 @@ public class MainActivity extends AppCompatActivity {
                 activity.loadProgress.invalidate();
 
                 // Add the fetched apps and update item view cache.
-                activity.appsList.addAll(tempList);
-                activity.appsAdapter.updateDataSet(tempList);
+                activity.appsAdapter.updateDataSet(activity.appsList);
                 activity.appsRecyclerView.setItemViewCacheSize(activity
                         .appsAdapter.getItemCount() - 1);
 
