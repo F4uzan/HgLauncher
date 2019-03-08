@@ -67,7 +67,7 @@ public class WidgetsDialogFragment extends DialogFragment {
         appWidgetContainer = view.findViewById(R.id.widget_container);
 
         if (!widgetsList.isEmpty()) {
-            for (String widgets : widgetsList) {
+            for (String widgets : PreferenceHelper.getWidgetList()) {
                 Intent widgetIntent = new Intent();
                 widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Integer.parseInt(widgets));
                 addWidget(widgetIntent, appWidgetContainer.getChildCount(), false);
