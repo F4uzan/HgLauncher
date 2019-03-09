@@ -122,6 +122,11 @@ public class AppUtils {
      * @param componentName The component name of the app.
      */
     public static void launchApp(Activity activity, String componentName) {
+        // When receiving 'none', it's probably a gesture that hasn't been registered.
+        if ("none".equals(componentName)) {
+            return;
+        }
+
         ComponentName component = ComponentName.unflattenFromString(componentName);
 
         // Forcibly end if we can't unflatten the string.
