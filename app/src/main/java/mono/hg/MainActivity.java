@@ -28,6 +28,8 @@ import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -669,6 +671,7 @@ public class MainActivity extends AppCompatActivity {
     private void addSearchBarTextListener() {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
+            Timer timer;
             String searchBarText, searchHint;
             DagashiBar searchSnack = DagashiBar.make(snackHolder, searchHint,
                     DagashiBar.LENGTH_INDEFINITE);
@@ -683,6 +686,10 @@ public class MainActivity extends AppCompatActivity {
                 // Begin filtering our list.
                 appsAdapter.setFilter(searchBarText);
                 appsAdapter.filterItems();
+
+                if (timer != null) {
+                    timer.cancel();
+                }
             }
 
             @Override
@@ -697,10 +704,20 @@ public class MainActivity extends AppCompatActivity {
                     s.delete(0, 1);
                 }
 
-                if (s.length() == 0) {
-                    // Dismiss the search snackbar.
-                    searchSnack.dismiss();
-                } else if (s.length() > 0 && PreferenceHelper.promptSearch()) {
+                timer = new Timer();
+
+                // Avoid dismissing searchSnack by setting a timer for user input.
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        // Dismiss the search prompt when there is nothing to show.
+                        if (searchBarText.isEmpty()) {
+                            searchSnack.dismiss();
+                        }
+                    }
+                }, 125);
+
+                if (s.length() > 0 && PreferenceHelper.promptSearch()) {
                     // Update the snackbar text.
                     searchSnack.setText(searchHint);
 
