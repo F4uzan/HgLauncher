@@ -729,7 +729,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).show();
 
-                    if (PreferenceHelper.extendedSearchMenu() && !PreferenceHelper.getSearchProvider().equals("none")) {
+                    if (PreferenceHelper.extendedSearchMenu() && !PreferenceHelper.getSearchProvider()
+                                                                                  .equals("none")) {
                         searchSnack.setLongPressAction(new View.OnLongClickListener() {
                             @Override public boolean onLongClick(View view) {
                                 appMenu = new PopupMenu(MainActivity.this, view);
@@ -840,7 +841,11 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onItemLongClick(int position) {
                 final String packageName = Utils.requireNonNull(
                         pinnedAppsAdapter.getItem(position)).getPackageName();
-                createAppMenu(pinnedAppsRecyclerView.getChildAt(position), true, packageName);
+
+                // Use LayoutManager method to get the view,
+                // as RecyclerView will happily return null if it can.
+                createAppMenu(Utils.requireNonNull(pinnedAppsRecyclerView.getLayoutManager())
+                                   .findViewByPosition(position), true, packageName);
             }
         });
     }
