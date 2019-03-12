@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,8 +29,6 @@ import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -671,7 +670,21 @@ public class MainActivity extends AppCompatActivity {
     private void addSearchBarTextListener() {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(new TextWatcher() {
-            Timer timer;
+            // Handler and Runnable used to keep track of user input.
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
+                @Override public void run() {
+                    // Dismiss the search prompt when there is nothing to show.
+                    if (searchBarText.isEmpty()) {
+                        searchSnack.dismiss();
+                        handler.removeCallbacks(this);
+                    } else {
+                        // Tick again.
+                        handler.postDelayed(this, 125);
+                    }
+                }
+            };
+
             String searchBarText, searchHint;
             DagashiBar searchSnack = DagashiBar.make(snackHolder, searchHint,
                     DagashiBar.LENGTH_INDEFINITE);
@@ -686,10 +699,6 @@ public class MainActivity extends AppCompatActivity {
                 // Begin filtering our list.
                 appsAdapter.setFilter(searchBarText);
                 appsAdapter.filterItems();
-
-                if (timer != null) {
-                    timer.cancel();
-                }
             }
 
             @Override
@@ -704,18 +713,8 @@ public class MainActivity extends AppCompatActivity {
                     s.delete(0, 1);
                 }
 
-                timer = new Timer();
-
-                // Avoid dismissing searchSnack by setting a timer for user input.
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        // Dismiss the search prompt when there is nothing to show.
-                        if (searchBarText.isEmpty()) {
-                            searchSnack.dismiss();
-                        }
-                    }
-                }, 125);
+                // Start our handler.
+                handler.postDelayed(runnable, 125);
 
                 if (s.length() > 0 && PreferenceHelper.promptSearch()) {
                     // Update the snackbar text.
