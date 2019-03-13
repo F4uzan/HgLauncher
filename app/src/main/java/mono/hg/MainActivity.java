@@ -8,10 +8,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -53,6 +51,7 @@ import mono.hg.views.IndeterminateMaterialProgressBar;
 import mono.hg.views.TogglingLinearLayoutManager;
 import mono.hg.wrappers.GestureListener;
 import mono.hg.wrappers.SimpleScrollListener;
+import mono.hg.wrappers.TextSpectator;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -669,54 +668,39 @@ public class MainActivity extends AppCompatActivity {
      */
     private void addSearchBarTextListener() {
         // Implement listener for the search bar.
-        searchBar.addTextChangedListener(new TextWatcher() {
-            // Handler and Runnable used to keep track of user input.
-            Handler handler = new Handler();
-            Runnable runnable = new Runnable() {
-                @Override public void run() {
-                    // Dismiss the search prompt when there is nothing to show.
-                    if (searchBarText.isEmpty()) {
-                        searchSnack.dismiss();
-                        handler.removeCallbacks(this);
-                    } else {
-                        // Tick again.
-                        handler.postDelayed(this, 125);
-                    }
-                }
-            };
+        searchBar.addTextChangedListener(new TextSpectator(searchBar) {
+            String searchHint;
 
-            String searchBarText, searchHint;
             DagashiBar searchSnack = DagashiBar.make(snackHolder, searchHint,
                     DagashiBar.LENGTH_INDEFINITE);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Fetch texts for the snackbar.
-                searchBarText = searchBar.getText().toString().trim();
+            @Override public void whenTimerTicked() {
+                super.whenTimerTicked();
+
+                if (getTrimmedInputText().isEmpty()) {
+                    searchSnack.dismiss();
+                    stopTimer();
+                }
+            }
+
+            @Override public void whenChanged(CharSequence s, int start, int before, int count) {
+                super.whenChanged(s, start, before, count);
+
+                // Text used for searchSnack.
                 searchHint = String.format(getResources().getString(R.string.search_web_hint),
-                        searchBarText);
+                        getInputText());
 
                 // Begin filtering our list.
-                appsAdapter.setFilter(searchBarText);
+                appsAdapter.setFilter(getTrimmedInputText());
                 appsAdapter.filterItems();
             }
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // No-op.
-            }
+            @Override public void afterChanged(Editable s) {
+                super.afterChanged(s);
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Don't allow spamming of empty spaces.
-                if (s.length() > 0 && s.charAt(0) == ' ') {
-                    s.delete(0, 1);
-                }
+                startTimer();
 
-                // Start our handler.
-                handler.postDelayed(runnable, 125);
-
-                if (s.length() > 0 && PreferenceHelper.promptSearch()) {
+                if (!getTrimmedInputText().isEmpty() && PreferenceHelper.promptSearch()) {
                     // Update the snackbar text.
                     searchSnack.setText(searchHint);
 
@@ -735,12 +719,12 @@ public class MainActivity extends AppCompatActivity {
                             if (!PreferenceHelper.getSearchProvider().equals("none")) {
                                 Utils.doWebSearch(MainActivity.this,
                                         PreferenceHelper.getSearchProvider(),
-                                        URLEncoder.encode(searchBarText));
+                                        URLEncoder.encode(getTrimmedInputText()));
                                 searchSnack.dismiss();
                             } else {
                                 appMenu = new PopupMenu(MainActivity.this, view);
                                 ViewUtils.createSearchMenu(MainActivity.this, appMenu,
-                                        URLEncoder.encode(searchBarText));
+                                        URLEncoder.encode(getTrimmedInputText()));
                             }
                         }
                     }).show();
@@ -751,7 +735,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override public boolean onLongClick(View view) {
                                 appMenu = new PopupMenu(MainActivity.this, view);
                                 ViewUtils.createSearchMenu(MainActivity.this, appMenu,
-                                        URLEncoder.encode(searchBarText));
+                                        URLEncoder.encode(getTrimmedInputText()));
                                 return true;
                             }
                         });
