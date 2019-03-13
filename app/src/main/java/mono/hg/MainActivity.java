@@ -1029,7 +1029,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private static class getAppTask extends AsyncTask<Void, Void, Void> {
         private WeakReference<MainActivity> activityRef;
-        private ArrayList<AppDetail> tempList = new ArrayList<>();
 
         getAppTask(MainActivity context) {
             activityRef = new WeakReference<>(context);
