@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         // Dismiss any visible menu as well as the app panel when it is not needed.
-        dismissAppMenu();
+        doThis("dismiss_menu");
 
         if (!PreferenceHelper.keepAppList()) {
             doThis("hide_panel");
@@ -403,6 +403,13 @@ public class MainActivity extends AppCompatActivity {
         switch (action) {
             default:
                 // Don't do anything.
+                break;
+            case "dismiss_menu":
+                if (appMenu != null) {
+                    appMenu.getMenu().findItem(R.id.action_app_actions).getSubMenu().close();
+                    appMenu.getMenu().findItem(SHORTCUT_MENU_GROUP).getSubMenu().close();
+                    appMenu.dismiss();
+                }
                 break;
             case "show_panel":
                 if (!ViewUtils.isPanelVisible(slidingHome)) {
@@ -804,7 +811,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onScroll() {
-                dismissAppMenu();
+                doThis("dismiss_menu");
             }
 
             @Override
@@ -876,7 +883,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override public void onItemMove(int fromPosition, int toPosition) {
                 // Close app menu when we're dragging.
-                dismissAppMenu();
+                doThis("dismiss_menu");
 
                 // Shuffle our apps around.
                 pinnedAppsAdapter.swapItems(pinnedAppList, fromPosition, toPosition);
@@ -901,7 +908,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityServiceUtils.hideSoftKeyboard(MainActivity.this);
 
                 // Dismiss any visible menu.
-                dismissAppMenu();
+                doThis("dismiss_menu");
             }
 
             @Override public void onPanelStateChanged(View panel,
@@ -1042,13 +1049,5 @@ public class MainActivity extends AppCompatActivity {
 
     public LauncherAppWidgetHost getAppWidgetHostView() {
         return appWidgetHost;
-    }
-
-    private void dismissAppMenu() {
-        if (appMenu != null) {
-            appMenu.getMenu().findItem(R.id.action_app_actions).getSubMenu().close();
-            appMenu.getMenu().findItem(SHORTCUT_MENU_GROUP).getSubMenu().close();
-            appMenu.dismiss();
-        }
     }
 }
