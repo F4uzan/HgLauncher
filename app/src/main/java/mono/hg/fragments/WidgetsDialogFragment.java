@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import mono.hg.MainActivity;
 import mono.hg.R;
 import mono.hg.appwidget.LauncherAppWidgetHost;
 import mono.hg.helpers.PreferenceHelper;
@@ -34,7 +35,6 @@ public class WidgetsDialogFragment extends DialogFragment {
     private static int WIDGET_CONFIG_START_CODE = 1;
     private static int WIDGET_CONFIG_RETURN_CODE = 2;
     private static int WIDGET_CONFIG_DEFAULT_CODE = -1;
-    private static int WIDGET_HOST_ID = 314;
 
     /*
      * Used to handle and add widgets to widgetContainer.
@@ -56,8 +56,8 @@ public class WidgetsDialogFragment extends DialogFragment {
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        appWidgetManager = AppWidgetManager.getInstance(requireActivity().getApplicationContext());
-        appWidgetHost = new LauncherAppWidgetHost(requireActivity().getApplicationContext(), WIDGET_HOST_ID);
+        appWidgetManager = ((MainActivity) requireActivity()).getAppWidgetManager();
+        appWidgetHost = ((MainActivity) requireActivity()).getAppWidgetHostView();
     }
 
     @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

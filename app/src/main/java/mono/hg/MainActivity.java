@@ -2,6 +2,7 @@ package mono.hg;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -36,6 +37,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
+import mono.hg.appwidget.LauncherAppWidgetHost;
 import mono.hg.fragments.WidgetsDialogFragment;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
@@ -56,6 +58,7 @@ import mono.hg.wrappers.TextSpectator;
 public class MainActivity extends AppCompatActivity {
 
     private static int SETTINGS_RETURN_CODE = 12;
+    private static int WIDGET_HOST_ID = 314;
     /*
      * Should the favourites panel listen for scroll?
      */
@@ -146,6 +149,11 @@ public class MainActivity extends AppCompatActivity {
      * Receiver used to listen to installed/uninstalled packages.
      */
     private PackageChangesReceiver packageReceiver = new PackageChangesReceiver();
+    /*
+     * Activity-contained widget manager and host.
+     */
+    private AppWidgetManager appWidgetManager;
+    private LauncherAppWidgetHost appWidgetHost;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -178,6 +186,9 @@ public class MainActivity extends AppCompatActivity {
         appsRecyclerView = findViewById(R.id.apps_list);
         pinnedAppsRecyclerView = findViewById(R.id.pinned_apps_list);
         loadProgress = findViewById(R.id.load_progress);
+
+        appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        appWidgetHost = new LauncherAppWidgetHost(getApplicationContext(), WIDGET_HOST_ID);
 
         animateDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -1022,6 +1033,14 @@ public class MainActivity extends AppCompatActivity {
                        }
                    }
                }).show();
+    }
+
+    public AppWidgetManager getAppWidgetManager() {
+        return appWidgetManager;
+    }
+
+    public LauncherAppWidgetHost getAppWidgetHostView() {
+        return appWidgetHost;
     }
 
     /**
