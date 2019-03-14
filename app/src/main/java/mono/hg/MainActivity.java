@@ -5,13 +5,17 @@ import android.animation.AnimatorListenerAdapter;
 import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Process;
 import android.provider.Settings;
 import android.text.Editable;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +29,9 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,6 +64,23 @@ public class MainActivity extends AppCompatActivity {
 
     private static int SETTINGS_RETURN_CODE = 12;
     private static int WIDGET_HOST_ID = 314;
+    private static int SHORTCUT_MENU_GROUP = 247;
+    /*
+     * List containing installed apps.
+     */
+    public ArrayList<AppDetail> appsList = new ArrayList<>();
+    /*
+     * Adapter for installed apps.
+     */
+    public AppAdapter appsAdapter = new AppAdapter(appsList);
+    /*
+     * RecyclerView for app list.
+     */
+    public RecyclerView appsRecyclerView;
+    /*
+     * Progress bar shown when populating app list.
+     */
+    public IndeterminateMaterialProgressBar loadProgress;
     /*
      * Should the favourites panel listen for scroll?
      */
@@ -70,14 +93,6 @@ public class MainActivity extends AppCompatActivity {
      * Animation duration; fetched from system's duration.
      */
     private int animateDuration;
-    /*
-     * List containing installed apps.
-     */
-    public ArrayList<AppDetail> appsList = new ArrayList<>();
-    /*
-     * Adapter for installed apps.
-     */
-    public AppAdapter appsAdapter = new AppAdapter(appsList);
     /*
      * List containing pinned apps.
      */
@@ -99,10 +114,6 @@ public class MainActivity extends AppCompatActivity {
      * Package manager; casted through getPackageManager().
      */
     private PackageManager manager;
-    /*
-     * RecyclerView for app list.
-     */
-    public RecyclerView appsRecyclerView;
     /*
      * LinearLayoutManager used in appsRecyclerView.
      */
@@ -137,10 +148,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private View touchReceiver;
     /*
-     * Progress bar shown when populating app list.
-     */
-    public IndeterminateMaterialProgressBar loadProgress;
-    /*
      * Menu shown when long-pressing apps.
      */
     private PopupMenu appMenu;
@@ -153,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private AppWidgetManager appWidgetManager;
     private LauncherAppWidgetHost appWidgetHost;
+
+    private LauncherApps launcherApps;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,6 +197,10 @@ public class MainActivity extends AppCompatActivity {
 
         appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
         appWidgetHost = new LauncherAppWidgetHost(getApplicationContext(), WIDGET_HOST_ID);
+
+        if (Utils.sdkIsAround(25)) {
+            launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
+        }
 
         animateDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -508,6 +521,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void createAppMenu(View view, boolean isPinned, final String packageName) {
         final Uri packageNameUri = Uri.parse("package:" + AppUtils.getPackageName(packageName));
+        final Map<CharSequence, String> shortcutMap = new HashMap<>();
 
         int position;
         if (isPinned) {
@@ -521,6 +535,25 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the app menu.
         appMenu = new PopupMenu(MainActivity.this, view);
         appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
+
+        // Inflate app shortcuts.
+        if (Utils.sdkIsAround(25)) {
+            appMenu.getMenu().addSubMenu(1, 0, 0, R.string.action_shortcuts);
+
+            for (ShortcutInfo shortcutInfo : AppUtils.getShortcuts(launcherApps,
+                    AppUtils.getPackageName(packageName))) {
+                shortcutMap.put(Utils.requireNonNull(shortcutInfo.getShortLabel()),
+                        shortcutInfo.getId());
+                appMenu.getMenu()
+                       .findItem(0)
+                       .getSubMenu()
+                       .add(SHORTCUT_MENU_GROUP, Menu.NONE, Menu.NONE, shortcutInfo.getShortLabel());
+            }
+
+            if (shortcutMap.size() == 0) {
+                appMenu.getMenu().getItem(0).setVisible(false);
+            }
+        }
 
         // Hide 'pin' if the app is already pinned or isPinned is set.
         appMenu.getMenu().findItem(R.id.action_pin)
@@ -580,7 +613,13 @@ public class MainActivity extends AppCompatActivity {
                         appsAdapter.removeItem(finalPosition);
                         break;
                     default:
-                        // There is nothing to do.
+                        // Catch click actions from the shortcut menu group.
+                        if (item.getGroupId() == SHORTCUT_MENU_GROUP && Utils.sdkIsAround(25)) {
+                            launcherApps.startShortcut(AppUtils.getPackageName(packageName),
+                                    Utils.requireNonNull(shortcutMap.get(item.getTitle())),
+                                    null, null,
+                                    Process.myUserHandle());
+                        }
                         break;
                 }
                 return true;

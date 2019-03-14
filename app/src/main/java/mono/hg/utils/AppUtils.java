@@ -1,14 +1,19 @@
 package mono.hg.utils;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ShortcutInfo;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.Process;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -265,5 +270,24 @@ public class AppUtils {
             }
         }
         return appsList;
+    }
+
+    /**
+     * Fetch and return shortcuts for a specific app.
+     *
+     * @param launcherApps  LauncherApps service from an activity.
+     * @param componentName The component name to flatten to package name.
+     *
+     * @return A list of shortcut. Null if nonexistent.
+     */
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    public static List<ShortcutInfo> getShortcuts(LauncherApps launcherApps, String componentName) {
+        LauncherApps.ShortcutQuery shortcutQuery = new LauncherApps.ShortcutQuery();
+        shortcutQuery.setQueryFlags(LauncherApps.ShortcutQuery.FLAG_MATCH_DYNAMIC
+                | LauncherApps.ShortcutQuery.FLAG_MATCH_MANIFEST
+                | LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED);
+        shortcutQuery.setPackage(getPackageName(componentName));
+
+        return launcherApps.getShortcuts(shortcutQuery, Process.myUserHandle());
     }
 }

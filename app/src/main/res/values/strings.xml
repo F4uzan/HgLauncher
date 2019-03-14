@@ -27,6 +27,8 @@
     <string name="action_uninstall">Uninstall</string>
     <string name="action_info">App info</string>
     <string name="action_shorthand">Shorthand</string>
+    <string name="action_actions">Actions</string>
+    <string name="action_shortcuts">Shortcuts</string>
 
     <!-- Misc -->
     <string name="search_hint">Search…</string>
