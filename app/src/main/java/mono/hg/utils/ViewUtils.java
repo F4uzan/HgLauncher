@@ -1,6 +1,7 @@
 package mono.hg.utils;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Build;
 import android.view.MenuItem;
@@ -14,8 +15,11 @@ import java.util.Map;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.R;
 import mono.hg.helpers.PreferenceHelper;
+import mono.hg.models.AppDetail;
 
 public class ViewUtils {
 
@@ -69,6 +73,25 @@ public class ViewUtils {
     public static boolean isPanelVisible(SlidingUpPanelLayout panel) {
         return panel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
                 || panel.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED;
+    }
+
+    /**
+     * Launches an app based on RecyclerView scroll state.
+     *
+     * @param activity     The activity for context reference.
+     * @param recyclerView The RecyclerView itself.
+     * @param adapter      A FlexibleAdapter with AppDetail items.
+     */
+    public static void keyboardLaunchApp(Activity activity, RecyclerView recyclerView, FlexibleAdapter<AppDetail> adapter) {
+        if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)
+                && !recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+            AppUtils.launchApp(activity, Utils.requireNonNull(
+                    adapter.getItem(adapter.getItemCount() - 1))
+                                              .getPackageName());
+        } else {
+            AppUtils.launchApp(activity, Utils.requireNonNull(
+                    adapter.getItem(0)).getPackageName());
+        }
     }
 
     /**

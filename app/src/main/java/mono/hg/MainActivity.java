@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Editable;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,6 +42,7 @@ import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.AppDetail;
 import mono.hg.models.PinnedAppDetail;
 import mono.hg.receivers.PackageChangesReceiver;
+import mono.hg.tasks.FetchAppsTask;
 import mono.hg.utils.ActivityServiceUtils;
 import mono.hg.utils.AppUtils;
 import mono.hg.utils.Utils;
@@ -74,11 +73,11 @@ public class MainActivity extends AppCompatActivity {
     /*
      * List containing installed apps.
      */
-    private ArrayList<AppDetail> appsList = new ArrayList<>();
+    public ArrayList<AppDetail> appsList = new ArrayList<>();
     /*
      * Adapter for installed apps.
      */
-    private AppAdapter appsAdapter = new AppAdapter(appsList);
+    public AppAdapter appsAdapter = new AppAdapter(appsList);
     /*
      * List containing pinned apps.
      */
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     /*
      * RecyclerView for app list.
      */
-    private RecyclerView appsRecyclerView;
+    public RecyclerView appsRecyclerView;
     /*
      * LinearLayoutManager used in appsRecyclerView.
      */
@@ -140,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     /*
      * Progress bar shown when populating app list.
      */
-    private IndeterminateMaterialProgressBar loadProgress;
+    public IndeterminateMaterialProgressBar loadProgress;
     /*
      * Menu shown when long-pressing apps.
      */
@@ -223,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Start loading apps and initialising click listeners.
-        new getAppTask(this).execute();
+        new FetchAppsTask(this).execute();
         addSearchBarTextListener();
         addSearchBarEditorListener();
         addGestureListener();
@@ -317,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
         if (AppUtils.hasNewPackage(
                 manager) || (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty())) {
             updatePinnedApps(true);
-            new getAppTask(this).execute();
+            new FetchAppsTask(this).execute();
         }
 
         Utils.registerPackageReceiver(this, packageReceiver);
@@ -366,30 +365,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.isCtrlPressed()) {
-            // Get selected text for cut and copy.
-            int start = searchBar.getSelectionStart();
-            int end = searchBar.getSelectionEnd();
-            final String text = searchBar.getText().toString().substring(start, end);
-
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_A:
-                    searchBar.selectAll();
-                    return true;
-                case KeyEvent.KEYCODE_X:
-                    searchBar.setText(searchBar.getText().toString().replace(text, ""));
-                    return true;
-                case KeyEvent.KEYCODE_C:
-                    ActivityServiceUtils.copyToClipboard(this, text);
-                    return true;
-                case KeyEvent.KEYCODE_V:
-                    searchBar.setText(
-                            searchBar.getText().replace(Math.min(start, end), Math.max(start, end),
-                                    ActivityServiceUtils.pasteFromClipboard(this), 0,
-                                    ActivityServiceUtils.pasteFromClipboard(this).length()));
-                    return true;
-                default:
-                    return super.onKeyUp(keyCode, event);
-            }
+            return Utils.handleInputShortcut(this, searchBar, keyCode);
         } else {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_ESCAPE:
@@ -494,7 +470,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param isInit Are we loading for onCreate?
      */
-    private void loadPref(Boolean isInit) {
+    private void loadPref(boolean isInit) {
         if (!PreferenceHelper.hasEditor()) {
             PreferenceHelper.initPreference(this);
         }
@@ -530,7 +506,7 @@ public class MainActivity extends AppCompatActivity {
      * @param isPinned    Is this a pinned app?
      * @param packageName Package name of the app.
      */
-    private void createAppMenu(View view, Boolean isPinned, final String packageName) {
+    private void createAppMenu(View view, boolean isPinned, final String packageName) {
         final Uri packageNameUri = Uri.parse("package:" + AppUtils.getPackageName(packageName));
 
         int position;
@@ -767,15 +743,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((!appsAdapter.isEmpty() && searchBar.getText().length() > 0) &&
                         (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
-                    if (!appsRecyclerView.canScrollVertically(RecyclerView.FOCUS_UP)
-                            && !appsRecyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
-                        AppUtils.launchApp(MainActivity.this, Utils.requireNonNull(
-                                appsAdapter.getItem(appsAdapter.getItemCount() - 1))
-                                                                   .getPackageName());
-                    } else {
-                        AppUtils.launchApp(MainActivity.this, Utils.requireNonNull(
-                                appsAdapter.getItem(0)).getPackageName());
-                    }
+                    ViewUtils.keyboardLaunchApp(MainActivity.this, appsRecyclerView, appsAdapter);
                     return true;
                 }
                 return false;
@@ -969,7 +937,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param restart Should a complete adapter & list re-initialisation be done?
      */
-    private void updatePinnedApps(Boolean restart) {
+    private void updatePinnedApps(boolean restart) {
         String newAppString = "";
 
         if (!pinnedAppString.isEmpty() && restart) {
@@ -1041,56 +1009,5 @@ public class MainActivity extends AppCompatActivity {
 
     public LauncherAppWidgetHost getAppWidgetHostView() {
         return appWidgetHost;
-    }
-
-    /**
-     * AsyncTask used to load/populate the app list.
-     */
-    private static class getAppTask extends AsyncTask<Void, Void, Void> {
-        private WeakReference<MainActivity> activityRef;
-
-        getAppTask(MainActivity context) {
-            activityRef = new WeakReference<>(context);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            MainActivity activity = activityRef.get();
-
-            if (activity != null) {
-                // Clear the apps list first so we wouldn't add over an existing list.
-                activity.appsList.clear();
-                activity.appsAdapter.removeRange(0, activity.appsList.size());
-
-                // Show the progress bar so the list wouldn't look empty.
-                activity.loadProgress.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            MainActivity activity = activityRef.get();
-            if (activity != null) {
-                activity.appsList.addAll(AppUtils.loadApps(activity));
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void results) {
-            MainActivity activity = activityRef.get();
-            if (activity != null) {
-                // Remove the progress bar.
-                activity.loadProgress.setVisibility(View.GONE);
-                activity.loadProgress.invalidate();
-
-                // Add the fetched apps and update item view cache.
-                activity.appsAdapter.updateDataSet(activity.appsList);
-                activity.appsRecyclerView.setItemViewCacheSize(activity
-                        .appsAdapter.getItemCount() - 1);
-
-                activity.appsAdapter.finishedLoading(true);
-            }
-        }
     }
 }

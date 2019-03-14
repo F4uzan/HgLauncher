@@ -8,6 +8,8 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.widget.EditText;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -184,6 +186,42 @@ public class Utils {
         }
     }
 
+    /**
+     * Handles common input shortcut from an EditText.
+     *
+     * @param activity The activity to reference for copying and pasting.
+     * @param editText The EditText where the text is being copied/pasted.
+     * @param keyCode  Keycode to handle.
+     *
+     * @return True if key is handled.
+     */
+    public static boolean handleInputShortcut(Activity activity, EditText editText, int keyCode) {
+        // Get selected text for cut and copy.
+        int start = editText.getSelectionStart();
+        int end = editText.getSelectionEnd();
+        final String text = editText.getText().toString().substring(start, end);
+
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_A:
+                editText.selectAll();
+                return true;
+            case KeyEvent.KEYCODE_X:
+                editText.setText(editText.getText().toString().replace(text, ""));
+                return true;
+            case KeyEvent.KEYCODE_C:
+                ActivityServiceUtils.copyToClipboard(activity, text);
+                return true;
+            case KeyEvent.KEYCODE_V:
+                editText.setText(
+                        editText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                ActivityServiceUtils.pasteFromClipboard(activity), 0,
+                                ActivityServiceUtils.pasteFromClipboard(activity).length()));
+                return true;
+            default:
+                // Do nothing.
+                return false;
+        }
+    }
 
     /**
      * Set default providers for indeterminate search.

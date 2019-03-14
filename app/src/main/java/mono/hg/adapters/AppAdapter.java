@@ -78,38 +78,42 @@ public class AppAdapter extends FlexibleAdapter<AppDetail>
         mRecyclerView = recyclerView;
 
         // Handle key up and key down and attempt to move selection.
-        recyclerView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // Return false if scrolled to the bounds and allow focus to move off the list.
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (isConfirmButton(event)) {
-                        if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) == KeyEvent.FLAG_LONG_PRESS) {
-                            Utils.requireNonNull(
-                                    mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem))
-                                    .itemView.performLongClick();
+        // This is unnecessary for newer API.
+        if (Utils.sdkIsBelow(21)) {
+            recyclerView.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    // Return false if scrolled to the bounds and allow focus to move off the list.
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                        if (isConfirmButton(event)) {
+                            if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) == KeyEvent.FLAG_LONG_PRESS) {
+                                Utils.requireNonNull(
+                                        mRecyclerView.findViewHolderForAdapterPosition(
+                                                mSelectedItem))
+                                        .itemView.performLongClick();
+                            } else {
+                                event.startTracking();
+                            }
+                            return true;
                         } else {
-                            event.startTracking();
+                            if (isDown(keyCode)) {
+                                return tryMoveSelection(1);
+                            } else if (isUp(keyCode)) {
+                                return tryMoveSelection(-1);
+                            }
                         }
+                    } else if (event.getAction() == KeyEvent.ACTION_UP && isConfirmButton(event)
+                            && ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != KeyEvent.FLAG_LONG_PRESS)
+                            && mSelectedItem != -1) {
+                        Utils.requireNonNull(
+                                mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem))
+                                .itemView.performClick();
                         return true;
-                    } else {
-                        if (isDown(keyCode)) {
-                            return tryMoveSelection(1);
-                        } else if (isUp(keyCode)) {
-                            return tryMoveSelection(-1);
-                        }
                     }
-                } else if (event.getAction() == KeyEvent.ACTION_UP && isConfirmButton(event)
-                        && ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != KeyEvent.FLAG_LONG_PRESS)
-                        && mSelectedItem != -1) {
-                    Utils.requireNonNull(
-                            mRecyclerView.findViewHolderForAdapterPosition(mSelectedItem))
-                            .itemView.performClick();
-                    return true;
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
+        }
     }
 
     /**
