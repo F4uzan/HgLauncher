@@ -299,9 +299,8 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         // Dismiss any visible menu as well as the app panel when it is not needed.
-        if (appMenu != null) {
-            appMenu.dismiss();
-        }
+        dismissAppMenu();
+
         if (!PreferenceHelper.keepAppList()) {
             doThis("hide_panel");
         }
@@ -538,14 +537,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Inflate app shortcuts.
         if (Utils.sdkIsAround(25)) {
-            appMenu.getMenu().addSubMenu(1, 0, 0, R.string.action_shortcuts);
+            appMenu.getMenu().addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts);
 
-            for (ShortcutInfo shortcutInfo : AppUtils.getShortcuts(launcherApps,
-                    AppUtils.getPackageName(packageName))) {
+            for (ShortcutInfo shortcutInfo : AppUtils.getShortcuts(launcherApps, packageName)) {
                 shortcutMap.put(Utils.requireNonNull(shortcutInfo.getShortLabel()),
                         shortcutInfo.getId());
                 appMenu.getMenu()
-                       .findItem(0)
+                       .findItem(SHORTCUT_MENU_GROUP)
                        .getSubMenu()
                        .add(SHORTCUT_MENU_GROUP, Menu.NONE, Menu.NONE, shortcutInfo.getShortLabel());
             }
@@ -806,9 +804,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onScroll() {
-                if (appMenu != null) {
-                    appMenu.dismiss();
-                }
+                dismissAppMenu();
             }
 
             @Override
@@ -880,7 +876,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override public void onItemMove(int fromPosition, int toPosition) {
                 // Close app menu when we're dragging.
-                appMenu.dismiss();
+                dismissAppMenu();
 
                 // Shuffle our apps around.
                 pinnedAppsAdapter.swapItems(pinnedAppList, fromPosition, toPosition);
@@ -905,9 +901,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityServiceUtils.hideSoftKeyboard(MainActivity.this);
 
                 // Dismiss any visible menu.
-                if (appMenu != null) {
-                    appMenu.dismiss();
-                }
+                dismissAppMenu();
             }
 
             @Override public void onPanelStateChanged(View panel,
@@ -1048,5 +1042,13 @@ public class MainActivity extends AppCompatActivity {
 
     public LauncherAppWidgetHost getAppWidgetHostView() {
         return appWidgetHost;
+    }
+
+    private void dismissAppMenu() {
+        if (appMenu != null) {
+            appMenu.getMenu().findItem(R.id.action_app_actions).getSubMenu().close();
+            appMenu.getMenu().findItem(SHORTCUT_MENU_GROUP).getSubMenu().close();
+            appMenu.dismiss();
+        }
     }
 }
