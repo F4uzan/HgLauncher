@@ -166,12 +166,8 @@ public class MainActivity extends AppCompatActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Load preferences before setting layout to allow for quick theme change.
+        // Load preferences before setting layout.
         loadPref(true);
-
-        if (PreferenceHelper.getProviderList().isEmpty()) {
-            Utils.setDefaultProviders(getResources());
-        }
 
         setContentView(R.layout.activity_main);
 
@@ -505,6 +501,11 @@ public class MainActivity extends AppCompatActivity {
         if (isInit) {
             // Get a list of our hidden apps, default to null if there aren't any.
             excludedAppsList.addAll(PreferenceHelper.getExclusionList());
+
+            // Get the default providers list if it's empty.
+            if (PreferenceHelper.getProviderList().isEmpty()) {
+                Utils.setDefaultProviders(getResources());
+            }
 
             // Set the app theme!
             switch (PreferenceHelper.appTheme()) {
