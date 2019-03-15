@@ -406,8 +406,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "dismiss_menu":
                 if (appMenu != null) {
-                    appMenu.getMenu().findItem(R.id.action_app_actions).getSubMenu().close();
-                    appMenu.getMenu().findItem(SHORTCUT_MENU_GROUP).getSubMenu().close();
+                    if (appMenu.getMenu().findItem(R.id.action_app_actions) != null) {
+                        appMenu.getMenu().findItem(R.id.action_app_actions).getSubMenu().close();
+                    }
+
+                    if (appMenu.getMenu().findItem(SHORTCUT_MENU_GROUP) != null) {
+                        appMenu.getMenu().findItem(SHORTCUT_MENU_GROUP).getSubMenu().close();
+                    }
+
                     appMenu.dismiss();
                 }
                 break;
@@ -541,11 +547,10 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the app menu.
         appMenu = new PopupMenu(MainActivity.this, view);
         appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
+        appMenu.getMenu().addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts);
 
         // Inflate app shortcuts.
         if (Utils.sdkIsAround(25)) {
-            appMenu.getMenu().addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts);
-
             for (ShortcutInfo shortcutInfo : AppUtils.getShortcuts(launcherApps, packageName)) {
                 shortcutMap.put(Utils.requireNonNull(shortcutInfo.getShortLabel()),
                         shortcutInfo.getId());
@@ -558,6 +563,8 @@ public class MainActivity extends AppCompatActivity {
             if (shortcutMap.size() == 0) {
                 appMenu.getMenu().getItem(0).setVisible(false);
             }
+        } else {
+            appMenu.getMenu().getItem(0).setVisible(false);
         }
 
         // Hide 'pin' if the app is already pinned or isPinned is set.
