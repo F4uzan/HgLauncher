@@ -16,8 +16,13 @@ public class TogglingLinearLayoutManager extends LinearLayoutManager {
         super(context);
     }
 
-    public TogglingLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
-        super(context, orientation, reverseLayout);
+    public TogglingLinearLayoutManager(Context context, int orientation, boolean stackFromEnd) {
+        super(context, orientation, stackFromEnd);
+
+        if (stackFromEnd) {
+            setStackFromEnd(true);
+            setReverseLayout(false);
+        }
     }
 
     public TogglingLinearLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {

@@ -178,9 +178,7 @@ public class MainActivity extends AppCompatActivity {
         manager = getPackageManager();
 
         appsLayoutManager = new TogglingLinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false);
-
-        appsLayoutManager.setStackFromEnd(true);
+                LinearLayoutManager.VERTICAL, true);
 
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
