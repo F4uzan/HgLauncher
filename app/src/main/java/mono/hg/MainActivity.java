@@ -532,7 +532,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void createAppMenu(View view, boolean isPinned, final String packageName) {
         final Uri packageNameUri = Uri.parse("package:" + AppUtils.getPackageName(packageName));
-        final Map<CharSequence, String> shortcutMap = new HashMap<>();
+        final Map<Integer, String> shortcutMap = new HashMap<>();
 
         int position;
         if (isPinned) {
@@ -550,13 +550,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Inflate app shortcuts.
         if (Utils.sdkIsAround(25)) {
+            int menu_id = SHORTCUT_MENU_GROUP;
+
             for (ShortcutInfo shortcutInfo : AppUtils.getShortcuts(launcherApps, packageName)) {
-                shortcutMap.put(Utils.requireNonNull(shortcutInfo.getShortLabel()),
-                        shortcutInfo.getId());
+                shortcutMap.put(menu_id, shortcutInfo.getId());
                 appMenu.getMenu()
                        .findItem(SHORTCUT_MENU_GROUP)
                        .getSubMenu()
-                       .add(SHORTCUT_MENU_GROUP, Menu.NONE, Menu.NONE, shortcutInfo.getShortLabel());
+                       .add(SHORTCUT_MENU_GROUP, menu_id, Menu.NONE, shortcutInfo.getShortLabel());
+                menu_id++;
             }
 
             if (shortcutMap.size() == 0) {
@@ -627,7 +629,7 @@ public class MainActivity extends AppCompatActivity {
                         // Catch click actions from the shortcut menu group.
                         if (item.getGroupId() == SHORTCUT_MENU_GROUP && Utils.sdkIsAround(25)) {
                             launcherApps.startShortcut(AppUtils.getPackageName(packageName),
-                                    Utils.requireNonNull(shortcutMap.get(item.getTitle())),
+                                    Utils.requireNonNull(shortcutMap.get(item.getItemId())),
                                     null, null,
                                     Process.myUserHandle());
                         }
