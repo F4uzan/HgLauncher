@@ -282,6 +282,11 @@ public class AppUtils {
      */
     @TargetApi(Build.VERSION_CODES.N_MR1)
     public static List<ShortcutInfo> getShortcuts(LauncherApps launcherApps, String componentName) {
+        // Return nothing if we don't have permission to retrieve shortcuts.
+        if (!launcherApps.hasShortcutHostPermission()) {
+            return new ArrayList<>(0);
+        }
+
         LauncherApps.ShortcutQuery shortcutQuery = new LauncherApps.ShortcutQuery();
         shortcutQuery.setQueryFlags(LauncherApps.ShortcutQuery.FLAG_MATCH_DYNAMIC
                 | LauncherApps.ShortcutQuery.FLAG_MATCH_MANIFEST
