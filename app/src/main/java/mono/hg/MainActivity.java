@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Process;
 import android.provider.Settings;
 import android.text.Editable;
+import android.util.SparseArray;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -29,9 +30,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -532,7 +531,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void createAppMenu(View view, boolean isPinned, final String packageName) {
         final Uri packageNameUri = Uri.parse("package:" + AppUtils.getPackageName(packageName));
-        final Map<Integer, String> shortcutMap = new HashMap<>();
+        final SparseArray<String> shortcutMap = new SparseArray<>();
 
         int position;
         if (isPinned) {
