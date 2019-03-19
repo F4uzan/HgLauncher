@@ -24,8 +24,8 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.R;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
-import mono.hg.models.AppDetail;
-import mono.hg.models.PinnedAppDetail;
+import mono.hg.models.App;
+import mono.hg.models.PinnedApp;
 
 public class AppUtils {
     /**
@@ -94,8 +94,8 @@ public class AppUtils {
      * @param list           Which List object should be updated?
      */
     public static void pinApp(PackageManager packageManager, String componentName,
-            FlexibleAdapter<PinnedAppDetail> adapter, List<PinnedAppDetail> list) {
-        if (!adapter.contains(new PinnedAppDetail(componentName))) {
+            FlexibleAdapter<PinnedApp> adapter, List<PinnedApp> list) {
+        if (!adapter.contains(new PinnedApp(componentName))) {
             ComponentName iconComponent = ComponentName.unflattenFromString(componentName);
 
             try {
@@ -112,11 +112,11 @@ public class AppUtils {
                     icon = getIcon;
                 }
 
-                PinnedAppDetail app = new PinnedAppDetail(icon, componentName);
+                PinnedApp app = new PinnedApp(icon, componentName);
                 list.add(app);
                 adapter.updateDataSet(list, false);
             } catch (PackageManager.NameNotFoundException e) {
-                Utils.sendLog(3, e.toString());
+                Utils.sendLog(3, "Unable to pin " + componentName + ";missing package?");
             }
         }
     }
@@ -221,12 +221,12 @@ public class AppUtils {
      *
      * @param activity The activity where the app list resides and is needed.
      *
-     * @return List an AppDetail List containing the app list itself
+     * @return List an App List containing the app list itself
      */
-    public static List<AppDetail> loadApps(Activity activity) {
+    public static List<App> loadApps(Activity activity) {
         PackageManager manager = activity.getPackageManager();
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
-        List<AppDetail> appsList = new ArrayList<>();
+        List<App> appsList = new ArrayList<>();
 
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
@@ -265,7 +265,7 @@ public class AppUtils {
                         icon = getIcon;
                     }
                 }
-                AppDetail app = new AppDetail(icon, appName, packageName, hintName, false);
+                App app = new App(icon, appName, packageName, hintName, false);
                 appsList.add(app);
             }
         }

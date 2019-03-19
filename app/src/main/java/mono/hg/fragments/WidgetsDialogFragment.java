@@ -21,7 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import mono.hg.MainActivity;
+import mono.hg.LauncherActivity;
 import mono.hg.R;
 import mono.hg.appwidget.LauncherAppWidgetHost;
 import mono.hg.helpers.PreferenceHelper;
@@ -56,12 +56,12 @@ public class WidgetsDialogFragment extends DialogFragment {
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        appWidgetManager = ((MainActivity) requireActivity()).getAppWidgetManager();
-        appWidgetHost = ((MainActivity) requireActivity()).getAppWidgetHostView();
+        appWidgetManager = ((LauncherActivity) requireActivity()).getAppWidgetManager();
+        appWidgetHost = ((LauncherActivity) requireActivity()).getAppWidgetHostView();
     }
 
     @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.WidgetDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.WidgetDialogStyle);
         View view = View.inflate(requireContext(), R.layout.fragment_widgets_dialog, null);
 
         appWidgetContainer = view.findViewById(R.id.widget_container);

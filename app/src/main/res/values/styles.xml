@@ -1,5 +1,5 @@
 <resources>
-    <style name="BaseDialog">
+    <style name="BaseDialogStyle">
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingStart">19dp</item>
         <item name="android:paddingLeft">19dp</item>
@@ -7,12 +7,7 @@
         <item name="android:paddingRight">15dp</item>
     </style>
 
-    <style name="WidgetDialog" parent="@style/Theme.AppCompat.Dialog.Alert">
+    <style name="WidgetDialogStyle" parent="@style/Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="WidgetPopup" parent="@style/Widget.AppCompat.PopupMenu.Overflow">
-        <item name="android:dropDownHorizontalOffset">-4dp</item>
-        <item name="android:dropDownVerticalOffset">4dp</item>
     </style>
 </resources>

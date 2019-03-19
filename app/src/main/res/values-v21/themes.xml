@@ -1,5 +1,5 @@
 <resources>
-    <style name="AppTheme.NoActionBar" parent="@style/AppTheme">
+    <style name="LauncherTheme" parent="@style/AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowShowWallpaper">true</item>
@@ -8,7 +8,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.Dark.NoActionBar" parent="@style/AppTheme.Dark">
+    <style name="LauncherTheme.Black" parent="@style/AppTheme.Black">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowShowWallpaper">true</item>
@@ -17,7 +17,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.Gray.NoActionBar" parent="@style/AppTheme.Dark.NoActionBar">
+    <style name="LauncherTheme.Dark" parent="@style/LauncherTheme.Black">
         <item name="backgroundColor">@color/colorBackgroundGray</item>
     </style>
 </resources>

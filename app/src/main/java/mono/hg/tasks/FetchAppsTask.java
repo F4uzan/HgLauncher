@@ -5,22 +5,22 @@ import android.view.View;
 
 import java.lang.ref.WeakReference;
 
-import mono.hg.MainActivity;
+import mono.hg.LauncherActivity;
 import mono.hg.utils.AppUtils;
 
 /**
  * AsyncTask used to load/populate the app list.
  */
 public class FetchAppsTask extends AsyncTask<Void, Void, Void> {
-    private WeakReference<MainActivity> activityRef;
+    private WeakReference<LauncherActivity> activityRef;
 
-    public FetchAppsTask(MainActivity context) {
+    public FetchAppsTask(LauncherActivity context) {
         activityRef = new WeakReference<>(context);
     }
 
     @Override
     protected void onPreExecute() {
-        MainActivity activity = activityRef.get();
+        LauncherActivity activity = activityRef.get();
 
         if (activity != null) {
             // Clear the apps list first so we wouldn't add over an existing list.
@@ -34,7 +34,7 @@ public class FetchAppsTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        MainActivity activity = activityRef.get();
+        LauncherActivity activity = activityRef.get();
         if (activity != null) {
             activity.appsList.addAll(AppUtils.loadApps(activity));
         }
@@ -43,7 +43,7 @@ public class FetchAppsTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void results) {
-        MainActivity activity = activityRef.get();
+        LauncherActivity activity = activityRef.get();
         if (activity != null) {
             // Remove the progress bar.
             activity.loadProgress.setVisibility(View.GONE);

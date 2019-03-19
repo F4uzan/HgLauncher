@@ -26,11 +26,11 @@ import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
 import mono.hg.helpers.PreferenceHelper;
-import mono.hg.models.AppDetail;
+import mono.hg.models.App;
 import mono.hg.wrappers.BackHandledFragment;
 
 public class HiddenAppsFragment extends BackHandledFragment {
-    private ArrayList<AppDetail> appList = new ArrayList<>();
+    private ArrayList<App> appList = new ArrayList<>();
     private HiddenAppAdapter hiddenAppAdapter;
     private PackageManager manager;
     private HashSet<String> excludedAppList = new HashSet<>(
@@ -116,7 +116,7 @@ public class HiddenAppsFragment extends BackHandledFragment {
                 String appName = ri.loadLabel(manager).toString();
                 Drawable icon = ri.activityInfo.loadIcon(manager);
                 boolean isHidden = excludedAppList.contains(packageName);
-                AppDetail app = new AppDetail(icon, appName, packageName, null, isHidden);
+                App app = new App(icon, appName, packageName, null, isHidden);
                 appList.add(app);
             }
         }

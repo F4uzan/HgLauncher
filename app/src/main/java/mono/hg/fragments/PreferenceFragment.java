@@ -205,7 +205,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
                         counter--;
                     } else if (counter == 0) {
-                        PreferenceHelper.getEditor().putBoolean("is_grandma", true).apply();
+                        PreferenceHelper.update("is_grandma", true);
                         versionMenu.setTitle(R.string.version_key_name);
                     } else if (counter == 1) {
                         if (counterToast != null) {

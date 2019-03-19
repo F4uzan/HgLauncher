@@ -12,14 +12,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import mono.hg.R;
-import mono.hg.models.AppDetail;
+import mono.hg.models.App;
 import mono.hg.utils.Utils;
 
 public class HiddenAppAdapter extends BaseAdapter {
-    private ArrayList<AppDetail> hiddenAppsList;
+    private ArrayList<App> hiddenAppsList;
     private Context context;
 
-    public HiddenAppAdapter(ArrayList<AppDetail> hiddenApps, Context context) {
+    public HiddenAppAdapter(ArrayList<App> hiddenApps, Context context) {
         this.hiddenAppsList = hiddenApps;
         this.context = context;
     }

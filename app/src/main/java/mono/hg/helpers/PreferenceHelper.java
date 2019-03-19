@@ -265,7 +265,7 @@ public class PreferenceHelper {
     }
 
     public static void applyWidgetsUpdate() {
-        widgets_list = preferences.getString("widgets_list", "");
+        widgets_list = getPreference().getString("widgets_list", "");
     }
 
     public static void update(String id, HashSet<String> stringSet) {
@@ -275,43 +275,47 @@ public class PreferenceHelper {
     public static void update(String id, String string) {
         getEditor().putString(id, string).apply();
     }
+    
+    public static void update(String id, boolean state) {
+        getEditor().putBoolean(id, state).apply();
+    }
 
     public static void update(String id, int integer) {
         getEditor().putInt(id, integer).apply();
     }
 
     public static void fetchPreference() {
-        is_testing = preferences.getBoolean("is_grandma", false);
-        launch_anim = preferences.getString("launch_anim", "default");
-        icon_hide = preferences.getBoolean("icon_hide_switch", false);
-        icon_pack = preferences.getString("icon_pack", "default");
-        list_order = preferences.getString("list_order", "alphabetical")
+        is_testing = getPreference().getBoolean("is_grandma", false);
+        launch_anim = getPreference().getString("launch_anim", "default");
+        icon_hide = getPreference().getBoolean("icon_hide_switch", false);
+        icon_pack = getPreference().getString("icon_pack", "default");
+        list_order = getPreference().getString("list_order", "alphabetical")
                                 .equals("invertedAlphabetical");
-        shade_view = preferences.getBoolean("shade_view_switch", false);
-        keyboard_focus = preferences.getBoolean("keyboard_focus", false);
-        tap_to_drawer = preferences.getBoolean("tap_to_drawer", true);
-        app_theme = preferences.getString("app_theme", "light");
-        web_search_enabled = preferences.getBoolean("web_search_enabled", true);
-        web_search_long_press = preferences.getBoolean("web_search_long_press", false);
-        search_provider_set = preferences.getString("search_provider", "none");
-        static_favourites_panel = preferences.getBoolean("static_favourites_panel_switch", false);
-        static_app_list = preferences.getBoolean("static_app_list_switch", false);
-        adaptive_shade = preferences.getBoolean("adaptive_shade_switch", false);
-        windowbar_status_switch = preferences.getBoolean("windowbar_status_switch", false);
-        windowbar_mode = preferences.getString("windowbar_mode", "none");
-        gesture_down_status = preferences.getBoolean("gesture_down_status", false);
-        gesture_left_action = preferences.getString("gesture_left", "none");
-        gesture_right_action = preferences.getString("gesture_right", "none");
-        gesture_up_action = preferences.getString("gesture_up", "none");
-        gesture_double_tap_action = preferences.getString("gesture_double_tap", "none");
-        widgets_list = preferences.getString("widgets_list", "");
+        shade_view = getPreference().getBoolean("shade_view_switch", false);
+        keyboard_focus = getPreference().getBoolean("keyboard_focus", false);
+        tap_to_drawer = getPreference().getBoolean("tap_to_drawer", true);
+        app_theme = getPreference().getString("app_theme", "light");
+        web_search_enabled = getPreference().getBoolean("web_search_enabled", true);
+        web_search_long_press = getPreference().getBoolean("web_search_long_press", false);
+        search_provider_set = getPreference().getString("search_provider", "none");
+        static_favourites_panel = getPreference().getBoolean("static_favourites_panel_switch", false);
+        static_app_list = getPreference().getBoolean("static_app_list_switch", false);
+        adaptive_shade = getPreference().getBoolean("adaptive_shade_switch", false);
+        windowbar_status_switch = getPreference().getBoolean("windowbar_status_switch", false);
+        windowbar_mode = getPreference().getString("windowbar_mode", "none");
+        gesture_down_status = getPreference().getBoolean("gesture_down_status", false);
+        gesture_left_action = getPreference().getString("gesture_left", "none");
+        gesture_right_action = getPreference().getString("gesture_right", "none");
+        gesture_up_action = getPreference().getString("gesture_up", "none");
+        gesture_double_tap_action = getPreference().getString("gesture_double_tap", "none");
+        widgets_list = getPreference().getString("widgets_list", "");
 
-        exclusion_list = (HashSet<String>) preferences.getStringSet("hidden_apps",
+        exclusion_list = (HashSet<String>) getPreference().getStringSet("hidden_apps",
                 new HashSet<String>());
-        HashSet<String> temp_label_list = (HashSet<String>) preferences.getStringSet("label_list",
+        HashSet<String> temp_label_list = (HashSet<String>) getPreference().getStringSet("label_list",
                 new HashSet<String>());
         parseProviders(
-                (HashSet<String>) preferences.getStringSet("provider_list", new HashSet<String>()));
+                (HashSet<String>) getPreference().getStringSet("provider_list", new HashSet<String>()));
 
         label_list_set.addAll(temp_label_list);
         fetchLabels();

@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import mono.hg.MainActivity;
+import mono.hg.LauncherActivity;
 
 public class PackageChangesReceiver extends BroadcastReceiver {
 
@@ -17,7 +17,7 @@ public class PackageChangesReceiver extends BroadcastReceiver {
                     || intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")
                     || intent.getAction().equals("android.intent.action.PACKAGE_CHANGED")
                     && !packageName.contains(context.getPackageName())) {
-                Intent mainIntent = new Intent(context, MainActivity.class);
+                Intent mainIntent = new Intent(context, LauncherActivity.class);
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(mainIntent);
             }

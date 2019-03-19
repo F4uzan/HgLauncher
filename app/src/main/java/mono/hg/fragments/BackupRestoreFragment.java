@@ -64,7 +64,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
          * This is needed because the preference library does not supply toolbars
          * for fragments that it isn't managing.
          */
-        isInRestore = getArguments().getBoolean("isRestore", false);
+        if (getArguments() != null) {
+            isInRestore = getArguments().getBoolean("isRestore", false);
+        }
 
         ActionBar actionBar = ((SettingsActivity) requireActivity()).getSupportActionBar();
         if (actionBar != null) {
@@ -104,10 +106,8 @@ public class BackupRestoreFragment extends BackHandledFragment {
                     // Restore backup when clicking a file, but only do so in restore mode.
                     File possibleBackup = new File(
                             currentPath + File.separator + fileFoldersList.get(position).getName());
-                    if (isInRestore && possibleBackup.isFile() && fileFoldersList.get(position)
-                                                                                 .getName()
-                                                                                 .indexOf(
-                                                                                         '.') > 0) {
+                    if (isInRestore && possibleBackup.isFile()
+                            && fileFoldersList.get(position).getName().indexOf('.') > 0) {
                         new restoreBackupTask(BackupRestoreFragment.this, possibleBackup).execute();
                     }
                 }
@@ -125,7 +125,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         }
     }
 
-    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
         menu.add(0, 1, 100, getString(R.string.action_backup));
         menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -133,7 +133,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
@@ -176,15 +176,15 @@ public class BackupRestoreFragment extends BackHandledFragment {
     }
 
     // Open a directory and refresh fileFoldersList.
-    public void traverseStorage(File path) {
+    private void traverseStorage(File path) {
         fileFoldersList.clear();
         fileFolderAdapter.notifyDataSetInvalidated();
         File contents[];
         if (isInRestore) {
             contents = path.listFiles(new FileFilter() {
                 public boolean accept(File dir) {
-                    return dir.getName().toLowerCase().endsWith(".xml") || dir.isDirectory() && !dir
-                            .isFile();
+                    return dir.getName().toLowerCase().endsWith(".xml")
+                            || dir.isDirectory() && !dir.isFile();
                 }
             });
         } else {
@@ -221,7 +221,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
      *
      * @param path Where should the preferences be saved to?
      */
-    public void saveBackup(File path) {
+    private void saveBackup(File path) {
         ObjectOutputStream out = null;
         try {
             out = new ObjectOutputStream(new FileOutputStream(path));
@@ -249,8 +249,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
      *
      * @param path Where does the backup reside in?
      */
-    @SuppressWarnings("unchecked")
-    public void restoreBackup(File path) {
+    @SuppressWarnings("unchecked") private void restoreBackup(File path) {
         ObjectInputStream input = null;
         try {
             input = new ObjectInputStream(new FileInputStream(path));
@@ -280,13 +279,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
         } catch (IOException e) {
             Utils.sendLog(3, e.toString());
         } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (IOException e) {
-                Utils.sendLog(3, e.toString());
-            }
+            Utils.closeStream(input);
         }
     }
 

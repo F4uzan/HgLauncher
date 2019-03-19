@@ -41,10 +41,10 @@ public class SettingsActivity extends AppCompatActivity
                 setTheme(R.style.AppTheme);
                 break;
             case "dark":
-                setTheme(R.style.AppTheme_Gray);
+                setTheme(R.style.AppTheme_Dark);
                 break;
             case "black":
-                setTheme(R.style.AppTheme_Dark);
+                setTheme(R.style.AppTheme_Black);
                 break;
         }
 

@@ -44,8 +44,8 @@ import mono.hg.appwidget.LauncherAppWidgetHost;
 import mono.hg.fragments.WidgetsDialogFragment;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
-import mono.hg.models.AppDetail;
-import mono.hg.models.PinnedAppDetail;
+import mono.hg.models.App;
+import mono.hg.models.PinnedApp;
 import mono.hg.receivers.PackageChangesReceiver;
 import mono.hg.tasks.FetchAppsTask;
 import mono.hg.utils.ActivityServiceUtils;
@@ -55,11 +55,11 @@ import mono.hg.utils.ViewUtils;
 import mono.hg.views.DagashiBar;
 import mono.hg.views.IndeterminateMaterialProgressBar;
 import mono.hg.views.TogglingLinearLayoutManager;
-import mono.hg.wrappers.GestureListener;
-import mono.hg.wrappers.SimpleScrollListener;
+import mono.hg.listeners.GestureListener;
+import mono.hg.listeners.SimpleScrollListener;
 import mono.hg.wrappers.TextSpectator;
 
-public class MainActivity extends AppCompatActivity {
+public class LauncherActivity extends AppCompatActivity {
 
     private static int SETTINGS_RETURN_CODE = 12;
     private static int WIDGET_HOST_ID = 314;
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     /*
      * List containing installed apps.
      */
-    public ArrayList<AppDetail> appsList = new ArrayList<>();
+    public ArrayList<App> appsList = new ArrayList<>();
     /*
      * Adapter for installed apps.
      */
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     /*
      * List containing pinned apps.
      */
-    private ArrayList<PinnedAppDetail> pinnedAppList = new ArrayList<>();
+    private ArrayList<PinnedApp> pinnedAppList = new ArrayList<>();
     /*
      * String containing pinned apps. Delimited by a semicolon (;).
      */
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     /*
      * Adapter for pinned apps.
      */
-    private FlexibleAdapter<PinnedAppDetail> pinnedAppsAdapter = new FlexibleAdapter<>(
+    private FlexibleAdapter<PinnedApp> pinnedAppsAdapter = new FlexibleAdapter<>(
             pinnedAppList);
     /*
      * List of excluded apps. These will not be shown in the app list.
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         // Load preferences before setting layout.
         loadPref(true);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_launcherspace);
 
         manager = getPackageManager();
 
@@ -510,13 +510,13 @@ public class MainActivity extends AppCompatActivity {
             switch (PreferenceHelper.appTheme()) {
                 default:
                 case "light":
-                    setTheme(R.style.AppTheme_NoActionBar);
+                    setTheme(R.style.LauncherTheme);
                     break;
                 case "dark":
-                    setTheme(R.style.AppTheme_Gray_NoActionBar);
+                    setTheme(R.style.LauncherTheme_Dark);
                     break;
                 case "black":
-                    setTheme(R.style.AppTheme_Dark_NoActionBar);
+                    setTheme(R.style.LauncherTheme_Black);
                     break;
             }
         }
@@ -535,15 +535,15 @@ public class MainActivity extends AppCompatActivity {
 
         int position;
         if (isPinned) {
-            PinnedAppDetail selectedPackage = new PinnedAppDetail(packageName);
+            PinnedApp selectedPackage = new PinnedApp(packageName);
             position = pinnedAppsAdapter.getGlobalPositionOf(selectedPackage);
         } else {
-            AppDetail selectedPackage = new AppDetail(packageName);
+            App selectedPackage = new App(packageName);
             position = appsAdapter.getGlobalPositionOf(selectedPackage);
         }
 
         // Inflate the app menu.
-        appMenu = new PopupMenu(MainActivity.this, view);
+        appMenu = new PopupMenu(LauncherActivity.this, view);
         appMenu.getMenuInflater().inflate(R.menu.menu_app, appMenu.getMenu());
         appMenu.getMenu().addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts);
 
@@ -648,7 +648,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwipeDown() {
                 if (PreferenceHelper.allowSwipeToExpand() && PreferenceHelper.allowTapToOpen()) {
-                    ActivityServiceUtils.expandStatusBar(MainActivity.this);
+                    ActivityServiceUtils.expandStatusBar(LauncherActivity.this);
                 } else {
                     // Show the app panel if swipe to expand is disabled.
                     doThis("show_panel");
@@ -658,28 +658,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwipeRight() {
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeRight());
+                    AppUtils.launchApp(LauncherActivity.this, PreferenceHelper.doSwipeRight());
                 }
             }
 
             @Override
             public void onSwipeLeft() {
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeLeft());
+                    AppUtils.launchApp(LauncherActivity.this, PreferenceHelper.doSwipeLeft());
                 }
             }
 
             @Override
             public void onSwipeUp() {
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    AppUtils.launchApp(MainActivity.this, PreferenceHelper.doSwipeUp());
+                    AppUtils.launchApp(LauncherActivity.this, PreferenceHelper.doSwipeUp());
                 }
             }
 
             @Override
             public void onDoubleTap() {
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    AppUtils.launchApp(MainActivity.this, PreferenceHelper.doDoubleTap());
+                    AppUtils.launchApp(LauncherActivity.this, PreferenceHelper.doDoubleTap());
                 }
             }
 
@@ -755,13 +755,13 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             if (!PreferenceHelper.getSearchProvider().equals("none")) {
-                                Utils.doWebSearch(MainActivity.this,
+                                Utils.doWebSearch(LauncherActivity.this,
                                         PreferenceHelper.getSearchProvider(),
                                         URLEncoder.encode(getTrimmedInputText()));
                                 searchSnack.dismiss();
                             } else {
-                                appMenu = new PopupMenu(MainActivity.this, view);
-                                ViewUtils.createSearchMenu(MainActivity.this, appMenu,
+                                appMenu = new PopupMenu(LauncherActivity.this, view);
+                                ViewUtils.createSearchMenu(LauncherActivity.this, appMenu,
                                         URLEncoder.encode(getTrimmedInputText()));
                             }
                         }
@@ -771,8 +771,8 @@ public class MainActivity extends AppCompatActivity {
                                                                                   .equals("none")) {
                         searchSnack.setLongPressAction(new View.OnLongClickListener() {
                             @Override public boolean onLongClick(View view) {
-                                appMenu = new PopupMenu(MainActivity.this, view);
-                                ViewUtils.createSearchMenu(MainActivity.this, appMenu,
+                                appMenu = new PopupMenu(LauncherActivity.this, view);
+                                ViewUtils.createSearchMenu(LauncherActivity.this, appMenu,
                                         URLEncoder.encode(getTrimmedInputText()));
                                 return true;
                             }
@@ -794,7 +794,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((!appsAdapter.isEmpty() && searchBar.getText().length() > 0) &&
                         (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
-                    ViewUtils.keyboardLaunchApp(MainActivity.this, appsRecyclerView, appsAdapter);
+                    ViewUtils.keyboardLaunchApp(LauncherActivity.this, appsRecyclerView, appsAdapter);
                     return true;
                 }
                 return false;
@@ -832,7 +832,7 @@ public class MainActivity extends AppCompatActivity {
         // Add item click action to app list.
         appsAdapter.addListener(new FlexibleAdapter.OnItemClickListener() {
             @Override public boolean onItemClick(View view, int position) {
-                AppUtils.launchApp(MainActivity.this,
+                AppUtils.launchApp(LauncherActivity.this,
                         Utils.requireNonNull(appsAdapter.getItem(position))
                              .getPackageName());
                 return true;
@@ -842,7 +842,7 @@ public class MainActivity extends AppCompatActivity {
         // Add item click action to the favourites panel.
         pinnedAppsAdapter.addListener(new FlexibleAdapter.OnItemClickListener() {
             @Override public boolean onItemClick(View view, int position) {
-                AppUtils.launchApp(MainActivity.this,
+                AppUtils.launchApp(LauncherActivity.this,
                         Utils.requireNonNull(pinnedAppsAdapter.getItem(position))
                              .getPackageName());
                 return true;
@@ -912,7 +912,7 @@ public class MainActivity extends AppCompatActivity {
                 appsLayoutManager.setVerticalScrollEnabled(false);
 
                 // Hide the keyboard at slide.
-                ActivityServiceUtils.hideSoftKeyboard(MainActivity.this);
+                ActivityServiceUtils.hideSoftKeyboard(LauncherActivity.this);
 
                 // Dismiss any visible menu.
                 doThis("dismiss_menu");
@@ -934,7 +934,7 @@ public class MainActivity extends AppCompatActivity {
                     // Automatically show keyboard when the panel is called.
                     if (PreferenceHelper.shouldFocusKeyboard()
                             && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                        ActivityServiceUtils.showSoftKeyboard(MainActivity.this, searchBar);
+                        ActivityServiceUtils.showSoftKeyboard(LauncherActivity.this, searchBar);
                     }
 
                     // Animate search container entering the view.
@@ -958,7 +958,7 @@ public class MainActivity extends AppCompatActivity {
                     appsLayoutManager.setVerticalScrollEnabled(false);
 
                     // Hide keyboard if container is invisible.
-                    ActivityServiceUtils.hideSoftKeyboard(MainActivity.this);
+                    ActivityServiceUtils.hideSoftKeyboard(LauncherActivity.this);
 
                     // Stop scrolling, the panel is being dismissed.
                     appsRecyclerView.stopScroll();
@@ -969,7 +969,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!isResuming) {
                         searchContainer.animate().alpha(0f).setDuration(animateDuration);
                         isResuming = false;
-                    } else if (ActivityServiceUtils.isPowerSaving(MainActivity.this)) {
+                    } else if (ActivityServiceUtils.isPowerSaving(LauncherActivity.this)) {
                         searchContainer.animate().alpha(0).setDuration(animateDuration);
                     }
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
@@ -999,8 +999,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Iterate through the list to get package name of each pinned apps, then stringify them.
-        for (AppDetail appDetail : pinnedAppList) {
-            newAppString = newAppString.concat(appDetail.getPackageName() + ";");
+        for (App app : pinnedAppList) {
+            newAppString = newAppString.concat(app.getPackageName() + ";");
         }
 
         // Update the saved pinned apps.
@@ -1036,10 +1036,10 @@ public class MainActivity extends AppCompatActivity {
                        PreferenceHelper.updateLabel(packageName, newLabel, newLabel.isEmpty());
 
                        // Update the specified item.
-                       AppDetail oldItem = appsAdapter.getItem(position);
+                       App oldItem = appsAdapter.getItem(position);
 
                        if (oldItem != null) {
-                           AppDetail newItem = new AppDetail(oldItem.getIcon(),
+                           App newItem = new App(oldItem.getIcon(),
                                    oldItem.getAppName(),
                                    packageName, newLabel, false);
 

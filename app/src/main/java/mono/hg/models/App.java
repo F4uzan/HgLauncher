@@ -16,13 +16,16 @@ import eu.davidea.viewholders.FlexibleViewHolder;
 import mono.hg.R;
 import mono.hg.helpers.KissFuzzySearch;
 
-public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
+public class App extends AbstractFlexibleItem<App.ViewHolder>
         implements IFilterable<String> {
+    private int HINT_MATCH_SCORE = 30;
+    private int NAME_MATCH_SCORE = 25;
+
     private String appName, packageName, hintName;
     private Boolean isAppHidden;
     private Drawable icon;
 
-    public AppDetail(Drawable icon, String appName, @NonNull String packageName, String hintName, Boolean isAppHidden) {
+    public App(Drawable icon, String appName, @NonNull String packageName, String hintName, Boolean isAppHidden) {
         this.packageName = packageName;
         this.appName = appName;
         this.hintName = hintName;
@@ -30,7 +33,7 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
         this.isAppHidden = isAppHidden;
     }
 
-    public AppDetail(@NonNull String packageName) {
+    public App(@NonNull String packageName) {
         this.packageName = packageName;
         this.isAppHidden = false;
     }
@@ -63,8 +66,16 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
         return hintName != null;
     }
 
+    public void setHintMatchScore(int newScore) {
+        HINT_MATCH_SCORE = newScore;
+    }
+
+    public void setNameMatchScore(int newScore) {
+        NAME_MATCH_SCORE = newScore;
+    }
+
     public boolean equals(Object object) {
-        AppDetail alt = (AppDetail) object;
+        App alt = (App) object;
         return this == object || getClass() != object.getClass() || getPackageName().equals(
                 alt.getPackageName());
     }
@@ -77,12 +88,12 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
         return R.layout.list_generic_item;
     }
 
-    @Override public AppDetail.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
+    @Override public App.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
         return new ViewHolder(view, adapter);
     }
 
     @Override public void bindViewHolder(FlexibleAdapter<IFlexible> adapter,
-            AppDetail.ViewHolder holder, int position,
+            App.ViewHolder holder, int position,
             List<Object> payloads) {
         holder.name.setText(getAppName());
         holder.icon.setImageDrawable(getIcon());
@@ -97,12 +108,12 @@ public class AppDetail extends AbstractFlexibleItem<AppDetail.ViewHolder>
         }
 
         // Is the hint name strong enough?
-        if (fuzzyScore >= 30) {
+        if (fuzzyScore >= HINT_MATCH_SCORE) {
             return true;
         } else {
             // Fall back to app name matching if it isn't.
             fuzzyScore = KissFuzzySearch.doFuzzy(appName, constraint);
-            return fuzzyScore >= 25;
+            return fuzzyScore >= NAME_MATCH_SCORE;
         }
     }
 

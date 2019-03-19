@@ -10,13 +10,13 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import mono.hg.R;
 
-public class PinnedAppDetail extends AppDetail {
+public class PinnedApp extends App {
 
-    public PinnedAppDetail(Drawable icon, @NonNull String packageName) {
+    public PinnedApp(Drawable icon, @NonNull String packageName) {
         super(icon, null, packageName, null, false);
     }
 
-    public PinnedAppDetail(String packageName) {
+    public PinnedApp(String packageName) {
         super(packageName);
     }
 
@@ -24,12 +24,12 @@ public class PinnedAppDetail extends AppDetail {
         return R.layout.list_pinned_item;
     }
 
-    @Override public PinnedAppDetail.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
+    @Override public PinnedApp.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
         return new ViewHolder(view, adapter);
     }
 
     @Override public void bindViewHolder(FlexibleAdapter<IFlexible> adapter,
-            PinnedAppDetail.ViewHolder holder, int position,
+            PinnedApp.ViewHolder holder, int position,
             List<Object> payloads) {
         holder.icon.setImageDrawable(getIcon());
     }

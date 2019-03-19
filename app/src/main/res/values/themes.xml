@@ -9,7 +9,7 @@
         <item name="textDefaultColor">@color/black</item>
     </style>
 
-    <style name="AppTheme.Dark" parent="Theme.AppCompat">
+    <style name="AppTheme.Black" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -19,12 +19,12 @@
         <item name="textDefaultColor">@color/white</item>
     </style>
 
-    <style name="AppTheme.Gray" parent="AppTheme.Dark">
+    <style name="AppTheme.Dark" parent="AppTheme.Black">
         <item name="android:windowBackground">@color/colorBackgroundGray</item>
         <item name="backgroundColor">@color/colorBackgroundGray</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="@style/AppTheme">
+    <style name="LauncherTheme" parent="@style/AppTheme">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowShowWallpaper">true</item>
@@ -33,7 +33,7 @@
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
     </style>
 
-    <style name="AppTheme.Dark.NoActionBar" parent="@style/AppTheme.Dark">
+    <style name="LauncherTheme.Black" parent="@style/AppTheme.Black">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowShowWallpaper">true</item>
@@ -42,7 +42,7 @@
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
     </style>
 
-    <style name="AppTheme.Gray.NoActionBar" parent="@style/AppTheme.Dark.NoActionBar">
+    <style name="LauncherTheme.Dark" parent="@style/LauncherTheme.Black">
         <item name="backgroundColor">@color/colorBackgroundGray</item>
     </style>
 

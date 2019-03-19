@@ -10,16 +10,16 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import mono.hg.models.AppDetail;
+import mono.hg.models.App;
 import mono.hg.utils.Utils;
 
-public class AppAdapter extends FlexibleAdapter<AppDetail>
+public class AppAdapter extends FlexibleAdapter<App>
         implements FastScrollRecyclerView.SectionedAdapter {
     private int mSelectedItem = 0;
     private RecyclerView mRecyclerView;
     private boolean finishedLoading = false;
 
-    public AppAdapter(List<AppDetail> apps) {
+    public AppAdapter(List<App> apps) {
         super(apps);
     }
 

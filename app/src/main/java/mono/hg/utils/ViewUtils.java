@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.R;
 import mono.hg.helpers.PreferenceHelper;
-import mono.hg.models.AppDetail;
+import mono.hg.models.App;
 
 public class ViewUtils {
 
@@ -80,9 +80,9 @@ public class ViewUtils {
      *
      * @param activity     The activity for context reference.
      * @param recyclerView The RecyclerView itself.
-     * @param adapter      A FlexibleAdapter with AppDetail items.
+     * @param adapter      A FlexibleAdapter with App items.
      */
-    public static void keyboardLaunchApp(Activity activity, RecyclerView recyclerView, FlexibleAdapter<AppDetail> adapter) {
+    public static void keyboardLaunchApp(Activity activity, RecyclerView recyclerView, FlexibleAdapter<App> adapter) {
         if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)
                 && !recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
             AppUtils.launchApp(activity, Utils.requireNonNull(
