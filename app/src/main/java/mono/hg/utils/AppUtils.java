@@ -283,7 +283,7 @@ public class AppUtils {
     @TargetApi(Build.VERSION_CODES.N_MR1)
     public static List<ShortcutInfo> getShortcuts(LauncherApps launcherApps, String componentName) {
         // Return nothing if we don't have permission to retrieve shortcuts.
-        if (!launcherApps.hasShortcutHostPermission()) {
+        if (launcherApps == null || !launcherApps.hasShortcutHostPermission()) {
             return new ArrayList<>(0);
         }
 
