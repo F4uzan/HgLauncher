@@ -918,9 +918,7 @@ public class LauncherActivity extends AppCompatActivity {
                 doThis("dismiss_menu");
             }
 
-            @Override public void onPanelStateChanged(View panel,
-                    SlidingUpPanelLayout.PanelState previousState,
-                    SlidingUpPanelLayout.PanelState newState) {
+            @Override public void onPanelStateChanged(View panel, int previousState, int newState) {
                 if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED
                         || newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
 
