@@ -166,7 +166,7 @@ public class LauncherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Load preferences before setting layout.
-        loadPref(true);
+        loadPref();
 
         setContentView(R.layout.activity_launcherspace);
 
@@ -311,7 +311,8 @@ public class LauncherActivity extends AppCompatActivity {
             LauncherIconHelper.clearDrawableCache();
         }
 
-        loadPref(false);
+        // Get pinned apps.
+        pinnedAppString = PreferenceHelper.getPreference().getString("pinned_apps_list", "");
 
         // Set app list animation duration.
         slidingHome.setPanelDurationMultiplier(Settings.System.getFloat(getContentResolver(),
@@ -485,10 +486,8 @@ public class LauncherActivity extends AppCompatActivity {
 
     /**
      * Loads available preferences and updates PreferenceHelpers.
-     *
-     * @param isInit Are we loading for onCreate?
      */
-    private void loadPref(boolean isInit) {
+    private void loadPref() {
         if (!PreferenceHelper.hasEditor()) {
             PreferenceHelper.initPreference(this);
         }
@@ -497,28 +496,26 @@ public class LauncherActivity extends AppCompatActivity {
         // Get pinned apps.
         pinnedAppString = PreferenceHelper.getPreference().getString("pinned_apps_list", "");
 
-        if (isInit) {
-            // Get a list of our hidden apps, default to null if there aren't any.
-            excludedAppsList.addAll(PreferenceHelper.getExclusionList());
+        // Get a list of our hidden apps, default to null if there aren't any.
+        excludedAppsList.addAll(PreferenceHelper.getExclusionList());
 
-            // Get the default providers list if it's empty.
-            if (PreferenceHelper.getProviderList().isEmpty()) {
-                Utils.setDefaultProviders(getResources());
-            }
+        // Get the default providers list if it's empty.
+        if (PreferenceHelper.getProviderList().isEmpty()) {
+            Utils.setDefaultProviders(getResources());
+        }
 
-            // Set the app theme!
-            switch (PreferenceHelper.appTheme()) {
-                default:
-                case "light":
-                    setTheme(R.style.LauncherTheme);
-                    break;
-                case "dark":
-                    setTheme(R.style.LauncherTheme_Dark);
-                    break;
-                case "black":
-                    setTheme(R.style.LauncherTheme_Black);
-                    break;
-            }
+        // Set the app theme!
+        switch (PreferenceHelper.appTheme()) {
+            default:
+            case "light":
+                setTheme(R.style.LauncherTheme);
+                break;
+            case "dark":
+                setTheme(R.style.LauncherTheme_Dark);
+                break;
+            case "black":
+                setTheme(R.style.LauncherTheme_Black);
+                break;
         }
     }
 
