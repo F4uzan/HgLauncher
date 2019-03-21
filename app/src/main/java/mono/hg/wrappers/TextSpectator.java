@@ -5,6 +5,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import java.lang.ref.WeakReference;
+
 /**
  * TextSpectator is an extension to TextWatcher, used when it is attached to an EditText.
  */
@@ -12,7 +14,7 @@ public class TextSpectator implements TextWatcher {
     // The default duration of the Handler loop, in milliseconds.
     private static int DEFAULT_TICK_DURATION = 125;
 
-    private EditText watchField;
+    private WeakReference<EditText> watchField;
     private int tickDuration = DEFAULT_TICK_DURATION;
     private boolean timerStopped = false;
     private boolean spaceSpam = false;
@@ -28,12 +30,7 @@ public class TextSpectator implements TextWatcher {
     };
 
     protected TextSpectator(EditText editText) {
-        watchField = editText;
-    }
-
-    protected TextSpectator(EditText editText, int duration) {
-        watchField = editText;
-        tickDuration = duration;
+        watchField = new WeakReference<>(editText);
     }
 
     /**
@@ -42,7 +39,11 @@ public class TextSpectator implements TextWatcher {
      * @return The contents of EditText.
      */
     protected String getInputText() {
-        return watchField.getText().toString();
+        if (watchField != null) {
+            return watchField.get().getText().toString();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -51,7 +52,11 @@ public class TextSpectator implements TextWatcher {
      * @return The trimmed contents of EditText;
      */
     public String getTrimmedInputText() {
-        return watchField.getText().toString().trim();
+        if (watchField != null) {
+            return watchField.get().getText().toString().trim();
+        } else {
+            return null;
+        }
     }
 
     /**
