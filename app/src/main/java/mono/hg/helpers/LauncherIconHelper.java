@@ -32,6 +32,7 @@ import mono.hg.utils.Utils;
 
 public class LauncherIconHelper {
     private static HashMap<String, String> mPackagesDrawables = new HashMap<>();
+    private static String iconPackageName = PreferenceHelper.getIconPackName();
 
     /**
      * Clears cached icon pack.
@@ -116,7 +117,6 @@ public class LauncherIconHelper {
      *                       icon pack.
      */
     public static int loadIconPack(PackageManager packageManager) {
-        String iconPackageName = PreferenceHelper.getIconPackName();
         XmlPullParser iconFilterXml = null;
         Resources iconRes;
 
@@ -211,7 +211,6 @@ public class LauncherIconHelper {
      */
     // Load icon from the cached appfilter.
     public static Drawable getIconDrawable(PackageManager packageManager, String appPackageName) {
-        String iconPackageName = PreferenceHelper.getIconPackName();
         String componentName = "ComponentInfo{" + appPackageName + "}";
         Resources iconRes = null;
 
