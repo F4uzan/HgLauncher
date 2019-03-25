@@ -60,10 +60,6 @@
     <string name="app_theme_dark">Szary</string>
     <string name="app_theme_black">Czarny</string>
 
-    <string name="dark_theme">Motyw nocny</string>
-    <string name="dark_theme_black">Użyj prawdziwej czerni</string>
-    <string name="dark_theme_black_desc">Zamień kolor szary na czarny w ciemnym motywie</string>
-
     <string name="windowbar_mode">Ukryj paski systemowe</string>
     <string name="windowbar_mode_none">Wyłączone</string>
     <string name="windowbar_mode_status">Ukryj pasek stanu</string>

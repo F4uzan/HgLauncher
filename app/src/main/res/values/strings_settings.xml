@@ -60,10 +60,6 @@
     <string name="app_theme_dark">Dark</string>
     <string name="app_theme_black">Black</string>
 
-    <string name="dark_theme">Dark theme</string>
-    <string name="dark_theme_black">Use true black</string>
-    <string name="dark_theme_black_desc">Swap out dark gray for actual black in dark theme.</string>
-
     <string name="windowbar_mode">Hide system bars</string>
     <string name="windowbar_mode_none">Disabled</string>
     <string name="windowbar_mode_status">Hide status bar</string>

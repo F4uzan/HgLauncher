@@ -43,10 +43,6 @@
     <string name="app_theme_dark">Iluna</string>
     <string name="app_theme_black">Beltza</string>
 
-    <string name="dark_theme">Itxura iluna</string>
-    <string name="dark_theme_black">Benetako beltza erabili</string>
-    <string name="dark_theme_black_desc">Aldatu gris iluna benetako beltzarekin itxura ilunean.</string>
-
     <string name="windowbar_mode">Sistemaren barrak ezkutatu</string>
     <string name="windowbar_mode_none">Ezgaituta</string>
     <string name="windowbar_mode_status">Egoera barra ezkutatu</string>
