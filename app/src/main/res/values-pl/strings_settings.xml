@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Strings for Settings (and all activity related to it -->
+    <string name="title_activity_settings">Ustawienia</string>
+
+    <!-- Header/category names -->
+    <string name="pref_header_about">Informacje</string>
+    <string name="pref_header_cust">Modyfikacje</string>
+    <string name="pref_header_gestures">Gesty</string>
+    <string name="pref_header_wall">Pulpit</string>
+    <string name="pref_header_list">Lista aplikacji</string>
+    <string name="pref_header_interface">Wygląd</string>
+    <string name="pref_header_search_bar">Pasek wyszukiwania</string>
+    <string name="pref_header_backup_restore">Kopia i przywracanie</string>
+    <string name="pref_header_icons">Ikony aplikacji</string>
+
+    <!-- Backup and restore -->
+    <string name="pref_header_hidden_apps">Ukryte</string>
+    <string name="pref_header_hidden_apps_desc">Zarządzaj listą ukrytych aplikacji</string>
+    <string name="pref_header_backup">Backup</string>
+    <string name="pref_header_backup_desc">Kopia zapasowa bieżącej konfiguracji HgLauncher</string>
+    <string name="backup_name_hint">Nazwa kopii…</string>
+    <string name="pref_header_restore">Przywróć</string>
+    <string name="pref_header_restore_desc">Przywróć konfigurację z kopii zapasowej</string>
+    <string name="reset_preference">Resetuj ustawienia</string>
+    <string name="reset_preference_desc">Przywróć ustawienia domyślne</string>
+    <string name="reset_preference_warn">Chcesz usunąć własne ustawienia aplikacji? Po zakończeniu nie można cofnąć operacji!</string>
+    <string name="reset_preference_positive">Przywróć</string>
+    <string name="reset_preference_toast">Przywrócono ustawienia domyślne</string>
+
+    <!-- Web search provider -->
+    <string name="pref_header_web_provider_title">Dostawcy wyszukiwania w sieci</string>
+    <string name="pref_header_web_provider_desc">Zarządzaj dostawcami wyszukiwania</string>
+    <string name="pref_header_web_provider_short">Zarządzaj…</string>
+    <string name="web_provider_name_hint">Nazwa (musi być unikalna)</string>
+    <string name="web_provider_url_hint" translatable="false">https://{url}/search?q=%s</string>
+
+    <!-- Easter egg -->
+    <string name="version_key_toast_plural">Tap %1$d more times to enable testing mode.</string>
+    <string name="version_key_toast">Tap once again to confirm.</string>
+    <string name="version_key_name">HgLauncher (testing)</string>
+
+    <!-- Dialog and toast messages -->
+    <string name="backup_exist">Zmień nazwę. Kopia o tej nazwie już istnieje</string>
+    <string name="backup_exist_overwrite">Przepisz</string>
+    <string name="backup_exist_cancel">Anuluj</string>
+    <string name="backup_restore_dialog">Przywracanie…</string>
+    <string name="restore_complete">Przywracanie ukończone!</string>
+    <string name="backup_complete">Kopia zapisana!</string>
+    <string name="backup_empty">Wprowadz nazwę kopii</string>
+
+    <!-- Credits dialog. -->
+    <string name="about_credits_dialog_title">O aplikacji</string>
+    <string name="about_credits">O aplikacji</string>
+    <string name="about_credits_desc">Informacje, współpraca, podziękowania</string>
+
+    <!-- Customizations -->
+    <string name="app_theme">Wybierz motyw</string>
+    <string name="app_theme_light">Biały</string>
+    <string name="app_theme_dark">Szary</string>
+    <string name="app_theme_black">Czarny</string>
+
+    <string name="dark_theme">Motyw nocny</string>
+    <string name="dark_theme_black">Użyj prawdziwej czerni</string>
+    <string name="dark_theme_black_desc">Zamień kolor szary na czarny w ciemnym motywie</string>
+
+    <string name="windowbar_mode">Ukryj paski systemowe</string>
+    <string name="windowbar_mode_none">Wyłączone</string>
+    <string name="windowbar_mode_status">Ukryj pasek stanu</string>
+    <string name="windowbar_mode_nav">Ukryj pasek nawigacji</string>
+    <string name="windowbar_mode_both">Ukryj wszystkie</string>
+
+    <string name="gestures_left">Przesuń w lewo</string>
+    <string name="gestures_right">Przesuń w prawo</string>
+    <string name="gestures_up">Przesuń w górę</string>
+    <string name="gestures_double_tap">Kliknij dwa razy</string>
+    <string name="gestures_default">Brak</string>
+    <string name="gestures_default_value" translatable="false">none</string>
+
+    <string name="gestures_down_status">Wysuń pasek stanu</string>
+    <string name="gestures_down_status_desc">Przesuń palcem w dół, aby rozwinąć pasek stanu</string>
+
+    <string name="pref_title_app_list_order">Kolejność listy aplikacji</string>
+    <string name="app_list_order_normal">A do Z</string>
+    <string name="app_list_order_inverse">Z do A</string>
+
+    <string name="static_app_list">Lista</string>
+    <string name="static_app_list_desc">Automatycznie otwieraj listę aplikacji</string>
+
+    <string name="pref_app_launch_anim">Animacje aplikacji</string>
+    <string name="anim_list_default">Domyślne</string>
+    <string name="anim_list_pull_up">Przeciągnięcie w górę</string>
+    <string name="anim_list_slide_in">Wsuwanie</string>
+
+    <string name="pref_search_provider">Zmień wyszukiwarkę</string>
+
+    <string name="web_search_long_press">Opcje wyszukiwania</string>
+    <string name="web_search_long_press_desc">Jeśli dostawca wyszukiwania nie jest ustawiony na „Zawsze pytaj”, długie naciśnięcie „Idź” umożliwia wybór dostawcy wyszukiwania</string>
+
+    <string name="keyboard_focus">Keyboard focus</string>
+    <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down.</string>
+
+    <string name="web_search">Wyszukiwanie w sieci</string>
+    <string name="web_search_desc">Proponuj wyszukiwanie w sieci</string>
+
+    <string name="tap_to_drawer">Lista aplikacji</string>
+    <string name="tap_to_drawer_desc">Otwórz listę aplikacji, dotykając dowolnego miejsca na pulpicie</string>
+
+    <string name="shadow_adaptive_icon">Cienie ikon</string>
+    <string name="shadow_adaptive_icon_desc">Dodanie cieni może zmniejszyć wydajność</string>
+
+    <string name="pref_icon_view">Ukryj ikony aplikacji</string>
+    <string name="pref_icon_view_desc">Zalecane dla lepszej wydajności urządzeń o niskich parametrach</string>
+
+    <string name="pref_shade_view">Cień tapety</string>
+    <string name="pref_shade_view_desc">Dodaj cień na tapecie</string>
+
+    <string name="static_favourites">Ulubione</string>
+    <string name="static_favourites_desc">Lista ulubionych widoczna podczas przewijania</string>
+
+    <string name="icon_pack">Wybierz paczkę ikon</string>
+    <string name="icon_pack_default">Domyślne</string>
+    <string name="icon_pack_default_value" translatable="false">default</string>
+</resources>
