@@ -162,6 +162,8 @@ public class LauncherActivity extends AppCompatActivity {
 
     private LauncherApps launcherApps;
 
+    private FetchAppsTask fetchAppsTask;
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -228,7 +230,8 @@ public class LauncherActivity extends AppCompatActivity {
         }
 
         // Start loading apps and initialising click listeners.
-        new FetchAppsTask(manager, appsAdapter, appsList).execute();
+        fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
+        fetchAppsTask.execute();
         addSearchBarTextListener();
         addSearchBarEditorListener();
         addGestureListener();
@@ -322,7 +325,12 @@ public class LauncherActivity extends AppCompatActivity {
         if (AppUtils.hasNewPackage(
                 manager) || (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty())) {
             updatePinnedApps(true);
-            new FetchAppsTask(manager, appsAdapter, appsList).execute();
+            if (fetchAppsTask != null) {
+                fetchAppsTask.execute();
+            } else {
+                fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
+                fetchAppsTask.execute();
+            }
         }
 
         Utils.registerPackageReceiver(this, packageReceiver);
@@ -346,6 +354,14 @@ public class LauncherActivity extends AppCompatActivity {
 
         // Reset the app list filter.
         appsAdapter.resetFilter();
+    }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+
+        if (fetchAppsTask != null) {
+            fetchAppsTask.cancel(true);
+        }
     }
 
     @Override public void onWindowFocusChanged(boolean hasFocus) {
