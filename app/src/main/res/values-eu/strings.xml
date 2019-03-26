@@ -6,8 +6,16 @@
     <string name="action_settings">Ezarpenak</string>
     <string name="action_wallpaper">Horma-papera aldatu</string>
     <string name="action_force_refresh">Freskatu</string>
+    <string name="action_view_widgets">Widgetak ikusi</string>
     <string name="action_remove_widget">Widgeta kendu</string>
+    <string name="action_up_widget">Gora mugitu</string>
+    <string name="action_down_widget">Behera mugitu</string>
+    <string name="action_web_provider_remove">Kendu</string>
+    <string name="action_web_provider_exclude">Baztertu</string>
+    <string name="action_web_provider_edit">Editatu</string>
     <string name="action_hidden_app_reset">Dena berrezarri</string>
+    <string name="action_web_provider_add">Gehitu</string>
+    <string name="action_web_provider_reset">Berrezarri</string>
     <string name="action_save_backup">Gorde</string>
 
     <!-- App menu actions -->
@@ -18,18 +26,34 @@
     <string name="action_backup">Babes-kopia egin</string>
     <string name="action_uninstall">Desinstalatu</string>
     <string name="action_info">Aplikazioaren informazioa</string>
+    <string name="action_shorthand">Laburdura</string>
+    <string name="action_actions">Ekintzak</string>
+    <string name="action_shortcuts">Lasterbideak</string>
 
     <!-- Misc -->
     <string name="search_hint">Bilatu…</string>
     <string name="search_web_hint">Bilatu \'%1$s\' sarean.</string>
+    <string name="search_web_button_prompt">Honekin</string>
     <string name="search_web_button">Joan</string>
+    <string name="dialog_widget_hint">Sakatu widgeta gehitzeko.</string>
+    <string name="dialog_title_add_provider">Hornitzailea gehitu</string>
+    <string name="dialog_title_edit_provider">Hornitzailea editatu</string>
+    <string name="dialog_title_shorthand">Laburdura ezarri</string>
+    <string name="dialog_title_widgets">Widgeten tokia</string>
+    <string name="dialog_action_close">Itxi</string>
+    <string name="dialog_action_add">Gehitu</string>
 
     <!-- Error messages -->
     <string name="err_activity_null">Ezin da aplikazioa hasi.</string>
+    <string name="err_invalid_url">URL ez balioduna.</string>
+    <string name="err_provider_exists">Hornitzailearen izena ezin da errepikatu.</string>
 
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Mahaigaineko ikuspegia</string>
     <string name="desc_apps_list">Aplikazioen zerrenda</string>
     <string name="desc_icon">Aplikazioa</string>
     <string name="desc_file">Fitxategia</string>
+
+    <!-- Built-in search providers -->
+    <string name="search_provider_none">Galdetu beti</string>
 </resources>
