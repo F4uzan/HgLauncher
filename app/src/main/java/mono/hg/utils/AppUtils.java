@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import mono.hg.BuildConfig;
 import mono.hg.R;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
@@ -219,12 +220,11 @@ public class AppUtils {
      * Populates the internal app list. This method must be loaded asynchronously to avoid
      * performance degradation.
      *
-     * @param activity The activity where the app list resides and is needed.
+     * @param manager PackageManager object for use retrieving intent activities.
      *
      * @return List an App List containing the app list itself
      */
-    public static List<App> loadApps(Activity activity) {
-        PackageManager manager = activity.getPackageManager();
+    public static List<App> loadApps(PackageManager manager) {
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         List<App> appsList = new ArrayList<>();
 
@@ -243,7 +243,7 @@ public class AppUtils {
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
             if (!PreferenceHelper.getExclusionList().contains(packageName) && !packageName.contains(
-                    activity.getPackageName())) {
+                    BuildConfig.APPLICATION_ID)) {
                 String appName = ri.loadLabel(manager).toString();
                 String hintName = PreferenceHelper.getLabel(packageName);
                 Drawable icon = null;

@@ -228,7 +228,7 @@ public class LauncherActivity extends AppCompatActivity {
         }
 
         // Start loading apps and initialising click listeners.
-        new FetchAppsTask(this).execute();
+        new FetchAppsTask(manager, appsAdapter, appsList).execute();
         addSearchBarTextListener();
         addSearchBarEditorListener();
         addGestureListener();
@@ -322,7 +322,7 @@ public class LauncherActivity extends AppCompatActivity {
         if (AppUtils.hasNewPackage(
                 manager) || (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty())) {
             updatePinnedApps(true);
-            new FetchAppsTask(this).execute();
+            new FetchAppsTask(manager, appsAdapter, appsList).execute();
         }
 
         Utils.registerPackageReceiver(this, packageReceiver);
