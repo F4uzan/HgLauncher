@@ -117,7 +117,7 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
         }
     }
 
-    protected class ViewHolder extends FlexibleViewHolder {
+    protected static class ViewHolder extends FlexibleViewHolder {
         protected TextView name;
         protected ImageView icon;
 
