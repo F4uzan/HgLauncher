@@ -224,19 +224,6 @@ public class LauncherIconHelper {
         if (drawable != null && iconRes != null) {
             // Load and return.
             return loadDrawable(iconRes, drawable, iconPackageName);
-        } else {
-            // Manually retrieve resource by brute-forcing its component name.
-            int start = componentName.indexOf("{") + 1;
-            int end = componentName.indexOf("}", start);
-            if (end > start && iconRes != null) {
-                drawable = componentName.substring(start, end)
-                                        .toLowerCase()
-                                        .replace(".", "_")
-                                        .replace("/", "_");
-                if (iconRes.getIdentifier(drawable, "drawable", iconPackageName) > 0) {
-                    return loadDrawable(iconRes, drawable, iconPackageName);
-                }
-            }
         }
         return null;
     }
