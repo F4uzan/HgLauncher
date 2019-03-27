@@ -890,6 +890,15 @@ public class LauncherActivity extends AppCompatActivity {
                                    .findViewByPosition(position), true, packageName);
             }
         });
+
+        appsAdapter.addListener(new FlexibleAdapter.OnUpdateListener() {
+            @Override public void onUpdateEmptyView(int size) {
+                if (size > 0) {
+                    loadProgress.setVisibility(View.GONE);
+                    loadProgress.invalidate();
+                }
+            }
+        });
     }
 
     /**
