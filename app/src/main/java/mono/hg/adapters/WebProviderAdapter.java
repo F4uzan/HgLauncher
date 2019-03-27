@@ -32,7 +32,7 @@ public class WebProviderAdapter extends BaseAdapter {
         return i;
     }
 
-    @Override public View getView(int i, View convertView, ViewGroup viewGroup) {
+    @Override public View getView(int i, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         View view = convertView;
 

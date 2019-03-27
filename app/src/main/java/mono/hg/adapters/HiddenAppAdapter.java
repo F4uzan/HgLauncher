@@ -2,7 +2,6 @@ package mono.hg.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 
 import mono.hg.R;
 import mono.hg.models.App;
-import mono.hg.utils.Utils;
 
 public class HiddenAppAdapter extends BaseAdapter {
     private ArrayList<App> hiddenAppsList;
@@ -25,14 +23,11 @@ public class HiddenAppAdapter extends BaseAdapter {
     }
 
     @Override public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         ViewHolder appHolder;
         View view = convertView;
 
         if (view == null) {
-            view = Utils.requireNonNull(inflater).inflate(R.layout.list_generic_item, parent, false);
+            view = View.inflate(context, R.layout.list_generic_item, null);
 
             appHolder = new ViewHolder();
 

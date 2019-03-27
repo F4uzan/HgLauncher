@@ -1,7 +1,6 @@
 package mono.hg.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 
 import mono.hg.R;
 import mono.hg.models.FileFolder;
-import mono.hg.utils.Utils;
 
 public class FileFolderAdapter extends BaseAdapter {
     private ArrayList<FileFolder> filesList;
@@ -24,15 +22,11 @@ public class FileFolderAdapter extends BaseAdapter {
     }
 
     @Override public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         ViewHolder holder;
         View view = convertView;
 
         if (view == null) {
-            view = Utils.requireNonNull(inflater)
-                        .inflate(R.layout.list_generic_item, parent, false);
+            view = View.inflate(context, R.layout.list_generic_item, null);
 
             holder = new ViewHolder();
             holder.content = view.findViewById(R.id.item_icon);
