@@ -9,6 +9,7 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Process;
 import android.provider.Settings;
@@ -44,6 +45,8 @@ import mono.hg.appwidget.LauncherAppWidgetHost;
 import mono.hg.fragments.WidgetsDialogFragment;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
+import mono.hg.listeners.GestureListener;
+import mono.hg.listeners.SimpleScrollListener;
 import mono.hg.models.App;
 import mono.hg.models.PinnedApp;
 import mono.hg.receivers.PackageChangesReceiver;
@@ -55,8 +58,6 @@ import mono.hg.utils.ViewUtils;
 import mono.hg.views.DagashiBar;
 import mono.hg.views.IndeterminateMaterialProgressBar;
 import mono.hg.views.TogglingLinearLayoutManager;
-import mono.hg.listeners.GestureListener;
-import mono.hg.listeners.SimpleScrollListener;
 import mono.hg.wrappers.TextSpectator;
 
 public class LauncherActivity extends AppCompatActivity {
@@ -229,9 +230,7 @@ public class LauncherActivity extends AppCompatActivity {
             PreferenceHelper.getEditor().putString("icon_pack", "default").apply();
         }
 
-        // Start loading apps and initialising click listeners.
-        fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
-        fetchAppsTask.execute();
+        // Start initialising listeners.
         addSearchBarTextListener();
         addSearchBarEditorListener();
         addGestureListener();
@@ -325,12 +324,9 @@ public class LauncherActivity extends AppCompatActivity {
         if (AppUtils.hasNewPackage(
                 manager) || (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty())) {
             updatePinnedApps(true);
-            if (fetchAppsTask != null) {
-                fetchAppsTask.execute();
-            } else {
-                fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
-                fetchAppsTask.execute();
-            }
+            fetchAppsTask.cancel(true);
+            fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
+            fetchAppsTask.execute();
         }
 
         Utils.registerPackageReceiver(this, packageReceiver);
@@ -352,6 +348,11 @@ public class LauncherActivity extends AppCompatActivity {
             recreate();
         }
 
+        if (fetchAppsTask == null) {
+            fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
+            fetchAppsTask.execute();
+        }
+
         // Reset the app list filter.
         appsAdapter.resetFilter();
     }
@@ -359,7 +360,7 @@ public class LauncherActivity extends AppCompatActivity {
     @Override protected void onDestroy() {
         super.onDestroy();
 
-        if (fetchAppsTask != null) {
+        if (fetchAppsTask != null && fetchAppsTask.getStatus() == AsyncTask.Status.RUNNING) {
             fetchAppsTask.cancel(true);
         }
     }
