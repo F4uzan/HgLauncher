@@ -68,19 +68,19 @@ public class LauncherActivity extends AppCompatActivity {
     /*
      * List containing installed apps.
      */
-    public ArrayList<App> appsList = new ArrayList<>();
+    private ArrayList<App> appsList = new ArrayList<>();
     /*
      * Adapter for installed apps.
      */
-    public AppAdapter appsAdapter = new AppAdapter(appsList);
+    private AppAdapter appsAdapter = new AppAdapter(appsList);
     /*
      * RecyclerView for app list.
      */
-    public RecyclerView appsRecyclerView;
+    private RecyclerView appsRecyclerView;
     /*
      * Progress bar shown when populating app list.
      */
-    public IndeterminateMaterialProgressBar loadProgress;
+    private IndeterminateMaterialProgressBar loadProgress;
     /*
      * Should the favourites panel listen for scroll?
      */
