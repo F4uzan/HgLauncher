@@ -3,6 +3,7 @@ Icon Design: tebriz159 (https://github.com/tebriz159)
 Translators:
 - Basque: Aitor Beriain (https://github.com/beriain)
 - Polish: Adam Konarzycki (https://github.com/adam5525)
+- Spanish: Aitor Beriain (https://github.com/beriain)
 
 Libraries:
 - AndroidX Support Libraries: Google and AOSP contributors (https://android.googlesource.com/platform/frameworks/support). Licensed under Apache v2.
