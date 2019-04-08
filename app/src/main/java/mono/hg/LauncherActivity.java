@@ -390,17 +390,13 @@ public class LauncherActivity extends AppCompatActivity {
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.isCtrlPressed()) {
             return Utils.handleInputShortcut(this, searchBar, keyCode);
         } else {
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_ESCAPE:
-                    onBackPressed();
-                    return true;
-                case KeyEvent.KEYCODE_SPACE:
-                    if (!searchBar.hasFocus()) {
-                        doThis("show_panel");
-                    }
-                    return true;
-                default:
-                    return super.onKeyUp(keyCode, event);
+            if (keyCode == KeyEvent.KEYCODE_SPACE) {
+                if (getWindow().getCurrentFocus() != searchBar) {
+                    doThis("show_panel");
+                }
+                return true;
+            } else {
+                return super.onKeyUp(keyCode, event);
             }
         }
     }
