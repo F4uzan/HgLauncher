@@ -219,11 +219,6 @@ public class LauncherActivity extends AppCompatActivity {
 
         pinnedAppsAdapter.setLongPressDragEnabled(true);
 
-        // Restore search bar visibility when panel is pulled down.
-        if (savedInstanceState != null && ViewUtils.isPanelVisible(slidingHome)) {
-            searchContainer.setVisibility(View.VISIBLE);
-        }
-
         // Get icons from icon pack.
         if (!"default".equals(PreferenceHelper.getIconPackName()) &&
                 LauncherIconHelper.loadIconPack(manager) == 0) {
@@ -334,6 +329,10 @@ public class LauncherActivity extends AppCompatActivity {
         // Show the app list when needed.
         if (PreferenceHelper.keepAppList()) {
             doThis("show_panel");
+        } else if (Utils.sdkIsBelow(21)) {
+            // HACK: For some reason, KitKat and below is always late setting visibility.
+            // Manually set it here to make sure it's invisible.
+            searchContainer.setVisibility(View.INVISIBLE);
         }
 
         isResuming = true;
@@ -955,22 +954,18 @@ public class LauncherActivity extends AppCompatActivity {
                     }
 
                     // Animate search container entering the view.
-                    if (previousState == SlidingUpPanelLayout.PanelState.DRAGGING) {
-                        searchContainer.animate().alpha(1f).setDuration(animateDuration)
-                                       .setListener(new AnimatorListenerAdapter() {
-                                           @Override
-                                           public void onAnimationStart(Animator animation) {
-                                               searchContainer.setVisibility(View.VISIBLE);
-                                           }
+                    searchContainer.animate().alpha(1f).setDuration(animateDuration)
+                                   .setListener(new AnimatorListenerAdapter() {
+                                       @Override
+                                       public void onAnimationStart(Animator animation) {
+                                           searchContainer.setVisibility(View.VISIBLE);
+                                       }
 
-                                           @Override
-                                           public void onAnimationEnd(Animator animation) {
-                                               searchContainer.clearAnimation();
-                                           }
-                                       });
-                    } else {
-                        searchContainer.setVisibility(View.VISIBLE);
-                    }
+                                       @Override
+                                       public void onAnimationEnd(Animator animation) {
+                                           searchContainer.clearAnimation();
+                                       }
+                                   });
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     appsLayoutManager.setVerticalScrollEnabled(false);
 
@@ -982,12 +977,11 @@ public class LauncherActivity extends AppCompatActivity {
 
                     searchContainer.setVisibility(View.INVISIBLE);
 
-                    // Also animate the container only when we are not resuming.
+                    // Animate the container.
                     if (!isResuming) {
                         searchContainer.animate().alpha(0f).setDuration(animateDuration);
+                    } else {
                         isResuming = false;
-                    } else if (ActivityServiceUtils.isPowerSaving(LauncherActivity.this)) {
-                        searchContainer.animate().alpha(0).setDuration(animateDuration);
                     }
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
                     doThis("show_panel");
