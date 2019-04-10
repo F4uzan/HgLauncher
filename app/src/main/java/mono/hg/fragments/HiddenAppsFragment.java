@@ -106,7 +106,8 @@ public class HiddenAppsFragment extends BackHandledFragment {
         Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
 
         // Clear the list to make sure that we aren't just adding over an existing list.
-        appList.clear();
+        // hit and try solution for new apps not adding in the list. didn't execpted how but it worked can try.
+        //appList.clear();
         hiddenAppAdapter.notifyDataSetInvalidated();
 
         // Fetch and add every app into our list,

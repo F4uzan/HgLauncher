@@ -66,8 +66,8 @@
     <string name="windowbar_mode_nav">Hide navigation bar</string>
     <string name="windowbar_mode_both">Hide both</string>
 
-    <string name="gestures_left">Swipe left</string>
-    <string name="gestures_right">Swipe right</string>
+    <string name="gestures_left">Swipe &lt;---</string>
+    <string name="gestures_right">Swipe ---&gt;</string>
     <string name="gestures_up">Swipe up</string>
     <string name="gestures_double_tap">Double tap</string>
     <string name="gestures_default">None</string>

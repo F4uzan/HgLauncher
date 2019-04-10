@@ -938,7 +938,8 @@ public class LauncherActivity extends AppCompatActivity {
 
             @Override public void onPanelStateChanged(View panel, int previousState, int newState) {
                 if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED
-                        || newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
+                        /*|| newState == SlidingUpPanelLayout.PanelState.DRAGGING*/) {
+                    //animation bar fixe desn't allow the slidingpanel to come out on random slides
 
                     if (newState != SlidingUpPanelLayout.PanelState.DRAGGING) {
                         appsLayoutManager.setVerticalScrollEnabled(true);
