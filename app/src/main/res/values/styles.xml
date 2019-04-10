@@ -9,5 +9,7 @@
 
     <style name="WidgetDialogStyle" parent="@style/Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
 </resources>
