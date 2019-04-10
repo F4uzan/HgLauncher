@@ -21,7 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import mono.hg.LauncherActivity;
 import mono.hg.R;
 import mono.hg.appwidget.LauncherAppWidgetHost;
 import mono.hg.helpers.PreferenceHelper;
@@ -35,6 +34,7 @@ public class WidgetsDialogFragment extends DialogFragment {
     private static int WIDGET_CONFIG_START_CODE = 1;
     private static int WIDGET_CONFIG_RETURN_CODE = 2;
     private static int WIDGET_CONFIG_DEFAULT_CODE = -1;
+    private static int WIDGET_HOST_ID = 314;
 
     /*
      * Used to handle and add widgets to widgetContainer.
@@ -46,23 +46,25 @@ public class WidgetsDialogFragment extends DialogFragment {
     /*
      * List containing widgets ID.
      */
-    private ArrayList<String> widgetsList = new ArrayList<>(PreferenceHelper.getWidgetList());
+    private ArrayList<String> widgetsList;
 
     /*
      * View calling the context menu.
      */
-    private AppWidgetHostView callingView = null;
+    private AppWidgetHostView callingView;
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        appWidgetManager = ((LauncherActivity) requireActivity()).getAppWidgetManager();
-        appWidgetHost = ((LauncherActivity) requireActivity()).getAppWidgetHostView();
+        appWidgetManager = AppWidgetManager.getInstance(requireContext());
+        appWidgetHost = new LauncherAppWidgetHost(requireContext(), WIDGET_HOST_ID);
     }
 
     @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.WidgetDialogStyle);
         View view = View.inflate(requireContext(), R.layout.fragment_widgets_dialog, null);
+
+        widgetsList = new ArrayList<>(PreferenceHelper.getWidgetList());
 
         appWidgetContainer = view.findViewById(R.id.widget_container);
 
