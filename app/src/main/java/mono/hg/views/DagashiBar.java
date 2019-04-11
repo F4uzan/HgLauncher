@@ -78,14 +78,15 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
     /**
      * Make a DagashiBar to display a message
      *
-     * @param view     The view to find a parent from.
-     * @param text     The text to show. Can be formatted text.
-     * @param duration How long to display the message. Can be {@link #LENGTH_SHORT}, {@link
-     *                 #LENGTH_LONG}, {@link #LENGTH_INDEFINITE}, or a custom duration in milliseconds.
+     * @param view      The view to find a parent from.
+     * @param text      The text to show. Can be formatted text.
+     * @param duration  How long to display the message. Can be {@link #LENGTH_SHORT}, {@link
+     *                  #LENGTH_LONG}, {@link #LENGTH_INDEFINITE}, or a custom duration in milliseconds.
+     * @param swipeable Whether swipe-to-dismiss is allowed.
      */
     @NonNull
     public static DagashiBar make(
-            @NonNull View view, @NonNull CharSequence text, @Duration int duration) {
+            @NonNull View view, @NonNull CharSequence text, @Duration int duration, boolean swipeable) {
         final ViewGroup parent = findSuitableParent(view);
         if (parent == null) {
             throw new IllegalArgumentException(
@@ -104,6 +105,9 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
         final DagashiBar snackbar = new DagashiBar(parent, content, content);
         snackbar.setText(text);
         snackbar.setDuration(duration);
+        if (!swipeable) {
+            snackbar.setSwipeDisabled();
+        }
         return snackbar;
     }
 
@@ -122,14 +126,15 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
     /**
      * Make a DagashiBar to display a message.
      *
-     * @param view     The view to find a parent from.
-     * @param resId    The resource id of the string resource to use. Can be formatted text.
-     * @param duration How long to display the message. Can be {@link #LENGTH_SHORT}, {@link
-     *                 #LENGTH_LONG}, {@link #LENGTH_INDEFINITE}, or a custom duration in milliseconds.
+     * @param view      The view to find a parent from.
+     * @param resId     The resource id of the string resource to use. Can be formatted text.
+     * @param duration  How long to display the message. Can be {@link #LENGTH_SHORT}, {@link
+     *                  #LENGTH_LONG}, {@link #LENGTH_INDEFINITE}, or a custom duration in milliseconds.
+     * @param swipeable Whether swipe-to-dismiss is allowed.
      */
     @NonNull
-    public static DagashiBar make(@NonNull View view, @StringRes int resId, @Duration int duration) {
-        return make(view, view.getResources().getText(resId), duration);
+    public static DagashiBar make(@NonNull View view, @StringRes int resId, @Duration int duration, boolean swipeable) {
+        return make(view, view.getResources().getText(resId), duration, swipeable);
     }
 
     private static ViewGroup findSuitableParent(View attachView) {

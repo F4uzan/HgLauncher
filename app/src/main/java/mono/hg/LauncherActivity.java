@@ -709,7 +709,7 @@ public class LauncherActivity extends AppCompatActivity {
             String searchHint;
 
             DagashiBar searchSnack = DagashiBar.make(snackHolder, searchHint,
-                    DagashiBar.LENGTH_INDEFINITE);
+                    DagashiBar.LENGTH_INDEFINITE, false);
 
             @Override public void whenTimerTicked() {
                 super.whenTimerTicked();
@@ -777,8 +777,6 @@ public class LauncherActivity extends AppCompatActivity {
                             }
                         });
                     }
-
-                    searchSnack.setSwipeDisabled();
                 }
             }
         });
