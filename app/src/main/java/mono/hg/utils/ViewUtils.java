@@ -6,13 +6,13 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.PopupMenu;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
