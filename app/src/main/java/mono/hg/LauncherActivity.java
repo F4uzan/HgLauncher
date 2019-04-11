@@ -792,7 +792,8 @@ public class LauncherActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((!appsAdapter.isEmpty() && searchBar.getText().length() > 0) &&
                         (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
-                    ViewUtils.keyboardLaunchApp(LauncherActivity.this, appsRecyclerView, appsAdapter);
+                    ViewUtils.keyboardLaunchApp(LauncherActivity.this, appsRecyclerView,
+                            appsAdapter);
                     return true;
                 }
                 return false;
@@ -915,6 +916,8 @@ public class LauncherActivity extends AppCompatActivity {
      */
     private void addPanelListener() {
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            boolean dismissed = false;
+
             @Override public void onPanelSlide(View view, float v) {
                 appsLayoutManager.setVerticalScrollEnabled(false);
 
@@ -923,6 +926,11 @@ public class LauncherActivity extends AppCompatActivity {
 
                 // Dismiss any visible menu.
                 doThis("dismiss_menu");
+
+                if (v == 1.0 && !dismissed) {
+                    // This is a swipe up. Trigger that instead.
+                    AppUtils.launchApp(LauncherActivity.this, PreferenceHelper.doSwipeUp());
+                }
             }
 
             @Override public void onPanelStateChanged(View panel, int previousState, int newState) {
@@ -931,6 +939,7 @@ public class LauncherActivity extends AppCompatActivity {
 
                     if (newState != SlidingUpPanelLayout.PanelState.DRAGGING) {
                         appsLayoutManager.setVerticalScrollEnabled(true);
+                        dismissed = true;
                     }
 
                     // Empty out search bar text
@@ -972,6 +981,8 @@ public class LauncherActivity extends AppCompatActivity {
                     } else {
                         isResuming = false;
                     }
+
+                    dismissed = false;
                 } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
                     doThis("show_panel");
                 }
