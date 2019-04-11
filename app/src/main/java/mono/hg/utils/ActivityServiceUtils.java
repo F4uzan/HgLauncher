@@ -112,7 +112,7 @@ public class ActivityServiceUtils {
             }
             showStatusbar.invoke(service);
         } catch (Exception w) {
-            Utils.sendLog(2, "Exception in expandStatusBar: " + w.toString());
+            Utils.sendLog(Utils.LogLevel.WARNING, "Exception in expandStatusBar: " + w.toString());
         }
     }
 

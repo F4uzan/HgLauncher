@@ -123,8 +123,8 @@ public class LauncherIconHelper {
         try {
             iconRes = packageManager.getResourcesForApplication(iconPackageName);
         } catch (PackageManager.NameNotFoundException e) {
-            Utils.sendLog(1, "Cannot find icon resources for " + iconPackageName + "!");
-            Utils.sendLog(1, "Loading default icon.");
+            Utils.sendLog(Utils.LogLevel.VERBOSE, "Cannot find icon resources for " + iconPackageName + "!");
+            Utils.sendLog(Utils.LogLevel.VERBOSE, "Loading default icon.");
             return 0;
         }
 
@@ -147,7 +147,7 @@ public class LauncherIconHelper {
                 iconFilterXml.setInput(iconAsset, "utf-8");
             }
         } catch (IOException | XmlPullParserException e) {
-            Utils.sendLog(3, e.toString());
+            Utils.sendLog(Utils.LogLevel.ERROR, e.toString());
         }
 
         // Begin parsing the received appfilter.
@@ -176,7 +176,7 @@ public class LauncherIconHelper {
                     eventType = iconFilterXml.next();
                 }
             } catch (IOException | XmlPullParserException e) {
-                Utils.sendLog(3, e.toString());
+                Utils.sendLog(Utils.LogLevel.ERROR, e.toString());
             }
         }
         return 1;
@@ -217,7 +217,7 @@ public class LauncherIconHelper {
         try {
             iconRes = packageManager.getResourcesForApplication(iconPackageName);
         } catch (PackageManager.NameNotFoundException e) {
-            Utils.sendLog(3, e.toString());
+            Utils.sendLog(Utils.LogLevel.ERROR, e.toString());
         }
 
         String drawable = mPackagesDrawables.get(componentName);

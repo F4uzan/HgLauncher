@@ -227,9 +227,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
             out = new ObjectOutputStream(new FileOutputStream(path));
             out.writeObject(PreferenceHelper.getPreference().getAll());
         } catch (FileNotFoundException e) {
-            Utils.sendLog(3, e.toString());
+            Utils.sendLog(Utils.LogLevel.ERROR, e.toString());
         } catch (IOException e) {
-            Utils.sendLog(3, e.toString());
+            Utils.sendLog(Utils.LogLevel.ERROR, e.toString());
         } finally {
             try {
                 if (out != null) {
@@ -237,7 +237,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
                     out.flush();
                 }
             } catch (IOException e) {
-                Utils.sendLog(3, e.toString());
+                Utils.sendLog(Utils.LogLevel.ERROR, e.toString());
             }
             traverseStorage(this.currentPath);
             Toast.makeText(requireActivity(), R.string.backup_complete, Toast.LENGTH_SHORT).show();
@@ -275,9 +275,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
             }
             PreferenceHelper.getEditor().apply();
         } catch (FileNotFoundException | ClassNotFoundException e) {
-            Utils.sendLog(3, e.toString());
+            Utils.sendLog(Utils.LogLevel.ERROR, e.toString());
         } catch (IOException e) {
-            Utils.sendLog(3, e.toString());
+            Utils.sendLog(Utils.LogLevel.ERROR, e.toString());
         } finally {
             Utils.closeStream(input);
         }

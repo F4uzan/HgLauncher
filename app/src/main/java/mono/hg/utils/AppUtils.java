@@ -79,7 +79,7 @@ public class AppUtils {
                 return true;
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Utils.sendLog(3, e.toString());
+            Utils.sendLog(Utils.LogLevel.ERROR, e.toString());
             return false;
         }
         return false;
@@ -117,7 +117,7 @@ public class AppUtils {
                 list.add(app);
                 adapter.updateDataSet(list, false);
             } catch (PackageManager.NameNotFoundException e) {
-                Utils.sendLog(3, "Unable to pin " + componentName + ";missing package?");
+                Utils.sendLog(Utils.LogLevel.ERROR, "Unable to pin " + componentName + ";missing package?");
             }
         }
     }
@@ -162,7 +162,7 @@ public class AppUtils {
             }
         } catch (ActivityNotFoundException | NullPointerException e) {
             Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show();
-            Utils.sendLog(3, "Cannot start " + componentName + "; missing package?");
+            Utils.sendLog(Utils.LogLevel.ERROR, "Cannot start " + componentName + "; missing package?");
         }
     }
 

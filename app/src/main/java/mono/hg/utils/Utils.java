@@ -13,14 +13,30 @@ import android.widget.EditText;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.lang.annotation.Retention;
 import java.util.ArrayList;
 
+import androidx.annotation.IntDef;
 import mono.hg.R;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.WebSearchProvider;
 import mono.hg.receivers.PackageChangesReceiver;
 
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
 public class Utils {
+
+    @IntDef({LogLevel.DEBUG,
+            LogLevel.VERBOSE,
+            LogLevel.WARNING,
+            LogLevel.ERROR})
+    @Retention(SOURCE)
+    public @interface LogLevel {
+        int DEBUG = 0;
+        int VERBOSE = 1;
+        int WARNING = 2;
+        int ERROR = 3;
+    }
 
     /**
      * Sends log using a predefined tag. This is used to better debug or to catch errors.
@@ -34,16 +50,16 @@ public class Utils {
         String tag = "HgLogger";
         switch (level) {
             default:
-            case 0:
+            case LogLevel.DEBUG:
                 Log.d(tag, message);
                 break;
-            case 1:
+            case LogLevel.VERBOSE:
                 Log.v(tag, message);
                 break;
-            case 2:
+            case LogLevel.WARNING:
                 Log.w(tag, message);
                 break;
-            case 3:
+            case LogLevel.ERROR:
                 Log.e(tag, message);
                 break;
         }
@@ -182,7 +198,7 @@ public class Utils {
         try {
             activity.unregisterReceiver(packageReceiver);
         } catch (IllegalArgumentException w) {
-            Utils.sendLog(0, "Failed to remove receiver!");
+            Utils.sendLog(LogLevel.DEBUG, "Failed to remove receiver!");
         }
     }
 
