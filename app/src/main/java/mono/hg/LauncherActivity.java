@@ -34,6 +34,8 @@ import java.util.HashSet;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -79,13 +81,13 @@ public class LauncherActivity extends AppCompatActivity {
      */
     private IndeterminateMaterialProgressBar loadProgress;
     /*
-     * Should the favourites panel listen for scroll?
-     */
-    private boolean shouldShowFavourites = true;
-    /*
      * Are we resuming this activity?
      */
     private boolean isResuming = false;
+    /*
+     * Visibility of the favourites panel.
+     */
+    private boolean isFavouritesVisible;
     /*
      * Animation duration; fetched from system's duration.
      */
@@ -137,9 +139,9 @@ public class LauncherActivity extends AppCompatActivity {
      */
     private SlidingUpPanelLayout slidingHome;
     /*
-     * CoordinatorLayout hosting the search snackbar.
+     * CoordinatorLayout hosting the view visible when slidingHome is pulled down.
      */
-    private View snackHolder;
+    private CoordinatorLayout appsListContainer;
     /*
      * A view used to intercept gestures and taps in the desktop.
      */
@@ -173,12 +175,12 @@ public class LauncherActivity extends AppCompatActivity {
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
 
+        appsListContainer = findViewById(R.id.app_list_container);
         searchContainer = findViewById(R.id.search_container);
         pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
         searchBar = findViewById(R.id.search);
         slidingHome = findViewById(R.id.slide_home);
         touchReceiver = findViewById(R.id.touch_receiver);
-        snackHolder = findViewById(R.id.snack_holder);
         appsRecyclerView = findViewById(R.id.apps_list);
         pinnedAppsRecyclerView = findViewById(R.id.pinned_apps_list);
         loadProgress = findViewById(R.id.load_progress);
@@ -427,27 +429,15 @@ public class LauncherActivity extends AppCompatActivity {
                 break;
             case "show_favourites":
                 pinnedAppsContainer.animate()
-                                   .translationY(0f)
+                                   .translationY(0)
                                    .setInterpolator(new LinearOutSlowInInterpolator())
-                                   .setDuration(animateDuration)
-                                   .setListener(new AnimatorListenerAdapter() {
-                                       @Override
-                                       public void onAnimationStart(Animator animator) {
-                                           pinnedAppsContainer.setVisibility(View.VISIBLE);
-                                       }
-                                   });
+                                   .setDuration(225);
                 break;
             case "hide_favourites":
                 pinnedAppsContainer.animate()
                                    .translationY(pinnedAppsContainer.getMeasuredHeight())
-                                   .setInterpolator(new LinearOutSlowInInterpolator())
-                                   .setDuration(animateDuration)
-                                   .setListener(new AnimatorListenerAdapter() {
-                                       @Override
-                                       public void onAnimationEnd(Animator animator) {
-                                           pinnedAppsContainer.setVisibility(View.GONE);
-                                       }
-                                   });
+                                   .setInterpolator(new FastOutLinearInInterpolator())
+                                   .setDuration(175);
                 break;
         }
     }
@@ -468,10 +458,12 @@ public class LauncherActivity extends AppCompatActivity {
             homeParams.topMargin = ViewUtils.getStatusBarHeight();
         }
 
-        // Hide the favourites panel when user chooses to disable it or when there's nothing to show.
+        // Hide the favourites panel when there's nothing to show.
         if (pinnedAppsAdapter.isEmpty()) {
-            pinnedAppsContainer.setVisibility(View.GONE);
-            shouldShowFavourites = false;
+            pinnedAppsContainer.setTranslationY(0f);
+            isFavouritesVisible = false;
+        } else {
+            isFavouritesVisible = true;
         }
 
         // Switch on wallpaper shade.
@@ -592,7 +584,6 @@ public class LauncherActivity extends AppCompatActivity {
                         AppUtils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
                         PreferenceHelper.update("pinned_apps_list", pinnedAppString);
-                        shouldShowFavourites = pinnedAppsAdapter.getItemCount() >= 1;
                         break;
                     case R.id.action_unpin:
                         pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
@@ -708,13 +699,17 @@ public class LauncherActivity extends AppCompatActivity {
         searchBar.addTextChangedListener(new TextSpectator(searchBar) {
             String searchHint;
 
-            DagashiBar searchSnack = DagashiBar.make(snackHolder, searchHint,
+            DagashiBar searchSnack = DagashiBar.make(appsListContainer, searchHint,
                     DagashiBar.LENGTH_INDEFINITE, false);
 
             @Override public void whenTimerTicked() {
                 super.whenTimerTicked();
 
                 if (getTrimmedInputText().isEmpty()) {
+                    // HACK: Hide the view stub.
+                    if (pinnedAppsAdapter.isEmpty()) {
+                        doThis("hide_favourites");
+                    }
                     searchSnack.dismiss();
                     stopTimer();
                 }
@@ -738,6 +733,11 @@ public class LauncherActivity extends AppCompatActivity {
                 startTimer();
 
                 if (!getTrimmedInputText().isEmpty() && PreferenceHelper.promptSearch()) {
+                    // HACK: Show a view stub to make sure app list anchors properly.
+                    if (pinnedAppsAdapter.isEmpty()) {
+                        doThis("show_favourites");
+                    }
+
                     // Update the snackbar text.
                     searchSnack.setText(searchHint);
 
@@ -809,8 +809,11 @@ public class LauncherActivity extends AppCompatActivity {
         appsRecyclerView.addOnScrollListener(new SimpleScrollListener(48) {
             @Override
             public void onScrollUp() {
-                if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
+                if (!pinnedAppsAdapter.isEmpty()
+                        && isFavouritesVisible
+                        && !PreferenceHelper.favouritesIgnoreScroll()) {
                     doThis("hide_favourites");
+                    isFavouritesVisible = false;
                 }
             }
 
@@ -821,8 +824,11 @@ public class LauncherActivity extends AppCompatActivity {
 
             @Override
             public void onEnd() {
-                if (shouldShowFavourites && !pinnedAppsAdapter.isEmpty() && !PreferenceHelper.favouritesIgnoreScroll()) {
+                if (!pinnedAppsAdapter.isEmpty()
+                        && !isFavouritesVisible
+                        && !PreferenceHelper.favouritesIgnoreScroll()) {
                     doThis("show_favourites");
+                    isFavouritesVisible = true;
                 }
             }
         });

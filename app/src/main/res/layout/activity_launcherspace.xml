@@ -24,7 +24,7 @@
         app:umanoScrollableView="@id/apps_list"
         app:umanoShadowHeight="0dp">
 
-        <RelativeLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/app_list_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,7 +39,7 @@
                 android:id="@+id/load_progress"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:layout_centerInParent="true"
+                android:layout_gravity="center"
                 android:indeterminate="true"
                 android:visibility="visible" />
 
@@ -47,18 +47,19 @@
                 android:id="@+id/apps_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@id/bottom_panel_container"
                 android:contentDescription="@string/desc_apps_list"
                 android:nextFocusDown="@id/search"
                 android:nextFocusForward="@id/search"
                 android:splitMotionEvents="false"
                 app:fastScrollPopupBgColor="@color/colorPrimaryDark"
                 app:fastScrollThumbColor="@color/colorAccent"
-                app:fastScrollThumbInactiveColor="@color/colorPrimaryDark" />
+                app:fastScrollThumbInactiveColor="@color/colorPrimaryDark"
+                app:layout_anchor="@id/pinned_apps_container"
+                app:layout_behavior=".wrappers.ObservantListBehavior" />
 
             <include layout="@layout/layout_favourites_panel" />
 
-        </RelativeLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <FrameLayout
             android:id="@+id/bottom_container"
