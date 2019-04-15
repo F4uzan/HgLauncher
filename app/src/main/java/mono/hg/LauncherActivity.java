@@ -429,15 +429,29 @@ public class LauncherActivity extends AppCompatActivity {
                 break;
             case "show_favourites":
                 pinnedAppsContainer.animate()
-                                   .translationY(0)
+                                   .translationY(0f)
                                    .setInterpolator(new LinearOutSlowInInterpolator())
-                                   .setDuration(225);
+                                   .setDuration(225)
+                                   .setListener(new AnimatorListenerAdapter() {
+                                       @Override public void onAnimationEnd(Animator animation) {
+                                           isFavouritesVisible = true;
+                                       }
+
+                                       @Override public void onAnimationCancel(Animator animation) {
+                                           isFavouritesVisible = false;
+                                       }
+                                   });
                 break;
             case "hide_favourites":
                 pinnedAppsContainer.animate()
                                    .translationY(pinnedAppsContainer.getMeasuredHeight())
                                    .setInterpolator(new FastOutLinearInInterpolator())
-                                   .setDuration(175);
+                                   .setDuration(175)
+                                   .setListener(new AnimatorListenerAdapter() {
+                                       @Override public void onAnimationEnd(Animator animation) {
+                                           isFavouritesVisible = false;
+                                       }
+                                   });
                 break;
         }
     }
@@ -813,7 +827,6 @@ public class LauncherActivity extends AppCompatActivity {
                         && isFavouritesVisible
                         && !PreferenceHelper.favouritesIgnoreScroll()) {
                     doThis("hide_favourites");
-                    isFavouritesVisible = false;
                 }
             }
 
@@ -828,7 +841,6 @@ public class LauncherActivity extends AppCompatActivity {
                         && !isFavouritesVisible
                         && !PreferenceHelper.favouritesIgnoreScroll()) {
                     doThis("show_favourites");
-                    isFavouritesVisible = true;
                 }
             }
         });
