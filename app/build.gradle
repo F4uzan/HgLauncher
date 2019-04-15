@@ -22,6 +22,13 @@ android {
             resValue "string", "app_version",
                     "${defaultConfig.versionName}${versionNameSuffix}"
         }
+        debugProguard {
+            initWith(buildTypes.debug)
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ['debug']
+        }
         release {
             minifyEnabled true
             zipAlignEnabled true
