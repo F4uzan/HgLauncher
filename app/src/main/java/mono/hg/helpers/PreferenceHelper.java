@@ -15,6 +15,7 @@ import mono.hg.models.WebSearchProvider;
 import mono.hg.utils.Utils.Gesture;
 
 public class PreferenceHelper {
+    private static int orientation_mode;
     private static boolean icon_hide;
     private static boolean list_order;
     private static boolean shade_view;
@@ -51,6 +52,10 @@ public class PreferenceHelper {
 
     public static boolean isTesting() {
         return is_testing;
+    }
+
+    public static int getOrientation() {
+        return orientation_mode;
     }
 
     public static HashSet<String> getExclusionList() {
@@ -297,6 +302,7 @@ public class PreferenceHelper {
     public static void fetchPreference() {
         is_testing = getPreference().getBoolean("is_grandma", false);
         launch_anim = getPreference().getString("launch_anim", "default");
+        orientation_mode = Integer.parseInt(getPreference().getString("orientation_mode", "-1"));
         icon_hide = getPreference().getBoolean("icon_hide_switch", false);
         icon_pack = getPreference().getString("icon_pack", "default");
         list_order = getPreference().getString("list_order", "alphabetical")

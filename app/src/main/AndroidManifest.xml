@@ -20,13 +20,14 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="mono.hg.LauncherActivity"
+            android:name=".LauncherActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:stateNotNeeded="true"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="unspecified"
             android:theme="@style/LauncherTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +40,7 @@
         </activity>
 
         <activity
-            android:name="mono.hg.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:excludeFromRecents="true"
             android:autoRemoveFromRecents="true"

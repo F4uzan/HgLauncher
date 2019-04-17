@@ -130,4 +130,9 @@
     <string name="icon_pack">Icon pack</string>
     <string name="icon_pack_default">Default</string>
     <string name="icon_pack_default_value" translatable="false">default</string>
+
+    <string name="orientation">Screen orientation</string>
+    <string name="orientation_sensor">Follow system</string>
+    <string name="orientation_portrait">Portrait</string>
+    <string name="orientation_landscape">Landscape</string>
 </resources>

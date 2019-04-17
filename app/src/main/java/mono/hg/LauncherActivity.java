@@ -167,6 +167,10 @@ public class LauncherActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_launcherspace);
 
+        if (getRequestedOrientation() != PreferenceHelper.getOrientation()) {
+            setRequestedOrientation(PreferenceHelper.getOrientation());
+        }
+
         manager = getPackageManager();
 
         appsLayoutManager = new TogglingLinearLayoutManager(this,

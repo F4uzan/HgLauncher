@@ -69,6 +69,13 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         }
     };
 
+    private Preference.OnPreferenceChangeListener RestartingListListener = new Preference.OnPreferenceChangeListener() {
+        @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
+            ((SettingsActivity) requireActivity()).restartActivity();
+            return true;
+        }
+    };
+
     @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_customization);
     }
@@ -83,6 +90,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         getAppList();
 
+        ListPreference orientationMode = (ListPreference) findPreference("orientation_mode");
         ListPreference appTheme = (ListPreference) findPreference("app_theme");
         final ListPreference iconList = (ListPreference) findPreference("icon_pack");
         ListPreference gestureHandlerList = (ListPreference) findPreference("gesture_handler");
@@ -119,13 +127,8 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         gestureUpList.setOnPreferenceChangeListener(NestingListListener);
         gestureDoubleTapList.setOnPreferenceChangeListener(NestingListListener);
 
-        appTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                ((SettingsActivity) requireActivity()).restartActivity();
-                return true;
-            }
-        });
+        appTheme.setOnPreferenceChangeListener(RestartingListListener);
+        orientationMode.setOnPreferenceChangeListener(RestartingListListener);
 
         addVersionCounterListener();
         addFragmentListener();

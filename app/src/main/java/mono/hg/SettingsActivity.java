@@ -51,6 +51,10 @@ public class SettingsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        if (getRequestedOrientation() != PreferenceHelper.getOrientation()) {
+            setRequestedOrientation(PreferenceHelper.getOrientation());
+        }
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
