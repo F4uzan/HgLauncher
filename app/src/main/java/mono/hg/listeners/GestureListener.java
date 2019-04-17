@@ -5,6 +5,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import mono.hg.utils.Utils.Gesture;
+
 /**
  * Detects touch events across a view.
  * Based on GestureListener originally written by Edward Brey at StackOverflow,
@@ -25,18 +27,6 @@ public class GestureListener implements View.OnTouchListener {
         gestureDetector = new GestureDetector(context, new InternalGestureListener());
     }
 
-    public void onSwipeLeft() {
-        // Do swipe left action.
-    }
-
-    public void onSwipeRight() {
-        // Do swipe right action.
-    }
-
-    public void onSwipeUp() {
-        // Do swipe up action.
-    }
-
     public void onSwipeDown() {
         // Do swipe down action.
     }
@@ -49,8 +39,8 @@ public class GestureListener implements View.OnTouchListener {
         // Do tap/click action.
     }
 
-    public void onDoubleTap() {
-        // Do double tap action.
+    public void onGesture(int direction) {
+        // Do generic gesture action.
     }
 
     public MotionEvent getEvent() {
@@ -96,7 +86,7 @@ public class GestureListener implements View.OnTouchListener {
 
         @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
-            GestureListener.this.onDoubleTap();
+            onGesture(Gesture.DOUBLE_TAP);
             return true;
         }
 
@@ -117,9 +107,9 @@ public class GestureListener implements View.OnTouchListener {
                     && Math.abs(distanceX) > SWIPE_DISTANCE_THRESHOLD
                     && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                 if (distanceX > 0) {
-                    onSwipeRight();
+                    onGesture(Gesture.RIGHT);
                 } else {
-                    onSwipeLeft();
+                    onGesture(Gesture.LEFT);
                 }
                 return true;
             } else if (Math.abs(distanceY) > Math.abs(distanceX)
@@ -128,7 +118,7 @@ public class GestureListener implements View.OnTouchListener {
                 if (distanceY > 0) {
                     onSwipeDown();
                 } else {
-                    onSwipeUp();
+                    onGesture(Gesture.UP);
                 }
                 return true;
             }

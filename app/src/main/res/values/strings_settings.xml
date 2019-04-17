@@ -66,15 +66,28 @@
     <string name="windowbar_mode_nav">Hide navigation bar</string>
     <string name="windowbar_mode_both">Hide both</string>
 
-    <string name="gestures_left">Swipe left</string>
-    <string name="gestures_right">Swipe right</string>
-    <string name="gestures_up">Swipe up</string>
-    <string name="gestures_double_tap">Double tap</string>
-    <string name="gestures_default">None</string>
-    <string name="gestures_default_value" translatable="false">none</string>
+    <string name="gesture_left">Swipe left</string>
+    <string name="gesture_right">Swipe right</string>
+    <string name="gesture_up">Swipe up</string>
+    <string name="gesture_double_tap">Double tap</string>
 
-    <string name="gestures_down_status">Swipe for status bar</string>
-    <string name="gestures_down_status_desc">Swipe down to expand the status bar. Requires tap to open to be enabled.</string>
+    <string name="gesture_handler">Gesture handler</string>
+    <string name="gesture_handler_default">None</string>
+    <string name="gesture_handler_default_value">none</string>
+
+    <string name="gesture_action_default">None</string>
+    <string name="gesture_action_default_value" translatable="false">none</string>
+    <string name="gesture_action_widget">Open Widgetspace</string>
+    <string name="gesture_action_widget_value" translatable="false">widget</string>
+    <string name="gesture_action_handler">Use gesture handler\'s action</string>
+    <string name="gesture_action_handler_value" translatable="false">handler</string>
+    <string name="gesture_action_app">Launch application</string>
+    <string name="gesture_action_app_value" translatable="false">app</string>
+
+    <string name="gesture_action_app_dialog_title">Select application</string>
+
+    <string name="gesture_down_status">Swipe for status bar</string>
+    <string name="gesture_down_status_desc">Swipe down to expand the status bar. Requires tap to open to be enabled.</string>
     
     <string name="pref_title_app_list_order">App list order</string>
     <string name="app_list_order_normal">A to Z</string>

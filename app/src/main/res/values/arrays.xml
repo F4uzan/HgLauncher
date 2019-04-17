@@ -57,4 +57,18 @@
         <item>nav</item>
         <item>both</item>
     </string-array>
+
+    <string-array name="pref_gesture_actions_title">
+        <item>@string/gesture_action_default</item>
+        <item>@string/gesture_action_widget</item>
+        <item>@string/gesture_action_app</item>
+        <item>@string/gesture_action_handler</item>
+    </string-array>
+
+    <string-array name="pref_gesture_actions_values">
+        <item>@string/gesture_action_default_value</item>
+        <item>@string/gesture_action_widget_value</item>
+        <item>@string/gesture_action_app_value</item>
+        <item>@string/gesture_action_handler_value</item>
+    </string-array>
 </resources>

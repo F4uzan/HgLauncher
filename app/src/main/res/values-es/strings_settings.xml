@@ -65,14 +65,14 @@
     <string name="windowbar_mode_nav">Ocultar la barra de navegación</string>
     <string name="windowbar_mode_both">Ocultar ambas</string>
 
-    <string name="gestures_left">Deslizar hacia la izquierda</string>
-    <string name="gestures_right">Deslizar hacia la derecha</string>
-    <string name="gestures_up">Deslizar hacia arriba</string>
-    <string name="gestures_double_tap">Doble pulsación</string>
-    <string name="gestures_default">Ninguna</string>
+    <string name="gesture_left">Deslizar hacia la izquierda</string>
+    <string name="gesture_right">Deslizar hacia la derecha</string>
+    <string name="gesture_up">Deslizar hacia arriba</string>
+    <string name="gesture_double_tap">Doble pulsación</string>
+    <string name="gesture_action_default">Ninguna</string>
 
-    <string name="gestures_down_status">Deslizar para la barra de estado</string>
-    <string name="gestures_down_status_desc">Desliza hacia abajo para expandir la barra de estado. Requiere que pulsar para abrir este activado.</string>
+    <string name="gesture_down_status">Deslizar para la barra de estado</string>
+    <string name="gesture_down_status_desc">Desliza hacia abajo para expandir la barra de estado. Requiere que pulsar para abrir este activado.</string>
     
     <string name="pref_title_app_list_order">Orden de la lista de aplicaciones</string>
     <string name="app_list_order_normal">A a Z</string>

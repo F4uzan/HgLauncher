@@ -1,6 +1,5 @@
 package mono.hg.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,7 +16,9 @@ import java.lang.annotation.Retention;
 import java.util.ArrayList;
 
 import androidx.annotation.IntDef;
+import androidx.appcompat.app.AppCompatActivity;
 import mono.hg.R;
+import mono.hg.fragments.WidgetsDialogFragment;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.WebSearchProvider;
 import mono.hg.receivers.PackageChangesReceiver;
@@ -25,18 +26,6 @@ import mono.hg.receivers.PackageChangesReceiver;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public class Utils {
-
-    @IntDef({LogLevel.DEBUG,
-            LogLevel.VERBOSE,
-            LogLevel.WARNING,
-            LogLevel.ERROR})
-    @Retention(SOURCE)
-    public @interface LogLevel {
-        int DEBUG = 0;
-        int VERBOSE = 1;
-        int WARNING = 2;
-        int ERROR = 3;
-    }
 
     /**
      * Sends log using a predefined tag. This is used to better debug or to catch errors.
@@ -181,7 +170,7 @@ public class Utils {
      * @param activity        The activity where PackageChangesReceiver is to be registered.
      * @param packageReceiver The receiver itself.
      */
-    public static void registerPackageReceiver(Activity activity, PackageChangesReceiver packageReceiver) {
+    public static void registerPackageReceiver(AppCompatActivity activity, PackageChangesReceiver packageReceiver) {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
         intentFilter.addDataScheme("package");
@@ -194,11 +183,41 @@ public class Utils {
      * @param activity        The activity where PackageChangesReceiver is to be registered.
      * @param packageReceiver The receiver itself.
      */
-    public static void unregisterPackageReceiver(Activity activity, PackageChangesReceiver packageReceiver) {
+    public static void unregisterPackageReceiver(AppCompatActivity activity, PackageChangesReceiver packageReceiver) {
         try {
             activity.unregisterReceiver(packageReceiver);
         } catch (IllegalArgumentException w) {
             Utils.sendLog(LogLevel.DEBUG, "Failed to remove receiver!");
+        }
+    }
+
+    /**
+     * Handles gesture actions based on the direction of the gesture.
+     *
+     * @param activity  The activity where the gesture is performed.
+     * @param direction The direction of the gesture.
+     *
+     * @see Gesture Valid directions for the gestures.
+     */
+    public static void handleGestureActions(AppCompatActivity activity, int direction) {
+        switch (PreferenceHelper.getGestureForDirection(direction)) {
+            case "handler":
+                if (PreferenceHelper.getGestureHandler() != null) {
+                    Intent handlerIntent = new Intent("mono.hg.GESTURE_HANDLER");
+                    handlerIntent.setComponent(PreferenceHelper.getGestureHandler());
+                    handlerIntent.setType("text/plain");
+                    handlerIntent.putExtra("direction", direction);
+                    activity.startActivity(handlerIntent);
+                }
+                break;
+            case "widget":
+                WidgetsDialogFragment widgetFragment = new WidgetsDialogFragment();
+                widgetFragment.show(activity.getSupportFragmentManager(), "Widgets Dialog");
+                break;
+            case "none":
+            default:
+                AppUtils.launchApp(activity, PreferenceHelper.getGestureForDirection(direction));
+                break;
         }
     }
 
@@ -211,7 +230,7 @@ public class Utils {
      *
      * @return True if key is handled.
      */
-    public static boolean handleInputShortcut(Activity activity, EditText editText, int keyCode) {
+    public static boolean handleInputShortcut(AppCompatActivity activity, EditText editText, int keyCode) {
         // Get selected text for cut and copy.
         int start = editText.getSelectionStart();
         int end = editText.getSelectionEnd();
@@ -258,5 +277,37 @@ public class Utils {
         }
 
         PreferenceHelper.updateProvider(tempList);
+    }
+
+    /**
+     * The importance (level) of log message.
+     */
+    @IntDef({LogLevel.DEBUG,
+            LogLevel.VERBOSE,
+            LogLevel.WARNING,
+            LogLevel.ERROR})
+    @Retention(SOURCE)
+    public @interface LogLevel {
+        int DEBUG = 0;
+        int VERBOSE = 1;
+        int WARNING = 2;
+        int ERROR = 3;
+    }
+
+    /**
+     * Directions of gesture.
+     */
+    @IntDef({Gesture.LEFT,
+            Gesture.RIGHT,
+            Gesture.UP,
+            Gesture.DOWN,
+            Gesture.DOUBLE_TAP})
+    @Retention(SOURCE)
+    public @interface Gesture {
+        int LEFT = 0;
+        int RIGHT = 1;
+        int UP = 10;
+        int DOWN = 11;
+        int DOUBLE_TAP = 100;
     }
 }

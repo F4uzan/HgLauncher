@@ -1,5 +1,6 @@
 package mono.hg.helpers;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import mono.hg.models.WebSearchProvider;
+import mono.hg.utils.Utils.Gesture;
 
 public class PreferenceHelper {
     private static boolean icon_hide;
@@ -44,6 +46,8 @@ public class PreferenceHelper {
 
     private static SharedPreferences preferences;
     private static SharedPreferences.Editor editor;
+
+    private static ComponentName gesture_handler;
 
     public static boolean isTesting() {
         return is_testing;
@@ -121,20 +125,26 @@ public class PreferenceHelper {
         was_alien = alien;
     }
 
-    public static String doSwipeRight() {
-        return gesture_right_action;
+    public static String getGestureForDirection(int direction) {
+        switch (direction) {
+            case Gesture.LEFT:
+                return gesture_left_action;
+            case Gesture.RIGHT:
+                return gesture_right_action;
+            case Gesture.UP:
+                return gesture_up_action;
+            case Gesture.DOWN:
+                // Stub for down gesture.
+                return "";
+            case Gesture.DOUBLE_TAP:
+                return gesture_double_tap_action;
+            default:
+                return "";
+        }
     }
 
-    public static String doSwipeLeft() {
-        return gesture_left_action;
-    }
-
-    public static String doSwipeUp() {
-        return gesture_up_action;
-    }
-
-    public static String doDoubleTap() {
-        return gesture_double_tap_action;
+    public static ComponentName getGestureHandler() {
+        return gesture_handler;
     }
 
     public static boolean allowSwipeToExpand() {
@@ -275,7 +285,7 @@ public class PreferenceHelper {
     public static void update(String id, String string) {
         getEditor().putString(id, string).apply();
     }
-    
+
     public static void update(String id, boolean state) {
         getEditor().putBoolean(id, state).apply();
     }
@@ -290,7 +300,7 @@ public class PreferenceHelper {
         icon_hide = getPreference().getBoolean("icon_hide_switch", false);
         icon_pack = getPreference().getString("icon_pack", "default");
         list_order = getPreference().getString("list_order", "alphabetical")
-                                .equals("invertedAlphabetical");
+                                    .equals("invertedAlphabetical");
         shade_view = getPreference().getBoolean("shade_view_switch", false);
         keyboard_focus = getPreference().getBoolean("keyboard_focus", false);
         tap_to_drawer = getPreference().getBoolean("tap_to_drawer", true);
@@ -298,7 +308,8 @@ public class PreferenceHelper {
         web_search_enabled = getPreference().getBoolean("web_search_enabled", true);
         web_search_long_press = getPreference().getBoolean("web_search_long_press", false);
         search_provider_set = getPreference().getString("search_provider", "none");
-        static_favourites_panel = getPreference().getBoolean("static_favourites_panel_switch", false);
+        static_favourites_panel = getPreference().getBoolean("static_favourites_panel_switch",
+                false);
         static_app_list = getPreference().getBoolean("static_app_list_switch", false);
         adaptive_shade = getPreference().getBoolean("adaptive_shade_switch", false);
         windowbar_status_switch = getPreference().getBoolean("windowbar_status_switch", false);
@@ -308,14 +319,18 @@ public class PreferenceHelper {
         gesture_right_action = getPreference().getString("gesture_right", "none");
         gesture_up_action = getPreference().getString("gesture_up", "none");
         gesture_double_tap_action = getPreference().getString("gesture_double_tap", "none");
+        gesture_handler = ComponentName.unflattenFromString(
+                getPreference().getString("gesture_handler", "none"));
         widgets_list = getPreference().getString("widgets_list", "");
 
         exclusion_list = (HashSet<String>) getPreference().getStringSet("hidden_apps",
                 new HashSet<String>());
-        HashSet<String> temp_label_list = (HashSet<String>) getPreference().getStringSet("label_list",
+        HashSet<String> temp_label_list = (HashSet<String>) getPreference().getStringSet(
+                "label_list",
                 new HashSet<String>());
         parseProviders(
-                (HashSet<String>) getPreference().getStringSet("provider_list", new HashSet<String>()));
+                (HashSet<String>) getPreference().getStringSet("provider_list",
+                        new HashSet<String>()));
 
         label_list_set.addAll(temp_label_list);
         fetchLabels();

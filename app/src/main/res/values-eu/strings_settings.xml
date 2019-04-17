@@ -65,14 +65,14 @@
     <string name="windowbar_mode_nav">Nabigazio barra ezkutatu</string>
     <string name="windowbar_mode_both">Biak ezkutatu</string>
 
-    <string name="gestures_left">Eskuinetik irristatu</string>
-    <string name="gestures_right">Ezkerretik irristatu</string>
-    <string name="gestures_up">Goruntz irristatu</string>
-    <string name="gestures_double_tap">Klik bikoitza</string>
-    <string name="gestures_default">Bat ere ez</string>
+    <string name="gesture_left">Eskuinetik irristatu</string>
+    <string name="gesture_right">Ezkerretik irristatu</string>
+    <string name="gesture_up">Goruntz irristatu</string>
+    <string name="gesture_double_tap">Klik bikoitza</string>
+    <string name="gesture_action_default">Bat ere ez</string>
 
-    <string name="gestures_down_status">Irristatu egoera barra ikusteko</string>
-    <string name="gestures_down_status_desc">Irristatu behera egoera barra hedatzeko. Sakatuz irekitzea gaituta egotea behar du.</string>
+    <string name="gesture_down_status">Irristatu egoera barra ikusteko</string>
+    <string name="gesture_down_status_desc">Irristatu behera egoera barra hedatzeko. Sakatuz irekitzea gaituta egotea behar du.</string>
 
     <string name="pref_title_app_list_order">Aplikazioen zerrendaren ordena</string>
     <string name="app_list_order_normal">Atik Zra</string>

@@ -66,15 +66,15 @@
     <string name="windowbar_mode_nav">Ukryj pasek nawigacji</string>
     <string name="windowbar_mode_both">Ukryj wszystkie</string>
 
-    <string name="gestures_left">Przesuń w lewo</string>
-    <string name="gestures_right">Przesuń w prawo</string>
-    <string name="gestures_up">Przesuń w górę</string>
-    <string name="gestures_double_tap">Kliknij dwa razy</string>
-    <string name="gestures_default">Brak</string>
-    <string name="gestures_default_value" translatable="false">none</string>
+    <string name="gesture_left">Przesuń w lewo</string>
+    <string name="gesture_right">Przesuń w prawo</string>
+    <string name="gesture_up">Przesuń w górę</string>
+    <string name="gesture_double_tap">Kliknij dwa razy</string>
+    <string name="gesture_action_default">Brak</string>
+    <string name="gesture_action_default_value" translatable="false">none</string>
 
-    <string name="gestures_down_status">Wysuń pasek stanu</string>
-    <string name="gestures_down_status_desc">Przesuń palcem w dół, aby rozwinąć pasek stanu</string>
+    <string name="gesture_down_status">Wysuń pasek stanu</string>
+    <string name="gesture_down_status_desc">Przesuń palcem w dół, aby rozwinąć pasek stanu</string>
 
     <string name="pref_title_app_list_order">Kolejność listy aplikacji</string>
     <string name="app_list_order_normal">A do Z</string>

@@ -1,6 +1,7 @@
 package mono.hg.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,16 +27,47 @@ import androidx.preference.PreferenceFragmentCompat;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.helpers.PreferenceHelper;
+import mono.hg.utils.AppUtils;
 import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
+import mono.hg.wrappers.AppSelectionPreferenceDialog;
 
 public class PreferenceFragment extends PreferenceFragmentCompat {
 
     private static final int PERMISSION_STORAGE_CODE = 4200;
+    private static final int APPLICATION_DIALOG_CODE = 300;
     private CharSequence[] appListEntries;
-    private CharSequence[] appListEntriesValue;
+    private CharSequence[] appListEntryValues;
     private boolean isRestore = false;
     private ListPreference providerList;
+
+    private Preference.OnPreferenceChangeListener NestingListListener = new Preference.OnPreferenceChangeListener() {
+        @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
+            ListPreference list = (ListPreference) preference;
+
+            // Workaround due to the use of setSummary in onCreate.
+            if ("none".equals(newValue)) {
+                list.setSummary(R.string.gesture_action_default);
+            } else if ("widget".equals(newValue)) {
+                list.setSummary(R.string.gesture_action_widget);
+            } else if ("handler".equals(newValue)) {
+                list.setSummary(R.string.gesture_action_handler);
+            } else if ("app".equals(newValue)) {
+                // Create the Bundle to pass to AppSelectionPreferenceDialog.
+                Bundle appListBundle = new Bundle();
+                appListBundle.putString("key", list.getKey());
+                appListBundle.putCharSequenceArray("entries", appListEntries);
+                appListBundle.putCharSequenceArray("entryValues", appListEntryValues);
+
+                // Call and create AppSelectionPreferenceDialog.
+                AppSelectionPreferenceDialog appList = new AppSelectionPreferenceDialog();
+                appList.setTargetFragment(PreferenceFragment.this, APPLICATION_DIALOG_CODE);
+                appList.setArguments(appListBundle);
+                appList.show(requireFragmentManager(), "AppSelectionDialog");
+            }
+            return true;
+        }
+    };
 
     @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_customization);
@@ -53,11 +85,17 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         ListPreference appTheme = (ListPreference) findPreference("app_theme");
         final ListPreference iconList = (ListPreference) findPreference("icon_pack");
+        ListPreference gestureHandlerList = (ListPreference) findPreference("gesture_handler");
         providerList = (ListPreference) findPreference("search_provider");
         ListPreference gestureLeftList = (ListPreference) findPreference("gesture_left");
         ListPreference gestureRightList = (ListPreference) findPreference("gesture_right");
         ListPreference gestureUpList = (ListPreference) findPreference("gesture_up");
         ListPreference gestureDoubleTapList = (ListPreference) findPreference("gesture_double_tap");
+
+        setNestedListSummary(gestureLeftList);
+        setNestedListSummary(gestureRightList);
+        setNestedListSummary(gestureUpList);
+        setNestedListSummary(gestureDoubleTapList);
 
         // Adaptive icon is not available before Android O/API 26.
         if (Utils.atLeastOreo()) {
@@ -74,11 +112,12 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         }
 
         setIconList(iconList);
+        setGestureHandlerList(gestureHandlerList);
         setProviderList(providerList);
-        setAppList(gestureLeftList);
-        setAppList(gestureRightList);
-        setAppList(gestureUpList);
-        setAppList(gestureDoubleTapList);
+        gestureLeftList.setOnPreferenceChangeListener(NestingListListener);
+        gestureRightList.setOnPreferenceChangeListener(NestingListListener);
+        gestureUpList.setOnPreferenceChangeListener(NestingListListener);
+        gestureDoubleTapList.setOnPreferenceChangeListener(NestingListListener);
 
         appTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -99,12 +138,29 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         setProviderList(providerList);
     }
 
+    @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == APPLICATION_DIALOG_CODE && data != null) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+                String key = data.getStringExtra("key");
+                ListPreference preference = (ListPreference) findPreference(key);
+                preference.setSummary(R.string.gesture_action_default);
+                preference.setValue(getString(R.string.gesture_action_default_value));
+            } else if (resultCode == Activity.RESULT_OK) {
+                String key = data.getStringExtra("key");
+                String app = AppUtils.getPackageLabel(requireActivity().getPackageManager(),
+                        data.getStringExtra("app"));
+                ListPreference preference = (ListPreference) findPreference(key);
+                preference.setSummary(app);
+            }
+        }
+    }
+
     private void setProviderList(ListPreference list) {
         List<String> entries = new ArrayList<>();
         List<String> entryValues = new ArrayList<>();
 
         entries.add(getString(R.string.search_provider_none));
-        entryValues.add(getString(R.string.gestures_default_value));
+        entryValues.add(getString(R.string.gesture_action_default_value));
 
         // We only need the key as the value is stored in PreferenceHelper's Map.
         for (Map.Entry<String, String> provider : PreferenceHelper
@@ -120,19 +176,14 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         list.setEntryValues(finalEntryValues);
     }
 
-    private void setAppList(ListPreference list) {
-        list.setEntries(appListEntries);
-        list.setEntryValues(appListEntriesValue);
-    }
-
     private void getAppList() {
         PackageManager manager = requireActivity().getPackageManager();
         List<String> entries = new ArrayList<>();
         List<String> entryValues = new ArrayList<>();
 
         // Get default value.
-        entries.add(getString(R.string.gestures_default));
-        entryValues.add(getString(R.string.gestures_default_value));
+        entries.add(getString(R.string.gesture_action_default));
+        entryValues.add(getString(R.string.gesture_action_default_value));
 
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -150,7 +201,44 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         }
 
         appListEntries = entries.toArray(new CharSequence[0]);
-        appListEntriesValue = entryValues.toArray(new CharSequence[0]);
+        appListEntryValues = entryValues.toArray(new CharSequence[0]);
+    }
+
+    private void setGestureHandlerList(ListPreference list) {
+        PackageManager manager = requireActivity().getPackageManager();
+        List<String> entries = new ArrayList<>();
+        List<String> entryValues = new ArrayList<>();
+
+        // Get default value.
+        entries.add(getString(R.string.gesture_handler_default));
+        entryValues.add(getString(R.string.gesture_handler_default_value));
+
+        // Fetch all available icon pack.
+        Intent intent = new Intent("mono.hg.GESTURE_HANDLER");
+        List<ResolveInfo> info = manager.queryIntentActivities(intent,
+                PackageManager.GET_RESOLVED_FILTER);
+        for (ResolveInfo resolveInfo : info) {
+            ActivityInfo activityInfo = resolveInfo.activityInfo;
+            String className = activityInfo.name;
+            String packageName = activityInfo.packageName;
+            String componentName = packageName + "/" + className;
+            String appName = activityInfo.loadLabel(manager).toString();
+            entries.add(appName);
+            entryValues.add(componentName);
+        }
+
+        CharSequence[] finalEntries = entries.toArray(new CharSequence[0]);
+        CharSequence[] finalEntryValues = entryValues.toArray(new CharSequence[0]);
+
+        list.setEntries(finalEntries);
+        list.setEntryValues(finalEntryValues);
+    }
+
+    private void setNestedListSummary(ListPreference list) {
+        if (list.getValue().contains("/")) {
+            list.setSummary(AppUtils.getPackageLabel(requireActivity().getPackageManager(),
+                    list.getValue()));
+        }
     }
 
     private void setIconList(ListPreference list) {

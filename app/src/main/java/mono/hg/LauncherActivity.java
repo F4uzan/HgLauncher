@@ -660,30 +660,9 @@ public class LauncherActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onSwipeRight() {
+            public void onGesture(int direction) {
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    AppUtils.launchApp(LauncherActivity.this, PreferenceHelper.doSwipeRight());
-                }
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    AppUtils.launchApp(LauncherActivity.this, PreferenceHelper.doSwipeLeft());
-                }
-            }
-
-            @Override
-            public void onSwipeUp() {
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    AppUtils.launchApp(LauncherActivity.this, PreferenceHelper.doSwipeUp());
-                }
-            }
-
-            @Override
-            public void onDoubleTap() {
-                if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    AppUtils.launchApp(LauncherActivity.this, PreferenceHelper.doDoubleTap());
+                    Utils.handleGestureActions(LauncherActivity.this, direction);
                 }
             }
 

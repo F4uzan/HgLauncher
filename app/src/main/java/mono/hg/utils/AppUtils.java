@@ -117,7 +117,8 @@ public class AppUtils {
                 list.add(app);
                 adapter.updateDataSet(list, false);
             } catch (PackageManager.NameNotFoundException e) {
-                Utils.sendLog(Utils.LogLevel.ERROR, "Unable to pin " + componentName + ";missing package?");
+                Utils.sendLog(Utils.LogLevel.ERROR,
+                        "Unable to pin " + componentName + ";missing package?");
             }
         }
     }
@@ -162,7 +163,8 @@ public class AppUtils {
             }
         } catch (ActivityNotFoundException | NullPointerException e) {
             Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show();
-            Utils.sendLog(Utils.LogLevel.ERROR, "Cannot start " + componentName + "; missing package?");
+            Utils.sendLog(Utils.LogLevel.ERROR,
+                    "Cannot start " + componentName + "; missing package?");
         }
     }
 
@@ -180,6 +182,26 @@ public class AppUtils {
         } else {
             return "";
         }
+    }
+
+    /**
+     * Retrieve a component name label.
+     *
+     * @param manager       PackageManager used to retrieve the component label.
+     * @param componentName The component name whose name is to be retrieved.
+     *
+     * @return The label of the component name if no exception is thrown.
+     */
+    public static String getPackageLabel(PackageManager manager, String componentName) {
+        String label = "";
+        try {
+            label = (String) manager.getApplicationLabel(
+                    manager.getApplicationInfo(getPackageName(componentName),
+                            PackageManager.GET_META_DATA));
+        } catch (PackageManager.NameNotFoundException e) {
+            Utils.sendLog(Utils.LogLevel.ERROR, "Unable to find label for " + componentName);
+        }
+        return label;
     }
 
     /**

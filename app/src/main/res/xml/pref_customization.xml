@@ -25,35 +25,49 @@
         android:key="gestures"
         android:title="@string/pref_header_gestures">
 
+        <androidx.preference.DropDownPreference
+            android:defaultValue="none"
+            android:key="gesture_handler"
+            android:summary="%s"
+            android:title="@string/gesture_handler" />
+
         <androidx.preference.ListPreference
             android:defaultValue="none"
             android:key="gesture_left"
             android:summary="%s"
-            android:title="@string/gestures_left" />
+            android:entries="@array/pref_gesture_actions_title"
+            android:entryValues="@array/pref_gesture_actions_values"
+            android:title="@string/gesture_left" />
 
         <androidx.preference.ListPreference
             android:defaultValue="none"
             android:key="gesture_right"
             android:summary="%s"
-            android:title="@string/gestures_right" />
+            android:entries="@array/pref_gesture_actions_title"
+            android:entryValues="@array/pref_gesture_actions_values"
+            android:title="@string/gesture_right" />
 
         <androidx.preference.ListPreference
             android:defaultValue="none"
             android:key="gesture_up"
             android:summary="%s"
-            android:title="@string/gestures_up" />
+            android:entries="@array/pref_gesture_actions_title"
+            android:entryValues="@array/pref_gesture_actions_values"
+            android:title="@string/gesture_up" />
 
         <androidx.preference.ListPreference
             android:defaultValue="none"
             android:key="gesture_double_tap"
             android:summary="%s"
-            android:title="@string/gestures_double_tap" />
+            android:entries="@array/pref_gesture_actions_title"
+            android:entryValues="@array/pref_gesture_actions_values"
+            android:title="@string/gesture_double_tap" />
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="gesture_down_status"
-            android:summary="@string/gestures_down_status_desc"
-            android:title="@string/gestures_down_status"
+            android:summary="@string/gesture_down_status_desc"
+            android:title="@string/gesture_down_status"
             app:dependency="tap_to_drawer" />
 
         <androidx.preference.SwitchPreferenceCompat
