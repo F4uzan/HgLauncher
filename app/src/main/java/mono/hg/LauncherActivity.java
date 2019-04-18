@@ -878,7 +878,7 @@ public class LauncherActivity extends AppCompatActivity {
 
         appsAdapter.addListener(new FlexibleAdapter.OnUpdateListener() {
             @Override public void onUpdateEmptyView(int size) {
-                if (size > 0) {
+                if (size > 0 && !appsAdapter.isEmpty()) {
                     loadProgress.setVisibility(View.GONE);
                     loadProgress.invalidate();
                 }
@@ -936,7 +936,7 @@ public class LauncherActivity extends AppCompatActivity {
 
                     // Empty out search bar text
                     searchBar.setText(null);
-                    
+
                     // Show the keyboard.
                     if (PreferenceHelper.shouldFocusKeyboard()
                             && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
