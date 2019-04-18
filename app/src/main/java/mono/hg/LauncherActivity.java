@@ -308,8 +308,13 @@ public class LauncherActivity extends AppCompatActivity {
         pinnedAppString = PreferenceHelper.getPreference().getString("pinned_apps_list", "");
 
         // Set app list animation duration.
-        slidingHome.setPanelDurationMultiplier(Settings.System.getFloat(getContentResolver(),
-                Settings.System.TRANSITION_ANIMATION_SCALE, 0));
+        if (Utils.sdkIsAround(17)) {
+            slidingHome.setPanelDurationMultiplier(Settings.Global.getFloat(getContentResolver(),
+                    Settings.Global.TRANSITION_ANIMATION_SCALE, 0));
+        } else {
+            slidingHome.setPanelDurationMultiplier(Settings.System.getFloat(getContentResolver(),
+                    Settings.System.TRANSITION_ANIMATION_SCALE, 0));
+        }
 
         // Refresh app list and pinned apps if there is a change in package count.
         if (AppUtils.hasNewPackage(
