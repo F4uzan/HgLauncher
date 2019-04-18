@@ -6,10 +6,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="preference_fallback_accent_color" tools:override="true">@color/colorAccent</color>
 
-    <!-- Icon background colour; used in adaptive icons. -->
-    <color name="ic_launcher_background">#8B46B7</color>
-
     <!-- UI colours. -->
+    <color name="fastScrollerIdle">#FF5C8D</color>
+    <color name="fastScrollerHold">#A00037</color>
     <color name="colorBackgroundGray">#202020</color>
     <color name="colorBackgroundWhite">#F5F5F5</color>
     <color name="colorCardBackgroundWhite">#242424</color>

@@ -51,9 +51,9 @@
                 android:nextFocusDown="@id/search"
                 android:nextFocusForward="@id/search"
                 android:splitMotionEvents="false"
-                app:fastScrollPopupBgColor="@color/colorPrimaryDark"
-                app:fastScrollThumbColor="@color/colorAccent"
-                app:fastScrollThumbInactiveColor="@color/colorPrimaryDark"
+                app:fastScrollPopupBgColor="@color/fastScrollerHold"
+                app:fastScrollThumbColor="@color/fastScrollerHold"
+                app:fastScrollThumbInactiveColor="@color/fastScrollerIdle"
                 app:layout_anchor="@id/pinned_apps_container"
                 app:layout_behavior=".wrappers.ObservantListBehavior" />
 
