@@ -406,7 +406,7 @@ public class LauncherActivity extends AppCompatActivity {
      *
      * @param action What to do?
      */
-    private void doThis(String action) {
+    public void doThis(String action) {
         switch (action) {
             default:
                 // Don't do anything.
@@ -659,16 +659,6 @@ public class LauncherActivity extends AppCompatActivity {
         // Handle touch events in touchReceiver.
         touchReceiver.setOnTouchListener(new GestureListener(this) {
             @Override
-            public void onSwipeDown() {
-                if (PreferenceHelper.allowSwipeToExpand() && PreferenceHelper.allowTapToOpen()) {
-                    ActivityServiceUtils.expandStatusBar(LauncherActivity.this);
-                } else {
-                    // Show the app panel if swipe to expand is disabled.
-                    doThis("show_panel");
-                }
-            }
-
-            @Override
             public void onGesture(int direction) {
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     Utils.handleGestureActions(LauncherActivity.this, direction);
@@ -680,14 +670,6 @@ public class LauncherActivity extends AppCompatActivity {
                 // Show context menu when touchReceiver is long pressed when the panel is expanded.
                 if (slidingHome.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     touchReceiver.showContextMenu();
-                }
-            }
-
-            @Override
-            public void onClick() {
-                // Imitate sliding panel drag view behaviour; show the app panel on click.
-                if (PreferenceHelper.allowTapToOpen()) {
-                    doThis("show_panel");
                 }
             }
         });

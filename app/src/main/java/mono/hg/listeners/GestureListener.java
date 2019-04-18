@@ -27,16 +27,8 @@ public class GestureListener implements View.OnTouchListener {
         gestureDetector = new GestureDetector(context, new InternalGestureListener());
     }
 
-    public void onSwipeDown() {
-        // Do swipe down action.
-    }
-
     public void onLongPress() {
         // Do long press action.
-    }
-
-    public void onClick() {
-        // Do tap/click action.
     }
 
     public void onGesture(int direction) {
@@ -80,7 +72,7 @@ public class GestureListener implements View.OnTouchListener {
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
-            onClick();
+            onGesture(Gesture.TAP);
             return true;
         }
 
@@ -116,7 +108,7 @@ public class GestureListener implements View.OnTouchListener {
                     && Math.abs(distanceY) > SWIPE_DISTANCE_THRESHOLD
                     && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                 if (distanceY > 0) {
-                    onSwipeDown();
+                    onGesture(Gesture.DOWN);
                 } else {
                     onGesture(Gesture.UP);
                 }

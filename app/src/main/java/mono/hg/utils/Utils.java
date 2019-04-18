@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.IntDef;
 import androidx.appcompat.app.AppCompatActivity;
+import mono.hg.LauncherActivity;
 import mono.hg.R;
 import mono.hg.fragments.WidgetsDialogFragment;
 import mono.hg.helpers.PreferenceHelper;
@@ -214,6 +215,13 @@ public class Utils {
                 WidgetsDialogFragment widgetFragment = new WidgetsDialogFragment();
                 widgetFragment.show(activity.getSupportFragmentManager(), "Widgets Dialog");
                 break;
+            case "status":
+                ActivityServiceUtils.expandStatusBar(activity);
+                break;
+            case "list":
+                // TODO: Maybe make this call less reliant on LauncherActivity?
+                ((LauncherActivity) activity).doThis("show_panel");
+                break;
             case "none":
             default:
                 AppUtils.launchApp(activity, PreferenceHelper.getGestureForDirection(direction));
@@ -301,6 +309,7 @@ public class Utils {
             Gesture.RIGHT,
             Gesture.UP,
             Gesture.DOWN,
+            Gesture.TAP,
             Gesture.DOUBLE_TAP})
     @Retention(SOURCE)
     public @interface Gesture {
@@ -308,6 +317,7 @@ public class Utils {
         int RIGHT = 1;
         int UP = 10;
         int DOWN = 11;
-        int DOUBLE_TAP = 100;
+        int TAP = 100;
+        int DOUBLE_TAP = 101;
     }
 }

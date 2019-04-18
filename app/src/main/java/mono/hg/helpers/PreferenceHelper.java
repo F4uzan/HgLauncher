@@ -21,12 +21,10 @@ public class PreferenceHelper {
     private static boolean shade_view;
     private static boolean keyboard_focus;
     private static boolean web_search_enabled;
-    private static boolean tap_to_drawer;
     private static boolean static_favourites_panel;
     private static boolean static_app_list;
     private static boolean adaptive_shade;
     private static boolean windowbar_status_switch;
-    private static boolean gesture_down_status;
     private static boolean web_search_long_press;
     private static boolean is_testing;
     private static boolean was_alien;
@@ -41,6 +39,8 @@ public class PreferenceHelper {
     private static String gesture_left_action;
     private static String gesture_right_action;
     private static String gesture_up_action;
+    private static String gesture_down_action;
+    private static String gesture_single_tap_action;
     private static String gesture_double_tap_action;
     private static String windowbar_mode;
     private static String widgets_list;
@@ -94,10 +94,6 @@ public class PreferenceHelper {
         return keyboard_focus;
     }
 
-    public static boolean allowTapToOpen() {
-        return tap_to_drawer;
-    }
-
     public static boolean shouldHideStatusBar() {
         return windowbar_status_switch;
     }
@@ -139,8 +135,9 @@ public class PreferenceHelper {
             case Gesture.UP:
                 return gesture_up_action;
             case Gesture.DOWN:
-                // Stub for down gesture.
-                return "";
+                return gesture_down_action;
+            case Gesture.TAP:
+                return gesture_single_tap_action;
             case Gesture.DOUBLE_TAP:
                 return gesture_double_tap_action;
             default:
@@ -150,10 +147,6 @@ public class PreferenceHelper {
 
     public static ComponentName getGestureHandler() {
         return gesture_handler;
-    }
-
-    public static boolean allowSwipeToExpand() {
-        return gesture_down_status;
     }
 
     public static String getWindowBarMode() {
@@ -309,7 +302,6 @@ public class PreferenceHelper {
                                     .equals("invertedAlphabetical");
         shade_view = getPreference().getBoolean("shade_view_switch", false);
         keyboard_focus = getPreference().getBoolean("keyboard_focus", false);
-        tap_to_drawer = getPreference().getBoolean("tap_to_drawer", true);
         app_theme = getPreference().getString("app_theme", "light");
         web_search_enabled = getPreference().getBoolean("web_search_enabled", true);
         web_search_long_press = getPreference().getBoolean("web_search_long_press", false);
@@ -320,10 +312,11 @@ public class PreferenceHelper {
         adaptive_shade = getPreference().getBoolean("adaptive_shade_switch", false);
         windowbar_status_switch = getPreference().getBoolean("windowbar_status_switch", false);
         windowbar_mode = getPreference().getString("windowbar_mode", "none");
-        gesture_down_status = getPreference().getBoolean("gesture_down_status", false);
         gesture_left_action = getPreference().getString("gesture_left", "none");
         gesture_right_action = getPreference().getString("gesture_right", "none");
         gesture_up_action = getPreference().getString("gesture_up", "none");
+        gesture_down_action = getPreference().getString("gesture_down", "none");
+        gesture_single_tap_action = getPreference().getString("gesture_single_tap", "list");
         gesture_double_tap_action = getPreference().getString("gesture_double_tap", "none");
         gesture_handler = ComponentName.unflattenFromString(
                 getPreference().getString("gesture_handler", "none"));

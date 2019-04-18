@@ -63,24 +63,27 @@
 
         <androidx.preference.ListPreference
             android:defaultValue="none"
+            android:key="gesture_down"
+            android:summary="%s"
+            android:entries="@array/pref_gesture_actions_title"
+            android:entryValues="@array/pref_gesture_actions_values"
+            android:title="@string/gesture_down" />
+
+        <androidx.preference.ListPreference
+            android:defaultValue="list"
+            android:key="gesture_single_tap"
+            android:summary="%s"
+            android:entries="@array/pref_gesture_actions_title"
+            android:entryValues="@array/pref_gesture_actions_values"
+            android:title="@string/gesture_single_tap" />
+
+        <androidx.preference.ListPreference
+            android:defaultValue="none"
             android:key="gesture_double_tap"
             android:summary="%s"
             android:entries="@array/pref_gesture_actions_title"
             android:entryValues="@array/pref_gesture_actions_values"
             android:title="@string/gesture_double_tap" />
-
-        <androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="gesture_down_status"
-            android:summary="@string/gesture_down_status_desc"
-            android:title="@string/gesture_down_status"
-            app:dependency="tap_to_drawer" />
-
-        <androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="tap_to_drawer"
-            android:summary="@string/tap_to_drawer_desc"
-            android:title="@string/tap_to_drawer" />
 
     </androidx.preference.PreferenceCategory>
 
