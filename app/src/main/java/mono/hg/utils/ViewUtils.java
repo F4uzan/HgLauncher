@@ -42,7 +42,12 @@ public class ViewUtils {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static int setWindowbarMode(String mode) {
-        int baseLayout = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        int baseLayout;
+        if (Utils.sdkIsAround(19)) {
+            baseLayout = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        } else {
+            baseLayout = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        }
         int noStatusLayout = baseLayout
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
