@@ -26,7 +26,7 @@
             android:stateNotNeeded="true"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="unspecified"
             android:theme="@style/LauncherTheme">
             <intent-filter>

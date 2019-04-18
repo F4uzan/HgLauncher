@@ -936,8 +936,8 @@ public class LauncherActivity extends AppCompatActivity {
 
                     // Empty out search bar text
                     searchBar.setText(null);
-
-                    // Automatically show keyboard when the panel is called.
+                    
+                    // Show the keyboard.
                     if (PreferenceHelper.shouldFocusKeyboard()
                             && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
                         ActivityServiceUtils.showSoftKeyboard(LauncherActivity.this, searchBar);
