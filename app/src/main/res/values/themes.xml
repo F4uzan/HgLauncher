@@ -10,8 +10,8 @@
     </style>
 
     <style name="AppTheme.Black" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="cardColor">@color/colorCardBackgroundGray</item>
         <item name="android:windowBackground">@color/black</item>
@@ -20,6 +20,8 @@
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Black">
+        <item name="colorPrimary">@color/actionBarGray</item>
+        <item name="colorPrimaryDark">@color/colorCardBackgroundGray</item>
         <item name="android:windowBackground">@color/colorBackgroundGray</item>
         <item name="backgroundColor">@color/colorBackgroundGray</item>
     </style>
