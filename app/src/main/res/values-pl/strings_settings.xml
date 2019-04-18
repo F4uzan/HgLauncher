@@ -73,9 +73,6 @@
     <string name="gesture_action_default">Brak</string>
     <string name="gesture_action_default_value" translatable="false">none</string>
 
-    <string name="gesture_down_status">Wysuń pasek stanu</string>
-    <string name="gesture_down_status_desc">Przesuń palcem w dół, aby rozwinąć pasek stanu</string>
-
     <string name="pref_title_app_list_order">Kolejność listy aplikacji</string>
     <string name="app_list_order_normal">A do Z</string>
     <string name="app_list_order_inverse">Z do A</string>
@@ -98,10 +95,7 @@
 
     <string name="web_search">Wyszukiwanie w sieci</string>
     <string name="web_search_desc">Proponuj wyszukiwanie w sieci</string>
-
-    <string name="tap_to_drawer">Lista aplikacji</string>
-    <string name="tap_to_drawer_desc">Otwórz listę aplikacji, dotykając dowolnego miejsca na pulpicie</string>
-
+    
     <string name="shadow_adaptive_icon">Cienie ikon</string>
     <string name="shadow_adaptive_icon_desc">Dodanie cieni może zmniejszyć wydajność</string>
 

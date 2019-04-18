@@ -121,7 +121,7 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
         protected TextView name;
         protected ImageView icon;
 
-        ViewHolder(View view, FlexibleAdapter adapter) {
+        ViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
             super(view, adapter);
             name = view.findViewById(R.id.item_name);
             icon = view.findViewById(R.id.item_icon);

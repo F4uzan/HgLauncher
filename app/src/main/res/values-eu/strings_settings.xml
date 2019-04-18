@@ -71,9 +71,6 @@
     <string name="gesture_double_tap">Klik bikoitza</string>
     <string name="gesture_action_default">Bat ere ez</string>
 
-    <string name="gesture_down_status">Irristatu egoera barra ikusteko</string>
-    <string name="gesture_down_status_desc">Irristatu behera egoera barra hedatzeko. Sakatuz irekitzea gaituta egotea behar du.</string>
-
     <string name="pref_title_app_list_order">Aplikazioen zerrendaren ordena</string>
     <string name="app_list_order_normal">Atik Zra</string>
     <string name="app_list_order_inverse">Ztik Ara</string>
@@ -96,9 +93,6 @@
 
     <string name="web_search">Sarean bilaketa egitea eskeini</string>
     <string name="web_search_desc">Zure kontsulta sarean bilatzea eskini.</string>
-
-    <string name="tap_to_drawer">Sakatu aplikazioen zerrenda irekitzeko</string>
-    <string name="tap_to_drawer_desc">Ireki aplikazioen zerrenda mahaigaineko edozein tokitan ukituz. Widgetek deuseztatu dezakete.</string>
 
     <string name="shadow_adaptive_icon">Ikono moldagarrientzako itzala</string>
     <string name="shadow_adaptive_icon_desc">Itzala eman ikono moldagarriei. Errendimendua jaitsi dezake.</string>
