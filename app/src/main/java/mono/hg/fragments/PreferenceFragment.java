@@ -39,6 +39,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     private CharSequence[] appListEntries;
     private CharSequence[] appListEntryValues;
     private boolean isRestore = false;
+    private String rootKey = "settings";
     private Preference versionMenu;
     private ListPreference providerList;
 
@@ -80,8 +81,10 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         if (getArguments() != null) {
             String key = getArguments().getString("rootKey");
+            this.rootKey = key;
             setPreferencesFromResource(R.xml.pref_customization, key);
         } else {
+            this.rootKey = "settings";
             setPreferencesFromResource(R.xml.pref_customization, rootKey);
         }
     }
@@ -103,63 +106,61 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         getAppList();
 
-        ListPreference orientationMode = (ListPreference) findPreference("orientation_mode");
-        ListPreference appTheme = (ListPreference) findPreference("app_theme");
-        final ListPreference iconList = (ListPreference) findPreference("icon_pack");
-        ListPreference gestureHandlerList = (ListPreference) findPreference("gesture_handler");
-        providerList = (ListPreference) findPreference("search_provider");
-        ListPreference gestureLeftList = (ListPreference) findPreference("gesture_left");
-        ListPreference gestureRightList = (ListPreference) findPreference("gesture_right");
-        ListPreference gestureUpList = (ListPreference) findPreference("gesture_up");
-        ListPreference gestureDoubleTapList = (ListPreference) findPreference("gesture_double_tap");
+        switch (rootKey) {
+            case "desktop":
+                ListPreference orientationMode = (ListPreference) findPreference("orientation_mode");
 
-        versionMenu = findPreference("version_key");
+                orientationMode.setOnPreferenceChangeListener(RestartingListListener);
 
-        if (gestureLeftList != null) {
-            setNestedListSummary(gestureLeftList);
-            setNestedListSummary(gestureRightList);
-            setNestedListSummary(gestureUpList);
-            setNestedListSummary(gestureDoubleTapList);
-        }
+                // Window bar hiding works only reliably in KitKat and above.
+                if (Utils.atLeastKitKat()) {
+                    findPreference("windowbar_mode").setVisible(true);
+                } else {
+                    findPreference("windowbar_status_switch").setVisible(true);
+                }
+                break;
+            case "app_list":
+                final ListPreference iconList = (ListPreference) findPreference("icon_pack");
 
-        if (iconList != null) {
-            setIconList(iconList);
+                setIconList(iconList);
 
-            // Adaptive icon is not available before Android O/API 26.
-            if (Utils.atLeastOreo()) {
-                findPreference("adaptive_shade_switch").setVisible(true);
-            }
-        }
+                // Adaptive icon is not available before Android O/API 26.
+                if (Utils.atLeastOreo()) {
+                    findPreference("adaptive_shade_switch").setVisible(true);
+                }
+                break;
+            case "gestures":
+                ListPreference gestureLeftList = (ListPreference) findPreference("gesture_left");
+                ListPreference gestureRightList = (ListPreference) findPreference("gesture_right");
+                ListPreference gestureUpList = (ListPreference) findPreference("gesture_up");
+                ListPreference gestureDoubleTapList = (ListPreference) findPreference("gesture_double_tap");
+                ListPreference gestureHandlerList = (ListPreference) findPreference("gesture_handler");
 
-        if (providerList != null) {
-            setProviderList(providerList);
-        }
+                setNestedListSummary(gestureLeftList);
+                setNestedListSummary(gestureRightList);
+                setNestedListSummary(gestureUpList);
+                setNestedListSummary(gestureDoubleTapList);
 
-        if (gestureLeftList != null) {
-            setGestureHandlerList(gestureHandlerList);
-            gestureLeftList.setOnPreferenceChangeListener(NestingListListener);
-            gestureRightList.setOnPreferenceChangeListener(NestingListListener);
-            gestureUpList.setOnPreferenceChangeListener(NestingListListener);
-            gestureDoubleTapList.setOnPreferenceChangeListener(NestingListListener);
-        }
+                setGestureHandlerList(gestureHandlerList);
+                gestureLeftList.setOnPreferenceChangeListener(NestingListListener);
+                gestureRightList.setOnPreferenceChangeListener(NestingListListener);
+                gestureUpList.setOnPreferenceChangeListener(NestingListListener);
+                gestureDoubleTapList.setOnPreferenceChangeListener(NestingListListener);
+                break;
+            case "web":
+                providerList = (ListPreference) findPreference("search_provider");
+                setProviderList(providerList);
+                break;
+            case "settings":
+                ListPreference appTheme = (ListPreference) findPreference("app_theme");
+                versionMenu = findPreference("version_key");
 
-        if (appTheme != null) {
-            appTheme.setOnPreferenceChangeListener(RestartingListListener);
-        }
-
-        if (orientationMode != null) {
-            orientationMode.setOnPreferenceChangeListener(RestartingListListener);
-
-            // Window bar hiding works only reliably in KitKat and above.
-            if (Utils.atLeastKitKat()) {
-                findPreference("windowbar_mode").setVisible(true);
-            } else {
-                findPreference("windowbar_status_switch").setVisible(true);
-            }
-        }
-
-        if (versionMenu != null) {
-            addVersionCounterListener();
+                appTheme.setOnPreferenceChangeListener(RestartingListListener);
+                addVersionCounterListener();
+                break;
+            default:
+                // No-op.
+                break;
         }
 
         addFragmentListener();
@@ -169,7 +170,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         super.onResume();
 
         // Set this here to make sure its values are updated every time we return to it.
-        if (providerList != null) {
+        if ("web".equals(rootKey)) {
             setProviderList(providerList);
         }
     }
@@ -349,14 +350,12 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     }
 
     private void addFragmentListener() {
-        final Preference credits = findPreference("about_credits");
-        Preference restoreMenu = findPreference("restore");
-        Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
-        Preference webProviderMenu = findPreference("web_provider");
-        final Preference backupMenu = findPreference("backup");
-        Preference resetMenu = findPreference("reset");
+        if ("settings".equals(rootKey)) {
+            final Preference credits = findPreference("about_credits");
+            Preference restoreMenu = findPreference("restore");
+            final Preference backupMenu = findPreference("backup");
+            Preference resetMenu = findPreference("reset");
 
-        if (credits != null) {
             credits.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -365,32 +364,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                     return false;
                 }
             });
-        }
 
-        if (hiddenAppsMenu != null) {
-            hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
-                            new HiddenAppsFragment(), "hidden_apps");
-                    return false;
-                }
-            });
-        }
-
-        if (webProviderMenu != null) {
-            webProviderMenu.setOnPreferenceClickListener(
-                    new Preference.OnPreferenceClickListener() {
-                        @Override
-                        public boolean onPreferenceClick(Preference preference) {
-                            ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
-                                    new WebProviderFragment(), "WebProvider");
-                            return false;
-                        }
-                    });
-        }
-
-        if (backupMenu != null) {
             backupMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -427,6 +401,28 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                     return false;
                 }
             });
+        } else if ("app_list".equals(rootKey)) {
+            Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
+
+            hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
+                            new HiddenAppsFragment(), "hidden_apps");
+                    return false;
+                }
+            });
+        } else if ("web".equals(rootKey)) {
+            Preference webProviderMenu = findPreference("web_provider");
+            webProviderMenu.setOnPreferenceClickListener(
+                    new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
+                                    new WebProviderFragment(), "WebProvider");
+                            return false;
+                        }
+                    });
         }
     }
 

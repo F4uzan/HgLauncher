@@ -186,7 +186,7 @@
         </androidx.preference.PreferenceScreen>
 
         <androidx.preference.PreferenceScreen
-            android:key="search_bar"
+            android:key="web"
             android:summary="@string/pref_summary_web"
             android:title="@string/pref_header_web">
 
