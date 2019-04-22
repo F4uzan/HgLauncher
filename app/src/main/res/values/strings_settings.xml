@@ -10,9 +10,15 @@
     <string name="pref_header_wall">Desktop</string>
     <string name="pref_header_list">App list</string>
     <string name="pref_header_interface">Interface</string>
-    <string name="pref_header_search_bar">Search bar</string>
+    <string name="pref_header_behavior">Behavior</string>
+    <string name="pref_header_web">Web search</string>
     <string name="pref_header_backup_restore">Backup &amp; Restore</string>
-    <string name="pref_header_icons">Icons</string>
+
+    <!-- Summaries for headers/categories -->
+    <string name="pref_summary_web">Manage web search preferences</string>
+    <string name="pref_summary_gestures">Desktop gestures and gesture handler</string>
+    <string name="pref_summary_wall">Screen orientation, hide status bar</string>
+    <string name="pref_summary_list">Hidden apps, icon pack, app list behaviors</string>
 
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Hidden apps</string>
@@ -119,8 +125,8 @@
     <string name="pref_shade_view">Shadow over wallpaper</string>
     <string name="pref_shade_view_desc">Add a visible shadow to shade over wallpaper. Recommended for light wallpapers.</string>
 
-    <string name="static_favourites">Persistent favourites panel</string>
-    <string name="static_favourites_desc">Keep favourites panel visibility regardless of scroll events.</string>
+    <string name="static_favourites">Persistent favorites panel</string>
+    <string name="static_favourites_desc">Keep favorites panel visibility regardless of scroll events.</string>
 
     <string name="icon_pack">Icon pack</string>
     <string name="icon_pack_default">Default</string>

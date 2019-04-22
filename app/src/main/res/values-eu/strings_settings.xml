@@ -10,9 +10,7 @@
     <string name="pref_header_wall">Mahaigaina</string>
     <string name="pref_header_list">Aplikazioen zerrenda</string>
     <string name="pref_header_interface">Interfazea</string>
-    <string name="pref_header_search_bar">Bilaketa barra</string>
     <string name="pref_header_backup_restore">Babes-kopia eta berrezartzea</string>
-    <string name="pref_header_icons">Ikonoak</string>
 
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Ezkutatutako aplikazioak</string>

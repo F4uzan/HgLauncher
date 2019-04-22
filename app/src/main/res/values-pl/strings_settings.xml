@@ -10,9 +10,7 @@
     <string name="pref_header_wall">Pulpit</string>
     <string name="pref_header_list">Lista aplikacji</string>
     <string name="pref_header_interface">Wygląd</string>
-    <string name="pref_header_search_bar">Pasek wyszukiwania</string>
     <string name="pref_header_backup_restore">Kopia i przywracanie</string>
-    <string name="pref_header_icons">Ikony aplikacji</string>
 
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Ukryte</string>

@@ -10,9 +10,7 @@
     <string name="pref_header_wall">Escritorio</string>
     <string name="pref_header_list">Lista de aplicaciones</string>
     <string name="pref_header_interface">Interfaz</string>
-    <string name="pref_header_search_bar">Barra de búsqueda</string>
     <string name="pref_header_backup_restore">Copia de seguridad y restitución</string>
-    <string name="pref_header_icons">Iconos</string>
 
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Aplicaciones ocultadas</string>

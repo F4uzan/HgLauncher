@@ -19,11 +19,11 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.helpers.PreferenceHelper;
@@ -39,6 +39,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     private CharSequence[] appListEntries;
     private CharSequence[] appListEntryValues;
     private boolean isRestore = false;
+    private Preference versionMenu;
     private ListPreference providerList;
 
     private Preference.OnPreferenceChangeListener NestingListListener = new Preference.OnPreferenceChangeListener() {
@@ -77,16 +78,28 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     };
 
     @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.pref_customization);
+        if (getArguments() != null) {
+            String key = getArguments().getString("rootKey");
+            setPreferencesFromResource(R.xml.pref_customization, key);
+        } else {
+            setPreferencesFromResource(R.xml.pref_customization, rootKey);
+        }
+    }
+
+    @Override public void onNavigateToScreen(PreferenceScreen preferenceScreen) {
+        PreferenceFragment fragment = new PreferenceFragment();
+        Bundle args = new Bundle();
+        args.putString("rootKey", preferenceScreen.getKey());
+        fragment.setArguments(args);
+        requireFragmentManager()
+                .beginTransaction()
+                .replace(getId(), fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        ActionBar actionBar = ((SettingsActivity) requireActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.title_activity_settings);
-        }
 
         getAppList();
 
@@ -100,37 +113,55 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         ListPreference gestureUpList = (ListPreference) findPreference("gesture_up");
         ListPreference gestureDoubleTapList = (ListPreference) findPreference("gesture_double_tap");
 
-        setNestedListSummary(gestureLeftList);
-        setNestedListSummary(gestureRightList);
-        setNestedListSummary(gestureUpList);
-        setNestedListSummary(gestureDoubleTapList);
+        versionMenu = findPreference("version_key");
 
-        // Adaptive icon is not available before Android O/API 26.
-        if (Utils.atLeastOreo()) {
-            findPreference("adaptive_shade_switch").setVisible(true);
+        if (gestureLeftList != null) {
+            setNestedListSummary(gestureLeftList);
+            setNestedListSummary(gestureRightList);
+            setNestedListSummary(gestureUpList);
+            setNestedListSummary(gestureDoubleTapList);
         }
 
-        // Window bar hiding works only reliably in KitKat and above.
-        if (Utils.atLeastKitKat()) {
-            findPreference("windowbar_mode").setVisible(true);
+        if (iconList != null) {
+            setIconList(iconList);
+
+            // Adaptive icon is not available before Android O/API 26.
+            if (Utils.atLeastOreo()) {
+                findPreference("adaptive_shade_switch").setVisible(true);
+            }
         }
 
-        if (Utils.sdkIsBelow(19)) {
-            findPreference("windowbar_status_switch").setVisible(true);
+        if (providerList != null) {
+            setProviderList(providerList);
         }
 
-        setIconList(iconList);
-        setGestureHandlerList(gestureHandlerList);
-        setProviderList(providerList);
-        gestureLeftList.setOnPreferenceChangeListener(NestingListListener);
-        gestureRightList.setOnPreferenceChangeListener(NestingListListener);
-        gestureUpList.setOnPreferenceChangeListener(NestingListListener);
-        gestureDoubleTapList.setOnPreferenceChangeListener(NestingListListener);
+        if (gestureLeftList != null) {
+            setGestureHandlerList(gestureHandlerList);
+            gestureLeftList.setOnPreferenceChangeListener(NestingListListener);
+            gestureRightList.setOnPreferenceChangeListener(NestingListListener);
+            gestureUpList.setOnPreferenceChangeListener(NestingListListener);
+            gestureDoubleTapList.setOnPreferenceChangeListener(NestingListListener);
+        }
 
-        appTheme.setOnPreferenceChangeListener(RestartingListListener);
-        orientationMode.setOnPreferenceChangeListener(RestartingListListener);
+        if (appTheme != null) {
+            appTheme.setOnPreferenceChangeListener(RestartingListListener);
+        }
 
-        addVersionCounterListener();
+        if (orientationMode != null) {
+            orientationMode.setOnPreferenceChangeListener(RestartingListListener);
+
+            // Window bar hiding works only reliably in KitKat and above.
+            if (Utils.atLeastKitKat()) {
+                findPreference("windowbar_mode").setVisible(true);
+            } else {
+                findPreference("windowbar_status_switch").setVisible(true);
+            }
+        }
+
+        if (versionMenu != null) {
+            addVersionCounterListener();
+        }
+
         addFragmentListener();
     }
 
@@ -138,7 +169,9 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         super.onResume();
 
         // Set this here to make sure its values are updated every time we return to it.
-        setProviderList(providerList);
+        if (providerList != null) {
+            setProviderList(providerList);
+        }
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -273,8 +306,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     }
 
     private void addVersionCounterListener() {
-        final Preference versionMenu = findPreference("version_key");
-
         if (!PreferenceHelper.getPreference().getBoolean("is_grandma", false)) {
             versionMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 int counter = 9;
@@ -325,69 +356,78 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         final Preference backupMenu = findPreference("backup");
         Preference resetMenu = findPreference("reset");
 
-        credits.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                DialogFragment creditsInfo = new CreditsDialogFragment();
-                creditsInfo.show(requireActivity().getFragmentManager(), "CreditsDialog");
-                return false;
-            }
-        });
+        if (credits != null) {
+            credits.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    DialogFragment creditsInfo = new CreditsDialogFragment();
+                    creditsInfo.show(requireActivity().getFragmentManager(), "CreditsDialog");
+                    return false;
+                }
+            });
+        }
 
-        hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
-                        new HiddenAppsFragment(), "hidden_apps");
-                return false;
-            }
-        });
+        if (hiddenAppsMenu != null) {
+            hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
+                            new HiddenAppsFragment(), "hidden_apps");
+                    return false;
+                }
+            });
+        }
 
-        webProviderMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
-                        new WebProviderFragment(), "WebProvider");
-                return false;
-            }
-        });
+        if (webProviderMenu != null) {
+            webProviderMenu.setOnPreferenceClickListener(
+                    new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
+                                    new WebProviderFragment(), "WebProvider");
+                            return false;
+                        }
+                    });
+        }
 
-        backupMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                isRestore = false;
-                return hasStoragePermission();
-            }
-        });
+        if (backupMenu != null) {
+            backupMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    isRestore = false;
+                    return hasStoragePermission();
+                }
+            });
 
-        restoreMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                isRestore = true;
-                return hasStoragePermission();
-            }
-        });
+            restoreMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    isRestore = true;
+                    return hasStoragePermission();
+                }
+            });
 
-        resetMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override public boolean onPreferenceClick(Preference preference) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
-                alert.setTitle(getString(R.string.reset_preference))
-                     .setMessage(getString(R.string.reset_preference_warn))
-                     .setNegativeButton(getString(android.R.string.cancel), null)
-                     .setPositiveButton(R.string.reset_preference_positive,
-                             new DialogInterface.OnClickListener() {
-                                 @Override
-                                 public void onClick(DialogInterface dialog, int which) {
-                                     PreferenceHelper.getEditor().clear().apply();
-                                     ((SettingsActivity) requireActivity()).restartActivity();
-                                     Toast.makeText(requireContext(),
-                                             R.string.reset_preference_toast, Toast.LENGTH_LONG)
-                                          .show();
-                                 }
-                             }).show();
-                return false;
-            }
-        });
+            resetMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override public boolean onPreferenceClick(Preference preference) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
+                    alert.setTitle(getString(R.string.reset_preference))
+                         .setMessage(getString(R.string.reset_preference_warn))
+                         .setNegativeButton(getString(android.R.string.cancel), null)
+                         .setPositiveButton(R.string.reset_preference_positive,
+                                 new DialogInterface.OnClickListener() {
+                                     @Override
+                                     public void onClick(DialogInterface dialog, int which) {
+                                         PreferenceHelper.getEditor().clear().apply();
+                                         ((SettingsActivity) requireActivity()).restartActivity();
+                                         Toast.makeText(requireContext(),
+                                                 R.string.reset_preference_toast, Toast.LENGTH_LONG)
+                                              .show();
+                                     }
+                                 }).show();
+                    return false;
+                }
+            });
+        }
     }
 
     // Used to check for storage permission.
