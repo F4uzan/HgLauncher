@@ -46,26 +46,39 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     private Preference.OnPreferenceChangeListener NestingListListener = new Preference.OnPreferenceChangeListener() {
         @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
             ListPreference list = (ListPreference) preference;
+            String value = (String) newValue;
 
             // Workaround due to the use of setSummary in onCreate.
-            if ("none".equals(newValue)) {
-                list.setSummary(R.string.gesture_action_default);
-            } else if ("widget".equals(newValue)) {
-                list.setSummary(R.string.gesture_action_widget);
-            } else if ("handler".equals(newValue)) {
-                list.setSummary(R.string.gesture_action_handler);
-            } else if ("app".equals(newValue)) {
-                // Create the Bundle to pass to AppSelectionPreferenceDialog.
-                Bundle appListBundle = new Bundle();
-                appListBundle.putString("key", list.getKey());
-                appListBundle.putCharSequenceArray("entries", appListEntries);
-                appListBundle.putCharSequenceArray("entryValues", appListEntryValues);
+            switch (value) {
+                case "handler":
+                    list.setSummary(R.string.gesture_action_handler);
+                    break;
+                case "widget":
+                    list.setSummary(R.string.gesture_action_widget);
+                    break;
+                case "status":
+                    list.setSummary(R.string.gesture_action_status);
+                    break;
+                case "list":
+                    list.setSummary(R.string.gesture_action_list);
+                    break;
+                case "app":
+                    // Create the Bundle to pass to AppSelectionPreferenceDialog.
+                    Bundle appListBundle = new Bundle();
+                    appListBundle.putString("key", list.getKey());
+                    appListBundle.putCharSequenceArray("entries", appListEntries);
+                    appListBundle.putCharSequenceArray("entryValues", appListEntryValues);
 
-                // Call and create AppSelectionPreferenceDialog.
-                AppSelectionPreferenceDialog appList = new AppSelectionPreferenceDialog();
-                appList.setTargetFragment(PreferenceFragment.this, APPLICATION_DIALOG_CODE);
-                appList.setArguments(appListBundle);
-                appList.show(requireFragmentManager(), "AppSelectionDialog");
+                    // Call and create AppSelectionPreferenceDialog.
+                    AppSelectionPreferenceDialog appList = new AppSelectionPreferenceDialog();
+                    appList.setTargetFragment(PreferenceFragment.this, APPLICATION_DIALOG_CODE);
+                    appList.setArguments(appListBundle);
+                    appList.show(requireFragmentManager(), "AppSelectionDialog");
+                    break;
+                case "none":
+                default:
+                    list.setSummary(R.string.gesture_action_default);
+                    break;
             }
             return true;
         }
