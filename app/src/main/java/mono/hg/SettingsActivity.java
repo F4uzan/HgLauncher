@@ -59,8 +59,10 @@ public class SettingsActivity extends AppCompatActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        fragmentManager.popBackStack("fragment_root", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        ViewUtils.setFragment(this, new PreferenceFragment());
+        if (savedInstanceState == null) {
+            fragmentManager.popBackStack("fragment_root", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            ViewUtils.setFragment(getSupportFragmentManager(), new PreferenceFragment());
+        }
     }
 
     @Override public void onBackPressed() {
