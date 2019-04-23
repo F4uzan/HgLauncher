@@ -102,11 +102,10 @@ public class ViewUtils {
     /**
      * Sets initial fragment. This fragment is not added to the backstack.
      *
-     * @param activity The activity where the fragment is being contained.
+     * @param fragmentManager The fragment manager in the current activity.
      * @param fragment The fragment to use.
      */
-    public static void setFragment(AppCompatActivity activity, Fragment fragment) {
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+    public static void setFragment(FragmentManager fragmentManager, Fragment fragment) {
         fragmentManager.beginTransaction()
                        .replace(R.id.fragment_container, fragment)
                        .commit();
@@ -115,12 +114,11 @@ public class ViewUtils {
     /**
      * Replace existing fragment with another. This adds the fragment to the back stack.
      *
-     * @param activity The activity where the fragment is being contained.
-     * @param fragment The fragment to use.
-     * @param tag      The tag used for the fragment.
+     * @param fragmentManager The fragment manager in the current activity.
+     * @param fragment        The fragment to use.
+     * @param tag             The tag used for the fragment.
      */
-    public static void replaceFragment(AppCompatActivity activity, Fragment fragment, String tag) {
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+    public static void replaceFragment(FragmentManager fragmentManager, Fragment fragment, String tag) {
         fragmentManager.beginTransaction()
                        .replace(R.id.fragment_container, fragment)
                        .addToBackStack(tag)

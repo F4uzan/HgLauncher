@@ -91,6 +91,13 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         }
     };
 
+    private Preference.OnPreferenceChangeListener RotatingListListener = new Preference.OnPreferenceChangeListener() {
+        @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
+            requireActivity().setRequestedOrientation(Integer.parseInt((String) newValue));
+            return true;
+        }
+    };
+
     @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         if (getArguments() != null) {
             String key = getArguments().getString("rootKey");
@@ -123,7 +130,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             case "desktop":
                 ListPreference orientationMode = (ListPreference) findPreference("orientation_mode");
 
-                orientationMode.setOnPreferenceChangeListener(RestartingListListener);
+                orientationMode.setOnPreferenceChangeListener(RotatingListListener);
 
                 // Window bar hiding works only reliably in KitKat and above.
                 if (Utils.atLeastKitKat()) {
@@ -420,7 +427,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
+                    ViewUtils.replaceFragment(requireFragmentManager(),
                             new HiddenAppsFragment(), "hidden_apps");
                     return false;
                 }
@@ -431,7 +438,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                     new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            ViewUtils.replaceFragment((SettingsActivity) requireActivity(),
+                            ViewUtils.replaceFragment(requireFragmentManager(),
                                     new WebProviderFragment(), "WebProvider");
                             return false;
                         }
@@ -476,7 +483,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         Bundle fragmentBundle = new Bundle();
         fragmentBundle.putBoolean("isRestore", isRestore);
         backupRestoreFragment.setArguments(fragmentBundle);
-        ViewUtils.replaceFragment((SettingsActivity) requireActivity(), backupRestoreFragment,
+        ViewUtils.replaceFragment(requireFragmentManager(), backupRestoreFragment,
                 "backup_restore");
     }
 }
