@@ -17,7 +17,7 @@
     <!-- Summaries for headers/categories -->
     <string name="pref_summary_web">Manage web search preferences</string>
     <string name="pref_summary_gestures">Desktop gestures and gesture handler</string>
-    <string name="pref_summary_wall">Screen orientation, hide status bar</string>
+    <string name="pref_summary_wall">Screen orientation, system bars mode</string>
     <string name="pref_summary_list">Hidden apps, icon pack, app list behaviors</string>
 
     <!-- Backup and restore -->
