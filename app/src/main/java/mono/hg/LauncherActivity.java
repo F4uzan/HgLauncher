@@ -940,6 +940,7 @@ public class LauncherActivity extends AppCompatActivity {
                 } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                     appsLayoutManager.setVerticalScrollEnabled(true);
 
+                    searchBar.setEnabled(true);
                     searchBar.setFocusable(true);
                     searchBar.setFocusableInTouchMode(true);
 
@@ -956,6 +957,7 @@ public class LauncherActivity extends AppCompatActivity {
 
                     searchBar.setFocusable(false);
                     searchBar.setFocusableInTouchMode(false);
+                    searchBar.setEnabled(false);
 
                     // Stop scrolling, the panel is being dismissed.
                     appsRecyclerView.stopScroll();
