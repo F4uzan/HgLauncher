@@ -914,19 +914,12 @@ public class LauncherActivity extends AppCompatActivity {
             }
 
             @Override public void onPanelStateChanged(View panel, int previousState, int newState) {
-                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED
-                        || newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
-
-                    if (newState != SlidingUpPanelLayout.PanelState.DRAGGING) {
-                        appsLayoutManager.setVerticalScrollEnabled(true);
-                    }
-
+                if (newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
                     // Empty out search bar text
                     searchBar.setText(null);
 
-                    // Show the keyboard.
-                    if (PreferenceHelper.shouldFocusKeyboard()
-                            && previousState != SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    // Preemptive attempt at showing the keyboard.
+                    if (PreferenceHelper.shouldFocusKeyboard()) {
                         ActivityServiceUtils.showSoftKeyboard(LauncherActivity.this, searchBar);
                     }
 
@@ -943,11 +936,25 @@ public class LauncherActivity extends AppCompatActivity {
                                            searchContainer.clearAnimation();
                                        }
                                    });
+                } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    appsLayoutManager.setVerticalScrollEnabled(true);
+
+                    searchBar.setFocusable(true);
+                    searchBar.setFocusableInTouchMode(true);
+
+                    // Show the keyboard.
+                    if (PreferenceHelper.shouldFocusKeyboard()
+                            && previousState == SlidingUpPanelLayout.PanelState.DRAGGING) {
+                        ActivityServiceUtils.showSoftKeyboard(LauncherActivity.this, searchBar);
+                    }
                 } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     appsLayoutManager.setVerticalScrollEnabled(false);
 
                     // Hide keyboard if container is invisible.
                     ActivityServiceUtils.hideSoftKeyboard(LauncherActivity.this);
+
+                    searchBar.setFocusable(false);
+                    searchBar.setFocusableInTouchMode(false);
 
                     // Stop scrolling, the panel is being dismissed.
                     appsRecyclerView.stopScroll();
@@ -960,8 +967,6 @@ public class LauncherActivity extends AppCompatActivity {
                     } else {
                         isResuming = false;
                     }
-                } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED) {
-                    doThis("show_panel");
                 }
             }
         });
