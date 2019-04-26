@@ -105,9 +105,9 @@ public class ViewUtils {
      * @param fragmentManager The fragment manager in the current activity.
      * @param fragment The fragment to use.
      */
-    public static void setFragment(FragmentManager fragmentManager, Fragment fragment) {
+    public static void setFragment(FragmentManager fragmentManager, Fragment fragment, String tag) {
         fragmentManager.beginTransaction()
-                       .replace(R.id.fragment_container, fragment)
+                       .replace(R.id.fragment_container, fragment, tag)
                        .commit();
     }
 

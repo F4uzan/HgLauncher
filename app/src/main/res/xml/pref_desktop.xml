@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.DropDownPreference
+        android:defaultValue="-1"
+        android:entries="@array/pref_orientation_title"
+        android:entryValues="@array/pref_orientation_values"
+        android:key="orientation_mode"
+        android:summary="%s"
+        android:title="@string/orientation" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="windowbar_status_switch"
+        android:title="@string/windowbar_mode_status"
+        app:isPreferenceVisible="false" />
+
+    <androidx.preference.DropDownPreference
+        android:defaultValue="none"
+        android:entries="@array/pref_windowbar_title"
+        android:entryValues="@array/pref_windowbar_values"
+        android:key="windowbar_mode"
+        android:summary="%s"
+        android:title="@string/windowbar_mode"
+        app:isPreferenceVisible="false" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="shade_view_switch"
+        android:summary="@string/pref_shade_view_desc"
+        android:title="@string/pref_shade_view" />
+</androidx.preference.PreferenceScreen>

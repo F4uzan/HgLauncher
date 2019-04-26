@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.preference.DropDownPreference
+        android:defaultValue="none"
+        android:key="gesture_handler"
+        android:summary="%s"
+        android:title="@string/gesture_handler" />
+
+    <androidx.preference.ListPreference
+        android:defaultValue="none"
+        android:key="gesture_left"
+        android:summary="%s"
+        android:entries="@array/pref_gesture_actions_title"
+        android:entryValues="@array/pref_gesture_actions_values"
+        android:title="@string/gesture_left" />
+
+    <androidx.preference.ListPreference
+        android:defaultValue="none"
+        android:key="gesture_right"
+        android:summary="%s"
+        android:entries="@array/pref_gesture_actions_title"
+        android:entryValues="@array/pref_gesture_actions_values"
+        android:title="@string/gesture_right" />
+
+    <androidx.preference.ListPreference
+        android:defaultValue="none"
+        android:key="gesture_up"
+        android:summary="%s"
+        android:entries="@array/pref_gesture_actions_title"
+        android:entryValues="@array/pref_gesture_actions_values"
+        android:title="@string/gesture_up" />
+
+    <androidx.preference.ListPreference
+        android:defaultValue="none"
+        android:key="gesture_down"
+        android:summary="%s"
+        android:entries="@array/pref_gesture_actions_title"
+        android:entryValues="@array/pref_gesture_actions_values"
+        android:title="@string/gesture_down" />
+
+    <androidx.preference.ListPreference
+        android:defaultValue="list"
+        android:key="gesture_single_tap"
+        android:summary="%s"
+        android:entries="@array/pref_gesture_actions_title"
+        android:entryValues="@array/pref_gesture_actions_values"
+        android:title="@string/gesture_single_tap" />
+
+    <androidx.preference.ListPreference
+        android:defaultValue="none"
+        android:key="gesture_double_tap"
+        android:summary="%s"
+        android:entries="@array/pref_gesture_actions_title"
+        android:entryValues="@array/pref_gesture_actions_values"
+        android:title="@string/gesture_double_tap" />
+</androidx.preference.PreferenceScreen>

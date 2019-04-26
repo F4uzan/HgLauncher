@@ -4,21 +4,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-import mono.hg.fragments.PreferenceFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import mono.hg.helpers.PreferenceHelper;
+import mono.hg.preferences.BasePreference;
 import mono.hg.utils.ActivityServiceUtils;
 import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
 import mono.hg.wrappers.BackHandledFragment;
 
 public class SettingsActivity extends AppCompatActivity
-        implements BackHandledFragment.BackHandlerInterface {
+        implements BackHandledFragment.BackHandlerInterface, PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     private BackHandledFragment selectedFragment;
-    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private CharSequence fragmentTitle;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         if (!PreferenceHelper.hasEditor()) {
@@ -60,16 +64,29 @@ public class SettingsActivity extends AppCompatActivity
         }
 
         if (savedInstanceState == null) {
-            fragmentManager.popBackStack("fragment_root", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            ViewUtils.setFragment(getSupportFragmentManager(), new PreferenceFragment());
+            ViewUtils.setFragment(getSupportFragmentManager(), new BasePreference(), "settings");
+        } else {
+            fragmentTitle = savedInstanceState.getCharSequence("title");
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(fragmentTitle);
+            }
         }
+    }
+
+    @Override protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putCharSequence("title", fragmentTitle);
     }
 
     @Override public void onBackPressed() {
         if (selectedFragment == null || !selectedFragment.onBackPressed()) {
             // Selected fragment did not consume the back press event.
             if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(R.string.title_activity_settings);
+                if (getSupportFragmentManager().findFragmentByTag("settings") instanceof BasePreference) {
+                    getSupportActionBar().setTitle(getString(R.string.title_activity_settings));
+                } else {
+                    getSupportActionBar().setTitle(fragmentTitle);
+                }
             }
             super.onBackPressed();
         }
@@ -82,7 +99,11 @@ public class SettingsActivity extends AppCompatActivity
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(R.string.title_activity_settings);
+                if (getSupportFragmentManager().findFragmentByTag("settings") instanceof BasePreference) {
+                    getSupportActionBar().setTitle(getString(R.string.title_activity_settings));
+                } else {
+                    getSupportActionBar().setTitle(fragmentTitle);
+                }
             }
             super.onBackPressed();
             ActivityServiceUtils.hideSoftKeyboard(this);
@@ -109,5 +130,28 @@ public class SettingsActivity extends AppCompatActivity
         ActivityCompat.finishAfterTransition(this);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         startActivity(intent);
+    }
+
+    @Override public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
+        // Instantiate the new Fragment
+        final Bundle args = pref.getExtras();
+        final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(
+                getClassLoader(), pref.getFragment(), args);
+        fragment.setArguments(args);
+        fragment.setTargetFragment(caller, 0);
+        fragmentTitle = pref.getTitle();
+
+        // Replace the existing Fragment with the new Fragment
+        getSupportFragmentManager().beginTransaction()
+                                   .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                   .replace(R.id.fragment_container, fragment)
+                                   .addToBackStack(pref.getKey())
+                                   .commit();
+
+        // Update the Activity's action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(fragmentTitle);
+        }
+        return true;
     }
 }
