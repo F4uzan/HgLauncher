@@ -905,8 +905,6 @@ public class LauncherActivity extends AppCompatActivity {
     private void addPanelListener() {
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override public void onPanelSlide(View view, float v) {
-                appsLayoutManager.setVerticalScrollEnabled(false);
-
                 // Hide the keyboard at slide.
                 ActivityServiceUtils.hideSoftKeyboard(LauncherActivity.this);
 
@@ -915,59 +913,60 @@ public class LauncherActivity extends AppCompatActivity {
             }
 
             @Override public void onPanelStateChanged(View panel, int previousState, int newState) {
-                if (newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
-                    // Empty out search bar text
-                    searchBar.setText(null);
+                appsLayoutManager.setVerticalScrollEnabled(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
+                searchBar.setClickable(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
+                searchBar.setLongClickable(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
 
-                    // Preemptive attempt at showing the keyboard.
-                    if (PreferenceHelper.shouldFocusKeyboard()) {
-                        ActivityServiceUtils.showSoftKeyboard(LauncherActivity.this, searchBar);
-                    }
+                switch (newState) {
+                    case SlidingUpPanelLayout.PanelState.DRAGGING:
+                        // Empty out search bar text
+                        searchBar.setText(null);
 
-                    // Animate search container entering the view.
-                    searchContainer.animate().alpha(1f).setDuration(animateDuration)
-                                   .setListener(new AnimatorListenerAdapter() {
-                                       @Override
-                                       public void onAnimationStart(Animator animation) {
-                                           searchContainer.setVisibility(View.VISIBLE);
-                                       }
+                        // Preemptive attempt at showing the keyboard.
+                        if (PreferenceHelper.shouldFocusKeyboard()) {
+                            ActivityServiceUtils.showSoftKeyboard(LauncherActivity.this, searchBar);
+                        }
 
-                                       @Override
-                                       public void onAnimationEnd(Animator animation) {
-                                           searchContainer.clearAnimation();
-                                       }
-                                   });
-                } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                    appsLayoutManager.setVerticalScrollEnabled(true);
+                        // Animate search container entering the view.
+                        searchContainer.animate().alpha(1f).setDuration(animateDuration)
+                                       .setListener(new AnimatorListenerAdapter() {
+                                           @Override
+                                           public void onAnimationStart(Animator animation) {
+                                               searchContainer.setVisibility(View.VISIBLE);
+                                           }
 
-                    searchBar.setClickable(true);
-                    searchBar.setLongClickable(true);
+                                           @Override
+                                           public void onAnimationEnd(Animator animation) {
+                                               searchContainer.clearAnimation();
+                                           }
+                                       });
+                        break;
+                    case SlidingUpPanelLayout.PanelState.COLLAPSED:
+                        // Show the keyboard.
+                        if (PreferenceHelper.shouldFocusKeyboard()
+                                && previousState == SlidingUpPanelLayout.PanelState.DRAGGING) {
+                            ActivityServiceUtils.showSoftKeyboard(LauncherActivity.this, searchBar);
+                        }
+                        break;
+                    case SlidingUpPanelLayout.PanelState.EXPANDED:
+                        // Hide keyboard if container is invisible.
+                        ActivityServiceUtils.hideSoftKeyboard(LauncherActivity.this);
 
-                    // Show the keyboard.
-                    if (PreferenceHelper.shouldFocusKeyboard()
-                            && previousState == SlidingUpPanelLayout.PanelState.DRAGGING) {
-                        ActivityServiceUtils.showSoftKeyboard(LauncherActivity.this, searchBar);
-                    }
-                } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    appsLayoutManager.setVerticalScrollEnabled(false);
+                        // Stop scrolling, the panel is being dismissed.
+                        appsRecyclerView.stopScroll();
 
-                    // Hide keyboard if container is invisible.
-                    ActivityServiceUtils.hideSoftKeyboard(LauncherActivity.this);
+                        searchContainer.setVisibility(View.INVISIBLE);
 
-                    searchBar.setClickable(false);
-                    searchBar.setLongClickable(false);
-
-                    // Stop scrolling, the panel is being dismissed.
-                    appsRecyclerView.stopScroll();
-
-                    searchContainer.setVisibility(View.INVISIBLE);
-
-                    // Animate the container.
-                    if (!isResuming) {
-                        searchContainer.animate().alpha(0f).setDuration(animateDuration);
-                    } else {
-                        isResuming = false;
-                    }
+                        // Animate the container.
+                        if (!isResuming) {
+                            searchContainer.animate().alpha(0f).setDuration(animateDuration);
+                        } else {
+                            isResuming = false;
+                        }
+                        break;
+                    default:
+                        // No-op.
+                        break;
                 }
             }
         });

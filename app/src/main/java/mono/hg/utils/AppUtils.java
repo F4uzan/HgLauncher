@@ -263,17 +263,18 @@ public class AppUtils {
 
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
-            String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
-            if (!PreferenceHelper.getExclusionList().contains(packageName) && !packageName.contains(
+            String packageName = ri.activityInfo.packageName;
+            String componentName = packageName + "/" + ri.activityInfo.name;
+            if (!PreferenceHelper.getExclusionList().contains(componentName) && !packageName.equals(
                     BuildConfig.APPLICATION_ID)) {
                 String appName = ri.loadLabel(manager).toString();
-                String hintName = PreferenceHelper.getLabel(packageName);
+                String hintName = PreferenceHelper.getLabel(componentName);
                 Drawable icon = null;
                 Drawable getIcon = null;
                 // Only show icons if user chooses so.
                 if (!PreferenceHelper.shouldHideIcon()) {
                     if (!PreferenceHelper.getIconPackName().equals("default")) {
-                        getIcon = LauncherIconHelper.getIconDrawable(manager, packageName);
+                        getIcon = LauncherIconHelper.getIconDrawable(manager, componentName);
                     }
                     if (getIcon == null) {
                         icon = ri.activityInfo.loadIcon(manager);
@@ -287,7 +288,7 @@ public class AppUtils {
                         icon = getIcon;
                     }
                 }
-                App app = new App(icon, appName, packageName, hintName, false);
+                App app = new App(icon, appName, componentName, hintName, false);
                 appsList.add(app);
             }
         }
