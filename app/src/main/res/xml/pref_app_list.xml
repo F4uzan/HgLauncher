@@ -2,6 +2,7 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.preference.Preference
+        android:fragment="mono.hg.preferences.HiddenAppsPreference"
         android:key="hidden_apps_menu"
         android:summary="@string/pref_header_hidden_apps_desc"
         android:title="@string/pref_header_hidden_apps" />

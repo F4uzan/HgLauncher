@@ -13,6 +13,7 @@
         android:title="@string/web_search_long_press" />
 
     <androidx.preference.Preference
+        android:fragment="mono.hg.preferences.WebSearchProviderPreference"
         android:key="web_provider"
         android:summary="@string/pref_header_web_provider_desc"
         android:title="@string/pref_header_web_provider_title" />

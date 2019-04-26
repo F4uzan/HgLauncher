@@ -135,8 +135,7 @@ public class SettingsActivity extends AppCompatActivity
     @Override public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
         // Instantiate the new Fragment
         final Bundle args = pref.getExtras();
-        final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(
-                getClassLoader(), pref.getFragment(), args);
+        final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(getClassLoader(), pref.getFragment(), args);
         fragment.setArguments(args);
         fragment.setTargetFragment(caller, 0);
         fragmentTitle = pref.getTitle();
@@ -144,7 +143,7 @@ public class SettingsActivity extends AppCompatActivity
         // Replace the existing Fragment with the new Fragment
         getSupportFragmentManager().beginTransaction()
                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                   .replace(R.id.fragment_container, fragment)
+                                   .replace(R.id.fragment_container, fragment, pref.getKey())
                                    .addToBackStack(pref.getKey())
                                    .commit();
 

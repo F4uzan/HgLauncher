@@ -1,4 +1,4 @@
-package mono.hg.fragments;
+package mono.hg.preferences;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,14 +22,14 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.preference.PreferenceFragmentCompat;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.App;
-import mono.hg.wrappers.BackHandledFragment;
 
-public class HiddenAppsFragment extends BackHandledFragment {
+public class HiddenAppsPreference extends PreferenceFragmentCompat {
     private ArrayList<App> appList = new ArrayList<>();
     private HiddenAppAdapter hiddenAppAdapter;
     private PackageManager manager;
@@ -37,17 +37,16 @@ public class HiddenAppsFragment extends BackHandledFragment {
             PreferenceHelper.getPreference().getStringSet("hidden_apps", new HashSet<String>()));
     private ListView appsListView;
 
+    @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        // No-op.
+    }
+
     @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_hidden_apps, container, false);
     }
 
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ActionBar actionBar = ((SettingsActivity) requireActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.pref_header_hidden_apps);
-        }
 
         setHasOptionsMenu(true);
 
@@ -64,8 +63,14 @@ public class HiddenAppsFragment extends BackHandledFragment {
         addListeners();
     }
 
-    @Override public boolean onBackPressed() {
-        return false;
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        // We have been sent back. Set the action bar title accordingly.
+        ActionBar actionBar = ((SettingsActivity) requireActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.pref_header_list);
+        }
     }
 
     @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {

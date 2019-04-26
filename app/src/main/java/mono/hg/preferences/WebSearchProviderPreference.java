@@ -1,4 +1,4 @@
-package mono.hg.fragments;
+package mono.hg.preferences;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -22,16 +22,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.preference.PreferenceFragmentCompat;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.WebProviderAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.WebSearchProvider;
-import mono.hg.wrappers.BackHandledFragment;
 
-public class WebProviderFragment extends BackHandledFragment {
+public class WebSearchProviderPreference extends PreferenceFragmentCompat {
     private ArrayList<WebSearchProvider> providerList = new ArrayList<>();
     private WebProviderAdapter providerAdapter;
+
+    @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        // No-op.
+    }
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_web_provider, container, false);
@@ -40,10 +44,6 @@ public class WebProviderFragment extends BackHandledFragment {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ActionBar actionBar = ((SettingsActivity) requireActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.pref_header_web_provider_short);
-        }
         setHasOptionsMenu(true);
 
         ListView providerListView = requireActivity().findViewById(R.id.web_provider_list);
@@ -88,8 +88,14 @@ public class WebProviderFragment extends BackHandledFragment {
         }
     }
 
-    @Override public boolean onBackPressed() {
-        return false;
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        // We have been sent back. Set the action bar title accordingly.
+        ActionBar actionBar = ((SettingsActivity) requireActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.pref_header_web);
+        }
     }
 
     @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {

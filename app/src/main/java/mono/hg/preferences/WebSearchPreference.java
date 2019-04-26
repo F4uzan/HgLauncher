@@ -10,12 +10,9 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import mono.hg.R;
-import mono.hg.fragments.WebProviderFragment;
 import mono.hg.helpers.PreferenceHelper;
-import mono.hg.utils.ViewUtils;
 
 public class WebSearchPreference extends PreferenceFragmentCompat {
     private ListPreference providerList;
@@ -27,19 +24,8 @@ public class WebSearchPreference extends PreferenceFragmentCompat {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Preference webProviderMenu = findPreference("web_provider");
         providerList = (ListPreference) findPreference("search_provider");
         setProviderList(providerList);
-
-        webProviderMenu.setOnPreferenceClickListener(
-                new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        ViewUtils.replaceFragment(requireFragmentManager(),
-                                new WebProviderFragment(), "WebProvider");
-                        return false;
-                    }
-                });
     }
 
     @Override public void onResume() {

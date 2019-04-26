@@ -13,12 +13,9 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import mono.hg.R;
-import mono.hg.fragments.HiddenAppsFragment;
 import mono.hg.utils.Utils;
-import mono.hg.utils.ViewUtils;
 
 public class AppListPreference extends PreferenceFragmentCompat {
     @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -29,7 +26,6 @@ public class AppListPreference extends PreferenceFragmentCompat {
         super.onViewCreated(view, savedInstanceState);
 
         ListPreference iconList = (ListPreference) findPreference("icon_pack");
-        Preference hiddenAppsMenu = findPreference("hidden_apps_menu");
 
         setIconList(iconList);
 
@@ -37,15 +33,6 @@ public class AppListPreference extends PreferenceFragmentCompat {
         if (Utils.atLeastOreo()) {
             findPreference("adaptive_shade_switch").setVisible(true);
         }
-
-        hiddenAppsMenu.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                ViewUtils.replaceFragment(requireFragmentManager(),
-                        new HiddenAppsFragment(), "hidden_apps");
-                return false;
-            }
-        });
     }
 
     private void setIconList(ListPreference list) {
