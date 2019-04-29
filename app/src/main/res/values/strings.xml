@@ -32,7 +32,7 @@
 
     <!-- Misc -->
     <string name="search_hint">Search…</string>
-    <string name="search_web_hint">Search for \'%1$s\' online.</string>
+    <string name="search_web_hint">Search for \'%1$s\' online</string>
     <string name="search_web_button_prompt">With</string>
     <string name="search_web_button">Go</string>
     <string name="dialog_widget_hint">Tap to add widget.</string>

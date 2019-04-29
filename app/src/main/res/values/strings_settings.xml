@@ -22,21 +22,21 @@
 
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Hidden apps</string>
-    <string name="pref_header_hidden_apps_desc">Manage your list of hidden apps.</string>
+    <string name="pref_header_hidden_apps_desc">Manage your list of hidden apps</string>
     <string name="pref_header_backup">Backup</string>
-    <string name="pref_header_backup_desc">Backup current launcher configuration.</string>
+    <string name="pref_header_backup_desc">Backup current launcher configuration</string>
     <string name="backup_name_hint">Backup name…</string>
     <string name="pref_header_restore">Restore</string>
-    <string name="pref_header_restore_desc">Restore a saved configuration.</string>
+    <string name="pref_header_restore_desc">Restore a saved configuration</string>
     <string name="reset_preference">Reset configuration</string>
-    <string name="reset_preference_desc">Reset current configuration and restore defaults.</string>
+    <string name="reset_preference_desc">Reset current configuration and restore defaults</string>
     <string name="reset_preference_warn">Proceeding will reset your entire configuration. Once done, you cannot undo the operation!</string>
     <string name="reset_preference_positive">Understood</string>
     <string name="reset_preference_toast">Configuration has been reset.</string>
 
     <!-- Web search provider -->
     <string name="pref_header_web_provider_title">Web search providers</string>
-    <string name="pref_header_web_provider_desc">Add or remove web search providers.</string>
+    <string name="pref_header_web_provider_desc">Add or remove web search providers</string>
     <string name="pref_header_web_provider_short">Search providers</string>
     <string name="web_provider_name_hint">Name (must be unique)</string>
     <string name="web_provider_url_hint" translatable="false">https://{url}/search?q=%s</string>
@@ -53,12 +53,12 @@
     <string name="backup_restore_dialog">Restoring…</string>
     <string name="restore_complete">Restore complete!</string>
     <string name="backup_complete">Backup saved!</string>
-    <string name="backup_empty">Backup name cannot be empty.</string>
+    <string name="backup_empty">Backup name cannot be empty!</string>
 
     <!-- Credits dialog. -->
     <string name="about_credits_dialog_title">Credits</string>
     <string name="about_credits">Credits</string>
-    <string name="about_credits_desc">Credits for everyone involved in this launcher.</string>
+    <string name="about_credits_desc">Credits for everyone involved in this launcher</string>
 
     <!-- Customizations -->
     <string name="app_theme">App theme</string>
@@ -98,7 +98,7 @@
     <string name="app_list_order_inverse">Z to A</string>
 
     <string name="static_app_list">Always open app list</string>
-    <string name="static_app_list_desc">Open the app list when entering the launcher. Does not prevent it from being closed.</string>
+    <string name="static_app_list_desc">Open the app list when entering the launcher. This does not prevent it from being closed.</string>
 
     <string name="pref_app_launch_anim">App launch animation</string>
     <string name="anim_list_default">System-defined</string>
@@ -108,25 +108,25 @@
     <string name="pref_search_provider">Default web search provider</string>
 
     <string name="web_search_long_press">Extended search menu</string>
-    <string name="web_search_long_press_desc">When search provider is not set to \'Always ask\', long-pressing \'Go\' allows selection of search provider.</string>
+    <string name="web_search_long_press_desc">When search provider is not set to \'Always ask\', long-pressing \'Go\' allows selection of search provider</string>
 
     <string name="keyboard_focus">Keyboard focus</string>
-    <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down.</string>
+    <string name="keyboard_focus_desc">Automatically show the keyboard if app panel is pulled down</string>
 
     <string name="web_search">Prompt for web search</string>
-    <string name="web_search_desc">Show a prompt to search for your query online.</string>
+    <string name="web_search_desc">Show a prompt to search for your query online</string>
 
     <string name="shadow_adaptive_icon">Shadow for Adaptive Icons</string>
     <string name="shadow_adaptive_icon_desc">Shade adaptive icons with a slight shadow. May reduce performance.</string>
 
     <string name="pref_icon_view">Hide icons</string>
-    <string name="pref_icon_view_desc">Recommended if you have a slower device.</string>
+    <string name="pref_icon_view_desc">Recommended if you have a slower device</string>
 
     <string name="pref_shade_view">Shadow over wallpaper</string>
-    <string name="pref_shade_view_desc">Add a visible shadow to shade over wallpaper. Recommended for light wallpapers.</string>
+    <string name="pref_shade_view_desc">Add a visible shadow on the top and bottom of the wallpaper</string>
 
     <string name="static_favourites">Persistent favorites panel</string>
-    <string name="static_favourites_desc">Keep favorites panel visibility regardless of scroll events.</string>
+    <string name="static_favourites_desc">Keep favorites panel visibility regardless of scroll events</string>
 
     <string name="icon_pack">Icon pack</string>
     <string name="icon_pack_default">Default</string>
