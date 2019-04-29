@@ -3,6 +3,7 @@ package mono.hg.preferences;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
@@ -12,6 +13,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import mono.hg.R;
 import mono.hg.utils.Utils;
 
+@Keep
 public class DesktopPreference extends PreferenceFragmentCompat {
     private Preference.OnPreferenceChangeListener RotatingListListener = new Preference.OnPreferenceChangeListener() {
         @Override public boolean onPreferenceChange(Preference preference, Object newValue) {

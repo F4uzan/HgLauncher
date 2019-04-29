@@ -3,6 +3,7 @@ package mono.hg.preferences;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
@@ -15,6 +16,7 @@ import java.util.Map;
 import mono.hg.R;
 import mono.hg.helpers.PreferenceHelper;
 
+@Keep
 public class WebSearchPreference extends PreferenceFragmentCompat {
     private ListPreference providerList;
 

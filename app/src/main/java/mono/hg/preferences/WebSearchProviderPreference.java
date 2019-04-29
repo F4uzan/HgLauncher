@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -30,6 +31,7 @@ import mono.hg.adapters.WebProviderAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.WebSearchProvider;
 
+@Keep
 public class WebSearchProviderPreference extends PreferenceFragmentCompat {
     private ArrayList<WebSearchProvider> providerList = new ArrayList<>();
     private WebProviderAdapter providerAdapter;

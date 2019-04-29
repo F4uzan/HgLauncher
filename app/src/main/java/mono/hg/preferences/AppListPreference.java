@@ -7,6 +7,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
@@ -18,6 +19,7 @@ import java.util.List;
 import mono.hg.R;
 import mono.hg.utils.Utils;
 
+@Keep
 public class AppListPreference extends PreferenceFragmentCompat {
     @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.pref_app_list, rootKey);

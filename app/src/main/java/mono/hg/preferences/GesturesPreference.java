@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
@@ -22,6 +23,7 @@ import mono.hg.R;
 import mono.hg.utils.AppUtils;
 import mono.hg.wrappers.AppSelectionPreferenceDialog;
 
+@Keep
 public class GesturesPreference extends PreferenceFragmentCompat {
     private static final int APPLICATION_DIALOG_CODE = 300;
     private CharSequence[] appListEntries;
