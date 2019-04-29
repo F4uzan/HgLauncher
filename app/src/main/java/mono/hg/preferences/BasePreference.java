@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.fragments.BackupRestoreFragment;
@@ -36,7 +37,7 @@ public class BasePreference extends PreferenceFragmentCompat {
     };
 
     @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-       setPreferencesFromResource(R.xml.pref_base, rootKey);
+        setPreferencesFromResource(R.xml.pref_base, rootKey);
     }
 
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

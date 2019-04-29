@@ -18,6 +18,10 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -33,9 +37,6 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.FileFolderAdapter;
@@ -165,7 +166,8 @@ public class BackupRestoreFragment extends BackHandledFragment {
                         saveBackup(backupName);
                     }
                 } else {
-                    Toast.makeText(requireActivity(), R.string.backup_empty, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), R.string.backup_empty, Toast.LENGTH_SHORT)
+                         .show();
                 }
                 return true;
             default:

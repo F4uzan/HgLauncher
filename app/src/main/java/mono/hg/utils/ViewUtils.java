@@ -7,15 +7,16 @@ import android.os.Build;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
-import java.util.Map;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import java.util.Map;
+
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.R;
 import mono.hg.helpers.PreferenceHelper;
@@ -103,7 +104,7 @@ public class ViewUtils {
      * Sets initial fragment. This fragment is not added to the backstack.
      *
      * @param fragmentManager The fragment manager in the current activity.
-     * @param fragment The fragment to use.
+     * @param fragment        The fragment to use.
      */
     public static void setFragment(FragmentManager fragmentManager, Fragment fragment, String tag) {
         fragmentManager.beginTransaction()

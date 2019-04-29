@@ -10,13 +10,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
+import androidx.annotation.IntDef;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.util.ArrayList;
 
-import androidx.annotation.IntDef;
-import androidx.appcompat.app.AppCompatActivity;
 import mono.hg.LauncherActivity;
 import mono.hg.R;
 import mono.hg.fragments.WidgetsDialogFragment;

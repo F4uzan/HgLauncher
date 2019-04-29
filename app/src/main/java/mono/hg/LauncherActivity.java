@@ -25,12 +25,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -40,6 +34,13 @@ import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
 import mono.hg.fragments.WidgetsDialogFragment;
@@ -913,7 +914,8 @@ public class LauncherActivity extends AppCompatActivity {
             }
 
             @Override public void onPanelStateChanged(View panel, int previousState, int newState) {
-                appsLayoutManager.setVerticalScrollEnabled(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
+                appsLayoutManager.setVerticalScrollEnabled(
+                        newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
                 searchBar.setClickable(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
                 searchBar.setLongClickable(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
 

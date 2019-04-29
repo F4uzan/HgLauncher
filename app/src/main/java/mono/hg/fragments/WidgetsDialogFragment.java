@@ -14,13 +14,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
 import mono.hg.R;
 import mono.hg.appwidget.LauncherAppWidgetHost;
 import mono.hg.helpers.PreferenceHelper;
@@ -61,7 +62,8 @@ public class WidgetsDialogFragment extends DialogFragment {
     }
 
     @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.WidgetDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(),
+                R.style.WidgetDialogStyle);
         View view = View.inflate(requireContext(), R.layout.fragment_widgets_dialog, null);
 
         widgetsList = new ArrayList<>(PreferenceHelper.getWidgetList());
@@ -71,7 +73,8 @@ public class WidgetsDialogFragment extends DialogFragment {
         if (!widgetsList.isEmpty()) {
             for (String widgets : PreferenceHelper.getWidgetList()) {
                 Intent widgetIntent = new Intent();
-                widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Integer.parseInt(widgets));
+                widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                        Integer.parseInt(widgets));
                 addWidget(widgetIntent, appWidgetContainer.getChildCount(), false);
             }
         }
@@ -96,7 +99,8 @@ public class WidgetsDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(View view) {
                         Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
-                        pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,  appWidgetHost.allocateAppWidgetId());
+                        pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                                appWidgetHost.allocateAppWidgetId());
                         startActivityForResult(pickIntent, WIDGET_CONFIG_START_CODE);
                     }
                 });
@@ -128,7 +132,8 @@ public class WidgetsDialogFragment extends DialogFragment {
                 addWidget(data, widgetsList.size(), true);
             }
         } else if (resultCode == RESULT_CANCELED && data != null) {
-            int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE);
+            int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    WIDGET_CONFIG_DEFAULT_CODE);
             if (widgetId != WIDGET_CONFIG_DEFAULT_CODE) {
                 appWidgetHost.deleteAppWidgetId(widgetId);
             }
@@ -198,9 +203,11 @@ public class WidgetsDialogFragment extends DialogFragment {
      * @param data Intent used to receive the ID of the widget being added.
      */
     private void addWidget(Intent data, int index, boolean newWidget) {
-        int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE);
+        int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                WIDGET_CONFIG_DEFAULT_CODE);
         AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId);
-        AppWidgetHostView appWidgetHostView = appWidgetHost.createView(requireActivity().getApplicationContext(),
+        AppWidgetHostView appWidgetHostView = appWidgetHost.createView(
+                requireActivity().getApplicationContext(),
                 widgetId, appWidgetInfo);
 
         // Prevents crashing when the widget info can't be found.

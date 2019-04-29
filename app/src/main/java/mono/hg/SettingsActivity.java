@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.preferences.BasePreference;
 import mono.hg.utils.ActivityServiceUtils;
@@ -82,7 +83,8 @@ public class SettingsActivity extends AppCompatActivity
         if (selectedFragment == null || !selectedFragment.onBackPressed()) {
             // Selected fragment did not consume the back press event.
             if (getSupportActionBar() != null) {
-                if (getSupportFragmentManager().findFragmentByTag("settings") instanceof BasePreference) {
+                if (getSupportFragmentManager().findFragmentByTag(
+                        "settings") instanceof BasePreference) {
                     getSupportActionBar().setTitle(getString(R.string.title_activity_settings));
                 } else {
                     getSupportActionBar().setTitle(fragmentTitle);
@@ -99,7 +101,8 @@ public class SettingsActivity extends AppCompatActivity
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (getSupportActionBar() != null) {
-                if (getSupportFragmentManager().findFragmentByTag("settings") instanceof BasePreference) {
+                if (getSupportFragmentManager().findFragmentByTag(
+                        "settings") instanceof BasePreference) {
                     getSupportActionBar().setTitle(getString(R.string.title_activity_settings));
                 } else {
                     getSupportActionBar().setTitle(fragmentTitle);
@@ -135,7 +138,9 @@ public class SettingsActivity extends AppCompatActivity
     @Override public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
         // Instantiate the new Fragment
         final Bundle args = pref.getExtras();
-        final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(getClassLoader(), pref.getFragment(), args);
+        final Fragment fragment = getSupportFragmentManager().getFragmentFactory()
+                                                             .instantiate(getClassLoader(),
+                                                                     pref.getFragment(), args);
         fragment.setArguments(args);
         fragment.setTargetFragment(caller, 0);
         fragmentTitle = pref.getTitle();

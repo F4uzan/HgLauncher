@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
 import mono.hg.R;
 import mono.hg.helpers.PreferenceHelper;
 
@@ -48,7 +49,8 @@ public class AppSelectionPreferenceDialog extends DialogFragment {
         super.onDismiss(dialog);
         if (mValue == null) {
             Intent i = new Intent().putExtra("key", preference);
-            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, i);
+            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED,
+                    i);
             PreferenceHelper.update(preference, "none");
         } else {
             Intent i = new Intent().putExtra("key", preference).putExtra("app", mValue);

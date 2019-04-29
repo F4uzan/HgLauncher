@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import android.widget.ProgressBar;
 
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+
 import mono.hg.R;
 
 public class IndeterminateMaterialProgressBar extends ProgressBar {

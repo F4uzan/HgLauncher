@@ -7,12 +7,13 @@ import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.text.util.LinkifyCompat;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.text.util.LinkifyCompat;
 import mono.hg.R;
 import mono.hg.utils.Utils;
 
@@ -38,7 +39,8 @@ public class CreditsDialogFragment extends DialogFragment {
                 stringBuilder.append('\n');
             }
         } catch (IOException e) {
-            Utils.sendLog(Utils.LogLevel.ERROR, "Exception in reading credits file: " + e.toString());
+            Utils.sendLog(Utils.LogLevel.ERROR,
+                    "Exception in reading credits file: " + e.toString());
         } finally {
             Utils.closeStream(br);
         }

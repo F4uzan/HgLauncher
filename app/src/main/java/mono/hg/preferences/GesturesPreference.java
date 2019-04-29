@@ -8,15 +8,16 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import mono.hg.R;
 import mono.hg.utils.AppUtils;
 import mono.hg.wrappers.AppSelectionPreferenceDialog;

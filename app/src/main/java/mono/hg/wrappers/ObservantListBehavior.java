@@ -4,11 +4,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 
 @Keep
 public class ObservantListBehavior extends CoordinatorLayout.Behavior<View> {

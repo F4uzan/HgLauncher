@@ -14,15 +14,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Map;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.preference.PreferenceFragmentCompat;
+
+import java.util.ArrayList;
+import java.util.Map;
+
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.WebProviderAdapter;
@@ -189,13 +190,15 @@ public class WebSearchProviderPreference extends PreferenceFragmentCompat {
 
                        if (!Patterns.WEB_URL.matcher(safeUrl).matches()) {
                            // This is an invalid URL, cancel.
-                           Toast.makeText(requireContext(), R.string.err_invalid_url, Toast.LENGTH_SHORT).show();
+                           Toast.makeText(requireContext(), R.string.err_invalid_url,
+                                   Toast.LENGTH_SHORT).show();
                            return;
                        }
 
                        if (!"none".equals(PreferenceHelper.getProvider(name)) && !isEditing) {
                            // We already have that provider and/or we aren't editing.
-                           Toast.makeText(requireContext(), R.string.err_provider_exists, Toast.LENGTH_SHORT).show();
+                           Toast.makeText(requireContext(), R.string.err_provider_exists,
+                                   Toast.LENGTH_SHORT).show();
                            return;
                        }
 

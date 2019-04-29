@@ -3,14 +3,15 @@ package mono.hg.preferences;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import mono.hg.R;
 import mono.hg.helpers.PreferenceHelper;
 
@@ -24,7 +25,7 @@ public class WebSearchPreference extends PreferenceFragmentCompat {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        providerList = (ListPreference) findPreference("search_provider");
+        providerList = findPreference("search_provider");
         setProviderList(providerList);
     }
 

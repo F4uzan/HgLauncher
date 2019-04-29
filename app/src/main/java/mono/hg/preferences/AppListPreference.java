@@ -7,13 +7,14 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import mono.hg.R;
 import mono.hg.utils.Utils;
 
@@ -25,7 +26,7 @@ public class AppListPreference extends PreferenceFragmentCompat {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ListPreference iconList = (ListPreference) findPreference("icon_pack");
+        ListPreference iconList = findPreference("icon_pack");
 
         setIconList(iconList);
 

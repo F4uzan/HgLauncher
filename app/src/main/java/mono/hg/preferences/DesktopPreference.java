@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
 import mono.hg.R;
 import mono.hg.utils.Utils;
 
@@ -26,7 +27,7 @@ public class DesktopPreference extends PreferenceFragmentCompat {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ListPreference orientationMode = (ListPreference) findPreference("orientation_mode");
+        ListPreference orientationMode = findPreference("orientation_mode");
 
         orientationMode.setOnPreferenceChangeListener(RotatingListListener);
 

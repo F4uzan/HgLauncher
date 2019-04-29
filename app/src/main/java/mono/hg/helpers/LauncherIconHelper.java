@@ -123,7 +123,8 @@ public class LauncherIconHelper {
         try {
             iconRes = packageManager.getResourcesForApplication(iconPackageName);
         } catch (PackageManager.NameNotFoundException e) {
-            Utils.sendLog(Utils.LogLevel.VERBOSE, "Cannot find icon resources for " + iconPackageName + "!");
+            Utils.sendLog(Utils.LogLevel.VERBOSE,
+                    "Cannot find icon resources for " + iconPackageName + "!");
             Utils.sendLog(Utils.LogLevel.VERBOSE, "Loading default icon.");
             return 0;
         }

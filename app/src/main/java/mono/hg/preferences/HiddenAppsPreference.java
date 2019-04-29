@@ -14,15 +14,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.preference.PreferenceFragmentCompat;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.preference.PreferenceFragmentCompat;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
