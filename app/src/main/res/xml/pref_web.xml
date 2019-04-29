@@ -7,18 +7,21 @@
         android:title="@string/web_search" />
 
     <androidx.preference.SwitchPreferenceCompat
+        android:dependency="web_search_enabled"
         android:defaultValue="false"
         android:key="web_search_long_press"
         android:summary="@string/web_search_long_press_desc"
         android:title="@string/web_search_long_press" />
 
     <androidx.preference.Preference
+        android:dependency="web_search_enabled"
         android:fragment="mono.hg.preferences.WebSearchProviderPreference"
         android:key="web_provider"
         android:summary="@string/pref_header_web_provider_desc"
         android:title="@string/pref_header_web_provider_title" />
 
     <androidx.preference.ListPreference
+        android:dependency="web_search_enabled"
         android:defaultValue="none"
         android:entries="@array/pref_search_provider_title"
         android:entryValues="@array/pref_search_provider_values"
