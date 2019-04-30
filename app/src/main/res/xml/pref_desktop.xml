@@ -2,13 +2,15 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.preference.DropDownPreference
+    <mono.hg.wrappers.SpinnerPreference
         android:defaultValue="-1"
         android:entries="@array/pref_orientation_title"
         android:entryValues="@array/pref_orientation_values"
         android:key="orientation_mode"
         android:summary="%s"
-        android:title="@string/orientation" />
+        android:title="@string/orientation"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false" />
 
     <androidx.preference.SwitchPreferenceCompat
         android:defaultValue="false"
@@ -16,13 +18,15 @@
         android:title="@string/windowbar_mode_status"
         app:isPreferenceVisible="false" />
 
-    <androidx.preference.DropDownPreference
+    <mono.hg.wrappers.SpinnerPreference
         android:defaultValue="none"
         android:entries="@array/pref_windowbar_title"
         android:entryValues="@array/pref_windowbar_values"
         android:key="windowbar_mode"
         android:summary="%s"
         android:title="@string/windowbar_mode"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
         app:isPreferenceVisible="false" />
 
     <androidx.preference.SwitchPreferenceCompat

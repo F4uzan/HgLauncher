@@ -68,9 +68,9 @@
 
     <string name="windowbar_mode">Hide system bars</string>
     <string name="windowbar_mode_none">Disabled</string>
-    <string name="windowbar_mode_status">Hide status bar</string>
-    <string name="windowbar_mode_nav">Hide navigation bar</string>
-    <string name="windowbar_mode_both">Hide both</string>
+    <string name="windowbar_mode_status">Status bar</string>
+    <string name="windowbar_mode_nav">Navigation bar</string>
+    <string name="windowbar_mode_both">Both</string>
 
     <string name="gesture_left">Swipe left</string>
     <string name="gesture_right">Swipe right</string>
@@ -101,7 +101,7 @@
     <string name="static_app_list">Always open app list</string>
     <string name="static_app_list_desc">Open the app list when entering the launcher. This does not prevent it from being closed.</string>
 
-    <string name="pref_app_launch_anim">App launch animation</string>
+    <string name="pref_app_launch_anim">Launch animation</string>
     <string name="anim_list_default">System-defined</string>
     <string name="anim_list_pull_up">Pull up</string>
     <string name="anim_list_slide_in">Slide in</string>

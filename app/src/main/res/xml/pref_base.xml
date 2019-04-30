@@ -1,4 +1,5 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:key="settings"
     android:title="@string/title_activity_settings">
 
@@ -6,13 +7,14 @@
         android:key="interface"
         android:title="@string/pref_header_interface">
 
-        <androidx.preference.DropDownPreference
+        <mono.hg.wrappers.SpinnerPreference
             android:defaultValue="light"
             android:entries="@array/pref_app_theme_title"
             android:entryValues="@array/pref_app_theme_values"
             android:key="app_theme"
-            android:summary="%s"
-            android:title="@string/app_theme" />
+            android:title="@string/app_theme"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false" />
 
         <androidx.preference.Preference
             android:fragment="mono.hg.preferences.DesktopPreference"

@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -22,6 +21,7 @@ import mono.hg.fragments.CreditsDialogFragment;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
+import mono.hg.wrappers.SpinnerPreference;
 
 public class BasePreference extends PreferenceFragmentCompat {
     private static final int PERMISSION_STORAGE_CODE = 4200;
@@ -42,7 +42,7 @@ public class BasePreference extends PreferenceFragmentCompat {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ListPreference appTheme = findPreference("app_theme");
+        SpinnerPreference appTheme = findPreference("app_theme");
         versionMenu = findPreference("version_key");
 
         appTheme.setOnPreferenceChangeListener(RestartingListListener);
