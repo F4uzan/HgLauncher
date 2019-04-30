@@ -12,7 +12,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 @Keep
 public class ObservantListBehavior extends CoordinatorLayout.Behavior<View> {
-
     public ObservantListBehavior() {
         super();
     }

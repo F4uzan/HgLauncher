@@ -18,7 +18,6 @@ import mono.hg.R;
 import mono.hg.utils.Utils;
 
 public class CreditsDialogFragment extends DialogFragment {
-
     @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = View.inflate(getActivity(), R.layout.fragment_credits_dialog, null);

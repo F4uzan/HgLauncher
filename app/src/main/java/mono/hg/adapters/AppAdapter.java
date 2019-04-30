@@ -25,12 +25,7 @@ public class AppAdapter extends FlexibleAdapter<App>
     }
 
     private static boolean isConfirmButton(KeyEvent event) {
-        switch (event.getKeyCode()) {
-            case KeyEvent.KEYCODE_ENTER:
-                return true;
-            default:
-                return false;
-        }
+        return event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
     }
 
     private static boolean isUp(int keycode) {

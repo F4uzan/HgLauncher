@@ -110,8 +110,8 @@ public class PreferenceHelper {
         return web_search_long_press;
     }
 
-    public static boolean favouritesIgnoreScroll() {
-        return static_favourites_panel;
+    public static boolean favouritesAcceptScroll() {
+        return !static_favourites_panel;
     }
 
     public static boolean keepAppList() {
@@ -193,7 +193,7 @@ public class PreferenceHelper {
     }
 
     private static void parseProviders(HashSet<String> set) {
-        String toParse[];
+        String[] toParse;
         for (String parse : set) {
             toParse = parse.split("\\|");
             provider_list.put(toParse[0], toParse[1]);
@@ -224,7 +224,7 @@ public class PreferenceHelper {
     }
 
     private static void fetchLabels() {
-        String splitPackage[];
+        String[] splitPackage;
         for (String packageName : label_list_set) {
             splitPackage = packageName.split("\\|");
             label_list.put(splitPackage[0], splitPackage[1]);

@@ -24,7 +24,6 @@ import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
 
 public class BasePreference extends PreferenceFragmentCompat {
-
     private static final int PERMISSION_STORAGE_CODE = 4200;
     private boolean isRestore = false;
     private Preference versionMenu;
@@ -43,7 +42,7 @@ public class BasePreference extends PreferenceFragmentCompat {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ListPreference appTheme = (ListPreference) findPreference("app_theme");
+        ListPreference appTheme = findPreference("app_theme");
         versionMenu = findPreference("version_key");
 
         appTheme.setOnPreferenceChangeListener(RestartingListListener);
@@ -161,17 +160,12 @@ public class BasePreference extends PreferenceFragmentCompat {
         return false;
     }
 
-    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
             @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_STORAGE_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    openBackupRestore(isRestore);
-                }
-                break;
-            default:
-                // No-op.
-                break;
+        if (requestCode == PERMISSION_STORAGE_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openBackupRestore(isRestore);
+            }
         }
     }
 

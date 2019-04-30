@@ -79,11 +79,11 @@ public class GesturesPreference extends PreferenceFragmentCompat {
 
         getAppList();
 
-        ListPreference gestureLeftList = (ListPreference) findPreference("gesture_left");
-        ListPreference gestureRightList = (ListPreference) findPreference("gesture_right");
-        ListPreference gestureUpList = (ListPreference) findPreference("gesture_up");
-        ListPreference gestureDoubleTapList = (ListPreference) findPreference("gesture_double_tap");
-        ListPreference gestureHandlerList = (ListPreference) findPreference("gesture_handler");
+        ListPreference gestureLeftList = findPreference("gesture_left");
+        ListPreference gestureRightList = findPreference("gesture_right");
+        ListPreference gestureUpList = findPreference("gesture_up");
+        ListPreference gestureDoubleTapList = findPreference("gesture_double_tap");
+        ListPreference gestureHandlerList = findPreference("gesture_handler");
 
         setNestedListSummary(gestureLeftList);
         setNestedListSummary(gestureRightList);
@@ -101,14 +101,14 @@ public class GesturesPreference extends PreferenceFragmentCompat {
         if (requestCode == APPLICATION_DIALOG_CODE && data != null) {
             if (resultCode == Activity.RESULT_CANCELED) {
                 String key = data.getStringExtra("key");
-                ListPreference preference = (ListPreference) findPreference(key);
+                ListPreference preference = findPreference(key);
                 preference.setSummary(R.string.gesture_action_default);
                 preference.setValue(getString(R.string.gesture_action_default_value));
             } else if (resultCode == Activity.RESULT_OK) {
                 String key = data.getStringExtra("key");
                 String app = AppUtils.getPackageLabel(requireActivity().getPackageManager(),
                         data.getStringExtra("app"));
-                ListPreference preference = (ListPreference) findPreference(key);
+                ListPreference preference = findPreference(key);
                 preference.setSummary(app);
             }
         }

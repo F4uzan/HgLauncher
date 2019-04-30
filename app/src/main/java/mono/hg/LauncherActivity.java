@@ -797,7 +797,7 @@ public class LauncherActivity extends AppCompatActivity {
             public void onScrollUp() {
                 if (!pinnedAppsAdapter.isEmpty()
                         && isFavouritesVisible
-                        && !PreferenceHelper.favouritesIgnoreScroll()) {
+                        && PreferenceHelper.favouritesAcceptScroll()) {
                     doThis("hide_favourites");
                 }
             }
@@ -811,7 +811,7 @@ public class LauncherActivity extends AppCompatActivity {
             public void onEnd() {
                 if (!pinnedAppsAdapter.isEmpty()
                         && !isFavouritesVisible
-                        && !PreferenceHelper.favouritesIgnoreScroll()) {
+                        && PreferenceHelper.favouritesAcceptScroll()) {
                     doThis("show_favourites");
                 }
             }

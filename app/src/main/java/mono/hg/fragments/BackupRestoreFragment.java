@@ -181,7 +181,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
     private void traverseStorage(File path) {
         fileFoldersList.clear();
         fileFolderAdapter.notifyDataSetInvalidated();
-        File contents[];
+        File[] contents;
         if (isInRestore) {
             contents = path.listFiles(new FileFilter() {
                 public boolean accept(File dir) {

@@ -31,7 +31,6 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class WidgetsDialogFragment extends DialogFragment {
-
     private static int WIDGET_CONFIG_START_CODE = 1;
     private static int WIDGET_CONFIG_RETURN_CODE = 2;
     private static int WIDGET_CONFIG_DEFAULT_CODE = -1;

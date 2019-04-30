@@ -28,7 +28,6 @@ import mono.hg.receivers.PackageChangesReceiver;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public class Utils {
-
     /**
      * Sends log using a predefined tag. This is used to better debug or to catch errors.
      * Logging should always use sendLog to coalesce logs into one single place.
