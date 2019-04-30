@@ -218,6 +218,9 @@ public class Utils {
             case "status":
                 ActivityServiceUtils.expandStatusBar(activity);
                 break;
+            case "panel":
+                ActivityServiceUtils.expandSettingsPanel(activity);
+                break;
             case "list":
                 // TODO: Maybe make this call less reliant on LauncherActivity?
                 ((LauncherActivity) activity).doThis("show_panel");

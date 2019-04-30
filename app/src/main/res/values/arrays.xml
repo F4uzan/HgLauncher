@@ -63,6 +63,7 @@
         <item>@string/gesture_action_widget</item>
         <item>@string/gesture_action_list</item>
         <item>@string/gesture_action_status</item>
+        <item>@string/gesture_action_panel</item>
         <item>@string/gesture_action_app</item>
         <item>@string/gesture_action_handler</item>
     </string-array>
@@ -71,6 +72,7 @@
         <item>widget</item>
         <item>list</item>
         <item>status</item>
+        <item>panel</item>
         <item>app</item>
         <item>handler</item>
     </string-array>

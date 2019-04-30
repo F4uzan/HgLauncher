@@ -89,6 +89,7 @@
     <string name="gesture_action_handler">Use gesture handler\'s action</string>
     <string name="gesture_action_app">Launch application</string>
     <string name="gesture_action_status">Expand notification bar</string>
+    <string name="gesture_action_panel">Expand quick settings panel</string>
     <string name="gesture_action_list">Open app list</string>
 
     <string name="gesture_action_app_dialog_title">Select application</string>

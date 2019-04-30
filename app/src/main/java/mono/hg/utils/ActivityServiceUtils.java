@@ -10,11 +10,13 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import java.lang.reflect.Method;
 
-public class ActivityServiceUtils {
+import mono.hg.R;
 
+public class ActivityServiceUtils {
     /**
      * Hides the software keyboard.
      *
@@ -106,7 +108,7 @@ public class ActivityServiceUtils {
             Object service = activity.getSystemService("statusbar");
             Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
             Method showStatusbar;
-            if (Build.VERSION.SDK_INT >= 17) {
+            if (Utils.sdkIsAround(17)) {
                 showStatusbar = statusbarManager.getMethod("expandNotificationsPanel");
             } else {
                 showStatusbar = statusbarManager.getMethod("expand");
@@ -117,4 +119,25 @@ public class ActivityServiceUtils {
         }
     }
 
+    /**
+     * Expands the quick settings panel.
+     *
+     * @param activity The activity where status bar service can be retrieved.
+     */
+    @SuppressLint({"WrongConstant", "PrivateApi"})
+    public static void expandSettingsPanel(Activity activity) {
+        try {
+            Object service = activity.getSystemService("statusbar");
+            Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
+            Method showPanel;
+            if (Utils.sdkIsAround(17)) {
+                showPanel = statusbarManager.getMethod("expandSettingsPanel");
+                showPanel.invoke(service);
+            } else {
+                Toast.makeText(activity, R.string.err_no_method_panel, Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception w) {
+            Utils.sendLog(Utils.LogLevel.WARNING, "Exception in expandSettingsPanel: " + w.toString());
+        }
+    }
 }
