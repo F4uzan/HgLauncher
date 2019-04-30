@@ -51,9 +51,9 @@
     <string name="backup_exist_overwrite">Overwrite</string>
     <string name="backup_exist_cancel">Cancel</string>
     <string name="backup_restore_dialog">Restoring…</string>
-    <string name="restore_complete">Restore complete!</string>
-    <string name="backup_complete">Backup saved!</string>
-    <string name="backup_empty">Backup name cannot be empty!</string>
+    <string name="restore_complete">Backup has been restored.</string>
+    <string name="backup_complete">Backup has been saved.</string>
+    <string name="backup_empty">Backup name cannot be empty.</string>
 
     <!-- Credits dialog. -->
     <string name="about_credits_dialog_title">Credits</string>
