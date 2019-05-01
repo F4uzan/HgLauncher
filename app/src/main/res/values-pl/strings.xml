@@ -35,7 +35,6 @@
     <string name="search_web_hint">Szukaj \'%1$s\' w sieci.</string>
     <string name="search_web_button_prompt">Idź…</string>
     <string name="search_web_button">Idz</string>
-    <string name="dialog_widget_hint">Kliknij aby dodać widżet</string>
     <string name="dialog_title_add_provider">Dodaj wyszukiwarkę</string>
     <string name="dialog_title_edit_provider">Edit provider</string>
     <string name="dialog_title_shorthand">Dodaj tagi wyszukiwania</string>
@@ -56,7 +55,4 @@
 
     <!-- Built-in search providers -->
     <string name="search_provider_none">Zawsze pytaj</string>
-    <string name="search_provider_google" translatable="false">Google</string>
-    <string name="search_provider_ddg" translatable="false">DuckDuckGo</string>
-    <string name="search_provider_searx" translatable="false">searX</string>
 </resources>

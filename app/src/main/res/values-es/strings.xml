@@ -35,7 +35,6 @@
     <string name="search_web_hint">Busca \'%1$s\' online.</string>
     <string name="search_web_button_prompt">Con</string>
     <string name="search_web_button">Ir</string>
-    <string name="dialog_widget_hint">Pulsa para añadir un widget.</string>
     <string name="dialog_title_add_provider">Añadir buscador</string>
     <string name="dialog_title_edit_provider">Editar buscador</string>
     <string name="dialog_title_shorthand">Establecer abreviatura</string>

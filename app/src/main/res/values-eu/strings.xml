@@ -35,7 +35,6 @@
     <string name="search_web_hint">Bilatu \'%1$s\' sarean.</string>
     <string name="search_web_button_prompt">Honekin</string>
     <string name="search_web_button">Joan</string>
-    <string name="dialog_widget_hint">Sakatu widgeta gehitzeko.</string>
     <string name="dialog_title_add_provider">Hornitzailea gehitu</string>
     <string name="dialog_title_edit_provider">Hornitzailea editatu</string>
     <string name="dialog_title_shorthand">Laburdura ezarri</string>
