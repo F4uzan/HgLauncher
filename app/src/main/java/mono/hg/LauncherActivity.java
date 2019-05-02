@@ -930,18 +930,22 @@ public class LauncherActivity extends AppCompatActivity {
                         }
 
                         // Animate search container entering the view.
-                        searchContainer.animate().alpha(1f).setDuration(animateDuration)
-                                       .setListener(new AnimatorListenerAdapter() {
-                                           @Override
-                                           public void onAnimationStart(Animator animation) {
-                                               searchContainer.setVisibility(View.VISIBLE);
-                                           }
+                        if (!ActivityServiceUtils.isPowerSaving(LauncherActivity.this)) {
+                            searchContainer.animate().alpha(1f).setDuration(animateDuration)
+                                           .setListener(new AnimatorListenerAdapter() {
+                                               @Override
+                                               public void onAnimationStart(Animator animation) {
+                                                   searchContainer.setVisibility(View.VISIBLE);
+                                               }
 
-                                           @Override
-                                           public void onAnimationEnd(Animator animation) {
-                                               searchContainer.clearAnimation();
-                                           }
-                                       });
+                                               @Override
+                                               public void onAnimationEnd(Animator animation) {
+                                                   searchContainer.clearAnimation();
+                                               }
+                                           });
+                        } else {
+                            searchContainer.setVisibility(View.VISIBLE);
+                        }
                         break;
                     case SlidingUpPanelLayout.PanelState.COLLAPSED:
                         // Show the keyboard.
