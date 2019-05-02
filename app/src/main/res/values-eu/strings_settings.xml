@@ -10,7 +10,15 @@
     <string name="pref_header_wall">Mahaigaina</string>
     <string name="pref_header_list">Aplikazioen zerrenda</string>
     <string name="pref_header_interface">Interfazea</string>
+    <string name="pref_header_behavior">Portaera</string>
+    <string name="pref_header_web">Web bilaketa</string>
     <string name="pref_header_backup_restore">Babes-kopia eta berrezartzea</string>
+
+    <!-- Summaries for headers/categories -->
+    <string name="pref_summary_web">Kudeatu web bilaketen hobespenak</string>
+    <string name="pref_summary_gestures">Mahaigaineko keinuak eta keinuen maneiatzailea</string>
+    <string name="pref_summary_wall">Pantailaren orientazioa, sistemaren barren modua</string>
+    <string name="pref_summary_list">Ezkutatutako aplikazioak, ikonoen paketea, aplikazioen zerrendaren portaerak</string>
 
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Ezkutatutako aplikazioak</string>
@@ -63,11 +71,26 @@
     <string name="windowbar_mode_nav">Nabigazio barra ezkutatu</string>
     <string name="windowbar_mode_both">Biak ezkutatu</string>
 
-    <string name="gesture_left">Eskuinetik irristatu</string>
-    <string name="gesture_right">Ezkerretik irristatu</string>
+    <string name="gesture_left">Ezkerrera irristatu</string>
+    <string name="gesture_right">Eskuinera irristatu</string>
     <string name="gesture_up">Goruntz irristatu</string>
-    <string name="gesture_double_tap">Klik bikoitza</string>
+    <string name="gesture_down">Beheruntz irristatu</string>
+    <string name="gesture_single_tap">Ukitzea</string>
+    <string name="gesture_double_tap">ukitze bikoitza</string>
+
+    <string name="gesture_handler">Keinuen maneiatzailea</string>
+    <string name="gesture_handler_default">Bat ere ez</string>
+    <string name="gesture_handler_default_value">none</string>
+
     <string name="gesture_action_default">Bat ere ez</string>
+    <string name="gesture_action_widget">Widgeten tokia ireki</string>
+    <string name="gesture_action_handler">Erabili keinuen maneiatzailearen ekintza</string>
+    <string name="gesture_action_app">Aplikazioa ireki</string>
+    <string name="gesture_action_status">Jakinarazpenen barra zabaldu</string>
+    <string name="gesture_action_panel">Ezarpen bizkorren panela zabaldu</string>
+    <string name="gesture_action_list">Aplikazioen zerrenda ireki</string>
+
+    <string name="gesture_action_app_dialog_title">Aplikazioa hautatu</string>
 
     <string name="pref_title_app_list_order">Aplikazioen zerrendaren ordena</string>
     <string name="app_list_order_normal">Atik Zra</string>
@@ -106,4 +129,9 @@
 
     <string name="icon_pack">Ikonoen paketea</string>
     <string name="icon_pack_default">Lehenetsia</string>
+
+    <string name="orientation">Pantailaren orientazioa</string>
+    <string name="orientation_sensor">Sistemarena</string>
+    <string name="orientation_portrait">Erretratua</string>
+    <string name="orientation_landscape">Panoramikoa</string>
 </resources>
