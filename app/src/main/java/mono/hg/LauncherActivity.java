@@ -485,7 +485,11 @@ public class LauncherActivity extends AppCompatActivity {
 
         // Hide the favourites panel when there's nothing to show.
         if (pinnedAppsAdapter.isEmpty()) {
-            pinnedAppsContainer.setTranslationY(0f);
+            pinnedAppsContainer.post(new Runnable() {
+                @Override public void run() {
+                    pinnedAppsContainer.setTranslationY(pinnedAppsContainer.getMeasuredHeight());
+                }
+            });
             isFavouritesVisible = false;
         } else {
             isFavouritesVisible = true;
