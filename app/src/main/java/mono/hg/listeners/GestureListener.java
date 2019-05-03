@@ -51,7 +51,10 @@ public class GestureListener implements View.OnTouchListener {
 
         @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
-            onGesture(Gesture.DOUBLE_TAP);
+            // Only call onGesture if it's a DOWN event.
+            if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                onGesture(Gesture.DOUBLE_TAP);
+            }
             return true;
         }
 

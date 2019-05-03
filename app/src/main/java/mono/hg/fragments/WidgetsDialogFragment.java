@@ -91,7 +91,6 @@ public class WidgetsDialogFragment extends DialogFragment {
 
         widgetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override public void onShow(DialogInterface dialogInterface) {
-
                 Button button = widgetDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setOnClickListener(new View.OnClickListener() {
 
