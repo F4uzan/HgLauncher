@@ -350,7 +350,7 @@ public class LauncherActivity extends AppCompatActivity {
             recreate();
         }
 
-        if (fetchAppsTask == null) {
+        if (fetchAppsTask == null && appsAdapter.isEmpty()) {
             fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
             fetchAppsTask.execute();
         }
