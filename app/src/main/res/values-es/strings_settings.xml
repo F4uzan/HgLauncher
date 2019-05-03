@@ -10,7 +10,15 @@
     <string name="pref_header_wall">Escritorio</string>
     <string name="pref_header_list">Lista de aplicaciones</string>
     <string name="pref_header_interface">Interfaz</string>
+    <string name="pref_header_behavior">Comportamiento</string>
+    <string name="pref_header_web">Búsqueda web</string>
     <string name="pref_header_backup_restore">Copia de seguridad y restitución</string>
+
+    <!-- Summaries for headers/categories -->
+    <string name="pref_summary_web">Gestiona las preferencias de las búsquedas web</string>
+    <string name="pref_summary_gestures">Gestos del escritorio y controlador de gestos</string>
+    <string name="pref_summary_wall">Orientación de la pantalla, modo de las barras del sistema</string>
+    <string name="pref_summary_list">Aplicaciones ocultadas, paquete de iconos, comportamiento de la lista de aplicaciones</string>
 
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Aplicaciones ocultadas</string>
@@ -66,8 +74,23 @@
     <string name="gesture_left">Deslizar hacia la izquierda</string>
     <string name="gesture_right">Deslizar hacia la derecha</string>
     <string name="gesture_up">Deslizar hacia arriba</string>
+    <string name="gesture_down">Deslizar hacia abajo</string>
+    <string name="gesture_single_tap">Pulsar</string>
     <string name="gesture_double_tap">Doble pulsación</string>
+
+    <string name="gesture_handler">Controlador de gestos</string>
+    <string name="gesture_handler_default">Ninguno</string>
+    <string name="gesture_handler_default_value">none</string>
+
     <string name="gesture_action_default">Ninguna</string>
+    <string name="gesture_action_widget">Abrir el espacio de los widgets</string>
+    <string name="gesture_action_handler">Usar la acción del controlador de gestos</string>
+    <string name="gesture_action_app">Abrir una aplicación</string>
+    <string name="gesture_action_status">Expandir la barra de notificaciones</string>
+    <string name="gesture_action_panel">Expandir el panel de ajustes rápidos</string>
+    <string name="gesture_action_list">Abrir la lista de aplicaciones</string>
+
+    <string name="gesture_action_app_dialog_title">Selecciona una aplicación</string>
 
     <string name="pref_title_app_list_order">Orden de la lista de aplicaciones</string>
     <string name="app_list_order_normal">A a Z</string>
@@ -106,4 +129,9 @@
 
     <string name="icon_pack">Paquete de iconos</string>
     <string name="icon_pack_default">Predeterminado</string>
+
+    <string name="orientation">Orientación de la pantalla</string>
+    <string name="orientation_sensor">La del sistema</string>
+    <string name="orientation_portrait">Retrato</string>
+    <string name="orientation_landscape">Panorámica</string>
 </resources>

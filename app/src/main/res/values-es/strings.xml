@@ -46,6 +46,7 @@
     <string name="err_activity_null">No se ha podido iniciar la plicación.</string>
     <string name="err_invalid_url">URL no válida.</string>
     <string name="err_provider_exists">El nombre del buscador debe ser único.</string>
+    <string name="err_no_method_panel">Esta acción no está disponible en esta versión de Android.</string>
 
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Vista de escritorio</string>

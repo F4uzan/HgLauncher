@@ -46,6 +46,7 @@
     <string name="err_activity_null">Ezin da aplikazioa hasi.</string>
     <string name="err_invalid_url">URL ez balioduna.</string>
     <string name="err_provider_exists">Hornitzailearen izena ezin da errepikatu.</string>
+    <string name="err_no_method_panel">Ekintza hau ez dago Android bertsio honetan eskuragarri.</string>
 
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Mahaigaineko ikuspegia</string>
