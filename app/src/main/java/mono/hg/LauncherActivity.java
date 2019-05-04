@@ -968,7 +968,7 @@ public class LauncherActivity extends AppCompatActivity {
                         searchContainer.setVisibility(View.INVISIBLE);
 
                         // Animate the container.
-                        if (!isResuming) {
+                        if (!isResuming && !ActivityServiceUtils.isPowerSaving(LauncherActivity.this)) {
                             searchContainer.animate().alpha(0f).setDuration(animateDuration);
                         } else {
                             isResuming = false;
