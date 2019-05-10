@@ -70,18 +70,6 @@ public class ViewUtils {
     }
 
     /**
-     * Checks if a SlidingUpPanelLayout is visible within view.
-     *
-     * @param panel SlidingUpPanelLayout whose visibility is to be checked.
-     *
-     * @return true if panel is neither collapsed, dragging, or anchored.
-     */
-    public static boolean isPanelVisible(SlidingUpPanelLayout panel) {
-        return panel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
-                || panel.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED;
-    }
-
-    /**
      * Launches an app based on RecyclerView scroll state.
      *
      * @param activity     The activity for context reference.

@@ -279,7 +279,7 @@ public class LauncherActivity extends AppCompatActivity {
         // Don't call super.onBackPressed because we don't want the launcher to close.
 
         // Hides the panel if back is pressed.
-        doThis("hide_panel");
+        doThis("dismiss_panel");
     }
 
     @Override public void onPause() {
@@ -427,16 +427,15 @@ public class LauncherActivity extends AppCompatActivity {
                 }
                 break;
             case "show_panel":
-                if (!ViewUtils.isPanelVisible(slidingHome)) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
-                            ActivityServiceUtils.isPowerSaving(this));
-                }
+                slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
+                        ActivityServiceUtils.isPowerSaving(this));
+                break;
+            case "dismiss_panel":
+                slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
+                        ActivityServiceUtils.isPowerSaving(this));
                 break;
             case "hide_panel":
-                if (ViewUtils.isPanelVisible(slidingHome)) {
-                    slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
-                            ActivityServiceUtils.isPowerSaving(this));
-                }
+                slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
                 break;
             case "show_favourites":
                 pinnedAppsContainer.animate()
@@ -968,7 +967,8 @@ public class LauncherActivity extends AppCompatActivity {
                         searchContainer.setVisibility(View.INVISIBLE);
 
                         // Animate the container.
-                        if (!isResuming && !ActivityServiceUtils.isPowerSaving(LauncherActivity.this)) {
+                        if (!isResuming && !ActivityServiceUtils.isPowerSaving(
+                                LauncherActivity.this)) {
                             searchContainer.animate().alpha(0f).setDuration(animateDuration);
                         } else {
                             isResuming = false;
