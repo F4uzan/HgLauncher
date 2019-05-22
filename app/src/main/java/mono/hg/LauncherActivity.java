@@ -290,6 +290,9 @@ public class LauncherActivity extends AppCompatActivity {
 
         if (!PreferenceHelper.keepAppList()) {
             doThis("dismiss_panel");
+        } else {
+            // Clear the search bar text if app list is set to be kept open.
+            searchBar.setText("");
         }
 
         Utils.unregisterPackageReceiver(this, packageReceiver);
