@@ -13,8 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
 import java.util.Map;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -77,14 +75,13 @@ public class ViewUtils {
      * @param adapter      A FlexibleAdapter with App items.
      */
     public static void keyboardLaunchApp(Activity activity, RecyclerView recyclerView, FlexibleAdapter<App> adapter) {
-        if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)
-                && !recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+        if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
+            AppUtils.launchApp(activity, Utils.requireNonNull(
+                    adapter.getItem(0)).getPackageName());
+        } else if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
             AppUtils.launchApp(activity, Utils.requireNonNull(
                     adapter.getItem(adapter.getItemCount() - 1))
                                               .getPackageName());
-        } else {
-            AppUtils.launchApp(activity, Utils.requireNonNull(
-                    adapter.getItem(0)).getPackageName());
         }
     }
 
