@@ -289,7 +289,7 @@ public class LauncherActivity extends AppCompatActivity {
         doThis("dismiss_menu");
 
         if (!PreferenceHelper.keepAppList()) {
-            doThis("hide_panel");
+            doThis("dismiss_panel");
         }
 
         Utils.unregisterPackageReceiver(this, packageReceiver);
@@ -433,9 +433,6 @@ public class LauncherActivity extends AppCompatActivity {
             case "dismiss_panel":
                 slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
                         ActivityServiceUtils.isPowerSaving(this));
-                break;
-            case "hide_panel":
-                slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED, false);
                 break;
             case "show_favourites":
                 pinnedAppsContainer.animate()
