@@ -778,13 +778,19 @@ public class LauncherActivity extends AppCompatActivity {
         searchBar.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((!appsAdapter.isEmpty() && searchBar.getText().length() > 0) &&
-                        (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
-                    ViewUtils.keyboardLaunchApp(LauncherActivity.this, appsRecyclerView,
-                            appsAdapter);
-                    return true;
+                if ((searchBar.getText().length() > 0)
+                        && (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
+                    if (!appsAdapter.isEmpty()) {
+                        ViewUtils.keyboardLaunchApp(LauncherActivity.this, appsRecyclerView,
+                                appsAdapter);
+                    } else if (PreferenceHelper.promptSearch()
+                            && !PreferenceHelper.getSearchProvider().equals("none")) {
+                        Utils.doWebSearch(LauncherActivity.this,
+                                PreferenceHelper.getSearchProvider(),
+                                searchBar.getText().toString());
+                    }
                 }
-                return false;
+                return true;
             }
         });
     }
