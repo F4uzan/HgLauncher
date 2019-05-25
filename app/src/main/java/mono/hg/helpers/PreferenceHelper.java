@@ -23,6 +23,7 @@ public class PreferenceHelper {
     private static boolean web_search_enabled;
     private static boolean static_favourites_panel;
     private static boolean static_app_list;
+    private static boolean keep_last_search;
     private static boolean adaptive_shade;
     private static boolean windowbar_status_switch;
     private static boolean web_search_long_press;
@@ -116,6 +117,10 @@ public class PreferenceHelper {
 
     public static boolean keepAppList() {
         return static_app_list;
+    }
+
+    public static boolean keepLastSearch() {
+        return keep_last_search;
     }
 
     public static boolean wasAlien() {
@@ -309,6 +314,7 @@ public class PreferenceHelper {
         static_favourites_panel = getPreference().getBoolean("static_favourites_panel_switch",
                 false);
         static_app_list = getPreference().getBoolean("static_app_list_switch", false);
+        keep_last_search = getPreference().getBoolean("keep_last_search_switch", false);
         adaptive_shade = getPreference().getBoolean("adaptive_shade_switch", false);
         windowbar_status_switch = getPreference().getBoolean("windowbar_status_switch", false);
         windowbar_mode = getPreference().getString("windowbar_mode", "none");

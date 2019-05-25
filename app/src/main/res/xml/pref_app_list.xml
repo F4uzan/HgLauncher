@@ -40,6 +40,12 @@
         android:summary="@string/static_app_list_desc"
         android:title="@string/static_app_list" />
 
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="keep_last_search_switch"
+        android:summary="Maintain the search text when launcher closes..."
+        android:title="Maintain search text" />
+
     <mono.hg.wrappers.SpinnerPreference
         android:defaultValue="alphabetical"
         android:entries="@array/pref_app_list_order_titles"

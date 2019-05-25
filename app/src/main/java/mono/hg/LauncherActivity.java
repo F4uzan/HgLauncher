@@ -291,8 +291,11 @@ public class LauncherActivity extends AppCompatActivity {
         if (!PreferenceHelper.keepAppList()) {
             doThis("dismiss_panel");
         } else {
-            // Clear the search bar text if app list is set to be kept open.
+            // Clear the search bar text if app list is set to be kept open
+            // unless keepLastSearch setting indicates maintain last search
+            if (!PreferenceHelper.keepLastSearch()) {
             searchBar.setText("");
+        }
         }
 
         Utils.unregisterPackageReceiver(this, packageReceiver);
@@ -931,7 +934,12 @@ public class LauncherActivity extends AppCompatActivity {
                 switch (newState) {
                     case SlidingUpPanelLayout.PanelState.DRAGGING:
                         // Empty out search bar text
+
+                        // Clear the search bar text if app list is set to be kept open
+                        // unless keepLastSearch setting indicates maintain last search
+                        if (!PreferenceHelper.keepLastSearch()) {
                         searchBar.setText(null);
+                        }
 
                         // Preemptive attempt at showing the keyboard.
                         if (PreferenceHelper.shouldFocusKeyboard()) {
@@ -1017,6 +1025,13 @@ public class LauncherActivity extends AppCompatActivity {
 
         pinnedAppString = newAppString;
     }
+
+    public void clearSearch(View v)
+    {
+        // Clear the search bar text if app list is set to be kept open
+        searchBar.setText("");
+    }
+
 
     /**
      * Creates a dialog to set an app's shorthand.
