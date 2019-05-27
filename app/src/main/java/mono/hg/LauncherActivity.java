@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -125,7 +126,7 @@ public class LauncherActivity extends AppCompatActivity {
     /*
      * Parent layout containing search bar.
      */
-    private FrameLayout searchContainer;
+    private LinearLayout searchContainer;
     /*
      * Parent layout of pinned apps' RecyclerView.
      */
