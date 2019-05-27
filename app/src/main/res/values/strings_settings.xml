@@ -20,6 +20,7 @@
     <string name="pref_summary_wall">Screen orientation, system bars mode</string>
     <string name="pref_summary_list">Hidden apps, icon pack, app list behaviors</string>
 
+
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Hidden apps</string>
     <string name="pref_header_hidden_apps_desc">Manage your list of hidden apps</string>
@@ -100,6 +101,9 @@
 
     <string name="static_app_list">Always open app list</string>
     <string name="static_app_list_desc">Open the app list when entering the launcher. This does not prevent it from being closed.</string>
+
+    <string name="app_list_keep_search_desc">Maintain the search text when launcher closes.</string>
+    <string name="app_list_keep_search">Maintain search text</string>
 
     <string name="pref_app_launch_anim">Launch animation</string>
     <string name="anim_list_default">System-defined</string>

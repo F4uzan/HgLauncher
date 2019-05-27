@@ -29,4 +29,12 @@
         android:textColor="@android:color/white"
         android:textColorHint="@color/editTextHint" />
 
+    <Button
+        android:id="@+id/clearSearch"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:onClick="clearSearch"
+        android:text="X" />
+
 </FrameLayout>

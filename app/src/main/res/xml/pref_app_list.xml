@@ -40,6 +40,12 @@
         android:summary="@string/static_app_list_desc"
         android:title="@string/static_app_list" />
 
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="keep_last_search_switch"
+        android:summary="@string/app_list_keep_search_desc"
+        android:title="@string/app_list_keep_search" />
+
     <mono.hg.wrappers.SpinnerPreference
         android:defaultValue="alphabetical"
         android:entries="@array/pref_app_list_order_titles"
