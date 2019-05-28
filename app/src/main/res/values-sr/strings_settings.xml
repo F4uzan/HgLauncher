@@ -1,2 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="title_activity_settings">Podešavanja</string>
+    <string name="pref_header_about">O aplikaciji</string>
+    <string name="pref_header_cust">Prilagođavanje</string>
+    <string name="pref_header_gestures">Gestovi</string>
+    <string name="pref_header_wall">Radno okruženje</string>
+    <string name="pref_header_list">Lista aplikacija</string>
+    <string name="pref_header_interface">Interfejs</string>
+    <string name="pref_header_behavior">Ponašanje</string>
+    <string name="pref_header_web">Internet pretraga</string>
+    <string name="pref_header_backup_restore">Rezervna kopija i povratak na staro</string>
+    <string name="pref_summary_web">Upravljanje postavkama intenet pretrage</string>
+</resources>
