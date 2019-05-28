@@ -2,6 +2,7 @@
 
  [![Build Status](https://travis-ci.org/F4uzan/HgLauncher.svg?branch=master)](https://travis-ci.org/F4uzan/HgLauncher)
  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7b102385347b4be5b180ce56391d1bd1)](https://app.codacy.com/app/F4uzan/HgLauncher?utm_source=github.com&utm_medium=referral&utm_content=F4uzan/HgLauncher&utm_campaign=Badge_Grade_Dashboard)
+ [![Weblate](https://hosted.weblate.org/widgets/hglauncher/-/svg-badge.svg)](https://hosted.weblate.org/engage/hglauncher/?utm_source=widget)
 
  [![GitHub Release](https://img.shields.io/github/release/F4uzan/HgLauncher.svg?logo=github)](https://github.com/F4uzan/HgLauncher/releases) [![F-Droid](https://img.shields.io/f-droid/v/mono.hg.svg)](https://f-droid.org/app/mono.hg)
 
@@ -25,8 +26,18 @@ HgLauncher is available at:
 
 ### How can I contribute?
 
-* Send me a pull request
-* Let me review the changes (but I mostly just let it go through)
+#### Translations
+
+HgLauncher can be translated through [Weblate](https://hosted.weblate.org/engage/hglauncher/) or by directly making a PR with your translated strings. You are free to choose either route, but Weblate is recommended to ease your workflow.
+
+#### Reporting Bugs & Requesting Features
+
+Both bug reporting and feature requests can be made through the [Issue Tracker](https://github.com/F4uzan/HgLauncher/issues). Please be concise with your reports!
+
+#### Everything Else
+
+* Send a pull request
+* Wait until your changes are reviewed
 * Enjoy your life and move on!
 
 ### Licence
