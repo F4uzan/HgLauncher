@@ -92,6 +92,10 @@ public class LauncherActivity extends AppCompatActivity {
      */
     private boolean isFavouritesVisible;
     /*
+     * Visibility of the contextual button of search bar.
+     */
+    private boolean isContextVisible = false;
+    /*
      * Animation duration; fetched from system's duration.
      */
     private int animateDuration;
@@ -477,13 +481,28 @@ public class LauncherActivity extends AppCompatActivity {
                 searchContext.animate()
                              .translationX(0f)
                              .setInterpolator(new LinearOutSlowInInterpolator())
-                             .setDuration(200);
+                             .setDuration(200)
+                             .setListener(new AnimatorListenerAdapter() {
+                                 @Override public void onAnimationEnd(Animator animation) {
+                                     isContextVisible = true;
+                                 }
+
+                                 @Override public void onAnimationCancel(Animator animation) {
+                                     isContextVisible = false;
+                                 }
+                             });
                 break;
             case "hide_context_button":
                 searchContext.animate()
                              .translationX(searchContext.getMeasuredWidth())
                              .setInterpolator(new FastOutLinearInInterpolator())
-                             .setDuration(150);
+                             .setDuration(150)
+                             .setListener(new AnimatorListenerAdapter() {
+                                 @Override public void onAnimationEnd(Animator animation) {
+                                     isContextVisible = false;
+                                 }
+                             });
+
                 break;
         }
     }
@@ -727,7 +746,9 @@ public class LauncherActivity extends AppCompatActivity {
                     if (pinnedAppsAdapter.isEmpty()) {
                         doThis("hide_favourites");
                     }
-                    doThis("hide_context_button");
+                    if (isContextVisible) {
+                        doThis("hide_context_button");
+                    }
                     searchSnack.dismiss();
                     stopTimer();
                 }
@@ -759,7 +780,9 @@ public class LauncherActivity extends AppCompatActivity {
                     // Update the snackbar text.
                     searchSnack.setText(searchHint);
 
-                    doThis("show_context_button");
+                    if (!isContextVisible) {
+                        doThis("show_context_button");
+                    }
 
                     String searchSnackAction;
 
