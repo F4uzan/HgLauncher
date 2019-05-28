@@ -43,10 +43,10 @@
     <string name="dialog_action_add">Add</string>
 
     <!-- Error messages -->
-    <string name="err_activity_null">Cannot start application.</string>
+    <string name="err_activity_null">Unable to start application.</string>
     <string name="err_invalid_url">Invalid URL.</string>
     <string name="err_provider_exists">Provider name must be unique.</string>
-    <string name="err_no_method_panel">This action is not available in this version of Android.</string>
+    <string name="err_no_method_panel">This action is not available for this version of Android.</string>
 
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Desktop view</string>
