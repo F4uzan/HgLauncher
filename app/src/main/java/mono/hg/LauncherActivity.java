@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -145,6 +146,10 @@ public class LauncherActivity extends AppCompatActivity {
      */
     private CoordinatorLayout appsListContainer;
     /*
+     * Contextual button that changes depending on the availability of search text.
+     */
+    private ImageButton searchContext;
+    /*
      * A view used to intercept gestures and taps in the desktop.
      */
     private View touchReceiver;
@@ -189,6 +194,7 @@ public class LauncherActivity extends AppCompatActivity {
         touchReceiver = findViewById(R.id.touch_receiver);
         appsRecyclerView = findViewById(R.id.apps_list);
         pinnedAppsRecyclerView = findViewById(R.id.pinned_apps_list);
+        searchContext = findViewById(R.id.search_context_button);
         loadProgress = findViewById(R.id.load_progress);
 
         if (Utils.sdkIsAround(25)) {
@@ -295,8 +301,8 @@ public class LauncherActivity extends AppCompatActivity {
             // Clear the search bar text if app list is set to be kept open
             // unless keepLastSearch setting indicates maintain last search
             if (!PreferenceHelper.keepLastSearch()) {
-            searchBar.setText("");
-        }
+                searchBar.setText("");
+            }
         }
 
         Utils.unregisterPackageReceiver(this, packageReceiver);
@@ -467,6 +473,18 @@ public class LauncherActivity extends AppCompatActivity {
                                        }
                                    });
                 break;
+            case "show_context_button":
+                searchContext.animate()
+                             .translationX(0f)
+                             .setInterpolator(new LinearOutSlowInInterpolator())
+                             .setDuration(200);
+                break;
+            case "hide_context_button":
+                searchContext.animate()
+                             .translationX(searchContext.getMeasuredWidth())
+                             .setInterpolator(new FastOutLinearInInterpolator())
+                             .setDuration(150);
+                break;
         }
     }
 
@@ -497,6 +515,12 @@ public class LauncherActivity extends AppCompatActivity {
         } else {
             isFavouritesVisible = true;
         }
+
+        searchContext.post(new Runnable() {
+            @Override public void run() {
+                searchContext.setTranslationX(searchContext.getMeasuredWidth());
+            }
+        });
 
         // Switch on wallpaper shade.
         if (PreferenceHelper.useWallpaperShade()) {
@@ -703,6 +727,7 @@ public class LauncherActivity extends AppCompatActivity {
                     if (pinnedAppsAdapter.isEmpty()) {
                         doThis("hide_favourites");
                     }
+                    doThis("hide_context_button");
                     searchSnack.dismiss();
                     stopTimer();
                 }
@@ -733,6 +758,8 @@ public class LauncherActivity extends AppCompatActivity {
 
                     // Update the snackbar text.
                     searchSnack.setText(searchHint);
+
+                    doThis("show_context_button");
 
                     String searchSnackAction;
 
@@ -939,7 +966,7 @@ public class LauncherActivity extends AppCompatActivity {
                         // Clear the search bar text if app list is set to be kept open
                         // unless keepLastSearch setting indicates maintain last search
                         if (!PreferenceHelper.keepLastSearch()) {
-                        searchBar.setText(null);
+                            searchBar.setText(null);
                         }
 
                         // Preemptive attempt at showing the keyboard.
@@ -1027,8 +1054,7 @@ public class LauncherActivity extends AppCompatActivity {
         pinnedAppString = newAppString;
     }
 
-    public void clearSearch(View v)
-    {
+    public void clearSearch(View v) {
         // Clear the search bar text if app list is set to be kept open
         searchBar.setText("");
     }

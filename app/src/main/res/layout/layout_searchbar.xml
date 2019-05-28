@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search_container"
     android:layout_width="match_parent"
     android:layout_height="48dp"
@@ -30,12 +31,14 @@
         android:textColor="@android:color/white"
         android:textColorHint="@color/editTextHint" />
 
-    <Button
-        android:id="@+id/clearSearch"
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/search_context_button"
         android:layout_width="42dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
+        android:background="@android:color/transparent"
         android:onClick="clearSearch"
-        android:text="X" />
+        app:srcCompat="@drawable/ic_search_clear"
+        android:contentDescription="@string/desc_clear_search" />
 
 </LinearLayout>

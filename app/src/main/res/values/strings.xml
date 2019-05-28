@@ -53,6 +53,7 @@
     <string name="desc_apps_list">Application list</string>
     <string name="desc_icon">Application</string>
     <string name="desc_file">File</string>
+    <string name="desc_clear_search">Clear search query</string>
 
     <!-- Built-in search providers -->
     <string name="search_provider_none">Always ask</string>
