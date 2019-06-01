@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Strings for Settings (and all activity related to it -->
+    <!-- Strings for Settings (and all related activity) -->
     <string name="title_activity_settings">Settings</string>
 
     <!-- Header/category names -->
@@ -12,71 +12,71 @@
     <string name="pref_header_interface">Interface</string>
     <string name="pref_header_behavior">Behavior</string>
     <string name="pref_header_web">Web search</string>
-    <string name="pref_header_backup_restore">Backup &amp; Restore</string>
+    <string name="pref_header_backup_restore">Backup &amp; restore</string>
 
     <!-- Summaries for headers/categories -->
-    <string name="pref_summary_web">Manage web search preferences</string>
-    <string name="pref_summary_gestures">Desktop gestures and gesture handler</string>
-    <string name="pref_summary_wall">Screen orientation, system bars mode</string>
-    <string name="pref_summary_list">Hidden apps, icon pack, app list behaviors</string>
+    <string name="pref_summary_web">Web search preferences</string>
+    <string name="pref_summary_gestures">Gestures and -handler</string>
+    <string name="pref_summary_wall">Screen orientation, system bar mode</string>
+    <string name="pref_summary_list">Hidden apps, icon pack, app list behavior</string>
 
 
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Hidden apps</string>
-    <string name="pref_header_hidden_apps_desc">Manage your list of hidden apps</string>
+    <string name="pref_header_hidden_apps_desc">Manage list of hidden apps</string>
     <string name="pref_header_backup">Backup</string>
-    <string name="pref_header_backup_desc">Backup current launcher configuration</string>
+    <string name="pref_header_backup_desc">Save launcher configuration</string>
     <string name="backup_name_hint">Backup name…</string>
     <string name="pref_header_restore">Restore</string>
     <string name="pref_header_restore_desc">Restore a saved configuration</string>
     <string name="reset_preference">Reset configuration</string>
-    <string name="reset_preference_desc">Reset current configuration and restore defaults</string>
-    <string name="reset_preference_warn">Proceeding will reset your entire configuration. Once done, you cannot undo the operation!</string>
-    <string name="reset_preference_positive">Understood</string>
-    <string name="reset_preference_toast">Configuration has been reset.</string>
+    <string name="reset_preference_desc">Reset all settings to defaults</string>
+    <string name="reset_preference_warn">This resets your entire configuration permanently.</string>
+    <string name="reset_preference_positive">OK</string>
+    <string name="reset_preference_toast">Configuration reset.</string>
 
     <!-- Web search provider -->
-    <string name="pref_header_web_provider_title">Web search providers</string>
-    <string name="pref_header_web_provider_desc">Add or remove web search providers</string>
-    <string name="pref_header_web_provider_short">Search providers</string>
+    <string name="pref_header_web_provider_title">Web search engines</string>
+    <string name="pref_header_web_provider_desc">Add or remove web search engines</string>
+    <string name="pref_header_web_provider_short">Search engines</string>
     <string name="web_provider_name_hint">Name (must be unique)</string>
     <string name="web_provider_url_hint" translatable="false">https://{url}/search?q=%s</string>
 
     <!-- Easter egg -->
-    <string name="version_key_toast_plural">Tap %1$d more times to enable testing mode.</string>
-    <string name="version_key_toast">Tap once again to confirm.</string>
+    <string name="version_key_toast_plural">Tap %1$d more times to turn on testing mode.</string>
+    <string name="version_key_toast">Tap again to confirm.</string>
     <string name="version_key_name">HgLauncher (testing)</string>
 
     <!-- Dialog and toast messages -->
-    <string name="backup_exist">A file with the same name as the backup already exists.</string>
+    <string name="backup_exist">This backup filename already exists.</string>
     <string name="backup_exist_overwrite">Overwrite</string>
     <string name="backup_exist_cancel">Cancel</string>
     <string name="backup_restore_dialog">Restoring…</string>
-    <string name="restore_complete">Backup has been restored.</string>
-    <string name="backup_complete">Backup has been saved.</string>
-    <string name="backup_empty">Backup name must not be empty.</string>
+    <string name="restore_complete">Backup restored.</string>
+    <string name="backup_complete">Backup saved.</string>
+    <string name="backup_empty">Pick a backup name.</string>
 
     <!-- Credits dialog. -->
     <string name="about_credits_dialog_title">Credits</string>
     <string name="about_credits">Credits</string>
-    <string name="about_credits_desc">Credits for everyone involved in this launcher</string>
+    <string name="about_credits_desc">The makers of HgLauncher</string>
 
     <!-- Customizations -->
-    <string name="app_theme">App theme</string>
+    <string name="app_theme">Theme</string>
     <string name="app_theme_light">Light</string>
     <string name="app_theme_dark">Dark</string>
     <string name="app_theme_black">Black</string>
 
     <string name="windowbar_mode">Hide system bars</string>
-    <string name="windowbar_mode_none">Disabled</string>
+    <string name="windowbar_mode_none">Off</string>
     <string name="windowbar_mode_status">Status bar</string>
     <string name="windowbar_mode_nav">Navigation bar</string>
     <string name="windowbar_mode_both">Both</string>
 
-    <string name="gesture_left">Swipe left</string>
-    <string name="gesture_right">Swipe right</string>
-    <string name="gesture_up">Swipe up</string>
-    <string name="gesture_down">Swipe down</string>
+    <string name="gesture_left">Swipe ←</string>
+    <string name="gesture_right">Swipe →</string>
+    <string name="gesture_up">Swipe ↑</string>
+    <string name="gesture_down">Swipe ↓</string>
     <string name="gesture_single_tap">Tap</string>
     <string name="gesture_double_tap">Double tap</string>
 
@@ -86,59 +86,60 @@
 
     <string name="gesture_action_default">None</string>
     <string name="gesture_action_default_value" translatable="false">none</string>
-    <string name="gesture_action_widget">Open Widgetspace</string>
+    <string name="gesture_action_widget">Open widget-space</string>
     <string name="gesture_action_handler">Use gesture handler\'s action</string>
-    <string name="gesture_action_app">Launch application</string>
+    <string name="gesture_action_app">Launch app</string>
     <string name="gesture_action_status">Expand notification bar</string>
     <string name="gesture_action_panel">Expand quick settings panel</string>
     <string name="gesture_action_list">Open app list</string>
 
-    <string name="gesture_action_app_dialog_title">Select application</string>
+    <string name="gesture_action_app_dialog_title">Select app</string>
 
-    <string name="pref_title_app_list_order">App list order</string>
+    <string name="pref_title_app_list_order">Order</string>
     <string name="app_list_order_normal">A to Z</string>
     <string name="app_list_order_inverse">Z to A</string>
-
+    <!-- Translate this as "An always open app list -->
     <string name="static_app_list">Always open app list</string>
-    <string name="static_app_list_desc">Open the app list when entering the launcher. This does not prevent it from being closed.</string>
+    <!-- Translate as "Open the app list when" -->
+    <string name="static_app_list_desc">Open app list when entering launcher</string>
 
-    <string name="app_list_keep_search_desc">Keep search query even when the launcher has been dismissed</string>
-    <string name="app_list_keep_search">Maintain search text</string>
-
+    <string name="app_list_keep_search">Keep search text</string>
+    <string name="app_list_keep_search_desc">Keep search query after dismissing launcher</string>
+    <!-- This is the animation shown when starting the HgLauncher -->
     <string name="pref_app_launch_anim">Launch animation</string>
     <string name="anim_list_default">System-defined</string>
     <string name="anim_list_pull_up">Pull up</string>
     <string name="anim_list_slide_in">Slide in</string>
 
-    <string name="pref_search_provider">Default web search provider</string>
+    <string name="pref_search_provider">Default web search engine</string>
 
     <string name="web_search_long_press">Extended search menu</string>
-    <string name="web_search_long_press_desc">When search provider is not set to \'Always ask\', long-pressing \'Go\' allows selection of search provider</string>
+    <string name="web_search_long_press_desc">Unless set to \'Always ask\', long-pressing \'Go\' allows selecting search engine</string>
 
     <string name="keyboard_focus">Keyboard focus</string>
-    <string name="keyboard_focus_desc">Automatically show the keyboard if app list is pulled down</string>
-
+    <string name="keyboard_focus_desc">Keyboard shown when pulling app list down</string>
+    <!-- Translate as "Ask about …" -->
     <string name="web_search">Prompt for web search</string>
-    <string name="web_search_desc">Show a prompt to search for your query online</string>
+    <string name="web_search_desc">Asks to take your search online</string>
 
-    <string name="shadow_adaptive_icon">Shadow for Adaptive Icons</string>
-    <string name="shadow_adaptive_icon_desc">Shade adaptive icons with a slight shadow. May reduce performance.</string>
+    <string name="shadow_adaptive_icon">Shadow adaptive icons</string>
+    <string name="shadow_adaptive_icon_desc">Lightly shade adaptive icons, reducing performance</string>
 
     <string name="pref_icon_view">Hide icons</string>
-    <string name="pref_icon_view_desc">Recommended if you have a slower device</string>
+    <string name="pref_icon_view_desc">Better on slower devices</string>
 
     <string name="pref_shade_view">Shadow over wallpaper</string>
-    <string name="pref_shade_view_desc">Add a visible shadow to the top and bottom of the wallpaper</string>
+    <string name="pref_shade_view_desc">Shadows the top and bottom of the wallpaper</string>
+<!-- Translate as, an (always) open favourite panel -->
+    <string name="static_favourites">Open favorite panel</string>
+    <string name="static_favourites_desc">Favorite panel visible when scrolling</string>
 
-    <string name="static_favourites">Persistent favorites panel</string>
-    <string name="static_favourites_desc">Keep favorites panel visibility regardless of scroll events</string>
-
-    <string name="icon_pack">Icon pack</string>
+    <string name="icon_pack">Icons</string>
     <string name="icon_pack_default">Default</string>
     <string name="icon_pack_default_value" translatable="false">default</string>
 
-    <string name="orientation">Screen orientation</string>
-    <string name="orientation_sensor">Follow system</string>
+    <string name="orientation">Orientation</string>
+    <string name="orientation_sensor">System</string>
     <string name="orientation_portrait">Portrait</string>
     <string name="orientation_landscape">Landscape</string>
 </resources>
