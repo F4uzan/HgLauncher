@@ -6,8 +6,9 @@
 
  [![GitHub Release](https://img.shields.io/github/release/F4uzan/HgLauncher.svg?logo=github)](https://github.com/F4uzan/HgLauncher/releases) [![F-Droid](https://img.shields.io/f-droid/v/mono.hg.svg)](https://f-droid.org/app/mono.hg)
 
+A scrolling list of apps to launch them from, if you found what you want, look no further.
 
-HgLauncher is a launcher with a design philosophy of 'if it works, it works.' Consisting of simply a scrolling list of apps, there is very little visual cue to disturb you. If all you want in a launcher is for it to just launch apps _ASAP_, then you may be looking at the right launcher.
+'If it works, it works.'
 
 [Try it out now!](https://github.com/F4uzan/HgLauncher/blob/master/README.md#where-can-i-get-it)
 
@@ -19,7 +20,6 @@ HgLauncher is a launcher with a design philosophy of 'if it works, it works.' Co
 
 ### Where can I get it?
 
-HgLauncher is available at:
 - [F-Droid](https://f-droid.org/app/mono.hg)
 - [Google Play Store](https://play.google.com/store/apps/details?id=mono.hg)
 - [GitHub Releases](https://github.com/F4uzan/HgLauncher/releases)
@@ -28,22 +28,23 @@ HgLauncher is available at:
 
 #### Translations
 
-HgLauncher can be translated through [Weblate](https://hosted.weblate.org/engage/hglauncher/) or by directly making a PR with your translated strings. You are free to choose either route, but Weblate is recommended to ease your workflow.
+Translations are handled through [Hosted Weblate](https://hosted.weblate.org/engage/hglauncher/) (recommended), or by making a pull request here.
 
 #### Reporting Bugs & Requesting Features
 
-Both bug reporting and feature requests can be made through the [Issue Tracker](https://github.com/F4uzan/HgLauncher/issues). Please be concise with your reports!
+Bug reports and feature requests can be made through the [Issue Tracker](https://github.com/F4uzan/HgLauncher/issues). Please be concise.
 
 #### Everything Else
 
 * Send a pull request
 * Wait until your changes are reviewed
-* Enjoy your life and move on!
+* Enjoy your life and move on
 
 ### Licence
 
-> This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+> This program is libre software: You can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 >
-> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
->
-> You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
+> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+> 
+> See the [GNU General Public License version 3](https://www.gnu.org/licenses/gpl-3.0.html/) for more details.
+
