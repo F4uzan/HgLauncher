@@ -15,8 +15,8 @@
     <string name="pref_header_backup_restore">Backup &amp; restore</string>
 
     <!-- Summaries for headers/categories -->
-    <string name="pref_summary_web">Web search preferences</string>
-    <string name="pref_summary_gestures">Gestures and -handler</string>
+    <string name="pref_summary_web">Web search settings</string>
+    <string name="pref_summary_gestures">Gesture settings</string>
     <string name="pref_summary_wall">Screen orientation, system bar mode</string>
     <string name="pref_summary_list">Hidden apps, icon pack, app list behavior</string>
 
@@ -26,7 +26,7 @@
     <string name="pref_header_hidden_apps_desc">Manage list of hidden apps</string>
     <string name="pref_header_backup">Backup</string>
     <string name="pref_header_backup_desc">Save launcher configuration</string>
-    <string name="backup_name_hint">Backup name…</string>
+    <string name="backup_name_hint">Type in a name…</string>
     <string name="pref_header_restore">Restore</string>
     <string name="pref_header_restore_desc">Restore a saved configuration</string>
     <string name="reset_preference">Reset configuration</string>
@@ -117,21 +117,21 @@
     <string name="web_search_long_press_desc">Unless set to \'Always ask\', long-pressing \'Go\' allows selecting search engine</string>
 
     <string name="keyboard_focus">Keyboard focus</string>
-    <string name="keyboard_focus_desc">Keyboard shown when pulling app list down</string>
+    <string name="keyboard_focus_desc">Show keyboard when the app list is pulled down</string>
     <!-- Translate as "Ask about …" -->
     <string name="web_search">Prompt for web search</string>
     <string name="web_search_desc">Asks to take your search online</string>
-
-    <string name="shadow_adaptive_icon">Shadow adaptive icons</string>
-    <string name="shadow_adaptive_icon_desc">Lightly shade adaptive icons, reducing performance</string>
+    <!-- There are many such adaptive icons -->
+    <string name="shadow_adaptive_icon">Adaptive icon shadow</string>
+    <string name="shadow_adaptive_icon_desc">Lightly shaded adaptive icons</string>
 
     <string name="pref_icon_view">Hide icons</string>
     <string name="pref_icon_view_desc">Better on slower devices</string>
 
-    <string name="pref_shade_view">Shadow over wallpaper</string>
+    <string name="pref_shade_view">Wallpaper shadow</string>
     <string name="pref_shade_view_desc">Shadows the top and bottom of the wallpaper</string>
-<!-- Translate as, an (always) open favourite panel -->
-    <string name="static_favourites">Open favorite panel</string>
+    <!-- This is an option to have an always open favorite panel -->
+    <string name="static_favourites">Static favorite panel</string>
     <string name="static_favourites_desc">Favorite panel visible when scrolling</string>
 
     <string name="icon_pack">Icons</string>
