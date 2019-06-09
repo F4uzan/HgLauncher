@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -37,6 +38,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.net.URLEncoder;
@@ -253,6 +256,10 @@ public class LauncherActivity extends AppCompatActivity {
         // Show the app list once all the views are set up.
         if (PreferenceHelper.keepAppList()) {
             doThis("show_panel");
+        }
+
+        if (PreferenceHelper.isNewUser()) {
+            showStartDialog();
         }
     }
 
@@ -1080,6 +1087,23 @@ public class LauncherActivity extends AppCompatActivity {
     public void clearSearch(View v) {
         // Clear the search bar text if app list is set to be kept open
         searchBar.setText("");
+    }
+
+    public void showStartDialog() {
+        final BottomSheetDialog startDialog = new BottomSheetDialog(this);
+        startDialog.setContentView(R.layout.dialog_start_hint);
+        startDialog.setCancelable(false);
+        startDialog.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
+        Button startDismiss = startDialog.findViewById(R.id.dismiss);
+        if (startDismiss != null) {
+            startDismiss.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    startDialog.dismiss();
+                    PreferenceHelper.update("is_new_user", false);
+                }
+            });
+        }
+        startDialog.show();
     }
 
 

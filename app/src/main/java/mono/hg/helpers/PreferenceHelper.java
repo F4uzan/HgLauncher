@@ -16,6 +16,7 @@ import mono.hg.utils.Utils.Gesture;
 
 public class PreferenceHelper {
     private static int orientation_mode;
+    private static boolean is_new_user;
     private static boolean icon_hide;
     private static boolean list_order;
     private static boolean shade_view;
@@ -53,6 +54,10 @@ public class PreferenceHelper {
 
     public static boolean isTesting() {
         return is_testing;
+    }
+
+    public static boolean isNewUser() {
+        return is_new_user;
     }
 
     public static int getOrientation() {
@@ -299,6 +304,7 @@ public class PreferenceHelper {
 
     public static void fetchPreference() {
         is_testing = getPreference().getBoolean("is_grandma", false);
+        is_new_user = preferences.getBoolean("is_new_user", true);
         launch_anim = getPreference().getString("launch_anim", "default");
         orientation_mode = Integer.parseInt(getPreference().getString("orientation_mode", "-1"));
         icon_hide = getPreference().getBoolean("icon_hide_switch", false);
