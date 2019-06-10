@@ -48,7 +48,8 @@
     <string name="err_provider_exists">Provider name must be unique.</string>
     <string name="err_no_method_panel">This action is not available for this version of Android.</string>
 
-    <string name="dialog_start_hint_title">Let\'s guide you around,</string>
+    <!-- Start up dialogue, shown to new user -->
+    <string name="dialog_start_hint_title">Welcome!</string>
     <string name="dialog_start_hint_message_one">This is your desktop. In here, you can…\n
         • Tap to open the app list\n
         • Long-press to change wallpaper and open settings</string>
