@@ -598,21 +598,20 @@ public class LauncherActivity extends AppCompatActivity {
     /**
      * Creates a PopupMenu to use in a long-pressed app object.
      *
-     * @param view        View for the PopupMenu to anchor to.
-     * @param isPinned    Is this a pinned app?
-     * @param packageName Package name of the app.
+     * @param view     View for the PopupMenu to anchor to.
+     * @param isPinned Is this a pinned app?
+     * @param app      App object selected from the list.
      */
-    private void createAppMenu(View view, boolean isPinned, final String packageName) {
+    private void createAppMenu(View view, boolean isPinned, App app) {
+        final String packageName = app.getPackageName();
         final Uri packageNameUri = Uri.parse("package:" + AppUtils.getPackageName(packageName));
         final SparseArray<String> shortcutMap = new SparseArray<>();
 
         int position;
         if (isPinned) {
-            PinnedApp selectedPackage = new PinnedApp(packageName);
-            position = pinnedAppsAdapter.getGlobalPositionOf(selectedPackage);
+            position = pinnedAppsAdapter.getGlobalPositionOf(app);
         } else {
-            App selectedPackage = new App(packageName);
-            position = appsAdapter.getGlobalPositionOf(selectedPackage);
+            position = appsAdapter.getGlobalPositionOf(app);
         }
 
         // Inflate the app menu.
@@ -911,27 +910,25 @@ public class LauncherActivity extends AppCompatActivity {
         // This shows a menu to manage the selected app.
         appsAdapter.addListener(new FlexibleAdapter.OnItemLongClickListener() {
             @Override public void onItemLongClick(int position) {
-                final String packageName = Utils.requireNonNull(
-                        appsAdapter.getItem(position)).getPackageName();
+                App app = Utils.requireNonNull(appsAdapter.getItem(position));
 
                 // We need to rely on the LayoutManager here
                 // because app list is populated asynchronously,
                 // and will throw nulls if we try to directly ask RecyclerView for its child.
                 createAppMenu(Utils.requireNonNull(appsRecyclerView.getLayoutManager())
-                                   .findViewByPosition(position), false, packageName);
+                                   .findViewByPosition(position), false, app);
             }
         });
 
         // Also add a similar long click action for the favourites panel.
         pinnedAppsAdapter.addListener(new FlexibleAdapter.OnItemLongClickListener() {
             @Override public void onItemLongClick(int position) {
-                final String packageName = Utils.requireNonNull(
-                        pinnedAppsAdapter.getItem(position)).getPackageName();
+                App app = Utils.requireNonNull(pinnedAppsAdapter.getItem(position));
 
                 // Use LayoutManager method to get the view,
                 // as RecyclerView will happily return null if it can.
                 createAppMenu(Utils.requireNonNull(pinnedAppsRecyclerView.getLayoutManager())
-                                   .findViewByPosition(position), true, packageName);
+                                   .findViewByPosition(position), true, app);
             }
         });
 
@@ -1134,15 +1131,10 @@ public class LauncherActivity extends AppCompatActivity {
                        PreferenceHelper.updateLabel(packageName, newLabel, newLabel.isEmpty());
 
                        // Update the specified item.
-                       App oldItem = appsAdapter.getItem(position);
+                       App app = appsAdapter.getItem(position);
 
-                       if (oldItem != null) {
-                           App newItem = new App(oldItem.getIcon(),
-                                   oldItem.getAppName(),
-                                   packageName, newLabel, false);
-
-                           appsList.set(position, newItem);
-                           appsAdapter.updateItem(newItem);
+                       if (app != null) {
+                           app.setShorthand(newLabel);
                        }
                    }
                }).show();

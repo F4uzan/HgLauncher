@@ -67,6 +67,10 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
         return hintName != null;
     }
 
+    public void setShorthand(String newShorthand) {
+        hintName = newShorthand;
+    }
+
     public void setHintMatchScore(int newScore) {
         HINT_MATCH_SCORE = newScore;
     }
@@ -76,13 +80,16 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
     }
 
     public boolean equals(Object object) {
+        if (getClass() != object.getClass()) {
+            return false;
+        }
+
         App alt = (App) object;
-        return this == object || getClass() != object.getClass() || getPackageName().equals(
-                alt.getPackageName());
+        return this == object || getPackageName().equals(alt.getPackageName());
     }
 
     @Override public int hashCode() {
-        return packageName.hashCode();
+        return packageName != null ? packageName.hashCode() : 0;
     }
 
     @Override public int getLayoutRes() {
