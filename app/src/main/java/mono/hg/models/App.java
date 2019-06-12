@@ -67,8 +67,8 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
         return hintName != null;
     }
 
-    public void setShorthand(String newShorthand) {
-        hintName = newShorthand;
+    public void setHintName(String newName) {
+        hintName = newName;
     }
 
     public void setHintMatchScore(int newScore) {

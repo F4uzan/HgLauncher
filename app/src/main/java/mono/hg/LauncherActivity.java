@@ -1134,7 +1134,7 @@ public class LauncherActivity extends AppCompatActivity {
                        App app = appsAdapter.getItem(position);
 
                        if (app != null) {
-                           app.setShorthand(newLabel);
+                           app.setHintName(newLabel);
                        }
                    }
                }).show();
