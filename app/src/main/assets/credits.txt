@@ -3,10 +3,12 @@ HgLauncher is an open-source project.
 
 Icon Design: tebriz159 (https://github.com/tebriz159)
 
-Translators:
-- Basque: Aitor Beriain (https://github.com/beriain)
-- Polish: Adam Konarzycki (https://github.com/adam5525)
-- Spanish: Aitor Beriain (https://github.com/beriain)
+Contributors:
+- Allan Nordhøy <epost@anotheragency.no>
+- beriain <beriain@bitmessage.ch>
+- F4 <this.f4@protonmail.com>
+- Pavle Radosavljević <pavlepiramida@gmail.com>
+- Scott MacDonald <macdonaldster@gmail.com>
 
 Libraries:
 - AndroidX Support Libraries: Google and AOSP contributors (https://android.googlesource.com/platform/frameworks/support). Licensed under Apache v2.
