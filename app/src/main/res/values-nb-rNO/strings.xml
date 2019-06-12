@@ -45,4 +45,8 @@
     <string name="app_name">HgLauncher</string>
     <string name="err_activity_null">Kunne ikke starte program.</string>
     <string name="action_wallpaper">Endre bakgrunn</string>
+    <string name="dialog_start_hint_title">Velkommen.</string>
+    <string name="dialog_start_hint_message_one">Dette er skrivebordet ditt. Her kan du…
+\n • Trykke for å åpne programlisten
+\n • Lang-trykke for å endre bakgrunn og åpne innstillingene</string>
 </resources>
