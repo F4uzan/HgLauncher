@@ -31,7 +31,7 @@
         android:textColor="@android:color/white"
         android:textColorHint="@color/editTextHint" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <ImageButton
         android:id="@+id/search_context_button"
         android:layout_width="42dp"
         android:layout_height="match_parent"
