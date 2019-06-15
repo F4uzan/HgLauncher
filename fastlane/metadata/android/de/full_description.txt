@@ -1,0 +1,11 @@
+HgLauncher ist ein Launcher mit der Design-Philosophie von "Wenn es funktioniert, funktioniert es". Aus nur einer scrollenden App-Liste bestehend gibt es wenig Visuelles, was dich ablenken könnte. Wenn du von einem Launcher nur erwartest, dass er Apps starten kann, betrachtest du vielleicht den richtigen.
+
+Funktionen:
+• Einfach und schnell; keiner wartet gerne.
+• Dezentes Nutzerinterface: zeige den Hintergrundbild in all seiner Schönheit!
+• Kleine, aber extensive Nutzerinterface-Anpassungsoptionen.
+• Unterstützung für alle möglichen Launcher-Funktionen: Icon-Pakete, Apps verstecken, und mehr!
+• Geringtsmöglicher Speichergebrauch bei bestmöglicher Leistung.
+• Vollständig FLOSS; keine Werbung, keine Funktionseinschränkungen, keine dummen Nervigkeiten.
+• …Und noch mehr ist auf dem Weg!
+
