@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App information -->
+    <string name="app_name">HgLauncher</string>
+
+    <!-- Menu actions -->
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_wallpaper">Hintergrundbild ändern</string>
+    <string name="action_force_refresh">Aktualisieren</string>
+    <string name="action_view_widgets">Widgets</string>
+    <string name="action_remove_widget">Widget entfernen</string>
+    <string name="action_up_widget">Nach oben verschieben</string>
+    <string name="action_down_widget">Nach unten verschieben</string>
+    <string name="action_web_provider_remove">Entfernen</string>
+    <string name="action_web_provider_exclude">Ausschließen</string>
+    <string name="action_web_provider_edit">Bearbeiten</string>
+    <string name="action_hidden_app_reset">Alle wiederherstellen</string>
+    <string name="action_web_provider_add">Hinzufügen</string>
+    <string name="action_web_provider_reset">Zurücksetzen</string>
+    <string name="action_save_backup">Speichern</string>
+
+    <!-- App menu actions -->
+    <string name="action_pin">Anpinnen</string>
+    <string name="action_unpin">Entfernen</string>
+    <string name="action_hide">Verstecken</string>
+    <string name="action_show">Wiederherstellen</string>
+    <string name="action_backup">Sichern</string>
+    <string name="action_uninstall">Deinstallieren</string>
+    <string name="action_info">App-Info</string>
+    <string name="action_shorthand">Kurzbezeichner</string>
+    <string name="action_actions">Aktionen</string>
+    <string name="action_shortcuts">Shortcuts</string>
+
+    <!-- Misc -->
+    <string name="search_hint">Suchen…</string>
+    <string name="search_web_hint">Online nach \"%1$s\" suchen</string>
+    <string name="search_web_button_prompt">Mit</string>
+    <string name="search_web_button">Los</string>
+    <string name="dialog_title_add_provider">Anbieter hinzufügen</string>
+    <string name="dialog_title_edit_provider">Anbieter bearbeiten</string>
+    <string name="dialog_title_shorthand">Kurzbezeichner festlegen</string>
+    <string name="dialog_title_widgets">Widgets</string>
+    <string name="dialog_action_close">Schließen</string>
+    <string name="dialog_action_add">Hinzufügen</string>
+
+    <!-- Error messages -->
+    <string name="err_activity_null">Anwendung konnte nicht gestartet werden.</string>
+    <string name="err_invalid_url">Ungültige URL.<string>
+    <string name="err_provider_exists">Es gibt bereits einen Anbieter mit diesem Namen.</string>
+    <string name="err_no_method_panel">Diese Aktion wird auf dieser Android-Version nicht unterstützt.</string>
+
+    <!-- Start up dialogue, shown to new user -->
+    <string name="dialog_start_hint_title">Willkommen!</string>
+    <string name="dialog_start_hint_message_one">Dies ist dein Desktop. Hier kannst du…\n
+        • Tippen, um die App-Liste zu öffnen\n
+	    • Gedrückt halten, um Hintergrundbild und Einstellungen zu öffnen</string>
+
+    <!-- Accessibility string -->
+    <string name="desc_touch_receiver">Desktop-Ansicht</string>
+    <string name="desc_apps_list">Anwendungsliste</string>
+    <string name="desc_icon">Anwendung</string>
+    <string name="desc_file">Datei</string>
+    <string name="desc_clear_search">Sucheingabe leeren</string>
+
+    <!-- Built-in search providers -->
+    <string name="search_provider_none">Immer nachfragen</string>
+</resources>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Strings for Settings (and all activity related to it -->
+    <string name="title_activity_settings">Einstellungen</string>
+    <!-- Header/category names -->
+    <string name="pref_header_about">Über</string>
+    <string name="pref_header_cust">Anpassungen</string>
+    <string name="pref_header_gestures">Gesten</string>
+    <string name="pref_header_wall">Desktop</string>
+    <string name="pref_header_list">App-Liste</string>
+    <string name="pref_header_interface">Ansicht</string>
+    <string name="pref_header_behavior">Verhalten</string>
+    <string name="pref_header_web">Internetsuche</string>
+    <string name="pref_header_backup_restore">Sichern &amp; Wiederherstellen</string>
+    <!-- Summaries for headers/categories -->
+    <string name="pref_summary_web">Einstellungen für die Internetsuche</string>
+    <string name="pref_summary_gestures">Desktop-Gesten und Gesten-Handler</string>
+    <string name="pref_summary_wall">Bildschirmausrichtung, Systemleisten</string>
+    <string name="pref_summary_list">Versteckte Apps, Icon-Paket, App-Listenverhalten</string>
+    <!-- Backup and restore -->
+    <string name="pref_header_hidden_apps">Versteckte Apps</string>
+    <string name="pref_header_hidden_apps_desc">Verwalte deine Liste versteckter Apps</string>
+    <string name="pref_header_backup">Sichern</string>
+    <string name="pref_header_backup_desc">Aktuelle Einstellungen abspeichern</string>
+    <string name="backup_name_hint">Sicherungsname…</string>
+    <string name="pref_header_restore">Wiederherstellen</string>
+    <string name="pref_header_restore_desc">Gesicherte Einstellungen laden</string>
+    <string name="reset_preference">Konfiguration zurücksetzen</string>
+    <string name="reset_preference_desc">Standarteinstellungen wiederherstellen</string>
+    <string name="reset_preference_warn">Hierdurch wird die gesamte Konfiguration zurückgesetzt. Sobald dies geschehen ist, kann es nicht mehr rückgängig gemacht werden!</string>
+    <string name="reset_preference_positive">Verstanden</string>
+    <string name="reset_preference_toast">Konfiguration wurde zurückgesetzt.</string>
+    <!-- Web search provider -->
+    <string name="pref_header_web_provider_title">Internetsuchanbieter</string>
+    <string name="pref_header_web_provider_desc">Suchmaschinen hinzufügen oder entfernen</string>
+    <string name="pref_header_web_provider_short">Suchanbieter</string>
+    <string name="web_provider_name_hint">Name (muss einzigartig sein)</string>
+    <!-- Easter egg -->
+    <string name="version_key_toast_plural">Tippe %1$d weitere Male, um den Testmodus zu aktivieren.</string>
+    <string name="version_key_toast">Tippe noch einmal, um zu bestätigen.</string>
+    <string name="version_key_name">HgLauncher (Testmodus)</string>
+    <!-- Dialog and toast messages -->
+    <string name="backup_exist">Eine Datei mit dem gleichen Namen existiert bereits.</string>
+    <string name="backup_exist_overwrite">Überschreiben</string>
+    <string name="backup_exist_cancel">Abbrechen</string>
+    <string name="backup_restore_dialog">Wiederherstellen…</string>
+    <string name="restore_complete">Sicherung wiederhergestellt.</string>
+    <string name="backup_complete">Sicherung gespeichert.</string>
+    <string name="backup_empty">Sicherungsname darf nicht leer sein.</string>
+    <!-- Credits dialog. -->
+    <string name="about_credits_dialog_title">Danksagung</string>
+    <string name="about_credits">Nachspann</string>
+    <string name="about_credits_desc">Danksagung an alle, die am Launcher beteiligt sind</string>
+    <!-- Customizations -->
+    <string name="app_theme">App-Design</string>
+    <string name="app_theme_light">Hell</string>
+    <string name="app_theme_dark">Dunkel</string>
+    <string name="app_theme_black">Schwarz</string>
+    <string name="windowbar_mode">Systemleisten versteckenHide system bars</string>
+    <string name="windowbar_mode_none">Deaktiviert</string>
+    <string name="windowbar_mode_status">Statusleiste</string>
+    <string name="windowbar_mode_nav">Navigationsleiste</string>
+    <string name="windowbar_mode_both">Beide</string>
+    <string name="gesture_left">Nach links streichen</string>
+    <string name="gesture_right">Nach rechts streichen</string>
+    <string name="gesture_up">Nach oben streichen</string>
+    <string name="gesture_down">Nach unten streichen</string>
+    <string name="gesture_single_tap">Tippen</string>
+    <string name="gesture_double_tap">Doppelt tippen</string>
+    <string name="gesture_handler">Gesten-Handler</string>
+    <string name="gesture_handler_default">Keiner</string>
+    <string name="gesture_action_default">Keine</string>
+    <string name="gesture_action_widget">Widgets öffnen</string>
+    <string name="gesture_action_handler">Aktion des Gesten-Handlers verwenden</string>
+    <string name="gesture_action_app">App starten</string>
+    <string name="gesture_action_status">Nachrichtenleiste ausklappen</string>
+    <string name="gesture_action_panel">Schnelleinstellungen ausklappen</string>
+    <string name="gesture_action_list">App-Liste öffnen</string>
+    <string name="gesture_action_app_dialog_title">Anwendung auswählen</string>
+    <string name="pref_title_app_list_order">App-Listensortierung</string>
+    <string name="app_list_order_normal">A nach Z</string>
+    <string name="app_list_order_inverse">Z nach A</string>
+    <string name="static_app_list">App-Liste immer öffnen</string>
+    <string name="static_app_list_desc">App-Liste beim öffnen des Launchers öffnen. Dies verhindert nicht, dass sie geschlossen wird.</string>
+    <string name="app_list_keep_search_desc">Suchanfrage beibehalten, auch wenn der Launcher in den Hintergrund gerät</string>
+    <string name="app_list_keep_search">Suchtext beibehalten</string>
+    <string name="pref_app_launch_anim">Startanimation</string>
+    <string name="anim_list_default">Nach System richten</string>
+    <string name="anim_list_pull_up">Hochziehen</string>
+    <string name="anim_list_slide_in">Hineinschieben</string>
+    <string name="pref_search_provider">Standart-Suchanbieter</string>
+    <string name="web_search_long_press">Erweitertes Suchmenü</string>
+    <string name="web_search_long_press_desc">Wenn der Suchanbieter nicht auf \"Immer nachfragen\" gestellt ist, erlaubt gedrückt halten von \"Los\" die Auswahl des Suchanbieters</string>
+    <string name="keyboard_focus">Tastaturfokus</string>
+    <string name="keyboard_focus_desc">Automatisch Tastatur anzeigen, wenn App-Liste heruntergezogen wird</string>
+    <string name="web_search">Internetsuche anbieten</string>
+    <string name="web_search_desc">Leiste zur Online-Suche anzeigen</string>
+    <string name="shadow_adaptive_icon">Schatten für adaptive Icons</string>
+    <string name="shadow_adaptive_icon_desc">Adaptive Icons mit einem leichten Schatten hinterlegen. Kann Leistung verringern.</string>
+    <string name="pref_icon_view">Icons verstecken</string>
+    <string name="pref_icon_view_desc">Auf langsamen Geräten empfohlen</string>
+    <string name="pref_shade_view">Schatten über Hintergrundbild</string>
+    <string name="pref_shade_view_desc">Einen sichtbaren Schatten oben und unten am Hintergrundbild anbringen</string>
+    <string name="static_favourites">Fortbestehendes Favoriten-Panel</string>
+    <string name="static_favourites_desc">Favoriten-Panel unabhängig von Scroll-Ereignissen sichtbar lassen</string>
+    <string name="icon_pack">Icon-Paket</string>
+    <string name="icon_pack_default">Standart</string>
+    <string name="orientation">Bildschrimausrichtung</string>
+    <string name="orientation_sensor">System folgen</string>
+    <string name="orientation_portrait">Vertikal</string>
+    <string name="orientation_landscape">Horizontal</string>
+</resources>
