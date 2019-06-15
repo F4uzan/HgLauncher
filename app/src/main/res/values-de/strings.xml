@@ -29,7 +29,7 @@
     <string name="action_info">App-Info</string>
     <string name="action_shorthand">Kurzbezeichner</string>
     <string name="action_actions">Aktionen</string>
-    <string name="action_shortcuts">Shortcuts</string>
+    <string name="action_shortcuts">Verknüpfungen</string>
 
     <!-- Misc -->
     <string name="search_hint">Suchen…</string>
