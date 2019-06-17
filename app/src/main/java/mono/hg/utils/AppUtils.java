@@ -10,7 +10,6 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
-import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Process;
@@ -263,25 +262,7 @@ public class AppUtils {
                     BuildConfig.APPLICATION_ID)) {
                 String appName = ri.loadLabel(manager).toString();
                 String hintName = PreferenceHelper.getLabel(componentName);
-                Drawable icon = null;
-                Drawable getIcon = null;
-                // Only show icons if user chooses so.
-                if (!PreferenceHelper.shouldHideIcon()) {
-                    if (!PreferenceHelper.getIconPackName().equals("default")) {
-                        getIcon = LauncherIconHelper.getIconDrawable(manager, componentName);
-                    }
-                    if (getIcon == null) {
-                        icon = ri.activityInfo.loadIcon(manager);
-                        if (PreferenceHelper.appTheme().equals("light")
-                                && PreferenceHelper.shadeAdaptiveIcon()
-                                && (Utils.atLeastOreo()
-                                && icon instanceof AdaptiveIconDrawable)) {
-                            icon = LauncherIconHelper.drawAdaptiveShadow(icon);
-                        }
-                    } else {
-                        icon = getIcon;
-                    }
-                }
+                Drawable icon = LauncherIconHelper.getIcon(manager, componentName);
                 App app = new App(icon, appName, componentName, hintName, false);
                 appsList.add(app);
             }
@@ -292,7 +273,7 @@ public class AppUtils {
         } else {
             Collections.sort(appsList, new DisplayNameComparator());
         }
-        
+
         return appsList;
     }
 

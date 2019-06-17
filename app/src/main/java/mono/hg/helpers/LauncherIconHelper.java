@@ -1,5 +1,6 @@
 package mono.hg.helpers;
 
+import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
@@ -42,13 +44,51 @@ public class LauncherIconHelper {
     }
 
     /**
+     * Retrieve an icon for a component name, applying user preferences
+     * such as shaded adaptive icons and icon pack.
+     *
+     * @param manager       PackageManager used to retrieve the default icon.
+     * @param componentName Component name of the activity.
+     *
+     * @return Drawable of the icon.
+     */
+    public static Drawable getIcon(PackageManager manager, String componentName) {
+        Drawable icon = null;
+        Drawable custIcon = null;
+
+        if (!PreferenceHelper.shouldHideIcon()) {
+            if (!PreferenceHelper.getIconPackName().equals("default")) {
+                custIcon = LauncherIconHelper.getIconDrawable(manager, componentName);
+            }
+            if (custIcon == null) {
+                try {
+                    icon = manager.getActivityIcon(
+                            ComponentName.unflattenFromString(componentName));
+                } catch (PackageManager.NameNotFoundException ignored) {
+                    // No-op. We can't get here (hopefully).
+                }
+
+                if (PreferenceHelper.appTheme().equals("light")
+                        && PreferenceHelper.shadeAdaptiveIcon()
+                        && (Utils.atLeastOreo()
+                        && icon instanceof AdaptiveIconDrawable)) {
+                    icon = LauncherIconHelper.drawAdaptiveShadow(icon);
+                }
+            } else {
+                icon = custIcon;
+            }
+        }
+        return icon;
+    }
+
+    /**
      * Draws a shadow below a drawable.
      *
      * @param icon Foreground layer to which the shadows will be drawn.
      *
      * @return BitmapDrawable masked with shadow.
      */
-    public static BitmapDrawable drawAdaptiveShadow(final Drawable icon) {
+    private static BitmapDrawable drawAdaptiveShadow(final Drawable icon) {
         return new BitmapDrawable(
                 addShadow(icon, icon.getIntrinsicHeight(), icon.getIntrinsicWidth(),
                         Color.LTGRAY, 4, 1, 3));
