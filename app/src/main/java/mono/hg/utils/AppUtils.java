@@ -27,6 +27,7 @@ import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.App;
 import mono.hg.models.PinnedApp;
+import mono.hg.wrappers.DisplayNameComparator;
 
 public class AppUtils {
     /**
@@ -254,13 +255,6 @@ public class AppUtils {
 
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
 
-        if (PreferenceHelper.isListInverted()) {
-            Collections.sort(availableActivities, Collections
-                    .reverseOrder(new ResolveInfo.DisplayNameComparator(manager)));
-        } else {
-            Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
-        }
-
         // Fetch and add every app into our list, but ignore those that are in the exclusion list.
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName;
@@ -292,6 +286,13 @@ public class AppUtils {
                 appsList.add(app);
             }
         }
+
+        if (PreferenceHelper.isListInverted()) {
+            Collections.sort(appsList, Collections.reverseOrder(new DisplayNameComparator()));
+        } else {
+            Collections.sort(appsList, new DisplayNameComparator());
+        }
+        
         return appsList;
     }
 
