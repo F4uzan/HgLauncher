@@ -142,7 +142,7 @@ public class AppUtils {
         }
 
         Intent intent = Intent.makeMainActivity(component);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
         // Attempt to catch exceptions instead of crash landing directly to the floor.
         try {
