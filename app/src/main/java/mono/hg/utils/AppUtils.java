@@ -4,8 +4,10 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -13,6 +15,7 @@ import android.content.pm.ShortcutInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Process;
+import android.os.UserManager;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -154,7 +157,8 @@ public class AppUtils {
                     activity.overridePendingTransition(R.anim.pull_up, 0);
                     break;
                 case "slide_in":
-                    activity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    activity.overridePendingTransition(android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right);
                     break;
                 default:
                 case "default":
@@ -242,40 +246,71 @@ public class AppUtils {
      * Populates the internal app list. This method must be loaded asynchronously to avoid
      * performance degradation.
      *
-     * @param manager PackageManager object for use retrieving intent activities.
+     * @param activity Current foreground activity.
      *
-     * @return List an App List containing the app list itself
+     * @return List an App List containing the app list itself.
      */
-    public static List<App> loadApps(PackageManager manager) {
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+    public static List<App> loadApps(Activity activity) {
         List<App> appsList = new ArrayList<>();
+        PackageManager manager = activity.getPackageManager();
 
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        if (Utils.atLeastLollipop()) {
+            UserManager userManager = (UserManager) activity.getSystemService(Context.USER_SERVICE);
+            LauncherApps launcher = (LauncherApps) activity.getSystemService(
+                    Context.LAUNCHER_APPS_SERVICE);
 
-        List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
+            // Handle multi-profile support introduced in Android 5 (#542)
+            for (android.os.UserHandle profile : Utils.requireNonNull(userManager)
+                                                      .getUserProfiles()) {
+                for (LauncherActivityInfo activityInfo : Utils.requireNonNull(launcher)
+                                                              .getActivityList(null, profile)) {
+                    String componentName = activityInfo.getComponentName().flattenToString();
 
-        // Fetch and add every app into our list, but ignore those that are in the exclusion list.
-        for (ResolveInfo ri : availableActivities) {
-            String packageName = ri.activityInfo.packageName;
-            String componentName = packageName + "/" + ri.activityInfo.name;
-            if (!PreferenceHelper.getExclusionList().contains(componentName) && !packageName.equals(
-                    BuildConfig.APPLICATION_ID)) {
-                String appName = ri.loadLabel(manager).toString();
-                App app = new App(appName, componentName,false);
+                    if (!PreferenceHelper.getExclusionList().contains(componentName) && !componentName.equals(
+                            BuildConfig.APPLICATION_ID)) {
+                        String appName = activityInfo.getLabel().toString();
+                        App app = new App(appName, componentName, false);
 
-                app.setHintName(PreferenceHelper.getLabel(componentName));
-                app.setIcon(LauncherIconHelper.getIcon(manager, componentName));
-                appsList.add(app);
+                        app.setHintName(PreferenceHelper.getLabel(componentName));
+                        app.setIcon(LauncherIconHelper.getIcon(manager, componentName));
+                        appsList.add(app);
+                    }
+                }
+            }
+        } else {
+            Intent intent = new Intent(Intent.ACTION_MAIN, null);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+            for (ResolveInfo ri : manager.queryIntentActivities(intent, 0)) {
+                String packageName = ri.activityInfo.packageName;
+                String componentName = packageName + "/" + ri.activityInfo.name;
+                if (!PreferenceHelper.getExclusionList().contains(componentName) && !packageName.equals(
+                        BuildConfig.APPLICATION_ID)) {
+                    String appName = ri.loadLabel(manager).toString();
+                    App app = new App(appName, componentName, false);
+
+                    app.setHintName(PreferenceHelper.getLabel(componentName));
+                    app.setIcon(LauncherIconHelper.getIcon(manager, componentName));
+                    appsList.add(app);
+                }
             }
         }
 
-        if (PreferenceHelper.isListInverted()) {
-            Collections.sort(appsList, Collections.reverseOrder(new DisplayNameComparator()));
-        } else {
-            Collections.sort(appsList, new DisplayNameComparator());
-        }
-
+        sortAppList(appsList);
         return appsList;
+    }
+
+    /**
+     * Sorts a List containing the App object.
+     *
+     * @param list The list to be sorted.
+     */
+    private static void sortAppList(List<App> list) {
+        if (PreferenceHelper.isListInverted()) {
+            Collections.sort(list, Collections.reverseOrder(new DisplayNameComparator()));
+        } else {
+            Collections.sort(list, new DisplayNameComparator());
+        }
     }
 
     /**
