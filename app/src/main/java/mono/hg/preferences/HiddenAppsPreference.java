@@ -29,6 +29,7 @@ import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.App;
+import mono.hg.wrappers.DisplayNameComparator;
 
 @Keep
 public class HiddenAppsPreference extends PreferenceFragmentCompat {
@@ -110,8 +111,6 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
 
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
 
-        Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
-
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
         hiddenAppAdapter.notifyDataSetInvalidated();
@@ -128,6 +127,8 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
                 appList.add(app);
             }
         }
+
+        Collections.sort(appList, new DisplayNameComparator());
 
         hiddenAppAdapter.notifyDataSetChanged();
     }
