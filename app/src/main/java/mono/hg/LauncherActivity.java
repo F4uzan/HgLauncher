@@ -346,7 +346,7 @@ public class LauncherActivity extends AppCompatActivity {
                 manager) || (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty())) {
             updatePinnedApps(true);
             fetchAppsTask.cancel(true);
-            fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
+            fetchAppsTask = new FetchAppsTask(this, appsAdapter, appsList);
             fetchAppsTask.execute();
         }
 
@@ -375,7 +375,7 @@ public class LauncherActivity extends AppCompatActivity {
         }
 
         if (fetchAppsTask == null && appsAdapter.isEmpty()) {
-            fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
+            fetchAppsTask = new FetchAppsTask(this, appsAdapter, appsList);
             fetchAppsTask.execute();
         }
 
