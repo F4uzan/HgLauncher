@@ -3,7 +3,6 @@ package mono.hg.preferences;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -122,9 +121,10 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
             String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
             if (!ri.activityInfo.packageName.equals(requireActivity().getPackageName())) {
                 String appName = ri.loadLabel(manager).toString();
-                Drawable icon = ri.activityInfo.loadIcon(manager);
                 boolean isHidden = excludedAppList.contains(packageName);
-                App app = new App(icon, appName, packageName, null, isHidden);
+                App app = new App(appName, packageName, isHidden);
+
+                app.setIcon(ri.activityInfo.loadIcon(manager));
                 appList.add(app);
             }
         }

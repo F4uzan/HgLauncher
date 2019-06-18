@@ -261,9 +261,10 @@ public class AppUtils {
             if (!PreferenceHelper.getExclusionList().contains(componentName) && !packageName.equals(
                     BuildConfig.APPLICATION_ID)) {
                 String appName = ri.loadLabel(manager).toString();
-                String hintName = PreferenceHelper.getLabel(componentName);
-                Drawable icon = LauncherIconHelper.getIcon(manager, componentName);
-                App app = new App(icon, appName, componentName, hintName, false);
+                App app = new App(appName, componentName,false);
+
+                app.setHintName(PreferenceHelper.getLabel(componentName));
+                app.setIcon(LauncherIconHelper.getIcon(manager, componentName));
                 appsList.add(app);
             }
         }

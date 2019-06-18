@@ -14,7 +14,8 @@ import mono.hg.R;
 public class PinnedApp extends App {
 
     public PinnedApp(Drawable icon, @NonNull String packageName) {
-        super(icon, null, packageName, null, false);
+        super(null, packageName, false);
+        setIcon(icon);
     }
 
     public PinnedApp(String packageName) {

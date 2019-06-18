@@ -26,11 +26,9 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
     private Boolean isAppHidden;
     private Drawable icon;
 
-    public App(Drawable icon, String appName, @NonNull String packageName, String hintName, Boolean isAppHidden) {
+    public App(String appName, @NonNull String packageName, Boolean isAppHidden) {
         this.packageName = packageName;
         this.appName = appName;
-        this.hintName = hintName;
-        this.icon = icon;
         this.isAppHidden = isAppHidden;
     }
 
@@ -51,8 +49,20 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
         return hintName;
     }
 
+    public boolean hasHintName() {
+        return hintName != null;
+    }
+
+    public void setHintName(String newName) {
+        hintName = newName;
+    }
+
     public Drawable getIcon() {
         return icon;
+    }
+
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
     }
 
     public boolean isAppHidden() {
@@ -61,14 +71,6 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
 
     public void setAppHidden(Boolean hidden) {
         isAppHidden = hidden;
-    }
-
-    public boolean hasHintName() {
-        return hintName != null;
-    }
-
-    public void setHintName(String newName) {
-        hintName = newName;
     }
 
     public void setHintMatchScore(int newScore) {
