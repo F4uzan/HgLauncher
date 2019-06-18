@@ -154,7 +154,7 @@ public class AppUtils {
                     activity.overridePendingTransition(R.anim.pull_up, 0);
                     break;
                 case "slide_in":
-                    activity.overridePendingTransition(R.anim.slide_in, 0);
+                    activity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     break;
                 default:
                 case "default":
