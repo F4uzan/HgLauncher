@@ -204,7 +204,7 @@ public class LauncherActivity extends AppCompatActivity {
         searchContext = findViewById(R.id.search_context_button);
         loadProgress = findViewById(R.id.load_progress);
 
-        if (Utils.sdkIsAround(25)) {
+        if (Utils.atLeastLollipop()) {
             launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
         }
 
