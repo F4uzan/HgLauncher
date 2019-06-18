@@ -54,30 +54,18 @@ public class LauncherIconHelper {
      */
     public static Drawable getIcon(PackageManager manager, String componentName) {
         Drawable icon = null;
-        Drawable custIcon = null;
 
         if (!PreferenceHelper.shouldHideIcon()) {
-            if (!PreferenceHelper.getIconPackName().equals("default")) {
-                custIcon = LauncherIconHelper.getIconDrawable(manager, componentName);
-            }
-            if (custIcon == null) {
-                try {
-                    icon = manager.getActivityIcon(
-                            ComponentName.unflattenFromString(componentName));
-                } catch (PackageManager.NameNotFoundException ignored) {
-                    // No-op. We can't get here (hopefully).
-                }
+             icon = LauncherIconHelper.getIconDrawable(manager, componentName);
 
-                if (PreferenceHelper.appTheme().equals("light")
-                        && PreferenceHelper.shadeAdaptiveIcon()
-                        && (Utils.atLeastOreo()
-                        && icon instanceof AdaptiveIconDrawable)) {
-                    icon = LauncherIconHelper.drawAdaptiveShadow(icon);
-                }
-            } else {
-                icon = custIcon;
+            if (PreferenceHelper.appTheme().equals("light")
+                    && PreferenceHelper.shadeAdaptiveIcon()
+                    && (Utils.atLeastOreo()
+                    && icon instanceof AdaptiveIconDrawable)) {
+                icon = LauncherIconHelper.drawAdaptiveShadow(icon);
             }
         }
+
         return icon;
     }
 
@@ -251,12 +239,31 @@ public class LauncherIconHelper {
      * otherwise an associated icon from the icon pack will be returned.
      */
     // Load icon from the cached appfilter.
+
+    /**
+     * Loads an icon from the icon pack based on the received package name.
+     *
+     * @param packageManager PackageManager object to determine the launch intent of
+     *                       the package name.
+     * @param appPackageName Package name of the app whose icon is to be loaded.
+     *
+     * @return Drawable Will return null if there is no icon associated with the package name,
+     * otherwise an associated icon from the icon pack will be returned.
+     */
     public static Drawable getIconDrawable(PackageManager packageManager, String appPackageName) {
         String componentName = "ComponentInfo{" + appPackageName + "}";
         Resources iconRes = null;
+        Drawable defaultIcon = null;
 
         try {
-            iconRes = packageManager.getResourcesForApplication(iconPackageName);
+            defaultIcon = packageManager.getActivityIcon(
+                    ComponentName.unflattenFromString(appPackageName));
+
+            if (!"default".equals(iconPackageName)) {
+                iconRes = packageManager.getResourcesForApplication(iconPackageName);
+            } else {
+                return defaultIcon;
+            }
         } catch (PackageManager.NameNotFoundException e) {
             Utils.sendLog(Utils.LogLevel.ERROR, e.toString());
         }
@@ -265,7 +272,8 @@ public class LauncherIconHelper {
         if (drawable != null && iconRes != null) {
             // Load and return.
             return loadDrawable(iconRes, drawable, iconPackageName);
+        } else {
+            return defaultIcon;
         }
-        return null;
     }
 }
