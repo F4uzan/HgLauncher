@@ -91,38 +91,19 @@ public class AppUtils {
     /**
      * Pins an app to the favourites panel.
      *
-     * @param packageManager PackageManager object used to fetch information regarding
-     *                       the app that is being loaded.
-     * @param componentName  The package name to load and fetch.
-     * @param adapter        Which adapter should we notify update to?
-     * @param list           Which List object should be updated?
+     * @param activity      Current foreground activity.
+     * @param componentName The package name to load and fetch.
+     * @param adapter       Which adapter should we notify update to?
+     * @param list          Which List object should be updated?
      */
-    public static void pinApp(PackageManager packageManager, String componentName,
+    public static void pinApp(Activity activity, String componentName,
             FlexibleAdapter<PinnedApp> adapter, List<PinnedApp> list) {
         if (!adapter.contains(new PinnedApp(componentName))) {
-            ComponentName iconComponent = ComponentName.unflattenFromString(componentName);
+            Drawable icon = LauncherIconHelper.getIcon(activity, componentName);
 
-            try {
-                Drawable icon;
-                Drawable getIcon = null;
-
-                if (!PreferenceHelper.getIconPackName().equals("default")) {
-                    getIcon = LauncherIconHelper.getIconDrawable(packageManager,
-                            componentName);
-                }
-                if (getIcon == null) {
-                    icon = packageManager.getActivityIcon(iconComponent);
-                } else {
-                    icon = getIcon;
-                }
-
-                PinnedApp app = new PinnedApp(icon, componentName);
-                list.add(app);
-                adapter.updateDataSet(list, false);
-            } catch (PackageManager.NameNotFoundException e) {
-                Utils.sendLog(Utils.LogLevel.ERROR,
-                        "Unable to pin " + componentName + ";missing package?");
-            }
+            PinnedApp app = new PinnedApp(icon, componentName);
+            list.add(app);
+            adapter.updateDataSet(list, false);
         }
     }
 
@@ -265,13 +246,14 @@ public class AppUtils {
                                                               .getActivityList(null, profile)) {
                     String componentName = activityInfo.getComponentName().flattenToString();
 
-                    if (!PreferenceHelper.getExclusionList().contains(componentName) && !componentName.equals(
+                    if (!PreferenceHelper.getExclusionList()
+                                         .contains(componentName) && !componentName.equals(
                             BuildConfig.APPLICATION_ID)) {
                         String appName = activityInfo.getLabel().toString();
                         App app = new App(appName, componentName, false);
 
                         app.setHintName(PreferenceHelper.getLabel(componentName));
-                        app.setIcon(LauncherIconHelper.getIcon(manager, componentName));
+                        app.setIcon(LauncherIconHelper.getIcon(activity, componentName));
                         appsList.add(app);
                     }
                 }
@@ -283,13 +265,14 @@ public class AppUtils {
             for (ResolveInfo ri : manager.queryIntentActivities(intent, 0)) {
                 String packageName = ri.activityInfo.packageName;
                 String componentName = packageName + "/" + ri.activityInfo.name;
-                if (!PreferenceHelper.getExclusionList().contains(componentName) && !packageName.equals(
+                if (!PreferenceHelper.getExclusionList()
+                                     .contains(componentName) && !packageName.equals(
                         BuildConfig.APPLICATION_ID)) {
                     String appName = ri.loadLabel(manager).toString();
                     App app = new App(appName, componentName, false);
 
                     app.setHintName(PreferenceHelper.getLabel(componentName));
-                    app.setIcon(LauncherIconHelper.getIcon(manager, componentName));
+                    app.setIcon(LauncherIconHelper.getIcon(activity, componentName));
                     appsList.add(app);
                 }
             }

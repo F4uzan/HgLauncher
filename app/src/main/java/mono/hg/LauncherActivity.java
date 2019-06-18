@@ -326,7 +326,7 @@ public class LauncherActivity extends AppCompatActivity {
         if (!PreferenceHelper.getPreference()
                              .getString("icon_pack", "default")
                              .equals(PreferenceHelper.getIconPackName())) {
-            LauncherIconHelper.clearDrawableCache();
+            LauncherIconHelper.refreshIcons();
         }
 
         // Get pinned apps.
@@ -662,7 +662,7 @@ public class LauncherActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pin:
-                        AppUtils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
+                        AppUtils.pinApp(LauncherActivity.this, packageName, pinnedAppsAdapter, pinnedAppList);
                         pinnedAppString = pinnedAppString.concat(packageName + ";");
                         PreferenceHelper.update("pinned_apps_list", pinnedAppString);
                         break;
@@ -1065,7 +1065,7 @@ public class LauncherActivity extends AppCompatActivity {
 
             for (String pinnedApp : pinnedAppString.split(";")) {
                 if (AppUtils.doesComponentExist(manager, pinnedApp)) {
-                    AppUtils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
+                    AppUtils.pinApp(this, pinnedApp, pinnedAppsAdapter, pinnedAppList);
                 }
             }
         }
