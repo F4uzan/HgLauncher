@@ -536,6 +536,7 @@ public class LauncherActivity extends AppCompatActivity {
         searchContext.post(new Runnable() {
             @Override public void run() {
                 searchContext.setTranslationX(searchContext.getMeasuredWidth());
+                isContextVisible = false;
             }
         });
 
