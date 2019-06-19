@@ -239,7 +239,6 @@ public class AppUtils {
             UserManager userManager = (UserManager) activity.getSystemService(Context.USER_SERVICE);
             LauncherApps launcher = (LauncherApps) activity.getSystemService(
                     Context.LAUNCHER_APPS_SERVICE);
-
             for (android.os.UserHandle profile : Utils.requireNonNull(userManager)
                                                       .getUserProfiles()) {
                 for (LauncherActivityInfo activityInfo : Utils.requireNonNull(launcher)
