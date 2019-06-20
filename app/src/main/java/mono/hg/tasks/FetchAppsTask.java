@@ -41,7 +41,7 @@ public class FetchAppsTask extends AsyncTask<Void, Void, Void> {
         List<App> listRef = appsList.get();
 
         if (activityRef != null && listRef != null) {
-            listRef.addAll(AppUtils.loadApps(activityRef));
+            listRef.addAll(AppUtils.loadApps(activityRef, true));
         }
         return null;
     }

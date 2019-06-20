@@ -267,7 +267,7 @@ public class AppUtils {
      *
      * @return List an App List containing the app list itself.
      */
-    public static List<App> loadApps(Activity activity) {
+    public static List<App> loadApps(Activity activity, boolean hideHidden) {
         List<App> appsList = new ArrayList<>();
         PackageManager manager = activity.getPackageManager();
         UserUtils userUtils = new UserUtils(activity);
@@ -290,16 +290,17 @@ public class AppUtils {
                         userPackageName = componentName;
                     }
 
-                    if (!PreferenceHelper.getExclusionList()
-                                         .contains(userPackageName) && !componentName.equals(
-                            BuildConfig.APPLICATION_ID)) {
+                    boolean isHidden = PreferenceHelper.getExclusionList().contains(componentName)
+                            || componentName.contains(BuildConfig.APPLICATION_ID);
+
+                    if (!hideHidden || !isHidden) {
                         String appName = activityInfo.getLabel().toString();
                         App app = new App(appName, componentName, false, user);
-
 
                         app.setHintName(PreferenceHelper.getLabel(userPackageName));
                         app.setUserPackageName(userPackageName);
                         app.setIcon(LauncherIconHelper.getIcon(activity, componentName, user));
+                        app.setAppHidden(isHidden);
                         appsList.add(app);
                     }
                 }
@@ -311,9 +312,10 @@ public class AppUtils {
             for (ResolveInfo ri : manager.queryIntentActivities(intent, 0)) {
                 String packageName = ri.activityInfo.packageName;
                 String componentName = packageName + "/" + ri.activityInfo.name;
-                if (!PreferenceHelper.getExclusionList()
-                                     .contains(componentName) && !packageName.equals(
-                        BuildConfig.APPLICATION_ID)) {
+                boolean isHidden = PreferenceHelper.getExclusionList().contains(componentName)
+                        || componentName.contains(BuildConfig.APPLICATION_ID);
+
+                if (!hideHidden || !isHidden) {
                     String appName = ri.loadLabel(manager).toString();
                     App app = new App(appName, componentName, false, userUtils.getCurrentSerial());
 
@@ -321,6 +323,7 @@ public class AppUtils {
                     app.setUserPackageName(componentName);
                     app.setIcon(LauncherIconHelper.getIcon(activity, componentName,
                             userUtils.getCurrentSerial()));
+                    app.setAppHidden(isHidden);
                     appsList.add(app);
                 }
             }

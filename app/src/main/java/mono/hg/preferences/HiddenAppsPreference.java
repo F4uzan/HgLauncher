@@ -1,8 +1,6 @@
 package mono.hg.preferences;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,13 +20,13 @@ import androidx.preference.PreferenceFragmentCompat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.App;
+import mono.hg.utils.AppUtils;
 import mono.hg.wrappers.DisplayNameComparator;
 
 @Keep
@@ -106,29 +104,12 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
     }
 
     private void loadApps() {
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
-
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
         hiddenAppAdapter.notifyDataSetInvalidated();
 
         // Fetch and add every app into our list,
-        //TODO: Fix this for multi-user.
-        for (ResolveInfo ri : availableActivities) {
-            String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
-            if (!ri.activityInfo.packageName.equals(requireActivity().getPackageName())) {
-                String appName = ri.loadLabel(manager).toString();
-                boolean isHidden = excludedAppList.contains(packageName);
-                App app = new App(appName, packageName, isHidden, 0);
-
-                app.setIcon(ri.activityInfo.loadIcon(manager));
-                appList.add(app);
-            }
-        }
-
+        appList.addAll(AppUtils.loadApps(requireActivity(), false));
         Collections.sort(appList, new DisplayNameComparator());
 
         hiddenAppAdapter.notifyDataSetChanged();
