@@ -2,6 +2,7 @@ package mono.hg;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.LauncherApps;
@@ -10,7 +11,6 @@ import android.content.pm.ShortcutInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Process;
 import android.provider.Settings;
 import android.text.Editable;
 import android.util.SparseArray;
@@ -59,6 +59,7 @@ import mono.hg.receivers.PackageChangesReceiver;
 import mono.hg.tasks.FetchAppsTask;
 import mono.hg.utils.ActivityServiceUtils;
 import mono.hg.utils.AppUtils;
+import mono.hg.utils.UserUtils;
 import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
 import mono.hg.views.DagashiBar;
@@ -170,6 +171,7 @@ public class LauncherActivity extends AppCompatActivity {
     private PackageChangesReceiver packageReceiver = new PackageChangesReceiver();
 
     private LauncherApps launcherApps;
+    private UserUtils userUtils;
 
     private FetchAppsTask fetchAppsTask;
 
@@ -207,6 +209,8 @@ public class LauncherActivity extends AppCompatActivity {
         if (Utils.atLeastLollipop()) {
             launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
         }
+
+        userUtils = new UserUtils(this);
 
         animateDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -594,9 +598,12 @@ public class LauncherActivity extends AppCompatActivity {
      * @param isPinned Is this a pinned app?
      * @param app      App object selected from the list.
      */
-    private void createAppMenu(View view, boolean isPinned, App app) {
+    private void createAppMenu(View view, boolean isPinned, final App app) {
         final String packageName = app.getPackageName();
-        final Uri packageNameUri = Uri.parse("package:" + AppUtils.getPackageName(packageName));
+        final ComponentName componentName = ComponentName.unflattenFromString(packageName);
+        final long user = app.getUser();
+        PinnedApp pinApp = new PinnedApp(app.getPackageName(), app.getUser());
+        final Uri packageNameUri = Uri.fromParts("package", AppUtils.getPackageName(packageName), null);
         final SparseArray<String> shortcutMap = new SparseArray<>();
 
         int position;
@@ -633,7 +640,8 @@ public class LauncherActivity extends AppCompatActivity {
 
         // Hide 'pin' if the app is already pinned or isPinned is set.
         appMenu.getMenu().findItem(R.id.action_pin)
-               .setVisible(!isPinned && !pinnedAppString.contains(packageName));
+               .setVisible(!isPinned
+                       && !pinnedAppsAdapter.contains(pinApp));
 
         // We can't hide an app from the favourites panel.
         appMenu.getMenu().findItem(R.id.action_hide).setVisible(!isPinned);
@@ -645,7 +653,8 @@ public class LauncherActivity extends AppCompatActivity {
 
         // Show uninstall menu if the app is not a system app.
         appMenu.getMenu().findItem(R.id.action_uninstall)
-               .setVisible(!AppUtils.isSystemApp(manager, packageName));
+               .setVisible(!AppUtils.isSystemApp(manager, packageName)
+                       && app.getUser() == userUtils.getCurrentSerial());
 
         appMenu.show();
 
@@ -654,32 +663,39 @@ public class LauncherActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pin:
-                        AppUtils.pinApp(LauncherActivity.this, packageName, pinnedAppsAdapter, pinnedAppList);
-                        pinnedAppString = pinnedAppString.concat(packageName + ";");
+                        AppUtils.pinApp(LauncherActivity.this, user, packageName, pinnedAppsAdapter,
+                                pinnedAppList);
+                        pinnedAppString = pinnedAppString.concat(app.getUserPackageName() + ";");
                         PreferenceHelper.update("pinned_apps_list", pinnedAppString);
                         break;
                     case R.id.action_unpin:
                         pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
                         pinnedAppsAdapter.removeItem(finalPosition);
-                        pinnedAppString = pinnedAppString.replace(packageName + ";", "");
+                        pinnedAppString = pinnedAppString.replace(app.getUserPackageName() + ";",
+                                "");
                         PreferenceHelper.update("pinned_apps_list", pinnedAppString);
                         if (pinnedAppsAdapter.isEmpty()) {
                             doThis("hide_favourites");
                         }
                         break;
                     case R.id.action_info:
-                        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                packageNameUri));
+                        if (Utils.atLeastLollipop()) {
+                            launcherApps.startAppDetailsActivity(componentName,
+                                    userUtils.getUser(app.getUser()), null, null);
+                        } else {
+                            startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                    packageNameUri));
+                        }
                         break;
                     case R.id.action_uninstall:
                         startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageNameUri));
                         break;
                     case R.id.action_shorthand:
-                        makeRenameDialog(packageName, finalPosition);
+                        makeRenameDialog(app.getUserPackageName(), finalPosition);
                         break;
                     case R.id.action_hide:
                         // Add the app's package name to the exclusion list.
-                        excludedAppsList.add(packageName);
+                        excludedAppsList.add(app.getUserPackageName());
 
                         PreferenceHelper.update("hidden_apps", excludedAppsList);
 
@@ -693,7 +709,7 @@ public class LauncherActivity extends AppCompatActivity {
                             launcherApps.startShortcut(AppUtils.getPackageName(packageName),
                                     Utils.requireNonNull(shortcutMap.get(item.getItemId())),
                                     null, null,
-                                    Process.myUserHandle());
+                                    userUtils.getUser(user));
                         }
                         break;
                 }
@@ -882,8 +898,7 @@ public class LauncherActivity extends AppCompatActivity {
         appsAdapter.addListener(new FlexibleAdapter.OnItemClickListener() {
             @Override public boolean onItemClick(View view, int position) {
                 AppUtils.launchApp(LauncherActivity.this,
-                        Utils.requireNonNull(appsAdapter.getItem(position))
-                             .getPackageName());
+                        Utils.requireNonNull(appsAdapter.getItem(position)));
                 return true;
             }
         });
@@ -892,8 +907,7 @@ public class LauncherActivity extends AppCompatActivity {
         pinnedAppsAdapter.addListener(new FlexibleAdapter.OnItemClickListener() {
             @Override public boolean onItemClick(View view, int position) {
                 AppUtils.launchApp(LauncherActivity.this,
-                        Utils.requireNonNull(pinnedAppsAdapter.getItem(position))
-                             .getPackageName());
+                        Utils.requireNonNull(pinnedAppsAdapter.getItem(position)));
                 return true;
             }
         });
@@ -1056,15 +1070,25 @@ public class LauncherActivity extends AppCompatActivity {
             pinnedAppsAdapter.updateDataSet(pinnedAppList, false);
 
             for (String pinnedApp : pinnedAppString.split(";")) {
-                if (AppUtils.doesComponentExist(manager, pinnedApp)) {
-                    AppUtils.pinApp(this, pinnedApp, pinnedAppsAdapter, pinnedAppList);
+                String componentName = pinnedApp;
+                long user = userUtils.getCurrentSerial();
+
+                // Handle pinned apps coming from another user.
+                String[] userSplit = pinnedApp.split("-");
+                if (userSplit.length == 2) {
+                    user = Long.parseLong(userSplit[0]);
+                    componentName = userSplit[1];
+                }
+
+                if (AppUtils.doesComponentExist(manager, componentName)) {
+                    AppUtils.pinApp(this, user, componentName, pinnedAppsAdapter, pinnedAppList);
                 }
             }
         }
 
         // Iterate through the list to get package name of each pinned apps, then stringify them.
-        for (App app : pinnedAppList) {
-            newAppString = newAppString.concat(app.getPackageName() + ";");
+        for (PinnedApp app : pinnedAppList) {
+            newAppString = newAppString.concat(app.getUserPackageName() + ";");
         }
 
         // Update the saved pinned apps.
@@ -1094,7 +1118,6 @@ public class LauncherActivity extends AppCompatActivity {
         }
         startDialog.show();
     }
-
 
     /**
      * Creates a dialog to set an app's shorthand.

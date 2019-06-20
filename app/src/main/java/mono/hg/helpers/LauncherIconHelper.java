@@ -18,7 +18,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Process;
+import android.os.UserManager;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -39,7 +39,8 @@ import mono.hg.utils.Utils;
 
 public class LauncherIconHelper {
     private static HashMap<String, String> mPackagesDrawables = new HashMap<>();
-    private static String iconPackageName = PreferenceHelper.getPreference().getString("icon_pack", "default");
+    private static String iconPackageName = PreferenceHelper.getPreference()
+                                                            .getString("icon_pack", "default");
 
     /**
      * Clears cached icon pack.
@@ -58,11 +59,11 @@ public class LauncherIconHelper {
      *
      * @return Drawable of the icon.
      */
-    public static Drawable getIcon(Activity activity, String componentName) {
+    public static Drawable getIcon(Activity activity, String componentName, long user) {
         Drawable icon = null;
 
         if (!PreferenceHelper.shouldHideIcon()) {
-            icon = LauncherIconHelper.getIconDrawable(activity, componentName);
+            icon = LauncherIconHelper.getIconDrawable(activity, componentName, user);
 
             if (PreferenceHelper.appTheme().equals("light")
                     && PreferenceHelper.shadeAdaptiveIcon()
@@ -248,7 +249,7 @@ public class LauncherIconHelper {
      * @return Drawable Will return null if there is no icon associated with the package name,
      * otherwise an associated icon from the icon pack will be returned.
      */
-    private static Drawable getIconDrawable(Activity activity, String appPackageName) {
+    private static Drawable getIconDrawable(Activity activity, String appPackageName, long user) {
         PackageManager packageManager = activity.getPackageManager();
         String componentName = "ComponentInfo{" + appPackageName + "}";
         Resources iconRes = null;
@@ -258,10 +259,14 @@ public class LauncherIconHelper {
             if (Utils.atLeastLollipop()) {
                 LauncherApps launcher = (LauncherApps) activity.getSystemService(
                         Context.LAUNCHER_APPS_SERVICE);
-                defaultIcon = Utils.requireNonNull(launcher)
-                                   .getActivityList(AppUtils.getPackageName(appPackageName),
-                                           Process.myUserHandle())
-                                   .get(0).getBadgedIcon(0);
+                UserManager userManager = (UserManager) activity.getSystemService(
+                        Context.USER_SERVICE);
+
+                if (userManager != null && launcher != null) {
+                    defaultIcon = launcher.getActivityList(AppUtils.getPackageName(appPackageName),
+                            userManager.getUserForSerialNumber(user))
+                                          .get(0).getBadgedIcon(0);
+                }
             } else {
                 defaultIcon = packageManager.getActivityIcon(
                         ComponentName.unflattenFromString(appPackageName));

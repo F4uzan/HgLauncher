@@ -89,48 +89,58 @@ public class AppUtils {
     }
 
     /**
+     * Appends user serial to a component name.
+     *
+     * @param user          The user serial to prefix the component name.
+     * @param componentName The component name itself.
+     *
+     * @return String with a hyphen-appended user serial.
+     */
+    public static String appendUser(long user, String componentName) {
+        return user + "-" + componentName;
+    }
+
+    /**
      * Pins an app to the favourites panel.
      *
      * @param activity      Current foreground activity.
+     * @param user          User profile where the app originates.
      * @param componentName The package name to load and fetch.
      * @param adapter       Which adapter should we notify update to?
      * @param list          Which List object should be updated?
      */
-    public static void pinApp(Activity activity, String componentName,
+    public static void pinApp(Activity activity, long user, String componentName,
             FlexibleAdapter<PinnedApp> adapter, List<PinnedApp> list) {
-        if (!adapter.contains(new PinnedApp(componentName))) {
-            Drawable icon = LauncherIconHelper.getIcon(activity, componentName);
+        Drawable icon = LauncherIconHelper.getIcon(activity, componentName, user);
 
-            PinnedApp app = new PinnedApp(icon, componentName);
-            list.add(app);
-            adapter.updateDataSet(list, false);
-        }
+        PinnedApp app = new PinnedApp(icon, componentName, user);
+        list.add(app);
+        adapter.updateDataSet(list, false);
     }
 
     /**
      * Launches an app as a new task.
      *
-     * @param componentName The component name of the app.
+     * @param activity Current foreground activity.
+     * @param app      App object to launch.
      */
-    public static void launchApp(Activity activity, String componentName) {
-        // When receiving 'none', it's probably a gesture that hasn't been registered.
-        if ("none".equals(componentName)) {
-            return;
-        }
-
-        ComponentName component = ComponentName.unflattenFromString(componentName);
-
-        // Forcibly end if we can't unflatten the string.
-        if (component == null) {
-            return;
-        }
-
-        Intent intent = Intent.makeMainActivity(component);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
+    public static void launchApp(Activity activity, App app) {
         // Attempt to catch exceptions instead of crash landing directly to the floor.
         try {
-            activity.startActivity(intent);
+            if (Utils.atLeastLollipop()) {
+                UserUtils userUtils = new UserUtils(activity);
+                LauncherApps launcher = (LauncherApps) activity.getSystemService(
+                        Context.LAUNCHER_APPS_SERVICE);
+                ComponentName componentName = ComponentName.unflattenFromString(
+                        app.getPackageName());
+
+                if (launcher != null) {
+                    launcher.startMainActivity(componentName, userUtils.getUser(app.getUser()),
+                            null, null);
+                }
+            } else {
+                quickLaunch(activity, app.getPackageName());
+            }
 
             // Override app launch animation when needed.
             switch (PreferenceHelper.getLaunchAnim()) {
@@ -149,8 +159,34 @@ public class AppUtils {
         } catch (ActivityNotFoundException | NullPointerException e) {
             Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show();
             Utils.sendLog(Utils.LogLevel.ERROR,
-                    "Cannot start " + componentName + "; missing package?");
+                    "Cannot start " + app.getPackageName() + "; missing package?");
         }
+    }
+
+    /**
+     * Launches an activity based on its component name.
+     *
+     * @param activity      Current foreground activity.
+     * @param componentName Component name of the app to be launched.
+     */
+    static void quickLaunch(Activity activity, String componentName) {
+        // When receiving 'none', it's probably a gesture that hasn't been registered.
+        if ("none".equals(componentName)) {
+            return;
+        }
+
+        ComponentName component = ComponentName.unflattenFromString(componentName);
+
+        // Forcibly end if we can't unflatten the string.
+        if (component == null) {
+            return;
+        }
+
+        Intent intent = Intent.makeMainActivity(component);
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+        activity.startActivity(intent);
     }
 
     /**
@@ -234,6 +270,7 @@ public class AppUtils {
     public static List<App> loadApps(Activity activity) {
         List<App> appsList = new ArrayList<>();
         PackageManager manager = activity.getPackageManager();
+        UserUtils userUtils = new UserUtils(activity);
 
         if (Utils.atLeastLollipop()) {
             UserManager userManager = (UserManager) activity.getSystemService(Context.USER_SERVICE);
@@ -244,15 +281,25 @@ public class AppUtils {
                 for (LauncherActivityInfo activityInfo : Utils.requireNonNull(launcher)
                                                               .getActivityList(null, profile)) {
                     String componentName = activityInfo.getComponentName().flattenToString();
+                    String userPackageName;
+                    long user = userUtils.getSerial(profile);
+
+                    if (user != userUtils.getCurrentSerial()) {
+                        userPackageName = appendUser(user, componentName);
+                    } else {
+                        userPackageName = componentName;
+                    }
 
                     if (!PreferenceHelper.getExclusionList()
-                                         .contains(componentName) && !componentName.equals(
+                                         .contains(userPackageName) && !componentName.equals(
                             BuildConfig.APPLICATION_ID)) {
                         String appName = activityInfo.getLabel().toString();
-                        App app = new App(appName, componentName, false);
+                        App app = new App(appName, componentName, false, user);
 
-                        app.setHintName(PreferenceHelper.getLabel(componentName));
-                        app.setIcon(LauncherIconHelper.getIcon(activity, componentName));
+
+                        app.setHintName(PreferenceHelper.getLabel(userPackageName));
+                        app.setUserPackageName(userPackageName);
+                        app.setIcon(LauncherIconHelper.getIcon(activity, componentName, user));
                         appsList.add(app);
                     }
                 }
@@ -268,10 +315,12 @@ public class AppUtils {
                                      .contains(componentName) && !packageName.equals(
                         BuildConfig.APPLICATION_ID)) {
                     String appName = ri.loadLabel(manager).toString();
-                    App app = new App(appName, componentName, false);
+                    App app = new App(appName, componentName, false, userUtils.getCurrentSerial());
 
                     app.setHintName(PreferenceHelper.getLabel(componentName));
-                    app.setIcon(LauncherIconHelper.getIcon(activity, componentName));
+                    app.setUserPackageName(componentName);
+                    app.setIcon(LauncherIconHelper.getIcon(activity, componentName,
+                            userUtils.getCurrentSerial()));
                     appsList.add(app);
                 }
             }

@@ -201,6 +201,8 @@ public class Utils {
      * @see Gesture Valid directions for the gestures.
      */
     public static void handleGestureActions(AppCompatActivity activity, int direction) {
+        UserUtils userUtils = new UserUtils(activity);
+
         switch (PreferenceHelper.getGestureForDirection(direction)) {
             case "handler":
                 if (PreferenceHelper.getGestureHandler() != null) {
@@ -227,7 +229,7 @@ public class Utils {
                 break;
             case "none":
             default:
-                AppUtils.launchApp(activity, PreferenceHelper.getGestureForDirection(direction));
+                AppUtils.quickLaunch(activity, PreferenceHelper.getGestureForDirection(direction));
                 break;
         }
     }

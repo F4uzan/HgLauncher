@@ -116,12 +116,13 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
         hiddenAppAdapter.notifyDataSetInvalidated();
 
         // Fetch and add every app into our list,
+        //TODO: Fix this for multi-user.
         for (ResolveInfo ri : availableActivities) {
             String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
             if (!ri.activityInfo.packageName.equals(requireActivity().getPackageName())) {
                 String appName = ri.loadLabel(manager).toString();
                 boolean isHidden = excludedAppList.contains(packageName);
-                App app = new App(appName, packageName, isHidden);
+                App app = new App(appName, packageName, isHidden, 0);
 
                 app.setIcon(ri.activityInfo.loadIcon(manager));
                 appList.add(app);
@@ -134,7 +135,7 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
     }
 
     private void toggleHiddenState(int position) {
-        String packageName = appList.get(position).getPackageName();
+        String packageName = appList.get(position).getUserPackageName();
 
         // Check if package is already in exclusion.
         if (excludedAppList.contains(packageName)) {
