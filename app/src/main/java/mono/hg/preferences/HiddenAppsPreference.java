@@ -1,6 +1,5 @@
 package mono.hg.preferences;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +17,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceFragmentCompat;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 
 import mono.hg.R;
@@ -27,13 +25,11 @@ import mono.hg.adapters.HiddenAppAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.App;
 import mono.hg.utils.AppUtils;
-import mono.hg.wrappers.DisplayNameComparator;
 
 @Keep
 public class HiddenAppsPreference extends PreferenceFragmentCompat {
     private ArrayList<App> appList = new ArrayList<>();
     private HiddenAppAdapter hiddenAppAdapter;
-    private PackageManager manager;
     private HashSet<String> excludedAppList = new HashSet<>(
             PreferenceHelper.getPreference().getStringSet("hidden_apps", new HashSet<String>()));
     private ListView appsListView;
@@ -50,8 +46,6 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-
-        manager = requireActivity().getPackageManager();
 
         appsListView = requireActivity().findViewById(R.id.hidden_apps_list);
         hiddenAppAdapter = new HiddenAppAdapter(appList, requireActivity());
@@ -110,7 +104,6 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
 
         // Fetch and add every app into our list,
         appList.addAll(AppUtils.loadApps(requireActivity(), false));
-        Collections.sort(appList, new DisplayNameComparator());
 
         hiddenAppAdapter.notifyDataSetChanged();
     }
