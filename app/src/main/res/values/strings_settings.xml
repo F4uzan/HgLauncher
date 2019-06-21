@@ -54,7 +54,7 @@
     <string name="backup_restore_dialog">Restoring…</string>
     <string name="restore_complete">Backup restored.</string>
     <string name="backup_complete">Backup saved.</string>
-    <string name="backup_empty">Pick a backup name.</string>
+    <string name="backup_empty">Type in backup name.</string>
 
     <!-- Credits dialog. -->
     <string name="about_credits_dialog_title">Credits</string>
