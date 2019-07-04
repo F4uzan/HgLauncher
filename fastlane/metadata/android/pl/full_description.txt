@@ -1,0 +1,10 @@
+HgLauncher jest launcherem z filozofią projektowania "jeśli działa, to działa". Składająca się z prostej przewijanej listy aplikacji, nie ma zbyt wiele wizualnych wskazówek, które mogłyby przeszkadzać. Jeśli wszystko, czego chcesz w launcherze, to po prostu uruchamiać aplikacje, wtedy możesz patrzeć na prawy launcher.
+
+Cechy:
+• Proste i szybkie; nikt nie lubi czekać.
+• Dyskretny interfejs użytkownika: pokaż swoją tapetę w całej jej okazałości!
+• Małe, ale rozbudowane dostosowywanie interfejsu użytkownika.
+• Wsparcie dla wszystkich rodzajów niestandardowych funkcji launchera: pakietów ikon, ukrywanie aplikacji i wiele więcej!
+• Minimalne zużycie pamięci przy zachowaniu najlepszej wydajności.
+• Całkowicie FLOSS; żadnych reklam, żadnych ograniczeń funkcjonalności, żadnych głupich nagów.
+• ...i jeszcze więcej!
