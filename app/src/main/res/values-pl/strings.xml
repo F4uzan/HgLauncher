@@ -1,7 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App information -->
     <string name="app_name">HgLauncher</string>
-
     <!-- Menu actions -->
     <string name="action_settings">Ustawienia</string>
     <string name="action_wallpaper">Zmień tapetę</string>
@@ -17,7 +17,6 @@
     <string name="action_web_provider_add">Dodaj</string>
     <string name="action_web_provider_reset">Resetuj</string>
     <string name="action_save_backup">Zapisz</string>
-
     <!-- App menu actions -->
     <string name="action_pin">Przypnij</string>
     <string name="action_unpin">Odepnij</string>
@@ -29,30 +28,32 @@
     <string name="action_shorthand">Tagi wyszukiwania</string>
     <string name="action_actions">Dostosuj</string>
     <string name="action_shortcuts">Skróty</string>
-
     <!-- Misc -->
     <string name="search_hint">Wyszukaj…</string>
-    <string name="search_web_hint">Szukaj \'%1$s\' w sieci.</string>
-    <string name="search_web_button_prompt">Idź…</string>
+    <string name="search_web_hint">Szukaj \'%1$s\' w sieci</string>
+    <string name="search_web_button_prompt">Idź...</string>
     <string name="search_web_button">Idz</string>
     <string name="dialog_title_add_provider">Dodaj wyszukiwarkę</string>
-    <string name="dialog_title_edit_provider">Edit provider</string>
+    <string name="dialog_title_edit_provider">Edytuj dostawcę</string>
     <string name="dialog_title_shorthand">Dodaj tagi wyszukiwania</string>
     <string name="dialog_title_widgets">Dodaj widżet</string>
     <string name="dialog_action_close">Zamknij</string>
     <string name="dialog_action_add">Dodaj</string>
-
     <!-- Error messages -->
     <string name="err_activity_null">Nie można uruchomić aplikacji.</string>
     <string name="err_invalid_url">Błędny URL.</string>
-    <string name="err_provider_exists">Nazwa dostawcy musi być unikalna</string>
-
+    <string name="err_provider_exists">Nazwa dostawcy musi być unikalna.</string>
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Widok pulpitu</string>
     <string name="desc_apps_list">Lista aplikacji</string>
     <string name="desc_icon">Aplikacje</string>
     <string name="desc_file">Pliki</string>
-
     <!-- Built-in search providers -->
     <string name="search_provider_none">Zawsze pytaj</string>
+    <string name="err_no_method_panel">Ta akcja nie jest dostępna dla tej wersji systemu Android.</string>
+    <string name="desc_clear_search">Wyczyść wyszukiwanie</string>
+    <string name="dialog_start_hint_title">Witaj!</string>
+    <string name="dialog_start_hint_message_one">To jest Twój pulpit. W tym miejscu można...
+\n • Dotknij, aby otworzyć listę aplikacji
+\n • Długie naciśnięcie, aby zmienić tapetę i otworzyć ustawienia</string>
 </resources>
