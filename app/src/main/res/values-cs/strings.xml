@@ -1,2 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">HgLauncher</string>
+    <string name="action_settings">Nastavení</string>
+    <string name="action_wallpaper">Změnit pozadí</string>
+    <string name="action_force_refresh">Obnovit</string>
+    <string name="action_view_widgets">Plocha pro widgety</string>
+    <string name="action_remove_widget">Odstranit widget</string>
+    <string name="action_up_widget">Posunout nahoru</string>
+    <string name="action_down_widget">Posunout dolu</string>
+    <string name="action_web_provider_remove">Odstranit</string>
+    <string name="action_web_provider_exclude">Vyloučit</string>
+    <string name="action_web_provider_edit">Upravit</string>
+    <string name="action_hidden_app_reset">Obnovit vše</string>
+    <string name="action_web_provider_add">Přidat</string>
+    <string name="action_web_provider_reset">Reset</string>
+    <string name="action_save_backup">Uložit</string>
+    <string name="action_pin">Připnout</string>
+    <string name="action_unpin">Odepnout</string>
+    <string name="action_hide">Skrýt</string>
+    <string name="action_show">Obnovit</string>
+    <string name="action_backup">Záloha</string>
+    <string name="action_uninstall">Odinstalovat</string>
+    <string name="action_info">Informace o aplikaci</string>
+    <string name="action_actions">Akce</string>
+    <string name="action_shortcuts">Zkratky</string>
+    <string name="search_hint">Hledat…</string>
+    <string name="search_web_hint">Hledat \'%1$s\' online</string>
+    <string name="search_web_button_prompt">S</string>
+    <string name="dialog_title_add_provider">Přidat poskytovatele</string>
+    <string name="dialog_title_edit_provider">Upravit poskytovatele</string>
+    <string name="dialog_action_close">Zavřít</string>
+    <string name="dialog_action_add">Přidat</string>
+    <string name="err_activity_null">Nepodařilo se spustit aplikaci.</string>
+    <string name="err_invalid_url">Neplatná URL.</string>
+    <string name="err_provider_exists">Jméno poskytovatele musí být unikátní.</string>
+    <string name="err_no_method_panel">Tato akce není dostupná ve Vaší verzi Android.</string>
+    <string name="dialog_start_hint_title">Vítejte!</string>
+    <string name="dialog_start_hint_message_one">Toto je vaše plocha. Zde můžete...
+\n • Klepnutím otevřít seznam aplikací
+\n • Dlouhým stiskem změnit tapetu a otevřít nastavení</string>
+    <string name="desc_touch_receiver">Zobrazení plochy</string>
+    <string name="desc_apps_list">Seznam aplikací</string>
+    <string name="desc_icon">Aplikace</string>
+    <string name="desc_file">Soubor</string>
+    <string name="desc_clear_search">Vymazat vyhledávací dotaz</string>
+    <string name="search_provider_none">Vždy se zeptat</string>
+</resources>
