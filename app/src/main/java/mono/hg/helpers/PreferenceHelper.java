@@ -179,6 +179,8 @@ public class PreferenceHelper {
                 return "https://www.duckduckgo.com/?q=%s";
             case "searx":
                 return "https://www.searx.me/?q=%s";
+            case "startpage":
+                return "https://www.startpage.com/do/search?query=%s";
             default:
                 // We can't go here. Return an empty string just in case.
                 return "";
