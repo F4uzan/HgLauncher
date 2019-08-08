@@ -1,0 +1,10 @@
+HgLauncher è un launcher con una filosofia: "se funziona, funziona". Composto da un semplice elenco a scorrimento di app. Se tutto ciò che vuoi è un launcher per avviare le app, allora stai guardando il launcher che fa per te!
+
+Caratteristiche:
+• Semplice e veloce; a nessuno piace aspettare.
+• Interfaccia utente discreta: mostra il tuo sfondo in tutto il suo splendore!
+• Personalizzazione dell'interfaccia utente piccola ma estesa.
+• Supporto per tutti i tipi di funzionalità di avvio personalizzate: pacchetti di icone, nascondere le app e altro!
+• Minimo utilizzo della memoria preservando al contempo le migliori prestazioni.
+• Completamente FLOSS; nessuna pubblicità, nessuna limitazione delle funzionalità, niente sciocchezze.
+• ... E molto altro ancora!
