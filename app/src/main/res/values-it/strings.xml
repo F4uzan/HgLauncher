@@ -1,2 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">HgLauncher</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="action_wallpaper">Modifica lo sfondo</string>
+    <string name="action_force_refresh">Ricarica HgLauncher</string>
+    <string name="action_view_widgets">Spazio widget</string>
+    <string name="action_remove_widget">Rimuovi il widget</string>
+    <string name="action_web_provider_remove">Rimuovi</string>
+    <string name="action_web_provider_exclude">Escludi</string>
+    <string name="action_web_provider_edit">Modifica</string>
+    <string name="action_hidden_app_reset">Ripristina tutto</string>
+    <string name="action_web_provider_add">Aggiungi</string>
+    <string name="action_web_provider_reset">Reset</string>
+    <string name="action_save_backup">Salva</string>
+    <string name="action_pin">Metti in evidenza</string>
+    <string name="action_hide">Nascondi</string>
+    <string name="action_show">Ripristina</string>
+    <string name="action_backup">Backup</string>
+    <string name="action_uninstall">Disinstalla</string>
+    <string name="action_info">Informazioni App</string>
+    <string name="action_actions">Azioni</string>
+    <string name="action_shortcuts">Shortcuts</string>
+    <string name="search_hint">Cerca…</string>
+    <string name="search_web_hint">Cerca \'%1$s\' online</string>
+    <string name="search_web_button">Vai</string>
+    <string name="dialog_title_add_provider">Aggiungi provider</string>
+    <string name="dialog_title_edit_provider">Modifica provider</string>
+    <string name="dialog_action_close">Chiudi</string>
+    <string name="dialog_action_add">Aggiungi</string>
+    <string name="err_activity_null">Impossibile avviare l\'applicazione.</string>
+    <string name="err_invalid_url">URL non valido.</string>
+    <string name="err_provider_exists">Il nome del provider deve essere univoco.</string>
+    <string name="err_no_method_panel">Questa azione non è disponibile per questa versione di Android.</string>
+    <string name="dialog_start_hint_title">Benvenuto!</string>
+    <string name="dialog_start_hint_message_one">Questo è il tuo desktop. Qui, puoi
+\n • Tap per aprire la lista delle app
+\n • Tieni premuto per cambiare lo sfondo e aprire le impostazioni</string>
+    <string name="desc_apps_list">Lista Applicazioni</string>
+    <string name="desc_icon">Applicazione</string>
+    <string name="desc_file">File</string>
+    <string name="desc_clear_search">Svuota la cronologia delle ricerche</string>
+    <string name="search_provider_none">Chiedi sempre</string>
+</resources>
