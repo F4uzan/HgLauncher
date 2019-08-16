@@ -763,8 +763,14 @@ public class LauncherActivity extends AppCompatActivity {
                     if (isContextVisible) {
                         doThis("hide_context_button");
                     }
+
+                    appsAdapter.resetFilter();
                     searchSnack.dismiss();
                     stopTimer();
+                } else {
+                    // Begin filtering our list.
+                    appsAdapter.setFilter(getTrimmedInputText());
+                    appsAdapter.filterItems();
                 }
             }
 
@@ -774,10 +780,6 @@ public class LauncherActivity extends AppCompatActivity {
                 // Text used for searchSnack.
                 searchHint = String.format(getResources().getString(R.string.search_web_hint),
                         getInputText());
-
-                // Begin filtering our list.
-                appsAdapter.setFilter(getTrimmedInputText());
-                appsAdapter.filterItems();
             }
 
             @Override public void afterChanged(Editable s) {
