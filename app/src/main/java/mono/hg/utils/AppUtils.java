@@ -301,7 +301,9 @@ public class AppUtils {
                         app.setUserPackageName(userPackageName);
                         app.setIcon(LauncherIconHelper.getIcon(activity, componentName, user));
                         app.setAppHidden(isHidden);
-                        appsList.add(app);
+                        if (!appsList.contains(app)) {
+                            appsList.add(app);
+                        }
                     }
                 }
             }
@@ -324,7 +326,9 @@ public class AppUtils {
                     app.setIcon(LauncherIconHelper.getIcon(activity, componentName,
                             userUtils.getCurrentSerial()));
                     app.setAppHidden(isHidden);
-                    appsList.add(app);
+                    if (!appsList.contains(app)) {
+                        appsList.add(app);
+                    }
                 }
             }
         }
