@@ -316,7 +316,7 @@ public class LauncherActivity extends AppCompatActivity {
             // Clear the search bar text if app list is set to be kept open
             // unless keepLastSearch setting indicates maintain last search
             if (!PreferenceHelper.keepLastSearch()) {
-                searchBar.setText("");
+                clearSearch(searchBar);
             }
         }
 
@@ -1001,7 +1001,7 @@ public class LauncherActivity extends AppCompatActivity {
                         // Clear the search bar text if app list is set to be kept open
                         // unless keepLastSearch setting indicates maintain last search
                         if (!PreferenceHelper.keepLastSearch()) {
-                            searchBar.setText(null);
+                            clearSearch(searchBar);
                         }
 
                         // Preemptive attempt at showing the keyboard.
