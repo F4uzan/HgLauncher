@@ -1,2 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="dialog_action_close">Tutup</string>
+    <string name="action_unpin">Lepas sematan</string>
+    <string name="action_shortcuts">Pintasan</string>
+    <string name="dialog_action_add">Tambahkan</string>
+    <string name="search_web_button">Cari</string>
+    <string name="desc_icon">Aplikasi</string>
+    <string name="err_no_method_panel">Tindakan ini tidak tersedia untuk versi Android ini.</string>
+    <string name="dialog_title_edit_provider">Sunting penyedia</string>
+    <string name="desc_touch_receiver">Tampilan beranda</string>
+    <string name="action_actions">Tindakan</string>
+    <string name="action_remove_widget">Hapus widget</string>
+    <string name="desc_apps_list">Daftar aplikasi</string>
+    <string name="search_hint">Pencarian…</string>
+    <string name="action_web_provider_remove">Hapus</string>
+    <string name="action_pin">Sematkan</string>
+    <string name="err_provider_exists">Nama penyedia harus unik.</string>
+    <string name="action_web_provider_reset">Setel ulang</string>
+    <string name="action_web_provider_exclude">Mengecualikan</string>
+    <string name="action_hide">Sembunyikan</string>
+    <string name="action_save_backup">Simpan</string>
+    <string name="action_uninstall">Copot pemasangan</string>
+    <string name="desc_clear_search">Hapus permintaan pencarian</string>
+    <string name="search_web_hint">Cari \'%1$s\' secara daring</string>
+    <string name="dialog_start_hint_title">Selamat datang!</string>
+    <string name="action_web_provider_edit">Sunting</string>
+    <string name="desc_file">Berkas</string>
+    <string name="action_hidden_app_reset">Pulihkan semua</string>
+    <string name="action_show">Pulihkan</string>
+    <string name="dialog_title_add_provider">Tambahkan penyedia</string>
+    <string name="action_view_widgets">Ruang widget</string>
+    <string name="search_web_button_prompt">Dengan</string>
+    <string name="action_info">Info aplikasi</string>
+    <string name="action_down_widget">Turunkan</string>
+    <string name="dialog_title_widgets">Ruang widget</string>
+    <string name="action_force_refresh">Segarkan</string>
+    <string name="action_shorthand">Singkatan</string>
+    <string name="err_invalid_url">URL tidak valid.</string>
+    <string name="action_web_provider_add">Tambah</string>
+    <string name="dialog_title_shorthand">Tetapkan singkatan</string>
+    <string name="dialog_start_hint_message_one">Ini adalah beranda Anda. Di sini, Anda bisa...
+\n • Ketuk untuk membuka daftar aplikasi
+\n • Tekan lama untuk mengubah wallpaper dan membuka pengaturan</string>
+    <string name="action_settings">Pengaturan</string>
+    <string name="action_backup">Cadangkan</string>
+    <string name="search_provider_none">Selalu tanya</string>
+    <string name="action_up_widget">Naikkan</string>
+    <string name="app_name">HgLauncher</string>
+    <string name="err_activity_null">Tidak dapat memulai aplikasi.</string>
+    <string name="action_wallpaper">Ubah wallpaper</string>
+</resources>
