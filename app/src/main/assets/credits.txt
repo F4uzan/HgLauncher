@@ -4,11 +4,16 @@ HgLauncher is an open-source project.
 Contributors:
 - Allan Nordhøy
 - beriain
+- Dhimas Ilya'sa Swandy
 - F4
 - Fynn Godau
+- Giuseppe
+- Paper Mountain Studio
 - Pavle Radosavljević
 - Scott MacDonald
 - Tebriz
+- The Codacy Badger
+- WaldiS
 
 Libraries and others:
 - AndroidX Support Libraries: Google and contributors (https://android.googlesource.com/platform/frameworks/support). Licensed under Apache v2.
