@@ -4,7 +4,7 @@ HgLauncher is an open-source project.
 Contributors:
 - Allan Nordhøy
 - beriain
-- Dhimas Ilya'sa Swandy
+- Dhimas Ilyasa
 - F4
 - Fynn Godau
 - Giuseppe
