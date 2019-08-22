@@ -136,6 +136,7 @@ public class BasePreference extends PreferenceFragmentCompat {
                                  @Override
                                  public void onClick(DialogInterface dialog, int which) {
                                      PreferenceHelper.getEditor().clear().apply();
+                                     PreferenceHelper.update("require_refresh", true);
                                      ((SettingsActivity) requireActivity()).restartActivity();
                                      Toast.makeText(requireContext(),
                                              R.string.reset_preference_toast, Toast.LENGTH_LONG)

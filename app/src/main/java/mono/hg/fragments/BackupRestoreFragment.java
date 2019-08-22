@@ -274,6 +274,8 @@ public class BackupRestoreFragment extends BackHandledFragment {
                 } else if (v instanceof String) {
                     PreferenceHelper.getEditor().putString(key, ((String) v));
                 }
+
+                PreferenceHelper.update("require_refresh", true);
             }
             PreferenceHelper.getEditor().apply();
         } catch (FileNotFoundException | ClassNotFoundException e) {

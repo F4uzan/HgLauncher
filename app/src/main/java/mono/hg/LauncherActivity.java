@@ -327,7 +327,8 @@ public class LauncherActivity extends AppCompatActivity {
         super.onResume();
 
         // See if user has changed icon pack. Clear cache if true.
-        if (!PreferenceHelper.getPreference()
+        if (PreferenceHelper.getPreference().getBoolean("require_refresh", false) ||
+                !PreferenceHelper.getPreference()
                              .getString("icon_pack", "default")
                              .equals(PreferenceHelper.getIconPackName())) {
             LauncherIconHelper.refreshIcons();
@@ -356,6 +357,9 @@ public class LauncherActivity extends AppCompatActivity {
             // Manually set it here to make sure it's invisible.
             searchContainer.setVisibility(View.INVISIBLE);
         }
+
+        // Toggle back the refresh switch.
+        PreferenceHelper.update("require_refresh", false);
 
         isResuming = true;
     }
@@ -603,7 +607,8 @@ public class LauncherActivity extends AppCompatActivity {
         final ComponentName componentName = ComponentName.unflattenFromString(packageName);
         final long user = app.getUser();
         PinnedApp pinApp = new PinnedApp(app.getPackageName(), app.getUser());
-        final Uri packageNameUri = Uri.fromParts("package", AppUtils.getPackageName(packageName), null);
+        final Uri packageNameUri = Uri.fromParts("package", AppUtils.getPackageName(packageName),
+                null);
         final SparseArray<String> shortcutMap = new SparseArray<>();
 
         int position;
