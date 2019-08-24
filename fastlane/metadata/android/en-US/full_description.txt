@@ -1,10 +1,14 @@
-HgLauncher is a launcher with a design philosophy of 'if it works, it works.' Consisting of simply a scrolling list of apps, there is very little visual cue to disturb you. If all you want in a launcher is for it to just launch apps, then you may be looking at the right launcher.
+ A scrolling list of apps to launch them from,
+ if you found what you want, look no further.
+ 
+'If it works, it works.'
 
 Features:
-• Simple and quick; no one likes waiting.
-• Unobtrusive user interface: show your wallpaper in all its glory!
-• Small but extensive user interface customization.
-• Support for all kinds of custom launcher features: icon packs, app hiding, and more!
+
+• Use less, do more, quickly.
+• Copyleft; Use, see, modify and share at will, with everyone.
+• More wallpaper, less obstruction.
+• Customize, icon packs, app hiding, and more!
 • Minimal memory usage while preserving the best performance.
-• Completely FLOSS; no ads, no feature restrictions, no silly nags.
-• …And more to come!
+• No ads, no feature restrictions.
+• Available in your language, or help make it so.
