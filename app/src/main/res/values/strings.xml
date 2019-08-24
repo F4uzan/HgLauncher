@@ -67,4 +67,5 @@
     <string name="search_provider_google" translatable="false">Google</string>
     <string name="search_provider_ddg" translatable="false">DuckDuckGo</string>
     <string name="search_provider_searx" translatable="false">searx</string>
+    <string name="search_provider_startpage" translatable="false">Startpage</string>
 </resources>
