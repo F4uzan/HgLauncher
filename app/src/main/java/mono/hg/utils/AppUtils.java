@@ -4,16 +4,18 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
-import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Process;
+import android.os.UserManager;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.App;
 import mono.hg.models.PinnedApp;
+import mono.hg.wrappers.DisplayNameComparator;
 
 public class AppUtils {
     /**
@@ -86,49 +89,87 @@ public class AppUtils {
     }
 
     /**
+     * Appends user serial to a component name.
+     *
+     * @param user          The user serial to prefix the component name.
+     * @param componentName The component name itself.
+     *
+     * @return String with a hyphen-appended user serial.
+     */
+    public static String appendUser(long user, String componentName) {
+        return user + "-" + componentName;
+    }
+
+    /**
      * Pins an app to the favourites panel.
      *
-     * @param packageManager PackageManager object used to fetch information regarding
-     *                       the app that is being loaded.
-     * @param componentName  The package name to load and fetch.
-     * @param adapter        Which adapter should we notify update to?
-     * @param list           Which List object should be updated?
+     * @param activity      Current foreground activity.
+     * @param user          User profile where the app originates.
+     * @param componentName The package name to load and fetch.
+     * @param adapter       Which adapter should we notify update to?
+     * @param list          Which List object should be updated?
      */
-    public static void pinApp(PackageManager packageManager, String componentName,
+    public static void pinApp(Activity activity, long user, String componentName,
             FlexibleAdapter<PinnedApp> adapter, List<PinnedApp> list) {
-        if (!adapter.contains(new PinnedApp(componentName))) {
-            ComponentName iconComponent = ComponentName.unflattenFromString(componentName);
+        Drawable icon = LauncherIconHelper.getIcon(activity, componentName, user);
 
-            try {
-                Drawable icon;
-                Drawable getIcon = null;
-
-                if (!PreferenceHelper.getIconPackName().equals("default")) {
-                    getIcon = LauncherIconHelper.getIconDrawable(packageManager,
-                            componentName);
-                }
-                if (getIcon == null) {
-                    icon = packageManager.getActivityIcon(iconComponent);
-                } else {
-                    icon = getIcon;
-                }
-
-                PinnedApp app = new PinnedApp(icon, componentName);
-                list.add(app);
-                adapter.updateDataSet(list, false);
-            } catch (PackageManager.NameNotFoundException e) {
-                Utils.sendLog(Utils.LogLevel.ERROR,
-                        "Unable to pin " + componentName + ";missing package?");
-            }
-        }
+        PinnedApp app = new PinnedApp(icon, componentName, user);
+        list.add(app);
+        adapter.updateDataSet(list, false);
     }
 
     /**
      * Launches an app as a new task.
      *
-     * @param componentName The component name of the app.
+     * @param activity Current foreground activity.
+     * @param app      App object to launch.
      */
-    public static void launchApp(Activity activity, String componentName) {
+    public static void launchApp(Activity activity, App app) {
+        // Attempt to catch exceptions instead of crash landing directly to the floor.
+        try {
+            if (Utils.atLeastLollipop()) {
+                UserUtils userUtils = new UserUtils(activity);
+                LauncherApps launcher = (LauncherApps) activity.getSystemService(
+                        Context.LAUNCHER_APPS_SERVICE);
+                ComponentName componentName = ComponentName.unflattenFromString(
+                        app.getPackageName());
+
+                if (launcher != null) {
+                    launcher.startMainActivity(componentName, userUtils.getUser(app.getUser()),
+                            null, null);
+                }
+            } else {
+                quickLaunch(activity, app.getPackageName());
+            }
+
+            // Override app launch animation when needed.
+            switch (PreferenceHelper.getLaunchAnim()) {
+                case "pull_up":
+                    activity.overridePendingTransition(R.anim.pull_up, 0);
+                    break;
+                case "slide_in":
+                    activity.overridePendingTransition(android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right);
+                    break;
+                default:
+                case "default":
+                    // Don't override when we have the default value.
+                    break;
+            }
+        } catch (ActivityNotFoundException | NullPointerException e) {
+            Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show();
+            Utils.sendLog(Utils.LogLevel.ERROR,
+                    "Cannot start " + app.getPackageName() + "; missing package?");
+        }
+    }
+
+    /**
+     * Launches an activity based on its component name.
+     *
+     * @param activity      Current foreground activity.
+     * @param componentName Component name of the app to be launched.
+     */
+    static void quickLaunch(Activity activity, String componentName) {
         // When receiving 'none', it's probably a gesture that hasn't been registered.
         if ("none".equals(componentName)) {
             return;
@@ -142,30 +183,10 @@ public class AppUtils {
         }
 
         Intent intent = Intent.makeMainActivity(component);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
-        // Attempt to catch exceptions instead of crash landing directly to the floor.
-        try {
-            activity.startActivity(intent);
-
-            // Override app launch animation when needed.
-            switch (PreferenceHelper.getLaunchAnim()) {
-                case "pull_up":
-                    activity.overridePendingTransition(R.anim.pull_up, 0);
-                    break;
-                case "slide_in":
-                    activity.overridePendingTransition(R.anim.slide_in, 0);
-                    break;
-                default:
-                case "default":
-                    // Don't override when we have the default value.
-                    break;
-            }
-        } catch (ActivityNotFoundException | NullPointerException e) {
-            Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show();
-            Utils.sendLog(Utils.LogLevel.ERROR,
-                    "Cannot start " + componentName + "; missing package?");
-        }
+        activity.startActivity(intent);
     }
 
     /**
@@ -242,57 +263,91 @@ public class AppUtils {
      * Populates the internal app list. This method must be loaded asynchronously to avoid
      * performance degradation.
      *
-     * @param manager PackageManager object for use retrieving intent activities.
+     * @param activity Current foreground activity.
      *
-     * @return List an App List containing the app list itself
+     * @return List an App List containing the app list itself.
      */
-    public static List<App> loadApps(PackageManager manager) {
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+    public static List<App> loadApps(Activity activity, boolean hideHidden) {
         List<App> appsList = new ArrayList<>();
+        PackageManager manager = activity.getPackageManager();
+        UserUtils userUtils = new UserUtils(activity);
 
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        if (Utils.atLeastLollipop()) {
+            UserManager userManager = (UserManager) activity.getSystemService(Context.USER_SERVICE);
+            LauncherApps launcher = (LauncherApps) activity.getSystemService(
+                    Context.LAUNCHER_APPS_SERVICE);
+            for (android.os.UserHandle profile : Utils.requireNonNull(userManager)
+                                                      .getUserProfiles()) {
+                for (LauncherActivityInfo activityInfo : Utils.requireNonNull(launcher)
+                                                              .getActivityList(null, profile)) {
+                    String componentName = activityInfo.getComponentName().flattenToString();
+                    String userPackageName;
+                    long user = userUtils.getSerial(profile);
 
-        List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
-
-        if (PreferenceHelper.isListInverted()) {
-            Collections.sort(availableActivities, Collections
-                    .reverseOrder(new ResolveInfo.DisplayNameComparator(manager)));
-        } else {
-            Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
-        }
-
-        // Fetch and add every app into our list, but ignore those that are in the exclusion list.
-        for (ResolveInfo ri : availableActivities) {
-            String packageName = ri.activityInfo.packageName;
-            String componentName = packageName + "/" + ri.activityInfo.name;
-            if (!PreferenceHelper.getExclusionList().contains(componentName) && !packageName.equals(
-                    BuildConfig.APPLICATION_ID)) {
-                String appName = ri.loadLabel(manager).toString();
-                String hintName = PreferenceHelper.getLabel(componentName);
-                Drawable icon = null;
-                Drawable getIcon = null;
-                // Only show icons if user chooses so.
-                if (!PreferenceHelper.shouldHideIcon()) {
-                    if (!PreferenceHelper.getIconPackName().equals("default")) {
-                        getIcon = LauncherIconHelper.getIconDrawable(manager, componentName);
-                    }
-                    if (getIcon == null) {
-                        icon = ri.activityInfo.loadIcon(manager);
-                        if (PreferenceHelper.appTheme().equals("light")
-                                && PreferenceHelper.shadeAdaptiveIcon()
-                                && (Utils.atLeastOreo()
-                                && icon instanceof AdaptiveIconDrawable)) {
-                            icon = LauncherIconHelper.drawAdaptiveShadow(icon);
-                        }
+                    if (user != userUtils.getCurrentSerial()) {
+                        userPackageName = appendUser(user, componentName);
                     } else {
-                        icon = getIcon;
+                        userPackageName = componentName;
+                    }
+
+                    boolean isHidden = PreferenceHelper.getExclusionList().contains(componentName)
+                            || componentName.contains(BuildConfig.APPLICATION_ID);
+
+                    if (!hideHidden || !isHidden) {
+                        String appName = activityInfo.getLabel().toString();
+                        App app = new App(appName, componentName, false, user);
+
+                        app.setHintName(PreferenceHelper.getLabel(userPackageName));
+                        app.setUserPackageName(userPackageName);
+                        app.setIcon(LauncherIconHelper.getIcon(activity, componentName, user));
+                        app.setAppHidden(isHidden);
+                        if (!appsList.contains(app)) {
+                            appsList.add(app);
+                        }
                     }
                 }
-                App app = new App(icon, appName, componentName, hintName, false);
-                appsList.add(app);
+            }
+        } else {
+            Intent intent = new Intent(Intent.ACTION_MAIN, null);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+            for (ResolveInfo ri : manager.queryIntentActivities(intent, 0)) {
+                String packageName = ri.activityInfo.packageName;
+                String componentName = packageName + "/" + ri.activityInfo.name;
+                boolean isHidden = PreferenceHelper.getExclusionList().contains(componentName)
+                        || componentName.contains(BuildConfig.APPLICATION_ID);
+
+                if (!hideHidden || !isHidden) {
+                    String appName = ri.loadLabel(manager).toString();
+                    App app = new App(appName, componentName, false, userUtils.getCurrentSerial());
+
+                    app.setHintName(PreferenceHelper.getLabel(componentName));
+                    app.setUserPackageName(componentName);
+                    app.setIcon(LauncherIconHelper.getIcon(activity, componentName,
+                            userUtils.getCurrentSerial()));
+                    app.setAppHidden(isHidden);
+                    if (!appsList.contains(app)) {
+                        appsList.add(app);
+                    }
+                }
             }
         }
+
+        sortAppList(appsList);
         return appsList;
+    }
+
+    /**
+     * Sorts a List containing the App object.
+     *
+     * @param list The list to be sorted.
+     */
+    private static void sortAppList(List<App> list) {
+        if (PreferenceHelper.isListInverted()) {
+            Collections.sort(list, Collections.reverseOrder(new DisplayNameComparator()));
+        } else {
+            Collections.sort(list, new DisplayNameComparator());
+        }
     }
 
     /**

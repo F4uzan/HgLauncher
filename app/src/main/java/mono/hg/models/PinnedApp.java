@@ -10,15 +10,19 @@ import java.util.List;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import mono.hg.R;
+import mono.hg.utils.AppUtils;
 
 public class PinnedApp extends App {
 
-    public PinnedApp(Drawable icon, @NonNull String packageName) {
-        super(icon, null, packageName, null, false);
+    public PinnedApp(Drawable icon, @NonNull String packageName, long user) {
+        super(null, packageName, false, user);
+        setIcon(icon);
+        setUserPackageName(AppUtils.appendUser(user, packageName));
     }
 
-    public PinnedApp(String packageName) {
-        super(packageName);
+    public PinnedApp(String packageName, long user) {
+        super(packageName, user);
+        setUserPackageName(AppUtils.appendUser(user, packageName));
     }
 
     @Override public int getLayoutRes() {

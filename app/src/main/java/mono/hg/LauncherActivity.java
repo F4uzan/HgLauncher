@@ -2,6 +2,7 @@ package mono.hg;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.LauncherApps;
@@ -10,7 +11,6 @@ import android.content.pm.ShortcutInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Process;
 import android.provider.Settings;
 import android.text.Editable;
 import android.util.SparseArray;
@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -37,6 +38,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.net.URLEncoder;
@@ -56,6 +59,7 @@ import mono.hg.receivers.PackageChangesReceiver;
 import mono.hg.tasks.FetchAppsTask;
 import mono.hg.utils.ActivityServiceUtils;
 import mono.hg.utils.AppUtils;
+import mono.hg.utils.UserUtils;
 import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
 import mono.hg.views.DagashiBar;
@@ -167,6 +171,7 @@ public class LauncherActivity extends AppCompatActivity {
     private PackageChangesReceiver packageReceiver = new PackageChangesReceiver();
 
     private LauncherApps launcherApps;
+    private UserUtils userUtils;
 
     private FetchAppsTask fetchAppsTask;
 
@@ -201,9 +206,11 @@ public class LauncherActivity extends AppCompatActivity {
         searchContext = findViewById(R.id.search_context_button);
         loadProgress = findViewById(R.id.load_progress);
 
-        if (Utils.sdkIsAround(25)) {
+        if (Utils.atLeastLollipop()) {
             launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
         }
+
+        userUtils = new UserUtils(this);
 
         animateDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -253,6 +260,10 @@ public class LauncherActivity extends AppCompatActivity {
         // Show the app list once all the views are set up.
         if (PreferenceHelper.keepAppList()) {
             doThis("show_panel");
+        }
+
+        if (PreferenceHelper.isNewUser()) {
+            showStartDialog();
         }
     }
 
@@ -305,7 +316,7 @@ public class LauncherActivity extends AppCompatActivity {
             // Clear the search bar text if app list is set to be kept open
             // unless keepLastSearch setting indicates maintain last search
             if (!PreferenceHelper.keepLastSearch()) {
-                searchBar.setText("");
+                clearSearch(searchBar);
             }
         }
 
@@ -316,30 +327,22 @@ public class LauncherActivity extends AppCompatActivity {
         super.onResume();
 
         // See if user has changed icon pack. Clear cache if true.
-        if (!PreferenceHelper.getPreference()
+        if (PreferenceHelper.getPreference().getBoolean("require_refresh", false) ||
+                !PreferenceHelper.getPreference()
                              .getString("icon_pack", "default")
                              .equals(PreferenceHelper.getIconPackName())) {
-            LauncherIconHelper.clearDrawableCache();
+            LauncherIconHelper.refreshIcons();
         }
 
         // Get pinned apps.
         pinnedAppString = PreferenceHelper.getPreference().getString("pinned_apps_list", "");
-
-        // Set app list animation duration.
-        if (Utils.sdkIsAround(17)) {
-            slidingHome.setPanelDurationMultiplier(Settings.Global.getFloat(getContentResolver(),
-                    Settings.Global.TRANSITION_ANIMATION_SCALE, 0));
-        } else {
-            slidingHome.setPanelDurationMultiplier(Settings.System.getFloat(getContentResolver(),
-                    Settings.System.TRANSITION_ANIMATION_SCALE, 0));
-        }
 
         // Refresh app list and pinned apps if there is a change in package count.
         if (AppUtils.hasNewPackage(
                 manager) || (appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty())) {
             updatePinnedApps(true);
             fetchAppsTask.cancel(true);
-            fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
+            fetchAppsTask = new FetchAppsTask(this, appsAdapter, appsList);
             fetchAppsTask.execute();
         }
 
@@ -355,6 +358,9 @@ public class LauncherActivity extends AppCompatActivity {
             searchContainer.setVisibility(View.INVISIBLE);
         }
 
+        // Toggle back the refresh switch.
+        PreferenceHelper.update("require_refresh", false);
+
         isResuming = true;
     }
 
@@ -368,7 +374,7 @@ public class LauncherActivity extends AppCompatActivity {
         }
 
         if (fetchAppsTask == null && appsAdapter.isEmpty()) {
-            fetchAppsTask = new FetchAppsTask(manager, appsAdapter, appsList);
+            fetchAppsTask = new FetchAppsTask(this, appsAdapter, appsList);
             fetchAppsTask.execute();
         }
 
@@ -538,6 +544,7 @@ public class LauncherActivity extends AppCompatActivity {
         searchContext.post(new Runnable() {
             @Override public void run() {
                 searchContext.setTranslationX(searchContext.getMeasuredWidth());
+                isContextVisible = false;
             }
         });
 
@@ -591,21 +598,24 @@ public class LauncherActivity extends AppCompatActivity {
     /**
      * Creates a PopupMenu to use in a long-pressed app object.
      *
-     * @param view        View for the PopupMenu to anchor to.
-     * @param isPinned    Is this a pinned app?
-     * @param packageName Package name of the app.
+     * @param view     View for the PopupMenu to anchor to.
+     * @param isPinned Is this a pinned app?
+     * @param app      App object selected from the list.
      */
-    private void createAppMenu(View view, boolean isPinned, final String packageName) {
-        final Uri packageNameUri = Uri.parse("package:" + AppUtils.getPackageName(packageName));
+    private void createAppMenu(View view, boolean isPinned, final App app) {
+        final String packageName = app.getPackageName();
+        final ComponentName componentName = ComponentName.unflattenFromString(packageName);
+        final long user = app.getUser();
+        PinnedApp pinApp = new PinnedApp(app.getPackageName(), app.getUser());
+        final Uri packageNameUri = Uri.fromParts("package", AppUtils.getPackageName(packageName),
+                null);
         final SparseArray<String> shortcutMap = new SparseArray<>();
 
         int position;
         if (isPinned) {
-            PinnedApp selectedPackage = new PinnedApp(packageName);
-            position = pinnedAppsAdapter.getGlobalPositionOf(selectedPackage);
+            position = pinnedAppsAdapter.getGlobalPositionOf(app);
         } else {
-            App selectedPackage = new App(packageName);
-            position = appsAdapter.getGlobalPositionOf(selectedPackage);
+            position = appsAdapter.getGlobalPositionOf(app);
         }
 
         // Inflate the app menu.
@@ -635,7 +645,8 @@ public class LauncherActivity extends AppCompatActivity {
 
         // Hide 'pin' if the app is already pinned or isPinned is set.
         appMenu.getMenu().findItem(R.id.action_pin)
-               .setVisible(!isPinned && !pinnedAppString.contains(packageName));
+               .setVisible(!isPinned
+                       && !pinnedAppsAdapter.contains(pinApp));
 
         // We can't hide an app from the favourites panel.
         appMenu.getMenu().findItem(R.id.action_hide).setVisible(!isPinned);
@@ -647,7 +658,8 @@ public class LauncherActivity extends AppCompatActivity {
 
         // Show uninstall menu if the app is not a system app.
         appMenu.getMenu().findItem(R.id.action_uninstall)
-               .setVisible(!AppUtils.isSystemApp(manager, packageName));
+               .setVisible(!AppUtils.isSystemApp(manager, packageName)
+                       && app.getUser() == userUtils.getCurrentSerial());
 
         appMenu.show();
 
@@ -656,32 +668,39 @@ public class LauncherActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pin:
-                        AppUtils.pinApp(manager, packageName, pinnedAppsAdapter, pinnedAppList);
-                        pinnedAppString = pinnedAppString.concat(packageName + ";");
+                        AppUtils.pinApp(LauncherActivity.this, user, packageName, pinnedAppsAdapter,
+                                pinnedAppList);
+                        pinnedAppString = pinnedAppString.concat(app.getUserPackageName() + ";");
                         PreferenceHelper.update("pinned_apps_list", pinnedAppString);
                         break;
                     case R.id.action_unpin:
                         pinnedAppList.remove(pinnedAppsAdapter.getItem(finalPosition));
                         pinnedAppsAdapter.removeItem(finalPosition);
-                        pinnedAppString = pinnedAppString.replace(packageName + ";", "");
+                        pinnedAppString = pinnedAppString.replace(app.getUserPackageName() + ";",
+                                "");
                         PreferenceHelper.update("pinned_apps_list", pinnedAppString);
                         if (pinnedAppsAdapter.isEmpty()) {
                             doThis("hide_favourites");
                         }
                         break;
                     case R.id.action_info:
-                        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                packageNameUri));
+                        if (Utils.atLeastLollipop()) {
+                            launcherApps.startAppDetailsActivity(componentName,
+                                    userUtils.getUser(app.getUser()), null, null);
+                        } else {
+                            startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                    packageNameUri));
+                        }
                         break;
                     case R.id.action_uninstall:
                         startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageNameUri));
                         break;
                     case R.id.action_shorthand:
-                        makeRenameDialog(packageName, finalPosition);
+                        makeRenameDialog(app.getUserPackageName(), finalPosition);
                         break;
                     case R.id.action_hide:
                         // Add the app's package name to the exclusion list.
-                        excludedAppsList.add(packageName);
+                        excludedAppsList.add(app.getUserPackageName());
 
                         PreferenceHelper.update("hidden_apps", excludedAppsList);
 
@@ -695,7 +714,7 @@ public class LauncherActivity extends AppCompatActivity {
                             launcherApps.startShortcut(AppUtils.getPackageName(packageName),
                                     Utils.requireNonNull(shortcutMap.get(item.getItemId())),
                                     null, null,
-                                    Process.myUserHandle());
+                                    userUtils.getUser(user));
                         }
                         break;
                 }
@@ -749,8 +768,14 @@ public class LauncherActivity extends AppCompatActivity {
                     if (isContextVisible) {
                         doThis("hide_context_button");
                     }
+
+                    appsAdapter.resetFilter();
                     searchSnack.dismiss();
                     stopTimer();
+                } else {
+                    // Begin filtering our list.
+                    appsAdapter.setFilter(getTrimmedInputText());
+                    appsAdapter.filterItems();
                 }
             }
 
@@ -760,10 +785,6 @@ public class LauncherActivity extends AppCompatActivity {
                 // Text used for searchSnack.
                 searchHint = String.format(getResources().getString(R.string.search_web_hint),
                         getInputText());
-
-                // Begin filtering our list.
-                appsAdapter.setFilter(getTrimmedInputText());
-                appsAdapter.filterItems();
             }
 
             @Override public void afterChanged(Editable s) {
@@ -884,8 +905,7 @@ public class LauncherActivity extends AppCompatActivity {
         appsAdapter.addListener(new FlexibleAdapter.OnItemClickListener() {
             @Override public boolean onItemClick(View view, int position) {
                 AppUtils.launchApp(LauncherActivity.this,
-                        Utils.requireNonNull(appsAdapter.getItem(position))
-                             .getPackageName());
+                        Utils.requireNonNull(appsAdapter.getItem(position)));
                 return true;
             }
         });
@@ -894,8 +914,7 @@ public class LauncherActivity extends AppCompatActivity {
         pinnedAppsAdapter.addListener(new FlexibleAdapter.OnItemClickListener() {
             @Override public boolean onItemClick(View view, int position) {
                 AppUtils.launchApp(LauncherActivity.this,
-                        Utils.requireNonNull(pinnedAppsAdapter.getItem(position))
-                             .getPackageName());
+                        Utils.requireNonNull(pinnedAppsAdapter.getItem(position)));
                 return true;
             }
         });
@@ -904,27 +923,25 @@ public class LauncherActivity extends AppCompatActivity {
         // This shows a menu to manage the selected app.
         appsAdapter.addListener(new FlexibleAdapter.OnItemLongClickListener() {
             @Override public void onItemLongClick(int position) {
-                final String packageName = Utils.requireNonNull(
-                        appsAdapter.getItem(position)).getPackageName();
+                App app = Utils.requireNonNull(appsAdapter.getItem(position));
 
                 // We need to rely on the LayoutManager here
                 // because app list is populated asynchronously,
                 // and will throw nulls if we try to directly ask RecyclerView for its child.
                 createAppMenu(Utils.requireNonNull(appsRecyclerView.getLayoutManager())
-                                   .findViewByPosition(position), false, packageName);
+                                   .findViewByPosition(position), false, app);
             }
         });
 
         // Also add a similar long click action for the favourites panel.
         pinnedAppsAdapter.addListener(new FlexibleAdapter.OnItemLongClickListener() {
             @Override public void onItemLongClick(int position) {
-                final String packageName = Utils.requireNonNull(
-                        pinnedAppsAdapter.getItem(position)).getPackageName();
+                App app = Utils.requireNonNull(pinnedAppsAdapter.getItem(position));
 
                 // Use LayoutManager method to get the view,
                 // as RecyclerView will happily return null if it can.
                 createAppMenu(Utils.requireNonNull(pinnedAppsRecyclerView.getLayoutManager())
-                                   .findViewByPosition(position), true, packageName);
+                                   .findViewByPosition(position), true, app);
             }
         });
 
@@ -989,7 +1006,7 @@ public class LauncherActivity extends AppCompatActivity {
                         // Clear the search bar text if app list is set to be kept open
                         // unless keepLastSearch setting indicates maintain last search
                         if (!PreferenceHelper.keepLastSearch()) {
-                            searchBar.setText(null);
+                            clearSearch(searchBar);
                         }
 
                         // Preemptive attempt at showing the keyboard.
@@ -1060,15 +1077,25 @@ public class LauncherActivity extends AppCompatActivity {
             pinnedAppsAdapter.updateDataSet(pinnedAppList, false);
 
             for (String pinnedApp : pinnedAppString.split(";")) {
-                if (AppUtils.doesComponentExist(manager, pinnedApp)) {
-                    AppUtils.pinApp(manager, pinnedApp, pinnedAppsAdapter, pinnedAppList);
+                String componentName = pinnedApp;
+                long user = userUtils.getCurrentSerial();
+
+                // Handle pinned apps coming from another user.
+                String[] userSplit = pinnedApp.split("-");
+                if (userSplit.length == 2) {
+                    user = Long.parseLong(userSplit[0]);
+                    componentName = userSplit[1];
+                }
+
+                if (AppUtils.doesComponentExist(manager, componentName)) {
+                    AppUtils.pinApp(this, user, componentName, pinnedAppsAdapter, pinnedAppList);
                 }
             }
         }
 
         // Iterate through the list to get package name of each pinned apps, then stringify them.
-        for (App app : pinnedAppList) {
-            newAppString = newAppString.concat(app.getPackageName() + ";");
+        for (PinnedApp app : pinnedAppList) {
+            newAppString = newAppString.concat(app.getUserPackageName() + ";");
         }
 
         // Update the saved pinned apps.
@@ -1082,6 +1109,22 @@ public class LauncherActivity extends AppCompatActivity {
         searchBar.setText("");
     }
 
+    public void showStartDialog() {
+        final BottomSheetDialog startDialog = new BottomSheetDialog(this);
+        startDialog.setContentView(R.layout.dialog_start_hint);
+        startDialog.setCancelable(false);
+        startDialog.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
+        Button startDismiss = startDialog.findViewById(R.id.dismiss);
+        if (startDismiss != null) {
+            startDismiss.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    startDialog.dismiss();
+                    PreferenceHelper.update("is_new_user", false);
+                }
+            });
+        }
+        startDialog.show();
+    }
 
     /**
      * Creates a dialog to set an app's shorthand.
@@ -1110,15 +1153,10 @@ public class LauncherActivity extends AppCompatActivity {
                        PreferenceHelper.updateLabel(packageName, newLabel, newLabel.isEmpty());
 
                        // Update the specified item.
-                       App oldItem = appsAdapter.getItem(position);
+                       App app = appsAdapter.getItem(position);
 
-                       if (oldItem != null) {
-                           App newItem = new App(oldItem.getIcon(),
-                                   oldItem.getAppName(),
-                                   packageName, newLabel, false);
-
-                           appsList.set(position, newItem);
-                           appsAdapter.updateItem(newItem);
+                       if (app != null) {
+                           app.setHintName(newLabel);
                        }
                    }
                }).show();

@@ -1,9 +1,5 @@
 package mono.hg.preferences;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,21 +17,19 @@ import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceFragmentCompat;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.App;
+import mono.hg.utils.AppUtils;
 
 @Keep
 public class HiddenAppsPreference extends PreferenceFragmentCompat {
     private ArrayList<App> appList = new ArrayList<>();
     private HiddenAppAdapter hiddenAppAdapter;
-    private PackageManager manager;
     private HashSet<String> excludedAppList = new HashSet<>(
             PreferenceHelper.getPreference().getStringSet("hidden_apps", new HashSet<String>()));
     private ListView appsListView;
@@ -52,8 +46,6 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-
-        manager = requireActivity().getPackageManager();
 
         appsListView = requireActivity().findViewById(R.id.hidden_apps_list);
         hiddenAppAdapter = new HiddenAppAdapter(appList, requireActivity());
@@ -106,34 +98,18 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
     }
 
     private void loadApps() {
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        List<ResolveInfo> availableActivities = manager.queryIntentActivities(intent, 0);
-
-        Collections.sort(availableActivities, new ResolveInfo.DisplayNameComparator(manager));
-
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear();
         hiddenAppAdapter.notifyDataSetInvalidated();
 
         // Fetch and add every app into our list,
-        for (ResolveInfo ri : availableActivities) {
-            String packageName = ri.activityInfo.packageName + "/" + ri.activityInfo.name;
-            if (!ri.activityInfo.packageName.equals(requireActivity().getPackageName())) {
-                String appName = ri.loadLabel(manager).toString();
-                Drawable icon = ri.activityInfo.loadIcon(manager);
-                boolean isHidden = excludedAppList.contains(packageName);
-                App app = new App(icon, appName, packageName, null, isHidden);
-                appList.add(app);
-            }
-        }
+        appList.addAll(AppUtils.loadApps(requireActivity(), false));
 
         hiddenAppAdapter.notifyDataSetChanged();
     }
 
     private void toggleHiddenState(int position) {
-        String packageName = appList.get(position).getPackageName();
+        String packageName = appList.get(position).getUserPackageName();
 
         // Check if package is already in exclusion.
         if (excludedAppList.contains(packageName)) {

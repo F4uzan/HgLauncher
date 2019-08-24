@@ -22,21 +22,22 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
     private int HINT_MATCH_SCORE = 30;
     private int NAME_MATCH_SCORE = 25;
 
-    private String appName, packageName, hintName;
+    private String appName, packageName, userPackageName, hintName;
     private Boolean isAppHidden;
     private Drawable icon;
+    private long user;
 
-    public App(Drawable icon, String appName, @NonNull String packageName, String hintName, Boolean isAppHidden) {
+    public App(String appName, @NonNull String packageName, Boolean isAppHidden, long user) {
         this.packageName = packageName;
         this.appName = appName;
-        this.hintName = hintName;
-        this.icon = icon;
         this.isAppHidden = isAppHidden;
+        this.user = user;
     }
 
-    public App(@NonNull String packageName) {
+    public App(@NonNull String packageName, long user) {
         this.packageName = packageName;
         this.isAppHidden = false;
+        this.user = user;
     }
 
     public String getAppName() {
@@ -47,12 +48,32 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
         return packageName;
     }
 
+    public String getUserPackageName() {
+        return userPackageName;
+    }
+
+    public void setUserPackageName(String userPackageName) {
+        this.userPackageName = userPackageName;
+    }
+
     public String getHintName() {
         return hintName;
     }
 
+    public boolean hasHintName() {
+        return hintName != null;
+    }
+
+    public void setHintName(String newName) {
+        hintName = newName;
+    }
+
     public Drawable getIcon() {
         return icon;
+    }
+
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
     }
 
     public boolean isAppHidden() {
@@ -63,8 +84,8 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
         isAppHidden = hidden;
     }
 
-    public boolean hasHintName() {
-        return hintName != null;
+    public long getUser() {
+        return user;
     }
 
     public void setHintMatchScore(int newScore) {
@@ -76,13 +97,16 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
     }
 
     public boolean equals(Object object) {
+        if (getClass() != object.getClass()) {
+            return false;
+        }
+
         App alt = (App) object;
-        return this == object || getClass() != object.getClass() || getPackageName().equals(
-                alt.getPackageName());
+        return this == object || getUserPackageName().equals(alt.getUserPackageName());
     }
 
     @Override public int hashCode() {
-        return packageName.hashCode();
+        return userPackageName != null ? userPackageName.hashCode() : packageName.hashCode();
     }
 
     @Override public int getLayoutRes() {

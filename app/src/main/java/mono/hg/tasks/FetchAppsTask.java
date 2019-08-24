@@ -1,6 +1,6 @@
 package mono.hg.tasks;
 
-import android.content.pm.PackageManager;
+import android.app.Activity;
 import android.os.AsyncTask;
 
 import java.lang.ref.WeakReference;
@@ -14,12 +14,12 @@ import mono.hg.utils.AppUtils;
  * AsyncTask used to load/populate the app list.
  */
 public class FetchAppsTask extends AsyncTask<Void, Void, Void> {
-    private WeakReference<PackageManager> packageManager;
+    private WeakReference<Activity> activity;
     private WeakReference<AppAdapter> adapter;
     private WeakReference<List<App>> appsList;
 
-    public FetchAppsTask(PackageManager manager, AppAdapter adapter, List<App> list) {
-        this.packageManager = new WeakReference<>(manager);
+    public FetchAppsTask(Activity activity, AppAdapter adapter, List<App> list) {
+        this.activity = new WeakReference<>(activity);
         this.adapter = new WeakReference<>(adapter);
         this.appsList = new WeakReference<>(list);
     }
@@ -37,11 +37,11 @@ public class FetchAppsTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        PackageManager managerRef = packageManager.get();
+        Activity activityRef = activity.get();
         List<App> listRef = appsList.get();
 
-        if (managerRef != null && listRef != null) {
-            listRef.addAll(AppUtils.loadApps(managerRef));
+        if (activityRef != null && listRef != null) {
+            listRef.addAll(AppUtils.loadApps(activityRef, true));
         }
         return null;
     }

@@ -2,7 +2,6 @@
 <resources>
     <!-- Strings for Settings (and all related activity) -->
     <string name="title_activity_settings">Settings</string>
-
     <!-- Header/category names -->
     <string name="pref_header_about">About</string>
     <string name="pref_header_cust">Customizations</string>
@@ -41,12 +40,10 @@
     <string name="pref_header_web_provider_short">Search engines</string>
     <string name="web_provider_name_hint">Name (must be unique)</string>
     <string name="web_provider_url_hint" translatable="false">https://{url}/search?q=%s</string>
-
     <!-- Easter egg -->
     <string name="version_key_toast_plural">Tap %1$d more times to turn on testing mode.</string>
     <string name="version_key_toast">Tap again to confirm.</string>
     <string name="version_key_name">HgLauncher (testing)</string>
-
     <!-- Dialog and toast messages -->
     <string name="backup_exist">This backup filename already exists.</string>
     <string name="backup_exist_overwrite">Overwrite</string>
@@ -66,7 +63,6 @@
     <string name="app_theme_light">Light</string>
     <string name="app_theme_dark">Dark</string>
     <string name="app_theme_black">Black</string>
-
     <string name="windowbar_mode">Hide system bars</string>
     <string name="windowbar_mode_none">Off</string>
     <string name="windowbar_mode_status">Status bar</string>
@@ -79,11 +75,9 @@
     <string name="gesture_down">Swipe ↓</string>
     <string name="gesture_single_tap">Tap</string>
     <string name="gesture_double_tap">Double tap</string>
-
     <string name="gesture_handler">Gesture handler</string>
     <string name="gesture_handler_default">None</string>
     <string name="gesture_handler_default_value">none</string>
-
     <string name="gesture_action_default">None</string>
     <string name="gesture_action_default_value" translatable="false">none</string>
     <string name="gesture_action_widget">Open widget-space</string>

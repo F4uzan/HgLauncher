@@ -14,7 +14,7 @@
     android:orientation="horizontal"
     android:visibility="invisible">
 
-    <androidx.appcompat.widget.AppCompatEditText
+    <EditText
         android:id="@+id/search"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -29,9 +29,10 @@
         android:paddingEnd="@dimen/uniform_panel_margin"
         android:paddingRight="@dimen/uniform_panel_margin"
         android:textColor="@android:color/white"
-        android:textColorHint="@color/editTextHint" />
+        android:textColorHint="@color/editTextHint"
+        android:importantForAutofill="no" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <ImageButton
         android:id="@+id/search_context_button"
         android:layout_width="42dp"
         android:layout_height="match_parent"

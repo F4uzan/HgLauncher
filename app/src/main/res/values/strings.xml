@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App information -->
     <string name="app_name">HgLauncher</string>
@@ -47,6 +48,12 @@
     <string name="err_invalid_url">Invalid URL.</string>
     <string name="err_provider_exists">Search engine name must be unique.</string>
     <string name="err_no_method_panel">This is only possible on newer Android.</string>
+
+    <!-- Start up dialogue, shown to new user -->
+    <string name="dialog_start_hint_title">Welcome!</string>
+    <string name="dialog_start_hint_message_one">This is your desktop. In here, you can…\n
+        • Tap to open the app list\n
+        • Long-press to change wallpaper and open settings</string>
 
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Desktop view</string>

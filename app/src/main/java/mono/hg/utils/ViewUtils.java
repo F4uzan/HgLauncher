@@ -77,11 +77,10 @@ public class ViewUtils {
     public static void keyboardLaunchApp(Activity activity, RecyclerView recyclerView, FlexibleAdapter<App> adapter) {
         if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
             AppUtils.launchApp(activity, Utils.requireNonNull(
-                    adapter.getItem(0)).getPackageName());
+                    adapter.getItem(0)));
         } else if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
             AppUtils.launchApp(activity, Utils.requireNonNull(
-                    adapter.getItem(adapter.getItemCount() - 1))
-                                              .getPackageName());
+                    adapter.getItem(adapter.getItemCount() - 1)));
         }
     }
 
