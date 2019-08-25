@@ -1,9 +1,12 @@
 package mono.hg.preferences;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -19,11 +22,14 @@ import mono.hg.SettingsActivity;
 import mono.hg.fragments.BackupRestoreFragment;
 import mono.hg.fragments.CreditsDialogFragment;
 import mono.hg.helpers.PreferenceHelper;
+import mono.hg.utils.BackupRestoreUtils;
 import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
 import mono.hg.wrappers.SpinnerPreference;
 
 public class BasePreference extends PreferenceFragmentCompat {
+    private final int RESTORE_STORAGE_CODE = 3600;
+    private final int BACKUP_STORAGE_CODE = 3200;
     private static final int PERMISSION_STORAGE_CODE = 4200;
     private boolean isRestore = false;
     private Preference versionMenu;
@@ -170,17 +176,51 @@ public class BasePreference extends PreferenceFragmentCompat {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+            Intent resultData) {
+        Uri uri = null;
+
+        if (resultCode == Activity.RESULT_OK && resultData != null) {
+            uri = resultData.getData();
+            if (requestCode == RESTORE_STORAGE_CODE) {
+                new BackupRestoreUtils.restoreBackupTask((SettingsActivity) requireActivity(), uri.toString()).execute();
+            }  else if (requestCode == BACKUP_STORAGE_CODE) {
+                BackupRestoreUtils.saveBackup(requireActivity(), uri.toString());
+            }
+        }
+    }
+
     /**
      * Opens the backup & restore fragment.
      *
      * @param isRestore Are we calling the fragment to restore a backup?
      */
     private void openBackupRestore(boolean isRestore) {
-        BackupRestoreFragment backupRestoreFragment = new BackupRestoreFragment();
-        Bundle fragmentBundle = new Bundle();
-        fragmentBundle.putBoolean("isRestore", isRestore);
-        backupRestoreFragment.setArguments(fragmentBundle);
-        ViewUtils.replaceFragment(requireFragmentManager(), backupRestoreFragment,
-                "backup_restore");
+        if (Utils.atLeastKitKat()) {
+            Intent intent;
+
+            if (isRestore) {
+                intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            } else {
+                intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            }
+
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("text/xml");
+
+            if (isRestore) {
+                startActivityForResult(intent, RESTORE_STORAGE_CODE);
+            } else {
+                startActivityForResult(intent, BACKUP_STORAGE_CODE);
+            }
+        } else {
+            BackupRestoreFragment backupRestoreFragment = new BackupRestoreFragment();
+            Bundle fragmentBundle = new Bundle();
+            fragmentBundle.putBoolean("isRestore", isRestore);
+            backupRestoreFragment.setArguments(fragmentBundle);
+            ViewUtils.replaceFragment(requireFragmentManager(), backupRestoreFragment,
+                    "backup_restore");
+        }
     }
 }
