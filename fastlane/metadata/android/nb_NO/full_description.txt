@@ -1,10 +1,11 @@
-HgLauncher har en enkel filosofi "hvis det virker, så virker det". En rullbar liste over programmer, og ingenting annet. Hvis du har funnet det du leter etter, så er dette riktig oppstarter.
+En rullbar liste over programmer å starte dem fra,
+hvis du har funnet det du leter etter, så er dette riktig oppstarter.
 
 Funksjoner:
-• Raskt og enkelt, ingen liker å vente
-• Uforstyrrende brukergrensesnitt, vise hele bakgrunnsbildet ditt.
-• Lite men omgående tilpasning av brukergrensesnitt
-• Støtte for alle typer oppstarterfunksjoner: Ikon-pakker, programskjuling, med mer.
+• Bruk mindre, gjøre mer, raskt.
+• Gemenslig programvare; Bruk, se, endre og del etter evne, med alle.
+• Mer bakgrunnsbilde, mindre forstyrrelse.
+• Tilpasningsdyktig, ikonpakker, programskjuling, og mer!
 • Minimal minnebruk, og best mulig ytelse.
-• Helt fritt, ingen reklame, ingen funksjonsbegrensninger, eller masing.
-• Mer kommer…
+• Ingen reklame, ingen funksjonsbegrensninger.
+• Enten tilgjengelig på ditt språk, eller så kan du fikse dette.
