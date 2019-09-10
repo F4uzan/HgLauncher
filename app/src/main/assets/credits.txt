@@ -8,11 +8,10 @@ Contributors:
 - F4
 - Fynn Godau
 - Giuseppe
+- Manuela Silva
 - Paper Mountain Studio
 - Pavle Radosavljević
 - Scott MacDonald
-- Tebriz
-- The Codacy Badger
 - WaldiS
 
 Libraries and others:
