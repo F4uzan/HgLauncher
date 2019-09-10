@@ -101,4 +101,8 @@
     <string name="anim_list_default">Systemdefinert</string>
     <string name="gesture_double_tap">Dobbelttrykk</string>
     <string name="version_key_name">HgLauncher (testversjon)</string>
+    <string name="list_background">Bakgrunn</string>
+    <string name="list_background_theme">Ugjennomsiktig</string>
+    <string name="list_background_trans">Gjennomsiktig</string>
+    <string name="list_background_none">Ingen</string>
 </resources>
