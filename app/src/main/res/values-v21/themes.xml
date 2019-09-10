@@ -19,5 +19,6 @@
 
     <style name="LauncherTheme.Dark" parent="@style/LauncherTheme.Black">
         <item name="backgroundColor">@color/colorBackgroundGray</item>
+        <item name="backgroundColorAlt">@color/colorBackgroundGrayAlt</item>
     </style>
 </resources>

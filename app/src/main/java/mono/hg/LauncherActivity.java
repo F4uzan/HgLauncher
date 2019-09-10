@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -554,6 +555,12 @@ public class LauncherActivity extends AppCompatActivity {
                         getResources().getColor(R.color.navigationBarShade));
             }
             wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
+        }
+
+        if ("transparent".equals(PreferenceHelper.getListBackground())) {
+            appsListContainer.setBackgroundColor(Utils.getColorFromAttr(this, R.attr.backgroundColorAlt));
+        } else if ("none".equals(PreferenceHelper.getListBackground())) {
+            appsListContainer.setBackgroundColor(Color.TRANSPARENT);
         }
     }
 

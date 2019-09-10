@@ -38,6 +38,7 @@ public class PreferenceHelper {
     private static String app_theme;
     private static String search_provider_set;
     private static String icon_pack;
+    private static String list_bg;
     private static String gesture_left_action;
     private static String gesture_right_action;
     private static String gesture_up_action;
@@ -86,6 +87,10 @@ public class PreferenceHelper {
 
     public static String getIconPackName() {
         return icon_pack;
+    }
+
+    public static String getListBackground() {
+        return list_bg;
     }
 
     public static boolean isListInverted() {
@@ -313,6 +318,7 @@ public class PreferenceHelper {
         icon_pack = getPreference().getString("icon_pack", "default");
         list_order = getPreference().getString("list_order", "alphabetical")
                                     .equals("invertedAlphabetical");
+        list_bg = getPreference().getString("list_bg", "theme");
         shade_view = getPreference().getBoolean("shade_view_switch", false);
         keyboard_focus = getPreference().getBoolean("keyboard_focus", false);
         app_theme = getPreference().getString("app_theme", "light");

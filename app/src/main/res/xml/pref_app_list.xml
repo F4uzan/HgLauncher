@@ -7,6 +7,16 @@
         android:summary="@string/pref_header_hidden_apps_desc"
         android:title="@string/pref_header_hidden_apps" />
 
+    <mono.hg.wrappers.SpinnerPreference
+        android:defaultValue="opaque"
+        android:entries="@array/pref_list_background_title"
+        android:entryValues="@array/pref_list_background_values"
+        android:key="list_bg"
+        android:summary="%s"
+        android:title="@string/list_background"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false" />
+
     <androidx.preference.SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="icon_hide_switch"

@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="cardColor">@color/colorCardBackgroundWhite</item>
         <item name="backgroundColor">@color/colorBackgroundWhite</item>
+        <item name="backgroundColorAlt">@color/colorBackgroundWhiteAlt</item>
         <item name="textDefaultColor">@color/black</item>
     </style>
 
@@ -16,6 +17,7 @@
         <item name="cardColor">@color/colorCardBackgroundGray</item>
         <item name="android:windowBackground">@color/black</item>
         <item name="backgroundColor">@color/black</item>
+        <item name="backgroundColorAlt">@color/transparentBlack</item>
         <item name="textDefaultColor">@color/white</item>
     </style>
 
@@ -46,6 +48,7 @@
 
     <style name="LauncherTheme.Dark" parent="@style/LauncherTheme.Black">
         <item name="backgroundColor">@color/colorBackgroundGray</item>
+        <item name="backgroundColorAlt">@color/colorBackgroundGrayAlt</item>
     </style>
 
 </resources>

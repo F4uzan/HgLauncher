@@ -132,6 +132,11 @@
     <string name="icon_pack_default">Default</string>
     <string name="icon_pack_default_value" translatable="false">default</string>
 
+    <string name="list_background">Background</string>
+    <string name="list_background_theme">Opaque</string>
+    <string name="list_background_trans">Transparent</string>
+    <string name="list_background_none">None</string>
+
     <string name="orientation">Orientation</string>
     <string name="orientation_sensor">System</string>
     <string name="orientation_portrait">Portrait</string>

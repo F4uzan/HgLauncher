@@ -89,4 +89,15 @@
         <item>1</item>
         <item>0</item>
     </string-array>
+
+    <string-array name="pref_list_background_title">
+        <item>@string/list_background_theme</item>
+        <item>@string/list_background_trans</item>
+        <item>@string/list_background_none</item>
+    </string-array>
+    <string-array name="pref_list_background_values">
+        <item>opaque</item>
+        <item>transparent</item>
+        <item>none</item>
+    </string-array>
 </resources>

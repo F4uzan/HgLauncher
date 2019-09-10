@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="backgroundColor" format="reference|color" />
+    <attr name="backgroundColorAlt" format="reference|color" />
     <attr name="cardColor" format="reference|color" />
     <attr name="textDefaultColor" format="reference|color" />
 </resources>

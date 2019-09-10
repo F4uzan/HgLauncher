@@ -7,9 +7,12 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
 import androidx.annotation.IntDef;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -163,6 +166,23 @@ public class Utils {
         } catch (IOException ignored) {
             // Do nothing.
         }
+    }
+
+    /**
+     * Returns a color from an attribute reference.
+     *
+     * @param context Pass the activity context, not the application context
+     * @param attr    The attribute reference to be resolved
+     *
+     * @return int array of color value
+     */
+    @ColorInt
+    public static int getColorFromAttr(Context context, @AttrRes int attr) {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(attr, typedValue, true);
+
+        return typedValue.data;
     }
 
     /**
