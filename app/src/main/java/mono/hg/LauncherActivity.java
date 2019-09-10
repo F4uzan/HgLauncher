@@ -529,20 +529,17 @@ public class LauncherActivity extends AppCompatActivity {
             homeParams.topMargin = ViewUtils.getStatusBarHeight();
         }
 
-        // Hide the favourites panel when there's nothing to show.
-        if (pinnedAppsAdapter.isEmpty()) {
-            pinnedAppsContainer.post(new Runnable() {
-                @Override public void run() {
-                    pinnedAppsContainer.setTranslationY(pinnedAppsContainer.getMeasuredHeight());
-                }
-            });
-            isFavouritesVisible = false;
-        } else {
-            isFavouritesVisible = true;
-        }
-
-        searchContext.post(new Runnable() {
+        slidingHome.post(new Runnable() {
             @Override public void run() {
+                // Hide the favourites panel when there's nothing to show.
+                if (pinnedAppsAdapter.isEmpty()) {
+                    pinnedAppsContainer.setTranslationY(pinnedAppsContainer.getMeasuredHeight());
+                    isFavouritesVisible = false;
+                } else {
+                    isFavouritesVisible = true;
+                }
+
+                // Hide the context menu right now.
                 searchContext.setTranslationX(searchContext.getMeasuredWidth());
                 isContextVisible = false;
             }
