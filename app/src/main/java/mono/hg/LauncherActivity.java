@@ -29,6 +29,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -41,6 +42,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.net.URLEncoder;
@@ -83,7 +85,7 @@ public class LauncherActivity extends AppCompatActivity {
     /*
      * RecyclerView for app list.
      */
-    private RecyclerView appsRecyclerView;
+    private FastScrollRecyclerView appsRecyclerView;
     /*
      * Progress bar shown when populating app list.
      */
@@ -224,6 +226,9 @@ public class LauncherActivity extends AppCompatActivity {
         appsRecyclerView.setDrawingCacheEnabled(true);
         appsRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         appsRecyclerView.setHasFixedSize(true);
+        appsRecyclerView.setThumbColor(PreferenceHelper.getDarkAccent());
+        appsRecyclerView.setThumbInactiveColor(PreferenceHelper.getAccent());
+        appsRecyclerView.setPopupBgColor(PreferenceHelper.getDarkerAccent());
 
         appsRecyclerView.setAdapter(appsAdapter);
         appsRecyclerView.setLayoutManager(appsLayoutManager);
@@ -272,7 +277,7 @@ public class LauncherActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
     }
 
-    @Override public boolean onContextItemSelected(MenuItem item) {
+    @Override public boolean onContextItemSelected(@NonNull MenuItem item) {
         return onOptionsItemSelected(item);
     }
 
@@ -759,7 +764,7 @@ public class LauncherActivity extends AppCompatActivity {
             String searchHint;
 
             DagashiBar searchSnack = DagashiBar.make(appsListContainer, searchHint,
-                    DagashiBar.LENGTH_INDEFINITE, false);
+                    DagashiBar.LENGTH_INDEFINITE, false).setTextColor(PreferenceHelper.getAccent());
 
             @Override public void whenTimerTicked() {
                 super.whenTimerTicked();

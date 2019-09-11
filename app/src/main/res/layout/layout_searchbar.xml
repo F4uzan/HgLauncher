@@ -28,6 +28,7 @@
         android:paddingLeft="@dimen/uniform_panel_margin"
         android:paddingEnd="@dimen/uniform_panel_margin"
         android:paddingRight="@dimen/uniform_panel_margin"
+        android:textCursorDrawable="@null"
         android:textColor="@android:color/white"
         android:textColorHint="@color/editTextHint"
         android:importantForAutofill="no" />

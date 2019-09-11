@@ -53,5 +53,6 @@ dependencies {
     // Other third-party libraries.
     implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.0'
     implementation 'eu.davidea:flexible-adapter:5.1.0'
+    implementation 'com.jaredrummler:colorpicker:1.1.0'
     implementation project(':slidinguppanel:library')
 }

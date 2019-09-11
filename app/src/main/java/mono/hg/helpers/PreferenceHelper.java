@@ -3,7 +3,10 @@ package mono.hg.helpers;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
+
+import androidx.core.graphics.ColorUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +19,9 @@ import mono.hg.utils.Utils.Gesture;
 
 public class PreferenceHelper {
     private static int orientation_mode;
+    private static int app_accent;
+    private static int app_accent_dark;
+    private static int app_accent_darker;
     private static boolean is_new_user;
     private static boolean icon_hide;
     private static boolean list_order;
@@ -111,6 +117,18 @@ public class PreferenceHelper {
 
     public static String appTheme() {
         return app_theme;
+    }
+
+    public static int getAccent() {
+        return app_accent;
+    }
+
+    public static int getDarkAccent() {
+        return app_accent_dark;
+    }
+
+    public static int getDarkerAccent() {
+        return app_accent_darker;
     }
 
     public static boolean promptSearch() {
@@ -322,6 +340,9 @@ public class PreferenceHelper {
         shade_view = getPreference().getBoolean("shade_view_switch", false);
         keyboard_focus = getPreference().getBoolean("keyboard_focus", false);
         app_theme = getPreference().getString("app_theme", "light");
+        app_accent = getPreference().getInt("app_accent", -49023); // The default accent in Int.
+        app_accent_dark = ColorUtils.blendARGB(app_accent, Color.BLACK, 0.1f);
+        app_accent_darker = ColorUtils.blendARGB(app_accent, Color.BLACK, 0.4f);
         web_search_enabled = getPreference().getBoolean("web_search_enabled", true);
         web_search_long_press = getPreference().getBoolean("web_search_long_press", false);
         search_provider_set = getPreference().getString("search_provider", "none");

@@ -69,6 +69,9 @@
     <string name="windowbar_mode_nav">Navigation bar</string>
     <string name="windowbar_mode_both">Both</string>
 
+    <string name="app_theme_accent">Accent</string>
+    <string name="app_theme_accent_dialog">Pick a color</string>
+
     <string name="gesture_left">Swipe ←</string>
     <string name="gesture_right">Swipe →</string>
     <string name="gesture_up">Swipe ↑</string>
