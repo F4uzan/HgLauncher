@@ -28,6 +28,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.IntDef;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
@@ -218,12 +219,23 @@ public class DagashiBar extends BaseTransientBottomBar<DagashiBar> {
     }
 
     /**
+     * Set the text color of the action in this {@link BaseTransientBottomBar}
+     *
+     * @param color The color to use for the action.
+     */
+    @SuppressLint("RestrictedApi")
+    public DagashiBar setTextColor(@ColorInt int color) {
+        final SnackbarContentLayout contentLayout = (SnackbarContentLayout) this.view.getChildAt(0);
+        final TextView tv = contentLayout.getActionView();
+        tv.setTextColor(color);
+        return this;
+    }
+
+    /**
      * Set the action to be displayed. The action will not dismiss this {@link BaseTransientBottomBar}
      *
      * @param text     Text to display for the action
      * @param listener callback to be invoked when the action is clicked
-     *
-     * @return
      */
     public DagashiBar setNonDismissAction(CharSequence text, View.OnClickListener listener) {
         return setAction(text, listener, false);
