@@ -40,6 +40,7 @@
         android:layout_gravity="end"
         android:background="@android:color/transparent"
         android:onClick="clearSearch"
+        android:translationX="42dp"
         app:srcCompat="@drawable/ic_search_clear"
         android:contentDescription="@string/desc_clear_search" />
 

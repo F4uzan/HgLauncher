@@ -544,10 +544,6 @@ public class LauncherActivity extends AppCompatActivity {
                 } else {
                     isFavouritesVisible = true;
                 }
-
-                // Hide the context menu right now.
-                searchContext.setTranslationX(searchContext.getMeasuredWidth());
-                isContextVisible = false;
             }
         });
 
