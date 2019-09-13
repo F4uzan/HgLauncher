@@ -341,7 +341,7 @@ public class PreferenceHelper {
         keyboard_focus = getPreference().getBoolean("keyboard_focus", false);
         app_theme = getPreference().getString("app_theme", "light");
         app_accent = getPreference().getInt("app_accent", -49023); // The default accent in Int.
-        app_accent_dark = ColorUtils.blendARGB(app_accent, Color.BLACK, 0.1f);
+        app_accent_dark = ColorUtils.blendARGB(app_accent, Color.BLACK, 0.25f);
         app_accent_darker = ColorUtils.blendARGB(app_accent, Color.BLACK, 0.4f);
         web_search_enabled = getPreference().getBoolean("web_search_enabled", true);
         web_search_long_press = getPreference().getBoolean("web_search_long_press", false);
