@@ -105,4 +105,6 @@
     <string name="list_background_theme">Ugjennomsiktig</string>
     <string name="list_background_trans">Gjennomsiktig</string>
     <string name="list_background_none">Ingen</string>
+    <string name="app_theme_accent">Aksentfarge</string>
+    <string name="app_theme_accent_dialog">Velg en farge</string>
 </resources>
