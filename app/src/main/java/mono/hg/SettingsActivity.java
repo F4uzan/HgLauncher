@@ -44,7 +44,13 @@ public class SettingsActivity extends AppCompatActivity
         switch (PreferenceHelper.appTheme()) {
             default:
             case "auto":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                if (Utils.atLeastQ()) {
+                    AppCompatDelegate.setDefaultNightMode(
+                            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(
+                            AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                }
                 break;
             case "light":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

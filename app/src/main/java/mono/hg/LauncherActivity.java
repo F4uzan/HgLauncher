@@ -336,8 +336,8 @@ public class LauncherActivity extends AppCompatActivity {
         // See if user has changed icon pack. Clear cache if true.
         if (PreferenceHelper.getPreference().getBoolean("require_refresh", false) ||
                 !PreferenceHelper.getPreference()
-                             .getString("icon_pack", "default")
-                             .equals(PreferenceHelper.getIconPackName())) {
+                                 .getString("icon_pack", "default")
+                                 .equals(PreferenceHelper.getIconPackName())) {
             LauncherIconHelper.refreshIcons();
         }
 
@@ -560,7 +560,8 @@ public class LauncherActivity extends AppCompatActivity {
         }
 
         if ("transparent".equals(PreferenceHelper.getListBackground())) {
-            appsListContainer.setBackgroundColor(Utils.getColorFromAttr(this, R.attr.backgroundColorAlt));
+            appsListContainer.setBackgroundColor(
+                    Utils.getColorFromAttr(this, R.attr.backgroundColorAlt));
         } else if ("none".equals(PreferenceHelper.getListBackground())) {
             appsListContainer.setBackgroundColor(Color.TRANSPARENT);
         }
@@ -590,7 +591,13 @@ public class LauncherActivity extends AppCompatActivity {
         switch (PreferenceHelper.appTheme()) {
             default:
             case "auto":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                if (Utils.atLeastQ()) {
+                    AppCompatDelegate.setDefaultNightMode(
+                            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(
+                            AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                }
                 break;
             case "light":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

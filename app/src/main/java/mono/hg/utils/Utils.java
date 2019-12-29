@@ -117,6 +117,16 @@ public class Utils {
     }
 
     /**
+     * Checks whether the system is at least Q.
+     *
+     * @return True when the system SDK is equal to or more than 29 (Q).
+     */
+    public static boolean atLeastQ() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+    }
+
+
+    /**
      * Checks if an object is null; throws an IllegalArgumentException if it is.
      *
      * @param obj The object to check for.
