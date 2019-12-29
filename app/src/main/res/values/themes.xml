@@ -24,7 +24,7 @@
         <item name="textDefaultColor">@color/white</item>
         <item name="snackbarStyle">@style/SearchSnack</item>
         <item name="snackbarTextViewStyle">@style/SearchSnack.TextView</item>
-        <item name="toolbarStyle">@style/Toolbar</item>
+        <item name="toolbarStyle">@style/Toolbar.Dark</item>
     </style>
 
     <style name="LauncherTheme" parent="@style/AppTheme">
