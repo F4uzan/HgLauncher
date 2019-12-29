@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="BaseDialogStyle">
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingStart">19dp</item>
@@ -12,5 +12,22 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+
+    <style name="SearchSnack" parent="@style/Widget.MaterialComponents.Snackbar">
+        <item name="backgroundTint">@color/cardview_dark_background</item>
+        <item name="animationMode">slide</item>
+    </style>
+
+    <style name="SearchSnack.TextView" parent="@style/Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Toolbar.Dark" parent="@style/Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@color/actionBarGray</item>
+    </style>
+
+    <style name="Toolbar.Black" parent="@style/Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@color/black</item>
     </style>
 </resources>
