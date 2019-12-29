@@ -22,7 +22,7 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="Toolbar.Black" parent="@style/Widget.MaterialComponents.Toolbar">
+    <style name="Toolbar" parent="@style/Widget.MaterialComponents.Toolbar">
         <item name="android:background">@color/black</item>
     </style>
 </resources>
