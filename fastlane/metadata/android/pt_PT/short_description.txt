@@ -1,1 +1,1 @@
-Um "launcher" para um dia lento
+Um ambiente de usuário leve
