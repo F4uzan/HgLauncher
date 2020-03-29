@@ -1,2 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">HgLauncher</string>
+    <string name="search_provider_none">Altijd vragen</string>
+    <string name="desc_clear_search">Zoekopdracht wissen</string>
+    <string name="desc_file">Bestand</string>
+    <string name="desc_icon">App</string>
+    <string name="desc_apps_list">App-lijst</string>
+    <string name="desc_touch_receiver">Startschermweergave</string>
+    <string name="dialog_start_hint_message_one">Dit is je startscherm. Hier kun je:
+\n • Eenmaal drukken om de app-lijst te openen
+\n • Lang drukken om de achtergrond te wijzigen en de instellingen te openen</string>
+    <string name="dialog_start_hint_title">Welkom!</string>
+    <string name="err_no_method_panel">Dit is alleen mogelijk op nieuwere Android-versies.</string>
+    <string name="err_provider_exists">De zoekmachinenaam moet uniek zijn.</string>
+    <string name="err_invalid_url">Ongeldige url.</string>
+    <string name="err_activity_null">De app kan niet worden geopend.</string>
+    <string name="dialog_action_add">Toevoegen</string>
+    <string name="dialog_action_close">Sluiten</string>
+    <string name="dialog_title_widgets">Widgetscherm</string>
+    <string name="dialog_title_shorthand">Afkorting instellen</string>
+    <string name="dialog_title_edit_provider">Zoekmachine bewerken</string>
+    <string name="dialog_title_add_provider">Zoekmachine toevoegen</string>
+    <string name="action_shorthand">Afkorting</string>
+    <string name="search_web_button">Gaan</string>
+    <string name="search_web_button_prompt">met</string>
+    <string name="search_web_hint">Zoeken naar \'%1$s\' op het internet</string>
+    <string name="search_hint">Zoeken…</string>
+    <string name="action_shortcuts">Snelkoppelingen</string>
+    <string name="action_actions">Acties</string>
+    <string name="action_info">App-informatie</string>
+    <string name="action_uninstall">Deïnstalleren</string>
+    <string name="action_backup">Back-uppen</string>
+    <string name="action_show">Herstellen</string>
+    <string name="action_hide">Verbergen</string>
+    <string name="action_unpin">Losmaken</string>
+    <string name="action_pin">Vastmaken</string>
+    <string name="action_save_backup">Opslaan</string>
+    <string name="action_web_provider_reset">Standaardwaarden</string>
+    <string name="action_web_provider_add">Toevoegen</string>
+    <string name="action_hidden_app_reset">Alles herstellen</string>
+    <string name="action_web_provider_edit">Bewerken</string>
+    <string name="action_web_provider_exclude">Uitsluiten</string>
+    <string name="action_web_provider_remove">Verwijderen</string>
+    <string name="action_down_widget">Omlaag verplaatsen</string>
+    <string name="action_up_widget">Omhoog verplaatsen</string>
+    <string name="action_remove_widget">Verwijderen</string>
+    <string name="action_view_widgets">Widgetscherm</string>
+    <string name="action_force_refresh">Verversen</string>
+    <string name="action_wallpaper">Achtergrond wijzigen</string>
+    <string name="action_settings">Instellingen</string>
+</resources>
