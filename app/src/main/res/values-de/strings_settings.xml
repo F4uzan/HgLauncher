@@ -26,7 +26,7 @@
     <string name="pref_header_restore">Wiederherstellen</string>
     <string name="pref_header_restore_desc">Gesicherte Einstellungen laden</string>
     <string name="reset_preference">Konfiguration zurücksetzen</string>
-    <string name="reset_preference_desc">Standarteinstellungen wiederherstellen</string>
+    <string name="reset_preference_desc">Standardeinstellungen wiederherstellen</string>
     <string name="reset_preference_warn">Hierdurch wird die gesamte Konfiguration zurückgesetzt. Sobald dies geschehen ist, kann es nicht mehr rückgängig gemacht werden!</string>
     <string name="reset_preference_positive">Verstanden</string>
     <string name="reset_preference_toast">Konfiguration wurde zurückgesetzt.</string>
@@ -88,7 +88,7 @@
     <string name="anim_list_default">Nach System richten</string>
     <string name="anim_list_pull_up">Hochziehen</string>
     <string name="anim_list_slide_in">Hineinschieben</string>
-    <string name="pref_search_provider">Standart-Suchanbieter</string>
+    <string name="pref_search_provider">Standard-Suchanbieter</string>
     <string name="web_search_long_press">Erweitertes Suchmenü</string>
     <string name="web_search_long_press_desc">Wenn der Suchanbieter nicht auf \"Immer nachfragen\" gestellt ist, erlaubt gedrückt halten von \"Los\" die Auswahl des Suchanbieters</string>
     <string name="keyboard_focus">Tastaturfokus</string>
@@ -104,7 +104,7 @@
     <string name="static_favourites">Fortbestehendes Favoriten-Panel</string>
     <string name="static_favourites_desc">Favoriten-Panel unabhängig von Scroll-Ereignissen sichtbar lassen</string>
     <string name="icon_pack">Icon-Paket</string>
-    <string name="icon_pack_default">Standart</string>
+    <string name="icon_pack_default">Standard</string>
     <string name="orientation">Bildschrimausrichtung</string>
     <string name="orientation_sensor">System folgen</string>
     <string name="orientation_portrait">Vertikal</string>
