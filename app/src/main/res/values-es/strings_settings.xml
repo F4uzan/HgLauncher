@@ -2,7 +2,6 @@
 <resources>
     <!-- Strings for Settings (and all activity related to it -->
     <string name="title_activity_settings">Ajustes</string>
-
     <!-- Header/category names -->
     <string name="pref_header_about">Acerca de</string>
     <string name="pref_header_cust">Personalizaciones</string>
@@ -12,14 +11,12 @@
     <string name="pref_header_interface">Interfaz</string>
     <string name="pref_header_behavior">Comportamiento</string>
     <string name="pref_header_web">Búsqueda web</string>
-    <string name="pref_header_backup_restore">Copia de seguridad y restitución</string>
-
+    <string name="pref_header_backup_restore">Copia de seguridad y restauracion</string>
     <!-- Summaries for headers/categories -->
     <string name="pref_summary_web">Gestiona las preferencias de las búsquedas web</string>
     <string name="pref_summary_gestures">Gestos del escritorio y controlador de gestos</string>
     <string name="pref_summary_wall">Orientación de la pantalla, modo de las barras del sistema</string>
     <string name="pref_summary_list">Aplicaciones ocultadas, paquete de iconos, comportamiento de la lista de aplicaciones</string>
-
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Aplicaciones ocultadas</string>
     <string name="pref_header_hidden_apps_desc">Gestiona la lista de aplicaciones ocultadas.</string>
@@ -33,18 +30,15 @@
     <string name="reset_preference_warn">Hacer esto restituirá toda tu configuración. Una vez hecho, no podrás deshacer la operación!</string>
     <string name="reset_preference_positive">Entendido</string>
     <string name="reset_preference_toast">Configuration has been reset.</string>
-
     <!-- Web search provider -->
     <string name="pref_header_web_provider_title">Buscadores web</string>
     <string name="pref_header_web_provider_desc">Añade o quita buscadores web.</string>
     <string name="pref_header_web_provider_short">Buscador web</string>
     <string name="web_provider_name_hint">Nombre (debe ser único)</string>
-
     <!-- Easter egg -->
     <string name="version_key_toast_plural">Pulsa %1$d veces más para activar el modo de pruebas.</string>
     <string name="version_key_toast">Pulsa una vez más para confirmar.</string>
     <string name="version_key_name">HgLauncher (pruebas)</string>
-
     <!-- Dialog and toast messages -->
     <string name="backup_exist">Ya existe un archivo con el mismo nombre.</string>
     <string name="backup_exist_overwrite">Sobrescribir</string>
@@ -53,35 +47,29 @@
     <string name="restore_complete">Restitución completada!</string>
     <string name="backup_complete">Copia de seguridad guardada!</string>
     <string name="backup_empty">El nombre de la copia de seguridad no puede estar vacío.</string>
-
     <!-- Credits dialog. -->
     <string name="about_credits_dialog_title">Créditos</string>
     <string name="about_credits">Créditos</string>
     <string name="about_credits_desc">Créditos para todas las personas que han participado en este lanzador.</string>
-
     <!-- Customizations -->
     <string name="app_theme">Aspecto de la aplicación</string>
     <string name="app_theme_light">Claro</string>
     <string name="app_theme_dark">Oscuro</string>
     <string name="app_theme_black">Negro</string>
-
     <string name="windowbar_mode">Ocultar las barras del sistema</string>
     <string name="windowbar_mode_none">Deshabilitado</string>
     <string name="windowbar_mode_status">Ocultar la barra de estado</string>
     <string name="windowbar_mode_nav">Ocultar la barra de navegación</string>
     <string name="windowbar_mode_both">Ocultar ambas</string>
-
     <string name="gesture_left">Deslizar hacia la izquierda</string>
     <string name="gesture_right">Deslizar hacia la derecha</string>
     <string name="gesture_up">Deslizar hacia arriba</string>
     <string name="gesture_down">Deslizar hacia abajo</string>
     <string name="gesture_single_tap">Pulsar</string>
     <string name="gesture_double_tap">Doble pulsación</string>
-
     <string name="gesture_handler">Controlador de gestos</string>
     <string name="gesture_handler_default">Ninguno</string>
     <string name="gesture_handler_default_value">none</string>
-
     <string name="gesture_action_default">Ninguna</string>
     <string name="gesture_action_widget">Abrir el espacio de los widgets</string>
     <string name="gesture_action_handler">Usar la acción del controlador de gestos</string>
@@ -89,47 +77,33 @@
     <string name="gesture_action_status">Expandir la barra de notificaciones</string>
     <string name="gesture_action_panel">Expandir el panel de ajustes rápidos</string>
     <string name="gesture_action_list">Abrir la lista de aplicaciones</string>
-
     <string name="gesture_action_app_dialog_title">Selecciona una aplicación</string>
-
-    <string name="pref_title_app_list_order">Orden de la lista de aplicaciones</string>
+    <string name="pref_title_app_list_order">Ordenar</string>
     <string name="app_list_order_normal">A a Z</string>
     <string name="app_list_order_inverse">Z a A</string>
-
     <string name="static_app_list">Abrir siempre la lista de aplicaciones</string>
     <string name="static_app_list_desc">Abre la lista de aplicaciones al acceder al lanzador. No evita que pueda cerrase.</string>
-
     <string name="pref_app_launch_anim">Animación de lanzamiento de aplicaciones</string>
     <string name="anim_list_default">Definida por el sistema</string>
     <string name="anim_list_pull_up">Hacia arriba</string>
     <string name="anim_list_slide_in">Desde un lado</string>
-
     <string name="pref_search_provider">Buscador web por defecto</string>
-
     <string name="web_search_long_press">Menú de búsqueda ampliado</string>
     <string name="web_search_long_press_desc">Cuando el buscador web no este establecido cómo \'Preguntar siempre\', mantener pulsado \'Ir\' permitirá seleccionar el buscador.</string>
-
     <string name="keyboard_focus">Foco sobre el teclado</string>
     <string name="keyboard_focus_desc">Muestra el teclado automáticamente al abrir el panel de aplicaciones.</string>
-
     <string name="web_search">Ofrecer búsqueda web</string>
     <string name="web_search_desc">Muestra un aviso que permite realizar una búsqueda en Internet.</string>
-
     <string name="shadow_adaptive_icon">Sombra para los iconos adaptativos</string>
     <string name="shadow_adaptive_icon_desc">Oscurece los iconos adaptativos cn una ligera sombra. Podría reducir el rendimiento.</string>
-
     <string name="pref_icon_view">Ocultar iconos</string>
     <string name="pref_icon_view_desc">Recomendado si tienes un dispositivo lento.</string>
-
     <string name="pref_shade_view">Sombra sobre el fondo de pantalla</string>
     <string name="pref_shade_view_desc">Añade una sombra para oscurecer el fondo de pantalla. Recomendado para fondos de pantalla claros.</string>
-
     <string name="static_favourites">Panel de favoritos persistente</string>
     <string name="static_favourites_desc">Mantiene el panel de favoritos visible al margen de los desplazamientos.</string>
-
     <string name="icon_pack">Paquete de iconos</string>
     <string name="icon_pack_default">Predeterminado</string>
-
     <string name="orientation">Orientación de la pantalla</string>
     <string name="orientation_sensor">La del sistema</string>
     <string name="orientation_portrait">Retrato</string>
