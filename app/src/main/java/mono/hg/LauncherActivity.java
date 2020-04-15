@@ -38,6 +38,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -240,6 +241,7 @@ public class LauncherActivity extends AppCompatActivity {
         pinnedAppsRecyclerView.setItemAnimator(null);
 
         pinnedAppsAdapter.setLongPressDragEnabled(true);
+        pinnedAppsAdapter.getItemTouchHelperCallback().setMoveThreshold(1f);
 
         // Get icons from icon pack.
         if (!"default".equals(PreferenceHelper.getIconPackName()) &&
@@ -950,18 +952,6 @@ public class LauncherActivity extends AppCompatActivity {
             }
         });
 
-        // Also add a similar long click action for the favourites panel.
-        pinnedAppsAdapter.addListener(new FlexibleAdapter.OnItemLongClickListener() {
-            @Override public void onItemLongClick(int position) {
-                App app = Utils.requireNonNull(pinnedAppsAdapter.getItem(position));
-
-                // Use LayoutManager method to get the view,
-                // as RecyclerView will happily return null if it can.
-                createAppMenu(Utils.requireNonNull(pinnedAppsRecyclerView.getLayoutManager())
-                                   .findViewByPosition(position), true, app);
-            }
-        });
-
         appsAdapter.addListener(new FlexibleAdapter.OnUpdateListener() {
             @Override public void onUpdateEmptyView(int size) {
                 if (size > 0 && !appsAdapter.isEmpty()) {
@@ -978,11 +968,16 @@ public class LauncherActivity extends AppCompatActivity {
      */
     private void addAdapterListener() {
         pinnedAppsAdapter.addListener(new FlexibleAdapter.OnItemMoveListener() {
+            int newState = 0;
+            long startTime;
+
             @Override public boolean shouldMoveItem(int fromPosition, int toPosition) {
                 return true;
             }
 
             @Override public void onItemMove(int fromPosition, int toPosition) {
+                startTime = System.currentTimeMillis();
+
                 // Close app menu when we're dragging.
                 doThis("dismiss_menu");
 
@@ -992,7 +987,25 @@ public class LauncherActivity extends AppCompatActivity {
             }
 
             @Override public void onActionStateChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-                updatePinnedApps(false);
+                // FIXME: Work out a better touch detection.
+                // No movement occurred, this is a long press.
+                if (newState != ItemTouchHelper.ACTION_STATE_DRAG && (System.currentTimeMillis() - startTime) == System
+                        .currentTimeMillis()) {
+                    App app = Utils.requireNonNull(
+                            pinnedAppsAdapter.getItem(viewHolder.getAbsoluteAdapterPosition()));
+
+                    // Use LayoutManager method to get the view,
+                    // as RecyclerView will happily return null if it can.
+                    createAppMenu(Utils.requireNonNull(pinnedAppsRecyclerView.getLayoutManager())
+                                       .findViewByPosition(viewHolder.getAbsoluteAdapterPosition()),
+                            true, app);
+                } else {
+                    // Reset startTime and update the pinned apps, we were swiping.
+                    startTime = 0;
+                    updatePinnedApps(false);
+                }
+
+                newState = actionState;
             }
         });
     }
