@@ -107,4 +107,5 @@
     <string name="web_search_long_press">Uitgebreid zoekmenu</string>
     <string name="pref_search_provider">Standaard zoekmachine</string>
     <string name="anim_list_slide_in">Glijden</string>
+    <string name="app_theme_auto">Automatisch</string>
 </resources>
