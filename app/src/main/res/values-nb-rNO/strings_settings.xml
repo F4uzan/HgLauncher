@@ -107,4 +107,5 @@
     <string name="list_background_none">Ingen</string>
     <string name="app_theme_accent">Aksentfarge</string>
     <string name="app_theme_accent_dialog">Velg en farge</string>
+    <string name="app_theme_auto">Automatisk</string>
 </resources>
