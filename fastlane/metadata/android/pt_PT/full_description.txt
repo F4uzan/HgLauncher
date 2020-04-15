@@ -1,14 +1,11 @@
-Uma lista de aplicações de deslocamento para as iniciar,
- se encontrou o que deseja, não procure mais.
+Uma lista "sobe e desce" de aplicativos,
+ se tu encontraste o que desejas, não procures mais.
+ 
+'Se funcionar, funcionou.'
 
-Se esta funcionar, esta funciona.
+Recursos:
 
-Funcionalidades
-
-• Use menos, faça mais, rapidamente.
-• Copyleft; Use, veja, modifique e partilhe à vontade, com todos.
-• Mais fundo, menos obstrução.
-• Personalize, pacotes de ícones, ocultação de aplicações e muito mais!
-• Uso mínimo da memória, preservando o melhor desempenho.
-• Sem anúncios, sem restrições de funcionalidade.
-• Disponível no seu idioma, ou ajude a traduzir.
+• Usar o teu dispositivo de forma mais rápida.
+• Aplicativo livre; usar, ver o código fonte, modificar e compartilhar (https://github.com/F4uzan/HgLauncher).
+• Sem anúncios.
+• Traduzir para a tua linguagem, caso não exista a tradução (https://hosted.weblate.org/engage/hglauncher/).

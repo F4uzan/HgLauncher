@@ -1,15 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App information -->
     <string name="app_name">HgLauncher</string>
-
     <!-- Menu actions -->
     <string name="action_settings">Ajustes</string>
     <string name="action_wallpaper">Cambiar fondo de pantalla</string>
     <string name="action_force_refresh">Refrescar</string>
-    <string name="action_view_widgets">Visualizar widgets</string>
-    <string name="action_remove_widget">Quitar widget</string>
-    <string name="action_up_widget">Mover arriba</string>
-    <string name="action_down_widget">Mover abajo</string>
+    <string name="action_view_widgets">Espacio de widgets</string>
+    <string name="action_remove_widget">Quitar</string>
+    <string name="action_up_widget">Mover hacia arriba</string>
+    <string name="action_down_widget">Mover hacia abajo</string>
     <string name="action_web_provider_remove">Quitar</string>
     <string name="action_web_provider_exclude">Excluir</string>
     <string name="action_web_provider_edit">Editar</string>
@@ -17,7 +17,6 @@
     <string name="action_web_provider_add">Añadir</string>
     <string name="action_web_provider_reset">Restablecer</string>
     <string name="action_save_backup">Guardar</string>
-
     <!-- App menu actions -->
     <string name="action_pin">Fijar</string>
     <string name="action_unpin">Soltar</string>
@@ -29,7 +28,6 @@
     <string name="action_shorthand">Abreviatura</string>
     <string name="action_actions">Acciones</string>
     <string name="action_shortcuts">Accesos directos</string>
-
     <!-- Misc -->
     <string name="search_hint">Buscar…</string>
     <string name="search_web_hint">Busca \'%1$s\' online.</string>
@@ -41,19 +39,21 @@
     <string name="dialog_title_widgets">Espacio de los widgets</string>
     <string name="dialog_action_close">Cerrar</string>
     <string name="dialog_action_add">Añadir</string>
-
     <!-- Error messages -->
     <string name="err_activity_null">No se ha podido iniciar la plicación.</string>
     <string name="err_invalid_url">URL no válida.</string>
     <string name="err_provider_exists">El nombre del buscador debe ser único.</string>
     <string name="err_no_method_panel">Esta acción no está disponible en esta versión de Android.</string>
-
     <!-- Accessibility string -->
     <string name="desc_touch_receiver">Vista de escritorio</string>
-    <string name="desc_apps_list">Lista de aplicaciones</string>
+    <string name="desc_apps_list">Lista de Aplicaciones</string>
     <string name="desc_icon">Aplicación</string>
     <string name="desc_file">Archivo</string>
-
     <!-- Built-in search providers -->
     <string name="search_provider_none">Preguntar siempre</string>
+    <string name="desc_clear_search">Borrar consulta de búsqueda</string>
+    <string name="dialog_start_hint_title">Bienvenido!</string>
+    <string name="dialog_start_hint_message_one">Este es tu escritorio. Aquí puedes ...
+\n  • Toque para abrir la lista de aplicaciones.
+\n  • Mantenga presionado para cambiar el fondo de pantalla y abrir la configuración</string>
 </resources>
