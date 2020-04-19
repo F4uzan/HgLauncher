@@ -10,7 +10,7 @@
     <string name="dialog_title_edit_provider">Rediger tilbyder</string>
     <string name="desc_touch_receiver">Skrivebordsvisning</string>
     <string name="action_actions">Handlinger</string>
-    <string name="action_remove_widget">Fjern</string>
+    <string name="action_remove_widget">fjern</string>
     <string name="desc_apps_list">Programliste</string>
     <string name="search_hint">Søk…</string>
     <string name="action_web_provider_remove">Fjern</string>
