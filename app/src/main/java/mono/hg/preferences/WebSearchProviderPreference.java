@@ -28,11 +28,14 @@ import java.util.Map;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.WebProviderAdapter;
+import mono.hg.databinding.FragmentWebProviderBinding;
+import mono.hg.databinding.LayoutWebProviderEditDialogBinding;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.WebSearchProvider;
 
 @Keep
 public class WebSearchProviderPreference extends PreferenceFragmentCompat {
+    private FragmentWebProviderBinding binding;
     private ArrayList<WebSearchProvider> providerList = new ArrayList<>();
     private WebProviderAdapter providerAdapter;
 
@@ -41,7 +44,8 @@ public class WebSearchProviderPreference extends PreferenceFragmentCompat {
     }
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_web_provider, container, false);
+        binding = FragmentWebProviderBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -49,7 +53,7 @@ public class WebSearchProviderPreference extends PreferenceFragmentCompat {
 
         setHasOptionsMenu(true);
 
-        ListView providerListView = requireActivity().findViewById(R.id.web_provider_list);
+        ListView providerListView = binding.webProviderList;
         providerAdapter = new WebProviderAdapter(requireContext(), providerList);
 
         providerListView.setAdapter(providerAdapter);
@@ -155,13 +159,13 @@ public class WebSearchProviderPreference extends PreferenceFragmentCompat {
     }
 
     private void makeEditMenu(String name, String url, final boolean isEditing, final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        View view = View.inflate(requireContext(), R.layout.layout_web_provider_edit_dialog, null);
+        LayoutWebProviderEditDialogBinding binding = LayoutWebProviderEditDialogBinding.inflate(getActivity().getLayoutInflater());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         String title;
 
-        final EditText nameField = view.findViewById(R.id.provider_edit_name);
-        final EditText urlField = view.findViewById(R.id.provider_edit_url);
+        final EditText nameField = binding.providerEditName;
+        final EditText urlField = binding.providerEditUrl;
 
         if (!name.isEmpty()) {
             nameField.setText(name);
@@ -177,7 +181,7 @@ public class WebSearchProviderPreference extends PreferenceFragmentCompat {
             title = getString(R.string.dialog_title_add_provider);
         }
 
-        builder.setView(view);
+        builder.setView(binding.getRoot());
 
         builder.setTitle(title)
                .setNegativeButton(android.R.string.cancel, null)

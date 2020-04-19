@@ -54,6 +54,9 @@ import java.util.HashSet;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import mono.hg.adapters.AppAdapter;
+import mono.hg.databinding.ActivityLauncherspaceBinding;
+import mono.hg.databinding.DialogStartHintBinding;
+import mono.hg.databinding.LayoutRenameDialogBinding;
 import mono.hg.fragments.WidgetsDialogFragment;
 import mono.hg.helpers.LauncherIconHelper;
 import mono.hg.helpers.PreferenceHelper;
@@ -74,9 +77,12 @@ import mono.hg.views.TogglingLinearLayoutManager;
 import mono.hg.wrappers.TextSpectator;
 
 public class LauncherActivity extends AppCompatActivity {
-
     private static int SETTINGS_RETURN_CODE = 12;
     private static int SHORTCUT_MENU_GROUP = 247;
+    /*
+     * Binding for this activity.
+     */
+    private ActivityLauncherspaceBinding binding;
     /*
      * List containing installed apps.
      */
@@ -187,7 +193,8 @@ public class LauncherActivity extends AppCompatActivity {
         // Load preferences before setting layout.
         loadPref();
 
-        setContentView(R.layout.activity_launcherspace);
+        binding = ActivityLauncherspaceBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         if (getRequestedOrientation() != PreferenceHelper.getOrientation()) {
             setRequestedOrientation(PreferenceHelper.getOrientation());
@@ -204,16 +211,16 @@ public class LauncherActivity extends AppCompatActivity {
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
 
-        appsListContainer = findViewById(R.id.app_list_container);
-        searchContainer = findViewById(R.id.search_container);
-        pinnedAppsContainer = findViewById(R.id.pinned_apps_container);
-        searchBar = findViewById(R.id.search);
-        slidingHome = findViewById(R.id.slide_home);
-        touchReceiver = findViewById(R.id.touch_receiver);
-        appsRecyclerView = findViewById(R.id.apps_list);
-        pinnedAppsRecyclerView = findViewById(R.id.pinned_apps_list);
-        searchContext = findViewById(R.id.search_context_button);
-        loadProgress = findViewById(R.id.load_progress);
+        appsListContainer = binding.appListContainer;
+        searchContainer = binding.searchContainer.searchContainer;
+        pinnedAppsContainer = binding.pinnedAppsContainer;
+        searchBar = binding.searchContainer.search;
+        slidingHome = binding.slideHome;
+        touchReceiver = binding.touchReceiver;
+        appsRecyclerView = binding.appsList;
+        pinnedAppsRecyclerView = binding.pinnedAppsList;
+        searchContext = binding.searchContainer.searchContextButton;
+        loadProgress = binding.loadProgress;
 
         if (Utils.atLeastLollipop()) {
             launcherApps = (LauncherApps) getSystemService(LAUNCHER_APPS_SERVICE);
@@ -556,13 +563,12 @@ public class LauncherActivity extends AppCompatActivity {
 
         // Switch on wallpaper shade.
         if (PreferenceHelper.useWallpaperShade()) {
-            View wallpaperShade = findViewById(R.id.wallpaper_shade);
             // Tints the navigation bar with a semi-transparent shade.
             if (Utils.atLeastLollipop()) {
                 getWindow().setNavigationBarColor(
                         getResources().getColor(R.color.navigationBarShade));
             }
-            wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
+            binding.wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow);
         }
 
         if ("transparent".equals(PreferenceHelper.getListBackground())) {
@@ -1142,19 +1148,18 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     public void showStartDialog() {
+        DialogStartHintBinding binding = DialogStartHintBinding.inflate(getLayoutInflater());
         final BottomSheetDialog startDialog = new BottomSheetDialog(this);
-        startDialog.setContentView(R.layout.dialog_start_hint);
+        startDialog.setContentView(binding.getRoot());
         startDialog.setCancelable(false);
         startDialog.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
-        Button startDismiss = startDialog.findViewById(R.id.dismiss);
-        if (startDismiss != null) {
-            startDismiss.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
-                    startDialog.dismiss();
-                    PreferenceHelper.update("is_new_user", false);
-                }
-            });
-        }
+        Button startDismiss = binding.dismiss;
+        startDismiss.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                startDialog.dismiss();
+                PreferenceHelper.update("is_new_user", false);
+            }
+        });
         startDialog.show();
     }
 
@@ -1166,11 +1171,11 @@ public class LauncherActivity extends AppCompatActivity {
      */
     private void makeRenameDialog(final String packageName, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = View.inflate(this, R.layout.layout_rename_dialog, null);
+        LayoutRenameDialogBinding binding = LayoutRenameDialogBinding.inflate(getLayoutInflater());
 
-        final EditText renameField = view.findViewById(R.id.rename_field);
+        final EditText renameField = binding.renameField;
         renameField.setHint(PreferenceHelper.getLabel(packageName));
-        builder.setView(view);
+        builder.setView(binding.getRoot());
 
         builder.setNegativeButton(android.R.string.cancel, null)
                .setTitle(R.string.dialog_title_shorthand)

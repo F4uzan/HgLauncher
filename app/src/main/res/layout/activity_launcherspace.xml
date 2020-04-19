@@ -57,7 +57,23 @@
                 app:layout_anchor="@id/pinned_apps_container"
                 app:layout_behavior=".wrappers.ObservantListBehavior" />
 
-            <include layout="@layout/layout_favourites_panel" />
+            <FrameLayout
+                android:id="@+id/pinned_apps_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/search_bar_size"
+                android:layout_gravity="bottom"
+                android:background="?attr/cardColor"
+                android:orientation="horizontal">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pinned_apps_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:overScrollMode="never"
+                    android:splitMotionEvents="false" />
+
+            </FrameLayout>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -73,7 +89,9 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/desc_touch_receiver" />
 
-            <include layout="@layout/layout_searchbar" />
+            <include
+                android:id="@+id/search_container"
+                layout="@layout/layout_searchbar" />
 
         </FrameLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>

@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.text.util.Linkify;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -15,19 +14,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import mono.hg.R;
+import mono.hg.databinding.FragmentCreditsDialogBinding;
 import mono.hg.utils.Utils;
 
 public class CreditsDialogFragment extends DialogFragment {
     @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
+        FragmentCreditsDialogBinding binding = FragmentCreditsDialogBinding.inflate(getActivity().getLayoutInflater());
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = View.inflate(getActivity(), R.layout.fragment_credits_dialog, null);
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader br = null;
 
         builder.setTitle(R.string.about_credits_dialog_title);
-        builder.setView(view);
+        builder.setView(binding.getRoot());
         builder.setPositiveButton(R.string.dialog_action_close, null);
-        TextView creditsText = view.findViewById(R.id.credits_placeholder);
+        TextView creditsText = binding.creditsPlaceholder;
 
         try {
             br = new BufferedReader(

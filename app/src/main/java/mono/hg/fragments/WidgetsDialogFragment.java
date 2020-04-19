@@ -24,6 +24,7 @@ import java.util.Collections;
 
 import mono.hg.R;
 import mono.hg.appwidget.LauncherAppWidgetHost;
+import mono.hg.databinding.FragmentWidgetsDialogBinding;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.utils.Utils;
 
@@ -61,13 +62,13 @@ public class WidgetsDialogFragment extends DialogFragment {
     }
 
     @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        FragmentWidgetsDialogBinding binding = FragmentWidgetsDialogBinding.inflate(requireActivity().getLayoutInflater());
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(),
                 R.style.WidgetDialogStyle);
-        View view = View.inflate(requireContext(), R.layout.fragment_widgets_dialog, null);
 
         widgetsList = new ArrayList<>(PreferenceHelper.getWidgetList());
 
-        appWidgetContainer = view.findViewById(R.id.widget_container);
+        appWidgetContainer = binding.widgetContainer;
 
         if (!widgetsList.isEmpty()) {
             for (String widgets : PreferenceHelper.getWidgetList()) {
@@ -78,7 +79,7 @@ public class WidgetsDialogFragment extends DialogFragment {
             }
         }
 
-        builder.setView(view);
+        builder.setView(binding.getRoot());
         builder.setTitle(R.string.dialog_title_widgets);
         builder.setNegativeButton(R.string.dialog_action_close, null);
         builder.setPositiveButton(R.string.dialog_action_add, null);

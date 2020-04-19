@@ -22,12 +22,14 @@ import java.util.HashSet;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.HiddenAppAdapter;
+import mono.hg.databinding.FragmentHiddenAppsBinding;
 import mono.hg.helpers.PreferenceHelper;
 import mono.hg.models.App;
 import mono.hg.utils.AppUtils;
 
 @Keep
 public class HiddenAppsPreference extends PreferenceFragmentCompat {
+    private FragmentHiddenAppsBinding binding;
     private ArrayList<App> appList = new ArrayList<>();
     private HiddenAppAdapter hiddenAppAdapter;
     private HashSet<String> excludedAppList = new HashSet<>(
@@ -39,7 +41,8 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
     }
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_hidden_apps, container, false);
+        binding = FragmentHiddenAppsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class HiddenAppsPreference extends PreferenceFragmentCompat {
 
         setHasOptionsMenu(true);
 
-        appsListView = requireActivity().findViewById(R.id.hidden_apps_list);
+        appsListView = binding.hiddenAppsList;
         hiddenAppAdapter = new HiddenAppAdapter(appList, requireActivity());
 
         appsListView.setAdapter(hiddenAppAdapter);

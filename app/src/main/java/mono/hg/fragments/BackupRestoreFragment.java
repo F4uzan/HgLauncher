@@ -29,11 +29,13 @@ import java.util.Comparator;
 import mono.hg.R;
 import mono.hg.SettingsActivity;
 import mono.hg.adapters.FileFolderAdapter;
+import mono.hg.databinding.FragmentBackupRestoreBinding;
 import mono.hg.models.FileFolder;
 import mono.hg.utils.BackupRestoreUtils;
 import mono.hg.wrappers.BackHandledFragment;
 
 public class BackupRestoreFragment extends BackHandledFragment {
+    private FragmentBackupRestoreBinding binding;
     private ArrayList<FileFolder> fileFoldersList = new ArrayList<>();
     private FileFolderAdapter fileFolderAdapter;
     private File currentPath;
@@ -42,7 +44,13 @@ public class BackupRestoreFragment extends BackHandledFragment {
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_backup_restore, container, false);
+        binding = FragmentBackupRestoreBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -69,9 +77,9 @@ public class BackupRestoreFragment extends BackHandledFragment {
         setHasOptionsMenu(true);
 
         fileFolderAdapter = new FileFolderAdapter(fileFoldersList, requireActivity());
-        FrameLayout fileInputContainer = requireActivity().findViewById(R.id.file_input_container);
-        ListView fileFolders = requireActivity().findViewById(R.id.files_list);
-        backupNameField = requireActivity().findViewById(R.id.file_input_entry);
+        FrameLayout fileInputContainer = binding.fileInputContainer;
+        ListView fileFolders = binding.filesList;
+        backupNameField = binding.fileInputEntry;
 
         fileFolders.setAdapter(fileFolderAdapter);
 
