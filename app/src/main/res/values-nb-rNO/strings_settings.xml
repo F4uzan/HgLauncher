@@ -108,4 +108,7 @@
     <string name="app_theme_accent">Aksentfarge</string>
     <string name="app_theme_accent_dialog">Velg en farge</string>
     <string name="app_theme_auto">Automatisk</string>
+    <string name="app_list_mode_grid">Rutenett</string>
+    <string name="app_list_mode_list">Liste</string>
+    <string name="app_list_mode">Programlistemodus</string>
 </resources>
