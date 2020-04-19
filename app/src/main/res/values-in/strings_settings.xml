@@ -107,4 +107,5 @@
     <string name="list_background_none">Tidak ada</string>
     <string name="app_theme_accent">Aksen</string>
     <string name="app_theme_accent_dialog">Pilih warna</string>
+    <string name="app_theme_auto">Otomatis</string>
 </resources>
