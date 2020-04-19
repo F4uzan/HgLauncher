@@ -38,6 +38,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -132,7 +133,7 @@ public class LauncherActivity extends AppCompatActivity {
     /*
      * LinearLayoutManager used in appsRecyclerView.
      */
-    private TogglingLinearLayoutManager appsLayoutManager;
+    private RecyclerView.LayoutManager appsLayoutManager;
     /*
      * RecyclerView for pinned apps; shown in favourites panel.
      */
@@ -194,8 +195,11 @@ public class LauncherActivity extends AppCompatActivity {
 
         manager = getPackageManager();
 
-        appsLayoutManager = new TogglingLinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, true);
+        if (PreferenceHelper.useGrid()) {
+            appsLayoutManager = new GridLayoutManager(this, 5);
+        } else {
+            appsLayoutManager = new TogglingLinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
+        }
 
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
@@ -1024,8 +1028,6 @@ public class LauncherActivity extends AppCompatActivity {
             }
 
             @Override public void onPanelStateChanged(View panel, int previousState, int newState) {
-                appsLayoutManager.setVerticalScrollEnabled(
-                        newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
                 searchBar.setClickable(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
                 searchBar.setLongClickable(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
 

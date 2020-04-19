@@ -49,6 +49,15 @@
         <item>black</item>
     </string-array>
 
+    <string-array name="pref_app_list_mode_title">
+        <item>@string/app_list_mode_list</item>
+        <item>@string/app_list_mode_grid</item>
+    </string-array>
+    <string-array name="pref_app_list_mode_values">
+        <item>list</item>
+        <item>grid</item>
+    </string-array>
+
     <string-array name="pref_windowbar_title">
         <item>@string/windowbar_mode_none</item>
         <item>@string/windowbar_mode_status</item>

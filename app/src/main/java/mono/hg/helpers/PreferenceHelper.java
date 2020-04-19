@@ -34,6 +34,7 @@ public class PreferenceHelper {
     private static boolean adaptive_shade;
     private static boolean windowbar_status_switch;
     private static boolean web_search_long_press;
+    private static boolean use_grid_mode;
     private static boolean is_testing;
     private static boolean was_alien;
     private static Map<String, String> label_list = new HashMap<>();
@@ -149,6 +150,10 @@ public class PreferenceHelper {
 
     public static boolean keepLastSearch() {
         return keep_last_search;
+    }
+
+    public static boolean useGrid() {
+        return use_grid_mode;
     }
 
     public static boolean wasAlien() {
@@ -353,6 +358,7 @@ public class PreferenceHelper {
         adaptive_shade = getPreference().getBoolean("adaptive_shade_switch", false);
         windowbar_status_switch = getPreference().getBoolean("windowbar_status_switch", false);
         windowbar_mode = getPreference().getString("windowbar_mode", "none");
+        use_grid_mode = preferences.getString("app_list_mode", "list").equals("grid");
         gesture_left_action = getPreference().getString("gesture_left", "none");
         gesture_right_action = getPreference().getString("gesture_right", "none");
         gesture_up_action = getPreference().getString("gesture_up", "none");

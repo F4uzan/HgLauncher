@@ -16,6 +16,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.FlexibleViewHolder;
 import mono.hg.R;
 import mono.hg.helpers.KissFuzzySearch;
+import mono.hg.helpers.PreferenceHelper;
 
 public class App extends AbstractFlexibleItem<App.ViewHolder>
         implements IFilterable<String> {
@@ -110,7 +111,11 @@ public class App extends AbstractFlexibleItem<App.ViewHolder>
     }
 
     @Override public int getLayoutRes() {
-        return R.layout.list_generic_item;
+        if (PreferenceHelper.useGrid()) {
+            return R.layout.grid_generic_item;
+        } else {
+            return R.layout.list_generic_item;
+        }
     }
 
     @Override public App.ViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {

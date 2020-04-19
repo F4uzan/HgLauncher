@@ -132,6 +132,10 @@
     <string name="static_favourites">Static favorite panel</string>
     <string name="static_favourites_desc">Favorite panel visible when scrolling</string>
 
+    <string name="app_list_mode">App list mode</string>
+    <string name="app_list_mode_list">List</string>
+    <string name="app_list_mode_grid">Grid</string>
+
     <string name="icon_pack">Icons</string>
     <string name="icon_pack_default">Default</string>
     <string name="icon_pack_default_value" translatable="false">default</string>

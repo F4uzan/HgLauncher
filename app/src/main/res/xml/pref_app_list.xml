@@ -8,6 +8,16 @@
         android:title="@string/pref_header_hidden_apps" />
 
     <mono.hg.wrappers.SpinnerPreference
+        android:defaultValue="list"
+        android:entries="@array/pref_app_list_mode_title"
+        android:entryValues="@array/pref_app_list_mode_values"
+        android:key="app_list_mode"
+        android:summary="%s"
+        android:title="@string/app_list_mode"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false" />
+
+    <mono.hg.wrappers.SpinnerPreference
         android:defaultValue="opaque"
         android:entries="@array/pref_list_background_title"
         android:entryValues="@array/pref_list_background_values"
