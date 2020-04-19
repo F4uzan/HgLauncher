@@ -108,4 +108,7 @@
     <string name="pref_search_provider">Standaard zoekmachine</string>
     <string name="anim_list_slide_in">Glijden</string>
     <string name="app_theme_auto">Automatisch</string>
+    <string name="app_list_mode_grid">Raster</string>
+    <string name="app_list_mode">Overzichtsmodus</string>
+    <string name="app_list_mode_list">Lijst</string>
 </resources>
