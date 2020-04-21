@@ -44,7 +44,7 @@
     <string name="action_web_provider_remove">Verwijderen</string>
     <string name="action_down_widget">Omlaag verplaatsen</string>
     <string name="action_up_widget">Omhoog verplaatsen</string>
-    <string name="action_remove_widget">Verwijderen</string>
+    <string name="action_remove_widget">verwijderen</string>
     <string name="action_view_widgets">Widgetscherm</string>
     <string name="action_force_refresh">Verversen</string>
     <string name="action_wallpaper">Achtergrond wijzigen</string>

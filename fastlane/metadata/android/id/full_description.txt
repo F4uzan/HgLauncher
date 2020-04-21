@@ -1,0 +1,14 @@
+Menyajikan daftar aplikasi yang dapat 
+Anda buka secara bergulir, tidak perlu mencari-cari kembali.
+
+"If it works, it works."
+
+Fitur:
+
+• Gunakan lebih sedikit, lakukan lebih banyak, lebih cepat.
+• Copyleft; Gunakan, lihat, modifikasi, dan bagikan sesuka hati Anda , dengan semua orang.
+• Wallpaper Anda akan tampil tanpa tertutupi hal lain.
+• Kustomisasi, paket ikon, menyembunyikan aplikasi, dan fitur lainnya.
+• Penggunaan memori yang kecil selagi menjaga performa.
+• Tanpa iklan dan pembatasan fitur.
+• Tersedia dalam bahasa Anda, atau anda dapat membantu agar tersedia dalam bahasa yang Anda gunakan.
