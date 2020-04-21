@@ -1027,9 +1027,6 @@ public class LauncherActivity extends AppCompatActivity {
     private void addPanelListener() {
         slidingHome.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override public void onPanelSlide(View view, float v) {
-                // Hide the keyboard at slide.
-                ActivityServiceUtils.hideSoftKeyboard(LauncherActivity.this);
-
                 // Dismiss any visible menu.
                 doThis("dismiss_menu");
             }
@@ -1042,16 +1039,10 @@ public class LauncherActivity extends AppCompatActivity {
                 switch (newState) {
                     case SlidingUpPanelLayout.PanelState.DRAGGING:
                         // Empty out search bar text
-
                         // Clear the search bar text if app list is set to be kept open
                         // unless keepLastSearch setting indicates maintain last search
                         if (!PreferenceHelper.keepLastSearch()) {
                             clearSearch(searchBar);
-                        }
-
-                        // Preemptive attempt at showing the keyboard.
-                        if (PreferenceHelper.shouldFocusKeyboard()) {
-                            ActivityServiceUtils.showSoftKeyboard(LauncherActivity.this, searchBar);
                         }
 
                         // Animate search container entering the view.
