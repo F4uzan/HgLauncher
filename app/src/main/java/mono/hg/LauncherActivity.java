@@ -1032,7 +1032,6 @@ public class LauncherActivity extends AppCompatActivity {
             }
 
             @Override public void onPanelStateChanged(View panel, int previousState, int newState) {
-                Utils.sendLog(3, String.valueOf(newState));
                 searchBar.setClickable(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
                 searchBar.setLongClickable(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
 
