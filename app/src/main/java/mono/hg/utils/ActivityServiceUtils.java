@@ -42,11 +42,13 @@ public class ActivityServiceUtils {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(
                 Activity.INPUT_METHOD_SERVICE);
         
+        if (!view.isFocused()) {
+            view.requestFocus();
+        }
+
         if (inputMethodManager != null) {
             inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_FORCED);
         }
-
-        view.requestFocus();
     }
 
     /**
