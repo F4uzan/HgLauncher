@@ -107,4 +107,8 @@
     <string name="orientation_sensor">Sistema</string>
     <string name="orientation_portrait">Retrato</string>
     <string name="orientation_landscape">Paisagem</string>
+    <string name="app_list_mode_grid">Rede</string>
+    <string name="app_list_mode_list">Lista</string>
+    <string name="app_list_mode">Modo lista de aplicativos</string>
+    <string name="app_theme_auto">Auto</string>
 </resources>
