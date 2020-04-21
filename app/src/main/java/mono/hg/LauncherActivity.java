@@ -205,7 +205,8 @@ public class LauncherActivity extends AppCompatActivity {
         if (PreferenceHelper.useGrid()) {
             appsLayoutManager = new GridLayoutManager(this, 5);
         } else {
-            appsLayoutManager = new TogglingLinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
+            appsLayoutManager = new TogglingLinearLayoutManager(this, LinearLayoutManager.VERTICAL,
+                    true);
         }
 
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
@@ -1034,6 +1035,7 @@ public class LauncherActivity extends AppCompatActivity {
             }
 
             @Override public void onPanelStateChanged(View panel, int previousState, int newState) {
+                Utils.sendLog(3, String.valueOf(newState));
                 searchBar.setClickable(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
                 searchBar.setLongClickable(newState == SlidingUpPanelLayout.PanelState.COLLAPSED);
 
@@ -1094,6 +1096,15 @@ public class LauncherActivity extends AppCompatActivity {
                             isResuming = false;
                         }
                         break;
+                    case SlidingUpPanelLayout.PanelState.ANCHORED:
+                        // Please don't anchor, we don't want it.
+                        if (previousState != SlidingUpPanelLayout.PanelState.DRAGGING) {
+                            slidingHome.setPanelState(previousState,
+                                    ActivityServiceUtils.isPowerSaving(LauncherActivity.this));
+                        } else {
+                            slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
+                                    ActivityServiceUtils.isPowerSaving(LauncherActivity.this));
+                        }
                     default:
                         // No-op.
                         break;
