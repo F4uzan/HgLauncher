@@ -47,7 +47,7 @@ public class ActivityServiceUtils {
         }
 
         if (inputMethodManager != null) {
-            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
         }
     }
 
