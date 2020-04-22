@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/search_bar_size"
                 android:layout_gravity="bottom"
-                android:background="?attr/cardColor"
+                android:background="@drawable/drawable_rounded_edge"
                 android:orientation="horizontal">
 
                 <androidx.recyclerview.widget.RecyclerView
