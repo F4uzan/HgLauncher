@@ -27,7 +27,7 @@ public class ActivityServiceUtils {
                 Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null && activity.getCurrentFocus() != null) {
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
-                    0);
+                    InputMethodManager.HIDE_NOT_ALWAYS);
             activity.getCurrentFocus().clearFocus();
         }
     }
@@ -47,7 +47,7 @@ public class ActivityServiceUtils {
         }
 
         if (inputMethodManager != null) {
-            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
         }
     }
 
