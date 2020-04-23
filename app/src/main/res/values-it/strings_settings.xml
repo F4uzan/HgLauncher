@@ -62,7 +62,7 @@
     <string name="gesture_action_default">Nessuno</string>
     <string name="gesture_action_widget">Apri lo spazio dei widget</string>
     <string name="gesture_action_app">Avvia l\'app</string>
-    <string name="gesture_action_status">Esapndi la barra di notifica</string>
+    <string name="gesture_action_status">Espandi la barra di notifica</string>
     <string name="gesture_action_panel">Espandi il pannello delle impostazioni rapide</string>
     <string name="gesture_action_list">Apri la lista delle app</string>
     <string name="gesture_action_app_dialog_title">Seleziona l\'applicazione</string>

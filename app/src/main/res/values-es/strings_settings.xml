@@ -14,7 +14,7 @@
     <string name="pref_header_backup_restore">Copia de seguridad y restauracion</string>
     <!-- Summaries for headers/categories -->
     <string name="pref_summary_web">Gestiona las preferencias de las búsquedas web</string>
-    <string name="pref_summary_gestures">Gestos del escritorio y controlador de gestos</string>
+    <string name="pref_summary_gestures">Configurar Gestos</string>
     <string name="pref_summary_wall">Orientación de la pantalla, modo de las barras del sistema</string>
     <string name="pref_summary_list">Aplicaciones ocultadas, paquete de iconos, comportamiento de la lista de aplicaciones</string>
     <!-- Backup and restore -->
@@ -98,7 +98,7 @@
     <string name="shadow_adaptive_icon_desc">Oscurece los iconos adaptativos cn una ligera sombra. Podría reducir el rendimiento.</string>
     <string name="pref_icon_view">Ocultar iconos</string>
     <string name="pref_icon_view_desc">Recomendado si tienes un dispositivo lento.</string>
-    <string name="pref_shade_view">Sombra sobre el fondo de pantalla</string>
+    <string name="pref_shade_view">Sombra en el fondo</string>
     <string name="pref_shade_view_desc">Añade una sombra para oscurecer el fondo de pantalla. Recomendado para fondos de pantalla claros.</string>
     <string name="static_favourites">Panel de favoritos persistente</string>
     <string name="static_favourites_desc">Mantiene el panel de favoritos visible al margen de los desplazamientos.</string>

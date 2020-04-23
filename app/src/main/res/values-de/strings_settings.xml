@@ -8,18 +8,18 @@
     <string name="pref_header_gestures">Gesten</string>
     <string name="pref_header_wall">Desktop</string>
     <string name="pref_header_list">App-Liste</string>
-    <string name="pref_header_interface">Ansicht</string>
+    <string name="pref_header_interface">Schnittstelle</string>
     <string name="pref_header_behavior">Verhalten</string>
-    <string name="pref_header_web">Internetsuche</string>
+    <string name="pref_header_web">Websuche</string>
     <string name="pref_header_backup_restore">Sichern &amp; Wiederherstellen</string>
     <!-- Summaries for headers/categories -->
-    <string name="pref_summary_web">Einstellungen für die Internetsuche</string>
-    <string name="pref_summary_gestures">Desktop-Gesten und Gesten-Handler</string>
+    <string name="pref_summary_web">Einstellungen für die Websuche</string>
+    <string name="pref_summary_gestures">Gesteneinstellungen</string>
     <string name="pref_summary_wall">Bildschirmausrichtung, Systemleisten</string>
     <string name="pref_summary_list">Versteckte Apps, Icon-Paket, App-Listenverhalten</string>
     <!-- Backup and restore -->
     <string name="pref_header_hidden_apps">Versteckte Apps</string>
-    <string name="pref_header_hidden_apps_desc">Verwalte deine Liste versteckter Apps</string>
+    <string name="pref_header_hidden_apps_desc">Liste der versteckten Apps verwalten</string>
     <string name="pref_header_backup">Sichern</string>
     <string name="pref_header_backup_desc">Aktuelle Einstellungen abspeichern</string>
     <string name="backup_name_hint">Sicherungsname…</string>
@@ -31,9 +31,9 @@
     <string name="reset_preference_positive">Verstanden</string>
     <string name="reset_preference_toast">Konfiguration wurde zurückgesetzt.</string>
     <!-- Web search provider -->
-    <string name="pref_header_web_provider_title">Internetsuchanbieter</string>
+    <string name="pref_header_web_provider_title">Websuchmaschinen</string>
     <string name="pref_header_web_provider_desc">Suchmaschinen hinzufügen oder entfernen</string>
-    <string name="pref_header_web_provider_short">Suchanbieter</string>
+    <string name="pref_header_web_provider_short">Suchmaschinen</string>
     <string name="web_provider_name_hint">Name (muss einzigartig sein)</string>
     <!-- Easter egg -->
     <string name="version_key_toast_plural">Tippe %1$d weitere Male, um den Testmodus zu aktivieren.</string>
@@ -61,10 +61,10 @@
     <string name="windowbar_mode_status">Statusleiste</string>
     <string name="windowbar_mode_nav">Navigationsleiste</string>
     <string name="windowbar_mode_both">Beide</string>
-    <string name="gesture_left">Nach links streichen</string>
-    <string name="gesture_right">Nach rechts streichen</string>
-    <string name="gesture_up">Nach oben streichen</string>
-    <string name="gesture_down">Nach unten streichen</string>
+    <string name="gesture_left">← streichen</string>
+    <string name="gesture_right">→ streichen</string>
+    <string name="gesture_up">↑ streichen</string>
+    <string name="gesture_down">↓ streichen</string>
     <string name="gesture_single_tap">Tippen</string>
     <string name="gesture_double_tap">Doppelt tippen</string>
     <string name="gesture_handler">Gesten-Handler</string>
@@ -88,9 +88,9 @@
     <string name="anim_list_default">Nach System richten</string>
     <string name="anim_list_pull_up">Hochziehen</string>
     <string name="anim_list_slide_in">Hineinschieben</string>
-    <string name="pref_search_provider">Standard-Suchanbieter</string>
+    <string name="pref_search_provider">Standard-Suchmaschine</string>
     <string name="web_search_long_press">Erweitertes Suchmenü</string>
-    <string name="web_search_long_press_desc">Wenn der Suchanbieter nicht auf \"Immer nachfragen\" gestellt ist, erlaubt gedrückt halten von \"Los\" die Auswahl des Suchanbieters</string>
+    <string name="web_search_long_press_desc">Wenn der Suchmaschine nicht auf „Immer nachfragen“ gestellt ist, erlaubt gedrückt halten von „Los“ die Auswahl der Suchmaschine</string>
     <string name="keyboard_focus">Tastaturfokus</string>
     <string name="keyboard_focus_desc">Automatisch Tastatur anzeigen, wenn App-Liste heruntergezogen wird</string>
     <string name="web_search">Internetsuche anbieten</string>
@@ -109,4 +109,6 @@
     <string name="orientation_sensor">System folgen</string>
     <string name="orientation_portrait">Vertikal</string>
     <string name="orientation_landscape">Horizontal</string>
+    <string name="app_theme_accent_dialog">Wählen Sie eine Farbe</string>
+    <string name="app_theme_auto">Automatisch</string>
 </resources>
