@@ -824,9 +824,7 @@ public class LauncherActivity extends AppCompatActivity {
 
                 if (!getTrimmedInputText().isEmpty() && PreferenceHelper.promptSearch()) {
                     // HACK: Show a view stub to make sure app list anchors properly.
-                    if (pinnedAppsAdapter.isEmpty()) {
-                        doThis("show_favourites");
-                    }
+                    doThis("show_favourites");
 
                     // Update the snackbar text.
                     searchSnack.setText(searchHint);
@@ -911,7 +909,8 @@ public class LauncherActivity extends AppCompatActivity {
             public void onScrollUp() {
                 if (!pinnedAppsAdapter.isEmpty()
                         && isFavouritesVisible
-                        && PreferenceHelper.favouritesAcceptScroll()) {
+                        && PreferenceHelper.favouritesAcceptScroll()
+                        && searchBar.getText().toString().isEmpty()) {
                     doThis("hide_favourites");
                 }
             }
