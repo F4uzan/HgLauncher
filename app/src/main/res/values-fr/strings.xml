@@ -1,2 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="dialog_start_hint_message_one">Voici votre bureau. Ici, vous pouvez…
+\n • Taper pour ouvrir la liste des applis
+\n • Faire un appui long pour changer le fond d\'écran et ouvrir les paramètres</string>
+    <string name="action_shorthand">Abréviation</string>
+    <string name="app_name">HgLauncher</string>
+    <string name="search_provider_none">Toujours demander</string>
+    <string name="desc_clear_search">Effacer la requête de recherche</string>
+    <string name="desc_file">Fichier</string>
+    <string name="desc_icon">Appli</string>
+    <string name="desc_apps_list">Liste des applis</string>
+    <string name="desc_touch_receiver">Vue de bureau</string>
+    <string name="dialog_start_hint_title">Bienvenue !</string>
+    <string name="err_no_method_panel">Ceci est possible seulement avec les nouvelles versions d\'Android.</string>
+    <string name="err_provider_exists">Le nom du moteur de recherche doit être unique.</string>
+    <string name="err_invalid_url">URL invalide.</string>
+    <string name="err_activity_null">Impossible de démarrer l\'application.</string>
+    <string name="dialog_action_add">Ajouter</string>
+    <string name="dialog_action_close">Fermer</string>
+    <string name="dialog_title_widgets">Espace widget</string>
+    <string name="dialog_title_shorthand">Définir l\'abréviation</string>
+    <string name="dialog_title_edit_provider">Modifier le fournisseur</string>
+    <string name="dialog_title_add_provider">Ajouter un fournisseur</string>
+    <string name="search_web_button">Aller</string>
+    <string name="search_web_button_prompt">Avec</string>
+    <string name="search_web_hint">Rechercher « %1$s » en ligne</string>
+    <string name="search_hint">Recherche…</string>
+    <string name="action_shortcuts">Raccourcis</string>
+    <string name="action_actions">Actions</string>
+    <string name="action_info">À propos</string>
+    <string name="action_uninstall">Désinstaller</string>
+    <string name="action_backup">Sauvegarder</string>
+    <string name="action_show">Restaurer</string>
+    <string name="action_hide">Masquer</string>
+    <string name="action_unpin">Désépingler</string>
+    <string name="action_pin">Épingler</string>
+    <string name="action_save_backup">Enregistrer</string>
+    <string name="action_web_provider_reset">Réinitialiser</string>
+    <string name="action_web_provider_add">Ajouter</string>
+    <string name="action_hidden_app_reset">Restaurer tout</string>
+    <string name="action_web_provider_edit">Modifier</string>
+    <string name="action_web_provider_exclude">Exclure</string>
+    <string name="action_web_provider_remove">Retirer</string>
+    <string name="action_down_widget">Descendre</string>
+    <string name="action_up_widget">Monter</string>
+    <string name="action_remove_widget">retirer</string>
+    <string name="action_view_widgets">Espace widget</string>
+    <string name="action_force_refresh">Rafraîchir</string>
+    <string name="action_wallpaper">Changer le fond d\'écran</string>
+    <string name="action_settings">Paramètres</string>
+</resources>
