@@ -74,6 +74,7 @@ import mono.hg.utils.ViewUtils;
 import mono.hg.views.DagashiBar;
 import mono.hg.views.IndeterminateMaterialProgressBar;
 import mono.hg.views.TogglingLinearLayoutManager;
+import mono.hg.wrappers.ItemOffsetDecoration;
 import mono.hg.wrappers.TextSpectator;
 
 public class LauncherActivity extends AppCompatActivity {
@@ -203,11 +204,13 @@ public class LauncherActivity extends AppCompatActivity {
         manager = getPackageManager();
 
         if (PreferenceHelper.useGrid()) {
-            appsLayoutManager = new GridLayoutManager(this, 5);
+            appsLayoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.column_default_size));
         } else {
             appsLayoutManager = new TogglingLinearLayoutManager(this, LinearLayoutManager.VERTICAL,
                     true);
         }
+
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(this, R.dimen.item_offset);
 
         final LinearLayoutManager pinnedAppsManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
@@ -247,6 +250,9 @@ public class LauncherActivity extends AppCompatActivity {
         appsRecyclerView.setAdapter(appsAdapter);
         appsRecyclerView.setLayoutManager(appsLayoutManager);
         appsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        if (PreferenceHelper.useGrid()) {
+            appsRecyclerView.addItemDecoration(itemDecoration);
+        }
 
         pinnedAppsRecyclerView.setAdapter(pinnedAppsAdapter);
         pinnedAppsRecyclerView.setLayoutManager(pinnedAppsManager);

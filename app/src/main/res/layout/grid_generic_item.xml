@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp"
-    android:padding="5dp"
+    android:gravity="center"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
     android:weightSum="10">
 
     <ImageView
@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/item_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:ellipsize="end"

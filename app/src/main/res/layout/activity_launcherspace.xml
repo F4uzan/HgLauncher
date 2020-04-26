@@ -51,6 +51,7 @@
                 android:nextFocusDown="@id/search"
                 android:nextFocusForward="@id/search"
                 android:splitMotionEvents="false"
+                android:clipToPadding="false"
                 app:fastScrollPopupBgColor="@color/fastScrollerHold"
                 app:fastScrollThumbColor="@color/fastScrollerHold"
                 app:fastScrollThumbInactiveColor="@color/fastScrollerIdle"
