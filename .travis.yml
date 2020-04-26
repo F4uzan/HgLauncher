@@ -12,7 +12,7 @@ android:
     - sys-img-armeabi-v7a-android-22
 
 before_install:
-  - yes | sdkmanager --licenses
+  - yes | sdkmanager "build-tools;30.0.0-rc2"
 
 before_script:
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
