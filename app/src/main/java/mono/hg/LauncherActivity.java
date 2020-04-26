@@ -38,7 +38,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,6 +70,7 @@ import mono.hg.utils.AppUtils;
 import mono.hg.utils.UserUtils;
 import mono.hg.utils.Utils;
 import mono.hg.utils.ViewUtils;
+import mono.hg.views.CustomGridLayoutManager;
 import mono.hg.views.DagashiBar;
 import mono.hg.views.IndeterminateMaterialProgressBar;
 import mono.hg.views.TogglingLinearLayoutManager;
@@ -204,7 +204,8 @@ public class LauncherActivity extends AppCompatActivity {
         manager = getPackageManager();
 
         if (PreferenceHelper.useGrid()) {
-            appsLayoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.column_default_size));
+            appsLayoutManager = new CustomGridLayoutManager(this,
+                    getResources().getInteger(R.integer.column_default_size));
         } else {
             appsLayoutManager = new TogglingLinearLayoutManager(this, LinearLayoutManager.VERTICAL,
                     true);
@@ -475,6 +476,7 @@ public class LauncherActivity extends AppCompatActivity {
 
                     appMenu.dismiss();
                 }
+
                 break;
             case "show_panel":
                 slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
