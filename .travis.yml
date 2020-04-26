@@ -6,7 +6,7 @@ android:
     - tools
     - build-tools-30.0.0-rc2
     - android-22
-    - android-29
+    - android-30
     - extra-google-m2repository
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-22
