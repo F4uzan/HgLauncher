@@ -8,7 +8,7 @@
     android:layout_marginLeft="@dimen/uniform_panel_margin"
     android:layout_marginEnd="@dimen/uniform_panel_margin"
     android:layout_marginRight="@dimen/uniform_panel_margin"
-    android:background="?attr/cardColor"
+    android:background="@color/colorCardBackgroundGray"
     android:nextFocusUp="@id/apps_list"
     android:nextFocusForward="@id/apps_list"
     android:orientation="horizontal"
