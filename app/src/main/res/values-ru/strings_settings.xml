@@ -1,2 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="version_key_name">HgLauncher (testing)</string>
+    <string name="version_key_toast">Нажми ещё раз для подтверждения.</string>
+    <string name="version_key_toast_plural">Нажми ещё %1$d раз для включения тестового режима.</string>
+    <string name="web_provider_name_hint">Имя (должно быть уникальным)</string>
+    <string name="pref_header_web_provider_short">Поисковики</string>
+    <string name="pref_header_web_provider_desc">Добавить или убрать поисковики</string>
+    <string name="pref_header_web_provider_title">Поисковики</string>
+    <string name="reset_preference_toast">Сброс настроек.</string>
+    <string name="reset_preference_positive">ОК</string>
+    <string name="reset_preference_warn">Это навсегда сбросит ваши настройки.</string>
+    <string name="reset_preference_desc">Сбросить все настройки на изначальные</string>
+    <string name="reset_preference">Сбросить настройки</string>
+    <string name="pref_header_restore_desc">Восстановить сохраненные настройки</string>
+    <string name="pref_header_restore">Восстановить</string>
+    <string name="backup_name_hint">Введите имя…</string>
+    <string name="pref_header_backup_desc">Сохранить настройки лаунчера</string>
+    <string name="pref_header_backup">Резервное копирование</string>
+    <string name="pref_header_hidden_apps_desc">Управление списком скрытых приложений</string>
+    <string name="pref_header_hidden_apps">Скрытые приложения</string>
+    <string name="pref_summary_wall">Ориентация экрана, режим системной панели</string>
+    <string name="pref_summary_gestures">Настройки жестов</string>
+    <string name="pref_summary_web">Настройки поиска</string>
+    <string name="pref_header_backup_restore">Резервное копирование и восстановление</string>
+    <string name="pref_header_web">Поиск в интернете</string>
+    <string name="pref_header_behavior">Поведение</string>
+    <string name="pref_header_interface">Интерфейс</string>
+    <string name="pref_header_list">Список приложений</string>
+    <string name="pref_header_wall">Рабочий стол</string>
+    <string name="pref_header_gestures">Жесты</string>
+    <string name="pref_header_cust">Кастомизация</string>
+    <string name="pref_header_about">О приложении</string>
+    <string name="title_activity_settings">Настройки</string>
+</resources>
