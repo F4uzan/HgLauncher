@@ -350,7 +350,8 @@ public class Utils {
             Gesture.UP,
             Gesture.DOWN,
             Gesture.TAP,
-            Gesture.DOUBLE_TAP})
+            Gesture.DOUBLE_TAP,
+            Gesture.PINCH})
     @Retention(SOURCE)
     public @interface Gesture {
         int LEFT = 0;
@@ -359,5 +360,6 @@ public class Utils {
         int DOWN = 11;
         int TAP = 100;
         int DOUBLE_TAP = 101;
+        int PINCH = 111;
     }
 }

@@ -85,6 +85,7 @@ public class GesturesPreference extends PreferenceFragmentCompat {
         ListPreference gestureUpList = findPreference("gesture_up");
         ListPreference gestureTapList = findPreference("gesture_single_tap");
         ListPreference gestureDoubleTapList = findPreference("gesture_double_tap");
+        ListPreference gesturePinchList = findPreference("gesture_pinch");
         ListPreference gestureHandlerList = findPreference("gesture_handler");
 
         setNestedListSummary(gestureLeftList);
@@ -93,6 +94,7 @@ public class GesturesPreference extends PreferenceFragmentCompat {
         setNestedListSummary(gestureUpList);
         setNestedListSummary(gestureTapList);
         setNestedListSummary(gestureDoubleTapList);
+        setNestedListSummary(gesturePinchList);
 
         setGestureHandlerList(gestureHandlerList);
         gestureLeftList.setOnPreferenceChangeListener(NestingListListener);
@@ -101,6 +103,7 @@ public class GesturesPreference extends PreferenceFragmentCompat {
         gestureUpList.setOnPreferenceChangeListener(NestingListListener);
         gestureDoubleTapList.setOnPreferenceChangeListener(NestingListListener);
         gestureTapList.setOnPreferenceChangeListener(NestingListListener);
+        gesturePinchList.setOnPreferenceChangeListener(NestingListListener);
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

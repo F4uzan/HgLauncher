@@ -52,6 +52,7 @@ public class PreferenceHelper {
     private static String gesture_down_action;
     private static String gesture_single_tap_action;
     private static String gesture_double_tap_action;
+    private static String gesture_pinch_action;
     private static String windowbar_mode;
     private static String widgets_list;
 
@@ -178,6 +179,8 @@ public class PreferenceHelper {
                 return gesture_single_tap_action;
             case Gesture.DOUBLE_TAP:
                 return gesture_double_tap_action;
+            case Gesture.PINCH:
+                return gesture_pinch_action;
             default:
                 return "";
         }
@@ -365,6 +368,7 @@ public class PreferenceHelper {
         gesture_down_action = getPreference().getString("gesture_down", "none");
         gesture_single_tap_action = getPreference().getString("gesture_single_tap", "list");
         gesture_double_tap_action = getPreference().getString("gesture_double_tap", "none");
+        gesture_pinch_action = getPreference().getString("gesture_pinch", "none");
         gesture_handler = ComponentName.unflattenFromString(
                 getPreference().getString("gesture_handler", "none"));
         widgets_list = getPreference().getString("widgets_list", "");

@@ -3,6 +3,7 @@ package mono.hg.listeners;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import mono.hg.utils.Utils.Gesture;
@@ -16,9 +17,11 @@ import mono.hg.utils.Utils.Gesture;
  */
 public class GestureListener implements View.OnTouchListener {
     private final GestureDetector gestureDetector;
+    private final ScaleGestureDetector scaleDetector;
 
     protected GestureListener(Context context) {
         gestureDetector = new GestureDetector(context, new InternalGestureListener());
+        scaleDetector = new ScaleGestureDetector(context, new InternalScaleGestureListener());
     }
 
     public void onLongPress() {
@@ -30,7 +33,14 @@ public class GestureListener implements View.OnTouchListener {
     }
 
     public boolean onTouch(View v, MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
+        return gestureDetector.onTouchEvent(event) || scaleDetector.onTouchEvent(event);
+    }
+
+    private final class InternalScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override public boolean onScale(ScaleGestureDetector detector) {
+            onGesture(Gesture.PINCH);
+            return super.onScale(detector);
+        }
     }
 
     private final class InternalGestureListener extends GestureDetector.SimpleOnGestureListener {

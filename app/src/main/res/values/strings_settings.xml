@@ -79,6 +79,7 @@
     <string name="gesture_down">Swipe ↓</string>
     <string name="gesture_single_tap">Tap</string>
     <string name="gesture_double_tap">Double tap</string>
+    <string name="gesture_pinch">Pinch</string>
     <string name="gesture_handler">Gesture handler</string>
     <string name="gesture_handler_default">None</string>
     <string name="gesture_handler_default_value">none</string>
