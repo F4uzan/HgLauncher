@@ -16,6 +16,7 @@ public class PackageChangesReceiver extends BroadcastReceiver {
             if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")
                     || intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")
                     || intent.getAction().equals("android.intent.action.PACKAGE_CHANGED")
+                    || intent.getAction().equals("android.intent.action.PACKAGE_REPLACED")
                     && !packageName.contains(context.getPackageName())) {
                 Intent mainIntent = new Intent(context, LauncherActivity.class);
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
