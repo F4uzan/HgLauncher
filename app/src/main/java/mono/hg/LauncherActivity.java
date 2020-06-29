@@ -123,7 +123,7 @@ public class LauncherActivity extends AppCompatActivity {
     /*
      * String containing pinned apps. Delimited by a semicolon (;).
      */
-    private String pinnedAppString;
+    private static String pinnedAppString;
     /*
      * Adapter for pinned apps.
      */
@@ -361,9 +361,6 @@ public class LauncherActivity extends AppCompatActivity {
                                  .equals(PreferenceHelper.getIconPackName())) {
             LauncherIconHelper.refreshIcons();
         }
-
-        // Get pinned apps.
-        pinnedAppString = PreferenceHelper.getPreference().getString("pinned_apps_list", "");
 
         // Refresh app list and pinned apps if there is a change in package count.
         if (AppUtils.hasNewPackage(
