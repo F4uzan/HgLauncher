@@ -261,6 +261,8 @@ public class Utils {
                 ((LauncherActivity) activity).doThis("show_panel");
                 break;
             case "none":
+                // We don't want to do anything.
+                break;
             default:
                 AppUtils.quickLaunch(activity, PreferenceHelper.getGestureForDirection(direction));
                 break;
