@@ -108,4 +108,8 @@
     <string name="app_theme_accent">Aksen</string>
     <string name="app_theme_accent_dialog">Pilih warna</string>
     <string name="app_theme_auto">Otomatis</string>
+    <string name="app_list_mode_grid">Kisi</string>
+    <string name="app_list_mode_list">Daftar</string>
+    <string name="app_list_mode">Mode daftar aplikasi</string>
+    <string name="gesture_pinch">Cubit</string>
 </resources>
