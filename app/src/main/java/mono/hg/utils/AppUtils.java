@@ -160,6 +160,9 @@ public class AppUtils {
             Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show();
             Utils.sendLog(Utils.LogLevel.ERROR,
                     "Cannot start " + app.getPackageName() + "; missing package?");
+        } catch (SecurityException e) {
+            Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show();
+            Utils.sendLog(Utils.LogLevel.ERROR, "Cannot start " + app.getPackageName() + "; invalid user?");
         }
     }
 
