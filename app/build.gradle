@@ -10,11 +10,9 @@ android {
         versionCode 30
         versionName "1.4.2.3"
         vectorDrawables.useSupportLibrary = true
-        viewBinding {
-            enabled = true
-        }
-        dataBinding {
-            enabled = true
+        buildFeatures {
+            viewBinding = true
+            dataBinding = true
         }
     }
 
