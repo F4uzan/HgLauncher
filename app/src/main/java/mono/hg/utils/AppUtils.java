@@ -172,7 +172,7 @@ public class AppUtils {
      * @param activity      Current foreground activity.
      * @param componentName Component name of the app to be launched.
      */
-    static void quickLaunch(Activity activity, String componentName) {
+    static void quickLaunch(Activity activity, String componentName) throws ActivityNotFoundException {
         // When receiving 'none', it's probably a gesture that hasn't been registered.
         if ("none".equals(componentName)) {
             return;

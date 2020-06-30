@@ -1,5 +1,6 @@
 package mono.hg.utils;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
@@ -264,7 +266,14 @@ public class Utils {
                 // We don't want to do anything.
                 break;
             default:
-                AppUtils.quickLaunch(activity, PreferenceHelper.getGestureForDirection(direction));
+                try {
+                    AppUtils.quickLaunch(activity,
+                            PreferenceHelper.getGestureForDirection(direction));
+                } catch (ActivityNotFoundException w) {
+                    // Maybe the user had an old configuration, but otherwise, this is harmless.
+                    // We should still notify them though.
+                    Toast.makeText(activity, activity.getString(R.string.err_activity_null), Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }
