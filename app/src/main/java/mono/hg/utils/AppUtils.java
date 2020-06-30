@@ -111,7 +111,7 @@ public class AppUtils {
      */
     public static void pinApp(Activity activity, long user, String componentName,
             FlexibleAdapter<PinnedApp> adapter, List<PinnedApp> list) {
-        Drawable icon = LauncherIconHelper.getIcon(activity, componentName, user);
+        Drawable icon = LauncherIconHelper.getIcon(activity, componentName, user, false);
 
         PinnedApp app = new PinnedApp(icon, componentName, user);
         list.add(app);
@@ -302,7 +302,7 @@ public class AppUtils {
 
                         app.setHintName(PreferenceHelper.getLabel(userPackageName));
                         app.setUserPackageName(userPackageName);
-                        app.setIcon(LauncherIconHelper.getIcon(activity, componentName, user));
+                        app.setIcon(LauncherIconHelper.getIcon(activity, componentName, user, PreferenceHelper.shouldHideIcon()));
                         app.setAppHidden(isHidden);
                         if (!appsList.contains(app)) {
                             appsList.add(app);
@@ -327,7 +327,7 @@ public class AppUtils {
                     app.setHintName(PreferenceHelper.getLabel(componentName));
                     app.setUserPackageName(componentName);
                     app.setIcon(LauncherIconHelper.getIcon(activity, componentName,
-                            userUtils.getCurrentSerial()));
+                            userUtils.getCurrentSerial(), PreferenceHelper.shouldHideIcon()));
                     app.setAppHidden(isHidden);
                     if (!appsList.contains(app)) {
                         appsList.add(app);

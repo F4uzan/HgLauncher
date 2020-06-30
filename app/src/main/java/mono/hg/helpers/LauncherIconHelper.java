@@ -56,13 +56,15 @@ public class LauncherIconHelper {
      *
      * @param activity      Activity where LauncherApps service can be retrieved.
      * @param componentName Component name of the activity.
+     * @param user          The numerical representation of the user.
+     * @param shouldHide    Whether we are even needed at all.
      *
      * @return Drawable of the icon.
      */
-    public static Drawable getIcon(Activity activity, String componentName, long user) {
+    public static Drawable getIcon(Activity activity, String componentName, long user, boolean shouldHide) {
         Drawable icon = null;
 
-        if (!PreferenceHelper.shouldHideIcon()) {
+        if (!shouldHide) {
             icon = LauncherIconHelper.getIconDrawable(activity, componentName, user);
 
             if (PreferenceHelper.appTheme().equals("light")
