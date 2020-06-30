@@ -184,7 +184,7 @@ public class BasePreference extends PreferenceFragmentCompat {
         if (resultCode == Activity.RESULT_OK && resultData != null) {
             uri = resultData.getData();
             if (requestCode == RESTORE_STORAGE_CODE) {
-                new BackupRestoreUtils.restoreBackupTask((SettingsActivity) requireActivity(), uri.toString()).execute();
+                new BackupRestoreUtils.RestoreBackupTask((SettingsActivity) requireActivity(), uri.toString()).execute();
             }  else if (requestCode == BACKUP_STORAGE_CODE) {
                 BackupRestoreUtils.saveBackup(requireActivity(), uri.toString());
             }

@@ -103,7 +103,7 @@ public class BackupRestoreFragment extends BackHandledFragment {
                     // Restore backup when clicking a file, but only do so in restore mode.
                     String possibleBackup = "file://" + currentPath + File.separator + fileFoldersList.get(position).getName();
                     if (isInRestore && fileFoldersList.get(position).getName().indexOf('.') > 0) {
-                        new BackupRestoreUtils.restoreBackupTask((SettingsActivity) requireActivity(), possibleBackup).execute();
+                        new BackupRestoreUtils.RestoreBackupTask((SettingsActivity) requireActivity(), possibleBackup).execute();
                     }
                 }
             }

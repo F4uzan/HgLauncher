@@ -89,12 +89,12 @@ public class BackupRestoreUtils {
         }
     }
 
-    public static class restoreBackupTask extends AsyncTask<Void, Void, Void> {
+    public static class RestoreBackupTask extends AsyncTask<Void, Void, Void> {
         private WeakReference<SettingsActivity> fragmentRef;
         private Uri uri;
         private ProgressDialog progress;
 
-        public restoreBackupTask(SettingsActivity activity, String path) {
+        public RestoreBackupTask(SettingsActivity activity, String path) {
             fragmentRef = new WeakReference<>(activity);
             this.uri = Uri.parse(path);
         }
@@ -124,7 +124,7 @@ public class BackupRestoreUtils {
             SettingsActivity fragment = fragmentRef.get();
             if (fragment != null) {
                 progress.dismiss();
-                ((SettingsActivity) fragment).restartActivity();
+                fragment.restartActivity();
                 Toast.makeText(fragmentRef.get(), R.string.restore_complete,
                         Toast.LENGTH_LONG).show();
             }
