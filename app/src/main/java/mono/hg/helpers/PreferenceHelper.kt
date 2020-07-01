@@ -40,7 +40,7 @@ object PreferenceHelper {
     private val label_list: MutableMap<String, String> = HashMap()
     private val provider_list: MutableMap<String?, String?> = HashMap()
     private val label_list_set = HashSet<String>()
-    var exclusionList: HashSet<String> = HashSet<String>()
+    var exclusionList: HashSet<String> = HashSet()
     var launchAnim: String? = null
         private set
     private var app_theme: String? = null

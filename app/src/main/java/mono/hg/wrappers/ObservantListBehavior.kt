@@ -6,6 +6,7 @@ import android.view.View
 import androidx.annotation.Keep
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar.SnackbarLayout
+import kotlin.math.roundToInt
 
 @Keep
 class ObservantListBehavior : CoordinatorLayout.Behavior<View> {
@@ -17,10 +18,10 @@ class ObservantListBehavior : CoordinatorLayout.Behavior<View> {
     }
 
     override fun onDependentViewChanged(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
-        val translationY = Math.min(0f, dependency.translationY - dependency.height)
+        val translationY = 0f.coerceAtMost(dependency.translationY - dependency.height)
         child.animate().cancel()
         child.translationY = translationY
-        child.setPadding(0, -Math.round(translationY), 0, 0)
+        child.setPadding(0, -translationY.roundToInt(), 0, 0)
         return true
     }
 

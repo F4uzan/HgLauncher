@@ -129,7 +129,7 @@ object ActivityServiceUtils {
                 Toast.makeText(activity, R.string.err_no_method_panel, Toast.LENGTH_SHORT).show()
             }
         } catch (w: Exception) {
-            Utils.sendLog(LogLevel.Companion.WARNING, "Exception in expandSettingsPanel: $w")
+            Utils.sendLog(LogLevel.WARNING, "Exception in expandSettingsPanel: $w")
         }
     }
 }

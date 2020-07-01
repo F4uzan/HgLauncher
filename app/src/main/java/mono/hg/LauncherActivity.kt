@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.PopupMenu
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -329,7 +330,7 @@ class LauncherActivity : AppCompatActivity() {
             // Clear the search bar text if app list is set to be kept open
             // unless keepLastSearch setting indicates maintain last search
             if (!PreferenceHelper.keepLastSearch()) {
-                clearSearch()
+                clearSearch(searchBar)
             }
         }
         Utils.unregisterPackageReceiver(this, packageReceiver)
@@ -522,7 +523,7 @@ class LauncherActivity : AppCompatActivity() {
         if (PreferenceHelper.useWallpaperShade()) {
             // Tints the navigation bar with a semi-transparent shade.
             if (Utils.atLeastLollipop()) {
-                window.navigationBarColor = resources.getColor(R.color.navigationBarShade)
+                window.navigationBarColor = ContextCompat.getColor(this, R.color.navigationBarShade)
             }
             binding.wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow)
         }
@@ -740,8 +741,7 @@ class LauncherActivity : AppCompatActivity() {
                 super.whenChanged(s, start, before, count)
 
                 // Text used for searchSnack.
-                searchHint = String.format(resources.getString(R.string.search_web_hint),
-                        inputText)
+                searchHint = String.format(resources.getString(R.string.search_web_hint), inputText)
             }
 
             override fun afterChanged(s: Editable?) {
@@ -767,19 +767,19 @@ class LauncherActivity : AppCompatActivity() {
                         if (PreferenceHelper.searchProvider != "none") {
                             Utils.doWebSearch(this@LauncherActivity,
                                     PreferenceHelper.searchProvider,
-                                    URLEncoder.encode(trimmedInputText))
+                                    URLEncoder.encode(trimmedInputText, "UTF-8"))
                             searchSnack.dismiss()
                         } else {
                             appMenu = PopupMenu(this@LauncherActivity, it)
                             ViewUtils.createSearchMenu(this@LauncherActivity, appMenu!!,
-                                    URLEncoder.encode(trimmedInputText))
+                                    URLEncoder.encode(trimmedInputText, "UTF-8"))
                         }
                     })
                     if (PreferenceHelper.extendedSearchMenu() && PreferenceHelper.searchProvider != "none") {
                         searchSnack.setLongPressAction(View.OnLongClickListener {
                             appMenu = PopupMenu(this@LauncherActivity, it)
                             ViewUtils.createSearchMenu(this@LauncherActivity, appMenu!!,
-                                    URLEncoder.encode(trimmedInputText))
+                                    URLEncoder.encode(trimmedInputText, "UTF-8"))
                             true
                         })
                     }
@@ -892,12 +892,12 @@ class LauncherActivity : AppCompatActivity() {
                 pinnedAppsAdapter.notifyItemMoved(fromPosition, toPosition)
             }
 
-            override fun onActionStateChanged(viewHolder: RecyclerView.ViewHolder, actionState: Int) {
+            override fun onActionStateChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
                 // FIXME: Work out a better touch detection.
                 // No movement occurred, this is a long press.
                 if (newState != ItemTouchHelper.ACTION_STATE_DRAG && System.currentTimeMillis() - startTime == System
                                 .currentTimeMillis()) {
-                    val app: App? = pinnedAppsAdapter.getItem(viewHolder.absoluteAdapterPosition)
+                    val app: App? = pinnedAppsAdapter.getItem(viewHolder!!.absoluteAdapterPosition)
 
                     // Use LayoutManager method to get the view,
                     // as RecyclerView will happily return null if it can.
@@ -931,7 +931,7 @@ class LauncherActivity : AppCompatActivity() {
                         // Clear the search bar text if app list is set to be kept open
                         // unless keepLastSearch setting indicates maintain last search
                         if (!PreferenceHelper.keepLastSearch()) {
-                            clearSearch()
+                            clearSearch(searchBar)
                         }
 
                         // Animate search container entering the view.
@@ -1021,7 +1021,7 @@ class LauncherActivity : AppCompatActivity() {
         pinnedAppString = newAppString
     }
 
-    fun clearSearch() {
+    fun clearSearch(view: View) {
         // Clear the search bar text if app list is set to be kept open
         searchBar.setText("")
     }

@@ -22,8 +22,8 @@ object KissFuzzySearch {
         var match = false
 
         // Normalise query and source (app name).
-        val source = sourceName!!.toLowerCase()
-        val matchTo = queryMatch.toLowerCase().trim { it <= ' ' }
+        val source = sourceName!!.toLowerCase(Locale.getDefault())
+        val matchTo = queryMatch.toLowerCase(Locale.getDefault()).trim { it <= ' ' }
         for (cApp in source.toCharArray()) {
             if (queryPos < matchTo.length && matchTo[queryPos] == cApp) {
                 // If we aren't already matching something, let's save the beginning of the match

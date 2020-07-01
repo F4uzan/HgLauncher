@@ -203,7 +203,6 @@ object Utils {
      * @see Gesture Valid directions for the gestures.
      */
     fun handleGestureActions(activity: AppCompatActivity, direction: Int) {
-        val userUtils = UserUtils(activity)
         when (PreferenceHelper.getGestureForDirection(direction)) {
             "handler" -> if (PreferenceHelper.gestureHandler != null) {
                 val handlerIntent = Intent("mono.hg.GESTURE_HANDLER")
@@ -218,8 +217,7 @@ object Utils {
             }
             "status" -> ActivityServiceUtils.expandStatusBar(activity)
             "panel" -> ActivityServiceUtils.expandSettingsPanel(activity)
-            "list" ->                 // TODO: Maybe make this call less reliant on LauncherActivity?
-                (activity as LauncherActivity).doThis("show_panel")
+            "list" -> (activity as LauncherActivity).doThis("show_panel") // TODO: Maybe make this call less reliant on LauncherActivity?
             "none" -> {
             }
             else -> try {
@@ -266,7 +264,8 @@ object Utils {
                         ActivityServiceUtils.pasteFromClipboard(activity).length)
                 true
             }
-            else ->                 // Do nothing.
+            else ->
+                // Do nothing.
                 false
         }
     }

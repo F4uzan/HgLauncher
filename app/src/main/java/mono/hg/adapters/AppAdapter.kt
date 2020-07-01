@@ -37,7 +37,7 @@ class AppAdapter(apps: List<App?>?) : FlexibleAdapter<App?>(apps), SectionedAdap
         // Handle key up and key down and attempt to move selection.
         // This is unnecessary for newer API.
         if (Utils.sdkIsBelow(21)) {
-            recyclerView.setOnKeyListener(View.OnKeyListener { v, keyCode, event -> // Return false if scrolled to the bounds and allow focus to move off the list.
+            recyclerView.setOnKeyListener(View.OnKeyListener { _, keyCode, event -> // Return false if scrolled to the bounds and allow focus to move off the list.
                 if (event.action == KeyEvent.ACTION_DOWN) {
                     if (isConfirmButton(event)) {
                         if (event.flags and KeyEvent.FLAG_LONG_PRESS == KeyEvent.FLAG_LONG_PRESS) {
@@ -87,7 +87,7 @@ class AppAdapter(apps: List<App?>?) : FlexibleAdapter<App?>(apps), SectionedAdap
         val nextSelectItem = mSelectedItem + direction
 
         // If still within valid bounds, move the selection, notify to redraw, and scroll.
-        if (nextSelectItem >= 0 && nextSelectItem < itemCount) {
+        if (nextSelectItem in 0 until itemCount) {
             notifyItemChanged(mSelectedItem)
             mSelectedItem = nextSelectItem
             notifyItemChanged(mSelectedItem)

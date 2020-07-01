@@ -33,7 +33,7 @@ class CreditsDialogFragment : DialogFragment() {
                 stringBuilder.append('\n')
             }
         } catch (e: IOException) {
-            Utils.sendLog(LogLevel.Companion.ERROR,
+            Utils.sendLog(LogLevel.ERROR,
                     "Exception in reading credits file: $e")
         } finally {
             Utils.closeStream(br)

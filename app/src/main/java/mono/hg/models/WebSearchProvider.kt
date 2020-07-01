@@ -20,14 +20,19 @@ class WebSearchProvider {
         this.id = id
     }
 
-    override fun equals(obj: Any?): Boolean {
-        val `object` = obj as WebSearchProvider?
+    override fun equals(other: Any?): Boolean {
+        val `object` = other as WebSearchProvider?
 
         // URL can be shared, but names should stay unique.
         return if (`object` != null) {
-            name == `object`.name || this.javaClass == obj!!.javaClass
+            name == `object`.name || this.javaClass == other!!.javaClass
         } else {
             false
         }
+    }
+    override fun hashCode(): Int {
+        var result = url?.hashCode() ?: 0
+        result = 31 * result + (id?.hashCode() ?: 0)
+        return result
     }
 }

@@ -11,9 +11,9 @@ import java.lang.ref.WeakReference
  * AsyncTask used to load/populate the app list.
  */
 class FetchAppsTask(activity: Activity, adapter: AppAdapter, list: MutableList<App?>) : AsyncTask<Void?, Void?, Void?>() {
-    private val activity: WeakReference<Activity>
-    private val adapter: WeakReference<AppAdapter>
-    private val appsList: WeakReference<MutableList<App?>>
+    private val activity: WeakReference<Activity> = WeakReference(activity)
+    private val adapter: WeakReference<AppAdapter> = WeakReference(adapter)
+    private val appsList: WeakReference<MutableList<App?>> = WeakReference(list)
     override fun onPreExecute() {
         val adapterRef = adapter.get()
         val listRef = appsList.get()
@@ -43,9 +43,4 @@ class FetchAppsTask(activity: Activity, adapter: AppAdapter, list: MutableList<A
         }
     }
 
-    init {
-        this.activity = WeakReference(activity)
-        this.adapter = WeakReference(adapter)
-        appsList = WeakReference(list)
-    }
 }

@@ -21,9 +21,9 @@ class SpinnerPreference @JvmOverloads constructor(context: Context?, attrs: Attr
     private lateinit var spinner: Spinner
     override fun onBindViewHolder(view: PreferenceViewHolder) {
         spinner = view.itemView.findViewById(R.id.spinner)
-        spinner.setAdapter(mAdapter)
+        spinner.adapter = mAdapter
         spinner.setSelection(mSelection)
-        spinner.setOnItemSelectedListener(object : OnItemSelectedListener {
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
                 if (position > 0) {
                     val value = entryValues[position].toString()
@@ -37,7 +37,7 @@ class SpinnerPreference @JvmOverloads constructor(context: Context?, attrs: Attr
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // No-op.
             }
-        })
+        }
         super.onBindViewHolder(view)
     }
 

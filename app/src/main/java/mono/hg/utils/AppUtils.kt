@@ -265,7 +265,7 @@ object AppUtils {
                     } else {
                         componentName
                     }
-                    val isHidden = (PreferenceHelper.exclusionList!!.contains(componentName)
+                    val isHidden = (PreferenceHelper.exclusionList.contains(componentName)
                             || componentName.contains(BuildConfig.APPLICATION_ID))
                     if (!hideHidden || !isHidden) {
                         val appName = activityInfo.label.toString()
@@ -286,7 +286,7 @@ object AppUtils {
             for (ri in manager.queryIntentActivities(intent, 0)) {
                 val packageName = ri.activityInfo.packageName
                 val componentName = packageName + "/" + ri.activityInfo.name
-                val isHidden = (PreferenceHelper.exclusionList!!.contains(componentName)
+                val isHidden = (PreferenceHelper.exclusionList.contains(componentName)
                         || componentName.contains(BuildConfig.APPLICATION_ID))
                 if (!hideHidden || !isHidden) {
                     val appName = ri.loadLabel(manager).toString()

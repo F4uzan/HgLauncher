@@ -67,7 +67,7 @@ open class GestureListener protected constructor(context: Context?) : OnTouchLis
         override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             val distanceX = e2.x - e1.x
             val distanceY = e2.y - e1.y
-            if (abs(distanceX) > abs(distanceY) && abs(distanceX) > Companion.SWIPE_DISTANCE_THRESHOLD && Math.abs(velocityX) > Companion.SWIPE_VELOCITY_THRESHOLD) {
+            if (abs(distanceX) > abs(distanceY) && abs(distanceX) > Companion.SWIPE_DISTANCE_THRESHOLD && abs(velocityX) > Companion.SWIPE_VELOCITY_THRESHOLD) {
                 if (distanceX > 0) {
                     onGesture(Utils.Gesture.RIGHT)
                 } else {

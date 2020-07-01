@@ -3,7 +3,6 @@ package mono.hg.preferences
 import android.Manifest
 import android.app.Activity
 import android.app.DialogFragment
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -108,7 +107,7 @@ class BasePreference : PreferenceFragmentCompat() {
                     .setMessage(getString(R.string.reset_preference_warn))
                     .setNegativeButton(getString(android.R.string.cancel), null)
                     .setPositiveButton(R.string.reset_preference_positive,
-                            DialogInterface.OnClickListener { dialog, which ->
+                            { _, _ ->
                                 PreferenceHelper.editor?.clear()?.apply()
                                 PreferenceHelper.update("require_refresh", true)
                                 (requireActivity() as SettingsActivity).restartActivity()
@@ -144,7 +143,7 @@ class BasePreference : PreferenceFragmentCompat() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int,
                                   resultData: Intent?) {
-        var uri: Uri?
+        val uri: Uri?
         if (resultCode == Activity.RESULT_OK && resultData != null) {
             uri = resultData.data
             if (requestCode == RESTORE_STORAGE_CODE) {

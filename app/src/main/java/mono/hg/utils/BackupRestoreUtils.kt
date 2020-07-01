@@ -28,7 +28,7 @@ object BackupRestoreUtils {
             out = ObjectOutputStream(context.contentResolver.openOutputStream(uri))
             out.writeObject(PreferenceHelper.preference.all)
         } catch (e: FileNotFoundException) {
-            Utils.sendLog(LogLevel.Companion.ERROR, e.toString())
+            Utils.sendLog(LogLevel.ERROR, e.toString())
         } catch (e: IOException) {
             Utils.sendLog(LogLevel.ERROR, e.toString())
         } finally {
@@ -38,7 +38,7 @@ object BackupRestoreUtils {
                     out.flush()
                 }
             } catch (e: IOException) {
-                Utils.sendLog(LogLevel.Companion.ERROR, e.toString())
+                Utils.sendLog(LogLevel.ERROR, e.toString())
             }
             Toast.makeText(context, R.string.backup_complete, Toast.LENGTH_SHORT).show()
         }
@@ -57,18 +57,25 @@ object BackupRestoreUtils {
             val entries = input.readObject() as Map<String, *>
             for ((key, value) in entries) {
                 val v = value!!
-                if (v is Boolean) {
-                    PreferenceHelper.editor?.putBoolean(key, v)
-                } else if (v is Float) {
-                    PreferenceHelper.editor?.putFloat(key, v)
-                } else if (v is Int) {
-                    PreferenceHelper.editor?.putInt(key, v)
-                } else if (v is Long) {
-                    PreferenceHelper.editor?.putLong(key, v)
-                } else if (v is Set<*>) {
-                    PreferenceHelper.editor?.putStringSet(key, v as Set<String?>)
-                } else if (v is String) {
-                    PreferenceHelper.editor?.putString(key, v)
+                when (v) {
+                    is Boolean -> {
+                        PreferenceHelper.editor?.putBoolean(key, v)
+                    }
+                    is Float -> {
+                        PreferenceHelper.editor?.putFloat(key, v)
+                    }
+                    is Int -> {
+                        PreferenceHelper.editor?.putInt(key, v)
+                    }
+                    is Long -> {
+                        PreferenceHelper.editor?.putLong(key, v)
+                    }
+                    is Set<*> -> {
+                        PreferenceHelper.editor?.putStringSet(key, v as Set<String?>)
+                    }
+                    is String -> {
+                        PreferenceHelper.editor?.putString(key, v)
+                    }
                 }
                 PreferenceHelper.update("require_refresh", true)
             }

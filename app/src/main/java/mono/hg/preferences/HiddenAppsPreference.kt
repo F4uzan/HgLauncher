@@ -56,13 +56,12 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
         menu.clear()
         menu.add(0, 1, 100, getString(R.string.action_hidden_app_reset))
         menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        menu.getItem(0).isVisible = !excludedAppList.isEmpty()
+        menu.getItem(0).isVisible = excludedAppList.isNotEmpty()
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        return when (id) {
+        return when (item.itemId) {
             R.id.home -> {
                 requireActivity().onBackPressed()
                 true
@@ -113,6 +112,6 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     }
 
     private fun addListeners() {
-        appsListView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id -> toggleHiddenState(position) }
+        appsListView!!.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> toggleHiddenState(position) }
     }
 }

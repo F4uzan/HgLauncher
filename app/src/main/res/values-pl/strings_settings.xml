@@ -28,7 +28,6 @@
     <string name="pref_header_web_provider_desc">Zarządzaj dostawcami wyszukiwania</string>
     <string name="pref_header_web_provider_short">Dostawcy wyszukiwania</string>
     <string name="web_provider_name_hint">Nazwa (musi być unikalna)</string>
-    <string name="web_provider_url_hint" translatable="false">https://{url}/search?q=%s</string>
     <!-- Easter egg -->
     <string name="version_key_toast_plural">Stuknij %1$d więcej razy, aby włączyć tryb testowy.</string>
     <string name="version_key_toast">Stuknij ponownie, aby potwierdzić.</string>
@@ -60,7 +59,6 @@
     <string name="gesture_up">Przesuń w górę</string>
     <string name="gesture_double_tap">Kliknij dwa razy</string>
     <string name="gesture_action_default">Brak</string>
-    <string name="gesture_action_default_value" translatable="false">none</string>
     <string name="pref_title_app_list_order">Kolejność listy aplikacji</string>
     <string name="app_list_order_normal">A do Z</string>
     <string name="app_list_order_inverse">Z do A</string>
@@ -87,7 +85,6 @@
     <string name="static_favourites_desc">Lista ulubionych widoczna podczas przewijania</string>
     <string name="icon_pack">Wybierz paczkę ikon</string>
     <string name="icon_pack_default">Domyślne</string>
-    <string name="icon_pack_default_value" translatable="false">default</string>
     <string name="pref_header_behavior">Zachowanie</string>
     <string name="pref_header_web">Wyszukiwanie w Internecie</string>
     <string name="pref_summary_web">Zarządzanie preferencjami wyszukiwania w Internecie</string>

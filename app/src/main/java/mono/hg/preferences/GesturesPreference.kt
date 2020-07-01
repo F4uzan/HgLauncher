@@ -21,8 +21,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
     private lateinit var appListEntryValues: Array<CharSequence>
     private val NestingListListener = Preference.OnPreferenceChangeListener { preference, newValue ->
         val list = preference as ListPreference
-        val value = newValue as String
-        when (value) {
+        when (newValue as String) {
             "handler" -> list.setSummary(R.string.gesture_action_handler)
             "widget" -> list.setSummary(R.string.gesture_action_widget)
             "status" -> list.setSummary(R.string.gesture_action_status)

@@ -36,8 +36,7 @@ object ViewUtils {// Return fallback size if we can't get the value from the sys
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     fun setWindowbarMode(mode: String?): Int {
-        val baseLayout: Int
-        baseLayout = if (Utils.sdkIsAround(19)) {
+        val baseLayout: Int = if (Utils.sdkIsAround(19)) {
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         } else {
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE

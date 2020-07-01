@@ -113,7 +113,7 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
         return super.onOptionsItemSelected(item)
     }
 
-    fun checkCaller() {
+    private fun checkCaller() {
         // If this activity is called from anywhere else but the launcher,
         // then the launcher needs to be informed of the changes made that it may not be aware of.
         if (callingActivity == null && !PreferenceHelper.wasAlien()) {

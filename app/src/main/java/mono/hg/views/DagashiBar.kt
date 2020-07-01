@@ -33,8 +33,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.SnackbarContentLayout
 import mono.hg.R
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
 
 /**
  * DagashiBar is a Snackbar clone tailored for use in HgLauncher.
@@ -43,23 +41,13 @@ import java.lang.annotation.RetentionPolicy
  * Due to Snackbar being entirely limited, no class can extend from it.
  * DagashiBar is based off of (read: copied from) Google's Snackbar code.
  */
-class DagashiBar private constructor(
+open class DagashiBar private constructor(
         parent: ViewGroup,
         content: View,
         contentViewCallback: com.google.android.material.snackbar.ContentViewCallback) : BaseTransientBottomBar<DagashiBar?>(parent, content, contentViewCallback) {
-    private val accessibilityManager: AccessibilityManager
+    private val accessibilityManager: AccessibilityManager = parent.context
+            .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
     private var hasAction = false
-    override fun show() {
-        super.show()
-    }
-
-    override fun dismiss() {
-        super.dismiss()
-    }
-
-    override fun isShown(): Boolean {
-        return super.isShown()
-    }
 
     /**
      * Update the text in this [DagashiBar].
@@ -174,7 +162,7 @@ class DagashiBar private constructor(
 
     @IntDef(LENGTH_INDEFINITE, LENGTH_SHORT, LENGTH_LONG)
     @IntRange(from = 1)
-    @Retention(RetentionPolicy.SOURCE)
+    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     annotation class Duration
     companion object {
         /**
@@ -272,8 +260,4 @@ class DagashiBar private constructor(
         }
     }
 
-    init {
-        accessibilityManager = parent.context
-                .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
-    }
 }

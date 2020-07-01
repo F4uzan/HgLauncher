@@ -135,8 +135,7 @@ object LauncherIconHelper {
      */
     fun loadIconPack(packageManager: PackageManager): Int {
         var iconFilterXml: XmlPullParser? = null
-        lateinit var iconRes: Resources
-        iconRes = try {
+        var iconRes: Resources = try {
             if ("default" != iconPackageName) {
                 packageManager.getResourcesForApplication(iconPackageName)
             } else {
@@ -252,7 +251,7 @@ object LauncherIconHelper {
                 return defaultIcon
             }
         } catch (e: PackageManager.NameNotFoundException) {
-            Utils.sendLog(LogLevel.Companion.ERROR, e.toString())
+            Utils.sendLog(LogLevel.ERROR, e.toString())
         }
         val drawable = mPackagesDrawables[componentName]
         return if (drawable != null && iconRes != null) {

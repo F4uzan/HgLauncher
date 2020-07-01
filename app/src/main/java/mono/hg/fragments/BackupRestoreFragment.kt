@@ -116,7 +116,7 @@ class BackupRestoreFragment : BackHandledFragment() {
             1 -> {
                 // Send our backup signal!
                 if (backupNameField.text.toString() != "") {
-                    val backupPath = "file://" + currentPath + File.separator + backupNameField?.text.toString() + ".xml"
+                    val backupPath = "file://" + currentPath + File.separator + backupNameField.text.toString() + ".xml"
                     val backupName = File(backupPath)
                     if (backupName.exists() && backupName.isFile) {
                         val overwriteDialog = AlertDialog.Builder(
