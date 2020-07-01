@@ -20,8 +20,8 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     private var binding: FragmentHiddenAppsBinding? = null
     private val appList = ArrayList<App>()
     private var hiddenAppAdapter: HiddenAppAdapter? = null
-    private val excludedAppList = HashSet(PreferenceHelper.preference.getStringSet("hidden_apps", HashSet()))
-    private var appsListView: ListView? = null
+    private var excludedAppList = HashSet<String>()
+    private lateinit var appsListView: ListView
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         // No-op.
@@ -35,9 +35,12 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        excludedAppList = PreferenceHelper.preference.getStringSet("hidden_apps", HashSet()) as HashSet<String>
+
         appsListView = binding!!.hiddenAppsList
         hiddenAppAdapter = context?.let { HiddenAppAdapter(appList, it) }
-        appsListView!!.adapter = hiddenAppAdapter
+        appsListView.adapter = hiddenAppAdapter
 
         // Get our app list.
         loadApps()
@@ -46,6 +49,8 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        PreferenceHelper.update("hidden_apps", excludedAppList)
 
         // We have been sent back. Set the action bar title accordingly.
         val actionBar = (requireActivity() as SettingsActivity).supportActionBar
@@ -112,6 +117,6 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     }
 
     private fun addListeners() {
-        appsListView!!.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> toggleHiddenState(position) }
+        appsListView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> toggleHiddenState(position) }
     }
 }
