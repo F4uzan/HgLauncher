@@ -13,7 +13,6 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
     private val watchField: WeakReference<EditText>?
     private var tickDuration = DEFAULT_TICK_DURATION
     private var timerStopped = false
-    private var spaceSpam = false
     private val handler = Handler()
     private val runnable: Runnable = object : Runnable {
         override fun run() {
@@ -47,15 +46,6 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
         } else {
             ""
         }
-
-    /**
-     * Should the user be allowed to start the query with empty spaces?
-     *
-     * @param enabled Whether query can start with an empty space.
-     */
-    fun spaceSpamming(enabled: Boolean) {
-        spaceSpam = enabled
-    }
 
     /**
      * Stops the Handler loop.
@@ -109,7 +99,7 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
     }
 
     override fun afterTextChanged(s: Editable) {
-        if (!spaceSpam && s.isNotEmpty() && s[0] == ' ') {
+        if (s.isNotEmpty() && s[0] == ' ') {
             s.delete(0, 1)
         }
         afterChanged(s)

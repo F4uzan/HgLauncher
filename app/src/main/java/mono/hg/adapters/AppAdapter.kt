@@ -13,6 +13,10 @@ class AppAdapter(apps: List<App?>?) : FlexibleAdapter<App?>(apps), SectionedAdap
     private var mSelectedItem = 0
     private lateinit var adapterRecyclerView: RecyclerView
     private var finishedLoading = false
+
+    /**
+     * Resets the current filter, as well as the filtered items.
+     */
     fun resetFilter() {
         setFilter("")
         filterItems()

@@ -272,7 +272,7 @@ class LauncherActivity : AppCompatActivity() {
 
         // Show the app list once all the views are set up.
         if (PreferenceHelper.keepAppList()) {
-            doThis("show_panel")
+            doThis(SHOW_PANEL)
         }
         if (PreferenceHelper.isNewUser) {
             showStartDialog()
@@ -316,16 +316,16 @@ class LauncherActivity : AppCompatActivity() {
         // Don't call super.onBackPressed because we don't want the launcher to close.
 
         // Hides the panel if back is pressed.
-        doThis("dismiss_panel")
+        doThis(HIDE_PANEL)
     }
 
     public override fun onPause() {
         super.onPause()
 
         // Dismiss any visible menu as well as the app panel when it is not needed.
-        doThis("dismiss_menu")
+        doThis(CLOSE_MENU)
         if (!PreferenceHelper.keepAppList()) {
-            doThis("dismiss_panel")
+            doThis(HIDE_PANEL)
         } else {
             // Clear the search bar text if app list is set to be kept open
             // unless keepLastSearch setting indicates maintain last search
@@ -358,7 +358,7 @@ class LauncherActivity : AppCompatActivity() {
 
         // Show the app list when needed.
         if (PreferenceHelper.keepAppList()) {
-            doThis("show_panel")
+            doThis(SHOW_PANEL)
             searchContainer.visibility = View.VISIBLE
         } else if (Utils.sdkIsBelow(21) || ActivityServiceUtils.isPowerSaving(this)) {
             // HACK: For some reason, KitKat and below is always late setting visibility.
@@ -420,7 +420,7 @@ class LauncherActivity : AppCompatActivity() {
         } else {
             if (keyCode == KeyEvent.KEYCODE_SPACE) {
                 if (window.currentFocus !== searchBar) {
-                    doThis("show_panel")
+                    doThis(SHOW_PANEL)
                 }
                 true
             } else {
@@ -436,7 +436,7 @@ class LauncherActivity : AppCompatActivity() {
      */
     fun doThis(action: String?) {
         when (action) {
-            "dismiss_menu" -> if (appMenu != null) {
+            CLOSE_MENU -> if (appMenu != null) {
                 if (appMenu!!.menu.findItem(R.id.action_app_actions) != null) {
                     appMenu!!.menu.findItem(R.id.action_app_actions).subMenu.close()
                 }
@@ -445,11 +445,11 @@ class LauncherActivity : AppCompatActivity() {
                 }
                 appMenu!!.dismiss()
             }
-            "show_panel" -> slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
+            SHOW_PANEL -> slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
                     ActivityServiceUtils.isPowerSaving(this))
-            "dismiss_panel" -> slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
+            HIDE_PANEL -> slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
                     ActivityServiceUtils.isPowerSaving(this))
-            "show_favourites" -> pinnedAppsContainer.animate()
+            SHOW_PINNED -> pinnedAppsContainer.animate()
                     .translationY(0f)
                     .setInterpolator(LinearOutSlowInInterpolator())
                     .setDuration(225)
@@ -462,7 +462,7 @@ class LauncherActivity : AppCompatActivity() {
                             isFavouritesVisible = false
                         }
                     })
-            "hide_favourites" -> pinnedAppsContainer.animate()
+            HIDE_PINNED -> pinnedAppsContainer.animate()
                     .translationY(pinnedAppsContainer.measuredHeight.toFloat())
                     .setInterpolator(FastOutLinearInInterpolator())
                     .setDuration(175)
@@ -652,7 +652,7 @@ class LauncherActivity : AppCompatActivity() {
                             "")
                     PreferenceHelper.update("pinned_apps_list", pinnedAppString)
                     if (pinnedAppsAdapter.isEmpty) {
-                        doThis("hide_favourites")
+                        doThis(HIDE_PINNED)
                     }
                 }
                 R.id.action_info -> if (Utils.atLeastLollipop()) {
@@ -722,7 +722,7 @@ class LauncherActivity : AppCompatActivity() {
                 if (trimmedInputText.isEmpty()) {
                     // HACK: Hide the view stub.
                     if (pinnedAppsAdapter.isEmpty) {
-                        doThis("hide_favourites")
+                        doThis(HIDE_PINNED)
                     }
                     if (isContextVisible) {
                         doThis("hide_context_button")
@@ -749,7 +749,7 @@ class LauncherActivity : AppCompatActivity() {
                 startTimer()
                 if (trimmedInputText.isNotEmpty() && PreferenceHelper.promptSearch()) {
                     // HACK: Show a view stub to make sure app list anchors properly.
-                    doThis("show_favourites")
+                    doThis(SHOW_PINNED)
 
                     // Update the snackbar text.
                     searchSnack.setText(searchHint)
@@ -767,19 +767,19 @@ class LauncherActivity : AppCompatActivity() {
                         if (PreferenceHelper.searchProvider != "none") {
                             Utils.doWebSearch(this@LauncherActivity,
                                     PreferenceHelper.searchProvider,
-                                    URLEncoder.encode(trimmedInputText, "UTF-8"))
+                                    URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name()))
                             searchSnack.dismiss()
                         } else {
                             appMenu = PopupMenu(this@LauncherActivity, it)
                             ViewUtils.createSearchMenu(this@LauncherActivity, appMenu!!,
-                                    URLEncoder.encode(trimmedInputText, "UTF-8"))
+                                    URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name()))
                         }
                     })
                     if (PreferenceHelper.extendedSearchMenu() && PreferenceHelper.searchProvider != "none") {
                         searchSnack.setLongPressAction(View.OnLongClickListener {
                             appMenu = PopupMenu(this@LauncherActivity, it)
                             ViewUtils.createSearchMenu(this@LauncherActivity, appMenu!!,
-                                    URLEncoder.encode(trimmedInputText, "UTF-8"))
+                                    URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name()))
                             true
                         })
                     }
@@ -822,19 +822,19 @@ class LauncherActivity : AppCompatActivity() {
                         && isFavouritesVisible
                         && PreferenceHelper.favouritesAcceptScroll()
                         && searchBar.text.toString().isEmpty()) {
-                    doThis("hide_favourites")
+                    doThis(HIDE_PINNED)
                 }
             }
 
             override fun onScroll() {
-                doThis("dismiss_menu")
+                doThis(CLOSE_MENU)
             }
 
             override fun onEnd() {
                 if (!pinnedAppsAdapter.isEmpty
                         && !isFavouritesVisible
                         && PreferenceHelper.favouritesAcceptScroll()) {
-                    doThis("show_favourites")
+                    doThis(SHOW_PINNED)
                 }
             }
         })
@@ -885,7 +885,7 @@ class LauncherActivity : AppCompatActivity() {
                 startTime = System.currentTimeMillis()
 
                 // Close app menu when we're dragging.
-                doThis("dismiss_menu")
+                doThis(CLOSE_MENU)
 
                 // Shuffle our apps around.
                 pinnedAppsAdapter.swapItems(pinnedAppList, fromPosition, toPosition)
@@ -919,7 +919,7 @@ class LauncherActivity : AppCompatActivity() {
         slidingHome.addPanelSlideListener(object : PanelSlideListener {
             override fun onPanelSlide(view: View, v: Float) {
                 // Dismiss any visible menu.
-                doThis("dismiss_menu")
+                doThis(CLOSE_MENU)
             }
 
             override fun onPanelStateChanged(panel: View, previousState: Int, newState: Int) {
@@ -1079,5 +1079,12 @@ class LauncherActivity : AppCompatActivity() {
          * String containing pinned apps. Delimited by a semicolon (;).
          */
         private lateinit var pinnedAppString: String
+        
+        // Constants used for doThis()
+        private const val SHOW_PINNED = "show_favourites"
+        private const val HIDE_PINNED = "hide_favourites"
+        private const val SHOW_PANEL = "show_panel"
+        private const val HIDE_PANEL = "hide_panel"
+        private const val CLOSE_MENU = "dismiss_menu"
     }
 }

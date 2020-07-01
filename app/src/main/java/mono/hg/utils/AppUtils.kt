@@ -143,10 +143,6 @@ object AppUtils {
             Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show()
             Utils.sendLog(LogLevel.ERROR,
                     "Cannot start " + app.packageName + "; missing package?")
-        } catch (e: NullPointerException) {
-            Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show()
-            Utils.sendLog(LogLevel.ERROR,
-                    "Cannot start " + app.packageName + "; missing package?")
         } catch (e: SecurityException) {
             Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show()
             Utils.sendLog(LogLevel.ERROR, "Cannot start " + app.packageName + "; invalid user?")
