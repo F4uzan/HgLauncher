@@ -162,11 +162,10 @@ class BackupRestoreFragment : BackHandledFragment() {
             path!!.listFiles()
         }
         if (contents != null && contents.isNotEmpty()) {
-            for (availableContents in contents) {
+            contents.forEach {
                 // Don't show hidden (.dot) files/folders.
-                if (!availableContents.isHidden) {
-                    fileFoldersList.add(FileFolder(availableContents.name,
-                            availableContents.isDirectory))
+                if (!it.isHidden) {
+                    fileFoldersList.add(FileFolder(it.name, it.isDirectory))
                 }
             }
             fileFolderAdapter!!.notifyDataSetChanged()

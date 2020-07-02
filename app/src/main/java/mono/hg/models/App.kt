@@ -40,7 +40,7 @@ open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
         this.user = user
     }
 
-    fun hasHintName(): Boolean {
+    private fun hasHintName(): Boolean {
         return hintName != null
     }
 

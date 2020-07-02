@@ -37,10 +37,11 @@ class WebSearchPreference : PreferenceFragmentCompat() {
         entryValues.add(getString(R.string.gesture_action_default_value))
 
         // We only need the key as the value is stored in PreferenceHelper's Map.
-        for ((key) in PreferenceHelper.providerList) {
-            entries.add(key)
-            entryValues.add(key)
+        PreferenceHelper.providerList.forEach {
+            entries.add(it.key)
+            entryValues.add(it.key)
         }
+
         val finalEntries = entries.toTypedArray<CharSequence?>()
         val finalEntryValues = entryValues.toTypedArray<CharSequence?>()
         list!!.entries = finalEntries

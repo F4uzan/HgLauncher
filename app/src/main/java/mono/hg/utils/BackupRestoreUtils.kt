@@ -55,26 +55,25 @@ object BackupRestoreUtils {
             input = ObjectInputStream(context.contentResolver.openInputStream(uri))
             PreferenceHelper.editor?.clear()
             val entries = input.readObject() as Map<String, *>
-            for ((key, value) in entries) {
-                val v = value!!
-                when (v) {
+            entries.forEach {
+                when (val v = it.value!!) {
                     is Boolean -> {
-                        PreferenceHelper.editor?.putBoolean(key, v)
+                        PreferenceHelper.editor?.putBoolean(it.key, v)
                     }
                     is Float -> {
-                        PreferenceHelper.editor?.putFloat(key, v)
+                        PreferenceHelper.editor?.putFloat(it.key, v)
                     }
                     is Int -> {
-                        PreferenceHelper.editor?.putInt(key, v)
+                        PreferenceHelper.editor?.putInt(it.key, v)
                     }
                     is Long -> {
-                        PreferenceHelper.editor?.putLong(key, v)
+                        PreferenceHelper.editor?.putLong(it.key, v)
                     }
                     is Set<*> -> {
-                        PreferenceHelper.editor?.putStringSet(key, v as Set<String?>)
+                        PreferenceHelper.editor?.putStringSet(it.key, v as Set<String?>)
                     }
                     is String -> {
-                        PreferenceHelper.editor?.putString(key, v)
+                        PreferenceHelper.editor?.putString(it.key, v)
                     }
                 }
                 PreferenceHelper.update("require_refresh", true)

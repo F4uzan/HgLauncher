@@ -22,10 +22,10 @@ object KissFuzzySearch {
         var match = false
 
         // Normalise query and source (app name).
-        val source = sourceName!!.toLowerCase(Locale.getDefault())
+        val source = sourceName?.toLowerCase(Locale.getDefault())
         val matchTo = queryMatch.toLowerCase(Locale.getDefault()).trim { it <= ' ' }
-        for (cApp in source.toCharArray()) {
-            if (queryPos < matchTo.length && matchTo[queryPos] == cApp) {
+        source?.toCharArray()?.forEach {
+            if (queryPos < matchTo.length && matchTo[queryPos] == it) {
                 // If we aren't already matching something, let's save the beginning of the match
                 if (!match) {
                     beginMatch = appPos
@@ -51,7 +51,7 @@ object KissFuzzySearch {
         }
         if (queryPos == matchTo.length) {
             // Add percentage of matched letters at a weight of 100
-            relevance += (queryPos.toDouble() / source.length * 100).toInt()
+            relevance += (queryPos.toDouble() / source!!.length * 100).toInt()
 
             // Add percentage of matched upper case letters (start of word), but at a weight of 60
             relevance += (matchedWordStarts.toDouble() / totalWordStarts * 60).toInt()

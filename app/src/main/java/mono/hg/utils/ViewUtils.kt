@@ -105,9 +105,7 @@ object ViewUtils {// Return fallback size if we can't get the value from the sys
      * @param query     Search query to launch when a provider is selected.
      */
     fun createSearchMenu(activity: AppCompatActivity, popupMenu: PopupMenu, query: String?) {
-        for ((key) in PreferenceHelper.providerList) {
-            popupMenu.menu.add(key)
-        }
+        PreferenceHelper.providerList.forEach { popupMenu.menu.add(it.key) }
         popupMenu.setOnMenuItemClickListener { menuItem ->
             Utils.doWebSearch(activity,
                     PreferenceHelper.getProvider(menuItem.title.toString()),

@@ -38,7 +38,7 @@ object PreferenceHelper {
         private set
     private var was_alien = false
     private val label_list: MutableMap<String, String> = HashMap()
-    private val provider_list: MutableMap<String?, String?> = HashMap()
+    private val provider_list: MutableMap<String, String> = HashMap()
     private val label_list_set = HashSet<String>()
     var exclusionList: HashSet<String> = HashSet()
     var launchAnim: String? = null
@@ -66,7 +66,7 @@ object PreferenceHelper {
     var gestureHandler: ComponentName? = null
         private set
 
-    val providerList: Map<String?, String?>
+    val providerList: Map<String, String>
         get() = provider_list
 
     fun shouldHideIcon(): Boolean {
@@ -175,11 +175,11 @@ object PreferenceHelper {
         preference.getString("widgets_list", "")!!.split(";".toRegex()).toTypedArray().forEach{ if (it.isNotEmpty()) { widgets_list.add(it) } }
     }
 
-    private fun parseDelimitedSet(set: HashSet<String>?) {
+    private fun parseDelimitedSet(set: HashSet<String>?, map: MutableMap<String, String>) {
         var toParse: Array<String>
         set!!.forEach {
             toParse = it.split("\\|".toRegex()).toTypedArray()
-            provider_list[toParse[0]] = toParse[1]
+            map[toParse[0]] = toParse[1]
         }
     }
 
@@ -190,7 +190,7 @@ object PreferenceHelper {
 
         // Clear and update our Map.
         provider_list.clear()
-        parseDelimitedSet(tempList)
+        parseDelimitedSet(tempList, provider_list)
     }
 
     fun getProvider(id: String?): String? {
@@ -203,9 +203,7 @@ object PreferenceHelper {
     }
 
     private fun updateSeparatedSet(pref_id: String, map: Map<String, String>, set: HashSet<String>) {
-        for ((key, value) in map) {
-            set.add("$key|$value")
-        }
+        map.forEach { set.add("$it.key|$it.value") }
         update(pref_id, set)
     }
 
@@ -289,8 +287,8 @@ object PreferenceHelper {
                 preference.getString("gesture_handler", "none")!!)
         exclusionList = preference.getStringSet("hidden_apps", HashSet()) as HashSet<String>
         val tempLabelList = preference.getStringSet("label_list", HashSet()) as HashSet<String>
-        parseDelimitedSet(preference.getStringSet("provider_list", HashSet()) as HashSet<String>?)
+        parseDelimitedSet(preference.getStringSet("provider_list", HashSet()) as HashSet<String>, provider_list)
         label_list_set.addAll(tempLabelList)
-        parseDelimitedSet(label_list_set)
+        parseDelimitedSet(label_list_set, label_list)
     }
 }

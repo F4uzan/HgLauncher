@@ -607,12 +607,12 @@ class LauncherActivity : AppCompatActivity() {
         // Inflate app shortcuts.
         if (Utils.sdkIsAround(25)) {
             var menuId = SHORTCUT_MENU_GROUP
-            for (shortcutInfo in AppUtils.getShortcuts(launcherApps, packageName)!!) {
-                shortcutMap.put(menuId, shortcutInfo.id)
+            AppUtils.getShortcuts(launcherApps, packageName)?.forEach {
+                shortcutMap.put(menuId, it.id)
                 appMenu!!.menu
                         .findItem(SHORTCUT_MENU_GROUP)
                         .subMenu
-                        .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, shortcutInfo.shortLabel)
+                        .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
                 menuId++
             }
             if (shortcutMap.size() == 0) {
@@ -995,16 +995,17 @@ class LauncherActivity : AppCompatActivity() {
         if (pinnedAppString.isNotEmpty() && restart) {
             pinnedAppList.clear()
             pinnedAppsAdapter.updateDataSet(pinnedAppList, false)
-            for (pinnedApp in pinnedAppString.split(";".toRegex()).toTypedArray()) {
-                var componentName = pinnedApp
+            pinnedAppString.split(";".toRegex()).toTypedArray().forEach {
+                var componentName = it
                 var user = userUtils!!.currentSerial
 
                 // Handle pinned apps coming from another user.
-                val userSplit = pinnedApp.split("-".toRegex()).toTypedArray()
+                val userSplit = it.split("-".toRegex()).toTypedArray()
                 if (userSplit.size == 2) {
                     user = userSplit[0].toLong()
                     componentName = userSplit[1]
                 }
+
                 if (AppUtils.doesComponentExist(manager, componentName)) {
                     AppUtils.pinApp(this, user, componentName, pinnedAppsAdapter, pinnedAppList)
                 }
@@ -1012,8 +1013,8 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         // Iterate through the list to get package name of each pinned apps, then stringify them.
-        for (app in pinnedAppList) {
-            newAppString = newAppString + app!!.userPackageName + ";"
+        pinnedAppList.forEach {
+            newAppString = newAppString + it?.userPackageName + ";"
         }
 
         // Update the saved pinned apps.

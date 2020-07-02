@@ -107,8 +107,8 @@ class GesturesPreference : PreferenceFragmentCompat() {
         val intent = Intent("mono.hg.GESTURE_HANDLER")
         val info = manager.queryIntentActivities(intent,
                 PackageManager.GET_RESOLVED_FILTER)
-        for (resolveInfo in info) {
-            val activityInfo = resolveInfo.activityInfo
+        info.forEach {
+            val activityInfo = it.activityInfo
             val className = activityInfo.name
             val packageName = activityInfo.packageName
             val componentName = "$packageName/$className"
@@ -138,9 +138,9 @@ class GesturesPreference : PreferenceFragmentCompat() {
             Collections.sort(availableActivities, ResolveInfo.DisplayNameComparator(manager))
 
             // Fetch apps and feed it into our list.
-            for (resolveInfo in availableActivities) {
-                val appName = resolveInfo.loadLabel(manager).toString()
-                val packageName = resolveInfo.activityInfo.packageName + "/" + resolveInfo.activityInfo.name
+            availableActivities.forEach {
+                val appName = it.loadLabel(manager).toString()
+                val packageName = it.activityInfo.packageName + "/" + it.activityInfo.name
                 entries.add(appName)
                 entryValues.add(packageName)
             }

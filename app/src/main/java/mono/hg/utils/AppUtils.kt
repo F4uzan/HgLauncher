@@ -210,8 +210,8 @@ object AppUtils {
      */
     fun countInstalledPackage(packageManager: PackageManager): Int {
         var count = 0
-        for (applicationInfo in packageManager.getInstalledApplications(0)) {
-            if (applicationInfo.enabled) {
+        packageManager.getInstalledApplications(0).forEach {
+            if (it.enabled) {
                 count++
             }
         }
@@ -251,10 +251,10 @@ object AppUtils {
             val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
             val launcher = activity.getSystemService(
                     Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-            for (profile in userManager.userProfiles) {
-                for (activityInfo in launcher.getActivityList(null, profile)) {
+            userManager.userProfiles.forEach { profile ->
+                launcher.getActivityList(null, profile).forEach { activityInfo ->
                     val componentName = activityInfo.componentName.flattenToString()
-                    var userPackageName: String
+                    val userPackageName: String
                     val user = userUtils.getSerial(profile)
                     userPackageName = if (user != userUtils.currentSerial) {
                         appendUser(user, componentName)
@@ -279,13 +279,13 @@ object AppUtils {
         } else {
             val intent = Intent(Intent.ACTION_MAIN, null)
             intent.addCategory(Intent.CATEGORY_LAUNCHER)
-            for (ri in manager.queryIntentActivities(intent, 0)) {
-                val packageName = ri.activityInfo.packageName
-                val componentName = packageName + "/" + ri.activityInfo.name
+            manager.queryIntentActivities(intent, 0).forEach {
+                val packageName = it.activityInfo.packageName
+                val componentName = packageName + "/" + it.activityInfo.name
                 val isHidden = (PreferenceHelper.exclusionList.contains(componentName)
                         || componentName.contains(BuildConfig.APPLICATION_ID))
                 if (!hideHidden || !isHidden) {
-                    val appName = ri.loadLabel(manager).toString()
+                    val appName = it.loadLabel(manager).toString()
                     val app = App(appName, componentName, false, userUtils.currentSerial)
                     app.hintName = PreferenceHelper.getLabel(componentName)
                     app.userPackageName = componentName

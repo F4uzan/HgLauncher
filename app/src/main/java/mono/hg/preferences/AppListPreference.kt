@@ -42,8 +42,8 @@ class AppListPreference : PreferenceFragmentCompat() {
         val intent = Intent("org.adw.launcher.THEMES")
         val info = manager.queryIntentActivities(intent,
                 PackageManager.GET_META_DATA)
-        for (resolveInfo in info) {
-            val activityInfo = resolveInfo.activityInfo
+        info.forEach {
+            val activityInfo = it.activityInfo
             val packageName = activityInfo.packageName
             val appName = activityInfo.loadLabel(manager).toString()
             entries.add(appName)

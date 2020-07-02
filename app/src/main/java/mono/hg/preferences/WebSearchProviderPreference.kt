@@ -64,7 +64,8 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
             popupMenu.show()
             true
         }
-        addProviders()
+
+        PreferenceHelper.providerList.forEach{ providerList.add(WebSearchProvider(it.key, it.value)) }
 
         // Add defaults if we don't have any provider.
         if (providerList.isEmpty()) {
@@ -122,12 +123,6 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
             providerList.add(WebSearchProvider(defaultProvider[i],
                     PreferenceHelper.getDefaultProvider(defaultProviderId[i]),
                     defaultProvider[i]))
-        }
-    }
-
-    private fun addProviders() {
-        for ((key, value) in PreferenceHelper.providerList) {
-            providerList.add(WebSearchProvider(key, value))
         }
     }
 
