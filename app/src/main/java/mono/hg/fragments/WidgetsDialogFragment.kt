@@ -25,14 +25,14 @@ class WidgetsDialogFragment : DialogFragment() {
     /*
      * Used to handle and add widgets to widgetContainer.
      */
-    private var appWidgetManager: AppWidgetManager? = null
-    private var appWidgetHost: LauncherAppWidgetHost? = null
-    private var appWidgetContainer: LinearLayout? = null
+    private lateinit var appWidgetManager: AppWidgetManager
+    private lateinit var appWidgetHost: LauncherAppWidgetHost
+    private lateinit var appWidgetContainer: LinearLayout
 
     /*
      * List containing widgets ID.
      */
-    private var widgetsList: ArrayList<String?>? = null
+    private lateinit var widgetsList: ArrayList<String?>
 
     /*
      * View calling the context menu.
@@ -51,11 +51,13 @@ class WidgetsDialogFragment : DialogFragment() {
                 R.style.WidgetDialogStyle)
         widgetsList = ArrayList(PreferenceHelper.widgetList)
         appWidgetContainer = binding.widgetContainer
-        if (widgetsList!!.isNotEmpty()) {
-            for (widgets in PreferenceHelper.widgetList) {
-                val widgetIntent = Intent()
-                widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgets.toInt())
-                addWidget(widgetIntent, appWidgetContainer!!.childCount, false)
+        if (widgetsList.isNotEmpty()) {
+            PreferenceHelper.widgetList.forEachIndexed { index, widgets ->
+                if (widgets.isNotEmpty()) {
+                    val widgetIntent = Intent()
+                    widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgets.toInt())
+                    addWidget(widgetIntent, index, false)
+                }
             }
         }
         builder.setView(binding.root)
@@ -71,7 +73,7 @@ class WidgetsDialogFragment : DialogFragment() {
             button.setOnClickListener {
                 val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
                 pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                        appWidgetHost!!.allocateAppWidgetId())
+                        appWidgetHost.allocateAppWidgetId())
                 startActivityForResult(pickIntent, WIDGET_CONFIG_START_CODE)
             }
         }
@@ -80,7 +82,7 @@ class WidgetsDialogFragment : DialogFragment() {
 
     override fun onStop() {
         super.onStop()
-        appWidgetHost?.stopListening()
+        appWidgetHost.stopListening()
         PreferenceHelper.applyWidgetsUpdate()
     }
 
@@ -88,20 +90,20 @@ class WidgetsDialogFragment : DialogFragment() {
         if (resultCode == Activity.RESULT_OK && data != null) {
             val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     WIDGET_CONFIG_DEFAULT_CODE)
-            val appWidgetInfo = appWidgetManager!!.getAppWidgetInfo(widgetId)
+            val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
             if (requestCode != WIDGET_CONFIG_RETURN_CODE && appWidgetInfo.configure != null) {
                 val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE)
                 intent.component = appWidgetInfo.configure
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
                 startActivityForResult(intent, WIDGET_CONFIG_RETURN_CODE)
             } else {
-                addWidget(data, widgetsList!!.size, true)
+                addWidget(data, widgetsList.size, true)
             }
         } else if (resultCode == Activity.RESULT_CANCELED && data != null) {
             val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     WIDGET_CONFIG_DEFAULT_CODE)
             if (widgetId != WIDGET_CONFIG_DEFAULT_CODE) {
-                appWidgetHost!!.deleteAppWidgetId(widgetId)
+                appWidgetHost.deleteAppWidgetId(widgetId)
             }
         }
     }
@@ -109,7 +111,7 @@ class WidgetsDialogFragment : DialogFragment() {
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
         // Set the calling view.
         callingView = v as AppWidgetHostView
-        val index = appWidgetContainer!!.indexOfChild(v)
+        val index = appWidgetContainer.indexOfChild(v)
 
         // Workaround for DialogFragment issue with context menu.
         // Taken from: https://stackoverflow.com/a/18853634
@@ -127,20 +129,20 @@ class WidgetsDialogFragment : DialogFragment() {
         menu.getItem(0).setOnMenuItemClickListener(listener)
 
         // Move actions should only be added when there is more than one widget.
-        menu.getItem(1).isVisible = appWidgetContainer!!.childCount > 1 && index > 0
-        menu.getItem(2).isVisible = appWidgetContainer!!.childCount != index + 1
-        if (appWidgetContainer!!.childCount > 1) {
+        menu.getItem(1).isVisible = appWidgetContainer.childCount > 1 && index > 0
+        menu.getItem(2).isVisible = appWidgetContainer.childCount != index + 1
+        if (appWidgetContainer.childCount > 1) {
             if (index > 0) {
                 menu.getItem(1).setOnMenuItemClickListener(listener)
             }
-            if (index + 1 != appWidgetContainer!!.childCount) {
+            if (index + 1 != appWidgetContainer.childCount) {
                 menu.getItem(2).setOnMenuItemClickListener(listener)
             }
         }
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val index = appWidgetContainer!!.indexOfChild(callingView)
+        val index = appWidgetContainer.indexOfChild(callingView)
         return when (item.itemId) {
             0 -> {
                 removeWidget(callingView, callingView!!.appWidgetId)
@@ -166,8 +168,8 @@ class WidgetsDialogFragment : DialogFragment() {
     private fun addWidget(data: Intent, index: Int, newWidget: Boolean) {
         val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 WIDGET_CONFIG_DEFAULT_CODE)
-        val appWidgetInfo = appWidgetManager!!.getAppWidgetInfo(widgetId)
-        val appWidgetHostView = appWidgetHost!!.createView(
+        val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
+        val appWidgetHostView = appWidgetHost.createView(
                 requireActivity().applicationContext,
                 widgetId, appWidgetInfo)
 
@@ -185,15 +187,15 @@ class WidgetsDialogFragment : DialogFragment() {
             }
 
             // Remove existing widget if any and then add the new widget.
-            appWidgetContainer!!.addView(appWidgetHostView, index)
+            appWidgetContainer.addView(appWidgetHostView, index)
 
             // Immediately listens for the widget.
-            appWidgetHost!!.startListening()
+            appWidgetHost.startListening()
             addWidgetActionListener(index)
-            registerForContextMenu(appWidgetContainer!!.getChildAt(index))
+            registerForContextMenu(appWidgetContainer.getChildAt(index))
             if (newWidget) {
                 // Update our list.
-                widgetsList!!.add(widgetId.toString())
+                widgetsList.add(widgetId.toString())
 
                 // Apply preference changes.
                 PreferenceHelper.updateWidgets(widgetsList)
@@ -207,28 +209,28 @@ class WidgetsDialogFragment : DialogFragment() {
      */
     private fun removeWidget(view: View?, id: Int) {
         unregisterForContextMenu(requireView())
-        appWidgetContainer!!.removeView(view)
+        appWidgetContainer.removeView(view)
 
         // Remove the widget from the list.
-        widgetsList!!.remove(id.toString())
+        widgetsList.remove(id.toString())
 
         // Update the preference by having the new list on it.
         PreferenceHelper.updateWidgets(widgetsList)
     }
 
     private fun swapWidget(one: Int, two: Int) {
-        val top = appWidgetContainer!!.getChildAt(one)
-        val bottom = appWidgetContainer!!.getChildAt(two)
+        val top = appWidgetContainer.getChildAt(one)
+        val bottom = appWidgetContainer.getChildAt(two)
 
         // Swap the list and update preferences.
         Collections.swap(widgetsList, one, two)
         PreferenceHelper.updateWidgets(widgetsList)
 
         // Update our views.
-        appWidgetContainer!!.removeView(top)
-        appWidgetContainer!!.addView(top, two)
-        appWidgetContainer!!.removeView(bottom)
-        appWidgetContainer!!.addView(bottom, one)
+        appWidgetContainer.removeView(top)
+        appWidgetContainer.addView(top, two)
+        appWidgetContainer.removeView(bottom)
+        appWidgetContainer.addView(bottom, one)
     }
 
     /**
@@ -236,7 +238,7 @@ class WidgetsDialogFragment : DialogFragment() {
      * TODO: Remove this once we figure out ways to resize the widgets.
      */
     private fun addWidgetActionListener(index: Int) {
-        appWidgetContainer!!.getChildAt(index).setOnLongClickListener { view ->
+        appWidgetContainer.getChildAt(index).setOnLongClickListener { view ->
             view.showContextMenu()
             true
         }
