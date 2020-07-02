@@ -774,7 +774,7 @@ class LauncherActivity : AppCompatActivity() {
                             ViewUtils.createSearchMenu(this@LauncherActivity, appMenu!!,
                                     URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name()))
                         }
-                    })
+                    }).show()
                     if (PreferenceHelper.extendedSearchMenu() && PreferenceHelper.searchProvider != "none") {
                         searchSnack.setLongPressAction(View.OnLongClickListener {
                             appMenu = PopupMenu(this@LauncherActivity, it)
