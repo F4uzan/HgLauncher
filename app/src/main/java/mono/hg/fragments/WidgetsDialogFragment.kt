@@ -32,7 +32,7 @@ class WidgetsDialogFragment : DialogFragment() {
     /*
      * List containing widgets ID.
      */
-    private lateinit var widgetsList: ArrayList<String?>
+    private lateinit var widgetsList: ArrayList<String>
 
     /*
      * View calling the context menu.
@@ -49,10 +49,10 @@ class WidgetsDialogFragment : DialogFragment() {
         val binding = FragmentWidgetsDialogBinding.inflate(requireActivity().layoutInflater)
         val builder = AlertDialog.Builder(requireActivity(),
                 R.style.WidgetDialogStyle)
-        widgetsList = ArrayList(PreferenceHelper.widgetList)
+        widgetsList = PreferenceHelper.widgetList()
         appWidgetContainer = binding.widgetContainer
         if (widgetsList.isNotEmpty()) {
-            PreferenceHelper.widgetList.forEachIndexed { index, widgets ->
+            PreferenceHelper.widgetList().forEachIndexed { index, widgets ->
                 if (widgets.isNotEmpty()) {
                     val widgetIntent = Intent()
                     widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgets.toInt())
@@ -83,7 +83,7 @@ class WidgetsDialogFragment : DialogFragment() {
     override fun onStop() {
         super.onStop()
         appWidgetHost.stopListening()
-        PreferenceHelper.applyWidgetsUpdate()
+        PreferenceHelper.updateWidgets(widgetsList)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -145,7 +145,7 @@ class WidgetsDialogFragment : DialogFragment() {
         val index = appWidgetContainer.indexOfChild(callingView)
         return when (item.itemId) {
             0 -> {
-                removeWidget(callingView, callingView!!.appWidgetId)
+                callingView?.let { removeWidget(it, callingView!!.appWidgetId) }
                 true
             }
             1 -> {
@@ -207,8 +207,8 @@ class WidgetsDialogFragment : DialogFragment() {
      * Removes widget from the desktop and resets the configuration
      * relating to widgets.
      */
-    private fun removeWidget(view: View?, id: Int) {
-        unregisterForContextMenu(requireView())
+    private fun removeWidget(view: View, id: Int) {
+        unregisterForContextMenu(view)
         appWidgetContainer.removeView(view)
 
         // Remove the widget from the list.
@@ -238,7 +238,7 @@ class WidgetsDialogFragment : DialogFragment() {
      * TODO: Remove this once we figure out ways to resize the widgets.
      */
     private fun addWidgetActionListener(index: Int) {
-        appWidgetContainer.getChildAt(index).setOnLongClickListener { view ->
+        appWidgetContainer.getChildAt(index)?.setOnLongClickListener { view ->
             view.showContextMenu()
             true
         }

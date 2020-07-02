@@ -58,7 +58,7 @@ object PreferenceHelper {
     private var gesture_pinch_action: String? = null
     var windowBarMode: String? = null
         private set
-    private var widgets_list: String? = null
+    private var widgets_list: ArrayList<String> = ArrayList()
     lateinit var preference: SharedPreferences
     private set
     var editor: Editor? = null
@@ -141,6 +141,10 @@ object PreferenceHelper {
         }
     }
 
+    fun widgetList(): ArrayList<String> {
+        return widgets_list
+    }
+
     val searchProvider: String?
         get() = if ("none" == search_provider_set) {
             "none"
@@ -166,26 +170,27 @@ object PreferenceHelper {
     fun initPreference(context: Context?) {
         preference = PreferenceManager.getDefaultSharedPreferences(context)
         editor = preference.edit()
+
+        // Initialise widgets early on.
+        preference.getString("widgets_list", "")!!.split(";".toRegex()).toTypedArray().forEach{ if (it.isNotEmpty()) { widgets_list.add(it) } }
     }
 
-    private fun parseProviders(set: HashSet<String>?) {
-        var toParse: Array<String?>
-        for (parse in set!!) {
-            toParse = parse.split("\\|".toRegex()).toTypedArray()
+    private fun parseDelimitedSet(set: HashSet<String>?) {
+        var toParse: Array<String>
+        set!!.forEach {
+            toParse = it.split("\\|".toRegex()).toTypedArray()
             provider_list[toParse[0]] = toParse[1]
         }
     }
 
     fun updateProvider(list: ArrayList<WebSearchProvider>) {
         val tempList = HashSet<String>()
-        for (provider in list) {
-            tempList.add(provider.name + "|" + provider.url)
-        }
+        list.forEach { tempList.add(it.name + "|" + it.url) }
         update("provider_list", tempList)
 
         // Clear and update our Map.
         provider_list.clear()
-        parseProviders(tempList)
+        parseDelimitedSet(tempList)
     }
 
     fun getProvider(id: String?): String? {
@@ -196,23 +201,6 @@ object PreferenceHelper {
             "none"
         }
     }
-
-    private fun fetchLabels() {
-        var splitPackage: Array<String>
-        for (packageName in label_list_set) {
-            splitPackage = packageName.split("\\|".toRegex()).toTypedArray()
-            label_list[splitPackage[0]] = splitPackage[1]
-        }
-    }
-
-    val widgetList: ArrayList<String>
-        get() {
-            val tempList = ArrayList<String>()
-            if ("" != widgets_list) {
-                Collections.addAll(tempList, *widgets_list!!.split(";".toRegex()).toTypedArray())
-            }
-            return tempList
-        }
 
     private fun updateSeparatedSet(pref_id: String, map: Map<String, String>, set: HashSet<String>) {
         for ((key, value) in map) {
@@ -237,18 +225,14 @@ object PreferenceHelper {
         updateSeparatedSet("label_list", label_list, label_list_set)
     }
 
-    fun updateWidgets(list: ArrayList<String?>?) {
+    fun updateWidgets(list: ArrayList<String>) {
         var tempList = ""
-        for (widgets in list!!) {
-            if ("" != widgets) {
-                tempList = "$tempList$widgets;"
+        list.forEach {
+            if (it.isNotEmpty()) {
+                tempList = tempList.plus(";").plus(it)
             }
         }
         update("widgets_list", tempList)
-    }
-
-    fun applyWidgetsUpdate() {
-        widgets_list = preference.getString("widgets_list", "")
     }
 
     fun update(id: String?, stringSet: HashSet<String>?) {
@@ -303,11 +287,10 @@ object PreferenceHelper {
         gesture_pinch_action = preference.getString("gesture_pinch", "none")
         gestureHandler = ComponentName.unflattenFromString(
                 preference.getString("gesture_handler", "none")!!)
-        widgets_list = preference.getString("widgets_list", "")
         exclusionList = preference.getStringSet("hidden_apps", HashSet()) as HashSet<String>
-        val temp_label_list = preference.getStringSet("label_list", HashSet()) as HashSet<String>
-        parseProviders(preference.getStringSet("provider_list", HashSet()) as HashSet<String>?)
-        label_list_set.addAll(temp_label_list)
-        fetchLabels()
+        val tempLabelList = preference.getStringSet("label_list", HashSet()) as HashSet<String>
+        parseDelimitedSet(preference.getStringSet("provider_list", HashSet()) as HashSet<String>?)
+        label_list_set.addAll(tempLabelList)
+        parseDelimitedSet(label_list_set)
     }
 }
