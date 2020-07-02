@@ -111,4 +111,5 @@
     <string name="app_list_mode_grid">Raster</string>
     <string name="app_list_mode">Overzichtsmodus</string>
     <string name="app_list_mode_list">Lijst</string>
+    <string name="gesture_pinch">Knijpen</string>
 </resources>
