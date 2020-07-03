@@ -705,7 +705,6 @@ class LauncherActivity : AppCompatActivity() {
         searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (searchBar.text.isNotEmpty()
                     && (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
-                Utils.sendLog(3, getCurrentPage().launchPreselection().toString())
                 if (! getCurrentPage().launchPreselection()
                         && PreferenceHelper.promptSearch()
                         && PreferenceHelper.searchProvider != "none") {
