@@ -368,15 +368,15 @@ class LauncherActivity : AppCompatActivity() {
      */
     fun doThis(action: String?) {
         when (action) {
-            /** CLOSE_MENU -> if (appMenu != null) {
-            if (appMenu!!.menu.findItem(R.id.action_app_actions) != null) {
-            appMenu!!.menu.findItem(R.id.action_app_actions).subMenu.close()
+            CLOSE_MENU -> if (appMenu != null) {
+                if (appMenu!!.menu.findItem(R.id.action_app_actions) != null) {
+                    appMenu!!.menu.findItem(R.id.action_app_actions).subMenu.close()
+                }
+                if (appMenu!!.menu.findItem(SHORTCUT_MENU_GROUP) != null) {
+                    appMenu!!.menu.findItem(SHORTCUT_MENU_GROUP).subMenu.close()
+                }
+                appMenu!!.dismiss()
             }
-            if (appMenu!!.menu.findItem(SHORTCUT_MENU_GROUP) != null) {
-            appMenu!!.menu.findItem(SHORTCUT_MENU_GROUP).subMenu.close()
-            }
-            appMenu!!.dismiss()
-            } **/
             SHOW_PANEL -> slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
                     ActivityServiceUtils.isPowerSaving(this))
             HIDE_PANEL -> slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
