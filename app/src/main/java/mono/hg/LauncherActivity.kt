@@ -6,61 +6,60 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
 import android.util.SparseArray
-import android.view.*
+import android.view.ContextMenu
 import android.view.ContextMenu.ContextMenuInfo
+import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.PopupMenu
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.FlexibleAdapter.OnItemMoveListener
-import eu.davidea.flexibleadapter.FlexibleAdapter.OnUpdateListener
-import mono.hg.adapters.AppAdapter
 import mono.hg.databinding.ActivityLauncherspaceBinding
 import mono.hg.databinding.DialogStartHintBinding
-import mono.hg.databinding.LayoutRenameDialogBinding
+import mono.hg.fragments.AppListFragment
+import mono.hg.fragments.GenericPageFragment
 import mono.hg.fragments.WidgetsDialogFragment
 import mono.hg.helpers.LauncherIconHelper
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.GestureListener
-import mono.hg.listeners.SimpleScrollListener
 import mono.hg.models.App
 import mono.hg.models.PinnedApp
 import mono.hg.receivers.PackageChangesReceiver
-import mono.hg.tasks.FetchAppsTask
-import mono.hg.utils.*
-import mono.hg.views.CustomGridLayoutManager
+import mono.hg.utils.ActivityServiceUtils
+import mono.hg.utils.AppUtils
+import mono.hg.utils.UserUtils
+import mono.hg.utils.Utils
+import mono.hg.utils.ViewUtils
 import mono.hg.views.DagashiBar
-import mono.hg.views.IndeterminateMaterialProgressBar
-import mono.hg.views.TogglingLinearLayoutManager
-import mono.hg.wrappers.ItemOffsetDecoration
 import mono.hg.wrappers.TextSpectator
 import java.net.URLEncoder
 import java.util.*
@@ -70,26 +69,6 @@ class LauncherActivity : AppCompatActivity() {
      * Binding for this activity.
      */
     private lateinit var binding: ActivityLauncherspaceBinding
-
-    /*
-     * List containing installed apps.
-     */
-    private val appsList = ArrayList<App?>()
-
-    /*
-     * Adapter for installed apps.
-     */
-    private val appsAdapter = AppAdapter(appsList)
-
-    /*
-     * RecyclerView for app list.
-     */
-    private lateinit var appsRecyclerView: FastScrollRecyclerView
-
-    /*
-     * Progress bar shown when populating app list.
-     */
-    private var loadProgress: IndeterminateMaterialProgressBar? = null
 
     /*
      * Are we resuming this activity?
@@ -119,23 +98,7 @@ class LauncherActivity : AppCompatActivity() {
     /*
      * Adapter for pinned apps.
      */
-    private val pinnedAppsAdapter = FlexibleAdapter(
-            pinnedAppList)
-
-    /*
-     * List of excluded apps. These will not be shown in the app list.
-     */
-    private val excludedAppsList = HashSet<String>()
-
-    /*
-     * Package manager; casted through getPackageManager()``.
-     */
-    private lateinit var manager: PackageManager
-
-    /*
-     * LinearLayoutManager used in appsRecyclerView.
-     */
-    private lateinit var appsLayoutManager: RecyclerView.LayoutManager
+    private val pinnedAppsAdapter = FlexibleAdapter(pinnedAppList)
 
     /*
      * RecyclerView for pinned apps; shown in favourites panel.
@@ -183,13 +146,15 @@ class LauncherActivity : AppCompatActivity() {
      */
     private var appMenu: PopupMenu? = null
 
+    private lateinit var viewPager: ViewPager2
+
     /*
      * Receiver used to listen to installed/uninstalled packages.
      */
     private val packageReceiver = PackageChangesReceiver()
     private var launcherApps: LauncherApps? = null
     private var userUtils: UserUtils? = null
-    private var fetchAppsTask: FetchAppsTask? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -200,31 +165,23 @@ class LauncherActivity : AppCompatActivity() {
         if (requestedOrientation != PreferenceHelper.orientation) {
             requestedOrientation = PreferenceHelper.orientation
         }
-        manager = packageManager
-        appsLayoutManager = if (PreferenceHelper.useGrid()) {
-            CustomGridLayoutManager(this,
-                    resources.getInteger(R.integer.column_default_size))
-        } else {
-            TogglingLinearLayoutManager(this, LinearLayoutManager.VERTICAL,
-                    true)
+
+        if (Utils.atLeastLollipop()) {
+            launcherApps = this.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
         }
-        val itemDecoration = ItemOffsetDecoration(this, R.dimen.item_offset)
-        val pinnedAppsManager = LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false)
+        userUtils = UserUtils(this)
+
+        val pinnedAppsManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
         appsListContainer = binding.appListContainer
         searchContainer = binding.searchContainer.searchContainer
         pinnedAppsContainer = binding.pinnedAppsContainer
         searchBar = binding.searchContainer.search
         slidingHome = binding.slideHome
         touchReceiver = binding.touchReceiver
-        appsRecyclerView = binding.appsList
         pinnedAppsRecyclerView = binding.pinnedAppsList
         searchContext = binding.searchContainer.searchContextButton
-        loadProgress = binding.loadProgress
-        if (Utils.atLeastLollipop()) {
-            launcherApps = getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-        }
-        userUtils = UserUtils(this)
+        viewPager = binding.pager
         animateDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
 
         // Let the launcher handle state of the sliding panel.
@@ -232,27 +189,19 @@ class LauncherActivity : AppCompatActivity() {
         slidingHome.alwaysResetState(true)
         slidingHome.anchorPoint = 0f
         slidingHome.setDragView(searchContainer)
-        appsRecyclerView.isDrawingCacheEnabled = true
-        appsRecyclerView.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_LOW
-        appsRecyclerView.setHasFixedSize(true)
-        appsRecyclerView.setThumbColor(PreferenceHelper.darkAccent)
-        appsRecyclerView.setThumbInactiveColor(PreferenceHelper.accent)
-        appsRecyclerView.setPopupBgColor(PreferenceHelper.darkerAccent)
-        appsRecyclerView.adapter = appsAdapter
-        appsRecyclerView.layoutManager = appsLayoutManager
-        appsRecyclerView.itemAnimator = DefaultItemAnimator()
-        if (PreferenceHelper.useGrid()) {
-            appsRecyclerView.addItemDecoration(itemDecoration)
-        }
         pinnedAppsRecyclerView.adapter = pinnedAppsAdapter
         pinnedAppsRecyclerView.layoutManager = pinnedAppsManager
         pinnedAppsRecyclerView.itemAnimator = null
         pinnedAppsAdapter.isLongPressDragEnabled = true
         pinnedAppsAdapter.itemTouchHelperCallback.setMoveThreshold(1f)
 
+        // The pager adapter, which provides the pages to the view pager widget.
+        val pagerAdapter = PageAdapter(this)
+        viewPager.adapter = pagerAdapter
+
         // Get icons from icon pack.
         if ("default" != PreferenceHelper.iconPackName &&
-                LauncherIconHelper.loadIconPack(manager) == 0) {
+                LauncherIconHelper.loadIconPack(packageManager) == 0) {
             PreferenceHelper.editor?.putString("icon_pack", "default")?.apply()
         }
 
@@ -264,7 +213,7 @@ class LauncherActivity : AppCompatActivity() {
         addListListeners()
         addPanelListener()
         registerForContextMenu(touchReceiver)
-        PreferenceHelper.update("package_count", AppUtils.countInstalledPackage(manager))
+        PreferenceHelper.update("package_count", AppUtils.countInstalledPackage(packageManager))
 
         // Start pinning apps.
         updatePinnedApps(true)
@@ -324,12 +273,12 @@ class LauncherActivity : AppCompatActivity() {
 
         // Dismiss any visible menu as well as the app panel when it is not needed.
         doThis(CLOSE_MENU)
-        if (!PreferenceHelper.keepAppList()) {
+        if (! PreferenceHelper.keepAppList()) {
             doThis(HIDE_PANEL)
         } else {
             // Clear the search bar text if app list is set to be kept open
             // unless keepLastSearch setting indicates maintain last search
-            if (!PreferenceHelper.keepLastSearch()) {
+            if (! PreferenceHelper.keepLastSearch()) {
                 clearSearch(searchBar)
             }
         }
@@ -347,13 +296,10 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         // Refresh app list and pinned apps if there is a change in package count.
-        if (AppUtils.hasNewPackage(
-                        manager) || appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty) {
+        if (AppUtils.hasNewPackage(packageManager)) {
             updatePinnedApps(true)
-            fetchAppsTask!!.cancel(true)
-            fetchAppsTask = FetchAppsTask(this, appsAdapter, appsList)
-            fetchAppsTask!!.execute()
         }
+
         Utils.registerPackageReceiver(this, packageReceiver)
 
         // Show the app list when needed.
@@ -379,20 +325,6 @@ class LauncherActivity : AppCompatActivity() {
             PreferenceHelper.isAlien(false)
             recreate()
         }
-        if (fetchAppsTask == null && appsAdapter.isEmpty) {
-            fetchAppsTask = FetchAppsTask(this, appsAdapter, appsList)
-            fetchAppsTask!!.execute()
-        }
-
-        // Reset the app list filter.
-        appsAdapter.resetFilter()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (fetchAppsTask != null && fetchAppsTask!!.status == AsyncTask.Status.RUNNING) {
-            fetchAppsTask!!.cancel(true)
-        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -406,7 +338,7 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // Handle preference change. Refresh when necessary.
-        if (requestCode == SETTINGS_RETURN_CODE && !PreferenceHelper.wasAlien()) {
+        if (requestCode == SETTINGS_RETURN_CODE && ! PreferenceHelper.wasAlien()) {
             recreate()
         }
 
@@ -416,7 +348,7 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         return if (event.action == KeyEvent.ACTION_DOWN && event.isCtrlPressed) {
-            searchBar.let { Utils.handleInputShortcut(this, it, keyCode) }!!
+            searchBar.let { Utils.handleInputShortcut(this, it, keyCode) } !!
         } else {
             if (keyCode == KeyEvent.KEYCODE_SPACE) {
                 if (window.currentFocus !== searchBar) {
@@ -436,15 +368,15 @@ class LauncherActivity : AppCompatActivity() {
      */
     fun doThis(action: String?) {
         when (action) {
-            CLOSE_MENU -> if (appMenu != null) {
-                if (appMenu!!.menu.findItem(R.id.action_app_actions) != null) {
-                    appMenu!!.menu.findItem(R.id.action_app_actions).subMenu.close()
-                }
-                if (appMenu!!.menu.findItem(SHORTCUT_MENU_GROUP) != null) {
-                    appMenu!!.menu.findItem(SHORTCUT_MENU_GROUP).subMenu.close()
-                }
-                appMenu!!.dismiss()
+            /** CLOSE_MENU -> if (appMenu != null) {
+            if (appMenu!!.menu.findItem(R.id.action_app_actions) != null) {
+            appMenu!!.menu.findItem(R.id.action_app_actions).subMenu.close()
             }
+            if (appMenu!!.menu.findItem(SHORTCUT_MENU_GROUP) != null) {
+            appMenu!!.menu.findItem(SHORTCUT_MENU_GROUP).subMenu.close()
+            }
+            appMenu!!.dismiss()
+            } **/
             SHOW_PANEL -> slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
                     ActivityServiceUtils.isPowerSaving(this))
             HIDE_PANEL -> slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
@@ -539,16 +471,13 @@ class LauncherActivity : AppCompatActivity() {
      * Loads available preferences and updates PreferenceHelpers.
      */
     private fun loadPref() {
-        if (!PreferenceHelper.hasEditor()) {
+        if (! PreferenceHelper.hasEditor()) {
             PreferenceHelper.initPreference(this)
         }
         PreferenceHelper.fetchPreference()
 
         // Get pinned apps.
         pinnedAppString = PreferenceHelper.preference.getString("pinned_apps_list", "").toString()
-
-        // Get a list of our hidden apps, default to null if there aren't any.
-        excludedAppsList.addAll(PreferenceHelper.exclusionList)
 
         // Get the default providers list if it's empty.
         if (PreferenceHelper.providerList.isEmpty()) {
@@ -582,69 +511,57 @@ class LauncherActivity : AppCompatActivity() {
      * Creates a PopupMenu to use in a long-pressed app object.
      *
      * @param view     View for the PopupMenu to anchor to.
-     * @param isPinned Is this a pinned app?
      * @param app      App object selected from the list.
      */
-    private fun createAppMenu(view: View?, isPinned: Boolean, app: App?) {
-        val packageName = app!!.packageName
+    private fun createAppMenu(view: View?, app: App?) {
+        val packageName = app !!.packageName
         val componentName = ComponentName.unflattenFromString(packageName)
         val user = app.user
         val pinApp = PinnedApp(app.packageName, app.user)
         val packageNameUri = Uri.fromParts("package", AppUtils.getPackageName(packageName),
                 null)
         val shortcutMap = SparseArray<String>()
-        val position: Int = if (isPinned) {
-            pinnedAppsAdapter.getGlobalPositionOf(app)
-        } else {
-            appsAdapter.getGlobalPositionOf(app)
-        }
+        val position = pinnedAppsAdapter.getGlobalPositionOf(app)
 
         // Inflate the app menu.
-        appMenu = PopupMenu(this@LauncherActivity, view!!)
-        appMenu!!.menuInflater.inflate(R.menu.menu_app, appMenu!!.menu)
-        appMenu!!.menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
+        appMenu = PopupMenu(this@LauncherActivity, view !!)
+        appMenu !!.menuInflater.inflate(R.menu.menu_app, appMenu !!.menu)
+        appMenu !!.menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
 
         // Inflate app shortcuts.
         if (Utils.sdkIsAround(25)) {
             var menuId = SHORTCUT_MENU_GROUP
             AppUtils.getShortcuts(launcherApps, packageName)?.forEach {
                 shortcutMap.put(menuId, it.id)
-                appMenu!!.menu
+                appMenu !!.menu
                         .findItem(SHORTCUT_MENU_GROUP)
                         .subMenu
                         .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
-                menuId++
+                menuId ++
             }
             if (shortcutMap.size() == 0) {
-                appMenu!!.menu.getItem(0).isVisible = false
+                appMenu !!.menu.getItem(0).isVisible = false
             }
         } else {
-            appMenu!!.menu.getItem(0).isVisible = false
+            appMenu !!.menu.getItem(0).isVisible = false
         }
 
         // Hide 'pin' if the app is already pinned or isPinned is set.
-        appMenu!!.menu.findItem(R.id.action_pin).isVisible = (!isPinned
-                && !pinnedAppsAdapter.contains(pinApp))
+        appMenu !!.menu.findItem(R.id.action_pin).isVisible = false
 
         // We can't hide an app from the favourites panel.
-        appMenu!!.menu.findItem(R.id.action_hide).isVisible = !isPinned
-        appMenu!!.menu.findItem(R.id.action_shorthand).isVisible = !isPinned
+        appMenu !!.menu.findItem(R.id.action_hide).isVisible = false
+        appMenu !!.menu.findItem(R.id.action_shorthand).isVisible = false
 
         // Only show the 'unpin' option if isPinned is set.
-        appMenu!!.menu.findItem(R.id.action_unpin).isVisible = isPinned
+        appMenu !!.menu.findItem(R.id.action_unpin).isVisible = true
 
         // Show uninstall menu if the app is not a system app.
-        appMenu!!.menu.findItem(R.id.action_uninstall).isVisible = (!AppUtils.isSystemApp(manager, packageName)
-                && app.user == userUtils!!.currentSerial)
-        appMenu!!.show()
-        appMenu!!.setOnMenuItemClickListener { item ->
+        appMenu !!.menu.findItem(R.id.action_uninstall).isVisible = (! AppUtils.isSystemApp(packageManager, packageName)
+                && app.user == userUtils !!.currentSerial)
+        appMenu !!.show()
+        appMenu !!.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.action_pin -> {
-                    AppUtils.pinApp(this@LauncherActivity, user, packageName, pinnedAppsAdapter,
-                            pinnedAppList)
-                    pinnedAppString = pinnedAppString + app.userPackageName + ";"
-                    PreferenceHelper.update("pinned_apps_list", pinnedAppString)
-                }
                 R.id.action_unpin -> {
                     pinnedAppList.remove(pinnedAppsAdapter.getItem(position))
                     pinnedAppsAdapter.removeItem(position)
@@ -656,26 +573,16 @@ class LauncherActivity : AppCompatActivity() {
                     }
                 }
                 R.id.action_info -> if (Utils.atLeastLollipop()) {
-                    launcherApps!!.startAppDetailsActivity(componentName,
-                            userUtils!!.getUser(app.user), null, null)
+                    launcherApps !!.startAppDetailsActivity(componentName,
+                            userUtils !!.getUser(app.user), null, null)
                 } else {
                     startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                             packageNameUri))
                 }
                 R.id.action_uninstall -> startActivity(Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageNameUri))
-                R.id.action_shorthand -> makeRenameDialog(app.userPackageName, position)
-                R.id.action_hide -> {
-                    // Add the app's package name to the exclusion list.
-                    excludedAppsList.add(app.userPackageName)
-                    PreferenceHelper.update("hidden_apps", excludedAppsList)
-
-                    // Reload the app list!
-                    appsList.remove(appsAdapter.getItem(position))
-                    appsAdapter.removeItem(position)
-                }
                 else ->                         // Catch click actions from the shortcut menu group.
                     if (item.groupId == SHORTCUT_MENU_GROUP && Utils.sdkIsAround(25)) {
-                        userUtils!!.getUser(user)?.let {
+                        userUtils !!.getUser(user)?.let {
                             launcherApps?.startShortcut(AppUtils.getPackageName(packageName),
                                     shortcutMap[item.itemId],
                                     null, null, it)
@@ -727,13 +634,16 @@ class LauncherActivity : AppCompatActivity() {
                     if (isContextVisible) {
                         doThis("hide_context_button")
                     }
-                    appsAdapter.resetFilter()
+                    if (getCurrentPage().isAcceptingSearch()) {
+                        getCurrentPage().resetSearch()
+                    }
                     searchSnack.dismiss()
                     stopTimer()
                 } else {
                     // Begin filtering our list.
-                    appsAdapter.setFilter(trimmedInputText)
-                    appsAdapter.filterItems()
+                    if (getCurrentPage().isAcceptingSearch()) {
+                        getCurrentPage().commitSearch(trimmedInputText)
+                    }
                 }
             }
 
@@ -753,7 +663,7 @@ class LauncherActivity : AppCompatActivity() {
 
                     // Update the snackbar text.
                     searchSnack.setText(searchHint)
-                    if (!isContextVisible) {
+                    if (! isContextVisible) {
                         doThis("show_context_button")
                     }
                     val searchSnackAction: String = if (PreferenceHelper.searchProvider == "none") {
@@ -771,14 +681,14 @@ class LauncherActivity : AppCompatActivity() {
                             searchSnack.dismiss()
                         } else {
                             appMenu = PopupMenu(this@LauncherActivity, it)
-                            ViewUtils.createSearchMenu(this@LauncherActivity, appMenu!!,
+                            ViewUtils.createSearchMenu(this@LauncherActivity, appMenu !!,
                                     URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name()))
                         }
                     }).show()
                     if (PreferenceHelper.extendedSearchMenu() && PreferenceHelper.searchProvider != "none") {
                         searchSnack.setLongPressAction(View.OnLongClickListener {
                             appMenu = PopupMenu(this@LauncherActivity, it)
-                            ViewUtils.createSearchMenu(this@LauncherActivity, appMenu!!,
+                            ViewUtils.createSearchMenu(this@LauncherActivity, appMenu !!,
                                     URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name()))
                             true
                         })
@@ -795,11 +705,9 @@ class LauncherActivity : AppCompatActivity() {
         searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (searchBar.text.isNotEmpty()
                     && (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
-                if (!appsAdapter.isEmpty) {
-                    appsRecyclerView.let {
-                        ViewUtils.keyboardLaunchApp(this@LauncherActivity, it, appsAdapter)
-                    }
-                } else if (PreferenceHelper.promptSearch()
+                Utils.sendLog(3, getCurrentPage().launchPreselection().toString())
+                if (! getCurrentPage().launchPreselection()
+                        && PreferenceHelper.promptSearch()
                         && PreferenceHelper.searchProvider != "none") {
                     Utils.doWebSearch(this@LauncherActivity,
                             PreferenceHelper.searchProvider,
@@ -814,58 +722,10 @@ class LauncherActivity : AppCompatActivity() {
      * Listeners for the app list.
      */
     private fun addListListeners() {
-        // Listen for app list scroll to hide/show favourites panel.
-        // Only do this when the user has favourites panel enabled.
-        appsRecyclerView.addOnScrollListener(object : SimpleScrollListener(48) {
-            override fun onScrollUp() {
-                if (!pinnedAppsAdapter.isEmpty
-                        && isFavouritesVisible
-                        && PreferenceHelper.favouritesAcceptScroll()
-                        && searchBar.text.toString().isEmpty()) {
-                    doThis(HIDE_PINNED)
-                }
-            }
-
-            override fun onScroll() {
-                doThis(CLOSE_MENU)
-            }
-
-            override fun onEnd() {
-                if (!pinnedAppsAdapter.isEmpty
-                        && !isFavouritesVisible
-                        && PreferenceHelper.favouritesAcceptScroll()) {
-                    doThis(SHOW_PINNED)
-                }
-            }
-        })
-
-        // Add item click action to app list.
-        appsAdapter.addListener(FlexibleAdapter.OnItemClickListener { _, position ->
-            appsAdapter.getItem(position)?.let { AppUtils.launchApp(this@LauncherActivity, it) }
-            true
-        })
-
         // Add item click action to the favourites panel.
         pinnedAppsAdapter.addListener(FlexibleAdapter.OnItemClickListener { _, position ->
             pinnedAppsAdapter.getItem(position)?.let { AppUtils.launchApp(this@LauncherActivity, it) }
             true
-        })
-
-        // Add long click listener to apps in the apps list.
-        // This shows a menu to manage the selected app.
-        appsAdapter.addListener(FlexibleAdapter.OnItemLongClickListener { position ->
-            val app = appsAdapter.getItem(position)
-
-            // We need to rely on the LayoutManager here
-            // because app list is populated asynchronously,
-            // and will throw nulls if we try to directly ask RecyclerView for its child.
-            createAppMenu(appsRecyclerView.layoutManager!!.findViewByPosition(position), false, app)
-        })
-        appsAdapter.addListener(OnUpdateListener { size ->
-            if (size > 0 && !appsAdapter.isEmpty) {
-                loadProgress!!.visibility = View.GONE
-                loadProgress!!.invalidate()
-            }
         })
     }
 
@@ -897,11 +757,11 @@ class LauncherActivity : AppCompatActivity() {
                 // No movement occurred, this is a long press.
                 if (newState != ItemTouchHelper.ACTION_STATE_DRAG && System.currentTimeMillis() - startTime == System
                                 .currentTimeMillis()) {
-                    val app: App? = pinnedAppsAdapter.getItem(viewHolder!!.absoluteAdapterPosition)
+                    val app: App? = pinnedAppsAdapter.getItem(viewHolder !!.absoluteAdapterPosition)
 
                     // Use LayoutManager method to get the view,
                     // as RecyclerView will happily return null if it can.
-                    createAppMenu(pinnedAppsRecyclerView.layoutManager!!.findViewByPosition(viewHolder.absoluteAdapterPosition), true, app)
+                    createAppMenu(pinnedAppsRecyclerView.layoutManager !!.findViewByPosition(viewHolder.absoluteAdapterPosition), app)
                 } else {
                     // Reset startTime and update the pinned apps, we were swiping.
                     startTime = 0
@@ -930,12 +790,12 @@ class LauncherActivity : AppCompatActivity() {
                         // Empty out search bar text
                         // Clear the search bar text if app list is set to be kept open
                         // unless keepLastSearch setting indicates maintain last search
-                        if (!PreferenceHelper.keepLastSearch()) {
+                        if (! PreferenceHelper.keepLastSearch()) {
                             clearSearch(searchBar)
                         }
 
                         // Animate search container entering the view.
-                        if (!ActivityServiceUtils.isPowerSaving(this@LauncherActivity)) {
+                        if (! ActivityServiceUtils.isPowerSaving(this@LauncherActivity)) {
                             searchContainer.animate().alpha(1f).setDuration(animateDuration.toLong())
                                     .setListener(object : AnimatorListenerAdapter() {
                                         override fun onAnimationStart(animation: Animator) {
@@ -960,11 +820,11 @@ class LauncherActivity : AppCompatActivity() {
                         ActivityServiceUtils.hideSoftKeyboard(this@LauncherActivity)
 
                         // Stop scrolling, the panel is being dismissed.
-                        appsRecyclerView.stopScroll()
+                        //appsRecyclerView.stopScroll()
                         searchContainer.visibility = View.INVISIBLE
 
                         // Animate the container.
-                        if (!isResuming && !ActivityServiceUtils.isPowerSaving(this@LauncherActivity)) {
+                        if (! isResuming && ! ActivityServiceUtils.isPowerSaving(this@LauncherActivity)) {
                             searchContainer.animate().alpha(0f).duration = animateDuration.toLong()
                         } else {
                             isResuming = false
@@ -987,7 +847,6 @@ class LauncherActivity : AppCompatActivity() {
 
     /**
      * Updates the favourites panel.
-     *
      * @param restart Should a complete adapter & list re-initialisation be done?
      */
     private fun updatePinnedApps(restart: Boolean) {
@@ -997,7 +856,7 @@ class LauncherActivity : AppCompatActivity() {
             pinnedAppsAdapter.updateDataSet(pinnedAppList, false)
             pinnedAppString.split(";".toRegex()).toTypedArray().forEach {
                 var componentName = it
-                var user = userUtils!!.currentSerial
+                var user = userUtils !!.currentSerial
 
                 // Handle pinned apps coming from another user.
                 val userSplit = it.split("-".toRegex()).toTypedArray()
@@ -1006,7 +865,7 @@ class LauncherActivity : AppCompatActivity() {
                     componentName = userSplit[1]
                 }
 
-                if (AppUtils.doesComponentExist(manager, componentName)) {
+                if (AppUtils.doesComponentExist(packageManager, componentName)) {
                     AppUtils.pinApp(this, user, componentName, pinnedAppsAdapter, pinnedAppList)
                 }
             }
@@ -1022,9 +881,60 @@ class LauncherActivity : AppCompatActivity() {
         pinnedAppString = newAppString
     }
 
+    /**
+     * Clears the search bar.
+     *
+     * @param view Unused. Only needed for XML initialisation.
+     */
     fun clearSearch(view: View) {
         // Clear the search bar text if app list is set to be kept open
         searchBar.setText("")
+    }
+
+    /**
+     * Pin an app to the favourites panel.
+     *
+     * @param packageName The package name of the app.
+     * @param user The user eligible to launch the app.
+     */
+    fun pinAppHere(packageName: String, user: Long) {
+        AppUtils.pinApp(this, user, packageName, pinnedAppsAdapter, pinnedAppList)
+        pinnedAppString = "$pinnedAppString$packageName;"
+        PreferenceHelper.update("pinned_apps_list", pinnedAppString)
+    }
+
+    /**
+     * Determine whether an app is pinned.
+     *
+     * @param pinnedApp The PinnedApp object. Can be derived from an App object.
+     */
+    fun isPinned(pinnedApp: PinnedApp): Boolean {
+        return pinnedAppsAdapter.contains(pinnedApp)
+    }
+
+    /**
+     * Hide the favourites panel.
+     * This function is provided for Pages to toggle favourites panel visibility.
+     */
+    fun hidePinnedApps() {
+        if (! pinnedAppsAdapter.isEmpty
+                && isFavouritesVisible
+                && PreferenceHelper.favouritesAcceptScroll()
+                && searchBar.text.toString().isEmpty()) {
+            doThis(HIDE_PINNED)
+        }
+    }
+
+    /**
+     * Show the favourites panel.
+     * This function is provided for Pages to toggle favourites panel visibility.
+     */
+    fun showPinnedApps() {
+        if (! pinnedAppsAdapter.isEmpty
+                && ! isFavouritesVisible
+                && PreferenceHelper.favouritesAcceptScroll()) {
+            doThis(SHOW_PINNED)
+        }
     }
 
     private fun showStartDialog() {
@@ -1042,34 +952,20 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     /**
-     * Creates a dialog to set an app's shorthand.
-     *
-     * @param packageName The package name of the app.
-     * @param position    Adapter position of the app.
+     * Adapter for Pages.
+     * TODO: Move this to its own class and further generify for other Pages.
      */
-    private fun makeRenameDialog(packageName: String, position: Int) {
-        val builder = AlertDialog.Builder(this)
-        val binding = LayoutRenameDialogBinding.inflate(layoutInflater)
-        val renameField = binding.renameField
-        renameField.hint = PreferenceHelper.getLabel(packageName)
-        builder.setView(binding.root)
-        builder.setNegativeButton(android.R.string.cancel, null)
-                .setTitle(R.string.dialog_title_shorthand)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    val newLabel = renameField.text
-                            .toString()
-                            .replace("\\|".toRegex(), "")
-                            .trim { it <= ' ' }
+    private inner class PageAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+        override fun getItemCount(): Int = 1
+        override fun createFragment(position: Int): GenericPageFragment = AppListFragment()
+    }
 
-                    // Unset shorthand if it is empty.
-                    PreferenceHelper.updateLabel(packageName, newLabel, newLabel.isEmpty())
-
-                    // Update the specified item.
-                    val app = appsAdapter.getItem(position)
-                    if (app != null) {
-                        app.hintName = newLabel
-                    }
-                }.show()
+    /**
+     * Helper function to retrieve currently-viewed Page.
+     * Uses a hack available in ViewPager2 fragment tagging.
+     */
+    private fun getCurrentPage(): GenericPageFragment {
+        return supportFragmentManager.findFragmentByTag("f" + viewPager.currentItem) as GenericPageFragment
     }
 
     companion object {
@@ -1080,7 +976,7 @@ class LauncherActivity : AppCompatActivity() {
          * String containing pinned apps. Delimited by a semicolon (;).
          */
         private lateinit var pinnedAppString: String
-        
+
         // Constants used for doThis()
         private const val SHOW_PINNED = "show_favourites"
         private const val HIDE_PINNED = "hide_favourites"

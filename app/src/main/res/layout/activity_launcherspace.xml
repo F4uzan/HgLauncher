@@ -35,26 +35,10 @@
             android:background="?attr/backgroundColor"
             android:orientation="vertical">
 
-            <mono.hg.views.IndeterminateMaterialProgressBar
-                android:id="@+id/load_progress"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
-                android:indeterminate="true"
-                android:visibility="visible" />
-
-            <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-                android:id="@+id/apps_list"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/desc_apps_list"
-                android:nextFocusDown="@id/search"
-                android:nextFocusForward="@id/search"
-                android:splitMotionEvents="false"
-                android:clipToPadding="false"
-                app:fastScrollPopupBgColor="@color/fastScrollerHold"
-                app:fastScrollThumbColor="@color/fastScrollerHold"
-                app:fastScrollThumbInactiveColor="@color/fastScrollerIdle"
                 app:layout_anchor="@id/pinned_apps_container"
                 app:layout_behavior=".wrappers.ObservantListBehavior" />
 
