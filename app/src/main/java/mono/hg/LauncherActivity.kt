@@ -47,7 +47,7 @@ import mono.hg.databinding.ActivityLauncherspaceBinding
 import mono.hg.databinding.DialogStartHintBinding
 import mono.hg.fragments.AppListFragment
 import mono.hg.fragments.GenericPageFragment
-import mono.hg.fragments.WidgetsDialogFragment
+import mono.hg.fragments.WidgetListFragment
 import mono.hg.helpers.LauncherIconHelper
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.GestureListener
@@ -198,6 +198,7 @@ class LauncherActivity : AppCompatActivity() {
         // The pager adapter, which provides the pages to the view pager widget.
         val pagerAdapter = PageAdapter(this)
         viewPager.adapter = pagerAdapter
+        viewPager.setCurrentItem(1, false)
 
         // Get icons from icon pack.
         if ("default" != PreferenceHelper.iconPackName &&
@@ -248,8 +249,7 @@ class LauncherActivity : AppCompatActivity() {
                 true
             }
             R.id.action_view_widgets -> {
-                val widgetFragment = WidgetsDialogFragment()
-                widgetFragment.show(supportFragmentManager, "Widgets Dialog")
+                doThis("open_widgets")
                 true
             }
             R.id.update_wallpaper -> {
@@ -425,6 +425,10 @@ class LauncherActivity : AppCompatActivity() {
                             isContextVisible = false
                         }
                     })
+            "open_widgets" -> {
+                viewPager.currentItem = 0
+                doThis(SHOW_PANEL)
+            }
             else -> {
             }
         }
@@ -955,8 +959,14 @@ class LauncherActivity : AppCompatActivity() {
      * TODO: Move this to its own class and further generify for other Pages.
      */
     private inner class PageAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-        override fun getItemCount(): Int = 1
-        override fun createFragment(position: Int): GenericPageFragment = AppListFragment()
+        override fun getItemCount(): Int = 2
+        override fun createFragment(position: Int): GenericPageFragment {
+            return if (position == 0) {
+                WidgetListFragment()
+            } else {
+                AppListFragment()
+            }
+        }
     }
 
     /**

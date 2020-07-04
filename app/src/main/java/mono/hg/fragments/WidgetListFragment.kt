@@ -1,30 +1,32 @@
 package mono.hg.fragments
 
 import android.app.Activity
-import android.app.Dialog
 import android.appwidget.AppWidgetHostView
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.os.Handler
 import android.view.ContextMenu
-import android.view.ContextMenu.ContextMenuInfo
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.DialogFragment
+import androidx.core.widget.NestedScrollView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import mono.hg.R
 import mono.hg.appwidget.LauncherAppWidgetHost
-import mono.hg.databinding.FragmentWidgetsDialogBinding
+import mono.hg.databinding.FragmentWidgetListBinding
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.Utils
 import java.util.*
 
-class WidgetsDialogFragment : DialogFragment() {
+
+class WidgetListFragment : GenericPageFragment() {
     /*
-     * Used to handle and add widgets to widgetContainer.
-     */
+    * Used to handle and add widgets to widgetContainer.
+    */
     private lateinit var appWidgetManager: AppWidgetManager
     private lateinit var appWidgetHost: LauncherAppWidgetHost
     private lateinit var appWidgetContainer: LinearLayout
@@ -39,57 +41,94 @@ class WidgetsDialogFragment : DialogFragment() {
      */
     private var callingView: AppWidgetHostView? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private var binding: FragmentWidgetListBinding? = null
+
+    private var isFavouritesShowing: Boolean = true
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentWidgetListBinding.inflate(inflater, container, false)
+
         appWidgetManager = AppWidgetManager.getInstance(requireContext())
         appWidgetHost = LauncherAppWidgetHost(requireContext(), WIDGET_HOST_ID)
+
+        widgetsList = PreferenceHelper.widgetList()
+        return binding!!.root
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val binding = FragmentWidgetsDialogBinding.inflate(requireActivity().layoutInflater)
-        val builder = AlertDialog.Builder(requireActivity(),
-                R.style.WidgetDialogStyle)
-        widgetsList = PreferenceHelper.widgetList()
-        appWidgetContainer = binding.widgetContainer
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        appWidgetHost.stopListening()
+        PreferenceHelper.updateWidgets(widgetsList)
+
+        binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        var scrollYPosition = 0
+
+        appWidgetContainer = binding!!.widgetContainer
+        val widgetScroller : NestedScrollView = binding!!.widgetScroller
+        val addWidget: FloatingActionButton = binding!!.addWidget
+
+        addWidget.backgroundTintList = ColorStateList.valueOf(PreferenceHelper.accent)
+
         if (widgetsList.isNotEmpty()) {
             PreferenceHelper.widgetList().forEachIndexed { index, widgets ->
                 if (widgets.isNotEmpty()) {
                     val widgetIntent = Intent()
                     widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgets.toInt())
-                    addWidget(widgetIntent, index, false)
+                    // Don't add ALL the widgets at once.
+                    // TODO: Handle this a bit better, because not all devices are made equally.
+                    Handler().postDelayed({
+                        addWidget(widgetIntent, index, false)
+                    }, 275)
                 }
             }
         }
-        builder.setView(binding.root)
-        builder.setTitle(R.string.dialog_title_widgets)
-        builder.setNegativeButton(R.string.dialog_action_close, null)
-        builder.setPositiveButton(R.string.dialog_action_add, null)
-        val widgetDialog = builder.create()
-        if (widgetDialog.window != null) {
-            widgetDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+
+        addWidget.setOnClickListener {
+            val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
+            pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    appWidgetHost.allocateAppWidgetId())
+            startActivityForResult(pickIntent, WIDGET_CONFIG_START_CODE)
         }
-        widgetDialog.setOnShowListener {
-            val button = widgetDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            button.setOnClickListener {
-                val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
-                pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                        appWidgetHost.allocateAppWidgetId())
-                startActivityForResult(pickIntent, WIDGET_CONFIG_START_CODE)
+
+        widgetScroller.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+            val scrollYDelta = scrollY - oldScrollY
+            val bottomDelta: Int = widgetScroller.getChildAt(0).bottom + widgetScroller.paddingBottom - (widgetScroller.height + widgetScroller.scrollY)
+
+            if (bottomDelta == 0) {
+                if (!isFavouritesShowing) {
+                    getLauncherActivity().showPinnedApps()
+                    isFavouritesShowing = true
+                }
+                addWidget.hide()
+                scrollYPosition = 0
+            } else if (scrollYPosition < -48) {
+                if (isFavouritesShowing) {
+                    getLauncherActivity().hidePinnedApps()
+                    isFavouritesShowing = false
+                }
+                addWidget.show()
+                scrollYPosition = 0
+            }
+
+            if (scrollYDelta < 0) {
+                scrollYPosition += scrollYDelta
             }
         }
-        return widgetDialog
     }
 
-    override fun onStop() {
-        super.onStop()
-        appWidgetHost.stopListening()
-        PreferenceHelper.updateWidgets(widgetsList)
+    override fun isAcceptingSearch(): Boolean {
+        return false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
-            val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    WIDGET_CONFIG_DEFAULT_CODE)
+            val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
             val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
             if (requestCode != WIDGET_CONFIG_RETURN_CODE && appWidgetInfo.configure != null) {
                 val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE)
@@ -100,15 +139,14 @@ class WidgetsDialogFragment : DialogFragment() {
                 addWidget(data, widgetsList.size, true)
             }
         } else if (resultCode == Activity.RESULT_CANCELED && data != null) {
-            val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    WIDGET_CONFIG_DEFAULT_CODE)
+            val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
             if (widgetId != WIDGET_CONFIG_DEFAULT_CODE) {
                 appWidgetHost.deleteAppWidgetId(widgetId)
             }
         }
     }
 
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
         // Set the calling view.
         callingView = v as AppWidgetHostView
         val index = appWidgetContainer.indexOfChild(v)
@@ -123,20 +161,21 @@ class WidgetsDialogFragment : DialogFragment() {
         // Generate menu.
         // TODO: Maybe a more robust and automated way can be done for this.
         menu.clear()
-        menu.add(1, 0, 100, getString(R.string.action_remove_widget))
-        menu.add(1, 1, 100, getString(R.string.action_up_widget))
-        menu.add(1, 2, 100, getString(R.string.action_down_widget))
+        menu.add(1, 0, 100, getString(R.string.dialog_action_add))
+        menu.add(1, 1, 100, getString(R.string.action_remove_widget))
+        menu.add(1, 2, 100, getString(R.string.action_up_widget))
+        menu.add(1, 3, 100, getString(R.string.action_down_widget))
         menu.getItem(0).setOnMenuItemClickListener(listener)
 
         // Move actions should only be added when there is more than one widget.
-        menu.getItem(1).isVisible = appWidgetContainer.childCount > 1 && index > 0
-        menu.getItem(2).isVisible = appWidgetContainer.childCount != index + 1
+        menu.getItem(2).isVisible = appWidgetContainer.childCount > 1 && index > 0
+        menu.getItem(3).isVisible = appWidgetContainer.childCount != index + 1
         if (appWidgetContainer.childCount > 1) {
             if (index > 0) {
-                menu.getItem(1).setOnMenuItemClickListener(listener)
+                menu.getItem(2).setOnMenuItemClickListener(listener)
             }
             if (index + 1 != appWidgetContainer.childCount) {
-                menu.getItem(2).setOnMenuItemClickListener(listener)
+                menu.getItem(3).setOnMenuItemClickListener(listener)
             }
         }
     }
@@ -145,14 +184,21 @@ class WidgetsDialogFragment : DialogFragment() {
         val index = appWidgetContainer.indexOfChild(callingView)
         return when (item.itemId) {
             0 -> {
-                callingView?.let { removeWidget(it, callingView!!.appWidgetId) }
+                val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
+                pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                        appWidgetHost.allocateAppWidgetId())
+                startActivityForResult(pickIntent, WIDGET_CONFIG_START_CODE)
                 true
             }
             1 -> {
-                swapWidget(index, index - 1)
+                callingView?.let { removeWidget(it, callingView!!.appWidgetId) }
                 true
             }
             2 -> {
+                swapWidget(index, index - 1)
+                true
+            }
+            3 -> {
                 swapWidget(index, index + 1)
                 true
             }
@@ -166,8 +212,7 @@ class WidgetsDialogFragment : DialogFragment() {
      * @param data Intent used to receive the ID of the widget being added.
      */
     private fun addWidget(data: Intent, index: Int, newWidget: Boolean) {
-        val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                WIDGET_CONFIG_DEFAULT_CODE)
+        val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
         val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
         val appWidgetHostView = appWidgetHost.createView(
                 requireActivity().applicationContext,
@@ -186,7 +231,7 @@ class WidgetsDialogFragment : DialogFragment() {
                         appWidgetInfo.minHeight, appWidgetInfo.minWidth, appWidgetInfo.minHeight)
             }
 
-            // Remove existing widget if any and then add the new widget.
+            // Add the widget.
             appWidgetContainer.addView(appWidgetHostView, index)
 
             // Immediately listens for the widget.

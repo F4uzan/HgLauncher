@@ -18,7 +18,6 @@ import androidx.annotation.IntDef
 import androidx.appcompat.app.AppCompatActivity
 import mono.hg.LauncherActivity
 import mono.hg.R
-import mono.hg.fragments.WidgetsDialogFragment
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.WebSearchProvider
 import mono.hg.receivers.PackageChangesReceiver
@@ -35,7 +34,7 @@ object Utils {
      * send errors. Defaults to debug message when the level is invalid.
      * @param message The message to send to logcat.
      */
-    fun sendLog(level: Int, message: String?) {
+    fun sendLog(level: Int, message: String) {
         val tag = "HgLogger"
         when (level) {
             LogLevel.DEBUG -> Log.d(tag, message)
@@ -211,10 +210,7 @@ object Utils {
                 handlerIntent.putExtra("direction", direction)
                 activity.startActivity(handlerIntent)
             }
-            "widget" -> {
-                val widgetFragment = WidgetsDialogFragment()
-                widgetFragment.show(activity.supportFragmentManager, "Widgets Dialog")
-            }
+            "widget" -> (activity as LauncherActivity).doThis("open_widgets") // TODO: Definitely make this less reliant on LauncherActivity.
             "status" -> ActivityServiceUtils.expandStatusBar(activity)
             "panel" -> ActivityServiceUtils.expandSettingsPanel(activity)
             "list" -> (activity as LauncherActivity).doThis("show_panel") // TODO: Maybe make this call less reliant on LauncherActivity?
