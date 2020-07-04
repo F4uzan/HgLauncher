@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+def dateVersionCode = (int) (((new Date().getTime() / 1000) - 1593866693) / 10)
+
 android {
     compileSdkVersion 29
     buildToolsVersion "30.0.0"
@@ -8,8 +10,8 @@ android {
         applicationId "mono.hg"
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 30
-        versionName "1.4.2.3"
+        versionCode dateVersionCode
+        versionName "1.4.3-rc1"
         vectorDrawables.useSupportLibrary = true
         buildFeatures {
             viewBinding = true
@@ -48,6 +50,10 @@ android {
 dependencies {
     testImplementation 'junit:junit:4.12'
 
+    // Kotlin libraries
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
     // Android support libraries.
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha04'
@@ -61,8 +67,6 @@ dependencies {
     implementation 'eu.davidea:flexible-adapter:5.1.0'
     implementation 'com.jaredrummler:colorpicker:1.1.0'
     implementation project(':slidinguppanel:library')
-    implementation "androidx.core:core-ktx:+"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 repositories {
