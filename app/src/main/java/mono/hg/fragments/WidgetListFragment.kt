@@ -88,7 +88,7 @@ class WidgetListFragment : GenericPageFragment() {
                     // TODO: Handle this a bit better, because not all devices are made equally.
                     Handler().postDelayed({
                         addWidget(widgetIntent, index, false)
-                    }, 275)
+                    }, 300)
                 }
             }
         }
