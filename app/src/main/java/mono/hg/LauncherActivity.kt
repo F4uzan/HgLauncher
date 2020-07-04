@@ -291,8 +291,6 @@ class LauncherActivity : AppCompatActivity() {
             doThis(HIDE_PANEL)
         }
 
-        panelLockRequested = false
-
         Utils.unregisterPackageReceiver(this, packageReceiver)
     }
 
@@ -325,6 +323,8 @@ class LauncherActivity : AppCompatActivity() {
 
         // Toggle back the refresh switch.
         PreferenceHelper.update("require_refresh", false)
+
+        panelLockRequested = false
 
         isResuming = true
     }
