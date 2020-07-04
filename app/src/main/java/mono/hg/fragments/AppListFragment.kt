@@ -59,7 +59,7 @@ class AppListFragment : GenericPageFragment() {
     /*
      * Progress bar shown when populating app list.
      */
-    private var loadProgress: IndeterminateMaterialProgressBar? = null
+    private lateinit var loadProgress: IndeterminateMaterialProgressBar
 
     /*
     * List of excluded apps. These will not be shown in the app list.
@@ -156,8 +156,8 @@ class AppListFragment : GenericPageFragment() {
 
         appsAdapter.addListener(FlexibleAdapter.OnUpdateListener { size ->
             if (size > 0 && !appsAdapter.isEmpty) {
-                loadProgress!!.visibility = View.GONE
-                loadProgress!!.invalidate()
+                loadProgress.visibility = View.GONE
+                loadProgress.invalidate()
             }
         })
 
