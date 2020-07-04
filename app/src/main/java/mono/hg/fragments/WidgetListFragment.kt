@@ -58,7 +58,11 @@ class WidgetListFragment : GenericPageFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        appWidgetHost.stopListening()
+        // Workaround to prevent widgets from being stuck (not updating).
+        // https://github.com/Neamar/KISS/commit/3d5410307b8a8dc29b1fdc48d9f7c6ea1864dcd6
+        if (Utils.atLeastOreo()) {
+            appWidgetHost.stopListening()
+        }
         PreferenceHelper.updateWidgets(widgetsList)
 
         binding = null
