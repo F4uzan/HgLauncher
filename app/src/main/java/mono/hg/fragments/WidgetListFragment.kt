@@ -218,6 +218,11 @@ class WidgetListFragment : GenericPageFragment() {
      * @param data Intent used to receive the ID of the widget being added.
      */
     private fun addWidget(data: Intent, index: Int, newWidget: Boolean) {
+        if (!isAdded || activity == null) {
+            // Nope. Not doing anything.
+            return
+        }
+
         val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
         val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
         val appWidgetHostView = appWidgetHost.createView(
