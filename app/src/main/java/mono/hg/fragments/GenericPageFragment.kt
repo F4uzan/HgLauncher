@@ -41,6 +41,15 @@ open class GenericPageFragment : Fragment() {
     }
 
     /**
+     * A setter to allow a Page's items to be searched.
+     *
+     * @param search Does this Page accepts search queries?
+     */
+    fun acceptsSearch(search: Boolean) {
+        this.acceptsSearch = search
+    }
+
+    /**
      * When searching, the keyboard 'Search'/'Enter' button
      * has the capability to launch the most relevant result
      * from a Page. If a Page can serve this result, then
@@ -52,14 +61,5 @@ open class GenericPageFragment : Fragment() {
      */
     open fun launchPreselection(): Boolean {
         return false
-    }
-
-    /**
-     * A setter to allow a Page's items to be searched.
-     *
-     * @param search Does this Page accepts search queries?
-     */
-    fun acceptsSearch(search: Boolean) {
-        this.acceptsSearch = search
     }
 }

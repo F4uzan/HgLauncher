@@ -86,6 +86,11 @@ class LauncherActivity : AppCompatActivity() {
     private var isContextVisible = false
 
     /*
+     * Whether a Page has requested a panel lock.
+     */
+    private var panelLockRequested = true
+
+    /*
      * Animation duration; fetched from system's duration.
      */
     private var animateDuration = 0
@@ -146,6 +151,9 @@ class LauncherActivity : AppCompatActivity() {
      */
     private var appMenu: PopupMenu? = null
 
+    /*
+     * ViewPager used to handle Pages.
+     */
     private lateinit var viewPager: ViewPager2
 
     /*
@@ -273,15 +281,18 @@ class LauncherActivity : AppCompatActivity() {
 
         // Dismiss any visible menu as well as the app panel when it is not needed.
         doThis(CLOSE_MENU)
-        if (! PreferenceHelper.keepAppList()) {
-            doThis(HIDE_PANEL)
-        } else {
+        if (panelLockRequested || PreferenceHelper.keepAppList()) {
             // Clear the search bar text if app list is set to be kept open
             // unless keepLastSearch setting indicates maintain last search
             if (! PreferenceHelper.keepLastSearch()) {
                 clearSearch(searchBar)
             }
+        } else {
+            doThis(HIDE_PANEL)
         }
+
+        panelLockRequested = false
+
         Utils.unregisterPackageReceiver(this, packageReceiver)
     }
 
@@ -314,6 +325,7 @@ class LauncherActivity : AppCompatActivity() {
 
         // Toggle back the refresh switch.
         PreferenceHelper.update("require_refresh", false)
+
         isResuming = true
     }
 
@@ -938,6 +950,14 @@ class LauncherActivity : AppCompatActivity() {
                 && PreferenceHelper.favouritesAcceptScroll()) {
             doThis(SHOW_PINNED)
         }
+    }
+
+    /**
+     * Locks the panel, preventing it from being pulled up when pausing the launcher.
+     * The lock is released upon the second pause.
+     */
+    fun requestPanelLock() {
+        panelLockRequested = true
     }
 
     private fun showStartDialog() {

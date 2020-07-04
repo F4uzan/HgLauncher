@@ -90,6 +90,9 @@ class WidgetListFragment : GenericPageFragment() {
         }
 
         addWidget.setOnClickListener {
+            // Don't pull the panel just yet.
+            getLauncherActivity().requestPanelLock()
+
             val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
             pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     appWidgetHost.allocateAppWidgetId())
@@ -184,6 +187,9 @@ class WidgetListFragment : GenericPageFragment() {
         val index = appWidgetContainer.indexOfChild(callingView)
         return when (item.itemId) {
             0 -> {
+                // Don't pull the panel just yet.
+                getLauncherActivity().requestPanelLock()
+
                 val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
                 pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                         appWidgetHost.allocateAppWidgetId())
