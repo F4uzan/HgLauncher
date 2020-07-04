@@ -998,7 +998,6 @@ class LauncherActivity : AppCompatActivity() {
      */
     private fun getCurrentPage(): GenericPageFragment? {
         return supportFragmentManager.findFragmentByTag("f" + viewPager.currentItem) as GenericPageFragment?
-                ?: null
     }
 
     companion object {
