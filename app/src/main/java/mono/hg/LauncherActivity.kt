@@ -650,15 +650,19 @@ class LauncherActivity : AppCompatActivity() {
                     if (isContextVisible) {
                         doThis("hide_context_button")
                     }
-                    if (getCurrentPage().isAcceptingSearch()) {
-                        getCurrentPage().resetSearch()
+                    if (getCurrentPage() != null) {
+                        if (getCurrentPage()!!.isAcceptingSearch()) {
+                            getCurrentPage()?.resetSearch()
+                        }
                     }
                     searchSnack.dismiss()
                     stopTimer()
                 } else {
                     // Begin filtering our list.
-                    if (getCurrentPage().isAcceptingSearch()) {
-                        getCurrentPage().commitSearch(trimmedInputText)
+                    if (getCurrentPage() != null) {
+                        if (getCurrentPage()!!.isAcceptingSearch()) {
+                            getCurrentPage()?.commitSearch(trimmedInputText)
+                        }
                     }
                 }
             }
@@ -721,9 +725,8 @@ class LauncherActivity : AppCompatActivity() {
         searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (searchBar.text.isNotEmpty()
                     && (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
-                if (! getCurrentPage().launchPreselection()
-                        && PreferenceHelper.promptSearch()
-                        && PreferenceHelper.searchProvider != "none") {
+                val pageAvailable = getCurrentPage()?.launchPreselection() ?: false
+                if (!pageAvailable && PreferenceHelper.promptSearch() && PreferenceHelper.searchProvider != "none") {
                     Utils.doWebSearch(this@LauncherActivity,
                             PreferenceHelper.searchProvider,
                             searchBar.text.toString())
@@ -993,8 +996,9 @@ class LauncherActivity : AppCompatActivity() {
      * Helper function to retrieve currently-viewed Page.
      * Uses a hack available in ViewPager2 fragment tagging.
      */
-    private fun getCurrentPage(): GenericPageFragment {
-        return supportFragmentManager.findFragmentByTag("f" + viewPager.currentItem) as GenericPageFragment
+    private fun getCurrentPage(): GenericPageFragment? {
+        return supportFragmentManager.findFragmentByTag("f" + viewPager.currentItem) as GenericPageFragment?
+                ?: null
     }
 
     companion object {
