@@ -110,16 +110,16 @@ class WidgetListFragment : GenericPageFragment() {
             if (bottomDelta == 0) {
                 if (!isFavouritesShowing) {
                     getLauncherActivity().showPinnedApps()
+                    addWidget.hide()
                     isFavouritesShowing = true
                 }
-                addWidget.hide()
                 scrollYPosition = 0
             } else if (scrollYPosition < -48) {
                 if (isFavouritesShowing) {
                     getLauncherActivity().hidePinnedApps()
+                    addWidget.show()
                     isFavouritesShowing = false
                 }
-                addWidget.show()
                 scrollYPosition = 0
             }
 
