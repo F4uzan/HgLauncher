@@ -21,7 +21,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.*
 
-/*
+/**
  * A class used to handle icon packs.
  * The implementation is based off of rickeythefox's code @ StackOverflow
  * (https://stackoverflow.com/questions/24937890/using-icon-packs-in-my-app)

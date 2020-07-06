@@ -16,7 +16,6 @@ import kotlin.math.abs
  * Based on GestureListener originally written by Edward Brey at StackOverflow,
  * (https://stackoverflow.com/a/19506010)
  *
- *
  * Modified to add swipe up, swipe down, single tap, and long press events.
  */
 open class GestureListener protected constructor(context: Context?) : OnTouchListener {

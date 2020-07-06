@@ -11,6 +11,12 @@ import mono.hg.models.WebSearchProvider
 import mono.hg.utils.Utils
 import java.util.*
 
+/**
+ * The class that performs CRUD towards preferences.
+ *
+ * It is preferable that any call to PreferenceManager and SharedPreferences
+ * are directed here to unify and simplify their calls.
+ */
 object PreferenceHelper {
     var orientation = 0
         private set

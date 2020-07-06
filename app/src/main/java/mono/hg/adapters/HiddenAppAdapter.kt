@@ -11,6 +11,9 @@ import mono.hg.R
 import mono.hg.models.App
 import java.util.*
 
+/**
+ * Adapter handling display of hidden apps. Only used in preferences.
+ */
 class HiddenAppAdapter(private val hiddenAppsList: ArrayList<App>, private val context: Context) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val appHolder: ViewHolder

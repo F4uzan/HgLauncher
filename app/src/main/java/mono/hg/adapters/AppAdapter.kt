@@ -9,6 +9,10 @@ import mono.hg.models.App
 import mono.hg.utils.Utils
 import java.util.*
 
+/**
+ * Adapter used to handle generic list of apps.
+ * Implements [SectionedAdapter] allowing fast-scroll seeking with sections.
+ */
 class AppAdapter(apps: List<App?>?) : FlexibleAdapter<App?>(apps), SectionedAdapter {
     private var mSelectedItem = 0
     private lateinit var adapterRecyclerView: RecyclerView

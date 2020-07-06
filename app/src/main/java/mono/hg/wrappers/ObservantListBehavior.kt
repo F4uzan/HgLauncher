@@ -8,10 +8,17 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar.SnackbarLayout
 import kotlin.math.roundToInt
 
+/**
+ * CoordinatorLayout.Behavior that pushes the view upwards from its anchor.
+ */
 @Keep
 class ObservantListBehavior : CoordinatorLayout.Behavior<View> {
-    constructor() : super() {}
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {}
+    constructor() : super() {
+        // Left empty. Used for XML initialisation.
+    }
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+        // Left empty. Used for XML initialisation.
+    }
 
     override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
         return dependency is SnackbarLayout

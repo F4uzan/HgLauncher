@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
  */
 abstract class BackHandledFragment : Fragment() {
     private var backHandlerInterface: BackHandlerInterface? = null
+
     abstract fun onBackPressed(): Boolean
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         backHandlerInterface = if (activity !is BackHandlerInterface) {
@@ -26,7 +28,15 @@ abstract class BackHandledFragment : Fragment() {
         backHandlerInterface!!.setSelectedFragment(this)
     }
 
+    /**
+     * The interface used to intercept back button press events on a selected fragment.
+     */
     interface BackHandlerInterface {
+        /**
+         * Set a fragment to be the main focus (selected) fragment.
+         *
+         * @param backHandledFragment The fragment itself. Must implement [BackHandlerInterface].
+         */
         fun setSelectedFragment(backHandledFragment: BackHandledFragment?)
     }
 }

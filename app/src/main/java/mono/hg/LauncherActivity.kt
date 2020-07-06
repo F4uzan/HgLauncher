@@ -64,6 +64,11 @@ import mono.hg.wrappers.TextSpectator
 import java.net.URLEncoder
 import java.util.*
 
+/**
+ * The launcher itself.
+ *
+ * Contains all the very things seen when the user starts and interacts with the launcher.
+ */
 class LauncherActivity : AppCompatActivity() {
     /*
      * Binding for this activity.

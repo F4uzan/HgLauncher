@@ -1,5 +1,8 @@
 package mono.hg.models
 
+/**
+ * A class holding information for web search engine providers.
+ */
 class WebSearchProvider {
     var url: String?
         private set

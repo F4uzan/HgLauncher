@@ -15,6 +15,9 @@ import mono.hg.R
 import mono.hg.utils.Utils.LogLevel
 import java.lang.reflect.Method
 
+/**
+ * Utils class that handles calls to SystemService.
+ */
 object ActivityServiceUtils {
     /**
      * Hides the software keyboard.

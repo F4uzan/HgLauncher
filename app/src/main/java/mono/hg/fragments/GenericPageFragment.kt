@@ -3,8 +3,18 @@ package mono.hg.fragments
 import androidx.fragment.app.Fragment
 import mono.hg.LauncherActivity
 
+/**
+ * A Fragment class that is specifically used to host Pages.
+ * Pages must extend from this class, as LauncherActivity expects proper call to handle searches.
+ */
 open class GenericPageFragment : Fragment() {
     private var acceptsSearch: Boolean = false
+
+    /**
+     * Returns the attached LauncherActivity.
+     *
+     * @return LauncherActivity The attached LauncherActivity.
+     */
     fun getLauncherActivity(): LauncherActivity {
         return requireActivity() as LauncherActivity
     }

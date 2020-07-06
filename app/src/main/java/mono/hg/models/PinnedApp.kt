@@ -7,6 +7,10 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import mono.hg.R
 import mono.hg.utils.AppUtils
 
+/**
+ * An extension of the [App] class that doesn't extracts app name.
+ * This class is used in the favourites panel.
+ */
 class PinnedApp : App {
     constructor(icon: Drawable?, packageName: String, user: Long) : super(null, packageName, false, user) {
         this.icon = icon

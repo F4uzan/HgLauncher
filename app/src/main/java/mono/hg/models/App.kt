@@ -13,6 +13,12 @@ import mono.hg.R
 import mono.hg.helpers.KissFuzzySearch
 import mono.hg.helpers.PreferenceHelper
 
+/**
+ * The app object. Holds information such as package name, shorthands, icons, and visibility state.
+ * Implements [IFilterable] to allow searching in the app list.
+ *
+ * This class is also extended [PinnedApp].
+ */
 open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     private var HINT_MATCH_SCORE = 30
     private var NAME_MATCH_SCORE = 25
@@ -42,14 +48,6 @@ open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
 
     private fun hasHintName(): Boolean {
         return hintName != null
-    }
-
-    fun setHintMatchScore(newScore: Int) {
-        HINT_MATCH_SCORE = newScore
-    }
-
-    fun setNameMatchScore(newScore: Int) {
-        NAME_MATCH_SCORE = newScore
     }
 
     override fun equals(other: Any?): Boolean {

@@ -17,6 +17,11 @@ import mono.hg.utils.ViewUtils
 import mono.hg.wrappers.BackHandledFragment
 import mono.hg.wrappers.BackHandledFragment.BackHandlerInterface
 
+/**
+ * Activity hosting all of preference fragments.
+ *
+ * This activity can be called through 'Additional setting' in the System settings as well.
+ */
 class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     private var selectedFragment: BackHandledFragment? = null
     private var fragmentTitle: CharSequence? = null
@@ -121,8 +126,10 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
         }
     }
 
-    // Called when the activity needs to be restarted (i.e when a theme change occurs).
-    // Allows for smooth transition between recreation.
+    /**
+     * Called when the activity needs to be restarted (i.e when a theme change occurs).
+     * Allows for smooth transition between recreation.
+     */
     fun restartActivity() {
         val intent = intent
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)

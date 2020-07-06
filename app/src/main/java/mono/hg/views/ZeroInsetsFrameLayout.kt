@@ -7,15 +7,23 @@ import android.util.AttributeSet
 import android.view.WindowInsets
 import android.widget.FrameLayout
 
-/*
+/**
+ * FrameLayout workaround for transparency issue in Android 4.4 and above.
+ *
  * Huge thanks and credits to Hogun (https://stackoverflow.com/a/41448403) for the class.
  */
 class ZeroInsetsFrameLayout : FrameLayout {
-    val insets = IntArray(4)
+    private val insets = IntArray(4)
 
-    constructor(context: Context?) : super(context!!) {}
-    constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs) {}
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context!!, attrs, defStyle) {}
+    constructor(context: Context?) : super(context!!) {
+        // Unused. Used only in XML initialisation.
+    }
+    constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs) {
+        // Unused. Used only in XML initialisation.
+    }
+    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context!!, attrs, defStyle) {
+        // Unused. Used only in XML initialisation.
+    }
 
     override fun computeSystemWindowInsets(`in`: WindowInsets, outLocalInsets: Rect): WindowInsets {
         outLocalInsets.left = 0

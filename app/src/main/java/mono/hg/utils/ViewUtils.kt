@@ -15,7 +15,12 @@ import mono.hg.R
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.App
 
-object ViewUtils {// Return fallback size if we can't get the value from the system.
+/**
+ * Utils class handling transformation of views relating to the launcher.
+ *
+ * Generally, most misc. view-handling is also stored here.
+ */
+object ViewUtils {
     /**
      * Fetch statusbar height from system's dimension.
      *

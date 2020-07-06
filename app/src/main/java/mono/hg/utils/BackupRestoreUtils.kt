@@ -15,6 +15,9 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.lang.ref.WeakReference
 
+/**
+ * Utils class that handles both backup and restore.
+ */
 object BackupRestoreUtils {
     /**
      * Saves preferences to a local file.

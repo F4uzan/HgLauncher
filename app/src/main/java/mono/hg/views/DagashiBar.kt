@@ -37,7 +37,6 @@ import mono.hg.R
 /**
  * DagashiBar is a Snackbar clone tailored for use in HgLauncher.
  *
- *
  * Due to Snackbar being entirely limited, no class can extend from it.
  * DagashiBar is based off of (read: copied from) Google's Snackbar code.
  */

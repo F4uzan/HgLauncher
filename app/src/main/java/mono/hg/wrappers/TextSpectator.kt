@@ -78,14 +78,23 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
         // Overridden when necessary.
     }
 
+    /**
+     * A syntactic sugar for beforeTextChanged().
+     */
     fun beforeChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         // Overridden when necessary.
     }
 
+    /**
+     * A syntactic sugar for onTextChanged().
+     */
     open fun whenChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         // Overridden when necessary.
     }
 
+    /**
+     * A syntactic sugar for afterTextChanged().
+     */
     open fun afterChanged(s: Editable?) {
         // Overridden when necessary.
     }

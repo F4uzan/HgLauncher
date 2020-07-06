@@ -20,6 +20,10 @@ import android.content.Context
 import android.view.MotionEvent
 import android.view.ViewGroup
 
+/**
+ * Modification of the [AppWidgetHostView] class that allows intercepting touch events
+ * to gather long press and other touch events.
+ */
 class LauncherAppWidgetHostView(context: Context?) : AppWidgetHostView(context) {
     private var longClickListener: OnLongClickListener? = null
     private var downTime: Long = 0

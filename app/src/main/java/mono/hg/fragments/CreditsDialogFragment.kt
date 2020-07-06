@@ -14,6 +14,9 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
+/**
+ * A DialogFragment that reads from assets/credits.txt, returning its content to a TextView.
+ */
 class CreditsDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val binding = FragmentCreditsDialogBinding.inflate(activity.layoutInflater)

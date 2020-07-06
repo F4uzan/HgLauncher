@@ -10,6 +10,9 @@ import mono.hg.R
 import mono.hg.models.FileFolder
 import java.util.*
 
+/**
+ * Adapter used to handle displaying over files and folders.
+ */
 class FileFolderAdapter(private val filesList: ArrayList<FileFolder>, private val context: Context) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val holder: ViewHolder

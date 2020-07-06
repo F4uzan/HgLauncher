@@ -20,6 +20,9 @@ import java.util.*
 import kotlin.Comparator
 import kotlin.collections.ArrayList
 
+/**
+ * A Fragment that displays both backup and restore options.
+ */
 class BackupRestoreFragment : BackHandledFragment() {
     private var binding: FragmentBackupRestoreBinding? = null
     private val fileFoldersList = ArrayList<FileFolder>()

@@ -40,6 +40,10 @@ import mono.hg.views.TogglingLinearLayoutManager
 import mono.hg.wrappers.ItemOffsetDecoration
 import java.util.*
 
+/**
+ * Page displaying an app list.
+ * This is the generic implementation of an app list that handles the required features.
+ */
 class AppListFragment : GenericPageFragment() {
     /*
      * List containing installed apps.

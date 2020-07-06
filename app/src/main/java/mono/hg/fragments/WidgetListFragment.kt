@@ -22,7 +22,10 @@ import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.Utils
 import java.util.*
 
-
+/**
+ * Page displaying a widget list.
+ * This is the generic implementation of a widget list that also handles its scrolling events.
+ */
 class WidgetListFragment : GenericPageFragment() {
     /*
     * Used to handle and add widgets to widgetContainer.

@@ -5,6 +5,11 @@ import android.content.Context
 import android.content.Intent
 import mono.hg.LauncherActivity
 
+/**
+ * A receiver called when the launcher receives any changes in packages (apps).
+ *
+ * This receiver is only used in LauncherActivity, and it is not called when the launcher is paused.
+ */
 class PackageChangesReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != null && intent.data != null) {

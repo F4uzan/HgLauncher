@@ -26,6 +26,9 @@ import mono.hg.utils.Utils.LogLevel
 import mono.hg.wrappers.DisplayNameComparator
 import java.util.*
 
+/**
+ * Utils class that handles operations related to applications and the app list.
+ */
 object AppUtils {
     /**
      * Checks if a certain application is installed, regardless of their launch intent.

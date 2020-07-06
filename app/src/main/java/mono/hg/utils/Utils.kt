@@ -25,6 +25,9 @@ import java.io.Closeable
 import java.io.IOException
 import java.util.*
 
+/**
+ * A misc. utils class for other various helpers and utilities functions.
+ */
 object Utils {
     /**
      * Sends log using a predefined tag. This is used to better debug or to catch errors.
