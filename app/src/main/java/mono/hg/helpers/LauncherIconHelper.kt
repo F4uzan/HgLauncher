@@ -11,6 +11,7 @@ import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.UserManager
+import androidx.core.content.res.ResourcesCompat
 import mono.hg.utils.AppUtils
 import mono.hg.utils.Utils
 import mono.hg.utils.Utils.LogLevel
@@ -57,28 +58,18 @@ object LauncherIconHelper {
             if (PreferenceHelper.appTheme() == "light" && PreferenceHelper.shadeAdaptiveIcon()
                     && (Utils.atLeastOreo()
                             && icon is AdaptiveIconDrawable)) {
-                icon = drawAdaptiveShadow(icon)
+                icon = drawAdaptiveShadow(activity.resources, icon)
             }
         }
         return icon
     }
 
-    /**
-     * Draws a shadow below a drawable.
-     *
-     * @param icon Foreground layer to which the shadows will be drawn.
-     *
-     * @return BitmapDrawable masked with shadow.
-     */
-    private fun drawAdaptiveShadow(icon: Drawable): BitmapDrawable {
-        return BitmapDrawable(
-                addShadow(icon, icon.intrinsicHeight, icon.intrinsicWidth,
-                        Color.LTGRAY, 4, 1f, 3f))
+    private fun drawAdaptiveShadow(resources: Resources, icon: Drawable): BitmapDrawable {
+        return BitmapDrawable(resources, addShadow(icon, icon.intrinsicHeight, icon.intrinsicWidth, 4, 1f, 3f))
     }
 
     /**
      * Adds a shadow to a Bitmap.
-     *
      *
      * TODO: Make this return Drawable for our use case.
      *
@@ -86,7 +77,6 @@ object LauncherIconHelper {
      * of the shadow.
      * @param dstHeight Height of the returned bitmap.
      * @param dstWidth  Width of the returned bitmap.
-     * @param color     Colour of the drawn shadow.
      * @param size      Size of the drawn shadow.
      * @param dx        Shadow x direction.
      * @param dy        Shadow y direction.
@@ -95,7 +85,7 @@ object LauncherIconHelper {
      *
      * @author schwiz (https://stackoverflow.com/a/24579764)
      */
-    private fun addShadow(drawable: Drawable, dstHeight: Int, dstWidth: Int, color: Int, size: Int, dx: Float, dy: Float): Bitmap {
+    private fun addShadow(drawable: Drawable, dstHeight: Int, dstWidth: Int, size: Int, dx: Float, dy: Float): Bitmap {
         val bm = Bitmap.createBitmap(drawable.intrinsicWidth,
                 drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bm)
@@ -116,7 +106,7 @@ object LauncherIconHelper {
         val filter = BlurMaskFilter(size.toFloat(), BlurMaskFilter.Blur.SOLID)
         paint.reset()
         paint.isAntiAlias = true
-        paint.color = color
+        paint.color = Color.LTGRAY
         paint.maskFilter = filter
         paint.isFilterBitmap = true
         val ret = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888)
@@ -135,9 +125,9 @@ object LauncherIconHelper {
      */
     fun loadIconPack(packageManager: PackageManager): Int {
         var iconFilterXml: XmlPullParser? = null
-        var iconRes: Resources = try {
+        val iconRes: Resources = try {
             if ("default" != iconPackageName) {
-                packageManager.getResourcesForApplication(iconPackageName)
+                packageManager.getResourcesForApplication(iconPackageName!!)
             } else {
                 // Return with a success because there's nothing to fetch.
                 return 1
@@ -152,8 +142,7 @@ object LauncherIconHelper {
         // Get appfilter from the icon pack.
         try {
             val iconAsset: InputStream
-            var appFilterXml = 0
-            appFilterXml = iconRes.getIdentifier("appfilter", "xml", iconPackageName)
+            val appFilterXml: Int = iconRes.getIdentifier("appfilter", "xml", iconPackageName)
             if (appFilterXml > 0) {
                 iconFilterXml = iconRes.getXml(appFilterXml)
             } else {
@@ -213,7 +202,7 @@ object LauncherIconHelper {
     private fun loadDrawable(resources: Resources, drawableName: String, iconPackageName: String?): Drawable? {
         val icon = resources.getIdentifier(drawableName, "drawable", iconPackageName)
         return if (icon > 0) {
-            resources.getDrawable(icon)
+            ResourcesCompat.getDrawable(resources, icon, null)
         } else null
     }
 
@@ -232,27 +221,23 @@ object LauncherIconHelper {
         var iconRes: Resources? = null
         var defaultIcon: Drawable? = null
         try {
-            if (Utils.atLeastLollipop()) {
-                val launcher = activity.getSystemService(
-                        Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-                val userManager = activity.getSystemService(
-                        Context.USER_SERVICE) as UserManager
-                if (userManager != null && launcher != null) {
-                    defaultIcon = launcher.getActivityList(AppUtils.getPackageName(appPackageName),
-                            userManager.getUserForSerialNumber(user))[0].getBadgedIcon(0)
-                }
+            defaultIcon = if (Utils.atLeastLollipop()) {
+                val launcher = activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+                val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
+                launcher.getActivityList(AppUtils.getPackageName(appPackageName),
+                        userManager.getUserForSerialNumber(user))[0].getBadgedIcon(0)
             } else {
-                defaultIcon = packageManager.getActivityIcon(
-                        ComponentName.unflattenFromString(appPackageName))
+                packageManager.getActivityIcon(ComponentName.unflattenFromString(appPackageName))
             }
             iconRes = if ("default" != iconPackageName) {
-                packageManager.getResourcesForApplication(iconPackageName)
+                packageManager.getResourcesForApplication(iconPackageName!!)
             } else {
                 return defaultIcon
             }
         } catch (e: PackageManager.NameNotFoundException) {
             Utils.sendLog(LogLevel.ERROR, e.toString())
         }
+
         val drawable = mPackagesDrawables[componentName]
         return if (drawable != null && iconRes != null) {
             loadDrawable(iconRes, drawable, iconPackageName)
