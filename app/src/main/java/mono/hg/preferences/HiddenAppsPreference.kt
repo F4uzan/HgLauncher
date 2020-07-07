@@ -15,6 +15,9 @@ import mono.hg.models.App
 import mono.hg.utils.AppUtils
 import java.util.*
 
+/**
+ * Preferences for the hidden apps list.
+ */
 @Keep
 class HiddenAppsPreference : PreferenceFragmentCompat() {
     private var binding: FragmentHiddenAppsBinding? = null

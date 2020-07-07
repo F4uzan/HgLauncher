@@ -52,7 +52,7 @@ object BackupRestoreUtils {
      *
      * @param uri The Uri representing the file itself.
      */
-    private fun restoreBackup(context: Context, uri: Uri) {
+    fun restoreBackup(context: Context, uri: Uri) {
         var input: ObjectInputStream? = null
         try {
             input = ObjectInputStream(context.contentResolver.openInputStream(uri))
@@ -93,6 +93,10 @@ object BackupRestoreUtils {
         }
     }
 
+    /**
+     * An AsyncTask tied to [SettingsActivity], used to read a backup file (.xml)
+     * and attempts to restore it.
+     */
     class RestoreBackupTask(activity: SettingsActivity, path: String?) : AsyncTask<Void?, Void?, Void?>() {
         private val fragmentRef: WeakReference<SettingsActivity> = WeakReference(activity)
         private val uri: Uri = Uri.parse(path)

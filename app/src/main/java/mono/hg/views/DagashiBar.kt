@@ -133,6 +133,12 @@ open class DagashiBar private constructor(
         return this
     }
 
+    /**
+     * Set the long press action that is called when the user taps on the main action
+     * of this [BaseTransientBottomBar]
+     *
+     * @param listener callback to be invoked when the action is clicked
+     */
     @SuppressLint("RestrictedApi")
     fun setLongPressAction(listener: OnLongClickListener) {
         val contentLayout = view.getChildAt(0) as SnackbarContentLayout
@@ -159,10 +165,14 @@ open class DagashiBar private constructor(
         return if (hasAction && accessibilityManager.isTouchExplorationEnabled) BaseTransientBottomBar.LENGTH_INDEFINITE else super.getDuration()
     }
 
+    /**
+     * The duration length constants, see [DagashiBar.Companion] for the constant values.
+     */
     @IntDef(LENGTH_INDEFINITE, LENGTH_SHORT, LENGTH_LONG)
     @IntRange(from = 1)
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     annotation class Duration
+
     companion object {
         /**
          * Show the DagashiBar indefinitely.
@@ -188,6 +198,7 @@ open class DagashiBar private constructor(
          * @param duration  How long to display the message. Can be [.LENGTH_SHORT], [                  ][.LENGTH_LONG], [.LENGTH_INDEFINITE], or a custom duration in milliseconds.
          * @param swipeable Whether swipe-to-dismiss is allowed.
          */
+        @SuppressLint("PrivateResource")
         fun make(
                 view: View, text: CharSequence, @Duration duration: Int, swipeable: Boolean): DagashiBar {
             val parent = findSuitableParent(view)
@@ -216,18 +227,6 @@ open class DagashiBar private constructor(
             val snackbarButtonStyleResId = a.getResourceId(0, -1)
             a.recycle()
             return snackbarButtonStyleResId != -1
-        }
-
-        /**
-         * Make a DagashiBar to display a message.
-         *
-         * @param view      The view to find a parent from.
-         * @param resId     The resource id of the string resource to use. Can be formatted text.
-         * @param duration  How long to display the message. Can be [.LENGTH_SHORT], [                  ][.LENGTH_LONG], [.LENGTH_INDEFINITE], or a custom duration in milliseconds.
-         * @param swipeable Whether swipe-to-dismiss is allowed.
-         */
-        fun make(view: View, @StringRes resId: Int, @Duration duration: Int, swipeable: Boolean): DagashiBar {
-            return make(view, view.resources.getText(resId), duration, swipeable)
         }
 
         private fun findSuitableParent(attachView: View): ViewGroup? {

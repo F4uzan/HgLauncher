@@ -23,6 +23,10 @@ import mono.hg.utils.Utils
 import mono.hg.utils.ViewUtils
 import mono.hg.wrappers.SpinnerPreference
 
+/**
+ * The main preference menu. This PreferenceFragment is used
+ * as a hub for other preferences, and it hosts main-level preferences.
+ */
 class BasePreference : PreferenceFragmentCompat() {
     private val RESTORE_STORAGE_CODE = 3600
     private val BACKUP_STORAGE_CODE = 3200

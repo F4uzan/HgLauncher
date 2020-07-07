@@ -22,15 +22,26 @@ open class GestureListener protected constructor(context: Context?) : OnTouchLis
     private val gestureDetector: GestureDetector
     private val scaleDetector: ScaleGestureDetector
 
+    /**
+     * Action done when a long press is detected.
+     */
     open fun onLongPress() {
         // Do long press action.
     }
 
+    /**
+     * Action done when a gesture is detected.
+     *
+     * @param direction The direction of the gesture.
+     *
+     * @see Utils.Gesture for the complete list of possible directions.
+     */
     open fun onGesture(direction: Int) {
         // Do generic gesture action.
     }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
+        v.performClick()
         return gestureDetector.onTouchEvent(event) || scaleDetector.onTouchEvent(event)
     }
 

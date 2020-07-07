@@ -17,7 +17,7 @@ import mono.hg.helpers.PreferenceHelper
  * The app object. Holds information such as package name, shorthands, icons, and visibility state.
  * Implements [IFilterable] to allow searching in the app list.
  *
- * This class is also extended [PinnedApp].
+ * This class is also extended by [PinnedApp].
  */
 open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     private var HINT_MATCH_SCORE = 30
@@ -99,6 +99,12 @@ open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
         }
     }
 
+    /**
+     * The ViewHolder that stores the app name and icon.
+     *
+     * Uses [R.layout.list_generic_item] as its layout,
+     * but this can be overriden in [App.getLayoutRes].
+     */
     class ViewHolder internal constructor(view: View, adapter: FlexibleAdapter<IFlexible<*>?>?) : FlexibleViewHolder(view, adapter) {
         var name: TextView? = view.findViewById(R.id.item_name)
         var icon: ImageView = view.findViewById(R.id.item_icon)

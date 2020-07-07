@@ -9,6 +9,10 @@ import mono.hg.R
 import mono.hg.helpers.PreferenceHelper
 import java.util.*
 
+/**
+ * Preferences for web search settings. This preference does not host the web search list,
+ * see [WebSearchProviderPreference] for that.
+ */
 @Keep
 class WebSearchPreference : PreferenceFragmentCompat() {
     private var providerList: ListPreference? = null

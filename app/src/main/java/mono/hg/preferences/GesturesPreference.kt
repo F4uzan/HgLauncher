@@ -15,6 +15,9 @@ import mono.hg.utils.AppUtils
 import mono.hg.wrappers.AppSelectionPreferenceDialog
 import java.util.*
 
+/**
+ * Preferences for gestures and their actions.
+ */
 @Keep
 class GesturesPreference : PreferenceFragmentCompat() {
     private lateinit var appListEntries: Array<CharSequence>
@@ -37,7 +40,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
                 val appList = AppSelectionPreferenceDialog()
                 appList.setTargetFragment(this@GesturesPreference, APPLICATION_DIALOG_CODE)
                 appList.arguments = appListBundle
-                appList.show(requireFragmentManager(), "AppSelectionDialog")
+                appList.show(requireActivity().supportFragmentManager, "AppSelectionDialog")
             }
             "none" -> list.setSummary(R.string.gesture_action_default)
             else -> list.setSummary(R.string.gesture_action_default)
@@ -81,15 +84,20 @@ class GesturesPreference : PreferenceFragmentCompat() {
         if (requestCode == APPLICATION_DIALOG_CODE && data != null) {
             if (resultCode == Activity.RESULT_CANCELED) {
                 val key = data.getStringExtra("key")
-                val preference = findPreference<ListPreference>(key)
-                preference?.setSummary(R.string.gesture_action_default)
-                preference?.value = getString(R.string.gesture_action_default_value)
+                if (key !== null) {
+                    val preference = findPreference<ListPreference>(key)
+                    preference?.setSummary(R.string.gesture_action_default)
+                    preference?.value = getString(R.string.gesture_action_default_value)
+                }
             } else if (resultCode == Activity.RESULT_OK) {
                 val key = data.getStringExtra("key")
                 val app = AppUtils.getPackageLabel(requireActivity().packageManager,
                         data.getStringExtra("app"))
-                val preference = findPreference<ListPreference>(key)
-                preference!!.summary = app
+
+                if (key != null) {
+                    val preference = findPreference<ListPreference>(key)
+                    preference?.summary = app
+                }
             }
         }
     }

@@ -9,6 +9,9 @@ import androidx.preference.PreferenceFragmentCompat
 import mono.hg.R
 import mono.hg.utils.Utils
 
+/**
+ * Preferences for the desktop/main view of the launcher.
+ */
 @Keep
 class DesktopPreference : PreferenceFragmentCompat() {
     private val RotatingListListener = Preference.OnPreferenceChangeListener { _, newValue ->

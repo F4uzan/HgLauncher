@@ -12,6 +12,9 @@ import mono.hg.R
 import mono.hg.utils.Utils
 import java.util.*
 
+/**
+ * Preferences for app lists and the view surrounding it.
+ */
 @Keep
 class AppListPreference : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

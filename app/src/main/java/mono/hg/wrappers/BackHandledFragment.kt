@@ -3,13 +3,18 @@ package mono.hg.wrappers
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 
-/*
+/**
  * A fragment class meant to handle back button press.
  * Taken from http://vinsol.com/blog/2014/10/01/handling-back-button-press-inside-fragments/
  */
 abstract class BackHandledFragment : Fragment() {
     private var backHandlerInterface: BackHandlerInterface? = null
 
+    /**
+     * Action done when back button is pressed
+     *
+     * @return Boolean Whether the back press event is consumed at all.
+     */
     abstract fun onBackPressed(): Boolean
 
     override fun onCreate(savedInstanceState: Bundle?) {

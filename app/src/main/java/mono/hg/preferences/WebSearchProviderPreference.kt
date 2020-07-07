@@ -19,6 +19,9 @@ import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.WebSearchProvider
 import java.util.*
 
+/**
+ * PreferenceFragment that hosts the list of available and editable web search provider.
+ */
 @Keep
 class WebSearchProviderPreference : PreferenceFragmentCompat() {
     private var binding: FragmentWebProviderBinding? = null
@@ -41,7 +44,7 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
         providerAdapter = context?.let { WebProviderAdapter(providerList, it ) }
 
         providerListView.adapter = providerAdapter
-        providerListView.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, view, i, _ ->
+        providerListView.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, _, i, _ ->
             val name = providerList[i].name
             val url = providerList[i].url
             val popupMenu = PopupMenu(requireActivity(), view)
