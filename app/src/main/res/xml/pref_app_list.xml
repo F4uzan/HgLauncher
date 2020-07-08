@@ -27,13 +27,13 @@
         app:allowDividerAbove="false"
         app:allowDividerBelow="false" />
 
-    <androidx.preference.SwitchPreferenceCompat
+    <mono.hg.wrappers.ThemeableSwitchPreference
         android:defaultValue="false"
         android:key="icon_hide_switch"
         android:summary="@string/pref_icon_view_desc"
         android:title="@string/pref_icon_view" />
 
-    <androidx.preference.SwitchPreferenceCompat
+    <mono.hg.wrappers.ThemeableSwitchPreference
         android:defaultValue="false"
         android:key="adaptive_shade_switch"
         android:summary="@string/shadow_adaptive_icon_desc"
@@ -48,19 +48,19 @@
         app:allowDividerAbove="false"
         app:allowDividerBelow="false" />
 
-    <androidx.preference.SwitchPreferenceCompat
+    <mono.hg.wrappers.ThemeableSwitchPreference
         android:defaultValue="false"
         android:key="static_favourites_panel_switch"
         android:summary="@string/static_favourites_desc"
         android:title="@string/static_favourites" />
 
-    <androidx.preference.SwitchPreferenceCompat
+    <mono.hg.wrappers.ThemeableSwitchPreference
         android:defaultValue="false"
         android:key="static_app_list_switch"
         android:summary="@string/static_app_list_desc"
         android:title="@string/static_app_list" />
 
-    <androidx.preference.SwitchPreferenceCompat
+    <mono.hg.wrappers.ThemeableSwitchPreference
         android:defaultValue="false"
         android:key="keep_last_search_switch"
         android:summary="@string/app_list_keep_search_desc"
@@ -86,7 +86,7 @@
         app:allowDividerAbove="false"
         app:allowDividerBelow="false" />
 
-    <androidx.preference.SwitchPreferenceCompat
+    <mono.hg.wrappers.ThemeableSwitchPreference
         android:defaultValue="false"
         android:key="keyboard_focus"
         android:summary="@string/keyboard_focus_desc"

@@ -1,12 +1,13 @@
 package mono.hg
 
 import android.content.Intent
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -19,6 +20,7 @@ import mono.hg.utils.Utils
 import mono.hg.utils.ViewUtils
 import mono.hg.wrappers.BackHandledFragment
 import mono.hg.wrappers.BackHandledFragment.BackHandlerInterface
+
 
 /**
  * Activity hosting all of preference fragments.
@@ -40,6 +42,10 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
         PreferenceHelper.fetchPreference()
         if (PreferenceHelper.providerList.isEmpty()) {
             Utils.setDefaultProviders(resources)
+        }
+
+        if (Utils.atLeastLollipop()) {
+            window.statusBarColor = PreferenceHelper.darkerAccent
         }
 
         // Check the caller of this activity.

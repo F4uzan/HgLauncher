@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <androidx.preference.SwitchPreferenceCompat
+    <mono.hg.wrappers.ThemeableSwitchPreference
         android:defaultValue="true"
         android:key="web_search_enabled"
         android:summary="@string/web_search_desc"
         android:title="@string/web_search" />
 
-    <androidx.preference.SwitchPreferenceCompat
+    <mono.hg.wrappers.ThemeableSwitchPreference
         android:dependency="web_search_enabled"
         android:defaultValue="false"
         android:key="web_search_long_press"
@@ -20,7 +20,7 @@
         android:summary="@string/pref_header_web_provider_desc"
         android:title="@string/pref_header_web_provider_title" />
 
-    <androidx.preference.ListPreference
+    <mono.hg.wrappers.ThemeableListPreference
         android:dependency="web_search_enabled"
         android:defaultValue="none"
         android:entries="@array/pref_search_provider_title"

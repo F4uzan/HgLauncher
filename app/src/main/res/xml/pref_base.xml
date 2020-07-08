@@ -3,7 +3,7 @@
     android:key="settings"
     android:title="@string/title_activity_settings">
 
-    <androidx.preference.PreferenceCategory
+    <mono.hg.wrappers.ThemeablePreferenceCategory
         android:key="interface"
         android:title="@string/pref_header_interface">
 
@@ -35,9 +35,9 @@
             android:summary="@string/pref_summary_list"
             android:title="@string/pref_header_list" />
 
-    </androidx.preference.PreferenceCategory>
+    </mono.hg.wrappers.ThemeablePreferenceCategory>
 
-    <androidx.preference.PreferenceCategory
+    <mono.hg.wrappers.ThemeablePreferenceCategory
         android:key="behavior"
         android:title="@string/pref_header_behavior">
 
@@ -53,9 +53,9 @@
             android:summary="@string/pref_summary_web"
             android:title="@string/pref_header_web" />
 
-    </androidx.preference.PreferenceCategory>
+    </mono.hg.wrappers.ThemeablePreferenceCategory>
 
-    <androidx.preference.PreferenceCategory
+    <mono.hg.wrappers.ThemeablePreferenceCategory
         android:key="backup_restore"
         android:title="@string/pref_header_backup_restore">
 
@@ -74,9 +74,9 @@
             android:summary="@string/reset_preference_desc"
             android:title="@string/reset_preference" />
 
-    </androidx.preference.PreferenceCategory>
+    </mono.hg.wrappers.ThemeablePreferenceCategory>
 
-    <androidx.preference.PreferenceCategory
+    <mono.hg.wrappers.ThemeablePreferenceCategory
         android:key="about_credit"
         android:title="@string/pref_header_about">
 
@@ -91,5 +91,5 @@
             android:summary="@string/app_version"
             android:title="@string/app_name" />
 
-    </androidx.preference.PreferenceCategory>
+    </mono.hg.wrappers.ThemeablePreferenceCategory>
 </androidx.preference.PreferenceScreen>

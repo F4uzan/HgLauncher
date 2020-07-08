@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/rename_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:importantForAutofill="no"
+        android:textCursorDrawable="@null"
         android:inputType="text" />
 
 </LinearLayout>

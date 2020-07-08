@@ -2,9 +2,12 @@ package mono.hg.fragments
 
 import android.content.ComponentName
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
@@ -16,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -327,6 +331,7 @@ class AppListFragment : GenericPageFragment() {
         val builder = AlertDialog.Builder(requireContext())
         val binding = LayoutRenameDialogBinding.inflate(layoutInflater)
         val renameField = binding.renameField
+        ViewCompat.setBackgroundTintList(renameField, ColorStateList.valueOf(PreferenceHelper.accent))
         renameField.hint = PreferenceHelper.getLabel(packageName)
         builder.setView(binding.root)
         builder.setNegativeButton(android.R.string.cancel, null)
@@ -345,7 +350,13 @@ class AppListFragment : GenericPageFragment() {
                     if (app != null) {
                         app.hintName = newLabel
                     }
-                }.show()
+                }
+
+        val themedDialog = builder.create()
+        themedDialog.show()
+
+        themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
+        themedDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
     }
 
     companion object {

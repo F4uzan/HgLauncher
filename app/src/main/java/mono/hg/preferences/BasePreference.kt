@@ -3,6 +3,7 @@ package mono.hg.preferences
 import android.Manifest
 import android.app.Activity
 import android.app.DialogFragment
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -108,15 +109,20 @@ class BasePreference : PreferenceFragmentCompat() {
             alert.setTitle(getString(R.string.reset_preference))
                     .setMessage(getString(R.string.reset_preference_warn))
                     .setNegativeButton(getString(android.R.string.cancel), null)
-                    .setPositiveButton(R.string.reset_preference_positive,
-                            { _, _ ->
-                                PreferenceHelper.editor?.clear()?.apply()
-                                PreferenceHelper.update("require_refresh", true)
-                                (requireActivity() as SettingsActivity).restartActivity()
-                                Toast.makeText(requireContext(),
-                                        R.string.reset_preference_toast, Toast.LENGTH_LONG)
-                                        .show()
-                            }).show()
+                    .setPositiveButton(R.string.reset_preference_positive) { _, _ ->
+                        PreferenceHelper.editor?.clear()?.apply()
+                        PreferenceHelper.update("require_refresh", true)
+                        (requireActivity() as SettingsActivity).restartActivity()
+                        Toast.makeText(requireContext(),
+                                R.string.reset_preference_toast, Toast.LENGTH_LONG)
+                                .show()
+                    }
+
+            val themedDialog = alert.create()
+            themedDialog.show()
+
+            themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
+            themedDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
             false
         }
     }

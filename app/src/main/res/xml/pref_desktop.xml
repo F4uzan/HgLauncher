@@ -12,7 +12,7 @@
         app:allowDividerAbove="false"
         app:allowDividerBelow="false" />
 
-    <androidx.preference.SwitchPreferenceCompat
+    <mono.hg.wrappers.ThemeableSwitchPreference
         android:defaultValue="false"
         android:key="windowbar_status_switch"
         android:title="@string/windowbar_mode_status"
@@ -29,7 +29,7 @@
         app:allowDividerBelow="false"
         app:isPreferenceVisible="false" />
 
-    <androidx.preference.SwitchPreferenceCompat
+    <mono.hg.wrappers.ThemeableSwitchPreference
         android:defaultValue="false"
         android:key="shade_view_switch"
         android:summary="@string/pref_shade_view_desc"
