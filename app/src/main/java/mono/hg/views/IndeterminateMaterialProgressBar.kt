@@ -6,6 +6,7 @@ import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import mono.hg.R
+import mono.hg.helpers.PreferenceHelper
 
 /**
  * Indeterminate progress bar, in the style of Material Design.
@@ -21,7 +22,7 @@ class IndeterminateMaterialProgressBar(context: Context?, attrs: AttributeSet?) 
         val metrics = resources.displayMetrics
         val screenDensity = metrics.density
         val drawable = CircularProgressDrawable(context!!)
-        drawable.setColorSchemeColors(ContextCompat.getColor(context, R.color.colorPrimary))
+        drawable.setColorSchemeColors(PreferenceHelper.accent)
         drawable.strokeWidth = WIDTH_DP * screenDensity
         indeterminateDrawable = drawable
     }
