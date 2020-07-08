@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
 import mono.hg.R
 import mono.hg.SettingsActivity
 import mono.hg.fragments.BackupRestoreFragment
@@ -44,8 +45,10 @@ class BasePreference : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val appTheme = findPreference<SpinnerPreference>("app_theme")
+        val appAccent = findPreference<ColorPreferenceCompat>("app_accent")
         versionMenu = findPreference("version_key")
         appTheme?.onPreferenceChangeListener = RestartingListListener
+        appAccent?.onPreferenceChangeListener = RestartingListListener
         addVersionCounterListener()
         addFragmentListener()
     }
