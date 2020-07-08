@@ -10,7 +10,9 @@ import androidx.preference.ListPreference
 import mono.hg.R
 import mono.hg.helpers.PreferenceHelper
 
-
+/**
+ * A ListPreference with custom style and dialogue buttons that follows [PreferenceHelper.accent].
+ */
 class ThemeableListPreference(context: Context?, attrs: AttributeSet?) : ListPreference(context, attrs) {
     override fun onClick() {
         val dialog = AlertDialog.Builder(context, R.style.PreferenceList_NoRadio)

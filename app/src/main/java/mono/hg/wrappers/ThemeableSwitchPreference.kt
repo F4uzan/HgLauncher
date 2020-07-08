@@ -10,6 +10,9 @@ import androidx.preference.PreferenceViewHolder
 import androidx.preference.SwitchPreferenceCompat
 import mono.hg.helpers.PreferenceHelper
 
+/**
+ * A SwitchPreference that extrapolates its colours from [PreferenceHelper.accent].
+ */
 class ThemeableSwitchPreference(context: Context, attrs: AttributeSet?) : SwitchPreferenceCompat(context, attrs) {
     override fun onBindViewHolder(holder: PreferenceViewHolder?) {
         super.onBindViewHolder(holder)
