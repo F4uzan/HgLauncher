@@ -1,13 +1,17 @@
 package mono.hg.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.widget.ImageViewCompat
 import mono.hg.R
+import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.App
 import java.util.*
 
@@ -32,6 +36,7 @@ class HiddenAppAdapter(private val hiddenAppsList: ArrayList<App>, private val c
         appHolder.name?.text = hiddenAppsList[position].appName
         if (hiddenAppsList[position].isAppHidden) {
             appHolder.icon?.setImageResource(R.drawable.ic_check)
+            appHolder.icon?.let { ImageViewCompat.setImageTintList(it, ColorStateList.valueOf(PreferenceHelper.accent)) }
             appHolder.name?.typeface = Typeface.DEFAULT_BOLD
         } else {
             appHolder.icon?.setImageDrawable(hiddenAppsList[position].icon)

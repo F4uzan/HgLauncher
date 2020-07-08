@@ -1,12 +1,15 @@
 package mono.hg.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.ImageViewCompat
 import mono.hg.R
+import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.FileFolder
 import java.util.*
 
@@ -33,6 +36,8 @@ class FileFolderAdapter(private val filesList: ArrayList<FileFolder>, private va
         } else {
             holder.content!!.setImageResource(R.drawable.ic_file)
         }
+
+        ImageViewCompat.setImageTintList(holder.content!!, ColorStateList.valueOf(PreferenceHelper.accent))
         holder.name!!.text = filesList[position].name
 
         return view
