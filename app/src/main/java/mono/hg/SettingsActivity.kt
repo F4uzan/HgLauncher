@@ -1,6 +1,8 @@
 package mono.hg
 
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -42,10 +44,6 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
         PreferenceHelper.fetchPreference()
         if (PreferenceHelper.providerList.isEmpty()) {
             Utils.setDefaultProviders(resources)
-        }
-
-        if (Utils.atLeastLollipop()) {
-            window.statusBarColor = PreferenceHelper.darkerAccent
         }
 
         // Check the caller of this activity.
@@ -165,7 +163,10 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
                 delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
             }
         }
-
+        if (Utils.atLeastLollipop() && resources.configuration.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_NO) {
+            window.statusBarColor = PreferenceHelper.darkerAccent
+        }
     }
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
