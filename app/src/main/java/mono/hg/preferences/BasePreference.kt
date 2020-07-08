@@ -28,8 +28,6 @@ import mono.hg.wrappers.SpinnerPreference
  * as a hub for other preferences, and it hosts main-level preferences.
  */
 class BasePreference : PreferenceFragmentCompat() {
-    private val RESTORE_STORAGE_CODE = 3600
-    private val BACKUP_STORAGE_CODE = 3200
     private var isRestore = false
     private var versionMenu: Preference? = null
 
@@ -189,5 +187,7 @@ class BasePreference : PreferenceFragmentCompat() {
 
     companion object {
         private const val PERMISSION_STORAGE_CODE = 4200
+        private const val RESTORE_STORAGE_CODE = 3600
+        private const val BACKUP_STORAGE_CODE = 3200
     }
 }

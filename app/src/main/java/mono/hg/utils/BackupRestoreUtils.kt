@@ -100,14 +100,10 @@ object BackupRestoreUtils {
     class RestoreBackupTask(activity: SettingsActivity, path: String?) : AsyncTask<Void?, Void?, Void?>() {
         private val fragmentRef: WeakReference<SettingsActivity> = WeakReference(activity)
         private val uri: Uri = Uri.parse(path)
-        private var progress: ProgressDialog? = null
         override fun onPreExecute() {
             super.onPreExecute()
-            progress = ProgressDialog(fragmentRef.get())
-            progress!!.setMessage(fragmentRef.get()!!.getString(R.string.backup_restore_dialog))
-            progress!!.isIndeterminate = false
-            progress!!.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-            progress!!.show()
+            val fragment = fragmentRef.get()
+            fragment?.progressBar?.show()
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -120,7 +116,7 @@ object BackupRestoreUtils {
             super.onPostExecute(result)
             val fragment = fragmentRef.get()
             if (fragment != null) {
-                progress!!.dismiss()
+                fragment.progressBar.hide()
                 fragment.restartActivity()
                 Toast.makeText(fragmentRef.get(), R.string.restore_complete,
                         Toast.LENGTH_LONG).show()

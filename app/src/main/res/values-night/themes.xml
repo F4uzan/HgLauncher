@@ -7,10 +7,12 @@
         <item name="android:windowBackground">@color/black</item>
         <item name="backgroundColor">@color/black</item>
         <item name="backgroundColorAlt">@color/transparentBlack</item>
+        <item name="dividerColor">@color/colorBackgroundWhiteAlt</item>
         <item name="textDefaultColor">@color/white</item>
         <item name="snackbarStyle">@style/SearchSnack</item>
         <item name="snackbarTextViewStyle">@style/SearchSnack.TextView</item>
-        <item name="toolbarStyle">@style/Toolbar.Black</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="LauncherTheme" parent="@style/AppTheme">
@@ -21,5 +23,4 @@
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
     </style>
-
 </resources>

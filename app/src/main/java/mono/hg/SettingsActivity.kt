@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.progressindicator.ProgressIndicator
+import mono.hg.databinding.ActivitySettingsBinding
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.preferences.BasePreference
 import mono.hg.utils.ActivityServiceUtils
@@ -25,10 +28,15 @@ import mono.hg.wrappers.BackHandledFragment.BackHandlerInterface
 class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     private var selectedFragment: BackHandledFragment? = null
     private var fragmentTitle: CharSequence? = null
+    private var binding: ActivitySettingsBinding? = null
+    private  var toolbar: Toolbar? = null
+    lateinit var progressBar: ProgressIndicator
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         if (!PreferenceHelper.hasEditor()) {
             PreferenceHelper.initPreference(this)
         }
+
         PreferenceHelper.fetchPreference()
         if (PreferenceHelper.providerList.isEmpty()) {
             Utils.setDefaultProviders(resources)
@@ -37,40 +45,32 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
         // Check the caller of this activity.
         // If it's coming from the launcher itself, it will always have a calling activity.
         checkCaller()
-        when (PreferenceHelper.appTheme()) {
-            "auto" -> if (Utils.atLeastQ()) {
-                AppCompatDelegate.setDefaultNightMode(
-                        AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(
-                        AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
-            }
-            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            "dark" -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                setTheme(R.style.AppTheme_Dark)
-            }
-            "black" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else -> if (Utils.atLeastQ()) {
-                AppCompatDelegate.setDefaultNightMode(
-                        AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(
-                        AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
-            }
-        }
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        setActivityTheme()
+
         if (requestedOrientation != PreferenceHelper.orientation) {
             requestedOrientation = PreferenceHelper.orientation
         }
+
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding!!.root)
+
+        super.onCreate(savedInstanceState)
+
+        toolbar = binding!!.toolbar
+        progressBar = binding!!.progressBar
+        progressBar.hide()
+
+        setSupportActionBar(toolbar!!)
+
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }
+
         if (savedInstanceState == null) {
+            supportActionBar!!.title = getString(R.string.title_activity_settings)
             ViewUtils.setFragment(supportFragmentManager, BasePreference(), "settings")
         } else {
-            fragmentTitle = savedInstanceState.getCharSequence("title")
+            fragmentTitle = savedInstanceState.getCharSequence("title") ?: getString(R.string.title_activity_settings)
             if (supportActionBar != null) {
                 supportActionBar!!.title = fragmentTitle
             }
@@ -80,6 +80,11 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putCharSequence("title", fragmentTitle)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        toolbar = null
     }
 
     override fun onBackPressed() {
@@ -135,15 +140,31 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        ActivityCompat.finishAfterTransition(this)
+        ActivityCompat.finishAffinity(this)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         startActivity(intent)
     }
 
+    private fun setActivityTheme() {
+        when (PreferenceHelper.appTheme()) {
+            "light" -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
+            "dark" -> {
+                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+                setTheme(R.style.AppTheme_Dark)
+            }
+            "black" -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+            else -> if (Utils.atLeastQ()) {
+                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            } else {
+                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+            }
+        }
+
+    }
+
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
         // Instantiate the new Fragment
-        val fragment = supportFragmentManager
-                .fragmentFactory.instantiate(classLoader, pref.fragment)
+        val fragment = supportFragmentManager.fragmentFactory.instantiate(classLoader, pref.fragment)
         fragment.setTargetFragment(caller, 0)
         fragmentTitle = pref.title
 

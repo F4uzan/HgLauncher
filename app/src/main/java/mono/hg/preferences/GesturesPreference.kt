@@ -10,6 +10,7 @@ import androidx.annotation.Keep
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceScreen
 import mono.hg.R
 import mono.hg.utils.AppUtils
 import mono.hg.wrappers.AppSelectionPreferenceDialog
@@ -54,30 +55,20 @@ class GesturesPreference : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val prefScreen: PreferenceScreen = preferenceScreen
+        val prefCount: Int = prefScreen.preferenceCount
+
         appList
-        val gestureLeftList = findPreference<ListPreference>("gesture_left")
-        val gestureRightList = findPreference<ListPreference>("gesture_right")
-        val gestureDownList = findPreference<ListPreference>("gesture_down")
-        val gestureUpList = findPreference<ListPreference>("gesture_up")
-        val gestureTapList = findPreference<ListPreference>("gesture_single_tap")
-        val gestureDoubleTapList = findPreference<ListPreference>("gesture_double_tap")
-        val gesturePinchList = findPreference<ListPreference>("gesture_pinch")
-        val gestureHandlerList = findPreference<ListPreference>("gesture_handler")
-        setNestedListSummary(gestureLeftList)
-        setNestedListSummary(gestureRightList)
-        setNestedListSummary(gestureDownList)
-        setNestedListSummary(gestureUpList)
-        setNestedListSummary(gestureTapList)
-        setNestedListSummary(gestureDoubleTapList)
-        setNestedListSummary(gesturePinchList)
-        setGestureHandlerList(gestureHandlerList)
-        gestureLeftList!!.onPreferenceChangeListener = NestingListListener
-        gestureRightList!!.onPreferenceChangeListener = NestingListListener
-        gestureDownList!!.onPreferenceChangeListener = NestingListListener
-        gestureUpList!!.onPreferenceChangeListener = NestingListListener
-        gestureDoubleTapList!!.onPreferenceChangeListener = NestingListListener
-        gestureTapList!!.onPreferenceChangeListener = NestingListListener
-        gesturePinchList!!.onPreferenceChangeListener = NestingListListener
+
+        // We can safely iterate through all the preferences and assume they're ListPreference
+        // because GesturesPreference has nothing else aside from that.
+        for (i in 0 until prefCount) {
+            val pref = prefScreen.getPreference(i) as ListPreference
+            setNestedListSummary(pref)
+            pref.onPreferenceChangeListener = NestingListListener
+        }
+
+        setGestureHandlerList(findPreference("gesture_handler"))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -113,8 +104,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
 
         // Fetch all available icon pack.
         val intent = Intent("mono.hg.GESTURE_HANDLER")
-        val info = manager.queryIntentActivities(intent,
-                PackageManager.GET_RESOLVED_FILTER)
+        val info = manager.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
         info.forEach {
             val activityInfo = it.activityInfo
             val className = activityInfo.name
@@ -126,8 +116,8 @@ class GesturesPreference : PreferenceFragmentCompat() {
         }
         val finalEntries = entries.toTypedArray<CharSequence>()
         val finalEntryValues = entryValues.toTypedArray<CharSequence>()
-        list!!.entries = finalEntries
-        list.entryValues = finalEntryValues
+        list?.entries = finalEntries
+        list?.entryValues = finalEntryValues
     }
 
     // Fetch apps and feed it into our list.
@@ -156,8 +146,8 @@ class GesturesPreference : PreferenceFragmentCompat() {
             appListEntryValues = entryValues.toTypedArray()
         }
 
-    private fun setNestedListSummary(list: ListPreference?) {
-        if (list!!.value.contains("/")) {
+    private fun setNestedListSummary(list: ListPreference) {
+        if (list.value.contains("/")) {
             list.summary = AppUtils.getPackageLabel(requireActivity().packageManager,
                     list.value)
         }
