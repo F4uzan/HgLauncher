@@ -15,7 +15,7 @@ import mono.hg.utils.Utils
 @Keep
 class DesktopPreference : PreferenceFragmentCompat() {
     private val RotatingListListener = Preference.OnPreferenceChangeListener { _, newValue ->
-        requireActivity().requestedOrientation = newValue as Int
+        requireActivity().requestedOrientation = Integer.parseInt(newValue as String)
         true
     }
 
