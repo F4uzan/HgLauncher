@@ -60,7 +60,7 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
             AdapterView.OnItemLongClickListener { _, _, i, _ ->
                 val name = providerList[i].name
                 val url = providerList[i].url
-                val popupMenu = PopupMenu(requireActivity(), view)
+                val popupMenu = PopupMenu(requireActivity(), providerListView.getChildAt(i))
                 popupMenu.menuInflater.inflate(R.menu.menu_web_provider, popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
