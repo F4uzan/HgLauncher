@@ -176,6 +176,8 @@ class AppListFragment : GenericPageFragment() {
             if (size > 0 && !appsAdapter.isEmpty) {
                 loadProgress.visibility = View.GONE
                 loadProgress.invalidate()
+            } else {
+                loadProgress.visibility = View.VISIBLE
             }
         })
 
