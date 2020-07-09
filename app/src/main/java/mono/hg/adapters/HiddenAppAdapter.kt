@@ -40,6 +40,7 @@ class HiddenAppAdapter(private val hiddenAppsList: ArrayList<App>, private val c
             appHolder.name?.typeface = Typeface.DEFAULT_BOLD
         } else {
             appHolder.icon?.setImageDrawable(hiddenAppsList[position].icon)
+            appHolder.icon?.let { ImageViewCompat.setImageTintList(it, null) }
             appHolder.name?.typeface = Typeface.DEFAULT
         }
         return view
