@@ -1,13 +1,14 @@
 package mono.hg.fragments
 
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
@@ -89,6 +90,11 @@ class AppListFragment : GenericPageFragment() {
     */
     private var appMenu: PopupMenu? = null
 
+    /*
+     * BroadcastReceiver used to receive package changes notification from LauncherActivity.
+     */
+    private var packageBroadcastReceiver: BroadcastReceiver? = null
+
     private var launcherApps: LauncherApps? = null
     private var userUtils: UserUtils? = null
     private var fetchAppsTask: FetchAppsTask? = null
@@ -105,10 +111,12 @@ class AppListFragment : GenericPageFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         if (fetchAppsTask != null && fetchAppsTask!!.status == AsyncTask.Status.RUNNING) {
             fetchAppsTask!!.cancel(true)
         }
 
+        unregisterBroadcast()
         binding = null
     }
 
@@ -121,6 +129,8 @@ class AppListFragment : GenericPageFragment() {
             launcherApps = requireActivity().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
         }
         userUtils = UserUtils(requireContext())
+
+        registerBroadcast()
 
         appsLayoutManager = if (PreferenceHelper.useGrid()) {
             CustomGridLayoutManager(requireContext(), resources.getInteger(R.integer.column_default_size))
@@ -188,22 +198,15 @@ class AppListFragment : GenericPageFragment() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        if (AppUtils.hasNewPackage(manager) || appsAdapter.hasFinishedLoading() && appsAdapter.isEmpty) {
-            fetchAppsTask!!.cancel(true)
-            fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
-            fetchAppsTask!!.execute()
-        }
-    }
-
     override fun onStart() {
         super.onStart()
 
-        if (fetchAppsTask == null && appsAdapter.isEmpty) {
+        if (AppUtils.hasNewPackage(manager) || appsAdapter.isEmpty) {
+            if (fetchAppsTask != null) {
+                fetchAppsTask?.cancel(true)
+            }
             fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
-            fetchAppsTask!!.execute()
+            fetchAppsTask?.execute()
         }
 
         // Reset the app list filter.
@@ -318,6 +321,32 @@ class AppListFragment : GenericPageFragment() {
                     }
             }
             true
+        }
+    }
+
+    private fun registerBroadcast() {
+        // We want this activity to receive the package change broadcast,
+        // since otherwise it won't be notified when there are changes to that.
+        val filter = IntentFilter()
+        filter.addAction("mono.hg.PACKAGE_CHANGE_BROADCAST")
+
+        packageBroadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                fetchAppsTask!!.cancel(true)
+                fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
+                fetchAppsTask!!.execute()
+            }
+        }
+
+        requireActivity().registerReceiver(packageBroadcastReceiver, filter)
+    }
+
+    private fun unregisterBroadcast() {
+        if (packageBroadcastReceiver != null) {
+            requireActivity().unregisterReceiver(packageBroadcastReceiver)
+            packageBroadcastReceiver = null
+        } else {
+            Utils.sendLog(Utils.LogLevel.VERBOSE, "unregisterBroadcast() was called to a null receiver.")
         }
     }
 
