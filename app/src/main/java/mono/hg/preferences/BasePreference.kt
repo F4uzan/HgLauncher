@@ -2,7 +2,6 @@ package mono.hg.preferences
 
 import android.Manifest
 import android.app.Activity
-import android.app.DialogFragment
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
@@ -102,7 +102,7 @@ class BasePreference : PreferenceFragmentCompat() {
         val resetMenu = findPreference<Preference>("reset")
         credits?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val creditsInfo: DialogFragment = CreditsDialogFragment()
-            creditsInfo.show(requireActivity().fragmentManager, "CreditsDialog")
+            creditsInfo.show(requireActivity().supportFragmentManager, "CreditsDialog")
             false
         }
         backupMenu?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
