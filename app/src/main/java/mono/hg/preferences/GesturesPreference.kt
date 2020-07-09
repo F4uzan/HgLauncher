@@ -29,6 +29,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
             "handler" -> list.setSummary(R.string.gesture_action_handler)
             "widget" -> list.setSummary(R.string.gesture_action_widget)
             "status" -> list.setSummary(R.string.gesture_action_status)
+            "panel" -> list.setSummary(R.string.gesture_action_panel)
             "list" -> list.setSummary(R.string.gesture_action_list)
             "app" -> {
                 // Create the Bundle to pass to AppSelectionPreferenceDialog.
