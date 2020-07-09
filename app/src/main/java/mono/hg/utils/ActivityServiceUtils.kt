@@ -26,11 +26,14 @@ object ActivityServiceUtils {
      */
     fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager = activity.getSystemService(
-                Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            Activity.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
         if (activity.currentFocus != null) {
-            inputMethodManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken,
-                    InputMethodManager.HIDE_NOT_ALWAYS)
-            activity.currentFocus!!.clearFocus()
+            inputMethodManager.hideSoftInputFromWindow(
+                activity.currentFocus !!.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+            activity.currentFocus !!.clearFocus()
         }
     }
 
@@ -42,8 +45,9 @@ object ActivityServiceUtils {
      */
     fun showSoftKeyboard(activity: Activity, view: View) {
         val inputMethodManager = activity.getSystemService(
-                Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (!view.isFocused) {
+            Activity.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
+        if (! view.isFocused) {
             view.requestFocus()
         }
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
@@ -58,7 +62,7 @@ object ActivityServiceUtils {
      */
     fun isPowerSaving(activity: Activity): Boolean {
         val powerManager = activity
-                .getSystemService(Context.POWER_SERVICE) as PowerManager
+            .getSystemService(Context.POWER_SERVICE) as PowerManager
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && powerManager.isPowerSaveMode
     }
 
@@ -70,7 +74,7 @@ object ActivityServiceUtils {
      */
     fun copyToClipboard(activity: Activity, text: String?) {
         val clipboardManager = activity
-                .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText(null, text)
         clipboardManager.setPrimaryClip(clipData)
     }
@@ -84,9 +88,12 @@ object ActivityServiceUtils {
      */
     fun pasteFromClipboard(activity: Activity): CharSequence {
         val clipboardManager = activity
-                .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        return if (clipboardManager.hasPrimaryClip() && clipboardManager.primaryClipDescription!!.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-            clipboardManager.primaryClip!!.getItemAt(0).text
+            .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        return if (clipboardManager.hasPrimaryClip() && clipboardManager.primaryClipDescription !!.hasMimeType(
+                ClipDescription.MIMETYPE_TEXT_PLAIN
+            )
+        ) {
+            clipboardManager.primaryClip !!.getItemAt(0).text
         } else {
             ""
         }

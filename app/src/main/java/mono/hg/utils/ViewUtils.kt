@@ -30,7 +30,7 @@ object ViewUtils {
     val statusBarHeight: Int
         get() {
             val idStatusBarHeight = Resources.getSystem()
-                    .getIdentifier("status_bar_height", "dimen", "android")
+                .getIdentifier("status_bar_height", "dimen", "android")
             return if (idStatusBarHeight > 0) {
                 Resources.getSystem().getDimensionPixelSize(idStatusBarHeight)
             } else {
@@ -68,10 +68,14 @@ object ViewUtils {
      * @param recyclerView The RecyclerView itself.
      * @param adapter      A FlexibleAdapter with App items.
      */
-    fun keyboardLaunchApp(activity: Activity, recyclerView: RecyclerView, adapter: FlexibleAdapter<App?>) {
+    fun keyboardLaunchApp(
+        activity: Activity,
+        recyclerView: RecyclerView,
+        adapter: FlexibleAdapter<App?>
+    ) {
         if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
             adapter.getItem(0)?.let { AppUtils.launchApp(activity, it) }
-        } else if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+        } else if (! recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
             adapter.getItem(adapter.itemCount - 1)?.let { AppUtils.launchApp(activity, it) }
         }
     }
@@ -84,8 +88,8 @@ object ViewUtils {
      */
     fun setFragment(fragmentManager: FragmentManager, fragment: Fragment?, tag: String?) {
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment!!, tag)
-                .commit()
+            .replace(R.id.fragment_container, fragment !!, tag)
+            .commit()
     }
 
     /**
@@ -97,9 +101,9 @@ object ViewUtils {
      */
     fun replaceFragment(fragmentManager: FragmentManager, fragment: Fragment?, tag: String?) {
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment!!)
-                .addToBackStack(tag)
-                .commit()
+            .replace(R.id.fragment_container, fragment !!)
+            .addToBackStack(tag)
+            .commit()
     }
 
     /**
@@ -112,9 +116,11 @@ object ViewUtils {
     fun createSearchMenu(activity: AppCompatActivity, popupMenu: PopupMenu, query: String?) {
         PreferenceHelper.providerList.forEach { popupMenu.menu.add(it.key) }
         popupMenu.setOnMenuItemClickListener { menuItem ->
-            Utils.doWebSearch(activity,
-                    PreferenceHelper.getProvider(menuItem.title.toString()),
-                    query)
+            Utils.doWebSearch(
+                activity,
+                PreferenceHelper.getProvider(menuItem.title.toString()),
+                query
+            )
             true
         }
         popupMenu.show()

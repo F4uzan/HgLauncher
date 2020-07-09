@@ -48,7 +48,7 @@ class WebSearchPreference : PreferenceFragmentCompat() {
 
         val finalEntries = entries.toTypedArray<CharSequence?>()
         val finalEntryValues = entryValues.toTypedArray<CharSequence?>()
-        list!!.entries = finalEntries
+        list !!.entries = finalEntries
         list.entryValues = finalEntryValues
     }
 }

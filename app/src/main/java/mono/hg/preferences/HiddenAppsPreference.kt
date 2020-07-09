@@ -1,7 +1,12 @@
 package mono.hg.preferences
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
 import androidx.annotation.Keep
@@ -30,18 +35,23 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
         // No-op.
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentHiddenAppsBinding.inflate(inflater, container, false)
-        return binding!!.root
+        return binding !!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        excludedAppList = PreferenceHelper.preference.getStringSet("hidden_apps", HashSet()) as HashSet<String>
+        excludedAppList =
+            PreferenceHelper.preference.getStringSet("hidden_apps", HashSet()) as HashSet<String>
 
-        appsListView = binding!!.hiddenAppsList
+        appsListView = binding !!.hiddenAppsList
         hiddenAppAdapter = context?.let { HiddenAppAdapter(appList, it) }
         appsListView.adapter = hiddenAppAdapter
 
@@ -92,11 +102,11 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     private fun loadApps() {
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear()
-        hiddenAppAdapter!!.notifyDataSetInvalidated()
+        hiddenAppAdapter !!.notifyDataSetInvalidated()
 
         // Fetch and add every app into our list,
         appList.addAll(AppUtils.loadApps(requireActivity(), false))
-        hiddenAppAdapter!!.notifyDataSetChanged()
+        hiddenAppAdapter !!.notifyDataSetChanged()
     }
 
     private fun toggleHiddenState(position: Int) {
@@ -113,13 +123,14 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
         appList[position].isAppHidden = excludedAppList.contains(packageName)
 
         // Reload the app list!
-        hiddenAppAdapter!!.notifyDataSetChanged()
+        hiddenAppAdapter !!.notifyDataSetChanged()
 
         // Toggle the state of the 'restore all' button.
         requireActivity().invalidateOptionsMenu()
     }
 
     private fun addListeners() {
-        appsListView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> toggleHiddenState(position) }
+        appsListView.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, position, _ -> toggleHiddenState(position) }
     }
 }

@@ -26,8 +26,10 @@ import android.content.Context
  * always pick up and move widgets.
  */
 class LauncherAppWidgetHost(context: Context?, hostId: Int) : AppWidgetHost(context, hostId) {
-    override fun onCreateView(context: Context, appWidgetId: Int,
-                              appWidget: AppWidgetProviderInfo): AppWidgetHostView {
+    override fun onCreateView(
+        context: Context, appWidgetId: Int,
+        appWidget: AppWidgetProviderInfo
+    ): AppWidgetHostView {
         return LauncherAppWidgetHostView(context)
     }
 }

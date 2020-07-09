@@ -12,7 +12,10 @@ import java.util.*
 /**
  * Adapter used to handle display web providers. Used only in preferences.
  */
-class WebProviderAdapter(private val itemList: ArrayList<WebSearchProvider>, private val context: Context) : BaseAdapter() {
+class WebProviderAdapter(
+    private val itemList: ArrayList<WebSearchProvider>,
+    private val context: Context
+) : BaseAdapter() {
     override fun getCount(): Int {
         return itemList.size
     }
@@ -39,8 +42,8 @@ class WebProviderAdapter(private val itemList: ArrayList<WebSearchProvider>, pri
             viewHolder = view.tag as ViewHolder
         }
 
-        viewHolder.title!!.text = itemList[i].name
-        viewHolder.url!!.text = itemList[i].url
+        viewHolder.title !!.text = itemList[i].name
+        viewHolder.url !!.text = itemList[i].url
 
         return view
     }

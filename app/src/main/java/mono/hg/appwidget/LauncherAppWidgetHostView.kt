@@ -37,7 +37,7 @@ class LauncherAppWidgetHostView(context: Context?) : AppWidgetHostView(context) 
             MotionEvent.ACTION_UP -> {
                 val isLongPressing = System.currentTimeMillis() - downTime > LONG_PRESS_DURATION
                 return if (isLongPressing) {
-                    longClickListener!!.onLongClick(this)
+                    longClickListener !!.onLongClick(this)
                     true
                 } else {
                     false

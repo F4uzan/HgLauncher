@@ -28,7 +28,7 @@ class AppListPreference : PreferenceFragmentCompat() {
 
         // Adaptive icon is not available before Android O/API 26.
         if (Utils.atLeastOreo()) {
-            findPreference<Preference>("adaptive_shade_switch")!!.isVisible = true
+            findPreference<Preference>("adaptive_shade_switch") !!.isVisible = true
         }
     }
 
@@ -43,8 +43,10 @@ class AppListPreference : PreferenceFragmentCompat() {
 
         // Fetch all available icon pack.
         val intent = Intent("org.adw.launcher.THEMES")
-        val info = manager.queryIntentActivities(intent,
-                PackageManager.GET_META_DATA)
+        val info = manager.queryIntentActivities(
+            intent,
+            PackageManager.GET_META_DATA
+        )
         info.forEach {
             val activityInfo = it.activityInfo
             val packageName = activityInfo.packageName
@@ -54,7 +56,7 @@ class AppListPreference : PreferenceFragmentCompat() {
         }
         val finalEntries = entries.toTypedArray<CharSequence>()
         val finalEntryValues = entryValues.toTypedArray<CharSequence>()
-        list!!.entries = finalEntries
+        list !!.entries = finalEntries
         list.entryValues = finalEntryValues
     }
 }

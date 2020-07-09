@@ -16,19 +16,28 @@ class ObservantListBehavior : CoordinatorLayout.Behavior<View> {
     constructor() : super() {
         // Left empty. Used for XML initialisation.
     }
+
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
         // Left empty. Used for XML initialisation.
     }
 
-    override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
+    override fun layoutDependsOn(
+        parent: CoordinatorLayout,
+        child: View,
+        dependency: View
+    ): Boolean {
         return dependency is SnackbarLayout
     }
 
-    override fun onDependentViewChanged(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
+    override fun onDependentViewChanged(
+        parent: CoordinatorLayout,
+        child: View,
+        dependency: View
+    ): Boolean {
         val translationY = 0f.coerceAtMost(dependency.translationY - dependency.height)
         child.animate().cancel()
         child.translationY = translationY
-        child.setPadding(0, -translationY.roundToInt(), 0, 0)
+        child.setPadding(0, - translationY.roundToInt(), 0, 0)
         return true
     }
 

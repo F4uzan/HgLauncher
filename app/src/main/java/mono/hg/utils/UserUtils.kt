@@ -18,7 +18,7 @@ class UserUtils(context: Context) {
      */
     fun getSerial(user: UserHandle?): Long {
         return if (Utils.sdkIsAround(17)) {
-            userManager!!.getSerialNumberForUser(user)
+            userManager !!.getSerialNumberForUser(user)
         } else {
             0
         }
@@ -31,7 +31,7 @@ class UserUtils(context: Context) {
      */
     fun getUser(serial: Long): UserHandle? {
         return if (Utils.sdkIsAround(17)) {
-            userManager!!.getUserForSerialNumber(serial)
+            userManager !!.getUserForSerialNumber(serial)
         } else {
             null
         }

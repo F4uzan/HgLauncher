@@ -16,7 +16,7 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
     private val handler = Handler()
     private val runnable: Runnable = object : Runnable {
         override fun run() {
-            if (!timerStopped) {
+            if (! timerStopped) {
                 whenTimerTicked()
                 handler.postDelayed(this, tickDuration.toLong())
             }
@@ -30,7 +30,7 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
      */
     protected val inputText: String?
         get() = if (watchField != null) {
-            watchField.get()!!.text.toString()
+            watchField.get() !!.text.toString()
         } else {
             null
         }
@@ -42,7 +42,7 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
      */
     val trimmedInputText: String
         get() = if (watchField != null) {
-            watchField.get()!!.text.toString().trim { it <= ' ' }
+            watchField.get() !!.text.toString().trim { it <= ' ' }
         } else {
             ""
         }

@@ -33,7 +33,7 @@ class AppAdapter(apps: List<App?>?) : FlexibleAdapter<App?>(apps), SectionedAdap
     }
 
     override fun getSectionName(position: Int): String {
-        return getItem(position)?.appName!!.substring(0, 1).toUpperCase(Locale.getDefault())
+        return getItem(position)?.appName !!.substring(0, 1).toUpperCase(Locale.getDefault())
     }
 
     /**
@@ -58,12 +58,14 @@ class AppAdapter(apps: List<App?>?) : FlexibleAdapter<App?>(apps), SectionedAdap
                         if (isDown(keyCode)) {
                             return@OnKeyListener tryMoveSelection(1)
                         } else if (isUp(keyCode)) {
-                            return@OnKeyListener tryMoveSelection(-1)
+                            return@OnKeyListener tryMoveSelection(- 1)
                         }
                     }
                 } else if (event.action == KeyEvent.ACTION_UP && isConfirmButton(event)
-                        && event.flags and KeyEvent.FLAG_LONG_PRESS != KeyEvent.FLAG_LONG_PRESS
-                        && mSelectedItem != -1) { recyclerView.findViewHolderForAdapterPosition(mSelectedItem)?.itemView?.performClick()
+                    && event.flags and KeyEvent.FLAG_LONG_PRESS != KeyEvent.FLAG_LONG_PRESS
+                    && mSelectedItem != - 1
+                ) {
+                    recyclerView.findViewHolderForAdapterPosition(mSelectedItem)?.itemView?.performClick()
                     return@OnKeyListener true
                 }
                 false

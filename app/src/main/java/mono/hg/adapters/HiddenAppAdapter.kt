@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.ImageViewCompat
 import mono.hg.R
 import mono.hg.helpers.PreferenceHelper
@@ -18,7 +17,8 @@ import java.util.*
 /**
  * Adapter handling display of hidden apps. Only used in preferences.
  */
-class HiddenAppAdapter(private val hiddenAppsList: ArrayList<App>, private val context: Context) : BaseAdapter() {
+class HiddenAppAdapter(private val hiddenAppsList: ArrayList<App>, private val context: Context) :
+    BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val appHolder: ViewHolder
         var view = convertView
@@ -36,7 +36,12 @@ class HiddenAppAdapter(private val hiddenAppsList: ArrayList<App>, private val c
         appHolder.name?.text = hiddenAppsList[position].appName
         if (hiddenAppsList[position].isAppHidden) {
             appHolder.icon?.setImageResource(R.drawable.ic_check)
-            appHolder.icon?.let { ImageViewCompat.setImageTintList(it, ColorStateList.valueOf(PreferenceHelper.accent)) }
+            appHolder.icon?.let {
+                ImageViewCompat.setImageTintList(
+                    it,
+                    ColorStateList.valueOf(PreferenceHelper.accent)
+                )
+            }
             appHolder.name?.typeface = Typeface.DEFAULT_BOLD
         } else {
             appHolder.icon?.setImageDrawable(hiddenAppsList[position].icon)

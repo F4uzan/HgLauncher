@@ -11,7 +11,8 @@ import mono.hg.helpers.PreferenceHelper
  *
  * Uses [CircularProgressDrawable] to draw its progress bar.
  */
-class IndeterminateMaterialProgressBar(context: Context, attrs: AttributeSet?) : ProgressBar(context, attrs) {
+class IndeterminateMaterialProgressBar(context: Context, attrs: AttributeSet?) :
+    ProgressBar(context, attrs) {
     companion object {
         private const val WIDTH_DP = 4
     }

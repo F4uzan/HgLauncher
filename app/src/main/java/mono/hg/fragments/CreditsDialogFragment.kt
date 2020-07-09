@@ -29,15 +29,18 @@ class CreditsDialogFragment : DialogFragment() {
         val creditsText = binding.creditsPlaceholder
         try {
             br = BufferedReader(
-                    InputStreamReader(activity.assets.open("credits.txt")))
+                InputStreamReader(activity.assets.open("credits.txt"))
+            )
             var line: String?
             while (br.readLine().also { line = it } != null) {
                 stringBuilder.append(line)
                 stringBuilder.append('\n')
             }
         } catch (e: IOException) {
-            Utils.sendLog(LogLevel.ERROR,
-                    "Exception in reading credits file: $e")
+            Utils.sendLog(
+                LogLevel.ERROR,
+                "Exception in reading credits file: $e"
+            )
         } finally {
             Utils.closeStream(br)
         }

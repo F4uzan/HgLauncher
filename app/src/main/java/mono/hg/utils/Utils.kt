@@ -134,7 +134,7 @@ object Utils {
      * @param query    The query itself
      */
     fun doWebSearch(context: Context, provider: String?, query: String?) {
-        openLink(context, provider!!.replace("%s", query!!))
+        openLink(context, provider !!.replace("%s", query !!))
     }
 
     /**
@@ -172,7 +172,10 @@ object Utils {
      * @param activity        The activity where PackageChangesReceiver is to be registered.
      * @param packageReceiver The receiver itself.
      */
-    fun registerPackageReceiver(activity: AppCompatActivity, packageReceiver: PackageChangesReceiver?) {
+    fun registerPackageReceiver(
+        activity: AppCompatActivity,
+        packageReceiver: PackageChangesReceiver?
+    ) {
         val intentFilter = IntentFilter()
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED)
         intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED)
@@ -188,7 +191,10 @@ object Utils {
      * @param activity        The activity where PackageChangesReceiver is to be registered.
      * @param packageReceiver The receiver itself.
      */
-    fun unregisterPackageReceiver(activity: AppCompatActivity, packageReceiver: PackageChangesReceiver?) {
+    fun unregisterPackageReceiver(
+        activity: AppCompatActivity,
+        packageReceiver: PackageChangesReceiver?
+    ) {
         try {
             activity.unregisterReceiver(packageReceiver)
         } catch (w: IllegalArgumentException) {
@@ -220,12 +226,18 @@ object Utils {
             "none" -> {
             }
             else -> try {
-                AppUtils.quickLaunch(activity,
-                        PreferenceHelper.getGestureForDirection(direction))
+                AppUtils.quickLaunch(
+                    activity,
+                    PreferenceHelper.getGestureForDirection(direction)
+                )
             } catch (w: ActivityNotFoundException) {
                 // Maybe the user had an old configuration, but otherwise, this is harmless.
                 // We should still notify them though.
-                Toast.makeText(activity, activity.getString(R.string.err_activity_null), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    activity,
+                    activity.getString(R.string.err_activity_null),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -239,7 +251,11 @@ object Utils {
      *
      * @return True if key is handled.
      */
-    fun handleInputShortcut(activity: AppCompatActivity, editText: EditText, keyCode: Int): Boolean? {
+    fun handleInputShortcut(
+        activity: AppCompatActivity,
+        editText: EditText,
+        keyCode: Int
+    ): Boolean? {
         // Get selected text for cut and copy.
         val start = editText.selectionStart
         val end = editText.selectionEnd
@@ -258,9 +274,11 @@ object Utils {
                 true
             }
             KeyEvent.KEYCODE_V -> {
-                editText.text = editText.text.replace(start.coerceAtMost(end), start.coerceAtLeast(end),
-                        ActivityServiceUtils.pasteFromClipboard(activity), 0,
-                        ActivityServiceUtils.pasteFromClipboard(activity).length)
+                editText.text = editText.text.replace(
+                    start.coerceAtMost(end), start.coerceAtLeast(end),
+                    ActivityServiceUtils.pasteFromClipboard(activity), 0,
+                    ActivityServiceUtils.pasteFromClipboard(activity).length
+                )
                 true
             }
             else ->
@@ -274,17 +292,23 @@ object Utils {
      */
     fun setDefaultProviders(resources: Resources) {
         val defaultProvider = resources.getStringArray(
-                R.array.pref_search_provider_title)
+            R.array.pref_search_provider_title
+        )
         val defaultProviderId = resources.getStringArray(
-                R.array.pref_search_provider_values)
+            R.array.pref_search_provider_values
+        )
         val tempList = ArrayList<WebSearchProvider>()
 
         // defaultProvider will always be the same size as defaultProviderUrl.
         // However, we start at 1 to ignore the 'Always ask' option.
         for (i in 1 until defaultProvider.size) {
-            tempList.add(WebSearchProvider(defaultProvider[i],
+            tempList.add(
+                WebSearchProvider(
+                    defaultProvider[i],
                     PreferenceHelper.getDefaultProvider(defaultProviderId[i]),
-                    defaultProvider[i]))
+                    defaultProvider[i]
+                )
+            )
         }
         PreferenceHelper.updateProvider(tempList)
     }
@@ -306,7 +330,15 @@ object Utils {
     /**
      * Directions of gesture.
      */
-    @IntDef(Gesture.LEFT, Gesture.RIGHT, Gesture.UP, Gesture.DOWN, Gesture.TAP, Gesture.DOUBLE_TAP, Gesture.PINCH)
+    @IntDef(
+        Gesture.LEFT,
+        Gesture.RIGHT,
+        Gesture.UP,
+        Gesture.DOWN,
+        Gesture.TAP,
+        Gesture.DOUBLE_TAP,
+        Gesture.PINCH
+    )
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     annotation class Gesture {
         companion object {

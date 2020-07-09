@@ -23,32 +23,33 @@ import java.util.*
 class GesturesPreference : PreferenceFragmentCompat() {
     private lateinit var appListEntries: Array<CharSequence>
     private lateinit var appListEntryValues: Array<CharSequence>
-    private val NestingListListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-        val list = preference as ListPreference
-        when (newValue as String) {
-            "handler" -> list.setSummary(R.string.gesture_action_handler)
-            "widget" -> list.setSummary(R.string.gesture_action_widget)
-            "status" -> list.setSummary(R.string.gesture_action_status)
-            "panel" -> list.setSummary(R.string.gesture_action_panel)
-            "list" -> list.setSummary(R.string.gesture_action_list)
-            "app" -> {
-                // Create the Bundle to pass to AppSelectionPreferenceDialog.
-                val appListBundle = Bundle()
-                appListBundle.putString("key", list.key)
-                appListBundle.putCharSequenceArray("entries", appListEntries)
-                appListBundle.putCharSequenceArray("entryValues", appListEntryValues)
+    private val NestingListListener =
+        Preference.OnPreferenceChangeListener { preference, newValue ->
+            val list = preference as ListPreference
+            when (newValue as String) {
+                "handler" -> list.setSummary(R.string.gesture_action_handler)
+                "widget" -> list.setSummary(R.string.gesture_action_widget)
+                "status" -> list.setSummary(R.string.gesture_action_status)
+                "panel" -> list.setSummary(R.string.gesture_action_panel)
+                "list" -> list.setSummary(R.string.gesture_action_list)
+                "app" -> {
+                    // Create the Bundle to pass to AppSelectionPreferenceDialog.
+                    val appListBundle = Bundle()
+                    appListBundle.putString("key", list.key)
+                    appListBundle.putCharSequenceArray("entries", appListEntries)
+                    appListBundle.putCharSequenceArray("entryValues", appListEntryValues)
 
-                // Call and create AppSelectionPreferenceDialog.
-                val appList = AppSelectionPreferenceDialog()
-                appList.setTargetFragment(this@GesturesPreference, APPLICATION_DIALOG_CODE)
-                appList.arguments = appListBundle
-                appList.show(requireActivity().supportFragmentManager, "AppSelectionDialog")
+                    // Call and create AppSelectionPreferenceDialog.
+                    val appList = AppSelectionPreferenceDialog()
+                    appList.setTargetFragment(this@GesturesPreference, APPLICATION_DIALOG_CODE)
+                    appList.arguments = appListBundle
+                    appList.show(requireActivity().supportFragmentManager, "AppSelectionDialog")
+                }
+                "none" -> list.setSummary(R.string.gesture_action_default)
+                else -> list.setSummary(R.string.gesture_action_default)
             }
-            "none" -> list.setSummary(R.string.gesture_action_default)
-            else -> list.setSummary(R.string.gesture_action_default)
+            true
         }
-        true
-    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.pref_gestures, rootKey)
@@ -83,8 +84,10 @@ class GesturesPreference : PreferenceFragmentCompat() {
                 }
             } else if (resultCode == Activity.RESULT_OK) {
                 val key = data.getStringExtra("key")
-                val app = AppUtils.getPackageLabel(requireActivity().packageManager,
-                        data.getStringExtra("app"))
+                val app = AppUtils.getPackageLabel(
+                    requireActivity().packageManager,
+                    data.getStringExtra("app")
+                )
 
                 if (key != null) {
                     val preference = findPreference<ListPreference>(key)
@@ -149,8 +152,10 @@ class GesturesPreference : PreferenceFragmentCompat() {
 
     private fun setNestedListSummary(list: ListPreference) {
         if (list.value.contains("/")) {
-            list.summary = AppUtils.getPackageLabel(requireActivity().packageManager,
-                    list.value)
+            list.summary = AppUtils.getPackageLabel(
+                requireActivity().packageManager,
+                list.value
+            )
         }
     }
 

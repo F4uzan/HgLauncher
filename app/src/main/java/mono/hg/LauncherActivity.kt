@@ -215,7 +215,8 @@ class LauncherActivity : AppCompatActivity() {
 
         // Get icons from icon pack.
         if ("default" != PreferenceHelper.iconPackName &&
-                LauncherIconHelper.loadIconPack(packageManager) == 0) {
+            LauncherIconHelper.loadIconPack(packageManager) == 0
+        ) {
             PreferenceHelper.editor?.putString("icon_pack", "default")?.apply()
         }
 
@@ -253,8 +254,10 @@ class LauncherActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                startActivityForResult(Intent(this, SettingsActivity::class.java),
-                        SETTINGS_RETURN_CODE)
+                startActivityForResult(
+                    Intent(this, SettingsActivity::class.java),
+                    SETTINGS_RETURN_CODE
+                )
                 true
             }
             R.id.action_force_refresh -> {
@@ -304,8 +307,9 @@ class LauncherActivity : AppCompatActivity() {
 
         // See if user has changed icon pack. Clear cache if true.
         if (PreferenceHelper.preference.getBoolean("require_refresh", false) ||
-                PreferenceHelper.preference
-                        .getString("icon_pack", "default") != PreferenceHelper.iconPackName) {
+            PreferenceHelper.preference
+                .getString("icon_pack", "default") != PreferenceHelper.iconPackName
+        ) {
             LauncherIconHelper.refreshIcons()
         }
 
@@ -347,7 +351,8 @@ class LauncherActivity : AppCompatActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         // See if any of the system bars needed hiding.
         if (Utils.atLeastKitKat()) {
-            window.decorView.systemUiVisibility = ViewUtils.setWindowbarMode(PreferenceHelper.windowBarMode)
+            window.decorView.systemUiVisibility =
+                ViewUtils.setWindowbarMode(PreferenceHelper.windowBarMode)
         } else if (Utils.sdkIsBelow(19) && PreferenceHelper.shouldHideStatusBar()) {
             window.decorView.systemUiVisibility = ViewUtils.setWindowbarMode("status")
         }
@@ -386,62 +391,66 @@ class LauncherActivity : AppCompatActivity() {
     fun doThis(action: String?) {
         when (action) {
             CLOSE_MENU -> if (appMenu != null) {
-                if (appMenu!!.menu.findItem(R.id.action_app_actions) != null) {
-                    appMenu!!.menu.findItem(R.id.action_app_actions).subMenu.close()
+                if (appMenu !!.menu.findItem(R.id.action_app_actions) != null) {
+                    appMenu !!.menu.findItem(R.id.action_app_actions).subMenu.close()
                 }
-                if (appMenu!!.menu.findItem(SHORTCUT_MENU_GROUP) != null) {
-                    appMenu!!.menu.findItem(SHORTCUT_MENU_GROUP).subMenu.close()
+                if (appMenu !!.menu.findItem(SHORTCUT_MENU_GROUP) != null) {
+                    appMenu !!.menu.findItem(SHORTCUT_MENU_GROUP).subMenu.close()
                 }
-                appMenu!!.dismiss()
+                appMenu !!.dismiss()
             }
-            SHOW_PANEL -> slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
-                    ActivityServiceUtils.isPowerSaving(this))
-            HIDE_PANEL -> slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED,
-                    ActivityServiceUtils.isPowerSaving(this))
+            SHOW_PANEL -> slidingHome.setPanelState(
+                SlidingUpPanelLayout.PanelState.COLLAPSED,
+                ActivityServiceUtils.isPowerSaving(this)
+            )
+            HIDE_PANEL -> slidingHome.setPanelState(
+                SlidingUpPanelLayout.PanelState.EXPANDED,
+                ActivityServiceUtils.isPowerSaving(this)
+            )
             SHOW_PINNED -> pinnedAppsContainer.animate()
-                    .translationY(0f)
-                    .setInterpolator(LinearOutSlowInInterpolator())
-                    .setDuration(225)
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            isFavouritesVisible = true
-                        }
+                .translationY(0f)
+                .setInterpolator(LinearOutSlowInInterpolator())
+                .setDuration(225)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        isFavouritesVisible = true
+                    }
 
-                        override fun onAnimationCancel(animation: Animator) {
-                            isFavouritesVisible = false
-                        }
-                    })
+                    override fun onAnimationCancel(animation: Animator) {
+                        isFavouritesVisible = false
+                    }
+                })
             HIDE_PINNED -> pinnedAppsContainer.animate()
-                    .translationY(pinnedAppsContainer.measuredHeight.toFloat())
-                    .setInterpolator(FastOutLinearInInterpolator())
-                    .setDuration(175)
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            isFavouritesVisible = false
-                        }
-                    })
+                .translationY(pinnedAppsContainer.measuredHeight.toFloat())
+                .setInterpolator(FastOutLinearInInterpolator())
+                .setDuration(175)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        isFavouritesVisible = false
+                    }
+                })
             "show_context_button" -> searchContext.animate()
-                    .translationX(0f)
-                    .setInterpolator(LinearOutSlowInInterpolator())
-                    .setDuration(200)
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            isContextVisible = true
-                        }
+                .translationX(0f)
+                .setInterpolator(LinearOutSlowInInterpolator())
+                .setDuration(200)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        isContextVisible = true
+                    }
 
-                        override fun onAnimationCancel(animation: Animator) {
-                            isContextVisible = false
-                        }
-                    })
+                    override fun onAnimationCancel(animation: Animator) {
+                        isContextVisible = false
+                    }
+                })
             "hide_context_button" -> searchContext.animate()
-                    .translationX(searchContext.measuredWidth.toFloat())
-                    .setInterpolator(FastOutLinearInInterpolator())
-                    .setDuration(150)
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            isContextVisible = false
-                        }
-                    })
+                .translationX(searchContext.measuredWidth.toFloat())
+                .setInterpolator(FastOutLinearInInterpolator())
+                .setDuration(150)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        isContextVisible = false
+                    }
+                })
             "open_widgets" -> {
                 viewPager.currentItem = 0
                 doThis(SHOW_PANEL)
@@ -458,8 +467,10 @@ class LauncherActivity : AppCompatActivity() {
         // Workaround v21+ status bar transparency issue.
         // This is disabled if the status bar is hidden.
         if (Utils.atLeastLollipop()
-                && (PreferenceHelper.windowBarMode == "none" || PreferenceHelper.windowBarMode == "nav")) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            && (PreferenceHelper.windowBarMode == "none" || PreferenceHelper.windowBarMode == "nav")
+        ) {
+            window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             val homeParams = slidingHome.layoutParams as MarginLayoutParams
             homeParams.topMargin = ViewUtils.statusBarHeight
         }
@@ -482,7 +493,8 @@ class LauncherActivity : AppCompatActivity() {
         }
         if ("transparent" == PreferenceHelper.listBackground) {
             appsListContainer.setBackgroundColor(
-                    Utils.getColorFromAttr(this, R.attr.backgroundColorAlt))
+                Utils.getColorFromAttr(this, R.attr.backgroundColorAlt)
+            )
         } else if ("none" == PreferenceHelper.listBackground) {
             appsListContainer.setBackgroundColor(Color.TRANSPARENT)
         }
@@ -507,10 +519,12 @@ class LauncherActivity : AppCompatActivity() {
         when (PreferenceHelper.appTheme()) {
             "auto" -> if (Utils.atLeastQ()) {
                 AppCompatDelegate.setDefaultNightMode(
-                        AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                )
             } else {
                 AppCompatDelegate.setDefaultNightMode(
-                        AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
+                    AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+                )
             }
             "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             "dark" -> {
@@ -520,10 +534,12 @@ class LauncherActivity : AppCompatActivity() {
             "black" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             else -> if (Utils.atLeastQ()) {
                 AppCompatDelegate.setDefaultNightMode(
-                        AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                )
             } else {
                 AppCompatDelegate.setDefaultNightMode(
-                        AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
+                    AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+                )
             }
         }
     }
@@ -539,8 +555,10 @@ class LauncherActivity : AppCompatActivity() {
         val componentName = ComponentName.unflattenFromString(packageName)
         val user = app.user
         val pinApp = PinnedApp(app.packageName, app.user)
-        val packageNameUri = Uri.fromParts("package", AppUtils.getPackageName(packageName),
-                null)
+        val packageNameUri = Uri.fromParts(
+            "package", AppUtils.getPackageName(packageName),
+            null
+        )
         val shortcutMap = SparseArray<String>()
         val position = pinnedAppsAdapter.getGlobalPositionOf(app)
 
@@ -555,9 +573,9 @@ class LauncherActivity : AppCompatActivity() {
             AppUtils.getShortcuts(launcherApps, packageName)?.forEach {
                 shortcutMap.put(menuId, it.id)
                 appMenu !!.menu
-                        .findItem(SHORTCUT_MENU_GROUP)
-                        .subMenu
-                        .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
+                    .findItem(SHORTCUT_MENU_GROUP)
+                    .subMenu
+                    .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
                 menuId ++
             }
             if (shortcutMap.size() == 0) {
@@ -578,35 +596,51 @@ class LauncherActivity : AppCompatActivity() {
         appMenu !!.menu.findItem(R.id.action_unpin).isVisible = true
 
         // Show uninstall menu if the app is not a system app.
-        appMenu !!.menu.findItem(R.id.action_uninstall).isVisible = (! AppUtils.isSystemApp(packageManager, packageName)
-                && app.user == userUtils !!.currentSerial)
+        appMenu !!.menu.findItem(R.id.action_uninstall).isVisible =
+            (! AppUtils.isSystemApp(packageManager, packageName)
+                    && app.user == userUtils !!.currentSerial)
         appMenu !!.show()
         appMenu !!.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_unpin -> {
                     pinnedAppList.remove(pinnedAppsAdapter.getItem(position))
                     pinnedAppsAdapter.removeItem(position)
-                    pinnedAppString = pinnedAppString.replace(app.userPackageName + ";",
-                            "")
+                    pinnedAppString = pinnedAppString.replace(
+                        app.userPackageName + ";",
+                        ""
+                    )
                     PreferenceHelper.update("pinned_apps_list", pinnedAppString)
                     if (pinnedAppsAdapter.isEmpty) {
                         doThis(HIDE_PINNED)
                     }
                 }
                 R.id.action_info -> if (Utils.atLeastLollipop()) {
-                    launcherApps !!.startAppDetailsActivity(componentName,
-                            userUtils !!.getUser(app.user), null, null)
+                    launcherApps !!.startAppDetailsActivity(
+                        componentName,
+                        userUtils !!.getUser(app.user), null, null
+                    )
                 } else {
-                    startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            packageNameUri))
+                    startActivity(
+                        Intent(
+                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            packageNameUri
+                        )
+                    )
                 }
-                R.id.action_uninstall -> startActivity(Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageNameUri))
+                R.id.action_uninstall -> startActivity(
+                    Intent(
+                        Intent.ACTION_UNINSTALL_PACKAGE,
+                        packageNameUri
+                    )
+                )
                 else ->                         // Catch click actions from the shortcut menu group.
                     if (item.groupId == SHORTCUT_MENU_GROUP && Utils.sdkIsAround(25)) {
                         userUtils !!.getUser(user)?.let {
-                            launcherApps?.startShortcut(AppUtils.getPackageName(packageName),
-                                    shortcutMap[item.itemId],
-                                    null, null, it)
+                            launcherApps?.startShortcut(
+                                AppUtils.getPackageName(packageName),
+                                shortcutMap[item.itemId],
+                                null, null, it
+                            )
                         }
                     }
             }
@@ -642,8 +676,10 @@ class LauncherActivity : AppCompatActivity() {
         // Implement listener for the search bar.
         searchBar.addTextChangedListener(object : TextSpectator(searchBar) {
             var searchHint: String = ""
-            var searchSnack = DagashiBar.make(appsListContainer, searchHint,
-                    DagashiBar.LENGTH_INDEFINITE, false).setTextColor(PreferenceHelper.accent)
+            var searchSnack = DagashiBar.make(
+                appsListContainer, searchHint,
+                DagashiBar.LENGTH_INDEFINITE, false
+            ).setTextColor(PreferenceHelper.accent)
 
             override fun whenTimerTicked() {
                 super.whenTimerTicked()
@@ -656,7 +692,7 @@ class LauncherActivity : AppCompatActivity() {
                         doThis("hide_context_button")
                     }
                     if (getCurrentPage() != null) {
-                        if (getCurrentPage()!!.isAcceptingSearch()) {
+                        if (getCurrentPage() !!.isAcceptingSearch()) {
                             getCurrentPage()?.resetSearch()
                         }
                     }
@@ -665,7 +701,7 @@ class LauncherActivity : AppCompatActivity() {
                 } else {
                     // Begin filtering our list.
                     if (getCurrentPage() != null) {
-                        if (getCurrentPage()!!.isAcceptingSearch()) {
+                        if (getCurrentPage() !!.isAcceptingSearch()) {
                             getCurrentPage()?.commitSearch(trimmedInputText)
                         }
                     }
@@ -700,21 +736,27 @@ class LauncherActivity : AppCompatActivity() {
                     // Prompt user if they want to search their query online.
                     searchSnack.setNonDismissAction(searchSnackAction, View.OnClickListener {
                         if (PreferenceHelper.searchProvider != "none") {
-                            Utils.doWebSearch(this@LauncherActivity,
-                                    PreferenceHelper.searchProvider,
-                                    URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name()))
+                            Utils.doWebSearch(
+                                this@LauncherActivity,
+                                PreferenceHelper.searchProvider,
+                                URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name())
+                            )
                             searchSnack.dismiss()
                         } else {
                             appMenu = PopupMenu(this@LauncherActivity, it)
-                            ViewUtils.createSearchMenu(this@LauncherActivity, appMenu !!,
-                                    URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name()))
+                            ViewUtils.createSearchMenu(
+                                this@LauncherActivity, appMenu !!,
+                                URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name())
+                            )
                         }
                     }).show()
                     if (PreferenceHelper.extendedSearchMenu() && PreferenceHelper.searchProvider != "none") {
                         searchSnack.setLongPressAction(View.OnLongClickListener {
                             appMenu = PopupMenu(this@LauncherActivity, it)
-                            ViewUtils.createSearchMenu(this@LauncherActivity, appMenu !!,
-                                    URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name()))
+                            ViewUtils.createSearchMenu(
+                                this@LauncherActivity, appMenu !!,
+                                URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name())
+                            )
                             true
                         })
                     }
@@ -729,12 +771,15 @@ class LauncherActivity : AppCompatActivity() {
     private fun addSearchBarEditorListener() {
         searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (searchBar.text.isNotEmpty()
-                    && (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)) {
+                && (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)
+            ) {
                 val pageAvailable = getCurrentPage()?.launchPreselection() ?: false
-                if (!pageAvailable && PreferenceHelper.promptSearch() && PreferenceHelper.searchProvider != "none") {
-                    Utils.doWebSearch(this@LauncherActivity,
-                            PreferenceHelper.searchProvider,
-                            searchBar.text.toString())
+                if (! pageAvailable && PreferenceHelper.promptSearch() && PreferenceHelper.searchProvider != "none") {
+                    Utils.doWebSearch(
+                        this@LauncherActivity,
+                        PreferenceHelper.searchProvider,
+                        searchBar.text.toString()
+                    )
                 }
             }
             true
@@ -747,7 +792,8 @@ class LauncherActivity : AppCompatActivity() {
     private fun addListListeners() {
         // Add item click action to the favourites panel.
         pinnedAppsAdapter.addListener(FlexibleAdapter.OnItemClickListener { _, position ->
-            pinnedAppsAdapter.getItem(position)?.let { AppUtils.launchApp(this@LauncherActivity, it) }
+            pinnedAppsAdapter.getItem(position)
+                ?.let { AppUtils.launchApp(this@LauncherActivity, it) }
             true
         })
     }
@@ -775,16 +821,24 @@ class LauncherActivity : AppCompatActivity() {
                 pinnedAppsAdapter.notifyItemMoved(fromPosition, toPosition)
             }
 
-            override fun onActionStateChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+            override fun onActionStateChanged(
+                viewHolder: RecyclerView.ViewHolder?,
+                actionState: Int
+            ) {
                 // FIXME: Work out a better touch detection.
                 // No movement occurred, this is a long press.
                 if (newState != ItemTouchHelper.ACTION_STATE_DRAG && System.currentTimeMillis() - startTime == System
-                                .currentTimeMillis()) {
+                        .currentTimeMillis()
+                ) {
                     val app: App? = pinnedAppsAdapter.getItem(viewHolder !!.absoluteAdapterPosition)
 
                     // Use LayoutManager method to get the view,
                     // as RecyclerView will happily return null if it can.
-                    createAppMenu(pinnedAppsRecyclerView.layoutManager !!.findViewByPosition(viewHolder.absoluteAdapterPosition), app)
+                    createAppMenu(
+                        pinnedAppsRecyclerView.layoutManager !!.findViewByPosition(
+                            viewHolder.absoluteAdapterPosition
+                        ), app
+                    )
                 } else {
                     // Reset startTime and update the pinned apps, we were swiping.
                     startTime = 0
@@ -819,23 +873,25 @@ class LauncherActivity : AppCompatActivity() {
 
                         // Animate search container entering the view.
                         if (! ActivityServiceUtils.isPowerSaving(this@LauncherActivity)) {
-                            searchContainer.animate().alpha(1f).setDuration(animateDuration.toLong())
-                                    .setListener(object : AnimatorListenerAdapter() {
-                                        override fun onAnimationStart(animation: Animator) {
-                                            searchContainer.visibility = View.VISIBLE
-                                        }
+                            searchContainer.animate().alpha(1f)
+                                .setDuration(animateDuration.toLong())
+                                .setListener(object : AnimatorListenerAdapter() {
+                                    override fun onAnimationStart(animation: Animator) {
+                                        searchContainer.visibility = View.VISIBLE
+                                    }
 
-                                        override fun onAnimationEnd(animation: Animator) {
-                                            searchContainer.clearAnimation()
-                                        }
-                                    })
+                                    override fun onAnimationEnd(animation: Animator) {
+                                        searchContainer.clearAnimation()
+                                    }
+                                })
                         } else {
                             searchContainer.visibility = View.VISIBLE
                         }
                     }
                     SlidingUpPanelLayout.PanelState.COLLAPSED ->                         // Show the keyboard.
                         if (PreferenceHelper.shouldFocusKeyboard()
-                                && previousState == SlidingUpPanelLayout.PanelState.DRAGGING) {
+                            && previousState == SlidingUpPanelLayout.PanelState.DRAGGING
+                        ) {
                             ActivityServiceUtils.showSoftKeyboard(this@LauncherActivity, searchBar)
                         }
                     SlidingUpPanelLayout.PanelState.EXPANDED -> {
@@ -855,11 +911,15 @@ class LauncherActivity : AppCompatActivity() {
                     }
                     SlidingUpPanelLayout.PanelState.ANCHORED ->                         // Please don't anchor, we don't want it.
                         if (previousState != SlidingUpPanelLayout.PanelState.DRAGGING) {
-                            slidingHome.setPanelState(previousState,
-                                    ActivityServiceUtils.isPowerSaving(this@LauncherActivity))
+                            slidingHome.setPanelState(
+                                previousState,
+                                ActivityServiceUtils.isPowerSaving(this@LauncherActivity)
+                            )
                         } else {
-                            slidingHome.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED,
-                                    ActivityServiceUtils.isPowerSaving(this@LauncherActivity))
+                            slidingHome.setPanelState(
+                                SlidingUpPanelLayout.PanelState.COLLAPSED,
+                                ActivityServiceUtils.isPowerSaving(this@LauncherActivity)
+                            )
                         }
                     else -> {
                     }
@@ -941,9 +1001,10 @@ class LauncherActivity : AppCompatActivity() {
      */
     fun hidePinnedApps() {
         if (! pinnedAppsAdapter.isEmpty
-                && isFavouritesVisible
-                && PreferenceHelper.favouritesAcceptScroll()
-                && searchBar.text.toString().isEmpty()) {
+            && isFavouritesVisible
+            && PreferenceHelper.favouritesAcceptScroll()
+            && searchBar.text.toString().isEmpty()
+        ) {
             doThis(HIDE_PINNED)
         }
     }
@@ -954,8 +1015,9 @@ class LauncherActivity : AppCompatActivity() {
      */
     fun showPinnedApps() {
         if (! pinnedAppsAdapter.isEmpty
-                && ! isFavouritesVisible
-                && PreferenceHelper.favouritesAcceptScroll()) {
+            && ! isFavouritesVisible
+            && PreferenceHelper.favouritesAcceptScroll()
+        ) {
             doThis(SHOW_PINNED)
         }
     }

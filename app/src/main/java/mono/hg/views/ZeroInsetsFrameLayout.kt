@@ -15,13 +15,19 @@ import android.widget.FrameLayout
 class ZeroInsetsFrameLayout : FrameLayout {
     private val insets = IntArray(4)
 
-    constructor(context: Context?) : super(context!!) {
+    constructor(context: Context?) : super(context !!) {
         // Unused. Used only in XML initialisation.
     }
-    constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs) {
+
+    constructor(context: Context?, attrs: AttributeSet?) : super(context !!, attrs) {
         // Unused. Used only in XML initialisation.
     }
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context!!, attrs, defStyle) {
+
+    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
+        context !!,
+        attrs,
+        defStyle
+    ) {
         // Unused. Used only in XML initialisation.
     }
 

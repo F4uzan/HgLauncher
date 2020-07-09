@@ -26,7 +26,7 @@ class DesktopPreference : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val orientationMode = findPreference<ListPreference>("orientation_mode")
-        orientationMode!!.onPreferenceChangeListener = RotatingListListener
+        orientationMode !!.onPreferenceChangeListener = RotatingListListener
 
         // Window bar hiding works only reliably in KitKat and above.
         if (Utils.atLeastKitKat()) {

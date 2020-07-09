@@ -1,6 +1,5 @@
 package mono.hg.wrappers
 
-import mono.hg.R
 import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
@@ -8,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import mono.hg.R
 import mono.hg.helpers.PreferenceHelper
 
 /**
@@ -22,7 +22,7 @@ class AppSelectionPreferenceDialog : DialogFragment() {
     private val selectItemListener = DialogInterface.OnClickListener { dialog, which ->
         if (mClickedDialogEntryIndex != which) {
             mClickedDialogEntryIndex = which
-            mValue = mEntryValues!![mClickedDialogEntryIndex].toString()
+            mValue = mEntryValues !![mClickedDialogEntryIndex].toString()
             PreferenceHelper.update(preference, mValue)
         }
         dialog.dismiss()
@@ -39,20 +39,23 @@ class AppSelectionPreferenceDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(PreferenceHelper.darkAccent)
-        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
-        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEUTRAL)
+            .setTextColor(PreferenceHelper.darkAccent)
+        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEGATIVE)
+            .setTextColor(PreferenceHelper.darkAccent)
+        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE)
+            .setTextColor(PreferenceHelper.darkAccent)
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         if (mValue == null) {
             val i = Intent().putExtra("key", preference)
-            targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_CANCELED, i)
+            targetFragment !!.onActivityResult(targetRequestCode, Activity.RESULT_CANCELED, i)
             PreferenceHelper.update(preference, "none")
         } else {
             val i = Intent().putExtra("key", preference).putExtra("app", mValue)
-            targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, i)
+            targetFragment !!.onActivityResult(targetRequestCode, Activity.RESULT_OK, i)
         }
     }
 

@@ -2,7 +2,6 @@ package mono.hg.preferences
 
 import android.content.DialogInterface
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -41,7 +40,11 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
         // No-op.
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentWebProviderBinding.inflate(inflater, container, false)
         return binding !!.root
     }
@@ -53,31 +56,39 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
         providerAdapter = context?.let { WebProviderAdapter(providerList, it) }
 
         providerListView.adapter = providerAdapter
-        providerListView.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, _, i, _ ->
-            val name = providerList[i].name
-            val url = providerList[i].url
-            val popupMenu = PopupMenu(requireActivity(), view)
-            popupMenu.menuInflater.inflate(R.menu.menu_web_provider, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.action_web_provider_remove -> {
-                        providerList.removeAt(i)
-                        providerAdapter !!.notifyDataSetChanged()
-                        PreferenceHelper.updateProvider(providerList)
-                        true
+        providerListView.onItemLongClickListener =
+            AdapterView.OnItemLongClickListener { _, _, i, _ ->
+                val name = providerList[i].name
+                val url = providerList[i].url
+                val popupMenu = PopupMenu(requireActivity(), view)
+                popupMenu.menuInflater.inflate(R.menu.menu_web_provider, popupMenu.menu)
+                popupMenu.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.action_web_provider_remove -> {
+                            providerList.removeAt(i)
+                            providerAdapter !!.notifyDataSetChanged()
+                            PreferenceHelper.updateProvider(providerList)
+                            true
+                        }
+                        R.id.action_web_provider_edit -> {
+                            makeEditMenu(name, url, true, i)
+                            true
+                        }
+                        else -> true
                     }
-                    R.id.action_web_provider_edit -> {
-                        makeEditMenu(name, url, true, i)
-                        true
-                    }
-                    else -> true
                 }
+                popupMenu.show()
+                true
             }
-            popupMenu.show()
-            true
-        }
 
-        PreferenceHelper.providerList.forEach { providerList.add(WebSearchProvider(it.key, it.value)) }
+        PreferenceHelper.providerList.forEach {
+            providerList.add(
+                WebSearchProvider(
+                    it.key,
+                    it.value
+                )
+            )
+        }
 
         // Add defaults if we don't have any provider.
         if (providerList.isEmpty()) {
@@ -125,20 +136,31 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
 
     private fun addDefaults() {
         val defaultProvider = resources.getStringArray(
-                R.array.pref_search_provider_title)
+            R.array.pref_search_provider_title
+        )
         val defaultProviderId = resources.getStringArray(
-                R.array.pref_search_provider_values)
+            R.array.pref_search_provider_values
+        )
 
         // defaultProvider will always be the same size as defaultProviderUrl.
         // However, we start at 1 to ignore the 'Always ask' option.
         for (i in 1 until defaultProvider.size) {
-            providerList.add(WebSearchProvider(defaultProvider[i],
+            providerList.add(
+                WebSearchProvider(
+                    defaultProvider[i],
                     PreferenceHelper.getDefaultProvider(defaultProviderId[i]),
-                    defaultProvider[i]))
+                    defaultProvider[i]
+                )
+            )
         }
     }
 
-    private fun makeEditMenu(name: String? = "", url: String? = "", isEditing: Boolean = false, position: Int = 0) {
+    private fun makeEditMenu(
+        name: String? = "",
+        url: String? = "",
+        isEditing: Boolean = false,
+        position: Int = 0
+    ) {
         val binding = LayoutWebProviderEditDialogBinding.inflate(requireActivity().layoutInflater)
         val builder = AlertDialog.Builder(requireActivity())
         val nameField = binding.providerEditName
@@ -160,39 +182,45 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
         }
         builder.setView(binding.root)
         builder.setTitle(title)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { _, _ ->
-                    val name = nameField.text.toString().replace("\\|".toRegex(), "").trim { it <= ' ' }
-                    val url = urlField.text.toString().trim { it <= ' ' }
+            .setNegativeButton(android.R.string.cancel, null)
+            .setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { _, _ ->
+                val name = nameField.text.toString().replace("\\|".toRegex(), "").trim { it <= ' ' }
+                val url = urlField.text.toString().trim { it <= ' ' }
 
-                    // Strip out %s as it triggers the matcher.
-                    // We won't use this URL, but we still need to check if the URL overall is valid.
-                    val safeUrl = url.replace("%s".toRegex(), "+s")
-                    if (! Patterns.WEB_URL.matcher(safeUrl).matches()) {
-                        // This is an invalid URL, cancel.
-                        Toast.makeText(requireContext(), R.string.err_invalid_url,
-                                Toast.LENGTH_SHORT).show()
-                        return@OnClickListener
-                    }
-                    if ("none" != PreferenceHelper.getProvider(name) && ! isEditing) {
-                        // We already have that provider and/or we aren't editing.
-                        Toast.makeText(requireContext(), R.string.err_provider_exists,
-                                Toast.LENGTH_SHORT).show()
-                        return@OnClickListener
-                    }
-                    if (isEditing) {
-                        providerList[position] = WebSearchProvider(name, url)
-                    } else {
-                        providerList.add(WebSearchProvider(name, url))
-                    }
-                    PreferenceHelper.updateProvider(providerList)
-                    providerAdapter !!.notifyDataSetChanged()
-                })
+                // Strip out %s as it triggers the matcher.
+                // We won't use this URL, but we still need to check if the URL overall is valid.
+                val safeUrl = url.replace("%s".toRegex(), "+s")
+                if (! Patterns.WEB_URL.matcher(safeUrl).matches()) {
+                    // This is an invalid URL, cancel.
+                    Toast.makeText(
+                        requireContext(), R.string.err_invalid_url,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@OnClickListener
+                }
+                if ("none" != PreferenceHelper.getProvider(name) && ! isEditing) {
+                    // We already have that provider and/or we aren't editing.
+                    Toast.makeText(
+                        requireContext(), R.string.err_provider_exists,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@OnClickListener
+                }
+                if (isEditing) {
+                    providerList[position] = WebSearchProvider(name, url)
+                } else {
+                    providerList.add(WebSearchProvider(name, url))
+                }
+                PreferenceHelper.updateProvider(providerList)
+                providerAdapter !!.notifyDataSetChanged()
+            })
 
         val themedDialog = builder.create()
         themedDialog.show()
 
-        themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
-        themedDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+        themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            .setTextColor(PreferenceHelper.darkAccent)
+        themedDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            .setTextColor(PreferenceHelper.darkAccent)
     }
 }

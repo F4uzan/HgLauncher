@@ -13,23 +13,37 @@ import mono.hg.helpers.PreferenceHelper
 /**
  * A SwitchPreference that extrapolates its colours from [PreferenceHelper.accent].
  */
-class ThemeableSwitchPreference(context: Context, attrs: AttributeSet?) : SwitchPreferenceCompat(context, attrs) {
+class ThemeableSwitchPreference(context: Context, attrs: AttributeSet?) :
+    SwitchPreferenceCompat(context, attrs) {
     override fun onBindViewHolder(holder: PreferenceViewHolder?) {
         super.onBindViewHolder(holder)
 
-        val switch : SwitchCompat? = holder?.itemView?.findViewById(androidx.preference.R.id.switchWidget)
+        val switch: SwitchCompat? =
+            holder?.itemView?.findViewById(androidx.preference.R.id.switchWidget)
 
-        val thumbStates = ColorStateList(arrayOf(intArrayOf(- android.R.attr.state_enabled), intArrayOf(android.R.attr.state_checked), intArrayOf()), intArrayOf(
+        val thumbStates = ColorStateList(
+            arrayOf(
+                intArrayOf(- android.R.attr.state_enabled),
+                intArrayOf(android.R.attr.state_checked),
+                intArrayOf()
+            ), intArrayOf(
                 PreferenceHelper.accent,
                 PreferenceHelper.accent,
                 Color.LTGRAY
-        ))
+            )
+        )
 
-        val trackStates = ColorStateList(arrayOf(intArrayOf(- android.R.attr.state_enabled), intArrayOf(android.R.attr.state_checked), intArrayOf()), intArrayOf(
+        val trackStates = ColorStateList(
+            arrayOf(
+                intArrayOf(- android.R.attr.state_enabled),
+                intArrayOf(android.R.attr.state_checked),
+                intArrayOf()
+            ), intArrayOf(
                 Color.LTGRAY,
                 PreferenceHelper.darkerAccent,
                 Color.GRAY
-        ))
+            )
+        )
 
         switch?.thumbTintList = thumbStates
         switch?.trackTintList = trackStates

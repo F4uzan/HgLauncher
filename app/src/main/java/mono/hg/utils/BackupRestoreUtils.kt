@@ -1,6 +1,5 @@
 package mono.hg.utils
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.net.Uri
 import android.os.AsyncTask
@@ -59,7 +58,7 @@ object BackupRestoreUtils {
             PreferenceHelper.editor?.clear()
             val entries = input.readObject() as Map<String, *>
             entries.forEach {
-                when (val v = it.value!!) {
+                when (val v = it.value !!) {
                     is Boolean -> {
                         PreferenceHelper.editor?.putBoolean(it.key, v)
                     }
@@ -97,7 +96,8 @@ object BackupRestoreUtils {
      * An AsyncTask tied to [SettingsActivity], used to read a backup file (.xml)
      * and attempts to restore it.
      */
-    class RestoreBackupTask(activity: SettingsActivity, path: String?) : AsyncTask<Void?, Void?, Void?>() {
+    class RestoreBackupTask(activity: SettingsActivity, path: String?) :
+        AsyncTask<Void?, Void?, Void?>() {
         private val fragmentRef: WeakReference<SettingsActivity> = WeakReference(activity)
         private val uri: Uri = Uri.parse(path)
         override fun onPreExecute() {
@@ -118,8 +118,10 @@ object BackupRestoreUtils {
             if (fragment != null) {
                 fragment.progressBar.hide()
                 fragment.restartActivity()
-                Toast.makeText(fragmentRef.get(), R.string.restore_complete,
-                        Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    fragmentRef.get(), R.string.restore_complete,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 

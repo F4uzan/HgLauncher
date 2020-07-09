@@ -16,7 +16,10 @@ import java.util.*
 /**
  * Adapter used to handle displaying over files and folders.
  */
-class FileFolderAdapter(private val filesList: ArrayList<FileFolder>, private val context: Context) : BaseAdapter() {
+class FileFolderAdapter(
+    private val filesList: ArrayList<FileFolder>,
+    private val context: Context
+) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val holder: ViewHolder
         var view = convertView
@@ -32,13 +35,16 @@ class FileFolderAdapter(private val filesList: ArrayList<FileFolder>, private va
         }
 
         if (filesList[position].isFolder) {
-            holder.content!!.setImageResource(R.drawable.ic_folder)
+            holder.content !!.setImageResource(R.drawable.ic_folder)
         } else {
-            holder.content!!.setImageResource(R.drawable.ic_file)
+            holder.content !!.setImageResource(R.drawable.ic_file)
         }
 
-        ImageViewCompat.setImageTintList(holder.content!!, ColorStateList.valueOf(PreferenceHelper.accent))
-        holder.name!!.text = filesList[position].name
+        ImageViewCompat.setImageTintList(
+            holder.content !!,
+            ColorStateList.valueOf(PreferenceHelper.accent)
+        )
+        holder.name !!.text = filesList[position].name
 
         return view
     }

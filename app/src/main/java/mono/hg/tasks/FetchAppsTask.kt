@@ -10,7 +10,8 @@ import java.lang.ref.WeakReference
 /**
  * AsyncTask used to load/populate the app list.
  */
-class FetchAppsTask(activity: Activity, adapter: AppAdapter, list: MutableList<App?>) : AsyncTask<Void?, Void?, Void?>() {
+class FetchAppsTask(activity: Activity, adapter: AppAdapter, list: MutableList<App?>) :
+    AsyncTask<Void?, Void?, Void?>() {
     private val activity: WeakReference<Activity> = WeakReference(activity)
     private val adapter: WeakReference<AppAdapter> = WeakReference(adapter)
     private val appsList: WeakReference<MutableList<App?>> = WeakReference(list)

@@ -54,7 +54,7 @@ class BasePreference : PreferenceFragmentCompat() {
     }
 
     private fun addVersionCounterListener() {
-        if (!PreferenceHelper.preference.getBoolean("is_grandma", false)) {
+        if (! PreferenceHelper.preference.getBoolean("is_grandma", false)) {
             versionMenu?.onPreferenceClickListener = object : Preference.OnPreferenceClickListener {
                 var counter = 9
                 lateinit var counterToast: Toast
@@ -63,11 +63,15 @@ class BasePreference : PreferenceFragmentCompat() {
                         counter > 1 -> {
                             counterToast.cancel()
                             if (counter < 8) {
-                                counterToast = Toast.makeText(requireActivity(), String.format(getString(R.string.version_key_toast_plural),
-                                        counter), Toast.LENGTH_SHORT)
+                                counterToast = Toast.makeText(
+                                    requireActivity(), String.format(
+                                        getString(R.string.version_key_toast_plural),
+                                        counter
+                                    ), Toast.LENGTH_SHORT
+                                )
                                 counterToast.show()
                             }
-                            counter--
+                            counter --
                         }
                         counter == 0 -> {
                             PreferenceHelper.update("is_grandma", true)
@@ -75,10 +79,12 @@ class BasePreference : PreferenceFragmentCompat() {
                         }
                         counter == 1 -> {
                             counterToast.cancel()
-                            counterToast = Toast.makeText(requireActivity(), R.string.version_key_toast,
-                                    Toast.LENGTH_SHORT)
+                            counterToast = Toast.makeText(
+                                requireActivity(), R.string.version_key_toast,
+                                Toast.LENGTH_SHORT
+                            )
                             counterToast.show()
-                            counter--
+                            counter --
                         }
                     }
                     return false
@@ -110,22 +116,26 @@ class BasePreference : PreferenceFragmentCompat() {
         resetMenu?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alert = AlertDialog.Builder(requireContext())
             alert.setTitle(getString(R.string.reset_preference))
-                    .setMessage(getString(R.string.reset_preference_warn))
-                    .setNegativeButton(getString(android.R.string.cancel), null)
-                    .setPositiveButton(R.string.reset_preference_positive) { _, _ ->
-                        PreferenceHelper.editor?.clear()?.apply()
-                        PreferenceHelper.update("require_refresh", true)
-                        (requireActivity() as SettingsActivity).restartActivity()
-                        Toast.makeText(requireContext(),
-                                R.string.reset_preference_toast, Toast.LENGTH_LONG)
-                                .show()
-                    }
+                .setMessage(getString(R.string.reset_preference_warn))
+                .setNegativeButton(getString(android.R.string.cancel), null)
+                .setPositiveButton(R.string.reset_preference_positive) { _, _ ->
+                    PreferenceHelper.editor?.clear()?.apply()
+                    PreferenceHelper.update("require_refresh", true)
+                    (requireActivity() as SettingsActivity).restartActivity()
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.reset_preference_toast, Toast.LENGTH_LONG
+                    )
+                        .show()
+                }
 
             val themedDialog = alert.create()
             themedDialog.show()
 
-            themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
-            themedDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+            themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                .setTextColor(PreferenceHelper.darkAccent)
+            themedDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                .setTextColor(PreferenceHelper.darkAccent)
             false
         }
     }
@@ -134,8 +144,10 @@ class BasePreference : PreferenceFragmentCompat() {
     // Throws true when API is less than M.
     private fun hasStoragePermission(): Boolean {
         if (Utils.atLeastMarshmallow()) {
-            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    PERMISSION_STORAGE_CODE)
+            requestPermissions(
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                PERMISSION_STORAGE_CODE
+            )
         } else {
             openBackupRestore(isRestore)
             return true
@@ -143,8 +155,10 @@ class BasePreference : PreferenceFragmentCompat() {
         return false
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == PERMISSION_STORAGE_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openBackupRestore(isRestore)
@@ -152,8 +166,10 @@ class BasePreference : PreferenceFragmentCompat() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int,
-                                  resultData: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int, resultCode: Int,
+        resultData: Intent?
+    ) {
         val uri: Uri?
         if (resultCode == Activity.RESULT_OK && resultData != null) {
             uri = resultData.data
@@ -189,8 +205,10 @@ class BasePreference : PreferenceFragmentCompat() {
             val fragmentBundle = Bundle()
             fragmentBundle.putBoolean("isRestore", isRestore)
             backupRestoreFragment.arguments = fragmentBundle
-            ViewUtils.replaceFragment(requireFragmentManager(), backupRestoreFragment,
-                    "backup_restore")
+            ViewUtils.replaceFragment(
+                requireFragmentManager(), backupRestoreFragment,
+                "backup_restore"
+            )
         }
     }
 

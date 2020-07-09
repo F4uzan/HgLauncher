@@ -48,14 +48,18 @@ class WidgetListFragment : GenericPageFragment() {
 
     private var isFavouritesShowing: Boolean = true
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentWidgetListBinding.inflate(inflater, container, false)
 
         appWidgetManager = AppWidgetManager.getInstance(requireContext())
         appWidgetHost = LauncherAppWidgetHost(requireContext(), WIDGET_HOST_ID)
 
         widgetsList = PreferenceHelper.widgetList()
-        return binding!!.root
+        return binding !!.root
     }
 
     override fun onDestroyView() {
@@ -76,9 +80,9 @@ class WidgetListFragment : GenericPageFragment() {
 
         var scrollYPosition = 0
 
-        appWidgetContainer = binding!!.widgetContainer
-        val widgetScroller : NestedScrollView = binding!!.widgetScroller
-        val addWidget: FloatingActionButton = binding!!.addWidget
+        appWidgetContainer = binding !!.widgetContainer
+        val widgetScroller: NestedScrollView = binding !!.widgetScroller
+        val addWidget: FloatingActionButton = binding !!.addWidget
 
         addWidget.backgroundTintList = ColorStateList.valueOf(PreferenceHelper.accent)
 
@@ -101,23 +105,26 @@ class WidgetListFragment : GenericPageFragment() {
             getLauncherActivity().requestPanelLock()
 
             val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
-            pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    appWidgetHost.allocateAppWidgetId())
+            pickIntent.putExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                appWidgetHost.allocateAppWidgetId()
+            )
             startActivityForResult(pickIntent, WIDGET_CONFIG_START_CODE)
         }
 
         widgetScroller.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
             val scrollYDelta = scrollY - oldScrollY
-            val bottomDelta: Int = widgetScroller.getChildAt(0).bottom + widgetScroller.paddingBottom - (widgetScroller.height + widgetScroller.scrollY)
+            val bottomDelta: Int =
+                widgetScroller.getChildAt(0).bottom + widgetScroller.paddingBottom - (widgetScroller.height + widgetScroller.scrollY)
 
             if (bottomDelta == 0) {
-                if (!isFavouritesShowing) {
+                if (! isFavouritesShowing) {
                     getLauncherActivity().showPinnedApps()
                     addWidget.hide()
                     isFavouritesShowing = true
                 }
                 scrollYPosition = 0
-            } else if (scrollYPosition < -48) {
+            } else if (scrollYPosition < - 48) {
                 if (isFavouritesShowing) {
                     getLauncherActivity().hidePinnedApps()
                     addWidget.show()
@@ -138,7 +145,8 @@ class WidgetListFragment : GenericPageFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
-            val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
+            val widgetId =
+                data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
             val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
             if (requestCode != WIDGET_CONFIG_RETURN_CODE && appWidgetInfo.configure != null) {
                 val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE)
@@ -149,14 +157,19 @@ class WidgetListFragment : GenericPageFragment() {
                 addWidget(data, widgetsList.size, true)
             }
         } else if (resultCode == Activity.RESULT_CANCELED && data != null) {
-            val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
+            val widgetId =
+                data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
             if (widgetId != WIDGET_CONFIG_DEFAULT_CODE) {
                 appWidgetHost.deleteAppWidgetId(widgetId)
             }
         }
     }
 
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
         // Set the calling view.
         callingView = v as AppWidgetHostView
         val index = appWidgetContainer.indexOfChild(v)
@@ -198,13 +211,15 @@ class WidgetListFragment : GenericPageFragment() {
                 getLauncherActivity().requestPanelLock()
 
                 val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
-                pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                        appWidgetHost.allocateAppWidgetId())
+                pickIntent.putExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    appWidgetHost.allocateAppWidgetId()
+                )
                 startActivityForResult(pickIntent, WIDGET_CONFIG_START_CODE)
                 true
             }
             1 -> {
-                callingView?.let { removeWidget(it, callingView!!.appWidgetId) }
+                callingView?.let { removeWidget(it, callingView !!.appWidgetId) }
                 true
             }
             2 -> {
@@ -225,16 +240,18 @@ class WidgetListFragment : GenericPageFragment() {
      * @param data Intent used to receive the ID of the widget being added.
      */
     private fun addWidget(data: Intent, index: Int, newWidget: Boolean) {
-        if (!isAdded || activity == null) {
+        if (! isAdded || activity == null) {
             // Nope. Not doing anything.
             return
         }
 
-        val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
+        val widgetId =
+            data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
         val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
         val appWidgetHostView = appWidgetHost.createView(
-                requireActivity().applicationContext,
-                widgetId, appWidgetInfo)
+            requireActivity().applicationContext,
+            widgetId, appWidgetInfo
+        )
 
         // Prevents crashing when the widget info can't be found.
         // https://github.com/Neamar/KISS/commit/f81ae32ef5ff5c8befe0888e6ff818a41d8dedb4
@@ -245,8 +262,10 @@ class WidgetListFragment : GenericPageFragment() {
             appWidgetHostView.minimumHeight = appWidgetInfo.minHeight
             appWidgetHostView.setAppWidget(widgetId, appWidgetInfo)
             if (Utils.sdkIsAround(16)) {
-                appWidgetHostView.updateAppWidgetSize(null, appWidgetInfo.minWidth,
-                        appWidgetInfo.minHeight, appWidgetInfo.minWidth, appWidgetInfo.minHeight)
+                appWidgetHostView.updateAppWidgetSize(
+                    null, appWidgetInfo.minWidth,
+                    appWidgetInfo.minHeight, appWidgetInfo.minWidth, appWidgetInfo.minHeight
+                )
             }
 
             // Add the widget.
@@ -310,7 +329,7 @@ class WidgetListFragment : GenericPageFragment() {
     companion object {
         private const val WIDGET_CONFIG_START_CODE = 1
         private const val WIDGET_CONFIG_RETURN_CODE = 2
-        private const val WIDGET_CONFIG_DEFAULT_CODE = -1
+        private const val WIDGET_CONFIG_DEFAULT_CODE = - 1
         private const val WIDGET_HOST_ID = 314
     }
 }

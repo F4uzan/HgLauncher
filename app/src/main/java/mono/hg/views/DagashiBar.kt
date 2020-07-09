@@ -41,11 +41,12 @@ import mono.hg.R
  * DagashiBar is based off of (read: copied from) Google's Snackbar code.
  */
 open class DagashiBar private constructor(
-        parent: ViewGroup,
-        content: View,
-        contentViewCallback: com.google.android.material.snackbar.ContentViewCallback) : BaseTransientBottomBar<DagashiBar?>(parent, content, contentViewCallback) {
+    parent: ViewGroup,
+    content: View,
+    contentViewCallback: com.google.android.material.snackbar.ContentViewCallback
+) : BaseTransientBottomBar<DagashiBar?>(parent, content, contentViewCallback) {
     private val accessibilityManager: AccessibilityManager = parent.context
-            .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
     private var hasAction = false
 
     /**
@@ -111,7 +112,11 @@ open class DagashiBar private constructor(
      * @param dismiss  Whether the action should dismiss the bar
      */
     @SuppressLint("RestrictedApi")
-    fun setAction(text: CharSequence?, listener: View.OnClickListener?, dismiss: Boolean): DagashiBar {
+    fun setAction(
+        text: CharSequence?,
+        listener: View.OnClickListener?,
+        dismiss: Boolean
+    ): DagashiBar {
         val contentLayout = view.getChildAt(0) as SnackbarContentLayout
         val tv: TextView = contentLayout.actionView
         if (TextUtils.isEmpty(text) || listener == null) {
@@ -200,19 +205,22 @@ open class DagashiBar private constructor(
          */
         @SuppressLint("PrivateResource")
         fun make(
-                view: View, text: CharSequence, @Duration duration: Int, swipeable: Boolean): DagashiBar {
+            view: View, text: CharSequence, @Duration duration: Int, swipeable: Boolean
+        ): DagashiBar {
             val parent = findSuitableParent(view)
-                    ?: throw IllegalArgumentException(
-                            "No suitable parent found from the given view. Please provide a valid view.")
+                ?: throw IllegalArgumentException(
+                    "No suitable parent found from the given view. Please provide a valid view."
+                )
             val inflater = LayoutInflater.from(parent.context)
             val content = inflater.inflate(
-                    if (hasSnackbarButtonStyleAttr(parent.context)) R.layout.mtrl_layout_snackbar_include else R.layout.design_layout_snackbar_include,
-                    parent,
-                    false) as SnackbarContentLayout
+                if (hasSnackbarButtonStyleAttr(parent.context)) R.layout.mtrl_layout_snackbar_include else R.layout.design_layout_snackbar_include,
+                parent,
+                false
+            ) as SnackbarContentLayout
             val snackbar = DagashiBar(parent, content, content)
             snackbar.setText(text)
             snackbar.duration = duration
-            if (!swipeable) {
+            if (! swipeable) {
                 snackbar.setSwipeDisabled()
             }
             return snackbar
@@ -224,9 +232,9 @@ open class DagashiBar private constructor(
          */
         protected fun hasSnackbarButtonStyleAttr(context: Context): Boolean {
             val a = context.obtainStyledAttributes(SNACKBAR_BUTTON_STYLE_ATTR)
-            val snackbarButtonStyleResId = a.getResourceId(0, -1)
+            val snackbarButtonStyleResId = a.getResourceId(0, - 1)
             a.recycle()
-            return snackbarButtonStyleResId != -1
+            return snackbarButtonStyleResId != - 1
         }
 
         private fun findSuitableParent(attachView: View): ViewGroup? {

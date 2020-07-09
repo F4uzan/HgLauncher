@@ -1,6 +1,5 @@
 package mono.hg.utils
 
-import mono.hg.R
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.ActivityNotFoundException
@@ -18,6 +17,7 @@ import android.os.UserManager
 import android.widget.Toast
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import mono.hg.BuildConfig
+import mono.hg.R
 import mono.hg.helpers.LauncherIconHelper
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.App
@@ -75,7 +75,8 @@ object AppUtils {
     fun isSystemApp(packageManager: PackageManager, componentName: String?): Boolean {
         try {
             val appFlags = packageManager.getApplicationInfo(
-                    getPackageName(componentName), 0)
+                getPackageName(componentName), 0
+            )
             if (appFlags.flags and ApplicationInfo.FLAG_SYSTEM == 1) {
                 return true
             }
@@ -107,8 +108,10 @@ object AppUtils {
      * @param adapter       Which adapter should we notify update to?
      * @param list          Which List object should be updated?
      */
-    fun pinApp(activity: Activity, user: Long, componentName: String,
-               adapter: FlexibleAdapter<PinnedApp?>, list: MutableList<PinnedApp?>) {
+    fun pinApp(
+        activity: Activity, user: Long, componentName: String,
+        adapter: FlexibleAdapter<PinnedApp?>, list: MutableList<PinnedApp?>
+    ) {
         val icon = LauncherIconHelper.getIcon(activity, componentName, user, false)
         val app = PinnedApp(icon, componentName, user)
         list.add(app)
@@ -127,7 +130,8 @@ object AppUtils {
             if (Utils.atLeastLollipop()) {
                 val userUtils = UserUtils(activity)
                 val launcher = activity.getSystemService(
-                        Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+                    Context.LAUNCHER_APPS_SERVICE
+                ) as LauncherApps
                 val componentName = ComponentName.unflattenFromString(app.packageName)
                 launcher.startMainActivity(componentName, userUtils.getUser(app.user), null, null)
             } else {
@@ -135,8 +139,10 @@ object AppUtils {
             }
             when (PreferenceHelper.launchAnim) {
                 "pull_up" -> activity.overridePendingTransition(R.anim.pull_up, 0)
-                "slide_in" -> activity.overridePendingTransition(android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right)
+                "slide_in" -> activity.overridePendingTransition(
+                    android.R.anim.slide_in_left,
+                    android.R.anim.slide_out_right
+                )
                 "default" -> {
                 }
                 else -> {
@@ -144,8 +150,10 @@ object AppUtils {
             }
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show()
-            Utils.sendLog(LogLevel.ERROR,
-                    "Cannot start " + app.packageName + "; missing package?")
+            Utils.sendLog(
+                LogLevel.ERROR,
+                "Cannot start " + app.packageName + "; missing package?"
+            )
         } catch (e: SecurityException) {
             Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show()
             Utils.sendLog(LogLevel.ERROR, "Cannot start " + app.packageName + "; invalid user?")
@@ -164,7 +172,7 @@ object AppUtils {
         if ("none" == componentName) {
             return
         }
-        val component = ComponentName.unflattenFromString(componentName!!) ?: return
+        val component = ComponentName.unflattenFromString(componentName !!) ?: return
 
         // Forcibly end if we can't unflatten the string.
         val intent = Intent.makeMainActivity(component)
@@ -180,7 +188,7 @@ object AppUtils {
      * @return String The package name if not null.
      */
     fun getPackageName(componentName: String?): String {
-        val unflattened = ComponentName.unflattenFromString(componentName!!)
+        val unflattened = ComponentName.unflattenFromString(componentName !!)
         return unflattened?.packageName ?: ""
     }
 
@@ -196,8 +204,11 @@ object AppUtils {
         var label = ""
         try {
             label = manager.getApplicationLabel(
-                    manager.getApplicationInfo(getPackageName(componentName),
-                            PackageManager.GET_META_DATA)) as String
+                manager.getApplicationInfo(
+                    getPackageName(componentName),
+                    PackageManager.GET_META_DATA
+                )
+            ) as String
         } catch (e: PackageManager.NameNotFoundException) {
             Utils.sendLog(LogLevel.ERROR, "Unable to find label for $componentName")
         }
@@ -215,7 +226,7 @@ object AppUtils {
         var count = 0
         packageManager.getInstalledApplications(0).forEach {
             if (it.enabled) {
-                count++
+                count ++
             }
         }
         return count
@@ -231,7 +242,9 @@ object AppUtils {
      */
     fun hasNewPackage(packageManager: PackageManager): Boolean {
         if (PreferenceHelper.preference.getInt("package_count", 0) != countInstalledPackage(
-                        packageManager)) {
+                packageManager
+            )
+        ) {
             PreferenceHelper.update("package_count", countInstalledPackage(packageManager))
             return true
         }
@@ -253,7 +266,8 @@ object AppUtils {
         if (Utils.atLeastLollipop()) {
             val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
             val launcher = activity.getSystemService(
-                    Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+                Context.LAUNCHER_APPS_SERVICE
+            ) as LauncherApps
             userManager.userProfiles.forEach { profile ->
                 launcher.getActivityList(null, profile).forEach { activityInfo ->
                     val componentName = activityInfo.componentName.flattenToString()
@@ -266,14 +280,19 @@ object AppUtils {
                     }
                     val isHidden = (PreferenceHelper.exclusionList.contains(componentName)
                             || componentName.contains(BuildConfig.APPLICATION_ID))
-                    if (!hideHidden || !isHidden) {
+                    if (! hideHidden || ! isHidden) {
                         val appName = activityInfo.label.toString()
                         val app = App(appName, componentName, false, user)
                         app.hintName = PreferenceHelper.getLabel(userPackageName)
                         app.userPackageName = userPackageName
-                        app.icon = LauncherIconHelper.getIcon(activity, componentName, user, PreferenceHelper.shouldHideIcon())
+                        app.icon = LauncherIconHelper.getIcon(
+                            activity,
+                            componentName,
+                            user,
+                            PreferenceHelper.shouldHideIcon()
+                        )
                         app.isAppHidden = isHidden
-                        if (!appsList.contains(app)) {
+                        if (! appsList.contains(app)) {
                             appsList.add(app)
                         }
                     }
@@ -287,15 +306,17 @@ object AppUtils {
                 val componentName = packageName + "/" + it.activityInfo.name
                 val isHidden = (PreferenceHelper.exclusionList.contains(componentName)
                         || componentName.contains(BuildConfig.APPLICATION_ID))
-                if (!hideHidden || !isHidden) {
+                if (! hideHidden || ! isHidden) {
                     val appName = it.loadLabel(manager).toString()
                     val app = App(appName, componentName, false, userUtils.currentSerial)
                     app.hintName = PreferenceHelper.getLabel(componentName)
                     app.userPackageName = componentName
-                    app.icon = LauncherIconHelper.getIcon(activity, componentName,
-                            userUtils.currentSerial, PreferenceHelper.shouldHideIcon())
+                    app.icon = LauncherIconHelper.getIcon(
+                        activity, componentName,
+                        userUtils.currentSerial, PreferenceHelper.shouldHideIcon()
+                    )
                     app.isAppHidden = isHidden
-                    if (!appsList.contains(app)) {
+                    if (! appsList.contains(app)) {
                         appsList.add(app)
                     }
                 }
@@ -329,13 +350,15 @@ object AppUtils {
     @TargetApi(Build.VERSION_CODES.N_MR1)
     fun getShortcuts(launcherApps: LauncherApps?, componentName: String?): List<ShortcutInfo>? {
         // Return nothing if we don't have permission to retrieve shortcuts.
-        if (launcherApps == null || !launcherApps.hasShortcutHostPermission()) {
+        if (launcherApps == null || ! launcherApps.hasShortcutHostPermission()) {
             return ArrayList(0)
         }
         val shortcutQuery = ShortcutQuery()
-        shortcutQuery.setQueryFlags(ShortcutQuery.FLAG_MATCH_DYNAMIC
-                or ShortcutQuery.FLAG_MATCH_MANIFEST
-                or ShortcutQuery.FLAG_MATCH_PINNED)
+        shortcutQuery.setQueryFlags(
+            ShortcutQuery.FLAG_MATCH_DYNAMIC
+                    or ShortcutQuery.FLAG_MATCH_MANIFEST
+                    or ShortcutQuery.FLAG_MATCH_PINNED
+        )
         shortcutQuery.setPackage(getPackageName(componentName))
         return launcherApps.getShortcuts(shortcutQuery, Process.myUserHandle())
     }

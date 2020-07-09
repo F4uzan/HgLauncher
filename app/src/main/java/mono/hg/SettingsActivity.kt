@@ -3,8 +3,6 @@ package mono.hg
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
-import android.graphics.PorterDuff
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -29,15 +27,16 @@ import mono.hg.wrappers.BackHandledFragment.BackHandlerInterface
  *
  * This activity can be called through 'Additional setting' in the System settings as well.
  */
-class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     private var selectedFragment: BackHandledFragment? = null
     private var fragmentTitle: CharSequence? = null
-    private var binding: ActivitySettingsBinding? = null
-    private  var toolbar: Toolbar? = null
+    private lateinit var binding: ActivitySettingsBinding
+    private lateinit var toolbar: Toolbar
     lateinit var progressBar: ProgressIndicator
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        if (!PreferenceHelper.hasEditor()) {
+        if (! PreferenceHelper.hasEditor()) {
             PreferenceHelper.initPreference(this)
         }
 
@@ -56,27 +55,28 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
         }
 
         binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
+        setContentView(binding.root)
 
         super.onCreate(savedInstanceState)
 
-        toolbar = binding!!.toolbar
-        progressBar = binding!!.progressBar
+        toolbar = binding.toolbar
+        progressBar = binding.progressBar
         progressBar.hide()
 
-        setSupportActionBar(toolbar!!)
+        setSupportActionBar(toolbar)
 
         if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+            supportActionBar !!.setDisplayHomeAsUpEnabled(true)
         }
 
         if (savedInstanceState == null) {
-            supportActionBar!!.title = getString(R.string.title_activity_settings)
+            supportActionBar !!.title = getString(R.string.title_activity_settings)
             ViewUtils.setFragment(supportFragmentManager, BasePreference(), "settings")
         } else {
-            fragmentTitle = savedInstanceState.getCharSequence("title") ?: getString(R.string.title_activity_settings)
+            fragmentTitle = savedInstanceState.getCharSequence("title")
+                ?: getString(R.string.title_activity_settings)
             if (supportActionBar != null) {
-                supportActionBar!!.title = fragmentTitle
+                supportActionBar !!.title = fragmentTitle
             }
         }
     }
@@ -86,20 +86,17 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
         outState.putCharSequence("title", fragmentTitle)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        toolbar = null
-    }
-
     override fun onBackPressed() {
-        if (selectedFragment == null || !selectedFragment!!.onBackPressed()) {
+        if (selectedFragment == null || ! selectedFragment !!.onBackPressed()) {
             // Selected fragment did not consume the back press event.
             if (supportActionBar != null) {
                 if (supportFragmentManager.findFragmentByTag(
-                                "settings") is BasePreference) {
-                    supportActionBar!!.title = getString(R.string.title_activity_settings)
+                        "settings"
+                    ) is BasePreference
+                ) {
+                    supportActionBar !!.title = getString(R.string.title_activity_settings)
                 } else {
-                    supportActionBar!!.title = fragmentTitle
+                    supportActionBar !!.title = fragmentTitle
                 }
             }
             super.onBackPressed()
@@ -114,10 +111,12 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
         if (item.itemId == android.R.id.home) {
             if (supportActionBar != null) {
                 if (supportFragmentManager.findFragmentByTag(
-                                "settings") is BasePreference) {
-                    supportActionBar!!.title = getString(R.string.title_activity_settings)
+                        "settings"
+                    ) is BasePreference
+                ) {
+                    supportActionBar !!.title = getString(R.string.title_activity_settings)
                 } else {
-                    supportActionBar!!.title = fragmentTitle
+                    supportActionBar !!.title = fragmentTitle
                 }
             }
             super.onBackPressed()
@@ -130,7 +129,7 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
     private fun checkCaller() {
         // If this activity is called from anywhere else but the launcher,
         // then the launcher needs to be informed of the changes made that it may not be aware of.
-        if (callingActivity == null && !PreferenceHelper.wasAlien()) {
+        if (callingActivity == null && ! PreferenceHelper.wasAlien()) {
             PreferenceHelper.isAlien(true)
         }
     }
@@ -164,27 +163,32 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface, PreferenceFr
             }
         }
         if (Utils.atLeastLollipop() && resources.configuration.uiMode and
-                Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_NO) {
+            Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_NO
+        ) {
             window.statusBarColor = PreferenceHelper.darkerAccent
         }
     }
 
-    override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
+    override fun onPreferenceStartFragment(
+        caller: PreferenceFragmentCompat,
+        pref: Preference
+    ): Boolean {
         // Instantiate the new Fragment
-        val fragment = supportFragmentManager.fragmentFactory.instantiate(classLoader, pref.fragment)
+        val fragment =
+            supportFragmentManager.fragmentFactory.instantiate(classLoader, pref.fragment)
         fragment.setTargetFragment(caller, 0)
         fragmentTitle = pref.title
 
         // Replace the existing Fragment with the new Fragment
         supportFragmentManager.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.fragment_container, fragment, pref.key)
-                .addToBackStack(pref.key)
-                .commit()
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .replace(R.id.fragment_container, fragment, pref.key)
+            .addToBackStack(pref.key)
+            .commit()
 
         // Update the Activity's action bar
         if (supportActionBar != null) {
-            supportActionBar!!.title = fragmentTitle
+            supportActionBar !!.title = fragmentTitle
         }
         return true
     }

@@ -26,7 +26,7 @@ object KissFuzzySearch {
         source?.toCharArray()?.forEach {
             if (queryPos < matchTo.length && matchTo[queryPos] == it) {
                 // If we aren't already matching something, let's save the beginning of the match
-                if (!match) {
+                if (! match) {
                     beginMatch = appPos
                     match = true
                 }
@@ -38,19 +38,19 @@ object KissFuzzySearch {
                 }
 
                 // Increment the position in the query
-                queryPos++
+                queryPos ++
             } else if (match) {
                 matchPositions.add(Pair.create(beginMatch, appPos))
                 match = false
             }
-            appPos++
+            appPos ++
         }
         if (match) {
             matchPositions.add(Pair.create(beginMatch, appPos))
         }
         if (queryPos == matchTo.length) {
             // Add percentage of matched letters at a weight of 100
-            relevance += (queryPos.toDouble() / source!!.length * 100).toInt()
+            relevance += (queryPos.toDouble() / source !!.length * 100).toInt()
 
             // Add percentage of matched upper case letters (start of word), but at a weight of 60
             relevance += (matchedWordStarts.toDouble() / totalWordStarts * 60).toInt()

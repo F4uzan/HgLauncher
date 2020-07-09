@@ -12,7 +12,12 @@ import mono.hg.utils.AppUtils
  * This class is used in the favourites panel.
  */
 class PinnedApp : App {
-    constructor(icon: Drawable?, packageName: String, user: Long) : super(null, packageName, false, user) {
+    constructor(icon: Drawable?, packageName: String, user: Long) : super(
+        null,
+        packageName,
+        false,
+        user
+    ) {
         this.icon = icon
         userPackageName = AppUtils.appendUser(user, packageName)
     }
@@ -25,13 +30,18 @@ class PinnedApp : App {
         return R.layout.list_pinned_item
     }
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>?>?): ViewHolder {
+    override fun createViewHolder(
+        view: View,
+        adapter: FlexibleAdapter<IFlexible<*>?>?
+    ): ViewHolder {
         return ViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>?>?,
-                                holder: ViewHolder, position: Int,
-                                payloads: List<Any>) {
+    override fun bindViewHolder(
+        adapter: FlexibleAdapter<IFlexible<*>?>?,
+        holder: ViewHolder, position: Int,
+        payloads: List<Any>
+    ) {
         holder.icon.setImageDrawable(icon)
     }
 }

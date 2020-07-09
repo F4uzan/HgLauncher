@@ -100,20 +100,24 @@ class AppListFragment : GenericPageFragment() {
     private var fetchAppsTask: FetchAppsTask? = null
     private var binding: FragmentAppListBinding? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentAppListBinding.inflate(inflater, container, false)
 
         // Get a list of our hidden apps, default to null if there aren't any.
         excludedAppsList.addAll(PreferenceHelper.exclusionList)
 
-        return binding!!.root
+        return binding !!.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
-        if (fetchAppsTask != null && fetchAppsTask!!.status == AsyncTask.Status.RUNNING) {
-            fetchAppsTask!!.cancel(true)
+        if (fetchAppsTask != null && fetchAppsTask !!.status == AsyncTask.Status.RUNNING) {
+            fetchAppsTask !!.cancel(true)
         }
 
         unregisterBroadcast()
@@ -126,21 +130,25 @@ class AppListFragment : GenericPageFragment() {
         manager = requireActivity().packageManager
 
         if (Utils.atLeastLollipop()) {
-            launcherApps = requireActivity().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+            launcherApps =
+                requireActivity().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
         }
         userUtils = UserUtils(requireContext())
 
         registerBroadcast()
 
         appsLayoutManager = if (PreferenceHelper.useGrid()) {
-            CustomGridLayoutManager(requireContext(), resources.getInteger(R.integer.column_default_size))
+            CustomGridLayoutManager(
+                requireContext(),
+                resources.getInteger(R.integer.column_default_size)
+            )
         } else {
             TogglingLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
         }
         val itemDecoration = ItemOffsetDecoration(requireContext(), R.dimen.item_offset)
 
-        appsRecyclerView = binding!!.appsList
-        loadProgress = binding!!.loadProgress
+        appsRecyclerView = binding !!.appsList
+        loadProgress = binding !!.loadProgress
 
         appsRecyclerView.isDrawingCacheEnabled = true
         appsRecyclerView.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_LOW
@@ -169,11 +177,12 @@ class AppListFragment : GenericPageFragment() {
             // We need to rely on the LayoutManager here
             // because app list is populated asynchronously,
             // and will throw nulls if we try to directly ask RecyclerView for its child.
-            appsRecyclerView.layoutManager!!.findViewByPosition(position)?.let { createAppMenu(it, app) }
+            appsRecyclerView.layoutManager !!.findViewByPosition(position)
+                ?.let { createAppMenu(it, app) }
         })
 
         appsAdapter.addListener(FlexibleAdapter.OnUpdateListener { size ->
-            if (size > 0 && !appsAdapter.isEmpty) {
+            if (size > 0 && ! appsAdapter.isEmpty) {
                 loadProgress.visibility = View.GONE
                 loadProgress.invalidate()
             } else {
@@ -229,7 +238,7 @@ class AppListFragment : GenericPageFragment() {
     }
 
     override fun launchPreselection(): Boolean {
-        return if (!appsAdapter.isEmpty) {
+        return if (! appsAdapter.isEmpty) {
             appsRecyclerView.let {
                 ViewUtils.keyboardLaunchApp(requireActivity(), it, appsAdapter)
             }
@@ -246,7 +255,7 @@ class AppListFragment : GenericPageFragment() {
      * @param app      App object selected from the list.
      */
     private fun createAppMenu(view: View, app: App?) {
-        val packageName = app!!.packageName
+        val packageName = app !!.packageName
         val componentName = ComponentName.unflattenFromString(packageName)
         val pinApp = PinnedApp(app.packageName, app.user)
         val user = app.user
@@ -257,52 +266,65 @@ class AppListFragment : GenericPageFragment() {
 
         // Inflate the app menu.
         appMenu = PopupMenu(requireContext(), view)
-        appMenu!!.menuInflater.inflate(R.menu.menu_app, appMenu!!.menu)
-        appMenu!!.menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
+        appMenu !!.menuInflater.inflate(R.menu.menu_app, appMenu !!.menu)
+        appMenu !!.menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
 
         // Inflate app shortcuts.
         if (Utils.sdkIsAround(25)) {
             var menuId = SHORTCUT_MENU_GROUP
             AppUtils.getShortcuts(launcherApps, packageName)?.forEach {
                 shortcutMap.put(menuId, it.id)
-                appMenu!!.menu
-                        .findItem(SHORTCUT_MENU_GROUP)
-                        .subMenu
-                        .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
-                menuId++
+                appMenu !!.menu
+                    .findItem(SHORTCUT_MENU_GROUP)
+                    .subMenu
+                    .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
+                menuId ++
             }
             if (shortcutMap.size() == 0) {
-                appMenu!!.menu.getItem(0).isVisible = false
+                appMenu !!.menu.getItem(0).isVisible = false
             }
         } else {
-            appMenu!!.menu.getItem(0).isVisible = false
+            appMenu !!.menu.getItem(0).isVisible = false
         }
 
         // Hide 'pin' if the app is already pinned or isPinned is set.
-        appMenu!!.menu.findItem(R.id.action_pin).isVisible = !getLauncherActivity().isPinned(pinApp)
+        appMenu !!.menu.findItem(R.id.action_pin).isVisible =
+            ! getLauncherActivity().isPinned(pinApp)
 
         // Only show the 'unpin' option if isPinned is set.
-        appMenu!!.menu.findItem(R.id.action_unpin).isVisible = false
+        appMenu !!.menu.findItem(R.id.action_unpin).isVisible = false
 
         // Show uninstall menu if the app is not a system app.
-        appMenu!!.menu.findItem(R.id.action_uninstall).isVisible = (!AppUtils.isSystemApp(manager, packageName)
-                && app.user == userUtils!!.currentSerial)
+        appMenu !!.menu.findItem(R.id.action_uninstall).isVisible =
+            (! AppUtils.isSystemApp(manager, packageName)
+                    && app.user == userUtils !!.currentSerial)
 
-        appMenu!!.show()
+        appMenu !!.show()
 
-        appMenu!!.setOnMenuItemClickListener { item ->
+        appMenu !!.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_pin -> {
                     getLauncherActivity().pinAppHere(app.userPackageName, user)
                 }
                 R.id.action_info -> if (Utils.atLeastLollipop()) {
-                    launcherApps!!.startAppDetailsActivity(componentName,
-                            userUtils!!.getUser(app.user), null, null)
+                    launcherApps !!.startAppDetailsActivity(
+                        componentName,
+                        userUtils !!.getUser(app.user), null, null
+                    )
                 } else {
-                    startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            packageNameUri))
+                    startActivity(
+                        Intent(
+                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            packageNameUri
+                        )
+                    )
                 }
-                R.id.action_uninstall -> startActivity(Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageNameUri))
+                R.id.action_uninstall -> startActivity(
+                    Intent(
+                        Intent.ACTION_UNINSTALL_PACKAGE,
+                        packageNameUri
+                    )
+                )
                 R.id.action_shorthand -> makeRenameDialog(app.userPackageName, position)
                 R.id.action_hide -> {
                     // Add the app's package name to the exclusion list.
@@ -315,10 +337,12 @@ class AppListFragment : GenericPageFragment() {
                 }
                 else ->                         // Catch click actions from the shortcut menu group.
                     if (item.groupId == SHORTCUT_MENU_GROUP && Utils.sdkIsAround(25)) {
-                        userUtils!!.getUser(user)?.let {
-                            launcherApps?.startShortcut(AppUtils.getPackageName(packageName),
-                                    shortcutMap[item.itemId],
-                                    null, null, it)
+                        userUtils !!.getUser(user)?.let {
+                            launcherApps?.startShortcut(
+                                AppUtils.getPackageName(packageName),
+                                shortcutMap[item.itemId],
+                                null, null, it
+                            )
                         }
                     }
             }
@@ -334,9 +358,9 @@ class AppListFragment : GenericPageFragment() {
 
         packageBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                fetchAppsTask!!.cancel(true)
+                fetchAppsTask !!.cancel(true)
                 fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
-                fetchAppsTask!!.execute()
+                fetchAppsTask !!.execute()
             }
         }
 
@@ -348,7 +372,10 @@ class AppListFragment : GenericPageFragment() {
             requireActivity().unregisterReceiver(packageBroadcastReceiver)
             packageBroadcastReceiver = null
         } else {
-            Utils.sendLog(Utils.LogLevel.VERBOSE, "unregisterBroadcast() was called to a null receiver.")
+            Utils.sendLog(
+                Utils.LogLevel.VERBOSE,
+                "unregisterBroadcast() was called to a null receiver."
+            )
         }
     }
 
@@ -362,32 +389,37 @@ class AppListFragment : GenericPageFragment() {
         val builder = AlertDialog.Builder(requireContext())
         val binding = LayoutRenameDialogBinding.inflate(layoutInflater)
         val renameField = binding.renameField
-        ViewCompat.setBackgroundTintList(renameField, ColorStateList.valueOf(PreferenceHelper.accent))
+        ViewCompat.setBackgroundTintList(
+            renameField,
+            ColorStateList.valueOf(PreferenceHelper.accent)
+        )
         renameField.hint = PreferenceHelper.getLabel(packageName)
         builder.setView(binding.root)
         builder.setNegativeButton(android.R.string.cancel, null)
-                .setTitle(R.string.dialog_title_shorthand)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    val newLabel = renameField.text
-                            .toString()
-                            .replace("\\|".toRegex(), "")
-                            .trim { it <= ' ' }
+            .setTitle(R.string.dialog_title_shorthand)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                val newLabel = renameField.text
+                    .toString()
+                    .replace("\\|".toRegex(), "")
+                    .trim { it <= ' ' }
 
-                    // Unset shorthand if it is empty.
-                    PreferenceHelper.updateLabel(packageName, newLabel, newLabel.isEmpty())
+                // Unset shorthand if it is empty.
+                PreferenceHelper.updateLabel(packageName, newLabel, newLabel.isEmpty())
 
-                    // Update the specified item.
-                    val app = appsAdapter.getItem(position)
-                    if (app != null) {
-                        app.hintName = newLabel
-                    }
+                // Update the specified item.
+                val app = appsAdapter.getItem(position)
+                if (app != null) {
+                    app.hintName = newLabel
                 }
+            }
 
         val themedDialog = builder.create()
         themedDialog.show()
 
-        themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
-        themedDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+        themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            .setTextColor(PreferenceHelper.darkAccent)
+        themedDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            .setTextColor(PreferenceHelper.darkAccent)
     }
 
     companion object {

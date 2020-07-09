@@ -15,7 +15,11 @@ import mono.hg.R
  * [DropDownPreference] with spinner as custom widget.
  * Based off of work from SpinnerPreference by [hidroh@github](https://github.com/hidroh).
  */
-class SpinnerPreference @JvmOverloads constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int = 0) : DropDownPreference(context, attrs, defStyleAttr) {
+class SpinnerPreference @JvmOverloads constructor(
+    context: Context?,
+    attrs: AttributeSet?,
+    defStyleAttr: Int = 0
+) : DropDownPreference(context, attrs, defStyleAttr) {
     private val mAdapter: ArrayAdapter<*>
     private var mSelection = 0
     private lateinit var spinner: Spinner
@@ -24,7 +28,12 @@ class SpinnerPreference @JvmOverloads constructor(context: Context?, attrs: Attr
         spinner.adapter = mAdapter
         spinner.setSelection(mSelection)
         spinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
                 if (position > 0) {
                     val value = entryValues[position].toString()
                     if (value != getValue() && callChangeListener(value)) {

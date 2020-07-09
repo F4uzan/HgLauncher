@@ -28,11 +28,12 @@ class WebSearchProvider {
 
         // URL can be shared, but names should stay unique.
         return if (`object` != null) {
-            name == `object`.name || this.javaClass == other!!.javaClass
+            name == `object`.name || this.javaClass == other !!.javaClass
         } else {
             false
         }
     }
+
     override fun hashCode(): Int {
         var result = url?.hashCode() ?: 0
         result = 31 * result + (id?.hashCode() ?: 0)

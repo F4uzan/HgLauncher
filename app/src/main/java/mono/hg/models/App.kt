@@ -51,7 +51,7 @@ open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (javaClass != other!!.javaClass) {
+        if (javaClass != other !!.javaClass) {
             return false
         }
         val alt = other as App?
@@ -70,13 +70,18 @@ open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
         }
     }
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>?>?): ViewHolder {
+    override fun createViewHolder(
+        view: View,
+        adapter: FlexibleAdapter<IFlexible<*>?>?
+    ): ViewHolder {
         return ViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>?>?,
-                                holder: ViewHolder, position: Int,
-                                payloads: List<Any>) {
+    override fun bindViewHolder(
+        adapter: FlexibleAdapter<IFlexible<*>?>?,
+        holder: ViewHolder, position: Int,
+        payloads: List<Any>
+    ) {
         holder.name?.text = appName
         holder.icon.setImageDrawable(icon)
     }
@@ -105,7 +110,8 @@ open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
      * Uses [R.layout.list_generic_item] as its layout,
      * but this can be overriden in [App.getLayoutRes].
      */
-    class ViewHolder internal constructor(view: View, adapter: FlexibleAdapter<IFlexible<*>?>?) : FlexibleViewHolder(view, adapter) {
+    class ViewHolder internal constructor(view: View, adapter: FlexibleAdapter<IFlexible<*>?>?) :
+        FlexibleViewHolder(view, adapter) {
         var name: TextView? = view.findViewById(R.id.item_name)
         var icon: ImageView = view.findViewById(R.id.item_icon)
     }

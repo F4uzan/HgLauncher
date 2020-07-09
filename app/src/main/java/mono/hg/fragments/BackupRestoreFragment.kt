@@ -3,7 +3,12 @@ package mono.hg.fragments
 import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Environment
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Toast
@@ -31,10 +36,12 @@ class BackupRestoreFragment : BackHandledFragment() {
     private var isInRestore = false
     private lateinit var backupNameField: EditText
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentBackupRestoreBinding.inflate(inflater, container, false)
-        return binding!!.root
+        return binding !!.root
     }
 
     override fun onDestroyView() {
@@ -63,9 +70,9 @@ class BackupRestoreFragment : BackHandledFragment() {
         }
         setHasOptionsMenu(true)
         fileFolderAdapter = context?.let { FileFolderAdapter(fileFoldersList, it) }
-        val fileInputContainer = binding!!.fileInputContainer
-        val fileFolders = binding!!.filesList
-        backupNameField = binding!!.fileInputEntry
+        val fileInputContainer = binding !!.fileInputContainer
+        val fileFolders = binding !!.filesList
+        backupNameField = binding !!.fileInputEntry
         fileFolders.adapter = fileFolderAdapter
 
         // If we are called to restore, then hide the input field.
@@ -80,13 +87,18 @@ class BackupRestoreFragment : BackHandledFragment() {
             // Open and traverse to directory.
             if (fileFoldersList[position].isFolder) {
                 currentPath = File(
-                        currentPath.toString() + File.separator + fileFoldersList[position].name)
+                    currentPath.toString() + File.separator + fileFoldersList[position].name
+                )
                 traverseStorage(currentPath)
             } else {
                 // Restore backup when clicking a file, but only do so in restore mode.
-                val possibleBackup = "file://" + currentPath + File.separator + fileFoldersList[position].name
+                val possibleBackup =
+                    "file://" + currentPath + File.separator + fileFoldersList[position].name
                 if (isInRestore && fileFoldersList[position].name.indexOf('.') > 0) {
-                    RestoreBackupTask(requireActivity() as SettingsActivity, possibleBackup).execute()
+                    RestoreBackupTask(
+                        requireActivity() as SettingsActivity,
+                        possibleBackup
+                    ).execute()
                 }
             }
         }
@@ -106,7 +118,7 @@ class BackupRestoreFragment : BackHandledFragment() {
         menu.clear()
         menu.add(0, 1, 100, getString(R.string.action_backup))
         menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        menu.getItem(0).isVisible = !isInRestore
+        menu.getItem(0).isVisible = ! isInRestore
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -119,17 +131,21 @@ class BackupRestoreFragment : BackHandledFragment() {
             1 -> {
                 // Send our backup signal!
                 if (backupNameField.text.toString() != "") {
-                    val backupPath = "file://" + currentPath + File.separator + backupNameField.text.toString() + ".xml"
+                    val backupPath =
+                        "file://" + currentPath + File.separator + backupNameField.text.toString() + ".xml"
                     val backupName = File(backupPath)
                     if (backupName.exists() && backupName.isFile) {
                         val overwriteDialog = AlertDialog.Builder(
-                                requireActivity())
+                            requireActivity()
+                        )
                         overwriteDialog.setTitle(getString(R.string.pref_header_backup))
                         overwriteDialog.setMessage(getString(R.string.backup_exist))
-                        overwriteDialog.setNegativeButton(getString(R.string.backup_exist_cancel),
-                                null)
+                        overwriteDialog.setNegativeButton(
+                            getString(R.string.backup_exist_cancel),
+                            null
+                        )
                         overwriteDialog.setPositiveButton(
-                                getString(R.string.backup_exist_overwrite)
+                            getString(R.string.backup_exist_overwrite)
                         ) { _, _ ->
                             BackupRestoreUtils.saveBackup(requireActivity(), backupPath)
                             traverseStorage(currentPath)
@@ -141,7 +157,7 @@ class BackupRestoreFragment : BackHandledFragment() {
                     }
                 } else {
                     Toast.makeText(requireActivity(), R.string.backup_empty, Toast.LENGTH_SHORT)
-                            .show()
+                        .show()
                 }
                 return true
             }
@@ -154,30 +170,30 @@ class BackupRestoreFragment : BackHandledFragment() {
     // Open a directory and refresh fileFoldersList.
     private fun traverseStorage(path: File?) {
         fileFoldersList.clear()
-        fileFolderAdapter!!.notifyDataSetInvalidated()
+        fileFolderAdapter !!.notifyDataSetInvalidated()
         val contents: Array<File>?
         contents = if (isInRestore) {
-            path!!.listFiles { dir ->
+            path !!.listFiles { dir ->
                 (dir.name.toLowerCase(Locale.getDefault()).endsWith(".xml")
-                        || dir.isDirectory && !dir.isFile)
+                        || dir.isDirectory && ! dir.isFile)
             }
         } else {
-            path!!.listFiles()
+            path !!.listFiles()
         }
         if (contents != null && contents.isNotEmpty()) {
             contents.forEach {
                 // Don't show hidden (.dot) files/folders.
-                if (!it.isHidden) {
+                if (! it.isHidden) {
                     fileFoldersList.add(FileFolder(it.name, it.isDirectory))
                 }
             }
-            fileFolderAdapter!!.notifyDataSetChanged()
+            fileFolderAdapter !!.notifyDataSetChanged()
         }
 
         fileFoldersList.sortWith(Comparator { f1, f2 ->
-            if (f1.isFolder && !f2.isFolder) {
-                -1
-            } else if (!f1.isFolder && f2.isFolder) {
+            if (f1.isFolder && ! f2.isFolder) {
+                - 1
+            } else if (! f1.isFolder && f2.isFolder) {
                 1
             } else {
                 f1.name.compareTo(f2.name, ignoreCase = true)
