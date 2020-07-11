@@ -42,8 +42,8 @@ class WebProviderAdapter(
             viewHolder = view.tag as ViewHolder
         }
 
-        viewHolder.title !!.text = itemList[i].name
-        viewHolder.url !!.text = itemList[i].url
+        viewHolder.title?.text = itemList[i].name
+        viewHolder.url?.text = itemList[i].url
 
         return view
     }

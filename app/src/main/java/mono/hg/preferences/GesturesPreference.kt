@@ -65,9 +65,11 @@ class GesturesPreference : PreferenceFragmentCompat() {
         // We can safely iterate through all the preferences and assume they're ListPreference
         // because GesturesPreference has nothing else aside from that.
         for (i in 0 until prefCount) {
-            val pref = prefScreen.getPreference(i) as ListPreference
-            setNestedListSummary(pref)
-            pref.onPreferenceChangeListener = NestingListListener
+            val pref = prefScreen.getPreference(i)
+            if (pref is ListPreference) {
+                setNestedListSummary(pref)
+                pref.onPreferenceChangeListener = NestingListListener
+            }
         }
 
         setGestureHandlerList(findPreference("gesture_handler"))

@@ -116,8 +116,8 @@ class AppListFragment : GenericPageFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        if (fetchAppsTask != null && fetchAppsTask !!.status == AsyncTask.Status.RUNNING) {
-            fetchAppsTask !!.cancel(true)
+        if (fetchAppsTask != null && fetchAppsTask?.status == AsyncTask.Status.RUNNING) {
+            fetchAppsTask?.cancel(true)
         }
 
         unregisterBroadcast()
@@ -358,9 +358,9 @@ class AppListFragment : GenericPageFragment() {
 
         packageBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                fetchAppsTask !!.cancel(true)
+                fetchAppsTask?.cancel(true)
                 fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
-                fetchAppsTask !!.execute()
+                fetchAppsTask?.execute()
             }
         }
 

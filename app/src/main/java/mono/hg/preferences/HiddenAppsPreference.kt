@@ -102,11 +102,11 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     private fun loadApps() {
         // Clear the list to make sure that we aren't just adding over an existing list.
         appList.clear()
-        hiddenAppAdapter !!.notifyDataSetInvalidated()
+        hiddenAppAdapter?.notifyDataSetInvalidated()
 
         // Fetch and add every app into our list,
         appList.addAll(AppUtils.loadApps(requireActivity(), false))
-        hiddenAppAdapter !!.notifyDataSetChanged()
+        hiddenAppAdapter?.notifyDataSetChanged()
     }
 
     private fun toggleHiddenState(position: Int) {
@@ -123,7 +123,7 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
         appList[position].isAppHidden = excludedAppList.contains(packageName)
 
         // Reload the app list!
-        hiddenAppAdapter !!.notifyDataSetChanged()
+        hiddenAppAdapter?.notifyDataSetChanged()
 
         // Toggle the state of the 'restore all' button.
         requireActivity().invalidateOptionsMenu()

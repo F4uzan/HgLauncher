@@ -27,6 +27,7 @@ import android.view.ViewGroup
 class LauncherAppWidgetHostView(context: Context?) : AppWidgetHostView(context) {
     private var longClickListener: OnLongClickListener? = null
     private var downTime: Long = 0
+
     override fun setOnLongClickListener(listener: OnLongClickListener?) {
         longClickListener = listener
     }
@@ -37,7 +38,7 @@ class LauncherAppWidgetHostView(context: Context?) : AppWidgetHostView(context) 
             MotionEvent.ACTION_UP -> {
                 val isLongPressing = System.currentTimeMillis() - downTime > LONG_PRESS_DURATION
                 return if (isLongPressing) {
-                    longClickListener !!.onLongClick(this)
+                    longClickListener?.onLongClick(this)
                     true
                 } else {
                     false

@@ -15,6 +15,7 @@ import android.os.Build
 import android.os.Process
 import android.os.UserManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import mono.hg.BuildConfig
 import mono.hg.R
@@ -255,65 +256,54 @@ object AppUtils {
      * Populates the internal app list. This method must be loaded asynchronously to avoid
      * performance degradation.
      *
+     * This function internally calls [loadAppsWithUser] to correctly instantiate
+     * user profiles and their respective apps, however if this is not feasible
+     * (such as with older APIs without support for user profiles/multi-user),
+     * [loadAppsLegacy] is called instead.
+     *
      * @param activity Current foreground activity.
      *
      * @return List an App List containing the app list itself.
      */
     fun loadApps(activity: Activity, hideHidden: Boolean): List<App> {
+        return if (Utils.atLeastLollipop()) {
+            loadAppsWithUser(activity, hideHidden)
+        } else {
+            loadAppsLegacy(activity, hideHidden)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun loadAppsWithUser(activity: Activity, hideHidden: Boolean): List<App> {
         val appsList: MutableList<App> = ArrayList()
         val manager = activity.packageManager
         val userUtils = UserUtils(activity)
-        if (Utils.atLeastLollipop()) {
-            val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
-            val launcher = activity.getSystemService(
-                Context.LAUNCHER_APPS_SERVICE
-            ) as LauncherApps
-            userManager.userProfiles.forEach { profile ->
-                launcher.getActivityList(null, profile).forEach { activityInfo ->
-                    val componentName = activityInfo.componentName.flattenToString()
-                    val userPackageName: String
-                    val user = userUtils.getSerial(profile)
-                    userPackageName = if (user != userUtils.currentSerial) {
-                        appendUser(user, componentName)
-                    } else {
-                        componentName
-                    }
-                    val isHidden = (PreferenceHelper.exclusionList.contains(componentName)
-                            || componentName.contains(BuildConfig.APPLICATION_ID))
-                    if (! hideHidden || ! isHidden) {
-                        val appName = activityInfo.label.toString()
-                        val app = App(appName, componentName, false, user)
-                        app.hintName = PreferenceHelper.getLabel(userPackageName)
-                        app.userPackageName = userPackageName
-                        app.icon = LauncherIconHelper.getIcon(
-                            activity,
-                            componentName,
-                            user,
-                            PreferenceHelper.shouldHideIcon()
-                        )
-                        app.isAppHidden = isHidden
-                        if (! appsList.contains(app)) {
-                            appsList.add(app)
-                        }
-                    }
+        val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
+        val launcher = activity.getSystemService(
+            Context.LAUNCHER_APPS_SERVICE
+        ) as LauncherApps
+        userManager.userProfiles.forEach { profile ->
+            launcher.getActivityList(null, profile).forEach { activityInfo ->
+                val componentName = activityInfo.componentName.flattenToString()
+                val userPackageName: String
+                val user = userUtils.getSerial(profile)
+                userPackageName = if (user != userUtils.currentSerial) {
+                    appendUser(user, componentName)
+                } else {
+                    componentName
                 }
-            }
-        } else {
-            val intent = Intent(Intent.ACTION_MAIN, null)
-            intent.addCategory(Intent.CATEGORY_LAUNCHER)
-            manager.queryIntentActivities(intent, 0).forEach {
-                val packageName = it.activityInfo.packageName
-                val componentName = packageName + "/" + it.activityInfo.name
                 val isHidden = (PreferenceHelper.exclusionList.contains(componentName)
                         || componentName.contains(BuildConfig.APPLICATION_ID))
                 if (! hideHidden || ! isHidden) {
-                    val appName = it.loadLabel(manager).toString()
-                    val app = App(appName, componentName, false, userUtils.currentSerial)
-                    app.hintName = PreferenceHelper.getLabel(componentName)
-                    app.userPackageName = componentName
+                    val appName = activityInfo.label.toString()
+                    val app = App(appName, componentName, false, user)
+                    app.hintName = PreferenceHelper.getLabel(userPackageName)
+                    app.userPackageName = userPackageName
                     app.icon = LauncherIconHelper.getIcon(
-                        activity, componentName,
-                        userUtils.currentSerial, PreferenceHelper.shouldHideIcon()
+                        activity,
+                        componentName,
+                        user,
+                        PreferenceHelper.shouldHideIcon()
                     )
                     app.isAppHidden = isHidden
                     if (! appsList.contains(app)) {
@@ -322,6 +312,38 @@ object AppUtils {
                 }
             }
         }
+
+        sortAppList(appsList)
+        return appsList
+    }
+
+    private fun loadAppsLegacy(activity: Activity, hideHidden: Boolean): List<App> {
+        val appsList: MutableList<App> = ArrayList()
+        val manager = activity.packageManager
+        val userUtils = UserUtils(activity)
+        val intent = Intent(Intent.ACTION_MAIN, null)
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        manager.queryIntentActivities(intent, 0).forEach {
+            val packageName = it.activityInfo.packageName
+            val componentName = packageName + "/" + it.activityInfo.name
+            val isHidden = (PreferenceHelper.exclusionList.contains(componentName)
+                    || componentName.contains(BuildConfig.APPLICATION_ID))
+            if (! hideHidden || ! isHidden) {
+                val appName = it.loadLabel(manager).toString()
+                val app = App(appName, componentName, false, userUtils.currentSerial)
+                app.hintName = PreferenceHelper.getLabel(componentName)
+                app.userPackageName = componentName
+                app.icon = LauncherIconHelper.getIcon(
+                    activity, componentName,
+                    userUtils.currentSerial, PreferenceHelper.shouldHideIcon()
+                )
+                app.isAppHidden = isHidden
+                if (! appsList.contains(app)) {
+                    appsList.add(app)
+                }
+            }
+        }
+
         sortAppList(appsList)
         return appsList
     }

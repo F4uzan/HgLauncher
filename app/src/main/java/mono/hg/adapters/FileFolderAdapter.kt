@@ -35,16 +35,18 @@ class FileFolderAdapter(
         }
 
         if (filesList[position].isFolder) {
-            holder.content !!.setImageResource(R.drawable.ic_folder)
+            holder.content?.setImageResource(R.drawable.ic_folder)
         } else {
-            holder.content !!.setImageResource(R.drawable.ic_file)
+            holder.content?.setImageResource(R.drawable.ic_file)
         }
 
-        ImageViewCompat.setImageTintList(
-            holder.content !!,
-            ColorStateList.valueOf(PreferenceHelper.accent)
-        )
-        holder.name !!.text = filesList[position].name
+        holder.content?.let {
+            ImageViewCompat.setImageTintList(
+                it,
+                ColorStateList.valueOf(PreferenceHelper.accent)
+            )
+        }
+        holder.name?.text = filesList[position].name
 
         return view
     }

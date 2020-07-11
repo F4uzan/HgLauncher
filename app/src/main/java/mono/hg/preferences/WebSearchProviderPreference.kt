@@ -66,7 +66,7 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
                     when (item.itemId) {
                         R.id.action_web_provider_remove -> {
                             providerList.removeAt(i)
-                            providerAdapter !!.notifyDataSetChanged()
+                            providerAdapter?.notifyDataSetChanged()
                             PreferenceHelper.updateProvider(providerList)
                             true
                         }
@@ -127,7 +127,7 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
                 providerList.clear()
                 addDefaults()
                 PreferenceHelper.updateProvider(providerList)
-                providerAdapter !!.notifyDataSetChanged()
+                providerAdapter?.notifyDataSetChanged()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -212,7 +212,7 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
                     providerList.add(WebSearchProvider(name, url))
                 }
                 PreferenceHelper.updateProvider(providerList)
-                providerAdapter !!.notifyDataSetChanged()
+                providerAdapter?.notifyDataSetChanged()
             })
 
         val themedDialog = builder.create()

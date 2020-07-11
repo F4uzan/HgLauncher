@@ -18,30 +18,24 @@ class FetchAppsTask(activity: Activity, adapter: AppAdapter, list: MutableList<A
     override fun onPreExecute() {
         val adapterRef = adapter.get()
         val listRef = appsList.get()
-        if (adapterRef != null && listRef != null) {
-            adapterRef.removeRange(0, listRef.size)
-            listRef.clear()
-        }
+        listRef?.size?.let { adapterRef?.removeRange(0, it) }
+        listRef?.clear()
     }
 
     override fun doInBackground(vararg params: Void?): Void? {
         val activityRef = activity.get()
         val listRef = appsList.get()
-        if (activityRef != null && listRef != null) {
-            listRef.addAll(AppUtils.loadApps(activityRef, true))
-        }
+        activityRef?.let { AppUtils.loadApps(it, true) }?.let { listRef?.addAll(it) }
         return null
     }
 
     override fun onPostExecute(results: Void?) {
         val adapterRef = adapter.get()
         val listRef: List<App?>? = appsList.get()
-        if (adapterRef != null && listRef != null) {
-            // Add the fetched apps and update item view cache.
-            adapterRef.updateDataSet(listRef)
-            adapterRef.recyclerView.setItemViewCacheSize(listRef.size - 1)
-            adapterRef.finishedLoading(true)
-        }
+        // Add the fetched apps and update item view cache.
+        adapterRef?.updateDataSet(listRef)
+        listRef?.size?.minus(1)?.let { adapterRef?.recyclerView?.setItemViewCacheSize(it) }
+        adapterRef?.finishedLoading(true)
     }
 
 }
