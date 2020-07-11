@@ -23,10 +23,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_widget"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_margin="16dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="8dp"
         android:layout_gravity="bottom|end"
+        app:ensureMinTouchTargetSize="true"
+        app:useCompatPadding="true"
+        app:fabCustomSize="40dp"
         app:srcCompat="@drawable/ic_add" />
 
 </FrameLayout>
