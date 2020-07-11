@@ -324,7 +324,9 @@ class LauncherActivity : AppCompatActivity() {
         if (PreferenceHelper.keepAppList()) {
             doThis(SHOW_PANEL)
             searchContainer.visibility = View.VISIBLE
-        } else if (Utils.sdkIsBelow(21) || ActivityServiceUtils.isPowerSaving(this)) {
+        } else if ((! panelLockRequested && Utils.sdkIsBelow(21)) ||
+            ActivityServiceUtils.isPowerSaving(this)
+        ) {
             // HACK: For some reason, KitKat and below is always late setting visibility.
             // Manually set it here to make sure it's invisible.
             searchContainer.visibility = View.INVISIBLE
