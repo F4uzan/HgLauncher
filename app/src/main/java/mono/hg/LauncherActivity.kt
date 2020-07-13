@@ -491,7 +491,8 @@ class LauncherActivity : AppCompatActivity() {
             if (Utils.atLeastLollipop()) {
                 window.navigationBarColor = ContextCompat.getColor(this, R.color.navigationBarShade)
             }
-            binding.wallpaperShade.setBackgroundResource(R.drawable.image_inner_shadow)
+            
+            binding.root.setBackgroundResource(R.drawable.image_inner_shadow)
         }
         if ("transparent" == PreferenceHelper.listBackground) {
             appsListContainer.setBackgroundColor(
