@@ -332,6 +332,15 @@ class LauncherActivity : AppCompatActivity() {
             searchContainer.visibility = View.INVISIBLE
         }
 
+        // Restore last search query if the user requests for it.
+        if (PreferenceHelper.keepLastSearch()) {
+            if (viewPagerAdapter.getCurrentPage() != null) {
+                if (viewPagerAdapter.getCurrentPage() !!.isAcceptingSearch()) {
+                    viewPagerAdapter.getCurrentPage()?.commitSearch(searchBar.text.toString())
+                }
+            }
+        }
+
         // Toggle back the refresh switch.
         PreferenceHelper.update("require_refresh", false)
 
@@ -673,7 +682,11 @@ class LauncherActivity : AppCompatActivity() {
                 super.onPageSelected(position)
 
                 // Pages should be informed of the new query as soon as they are selected.
-                viewPagerAdapter.getCurrentPage()?.commitSearch(searchBar.text.toString())
+                if (viewPagerAdapter.getCurrentPage() != null) {
+                    if (viewPagerAdapter.getCurrentPage() !!.isAcceptingSearch()) {
+                        viewPagerAdapter.getCurrentPage()?.commitSearch(searchBar.text.toString())
+                    }
+                }
             }
         })
 
