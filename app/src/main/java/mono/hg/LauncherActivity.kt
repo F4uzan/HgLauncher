@@ -675,7 +675,17 @@ class LauncherActivity : AppCompatActivity() {
      * Listeners for the search bar query.
      */
     private fun addSearchBarTextListener() {
-        // Implement listener for the search bar.
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                // Pages should be informed of the new query as soon as they are selected.
+                if (getCurrentPage() !!.isAcceptingSearch()) {
+                    getCurrentPage()?.commitSearch(searchBar.text.toString())
+                }
+            }
+        })
+
         searchBar.addTextChangedListener(object : TextSpectator(searchBar) {
             var searchHint: String = ""
             var searchSnack = DagashiBar.make(
