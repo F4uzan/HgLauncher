@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import mono.hg.R
@@ -321,7 +322,29 @@ class WidgetListFragment : GenericPageFragment() {
      */
     private fun addWidgetActionListener(index: Int) {
         appWidgetContainer.getChildAt(index)?.setOnLongClickListener { view ->
-            view.showContextMenu()
+            // Set the calling view.
+            callingView = view as AppWidgetHostView
+            val index = appWidgetContainer.indexOfChild(view)
+            val popupMenu = PopupMenu(requireContext(), view)
+            val menu = popupMenu.menu
+
+            // Generate menu.
+            // TODO: Maybe a more robust and automated way can be done for this.
+            menu.clear()
+            menu.add(1, 0, 100, getString(R.string.dialog_action_add))
+            menu.add(1, 1, 100, getString(R.string.action_remove_widget))
+            menu.add(1, 2, 100, getString(R.string.action_up_widget))
+            menu.add(1, 3, 100, getString(R.string.action_down_widget))
+
+            // Move actions should only be added when there is more than one widget.
+            menu.getItem(2).isVisible = appWidgetContainer.childCount > 1 && index > 0
+            menu.getItem(3).isVisible = appWidgetContainer.childCount != index + 1
+
+            popupMenu.setOnMenuItemClickListener {
+                onContextItemSelected(it)
+            }
+
+            popupMenu.show()
             true
         }
     }
