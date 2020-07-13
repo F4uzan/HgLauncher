@@ -29,13 +29,11 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.PopupMenu
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -43,11 +41,9 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.FlexibleAdapter.OnItemMoveListener
+import mono.hg.adapters.PageAdapter
 import mono.hg.databinding.ActivityLauncherspaceBinding
 import mono.hg.databinding.DialogStartHintBinding
-import mono.hg.fragments.AppListFragment
-import mono.hg.fragments.GenericPageFragment
-import mono.hg.fragments.WidgetListFragment
 import mono.hg.helpers.LauncherIconHelper
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.GestureListener
@@ -62,7 +58,6 @@ import mono.hg.utils.ViewUtils
 import mono.hg.views.DagashiBar
 import mono.hg.wrappers.TextSpectator
 import java.net.URLEncoder
-import java.util.*
 
 /**
  * The launcher itself.
@@ -162,6 +157,11 @@ class LauncherActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
 
     /*
+     * Adapter handling Pages, used by viewPager.
+     */
+    private lateinit var viewPagerAdapter: PageAdapter
+
+    /*
      * Receiver used to listen to installed/uninstalled packages.
      */
     private val packageReceiver = PackageChangesReceiver()
@@ -209,8 +209,8 @@ class LauncherActivity : AppCompatActivity() {
         pinnedAppsAdapter.itemTouchHelperCallback.setMoveThreshold(1f)
 
         // The pager adapter, which provides the pages to the view pager widget.
-        val pagerAdapter = PageAdapter(this)
-        viewPager.adapter = pagerAdapter
+        viewPagerAdapter = PageAdapter(this, viewPager)
+        viewPager.adapter = viewPagerAdapter
         viewPager.setCurrentItem(1, false)
 
         // Get icons from icon pack.
@@ -518,16 +518,8 @@ class LauncherActivity : AppCompatActivity() {
         if (PreferenceHelper.providerList.isEmpty()) {
             Utils.setDefaultProviders(resources)
         }
+
         when (PreferenceHelper.appTheme()) {
-            "auto" -> if (Utils.atLeastQ()) {
-                AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                )
-            } else {
-                AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-                )
-            }
             "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             "dark" -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -680,8 +672,8 @@ class LauncherActivity : AppCompatActivity() {
                 super.onPageSelected(position)
 
                 // Pages should be informed of the new query as soon as they are selected.
-                if (getCurrentPage() !!.isAcceptingSearch()) {
-                    getCurrentPage()?.commitSearch(searchBar.text.toString())
+                if (viewPagerAdapter.getCurrentPage() !!.isAcceptingSearch()) {
+                    viewPagerAdapter.getCurrentPage()?.commitSearch(searchBar.text.toString())
                 }
             }
         })
@@ -703,18 +695,18 @@ class LauncherActivity : AppCompatActivity() {
                     if (isContextVisible) {
                         doThis("hide_context_button")
                     }
-                    if (getCurrentPage() != null) {
-                        if (getCurrentPage() !!.isAcceptingSearch()) {
-                            getCurrentPage()?.resetSearch()
+                    if (viewPagerAdapter.getCurrentPage() != null) {
+                        if (viewPagerAdapter.getCurrentPage() !!.isAcceptingSearch()) {
+                            viewPagerAdapter.getCurrentPage()?.resetSearch()
                         }
                     }
                     searchSnack.dismiss()
                     stopTimer()
                 } else {
                     // Begin filtering our list.
-                    if (getCurrentPage() != null) {
-                        if (getCurrentPage() !!.isAcceptingSearch()) {
-                            getCurrentPage()?.commitSearch(trimmedInputText)
+                    if (viewPagerAdapter.getCurrentPage() != null) {
+                        if (viewPagerAdapter.getCurrentPage() !!.isAcceptingSearch()) {
+                            viewPagerAdapter.getCurrentPage()?.commitSearch(trimmedInputText)
                         }
                     }
                 }
@@ -785,7 +777,7 @@ class LauncherActivity : AppCompatActivity() {
             if (searchBar.text.isNotEmpty()
                 && (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL)
             ) {
-                val pageAvailable = getCurrentPage()?.launchPreselection() ?: false
+                val pageAvailable = viewPagerAdapter.getCurrentPage()?.launchPreselection() ?: false
                 if (! pageAvailable && PreferenceHelper.promptSearch() && PreferenceHelper.searchProvider != "none") {
                     Utils.doWebSearch(
                         this@LauncherActivity,
@@ -1054,29 +1046,6 @@ class LauncherActivity : AppCompatActivity() {
             PreferenceHelper.update("is_new_user", false)
         }
         startDialog.show()
-    }
-
-    /**
-     * Adapter for Pages.
-     * TODO: Move this to its own class and further generify for other Pages.
-     */
-    private inner class PageAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-        override fun getItemCount(): Int = 2
-        override fun createFragment(position: Int): GenericPageFragment {
-            return if (position == 0) {
-                WidgetListFragment()
-            } else {
-                AppListFragment()
-            }
-        }
-    }
-
-    /**
-     * Helper function to retrieve currently-viewed Page.
-     * Uses a hack available in ViewPager2 fragment tagging.
-     */
-    private fun getCurrentPage(): GenericPageFragment? {
-        return supportFragmentManager.findFragmentByTag("f" + viewPager.currentItem) as GenericPageFragment?
     }
 
     companion object {
