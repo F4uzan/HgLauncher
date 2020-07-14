@@ -3,6 +3,7 @@ package mono.hg.tasks
 import android.app.Activity
 import android.os.AsyncTask
 import mono.hg.adapters.AppAdapter
+import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.App
 import mono.hg.utils.AppUtils
 import java.lang.ref.WeakReference
@@ -30,12 +31,25 @@ class FetchAppsTask(activity: Activity, adapter: AppAdapter, list: MutableList<A
     }
 
     override fun onPostExecute(results: Void?) {
+        val activityRef = activity.get()
         val adapterRef = adapter.get()
         val listRef: List<App?>? = appsList.get()
+
         // Add the fetched apps and update item view cache.
         adapterRef?.updateDataSet(listRef)
         listRef?.size?.minus(1)?.let { adapterRef?.recyclerView?.setItemViewCacheSize(it) }
+
+        // Let the adapter know we're all done.
         adapterRef?.finishedLoading(true)
+
+        // Recount the number of installed package to make sure we're up-to-date
+        // when calling AppUtils.hasNewPackage()
+        activityRef?.packageManager?.let { AppUtils.countInstalledPackage(it) }?.let {
+            PreferenceHelper.update(
+                "package_count",
+                it
+            )
+        }
     }
 
 }
