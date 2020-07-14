@@ -213,12 +213,8 @@ class AppListFragment : GenericPageFragment() {
         super.onStart()
 
         if (AppUtils.hasNewPackage(manager) || appsAdapter.isEmpty) {
-            synchronized (appsList) {
-                if (fetchAppsTask != null) {
-                    fetchAppsTask?.cancel(true)
-                }
-                fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
-                fetchAppsTask?.execute()
+            synchronized(appsList) {
+                fetchApps()
             }
         }
 
@@ -353,13 +349,15 @@ class AppListFragment : GenericPageFragment() {
     }
 
     private fun registerBroadcast() {
-        // We want this activity to receive the package change broadcast,
+        // We want this fragment to receive the package change broadcast,
         // since otherwise it won't be notified when there are changes to that.
         val filter = IntentFilter()
         filter.addAction("mono.hg.PACKAGE_CHANGE_BROADCAST")
 
         packageBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
+                val isRemoving =
+                    intent.getStringExtra("action") == "android.intent.action.PACKAGE_REMOVED"
                 val launchIntent = requireActivity().packageManager.getLaunchIntentForPackage(
                     intent.getStringExtra("package")
                 )
@@ -368,10 +366,12 @@ class AppListFragment : GenericPageFragment() {
                     val hasLauncherCategory = launchIntent.hasCategory(Intent.CATEGORY_LAUNCHER)
 
                     if (hasLauncherCategory) {
-                        fetchAppsTask?.cancel(true)
-                        fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
-                        fetchAppsTask?.execute()
+                        fetchApps()
                     }
+                } else if (isRemoving) {
+                    // Apps being uninstalled will have no launch intent,
+                    // therefore it's better if we get the entire list again.
+                    fetchApps()
                 }
             }
         }
@@ -389,6 +389,12 @@ class AppListFragment : GenericPageFragment() {
                 "unregisterBroadcast() was called to a null receiver."
             )
         }
+    }
+
+    private fun fetchApps() {
+        fetchAppsTask?.cancel(true)
+        fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
+        fetchAppsTask?.execute()
     }
 
     /**

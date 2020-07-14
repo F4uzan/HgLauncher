@@ -3,6 +3,7 @@ package mono.hg.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import mono.hg.utils.Utils
 
 /**
  * A receiver called when the launcher receives any changes in packages (apps).
@@ -19,7 +20,9 @@ open class PackageChangesReceiver : BroadcastReceiver() {
                     context.packageName
                 )
             ) {
+                Utils.sendLog(3, "Fired!")
                 val mainIntent = Intent()
+                mainIntent.putExtra("action", intent.action)
                 mainIntent.putExtra("package", packageName)
                 mainIntent.action = "mono.hg.PACKAGE_CHANGE_BROADCAST"
                 context.sendBroadcast(mainIntent)
