@@ -10,10 +10,9 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import eu.davidea.flexibleadapter.FlexibleAdapter
 import mono.hg.R
+import mono.hg.adapters.AppAdapter
 import mono.hg.helpers.PreferenceHelper
-import mono.hg.models.App
 
 /**
  * Utils class handling transformation of views relating to the launcher.
@@ -71,7 +70,7 @@ object ViewUtils {
     fun keyboardLaunchApp(
         activity: Activity,
         recyclerView: RecyclerView,
-        adapter: FlexibleAdapter<App?>
+        adapter: AppAdapter
     ) {
         if (recyclerView.canScrollVertically(RecyclerView.FOCUS_UP)) {
             adapter.getItem(0)?.let { AppUtils.launchApp(activity, it) }
