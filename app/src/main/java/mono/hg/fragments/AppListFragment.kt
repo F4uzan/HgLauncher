@@ -360,9 +360,19 @@ class AppListFragment : GenericPageFragment() {
 
         packageBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                fetchAppsTask?.cancel(true)
-                fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
-                fetchAppsTask?.execute()
+                val launchIntent = requireActivity().packageManager.getLaunchIntentForPackage(
+                    intent.getStringExtra("package")
+                )
+
+                if (launchIntent != null) {
+                    val hasLauncherCategory = launchIntent.hasCategory(Intent.CATEGORY_LAUNCHER)
+
+                    if (hasLauncherCategory) {
+                        fetchAppsTask?.cancel(true)
+                        fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
+                        fetchAppsTask?.execute()
+                    }
+                }
             }
         }
 

@@ -20,6 +20,7 @@ open class PackageChangesReceiver : BroadcastReceiver() {
                 )
             ) {
                 val mainIntent = Intent()
+                mainIntent.putExtra("package", packageName)
                 mainIntent.action = "mono.hg.PACKAGE_CHANGE_BROADCAST"
                 context.sendBroadcast(mainIntent)
             }
