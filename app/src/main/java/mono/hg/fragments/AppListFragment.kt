@@ -213,11 +213,13 @@ class AppListFragment : GenericPageFragment() {
         super.onStart()
 
         if (AppUtils.hasNewPackage(manager) || appsAdapter.isEmpty) {
-            if (fetchAppsTask != null) {
-                fetchAppsTask?.cancel(true)
+            synchronized (appsList) {
+                if (fetchAppsTask != null) {
+                    fetchAppsTask?.cancel(true)
+                }
+                fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
+                fetchAppsTask?.execute()
             }
-            fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
-            fetchAppsTask?.execute()
         }
 
         // Reset the app list filter.
