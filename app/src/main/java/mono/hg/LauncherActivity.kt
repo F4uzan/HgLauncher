@@ -238,7 +238,10 @@ class LauncherActivity : AppCompatActivity() {
         if (PreferenceHelper.keepAppList()) {
             doThis(SHOW_PANEL)
         }
-        if (PreferenceHelper.isNewUser) {
+
+        // Only call showStartDialog() after savedInstanceState
+        // isn't null to prevent it from showing twice (and leaking windows in the process)
+        if (PreferenceHelper.isNewUser && savedInstanceState != null) {
             showStartDialog()
         }
     }
@@ -527,20 +530,16 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         when (PreferenceHelper.appTheme()) {
-            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "light" -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
             "dark" -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
                 setTheme(R.style.LauncherTheme_Dark)
             }
-            "black" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "black" -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
             else -> if (Utils.atLeastQ()) {
-                AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                )
+                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             } else {
-                AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-                )
+                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
             }
         }
     }
