@@ -9,6 +9,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import mono.hg.R
+import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.Utils
 import java.util.*
 
@@ -17,6 +18,17 @@ import java.util.*
  */
 @Keep
 class AppListPreference : PreferenceFragmentCompat() {
+    val RestartingListListener = Preference.OnPreferenceChangeListener { _, _ ->
+        if (PreferenceHelper.preference.getString(
+                "icon_pack",
+                "default"
+            ) != PreferenceHelper.iconPackName
+        ) {
+            PreferenceHelper.update("require_refresh", true)
+        }
+        true
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.pref_app_list, rootKey)
     }
@@ -24,6 +36,7 @@ class AppListPreference : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val iconList = findPreference<ListPreference>("icon_pack")
+        iconList?.onPreferenceChangeListener = RestartingListListener
         setIconList(iconList)
 
         // Adaptive icon is not available before Android O/API 26.

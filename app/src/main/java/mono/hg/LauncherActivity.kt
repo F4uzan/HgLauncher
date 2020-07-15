@@ -306,10 +306,7 @@ class LauncherActivity : AppCompatActivity() {
         super.onResume()
 
         // See if user has changed icon pack. Clear cache if true.
-        if (PreferenceHelper.preference.getBoolean("require_refresh", false) ||
-            PreferenceHelper.preference
-                .getString("icon_pack", "default") != PreferenceHelper.iconPackName
-        ) {
+        if (PreferenceHelper.preference.getBoolean("require_refresh", false)) {
             LauncherIconHelper.refreshIcons()
         }
 
