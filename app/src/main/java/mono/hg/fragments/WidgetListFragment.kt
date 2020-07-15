@@ -249,16 +249,13 @@ class WidgetListFragment : GenericPageFragment() {
         val widgetId =
             data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
         val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
-        val appWidgetHostView = appWidgetHost.createView(
-            requireActivity().applicationContext,
-            widgetId, appWidgetInfo
-        )
 
-        // Prevents crashing when the widget info can't be found.
-        // https://github.com/Neamar/KISS/commit/f81ae32ef5ff5c8befe0888e6ff818a41d8dedb4
-        if (appWidgetInfo == null) {
-            removeWidget(appWidgetHostView, widgetId)
-        } else {
+        if (appWidgetInfo != null) {
+            val appWidgetHostView = appWidgetHost.createView(
+                requireActivity().applicationContext,
+                widgetId, appWidgetInfo
+            )
+
             // Notify widget of the available minimum space.
             appWidgetHostView.minimumHeight = appWidgetInfo.minHeight
             appWidgetHostView.setAppWidget(widgetId, appWidgetInfo)
