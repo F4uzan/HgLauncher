@@ -92,12 +92,21 @@ class WidgetListFragment : GenericPageFragment() {
                 if (widgets.isNotEmpty()) {
                     val widgetIntent = Intent()
                     widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgets.toInt())
+
                     // Don't add ALL the widgets at once.
                     // TODO: Handle this a bit better, because not all devices are made equally.
                     Handler().postDelayed({
                         addWidget(widgetIntent, index, false)
                     }, 300)
                 }
+            }
+
+            if (widgetsList.size > appWidgetContainer.childCount) {
+                // This shouldn't happen, but will occur in a corrupted backup/restore.
+                // We don't want to add or iterate over this corrupted list,
+                // so it's better to clear and redo.
+                widgetsList.clear()
+                PreferenceHelper.updateWidgets(widgetsList)
             }
         }
 
@@ -155,7 +164,7 @@ class WidgetListFragment : GenericPageFragment() {
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
                 startActivityForResult(intent, WIDGET_CONFIG_RETURN_CODE)
             } else {
-                addWidget(data, widgetsList.size, true)
+                addWidget(data, appWidgetContainer.childCount, true)
             }
         } else if (resultCode == Activity.RESULT_CANCELED && data != null) {
             val widgetId =
@@ -243,6 +252,12 @@ class WidgetListFragment : GenericPageFragment() {
     private fun addWidget(data: Intent, index: Int, newWidget: Boolean) {
         if (! isAdded || activity == null) {
             // Nope. Not doing anything.
+            return
+        }
+
+        if (index > appWidgetContainer.childCount) {
+            // This might be caused by a broken restore.
+            // We don't want this to happen, so don't do anything.
             return
         }
 
