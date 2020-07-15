@@ -134,20 +134,6 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
         }
     }
 
-    /**
-     * Called when the activity needs to be restarted (i.e when a theme change occurs).
-     * Allows for smooth transition between recreation.
-     */
-    fun restartActivity() {
-        val intent = intent
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        finish()
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        startActivity(intent)
-    }
-
     private fun setActivityTheme() {
         when (PreferenceHelper.appTheme()) {
             "light" -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO

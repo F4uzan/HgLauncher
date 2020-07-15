@@ -2,6 +2,7 @@ package mono.hg.utils
 
 import android.annotation.TargetApi
 import android.app.Activity
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Build
 import android.view.View
@@ -124,4 +125,25 @@ object ViewUtils {
         }
         popupMenu.show()
     }
+
+    /**
+     * Called when the activity needs to be restarted (i.e when a theme change occurs).
+     * Allows for smooth transition between recreation.
+     */
+    fun restartActivity(activity: AppCompatActivity, clearTask: Boolean) {
+        val intent = Intent(activity.intent).apply {
+            this.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            if (clearTask) {
+                this.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            } else {
+                this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            }
+        }.also {
+            activity.startActivity(it)
+            activity.finish()
+            activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+
+    }
+
 }

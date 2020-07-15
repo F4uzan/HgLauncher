@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -34,7 +35,7 @@ class BasePreference : PreferenceFragmentCompat() {
     private var versionMenu: Preference? = null
 
     private val RestartingListListener = Preference.OnPreferenceChangeListener { _, _ ->
-        (requireActivity() as SettingsActivity).restartActivity()
+        ViewUtils.restartActivity(requireActivity() as AppCompatActivity, false)
         true
     }
 
@@ -124,12 +125,11 @@ class BasePreference : PreferenceFragmentCompat() {
                     PreferenceHelper.fetchPreference()
 
                     PreferenceHelper.update("require_refresh", true)
-                    (requireActivity() as SettingsActivity).restartActivity()
+                    ViewUtils.restartActivity(requireActivity() as AppCompatActivity, false)
                     Toast.makeText(
                         requireContext(),
                         R.string.reset_preference_toast, Toast.LENGTH_LONG
-                    )
-                        .show()
+                    ).show()
                 }
 
             val themedDialog = alert.create()

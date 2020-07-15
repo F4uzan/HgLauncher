@@ -261,7 +261,7 @@ class LauncherActivity : AppCompatActivity() {
                 true
             }
             R.id.action_force_refresh -> {
-                recreate()
+                ViewUtils.restartActivity(this, true)
                 true
             }
             R.id.action_view_widgets -> {
@@ -352,7 +352,7 @@ class LauncherActivity : AppCompatActivity() {
         // Restart the launcher in case of an alien call.
         if (PreferenceHelper.wasAlien()) {
             PreferenceHelper.isAlien(false)
-            recreate()
+            ViewUtils.restartActivity(this, true)
         }
     }
 
@@ -369,7 +369,7 @@ class LauncherActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // Handle preference change. Refresh when necessary.
         if (requestCode == SETTINGS_RETURN_CODE && ! PreferenceHelper.wasAlien()) {
-            recreate()
+            ViewUtils.restartActivity(this, true)
         }
 
         // Call super to handle anything else not handled here.

@@ -125,7 +125,7 @@ object BackupRestoreUtils {
             val fragment = fragmentRef.get()
             if (fragment != null) {
                 fragment.progressBar.hide()
-                fragment.restartActivity()
+                ViewUtils.restartActivity(fragment, false)
                 Toast.makeText(
                     fragmentRef.get(), R.string.restore_complete,
                     Toast.LENGTH_LONG
