@@ -119,7 +119,10 @@ class BasePreference : PreferenceFragmentCompat() {
                 .setMessage(getString(R.string.reset_preference_warn))
                 .setNegativeButton(getString(android.R.string.cancel), null)
                 .setPositiveButton(R.string.reset_preference_positive) { _, _ ->
+                    // We have to reset the leftover preferences to make sure they don't linger.
                     PreferenceHelper.editor?.clear()?.apply()
+                    PreferenceHelper.fetchPreference()
+
                     PreferenceHelper.update("require_refresh", true)
                     (requireActivity() as SettingsActivity).restartActivity()
                     Toast.makeText(

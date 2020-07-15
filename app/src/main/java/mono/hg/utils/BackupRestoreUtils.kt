@@ -55,7 +55,11 @@ object BackupRestoreUtils {
         var input: ObjectInputStream? = null
         try {
             input = ObjectInputStream(context.contentResolver.openInputStream(uri))
-            PreferenceHelper.editor?.clear()
+
+            // We have to reset the leftover preferences to make sure they don't linger.
+            PreferenceHelper.editor?.clear()?.apply()
+            PreferenceHelper.fetchPreference()
+
             val entries = input.readObject() as Map<String, *>
             entries.forEach {
                 when (val v = it.value !!) {
@@ -95,6 +99,10 @@ object BackupRestoreUtils {
     /**
      * An AsyncTask tied to [SettingsActivity], used to read a backup file (.xml)
      * and attempts to restore it.
+     *
+     * @param activity  The SettingsActivity itself.
+     * @param path      Path to the backup file. This path will be parsed by [Uri.parse], therefore
+     *                  it must be a valid Uri.
      */
     class RestoreBackupTask(activity: SettingsActivity, path: String?) :
         AsyncTask<Void?, Void?, Void?>() {
