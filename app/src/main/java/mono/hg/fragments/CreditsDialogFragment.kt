@@ -22,23 +22,39 @@ import java.io.InputStreamReader
 class CreditsDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val binding = FragmentCreditsDialogBinding.inflate(requireActivity().layoutInflater)
-        val builder = AlertDialog.Builder(requireActivity())
+
+        with(AlertDialog.Builder(requireActivity())) {
+            setTitle(R.string.about_credits_dialog_title)
+            setView(binding.root)
+            setPositiveButton(R.string.dialog_action_close, null)
+
+            binding.creditsPlaceholder.apply {
+                highlightColor = PreferenceHelper.darkAccent
+                setLinkTextColor(PreferenceHelper.accent)
+                text = readCredits()
+                LinkifyCompat.addLinks(this, Linkify.WEB_URLS)
+            }
+
+            create().apply {
+                show()
+                getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
+                getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+                return this
+            }
+        }
+    }
+
+    private fun readCredits() : String {
         val stringBuilder = StringBuilder()
         var br: BufferedReader? = null
-        builder.setTitle(R.string.about_credits_dialog_title)
-        builder.setView(binding.root)
-        builder.setPositiveButton(R.string.dialog_action_close, null)
-        val creditsText = binding.creditsPlaceholder
-        creditsText.highlightColor = PreferenceHelper.darkAccent
-        creditsText.setLinkTextColor(PreferenceHelper.accent)
+
         try {
             br = BufferedReader(
                 InputStreamReader(requireActivity().assets.open("credits.txt"))
             )
             var line: String?
             while (br.readLine().also { line = it } != null) {
-                stringBuilder.append(line)
-                stringBuilder.append('\n')
+                stringBuilder.append(line).append('\n')
             }
         } catch (e: IOException) {
             Utils.sendLog(
@@ -48,17 +64,7 @@ class CreditsDialogFragment : DialogFragment() {
         } finally {
             Utils.closeStream(br)
         }
-        creditsText.text = stringBuilder.toString()
-        LinkifyCompat.addLinks(creditsText, Linkify.WEB_URLS)
 
-        val themedDialog = builder.create()
-        themedDialog.show()
-
-        themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-            .setTextColor(PreferenceHelper.darkAccent)
-        themedDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-            .setTextColor(PreferenceHelper.darkAccent)
-
-        return themedDialog
+        return stringBuilder.toString()
     }
 }

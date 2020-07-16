@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class CustomGridLayoutManager(context: Context?, spanCount: Int) :
     GridLayoutManager(context, spanCount) {
+
     override fun requestChildRectangleOnScreen(
         parent: RecyclerView,
         child: View,

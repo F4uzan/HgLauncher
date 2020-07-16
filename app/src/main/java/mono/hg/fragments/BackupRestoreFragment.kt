@@ -1,6 +1,8 @@
 package mono.hg.fragments
 
+import android.annotation.TargetApi
 import android.app.AlertDialog
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
@@ -60,24 +62,23 @@ class BackupRestoreFragment : BackHandledFragment() {
          * This is needed because the preference library does not supply toolbars
          * for fragments that it isn't managing.
          */
-        val actionBar = (requireActivity() as SettingsActivity).supportActionBar
-        if (actionBar != null) {
+        (requireActivity() as SettingsActivity).supportActionBar.apply {
             if (isInRestore) {
-                actionBar.setTitle(R.string.pref_header_restore)
+                this?.setTitle(R.string.pref_header_restore)
             } else {
-                actionBar.setTitle(R.string.pref_header_backup)
+                this?.setTitle(R.string.pref_header_backup)
             }
         }
+
         setHasOptionsMenu(true)
         fileFolderAdapter = context?.let { FileFolderAdapter(fileFoldersList, it) }
-        val fileInputContainer = binding !!.fileInputContainer
         val fileFolders = binding !!.filesList
         backupNameField = binding !!.fileInputEntry
         fileFolders.adapter = fileFolderAdapter
 
         // If we are called to restore, then hide the input field.
         if (isInRestore) {
-            fileInputContainer.visibility = View.GONE
+            binding !!.fileInputContainer.visibility = View.GONE
         }
 
         // Check for storage permission if we're in Marshmallow and up.
@@ -115,11 +116,13 @@ class BackupRestoreFragment : BackHandledFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        menu.add(0, 1, 100, getString(R.string.action_backup))
-        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        menu.getItem(0).isVisible = ! isInRestore
-        super.onCreateOptionsMenu(menu, inflater)
+        with(menu) {
+            clear()
+            add(0, 1, 100, getString(R.string.action_backup))
+            getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            getItem(0).isVisible = ! isInRestore
+            super.onCreateOptionsMenu(this, inflater)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -135,22 +138,16 @@ class BackupRestoreFragment : BackHandledFragment() {
                         "file://" + currentPath + File.separator + backupNameField.text.toString() + ".xml"
                     val backupName = File(backupPath)
                     if (backupName.exists() && backupName.isFile) {
-                        val overwriteDialog = AlertDialog.Builder(
-                            requireActivity()
-                        )
-                        overwriteDialog.setTitle(getString(R.string.pref_header_backup))
-                        overwriteDialog.setMessage(getString(R.string.backup_exist))
-                        overwriteDialog.setNegativeButton(
-                            getString(R.string.backup_exist_cancel),
-                            null
-                        )
-                        overwriteDialog.setPositiveButton(
-                            getString(R.string.backup_exist_overwrite)
-                        ) { _, _ ->
-                            BackupRestoreUtils.saveBackup(requireActivity(), backupPath)
-                            traverseStorage(currentPath)
+                        with (AlertDialog.Builder(requireActivity())) {
+                            setTitle(getString(R.string.pref_header_backup))
+                            setMessage(getString(R.string.backup_exist))
+                            setNegativeButton(getString(R.string.backup_exist_cancel), null)
+                            setPositiveButton(getString(R.string.backup_exist_overwrite)) { _, _ ->
+                                BackupRestoreUtils.saveBackup(requireActivity(), backupPath)
+                                traverseStorage(currentPath)
+                            }
+                            show()
                         }
-                        overwriteDialog.show()
                     } else {
                         BackupRestoreUtils.saveBackup(requireActivity(), backupPath)
                         traverseStorage(currentPath)

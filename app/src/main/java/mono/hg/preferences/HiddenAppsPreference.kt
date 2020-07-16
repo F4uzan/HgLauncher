@@ -71,11 +71,13 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        menu.add(0, 1, 100, getString(R.string.action_hidden_app_reset))
-        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        menu.getItem(0).isVisible = excludedAppList.isNotEmpty()
-        super.onCreateOptionsMenu(menu, inflater)
+        with (menu) {
+            clear()
+            add(0, 1, 100, getString(R.string.action_hidden_app_reset))
+            getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            getItem(0).isVisible = excludedAppList.isNotEmpty()
+            super.onCreateOptionsMenu(this, inflater)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

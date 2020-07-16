@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
@@ -102,8 +101,7 @@ class BasePreference : PreferenceFragmentCompat() {
         val backupMenu = findPreference<Preference>("backup")
         val resetMenu = findPreference<Preference>("reset")
         credits?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val creditsInfo: DialogFragment = CreditsDialogFragment()
-            creditsInfo.show(requireActivity().supportFragmentManager, "CreditsDialog")
+            CreditsDialogFragment().show(requireActivity().supportFragmentManager, "CreditsDialog")
             false
         }
         backupMenu?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -115,11 +113,11 @@ class BasePreference : PreferenceFragmentCompat() {
             hasStoragePermission()
         }
         resetMenu?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val alert = AlertDialog.Builder(requireContext())
-            alert.setTitle(getString(R.string.reset_preference))
-                .setMessage(getString(R.string.reset_preference_warn))
-                .setNegativeButton(getString(android.R.string.cancel), null)
-                .setPositiveButton(R.string.reset_preference_positive) { _, _ ->
+            with (AlertDialog.Builder(requireContext())) {
+                setTitle(getString(R.string.reset_preference))
+                setMessage(getString(R.string.reset_preference_warn))
+                setNegativeButton(getString(android.R.string.cancel), null)
+                setPositiveButton(R.string.reset_preference_positive) { _, _ ->
                     // We have to reset the leftover preferences to make sure they don't linger.
                     PreferenceHelper.editor?.clear()?.apply()
                     PreferenceHelper.fetchPreference()
@@ -128,17 +126,17 @@ class BasePreference : PreferenceFragmentCompat() {
                     ViewUtils.restartActivity(requireActivity() as AppCompatActivity, false)
                     Toast.makeText(
                         requireContext(),
-                        R.string.reset_preference_toast, Toast.LENGTH_LONG
+                        R.string.reset_preference_toast,
+                        Toast.LENGTH_LONG
                     ).show()
                 }
 
-            val themedDialog = alert.create()
-            themedDialog.show()
-
-            themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-                .setTextColor(PreferenceHelper.darkAccent)
-            themedDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                .setTextColor(PreferenceHelper.darkAccent)
+                create().apply {
+                    show()
+                    getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
+                    getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+                }
+            }
             false
         }
     }
@@ -209,7 +207,7 @@ class BasePreference : PreferenceFragmentCompat() {
             fragmentBundle.putBoolean("isRestore", isRestore)
             backupRestoreFragment.arguments = fragmentBundle
             ViewUtils.replaceFragment(
-                requireFragmentManager(), backupRestoreFragment,
+                requireActivity().supportFragmentManager, backupRestoreFragment,
                 "backup_restore"
             )
         }

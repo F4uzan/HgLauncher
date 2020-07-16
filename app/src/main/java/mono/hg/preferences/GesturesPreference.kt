@@ -65,10 +65,9 @@ class GesturesPreference : PreferenceFragmentCompat() {
         // We can safely iterate through all the preferences and assume they're ListPreference
         // because GesturesPreference has nothing else aside from that.
         for (i in 0 until prefCount) {
-            val pref = prefScreen.getPreference(i)
-            if (pref is ListPreference) {
-                setNestedListSummary(pref)
-                pref.onPreferenceChangeListener = NestingListListener
+            val pref = prefScreen.getPreference(i).apply {
+                setNestedListSummary(this as ListPreference)
+                this.onPreferenceChangeListener = NestingListListener
             }
         }
 
@@ -80,9 +79,10 @@ class GesturesPreference : PreferenceFragmentCompat() {
             if (resultCode == Activity.RESULT_CANCELED) {
                 val key = data.getStringExtra("key")
                 if (key !== null) {
-                    val preference = findPreference<ListPreference>(key)
-                    preference?.setSummary(R.string.gesture_action_default)
-                    preference?.value = getString(R.string.gesture_action_default_value)
+                    val preference = findPreference<ListPreference>(key).let {
+                        it?.setSummary(R.string.gesture_action_default)
+                        it?.value = getString(R.string.gesture_action_default_value)
+                    }
                 }
             } else if (resultCode == Activity.RESULT_OK) {
                 val key = data.getStringExtra("key")
@@ -92,8 +92,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
                 )
 
                 if (key != null) {
-                    val preference = findPreference<ListPreference>(key)
-                    preference?.summary = app
+                    findPreference<ListPreference>(key)?.summary = app
                 }
             }
         }
@@ -110,20 +109,21 @@ class GesturesPreference : PreferenceFragmentCompat() {
 
         // Fetch all available icon pack.
         val intent = Intent("mono.hg.GESTURE_HANDLER")
-        val info = manager.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
-        info.forEach {
-            val activityInfo = it.activityInfo
-            val className = activityInfo.name
-            val packageName = activityInfo.packageName
-            val componentName = "$packageName/$className"
-            val appName = activityInfo.loadLabel(manager).toString()
-            entries.add(appName)
-            entryValues.add(componentName)
-        }
-        val finalEntries = entries.toTypedArray<CharSequence>()
-        val finalEntryValues = entryValues.toTypedArray<CharSequence>()
-        list?.entries = finalEntries
-        list?.entryValues = finalEntryValues
+
+        manager.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
+            .forEach {
+                with (it.activityInfo) {
+                    val className = this.name
+                    val packageName = this.packageName
+                    val componentName = "$packageName/$className"
+                    val appName = loadLabel(manager).toString()
+                    entries.add(appName)
+                    entryValues.add(componentName)
+                }
+            }
+
+        list?.entries = entries.toTypedArray<CharSequence>()
+        list?.entryValues = entryValues.toTypedArray<CharSequence>()
     }
 
     // Fetch apps and feed it into our list.
@@ -136,6 +136,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
             // Get default value.
             entries.add(getString(R.string.gesture_action_default))
             entryValues.add(getString(R.string.gesture_action_default_value))
+
             val intent = Intent(Intent.ACTION_MAIN, null)
             intent.addCategory(Intent.CATEGORY_LAUNCHER)
             val availableActivities = manager.queryIntentActivities(intent, 0)
@@ -148,6 +149,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
                 entries.add(appName)
                 entryValues.add(packageName)
             }
+
             appListEntries = entries.toTypedArray()
             appListEntryValues = entryValues.toTypedArray()
         }

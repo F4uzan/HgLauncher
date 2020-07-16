@@ -19,10 +19,12 @@ class IndeterminateMaterialProgressBar(context: Context, attrs: AttributeSet?) :
 
     init {
         val metrics = resources.displayMetrics
-        val screenDensity = metrics.density
-        val drawable = CircularProgressDrawable(context)
-        drawable.setColorSchemeColors(PreferenceHelper.accent)
-        drawable.strokeWidth = WIDTH_DP * screenDensity
-        indeterminateDrawable = drawable
+        metrics.density.let {
+            val drawable = CircularProgressDrawable(context).apply {
+                setColorSchemeColors(PreferenceHelper.accent)
+                strokeWidth = WIDTH_DP * it
+                indeterminateDrawable = this
+            }
+        }
     }
 }

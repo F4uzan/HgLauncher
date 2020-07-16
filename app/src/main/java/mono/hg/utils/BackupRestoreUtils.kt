@@ -19,7 +19,13 @@ import java.lang.ref.WeakReference
  */
 object BackupRestoreUtils {
     /**
-     * Saves preferences to a local file.
+     * Naively saves preferences to a local file.
+     *
+     * This function does not perform checks for which preferences
+     * to keep and will not perform any check for the resulting
+     * file.
+     *
+     * TODO: Selectively pick preferences instead of dumping everything.
      *
      * @param path Where should the preferences be saved to?
      */
@@ -48,6 +54,10 @@ object BackupRestoreUtils {
 
     /**
      * Restores a local backup and exports all the preferences stored.
+     *
+     * This function clears all the existing preferences before restoring
+     * the backup, and [PreferenceHelper.fetchPreference] will also be called
+     * to clear the cached values.
      *
      * @param uri The Uri representing the file itself.
      */
@@ -102,7 +112,7 @@ object BackupRestoreUtils {
      *
      * @param activity  The SettingsActivity itself.
      * @param path      Path to the backup file. This path will be parsed by [Uri.parse], therefore
-     *                  it must be a valid Uri.
+     *                  it must be a valid Uri, prefixed by "file://".
      */
     class RestoreBackupTask(activity: SettingsActivity, path: String?) :
         AsyncTask<Void?, Void?, Void?>() {
@@ -110,26 +120,24 @@ object BackupRestoreUtils {
         private val uri: Uri = Uri.parse(path)
         override fun onPreExecute() {
             super.onPreExecute()
-            val fragment = fragmentRef.get()
-            fragment?.progressBar?.show()
+            with (fragmentRef.get()) {
+                this?.progressBar?.show()
+            }
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            val fragment = fragmentRef.get()
-            fragment?.let { restoreBackup(it, uri) }
+            with (fragmentRef.get()) {
+                this?.let { restoreBackup(it, uri) }
+            }
             return null
         }
 
         override fun onPostExecute(result: Void?) {
             super.onPostExecute(result)
-            val fragment = fragmentRef.get()
-            if (fragment != null) {
-                fragment.progressBar.hide()
-                ViewUtils.restartActivity(fragment, false)
-                Toast.makeText(
-                    fragmentRef.get(), R.string.restore_complete,
-                    Toast.LENGTH_LONG
-                ).show()
+            with (fragmentRef.get()) {
+                this?.progressBar?.hide()
+                this?.let { ViewUtils.restartActivity(it, false) }
+                Toast.makeText(this, R.string.restore_complete, Toast.LENGTH_LONG).show()
             }
         }
 

@@ -14,18 +14,20 @@ open class PackageChangesReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != null && intent.data != null) {
             val packageName = intent.data !!.encodedSchemeSpecificPart
+            val requireBroadcast = intent.action == "android.intent.action.PACKAGE_ADDED" ||
+                    intent.action == "android.intent.action.PACKAGE_REMOVED" ||
+                    intent.action == "android.intent.action.PACKAGE_CHANGED" ||
+                    intent.action == "android.intent.action.PACKAGE_REPLACED"
 
             // Receive intent from broadcast and let the Pages know they may need refresh.
-            if ((intent.action == "android.intent.action.PACKAGE_ADDED" || intent.action == "android.intent.action.PACKAGE_REMOVED" || intent.action == "android.intent.action.PACKAGE_CHANGED" || intent.action == "android.intent.action.PACKAGE_REPLACED") && ! packageName.contains(
-                    context.packageName
-                )
-            ) {
-                Utils.sendLog(3, "Fired!")
-                val mainIntent = Intent()
-                mainIntent.putExtra("action", intent.action)
-                mainIntent.putExtra("package", packageName)
-                mainIntent.action = "mono.hg.PACKAGE_CHANGE_BROADCAST"
-                context.sendBroadcast(mainIntent)
+            if (requireBroadcast && ! packageName.contains(context.packageName)) {
+                val mainIntent = Intent().apply {
+                    putExtra("action", intent.action)
+                    putExtra("package", packageName)
+                    action = "mono.hg.PACKAGE_CHANGE_BROADCAST"
+                }.also {
+                    context.sendBroadcast(it)
+                }
             }
         }
     }

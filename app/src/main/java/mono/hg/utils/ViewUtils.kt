@@ -22,7 +22,7 @@ import mono.hg.helpers.PreferenceHelper
  */
 object ViewUtils {
     /**
-     * Fetch statusbar height from system's dimension.
+     * Fetches statusbar height from system's dimension.
      *
      * @return int Size of the statusbar. Returns the fallback value of 24dp if the
      * associated dimen value cannot be found.
@@ -39,6 +39,15 @@ object ViewUtils {
             }
         }
 
+    /**
+     * Configures the status bar and navigation bar mode according to the
+     * user's preference.
+     *
+     * @param mode  Between "status", "nav", "both", or "none". The parameter used
+     *              set the mode of the system bars.
+     *
+     * @see R.array.pref_windowbar_values
+     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     fun setWindowbarMode(mode: String?): Int {
         val baseLayout: Int = if (Utils.sdkIsAround(19)) {
@@ -64,6 +73,10 @@ object ViewUtils {
     /**
      * Launches an app based on RecyclerView scroll state.
      *
+     * When the RecyclerView is unable to scroll upwards, it will
+     * call the topmost item. Otherwise, the reverse applies when
+     * the RecyclerView can't scroll downwards.
+     *
      * @param activity     The activity for context reference.
      * @param recyclerView The RecyclerView itself.
      * @param adapter      A FlexibleAdapter with App items.
@@ -81,7 +94,10 @@ object ViewUtils {
     }
 
     /**
-     * Sets initial fragment. This fragment is not added to the backstack.
+     * Sets initial/starting fragment.
+     *
+     * This function should be called early, when the activity has no other
+     * fragments to present, as this fragment will not be added to back stack.
      *
      * @param fragmentManager The fragment manager in the current activity.
      * @param fragment        The fragment to use.
@@ -93,7 +109,11 @@ object ViewUtils {
     }
 
     /**
-     * Replace existing fragment with another. This adds the fragment to the back stack.
+     * Replace existing fragment with another fragment.
+     *
+     * This function adds the fragment to the back stack, allowing for calls
+     * to [Activity.onBackPressed] to proceed. The fragment and activity
+     * should account for this.
      *
      * @param fragmentManager The fragment manager in the current activity.
      * @param fragment        The fragment to use.
@@ -107,20 +127,22 @@ object ViewUtils {
     }
 
     /**
-     * Creates a PopupMenu containing available search provider.
+     * Creates a PopupMenu containing all available search provider.
      *
      * @param activity  Activity where the PopupMenu resides.
      * @param popupMenu The PopupMenu to populate and show.
      * @param query     Search query to launch when a provider is selected.
      */
-    fun createSearchMenu(activity: AppCompatActivity, popupMenu: PopupMenu, query: String?) {
+    fun createSearchMenu(activity: AppCompatActivity, popupMenu: PopupMenu, query: String) {
         PreferenceHelper.providerList.forEach { popupMenu.menu.add(it.key) }
         popupMenu.setOnMenuItemClickListener { menuItem ->
-            Utils.doWebSearch(
-                activity,
-                PreferenceHelper.getProvider(menuItem.title.toString()),
-                query
-            )
+            PreferenceHelper.getProvider(menuItem.title.toString())?.let {
+                Utils.doWebSearch(
+                    activity,
+                    it,
+                    query
+                )
+            }
             true
         }
         popupMenu.show()
@@ -128,15 +150,21 @@ object ViewUtils {
 
     /**
      * Called when the activity needs to be restarted (i.e when a theme change occurs).
-     * Allows for smooth transition between recreation.
+     * Allows for smooth transition between recreation, without the flicker associated
+     * with calling [Activity.recreate].
+     *
+     * @param activity  AppCompatActivity that needs to be restarted.
+     * @param clearTask Whether [Intent.FLAG_ACTIVITY_NEW_TASK] and [Intent.FLAG_ACTIVITY_CLEAR_TASK]
+     *                  flags should be used. These flags are useful for bottommost activity,
+     *                  where the backstack is at its end.
      */
     fun restartActivity(activity: AppCompatActivity, clearTask: Boolean) {
         val intent = Intent(activity.intent).apply {
-            this.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             if (clearTask) {
-                this.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             } else {
-                this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }.also {
             activity.startActivity(it)

@@ -21,9 +21,7 @@ class TogglingLinearLayoutManager(context: Context?, orientation: Int, stackFrom
     }
 
     init {
-        if (stackFromEnd) {
-            setStackFromEnd(true)
-            reverseLayout = false
-        }
+        setStackFromEnd(stackFromEnd)
+        reverseLayout = !stackFromEnd
     }
 }

@@ -11,6 +11,7 @@ import android.content.pm.LauncherApps
 import android.content.pm.LauncherApps.ShortcutQuery
 import android.content.pm.PackageManager
 import android.content.pm.ShortcutInfo
+import android.net.Uri
 import android.os.Build
 import android.os.Process
 import android.os.UserManager
@@ -53,6 +54,9 @@ object AppUtils {
 
     /**
      * Checks if a certain application is installed based off of its flattened component name.
+     *
+     * This function internally calls [isAppInstalled], and is a syntactic sugar of
+     * said function.
      *
      * @param packageManager PackageManager object to use for checking the requested
      * package's existence.
@@ -103,8 +107,12 @@ object AppUtils {
     /**
      * Pins an app to the favourites panel.
      *
+     * During pinning, the icon is re-retrieved through [LauncherIconHelper.getIcon],
+     * as such, it is necessary that the icon cache has been built,
+     * otherwise the pinned app will have no icon to show (but the view will still be drawn).
+     *
      * @param activity      Current foreground activity.
-     * @param user          User profile where the app originates.
+     * @param user          User profile where the app originates. 0 if none.
      * @param componentName The package name to load and fetch.
      * @param adapter       Which adapter should we notify update to?
      * @param list          Which List object should be updated?
@@ -120,7 +128,32 @@ object AppUtils {
     }
 
     /**
-     * Launches an app as a new task.
+     * Requests an uninstallation of a package.
+     *
+     * This function requires a proper Uri so as to launch the uninstallation prompt,
+     * which contains a package name by the 'package://' prefix. Note that
+     * if it is a component name, [getPackageName] should be invoked first.
+     *
+     * Currently, we are using the deprecated [Intent.ACTION_UNINSTALL_PACKAGE].
+     *
+     * @param activity      Current foreground activity.
+     * @param packageName   The package name of the app to be uninstalled.
+     */
+    fun uninstallApp(activity: Activity, packageName: Uri) {
+        activity.startActivity(Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageName))
+    }
+
+    /**
+     * Launches an application as a new task.
+     *
+     * This function make use of [LauncherApps.startMainActivity] for
+     * system running [Build.VERSION_CODES.LOLLIPOP] and above.
+     * For earlier version, [quickLaunch] is used.
+     *
+     * Before an app is launched, its launch animation is overridden
+     * by the selected animation in [PreferenceHelper.launchAnim].
+     * This behaviour will not occur if [PreferenceHelper.launchAnim]
+     * returns "default" or an invalid value.
      *
      * @param activity Current foreground activity.
      * @param app      App object to launch.
@@ -144,10 +177,6 @@ object AppUtils {
                     android.R.anim.slide_in_left,
                     android.R.anim.slide_out_right
                 )
-                "default" -> {
-                }
-                else -> {
-                }
             }
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show()
@@ -351,6 +380,11 @@ object AppUtils {
     /**
      * Sorts a List containing the App object.
      *
+     * The sorting will invoke [Collections.reverseOrder]
+     * if [PreferenceHelper.isListInverted] is set. This function
+     * should preferably be left alone for other app list aside from
+     * the ones shown to launch apps.
+     *
      * @param list The list to be sorted.
      */
     private fun sortAppList(list: List<App>) {
@@ -367,7 +401,7 @@ object AppUtils {
      * @param launcherApps  LauncherApps service from an activity.
      * @param componentName The component name to flatten to package name.
      *
-     * @return A list of shortcut. Null if nonexistent.
+     * @return List A list of shortcuts. Null if nonexistent.
      */
     @TargetApi(Build.VERSION_CODES.N_MR1)
     fun getShortcuts(launcherApps: LauncherApps?, componentName: String?): List<ShortcutInfo>? {
@@ -375,6 +409,7 @@ object AppUtils {
         if (launcherApps == null || ! launcherApps.hasShortcutHostPermission()) {
             return ArrayList(0)
         }
+
         val shortcutQuery = ShortcutQuery()
         shortcutQuery.setQueryFlags(
             ShortcutQuery.FLAG_MATCH_DYNAMIC

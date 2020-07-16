@@ -147,20 +147,20 @@ class AppListFragment : GenericPageFragment() {
         }
         val itemDecoration = ItemOffsetDecoration(requireContext(), R.dimen.item_offset)
 
-        appsRecyclerView = binding !!.appsList
         loadProgress = binding !!.loadProgress
-
-        appsRecyclerView.isDrawingCacheEnabled = true
-        appsRecyclerView.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_LOW
-        appsRecyclerView.setHasFixedSize(true)
-        appsRecyclerView.setThumbColor(PreferenceHelper.darkAccent)
-        appsRecyclerView.setThumbInactiveColor(PreferenceHelper.accent)
-        appsRecyclerView.setPopupBgColor(PreferenceHelper.darkerAccent)
-        appsRecyclerView.adapter = appsAdapter
-        appsRecyclerView.layoutManager = appsLayoutManager
-        appsRecyclerView.itemAnimator = DefaultItemAnimator()
-        if (PreferenceHelper.useGrid()) {
-            appsRecyclerView.addItemDecoration(itemDecoration)
+        appsRecyclerView = binding !!.appsList.apply {
+            isDrawingCacheEnabled = true
+            drawingCacheQuality = View.DRAWING_CACHE_QUALITY_LOW
+            setHasFixedSize(true)
+            setThumbColor(PreferenceHelper.darkAccent)
+            setThumbInactiveColor(PreferenceHelper.accent)
+            setPopupBgColor(PreferenceHelper.darkerAccent)
+            adapter = appsAdapter
+            layoutManager = appsLayoutManager
+            itemAnimator = DefaultItemAnimator()
+            if (PreferenceHelper.useGrid()) {
+                addItemDecoration(itemDecoration)
+            }
         }
 
         // Add item click action to app list.
@@ -267,6 +267,18 @@ class AppListFragment : GenericPageFragment() {
         appMenu !!.menuInflater.inflate(R.menu.menu_app, appMenu !!.menu)
         appMenu !!.menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
 
+        // Hide 'pin' if the app is already pinned or isPinned is set.
+        appMenu !!.menu.findItem(R.id.action_pin).isVisible =
+            ! getLauncherActivity().isPinned(pinApp)
+
+        // Only show the 'unpin' option if isPinned is set.
+        appMenu !!.menu.findItem(R.id.action_unpin).isVisible = false
+
+        // Show uninstall menu if the app is not a system app.
+        appMenu !!.menu.findItem(R.id.action_uninstall).isVisible =
+            (! AppUtils.isSystemApp(manager, packageName)
+                    && app.user == userUtils !!.currentSerial)
+
         // Inflate app shortcuts.
         if (Utils.sdkIsAround(25)) {
             var menuId = SHORTCUT_MENU_GROUP
@@ -284,18 +296,6 @@ class AppListFragment : GenericPageFragment() {
         } else {
             appMenu !!.menu.getItem(0).isVisible = false
         }
-
-        // Hide 'pin' if the app is already pinned or isPinned is set.
-        appMenu !!.menu.findItem(R.id.action_pin).isVisible =
-            ! getLauncherActivity().isPinned(pinApp)
-
-        // Only show the 'unpin' option if isPinned is set.
-        appMenu !!.menu.findItem(R.id.action_unpin).isVisible = false
-
-        // Show uninstall menu if the app is not a system app.
-        appMenu !!.menu.findItem(R.id.action_uninstall).isVisible =
-            (! AppUtils.isSystemApp(manager, packageName)
-                    && app.user == userUtils !!.currentSerial)
 
         appMenu !!.show()
 
@@ -317,12 +317,7 @@ class AppListFragment : GenericPageFragment() {
                         )
                     )
                 }
-                R.id.action_uninstall -> startActivity(
-                    Intent(
-                        Intent.ACTION_UNINSTALL_PACKAGE,
-                        packageNameUri
-                    )
-                )
+                R.id.action_uninstall -> AppUtils.uninstallApp(requireActivity(), packageNameUri)
                 R.id.action_shorthand -> makeRenameDialog(app.userPackageName, position)
                 R.id.action_hide -> {
                     // Add the app's package name to the exclusion list.
@@ -349,11 +344,6 @@ class AppListFragment : GenericPageFragment() {
     }
 
     private fun registerBroadcast() {
-        // We want this fragment to receive the package change broadcast,
-        // since otherwise it won't be notified when there are changes to that.
-        val filter = IntentFilter()
-        filter.addAction("mono.hg.PACKAGE_CHANGE_BROADCAST")
-
         packageBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 val isRemoving =
@@ -375,13 +365,20 @@ class AppListFragment : GenericPageFragment() {
                 }
 
                 // We should recount here, regardless of whether we update the list or not.
-                PreferenceHelper.update("package_count",
+                PreferenceHelper.update(
+                    "package_count",
                     AppUtils.countInstalledPackage(requireActivity().packageManager)
                 )
             }
         }
 
-        requireActivity().registerReceiver(packageBroadcastReceiver, filter)
+        // We want this fragment to receive the package change broadcast,
+        // since otherwise it won't be notified when there are changes to that.
+        val filter = IntentFilter().apply {
+            addAction("mono.hg.PACKAGE_CHANGE_BROADCAST")
+        }.also {
+            requireActivity().registerReceiver(packageBroadcastReceiver, it)
+        }
     }
 
     private fun unregisterBroadcast() {
@@ -409,18 +406,17 @@ class AppListFragment : GenericPageFragment() {
      * @param position    Adapter position of the app.
      */
     private fun makeRenameDialog(packageName: String, position: Int) {
-        val builder = AlertDialog.Builder(requireContext())
         val binding = LayoutRenameDialogBinding.inflate(layoutInflater)
-        val renameField = binding.renameField
-        ViewCompat.setBackgroundTintList(
-            renameField,
-            ColorStateList.valueOf(PreferenceHelper.accent)
-        )
-        renameField.hint = PreferenceHelper.getLabel(packageName)
-        builder.setView(binding.root)
-        builder.setNegativeButton(android.R.string.cancel, null)
-            .setTitle(R.string.dialog_title_shorthand)
-            .setPositiveButton(android.R.string.ok) { _, _ ->
+        val renameField = binding.renameField.apply {
+            ViewCompat.setBackgroundTintList(this, ColorStateList.valueOf(PreferenceHelper.accent))
+            hint = PreferenceHelper.getLabel(packageName)
+        }
+
+        with(AlertDialog.Builder(requireContext())) {
+            setView(binding.root)
+            setNegativeButton(android.R.string.cancel, null)
+            setTitle(R.string.dialog_title_shorthand)
+            setPositiveButton(android.R.string.ok) { _, _ ->
                 val newLabel = renameField.text
                     .toString()
                     .replace("\\|".toRegex(), "")
@@ -430,19 +426,17 @@ class AppListFragment : GenericPageFragment() {
                 PreferenceHelper.updateLabel(packageName, newLabel, newLabel.isEmpty())
 
                 // Update the specified item.
-                val app = appsAdapter.getItem(position)
-                if (app != null) {
-                    app.hintName = newLabel
+                appsAdapter.getItem(position).apply {
+                    this?.hintName = newLabel
                 }
             }
 
-        val themedDialog = builder.create()
-        themedDialog.show()
-
-        themedDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-            .setTextColor(PreferenceHelper.darkAccent)
-        themedDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-            .setTextColor(PreferenceHelper.darkAccent)
+            create().apply {
+                show()
+                getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
+                getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+            }
+        }
     }
 
     companion object {

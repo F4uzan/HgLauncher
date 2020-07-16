@@ -7,6 +7,9 @@ import android.os.UserManager
 
 /**
  * Utils class handling retrieval of UserHandle and its serial number.
+ *
+ * This class will return safe values for system without multi-user support
+ * (versions beneath API 17), and should be used when invoking userManager functions.
  */
 class UserUtils(context: Context) {
     private var userManager: UserManager? = null
@@ -31,7 +34,7 @@ class UserUtils(context: Context) {
      */
     fun getUser(serial: Long): UserHandle? {
         return if (Utils.sdkIsAround(17)) {
-            userManager !!.getUserForSerialNumber(serial)
+            userManager?.getUserForSerialNumber(serial)
         } else {
             null
         }

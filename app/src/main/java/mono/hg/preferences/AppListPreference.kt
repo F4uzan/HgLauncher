@@ -35,9 +35,10 @@ class AppListPreference : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val iconList = findPreference<ListPreference>("icon_pack")
-        iconList?.onPreferenceChangeListener = RestartingListListener
-        setIconList(iconList)
+        findPreference<ListPreference>("icon_pack").apply {
+            this?.onPreferenceChangeListener = RestartingListListener
+            setIconList(this)
+        }
 
         // Adaptive icon is not available before Android O/API 26.
         if (Utils.atLeastOreo()) {
@@ -56,20 +57,16 @@ class AppListPreference : PreferenceFragmentCompat() {
 
         // Fetch all available icon pack.
         val intent = Intent("org.adw.launcher.THEMES")
-        val info = manager.queryIntentActivities(
-            intent,
-            PackageManager.GET_META_DATA
-        )
-        info.forEach {
-            val activityInfo = it.activityInfo
-            val packageName = activityInfo.packageName
-            val appName = activityInfo.loadLabel(manager).toString()
-            entries.add(appName)
-            entryValues.add(packageName)
+        manager.queryIntentActivities(intent, PackageManager.GET_META_DATA).forEach {
+            with(it.activityInfo) {
+                val packageName = this.packageName
+                val appName = loadLabel(manager).toString()
+                entries.add(appName)
+                entryValues.add(packageName)
+            }
         }
-        val finalEntries = entries.toTypedArray<CharSequence>()
-        val finalEntryValues = entryValues.toTypedArray<CharSequence>()
-        list !!.entries = finalEntries
-        list.entryValues = finalEntryValues
+
+        list !!.entries = entries.toTypedArray<CharSequence>()
+        list.entryValues = entryValues.toTypedArray<CharSequence>()
     }
 }

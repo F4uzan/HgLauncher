@@ -42,7 +42,7 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
 
         PreferenceHelper.fetchPreference()
         if (PreferenceHelper.providerList.isEmpty()) {
-            Utils.setDefaultProviders(resources)
+            PreferenceHelper.updateProvider(Utils.setDefaultProviders(resources, ArrayList()))
         }
 
         // Check the caller of this activity.
@@ -60,8 +60,9 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
         super.onCreate(savedInstanceState)
 
         toolbar = binding.toolbar
-        progressBar = binding.progressBar
-        progressBar.hide()
+        progressBar = binding.progressBar.apply {
+            hide()
+        }
 
         setSupportActionBar(toolbar)
 

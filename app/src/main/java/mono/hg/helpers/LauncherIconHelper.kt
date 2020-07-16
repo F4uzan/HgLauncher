@@ -114,33 +114,43 @@ object LauncherIconHelper {
             drawable.intrinsicWidth,
             drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
         )
-        val canvas = Canvas(bm)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
+        with (Canvas(bm)) {
+            drawable.setBounds(0, 0, width, height)
+            drawable.draw(this)
+        }
         val mask = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ALPHA_8)
-        val scaleToFit = Matrix()
         val src = RectF(0F, 0F, bm.width.toFloat(), bm.height.toFloat())
         val dst = RectF(0F, 0F, dstWidth - dx, dstHeight - dy)
-        scaleToFit.setRectToRect(src, dst, Matrix.ScaleToFit.FILL)
-        val dropShadow = Matrix(scaleToFit)
-        dropShadow.postTranslate(dx, dy)
+        val scaleToFit = Matrix().apply {
+            setRectToRect(src, dst, Matrix.ScaleToFit.FILL)
+        }
         val maskCanvas = Canvas(mask)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        maskCanvas.drawBitmap(bm, scaleToFit, paint)
-        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
-        maskCanvas.drawBitmap(bm, dropShadow, paint)
         val filter = BlurMaskFilter(size.toFloat(), BlurMaskFilter.Blur.SOLID)
-        paint.reset()
-        paint.isAntiAlias = true
-        paint.color = Color.LTGRAY
-        paint.maskFilter = filter
-        paint.isFilterBitmap = true
-        val ret = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888)
-        val retCanvas = Canvas(ret)
-        retCanvas.drawBitmap(mask, 0f, 0f, paint)
-        retCanvas.drawBitmap(bm, scaleToFit, null)
-        mask.recycle()
-        return ret
+        val dropShadow = Matrix(scaleToFit).apply {
+            postTranslate(dx, dy)
+        }
+
+        with (paint) {
+            maskCanvas.drawBitmap(bm, scaleToFit, this)
+            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
+            maskCanvas.drawBitmap(bm, dropShadow, this)
+            reset()
+            isAntiAlias = true
+            color = Color.LTGRAY
+            maskFilter = filter
+            isFilterBitmap = true
+        }
+
+        Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888).apply {
+            with (Canvas(this)) {
+                drawBitmap(mask, 0f, 0f, paint)
+                drawBitmap(bm, scaleToFit, null)
+            }
+            mask.recycle()
+        }. also {
+            return it
+        }
     }
 
     /**

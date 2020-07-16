@@ -23,7 +23,6 @@ import mono.hg.models.WebSearchProvider
 import mono.hg.receivers.PackageChangesReceiver
 import java.io.Closeable
 import java.io.IOException
-import java.util.*
 
 /**
  * A misc. utils class for other various helpers and utilities functions.
@@ -31,7 +30,7 @@ import java.util.*
 object Utils {
     /**
      * Sends log using a predefined tag. This is used to better debug or to catch errors.
-     * Logging should always use sendLog to coalesce logs into one single place.
+     * Logging should always use sendLog to coalesce logs into one single source.
      *
      * @param level   Urgency level of the log to send. 3 is the ceiling and will
      * send errors. Defaults to debug message when the level is invalid.
@@ -116,29 +115,24 @@ object Utils {
     }
 
     /**
-     * Opens a URL/link from a string object.
-     *
-     * @param context Context object for use with startActivity.
-     * @param link    The link to be opened.
-     */
-    fun openLink(context: Context, link: String?) {
-        val linkIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-        context.startActivity(linkIntent)
-    }
-
-    /**
      * Parses a web provider URL then replaces its placeholder with the query.
      *
      * @param context  Context object for use with startActivity.
      * @param provider The URL of the provider
      * @param query    The query itself
      */
-    fun doWebSearch(context: Context, provider: String?, query: String?) {
-        openLink(context, provider !!.replace("%s", query !!))
+    fun doWebSearch(context: Context, provider: String, query: String) {
+        val linkIntent = Intent(Intent.ACTION_VIEW, Uri.parse(provider.replace("%s", query)))
+        context.startActivity(linkIntent)
     }
 
     /**
      * Closes a Closeable instance if it is not null.
+     *
+     * Any [IOException] is ignored by this function,
+     * if there is further handling to be done, this function
+     * should not be used, and a regular try-catch should be used
+     * in its place instead.
      *
      * @param stream The Closeable instance to close.
      */
@@ -169,6 +163,10 @@ object Utils {
     /**
      * Registers a PackageChangesReceiver on an activity.
      *
+     * This function does not check the availability or the
+     * nullity of the package receiver. It is recommended that before
+     * calling this function, a check is performed first.
+     *
      * @param activity        The activity where PackageChangesReceiver is to be registered.
      * @param packageReceiver The receiver itself.
      */
@@ -176,17 +174,23 @@ object Utils {
         activity: AppCompatActivity,
         packageReceiver: PackageChangesReceiver?
     ) {
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED)
-        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED)
-        intentFilter.addAction(Intent.ACTION_PACKAGE_REPLACED)
-        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED)
-        intentFilter.addDataScheme("package")
-        activity.registerReceiver(packageReceiver, intentFilter)
+        val intentFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_PACKAGE_ADDED)
+            addAction(Intent.ACTION_PACKAGE_REMOVED)
+            addAction(Intent.ACTION_PACKAGE_REPLACED)
+            addAction(Intent.ACTION_PACKAGE_CHANGED)
+            addDataScheme("package")
+        }.also {
+            activity.registerReceiver(packageReceiver, it)
+        }
     }
 
     /**
      * Unregisters a PackageChangesReceiver from an activity.
+     *
+     * This function should be called when the receiver in question
+     * exists and have not been destroyed/removed by the system. Otherwise,
+     * there is a risk of exceptions arising, not handled by this function.
      *
      * @param activity        The activity where PackageChangesReceiver is to be registered.
      * @param packageReceiver The receiver itself.
@@ -213,11 +217,13 @@ object Utils {
     fun handleGestureActions(activity: AppCompatActivity, direction: Int) {
         when (PreferenceHelper.getGestureForDirection(direction)) {
             "handler" -> if (PreferenceHelper.gestureHandler != null) {
-                val handlerIntent = Intent("mono.hg.GESTURE_HANDLER")
-                handlerIntent.component = PreferenceHelper.gestureHandler
-                handlerIntent.type = "text/plain"
-                handlerIntent.putExtra("direction", direction)
-                activity.startActivity(handlerIntent)
+                val handlerIntent = Intent("mono.hg.GESTURE_HANDLER").apply {
+                    component = PreferenceHelper.gestureHandler
+                    type = "text/plain"
+                    putExtra("direction", direction)
+                }.also {
+                    activity.startActivity(it)
+                }
             }
             "widget" -> (activity as LauncherActivity).doThis("open_widgets") // TODO: Definitely make this less reliant on LauncherActivity.
             "status" -> ActivityServiceUtils.expandStatusBar(activity)
@@ -243,13 +249,22 @@ object Utils {
     }
 
     /**
-     * Handles common input shortcut from an EditText.
+     * Handles common input shortcuts from an EditText.
+     *
+     * The input shortcut currently defined are:
+     * * Select All (CTRL+A)
+     * * Copy (CTRL+C)
+     * * Paste (CTRL+V)
+     * * Cut (CTRL+X)
+     *
+     * The shortcuts here may be overridden by the system, as such
+     * it is best if there is a check for such cases.
      *
      * @param activity The activity to reference for copying and pasting.
      * @param editText The EditText where the text is being copied/pasted.
      * @param keyCode  Keycode to handle.
      *
-     * @return True if key is handled.
+     * @return Boolean True if key is handled.
      */
     fun handleInputShortcut(
         activity: AppCompatActivity,
@@ -288,29 +303,36 @@ object Utils {
     }
 
     /**
-     * Set default providers for indeterminate search.
+     * Set default (starting) providers for indeterminate search.
+     *
+     * This function is always called when the provider list is empty
+     * to prevent the user from seeing an empty provider selection.
+     *
+     * @see [R.array.pref_search_provider_title]
+     *
+     * @param resources The resources object, used to retrieve the default array.
      */
-    fun setDefaultProviders(resources: Resources) {
+    fun setDefaultProviders(resources: Resources, list: ArrayList<WebSearchProvider>): ArrayList<WebSearchProvider> {
         val defaultProvider = resources.getStringArray(
             R.array.pref_search_provider_title
         )
         val defaultProviderId = resources.getStringArray(
             R.array.pref_search_provider_values
         )
-        val tempList = ArrayList<WebSearchProvider>()
 
         // defaultProvider will always be the same size as defaultProviderUrl.
         // However, we start at 1 to ignore the 'Always ask' option.
-        for (i in 1 until defaultProvider.size) {
-            tempList.add(
+        defaultProvider.forEachIndexed { index, _ ->
+            list.add(
                 WebSearchProvider(
-                    defaultProvider[i],
-                    PreferenceHelper.getDefaultProvider(defaultProviderId[i]),
-                    defaultProvider[i]
+                    defaultProvider[index],
+                    PreferenceHelper.getDefaultProvider(defaultProviderId[index]),
+                    defaultProvider[index]
                 )
             )
         }
-        PreferenceHelper.updateProvider(tempList)
+
+        return list
     }
 
     /**

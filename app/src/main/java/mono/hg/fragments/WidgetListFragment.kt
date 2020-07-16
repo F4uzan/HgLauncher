@@ -114,12 +114,11 @@ class WidgetListFragment : GenericPageFragment() {
             // Don't pull the panel just yet.
             getLauncherActivity().requestPanelLock()
 
-            val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
-            pickIntent.putExtra(
-                AppWidgetManager.EXTRA_APPWIDGET_ID,
-                appWidgetHost.allocateAppWidgetId()
-            )
-            startActivityForResult(pickIntent, WIDGET_CONFIG_START_CODE)
+            Intent(AppWidgetManager.ACTION_APPWIDGET_PICK).apply {
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetHost.allocateAppWidgetId())
+            }.also {
+                startActivityForResult(it, WIDGET_CONFIG_START_CODE)
+            }
         }
 
         widgetScroller.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
@@ -159,10 +158,12 @@ class WidgetListFragment : GenericPageFragment() {
                 data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
             val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
             if (requestCode != WIDGET_CONFIG_RETURN_CODE && appWidgetInfo.configure != null) {
-                val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE)
-                intent.component = appWidgetInfo.configure
-                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-                startActivityForResult(intent, WIDGET_CONFIG_RETURN_CODE)
+                Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE).apply {
+                    component = appWidgetInfo.configure
+                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+                }.also {
+                    startActivityForResult(it, WIDGET_CONFIG_RETURN_CODE)
+                }
             } else {
                 addWidget(data, appWidgetContainer.childCount, true)
             }
@@ -175,44 +176,6 @@ class WidgetListFragment : GenericPageFragment() {
         }
     }
 
-    override fun onCreateContextMenu(
-        menu: ContextMenu,
-        v: View,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        // Set the calling view.
-        callingView = v as AppWidgetHostView
-        val index = appWidgetContainer.indexOfChild(v)
-
-        // Workaround for DialogFragment issue with context menu.
-        // Taken from: https://stackoverflow.com/a/18853634
-        val listener = MenuItem.OnMenuItemClickListener { item ->
-            onContextItemSelected(item)
-            true
-        }
-
-        // Generate menu.
-        // TODO: Maybe a more robust and automated way can be done for this.
-        menu.clear()
-        menu.add(1, 0, 100, getString(R.string.dialog_action_add))
-        menu.add(1, 1, 100, getString(R.string.action_remove_widget))
-        menu.add(1, 2, 100, getString(R.string.action_up_widget))
-        menu.add(1, 3, 100, getString(R.string.action_down_widget))
-        menu.getItem(0).setOnMenuItemClickListener(listener)
-
-        // Move actions should only be added when there is more than one widget.
-        menu.getItem(2).isVisible = appWidgetContainer.childCount > 1 && index > 0
-        menu.getItem(3).isVisible = appWidgetContainer.childCount != index + 1
-        if (appWidgetContainer.childCount > 1) {
-            if (index > 0) {
-                menu.getItem(2).setOnMenuItemClickListener(listener)
-            }
-            if (index + 1 != appWidgetContainer.childCount) {
-                menu.getItem(3).setOnMenuItemClickListener(listener)
-            }
-        }
-    }
-
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val index = appWidgetContainer.indexOfChild(callingView)
         return when (item.itemId) {
@@ -220,12 +183,14 @@ class WidgetListFragment : GenericPageFragment() {
                 // Don't pull the panel just yet.
                 getLauncherActivity().requestPanelLock()
 
-                val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
-                pickIntent.putExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    appWidgetHost.allocateAppWidgetId()
-                )
-                startActivityForResult(pickIntent, WIDGET_CONFIG_START_CODE)
+                Intent(AppWidgetManager.ACTION_APPWIDGET_PICK).apply {
+                    putExtra(
+                        AppWidgetManager.EXTRA_APPWIDGET_ID,
+                        appWidgetHost.allocateAppWidgetId()
+                    )
+                }.also {
+                    startActivityForResult(it, WIDGET_CONFIG_START_CODE)
+                }
                 true
             }
             1 -> {
@@ -269,16 +234,16 @@ class WidgetListFragment : GenericPageFragment() {
             val appWidgetHostView = appWidgetHost.createView(
                 requireActivity().applicationContext,
                 widgetId, appWidgetInfo
-            )
-
-            // Notify widget of the available minimum space.
-            appWidgetHostView.minimumHeight = appWidgetInfo.minHeight
-            appWidgetHostView.setAppWidget(widgetId, appWidgetInfo)
-            if (Utils.sdkIsAround(16)) {
-                appWidgetHostView.updateAppWidgetSize(
-                    null, appWidgetInfo.minWidth,
-                    appWidgetInfo.minHeight, appWidgetInfo.minWidth, appWidgetInfo.minHeight
-                )
+            ).apply {
+                // Notify widget of the available minimum space.
+                minimumHeight = appWidgetInfo.minHeight
+                setAppWidget(widgetId, appWidgetInfo)
+                if (Utils.sdkIsAround(16)) {
+                    updateAppWidgetSize(
+                        null, appWidgetInfo.minWidth,
+                        appWidgetInfo.minHeight, appWidgetInfo.minWidth, appWidgetInfo.minHeight
+                    )
+                }
             }
 
             // Add the widget.
@@ -322,10 +287,15 @@ class WidgetListFragment : GenericPageFragment() {
         PreferenceHelper.updateWidgets(widgetsList)
 
         // Update our views.
-        appWidgetContainer.removeView(top)
-        appWidgetContainer.addView(top, two)
-        appWidgetContainer.removeView(bottom)
-        appWidgetContainer.addView(bottom, one)
+        with (appWidgetContainer) {
+            removeView(top)
+            addView(top, two)
+            removeView(bottom)
+            addView(bottom, one)
+        }
+
+        addWidgetActionListener(one)
+        addWidgetActionListener(two)
     }
 
     /**
@@ -336,21 +306,21 @@ class WidgetListFragment : GenericPageFragment() {
         appWidgetContainer.getChildAt(index)?.setOnLongClickListener { view ->
             // Set the calling view.
             callingView = view as AppWidgetHostView
-            val index = appWidgetContainer.indexOfChild(view)
             val popupMenu = PopupMenu(requireContext(), view)
-            val menu = popupMenu.menu
 
-            // Generate menu.
-            // TODO: Maybe a more robust and automated way can be done for this.
-            menu.clear()
-            menu.add(1, 0, 100, getString(R.string.dialog_action_add))
-            menu.add(1, 1, 100, getString(R.string.action_remove_widget))
-            menu.add(1, 2, 100, getString(R.string.action_up_widget))
-            menu.add(1, 3, 100, getString(R.string.action_down_widget))
+            with (popupMenu.menu) {
+                // Generate menu.
+                // TODO: Maybe a more robust and automated way can be done for this.
+                clear()
+                add(1, 0, 100, getString(R.string.dialog_action_add))
+                add(1, 1, 100, getString(R.string.action_remove_widget))
+                add(1, 2, 100, getString(R.string.action_up_widget))
+                add(1, 3, 100, getString(R.string.action_down_widget))
 
-            // Move actions should only be added when there is more than one widget.
-            menu.getItem(2).isVisible = appWidgetContainer.childCount > 1 && index > 0
-            menu.getItem(3).isVisible = appWidgetContainer.childCount != index + 1
+                // Move actions should only be added when there is more than one widget.
+                getItem(2).isVisible = appWidgetContainer.childCount > 1 && index > 0
+                getItem(3).isVisible = appWidgetContainer.childCount != index + 1
+            }
 
             popupMenu.setOnMenuItemClickListener {
                 onContextItemSelected(it)

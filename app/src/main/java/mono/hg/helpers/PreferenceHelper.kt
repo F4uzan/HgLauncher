@@ -1,5 +1,6 @@
 package mono.hg.helpers
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.SharedPreferences
@@ -173,6 +174,7 @@ object PreferenceHelper {
         return editor != null
     }
 
+    @SuppressLint("CommitPrefEdits")
     fun initPreference(context: Context?) {
         preference = PreferenceManager.getDefaultSharedPreferences(context)
         editor = preference.edit()

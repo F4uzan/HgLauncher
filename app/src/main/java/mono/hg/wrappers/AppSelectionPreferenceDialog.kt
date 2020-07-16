@@ -39,12 +39,12 @@ class AppSelectionPreferenceDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEUTRAL)
-            .setTextColor(PreferenceHelper.darkAccent)
-        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_NEGATIVE)
-            .setTextColor(PreferenceHelper.darkAccent)
-        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE)
-            .setTextColor(PreferenceHelper.darkAccent)
+        (dialog as AlertDialog).apply {
+            getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(PreferenceHelper.darkAccent)
+            getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
+            getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+        }
+
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -60,10 +60,11 @@ class AppSelectionPreferenceDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = AlertDialog.Builder(requireActivity(), R.style.PreferenceList_NoRadio)
-        dialog.setNegativeButton(android.R.string.cancel, null)
-        dialog.setTitle(R.string.gesture_action_app_dialog_title)
-        dialog.setSingleChoiceItems(mEntries, mClickedDialogEntryIndex, selectItemListener)
-        return dialog.create()
+        with (AlertDialog.Builder(requireActivity(), R.style.PreferenceList_NoRadio)) {
+            setNegativeButton(android.R.string.cancel, null)
+            setTitle(R.string.gesture_action_app_dialog_title)
+            setSingleChoiceItems(mEntries, mClickedDialogEntryIndex, selectItemListener)
+            return create()
+        }
     }
 }

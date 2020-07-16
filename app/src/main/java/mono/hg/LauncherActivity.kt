@@ -49,6 +49,7 @@ import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.GestureListener
 import mono.hg.models.App
 import mono.hg.models.PinnedApp
+import mono.hg.models.WebSearchProvider
 import mono.hg.receivers.PackageChangesReceiver
 import mono.hg.utils.ActivityServiceUtils
 import mono.hg.utils.AppUtils
@@ -198,13 +199,19 @@ class LauncherActivity : AppCompatActivity() {
         animateDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
 
         // Let the launcher handle state of the sliding panel.
-        slidingHome.disallowHiding(true)
-        slidingHome.alwaysResetState(true)
-        slidingHome.anchorPoint = 0f
-        slidingHome.setDragView(searchContainer)
-        pinnedAppsRecyclerView.adapter = pinnedAppsAdapter
-        pinnedAppsRecyclerView.layoutManager = pinnedAppsManager
-        pinnedAppsRecyclerView.itemAnimator = null
+        slidingHome.apply {
+            disallowHiding(true)
+            alwaysResetState(true)
+            anchorPoint = 0f
+            setDragView(searchContainer)
+        }
+
+        pinnedAppsRecyclerView.apply {
+            adapter = pinnedAppsAdapter
+            layoutManager = pinnedAppsManager
+            itemAnimator = null
+        }
+
         pinnedAppsAdapter.isLongPressDragEnabled = true
         pinnedAppsAdapter.itemTouchHelperCallback.setMoveThreshold(1f)
 
@@ -526,7 +533,7 @@ class LauncherActivity : AppCompatActivity() {
 
         // Get the default providers list if it's empty.
         if (PreferenceHelper.providerList.isEmpty()) {
-            Utils.setDefaultProviders(resources)
+            Utils.setDefaultProviders(resources, ArrayList())
         }
 
         when (PreferenceHelper.appTheme()) {
@@ -567,6 +574,21 @@ class LauncherActivity : AppCompatActivity() {
         appMenu !!.menuInflater.inflate(R.menu.menu_app, appMenu !!.menu)
         appMenu !!.menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
 
+        // Hide 'pin' if the app is already pinned or isPinned is set.
+        appMenu !!.menu.findItem(R.id.action_pin).isVisible = false
+
+        // We can't hide an app from the favourites panel.
+        appMenu !!.menu.findItem(R.id.action_hide).isVisible = false
+        appMenu !!.menu.findItem(R.id.action_shorthand).isVisible = false
+
+        // Only show the 'unpin' option if isPinned is set.
+        appMenu !!.menu.findItem(R.id.action_unpin).isVisible = true
+
+        // Show uninstall menu if the app is not a system app.
+        appMenu !!.menu.findItem(R.id.action_uninstall).isVisible =
+            (! AppUtils.isSystemApp(packageManager, packageName)
+                    && app.user == userUtils !!.currentSerial)
+
         // Inflate app shortcuts.
         if (Utils.sdkIsAround(25)) {
             var menuId = SHORTCUT_MENU_GROUP
@@ -585,20 +607,6 @@ class LauncherActivity : AppCompatActivity() {
             appMenu !!.menu.getItem(0).isVisible = false
         }
 
-        // Hide 'pin' if the app is already pinned or isPinned is set.
-        appMenu !!.menu.findItem(R.id.action_pin).isVisible = false
-
-        // We can't hide an app from the favourites panel.
-        appMenu !!.menu.findItem(R.id.action_hide).isVisible = false
-        appMenu !!.menu.findItem(R.id.action_shorthand).isVisible = false
-
-        // Only show the 'unpin' option if isPinned is set.
-        appMenu !!.menu.findItem(R.id.action_unpin).isVisible = true
-
-        // Show uninstall menu if the app is not a system app.
-        appMenu !!.menu.findItem(R.id.action_uninstall).isVisible =
-            (! AppUtils.isSystemApp(packageManager, packageName)
-                    && app.user == userUtils !!.currentSerial)
         appMenu !!.show()
         appMenu !!.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -627,12 +635,7 @@ class LauncherActivity : AppCompatActivity() {
                         )
                     )
                 }
-                R.id.action_uninstall -> startActivity(
-                    Intent(
-                        Intent.ACTION_UNINSTALL_PACKAGE,
-                        packageNameUri
-                    )
-                )
+                R.id.action_uninstall -> AppUtils.uninstallApp(this, packageNameUri)
                 else ->                         // Catch click actions from the shortcut menu group.
                     if (item.groupId == SHORTCUT_MENU_GROUP && Utils.sdkIsAround(25)) {
                         userUtils !!.getUser(user)?.let {
@@ -736,9 +739,12 @@ class LauncherActivity : AppCompatActivity() {
 
                     // Update the snackbar text.
                     searchSnack.setText(searchHint)
+
+                    // Show the context/clear-all button.
                     if (! isContextVisible) {
                         doThis("show_context_button")
                     }
+
                     val searchSnackAction: String = if (PreferenceHelper.searchProvider == "none") {
                         getString(R.string.search_web_button_prompt)
                     } else {
@@ -748,11 +754,13 @@ class LauncherActivity : AppCompatActivity() {
                     // Prompt user if they want to search their query online.
                     searchSnack.setNonDismissAction(searchSnackAction, View.OnClickListener {
                         if (PreferenceHelper.searchProvider != "none") {
-                            Utils.doWebSearch(
-                                this@LauncherActivity,
-                                PreferenceHelper.searchProvider,
-                                URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name())
-                            )
+                            PreferenceHelper.searchProvider?.let { it1 ->
+                                Utils.doWebSearch(
+                                    this@LauncherActivity,
+                                    it1,
+                                    URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name())
+                                )
+                            }
                             searchSnack.dismiss()
                         } else {
                             appMenu = PopupMenu(this@LauncherActivity, it)
@@ -787,11 +795,13 @@ class LauncherActivity : AppCompatActivity() {
             ) {
                 val pageAvailable = viewPagerAdapter.getCurrentPage()?.launchPreselection() ?: false
                 if (! pageAvailable && PreferenceHelper.promptSearch() && PreferenceHelper.searchProvider != "none") {
-                    Utils.doWebSearch(
-                        this@LauncherActivity,
-                        PreferenceHelper.searchProvider,
-                        searchBar.text.toString()
-                    )
+                    PreferenceHelper.searchProvider?.let {
+                        Utils.doWebSearch(
+                            this@LauncherActivity,
+                            it,
+                            searchBar.text.toString()
+                        )
+                    }
                 }
             }
             true
@@ -872,8 +882,10 @@ class LauncherActivity : AppCompatActivity() {
             }
 
             override fun onPanelStateChanged(panel: View, previousState: Int, newState: Int) {
-                searchBar.isClickable = newState == SlidingUpPanelLayout.PanelState.COLLAPSED
-                searchBar.isLongClickable = newState == SlidingUpPanelLayout.PanelState.COLLAPSED
+                with (searchBar) {
+                    isClickable = newState == SlidingUpPanelLayout.PanelState.COLLAPSED
+                    isLongClickable = newState == SlidingUpPanelLayout.PanelState.COLLAPSED
+                }
                 when (newState) {
                     SlidingUpPanelLayout.PanelState.DRAGGING -> {
                         // Empty out search bar text
@@ -910,11 +922,9 @@ class LauncherActivity : AppCompatActivity() {
                         // Hide keyboard if container is invisible.
                         ActivityServiceUtils.hideSoftKeyboard(this@LauncherActivity)
 
-                        // Stop scrolling, the panel is being dismissed.
-                        //appsRecyclerView.stopScroll()
+                        // Animate the container.
                         searchContainer.visibility = View.INVISIBLE
 
-                        // Animate the container.
                         if (! isResuming && ! ActivityServiceUtils.isPowerSaving(this@LauncherActivity)) {
                             searchContainer.animate().alpha(0f).duration = animateDuration.toLong()
                         } else {
@@ -1044,16 +1054,21 @@ class LauncherActivity : AppCompatActivity() {
 
     private fun showStartDialog() {
         val binding = DialogStartHintBinding.inflate(layoutInflater)
-        val startDialog = BottomSheetDialog(this)
-        startDialog.setContentView(binding.root)
-        startDialog.setCancelable(false)
-        startDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        val startDismiss = binding.dismiss
-        startDismiss.setOnClickListener {
-            startDialog.dismiss()
-            PreferenceHelper.update("is_new_user", false)
+
+        BottomSheetDialog(this).apply {
+            setContentView(binding.root)
+            setCancelable(false)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }.also { dialog ->
+            with (binding.dismiss) {
+                setOnClickListener {
+                    dialog.dismiss()
+                    PreferenceHelper.update("is_new_user", false)
+                }
+            }
+            dialog.show()
         }
-        startDialog.show()
+
     }
 
     companion object {
