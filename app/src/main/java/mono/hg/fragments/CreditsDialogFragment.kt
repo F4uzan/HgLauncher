@@ -10,10 +10,7 @@ import androidx.fragment.app.DialogFragment
 import mono.hg.R
 import mono.hg.databinding.FragmentCreditsDialogBinding
 import mono.hg.helpers.PreferenceHelper
-import mono.hg.utils.Utils
-import mono.hg.utils.Utils.LogLevel
 import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStreamReader
 
 /**
@@ -44,25 +41,14 @@ class CreditsDialogFragment : DialogFragment() {
         }
     }
 
-    private fun readCredits() : String {
+    private fun readCredits(): String {
         val stringBuilder = StringBuilder()
-        var br: BufferedReader? = null
 
-        try {
-            br = BufferedReader(
-                InputStreamReader(requireActivity().assets.open("credits.txt"))
-            )
-            var line: String?
-            while (br.readLine().also { line = it } != null) {
-                stringBuilder.append(line).append('\n')
+        BufferedReader(InputStreamReader(requireActivity().assets.open("credits.txt"))).use {
+            var currentLine: String?
+            while (it.readLine().also { line -> currentLine = line } != null) {
+                stringBuilder.append(currentLine).append('\n')
             }
-        } catch (e: IOException) {
-            Utils.sendLog(
-                LogLevel.ERROR,
-                "Exception in reading credits file: $e"
-            )
-        } finally {
-            Utils.closeStream(br)
         }
 
         return stringBuilder.toString()

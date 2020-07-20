@@ -127,24 +127,6 @@ object Utils {
     }
 
     /**
-     * Closes a Closeable instance if it is not null.
-     *
-     * Any [IOException] is ignored by this function,
-     * if there is further handling to be done, this function
-     * should not be used, and a regular try-catch should be used
-     * in its place instead.
-     *
-     * @param stream The Closeable instance to close.
-     */
-    fun closeStream(stream: Closeable?) {
-        try {
-            stream?.close()
-        } catch (ignored: IOException) {
-            // Do nothing.
-        }
-    }
-
-    /**
      * Returns a color from an attribute reference.
      *
      * @param context Pass the activity context, not the application context

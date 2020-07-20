@@ -62,15 +62,11 @@ object BackupRestoreUtils {
      * @param uri The Uri representing the file itself.
      */
     fun restoreBackup(context: Context, uri: Uri) {
-        var input: ObjectInputStream? = null
-        try {
-            input = ObjectInputStream(context.contentResolver.openInputStream(uri))
-
+        ObjectInputStream(context.contentResolver.openInputStream(uri)).use {
             // We have to reset the leftover preferences to make sure they don't linger.
             PreferenceHelper.editor?.clear()?.apply()
-            PreferenceHelper.fetchPreference()
 
-            val entries = input.readObject() as Map<String, *>
+            val entries = it.readObject() as Map<String, *>
             entries.forEach {
                 when (val v = it.value !!) {
                     is Boolean -> {
@@ -94,15 +90,10 @@ object BackupRestoreUtils {
                 }
                 PreferenceHelper.update("require_refresh", true)
             }
+
+            // Fetch again.
             PreferenceHelper.editor?.apply()
-        } catch (e: FileNotFoundException) {
-            Utils.sendLog(LogLevel.ERROR, e.toString())
-        } catch (e: ClassNotFoundException) {
-            Utils.sendLog(LogLevel.ERROR, e.toString())
-        } catch (e: IOException) {
-            Utils.sendLog(LogLevel.ERROR, e.toString())
-        } finally {
-            Utils.closeStream(input)
+            PreferenceHelper.fetchPreference()
         }
     }
 
