@@ -11,7 +11,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 29
         versionCode dateVersionCode
-        versionName "1.4.3-rc2"
+        versionName "1.4.3-rc3"
         vectorDrawables.useSupportLibrary = true
         buildFeatures {
             viewBinding = true
