@@ -213,9 +213,7 @@ class AppListFragment : GenericPageFragment() {
         super.onStart()
 
         if (AppUtils.hasNewPackage(manager) || appsAdapter.isEmpty) {
-            synchronized(appsList) {
-                fetchApps()
-            }
+            fetchApps()
         }
 
         // Reset the app list filter.
@@ -394,9 +392,11 @@ class AppListFragment : GenericPageFragment() {
     }
 
     private fun fetchApps() {
-        fetchAppsTask?.cancel(true)
-        fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
-        fetchAppsTask?.execute()
+        synchronized(appsList) {
+            fetchAppsTask?.cancel(true)
+            fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
+            fetchAppsTask?.execute()
+        }
     }
 
     /**
