@@ -3,7 +3,6 @@ package mono.hg.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import mono.hg.utils.Utils
 
 /**
  * A receiver called when the launcher receives any changes in packages (apps).

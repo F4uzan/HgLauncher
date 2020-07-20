@@ -113,7 +113,7 @@ class BasePreference : PreferenceFragmentCompat() {
             hasStoragePermission()
         }
         resetMenu?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            with (AlertDialog.Builder(requireContext())) {
+            with(AlertDialog.Builder(requireContext())) {
                 setTitle(getString(R.string.reset_preference))
                 setMessage(getString(R.string.reset_preference_warn))
                 setNegativeButton(getString(android.R.string.cancel), null)

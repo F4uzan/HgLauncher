@@ -21,8 +21,6 @@ import mono.hg.R
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.WebSearchProvider
 import mono.hg.receivers.PackageChangesReceiver
-import java.io.Closeable
-import java.io.IOException
 
 /**
  * A misc. utils class for other various helpers and utilities functions.
@@ -294,7 +292,10 @@ object Utils {
      *
      * @param resources The resources object, used to retrieve the default array.
      */
-    fun setDefaultProviders(resources: Resources, list: ArrayList<WebSearchProvider>): ArrayList<WebSearchProvider> {
+    fun setDefaultProviders(
+        resources: Resources,
+        list: ArrayList<WebSearchProvider>
+    ): ArrayList<WebSearchProvider> {
         val defaultProvider = resources.getStringArray(
             R.array.pref_search_provider_title
         )

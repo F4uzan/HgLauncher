@@ -84,7 +84,7 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
             }
 
         // Add defaults if we don't have any provider.
-        with (PreferenceHelper.providerList) {
+        with(PreferenceHelper.providerList) {
             if (this.isEmpty()) {
                 Utils.setDefaultProviders(requireActivity().resources, providerList)
             } else {
@@ -102,7 +102,7 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        with (menu) {
+        with(menu) {
             clear()
             add(1, 0, 100, getString(R.string.action_web_provider_add))
             add(1, 1, 100, getString(R.string.action_web_provider_reset))
@@ -125,7 +125,8 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
             1 -> {
                 providerList.clear()
                 PreferenceHelper.updateProvider(
-                    Utils.setDefaultProviders(requireActivity().resources, providerList))
+                    Utils.setDefaultProviders(requireActivity().resources, providerList)
+                )
                 providerAdapter?.notifyDataSetChanged()
                 true
             }
@@ -157,12 +158,13 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
             getString(R.string.dialog_title_add_provider)
         }
 
-        with (AlertDialog.Builder(requireActivity())) {
+        with(AlertDialog.Builder(requireActivity())) {
             setView(binding.root)
             setTitle(title)
                 .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { _, _ ->
-                    val name = nameField.text.toString().replace("\\|".toRegex(), "").trim { it <= ' ' }
+                    val name =
+                        nameField.text.toString().replace("\\|".toRegex(), "").trim { it <= ' ' }
                     val url = urlField.text.toString().trim { it <= ' ' }
 
                     // Strip out %s as it triggers the matcher.

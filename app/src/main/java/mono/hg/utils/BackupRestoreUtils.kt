@@ -111,13 +111,13 @@ object BackupRestoreUtils {
         private val uri: Uri = Uri.parse(path)
         override fun onPreExecute() {
             super.onPreExecute()
-            with (fragmentRef.get()) {
+            with(fragmentRef.get()) {
                 this?.progressBar?.show()
             }
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            with (fragmentRef.get()) {
+            with(fragmentRef.get()) {
                 this?.let { restoreBackup(it, uri) }
             }
             return null
@@ -125,7 +125,7 @@ object BackupRestoreUtils {
 
         override fun onPostExecute(result: Void?) {
             super.onPostExecute(result)
-            with (fragmentRef.get()) {
+            with(fragmentRef.get()) {
                 this?.progressBar?.hide()
                 this?.let { ViewUtils.restartActivity(it, false) }
                 Toast.makeText(this, R.string.restore_complete, Toast.LENGTH_LONG).show()

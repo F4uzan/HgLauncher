@@ -12,7 +12,8 @@ import mono.hg.fragments.WidgetListFragment
  *
  * This adapter is to be used for [ViewPager2].
  */
-class PageAdapter(fragment: FragmentActivity, viewPager: ViewPager2) : FragmentStateAdapter(fragment) {
+class PageAdapter(fragment: FragmentActivity, viewPager: ViewPager2) :
+    FragmentStateAdapter(fragment) {
     private val currentFragment = fragment
     private val currentViewPager = viewPager
 

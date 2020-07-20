@@ -18,7 +18,7 @@ class FetchAppsTask(activity: Activity, adapter: AppAdapter, list: MutableList<A
     private val appsList: WeakReference<MutableList<App?>> = WeakReference(list)
     override fun onPreExecute() {
         val adapterRef = adapter.get()
-        with (appsList.get()) {
+        with(appsList.get()) {
             this?.size?.let { adapterRef?.removeRange(0, it) }
             this?.clear()
         }

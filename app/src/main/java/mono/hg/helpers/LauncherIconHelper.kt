@@ -114,7 +114,7 @@ object LauncherIconHelper {
             drawable.intrinsicWidth,
             drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
         )
-        with (Canvas(bm)) {
+        with(Canvas(bm)) {
             drawable.setBounds(0, 0, width, height)
             drawable.draw(this)
         }
@@ -131,7 +131,7 @@ object LauncherIconHelper {
             postTranslate(dx, dy)
         }
 
-        with (paint) {
+        with(paint) {
             maskCanvas.drawBitmap(bm, scaleToFit, this)
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
             maskCanvas.drawBitmap(bm, dropShadow, this)
@@ -143,12 +143,12 @@ object LauncherIconHelper {
         }
 
         Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888).apply {
-            with (Canvas(this)) {
+            with(Canvas(this)) {
                 drawBitmap(mask, 0f, 0f, paint)
                 drawBitmap(bm, scaleToFit, null)
             }
             mask.recycle()
-        }. also {
+        }.also {
             return it
         }
     }

@@ -71,7 +71,7 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        with (menu) {
+        with(menu) {
             clear()
             add(0, 1, 100, getString(R.string.action_hidden_app_reset))
             getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)

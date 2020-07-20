@@ -112,7 +112,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
 
         manager.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
             .forEach {
-                with (it.activityInfo) {
+                with(it.activityInfo) {
                     val className = this.name
                     val packageName = this.packageName
                     val componentName = "$packageName/$className"

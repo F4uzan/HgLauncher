@@ -1,8 +1,6 @@
 package mono.hg.fragments
 
-import android.annotation.TargetApi
 import android.app.AlertDialog
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
@@ -138,7 +136,7 @@ class BackupRestoreFragment : BackHandledFragment() {
                         "file://" + currentPath + File.separator + backupNameField.text.toString() + ".xml"
                     val backupName = File(backupPath)
                     if (backupName.exists() && backupName.isFile) {
-                        with (AlertDialog.Builder(requireActivity())) {
+                        with(AlertDialog.Builder(requireActivity())) {
                             setTitle(getString(R.string.pref_header_backup))
                             setMessage(getString(R.string.backup_exist))
                             setNegativeButton(getString(R.string.backup_exist_cancel), null)

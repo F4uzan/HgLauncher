@@ -1,6 +1,5 @@
 package mono.hg
 
-import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.os.Bundle

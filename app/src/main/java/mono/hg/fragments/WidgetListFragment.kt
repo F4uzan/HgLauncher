@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
-import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -287,7 +286,7 @@ class WidgetListFragment : GenericPageFragment() {
         PreferenceHelper.updateWidgets(widgetsList)
 
         // Update our views.
-        with (appWidgetContainer) {
+        with(appWidgetContainer) {
             removeView(top)
             addView(top, two)
             removeView(bottom)
@@ -308,7 +307,7 @@ class WidgetListFragment : GenericPageFragment() {
             callingView = view as AppWidgetHostView
             val popupMenu = PopupMenu(requireContext(), view)
 
-            with (popupMenu.menu) {
+            with(popupMenu.menu) {
                 // Generate menu.
                 // TODO: Maybe a more robust and automated way can be done for this.
                 clear()

@@ -49,7 +49,6 @@ import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.GestureListener
 import mono.hg.models.App
 import mono.hg.models.PinnedApp
-import mono.hg.models.WebSearchProvider
 import mono.hg.receivers.PackageChangesReceiver
 import mono.hg.utils.ActivityServiceUtils
 import mono.hg.utils.AppUtils
@@ -754,10 +753,10 @@ class LauncherActivity : AppCompatActivity() {
                     // Prompt user if they want to search their query online.
                     searchSnack.setNonDismissAction(searchSnackAction, View.OnClickListener {
                         if (PreferenceHelper.searchProvider != "none") {
-                            PreferenceHelper.searchProvider?.let { it1 ->
+                            PreferenceHelper.searchProvider?.let { provider ->
                                 Utils.doWebSearch(
                                     this@LauncherActivity,
-                                    it1,
+                                    provider,
                                     URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name())
                                 )
                             }
@@ -882,7 +881,7 @@ class LauncherActivity : AppCompatActivity() {
             }
 
             override fun onPanelStateChanged(panel: View, previousState: Int, newState: Int) {
-                with (searchBar) {
+                with(searchBar) {
                     isClickable = newState == SlidingUpPanelLayout.PanelState.COLLAPSED
                     isLongClickable = newState == SlidingUpPanelLayout.PanelState.COLLAPSED
                 }
@@ -1060,7 +1059,7 @@ class LauncherActivity : AppCompatActivity() {
             setCancelable(false)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }.also { dialog ->
-            with (binding.dismiss) {
+            with(binding.dismiss) {
                 setOnClickListener {
                     dialog.dismiss()
                     PreferenceHelper.update("is_new_user", false)

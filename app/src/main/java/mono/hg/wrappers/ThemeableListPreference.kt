@@ -14,7 +14,7 @@ import mono.hg.helpers.PreferenceHelper
 class ThemeableListPreference(context: Context?, attrs: AttributeSet?) :
     ListPreference(context, attrs) {
     override fun onClick() {
-        with (AlertDialog.Builder(context, R.style.PreferenceList_NoRadio)) {
+        with(AlertDialog.Builder(context, R.style.PreferenceList_NoRadio)) {
             setTitle(title)
             setMessage(dialogMessage)
             setSingleChoiceItems(entries, entries.indexOf(entry)) { it, index ->

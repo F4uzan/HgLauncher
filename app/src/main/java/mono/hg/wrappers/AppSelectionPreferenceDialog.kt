@@ -60,7 +60,7 @@ class AppSelectionPreferenceDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        with (AlertDialog.Builder(requireActivity(), R.style.PreferenceList_NoRadio)) {
+        with(AlertDialog.Builder(requireActivity(), R.style.PreferenceList_NoRadio)) {
             setNegativeButton(android.R.string.cancel, null)
             setTitle(R.string.gesture_action_app_dialog_title)
             setSingleChoiceItems(mEntries, mClickedDialogEntryIndex, selectItemListener)
