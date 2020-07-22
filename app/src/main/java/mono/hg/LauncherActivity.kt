@@ -556,7 +556,6 @@ class LauncherActivity : AppCompatActivity() {
      */
     private fun createAppMenu(view: View?, app: App?) {
         val packageName = app !!.packageName
-        val componentName = ComponentName.unflattenFromString(packageName)
         val user = app.user
         val packageNameUri = Uri.fromParts(
             "package", AppUtils.getPackageName(packageName),
@@ -618,19 +617,7 @@ class LauncherActivity : AppCompatActivity() {
                         doThis(HIDE_PINNED)
                     }
                 }
-                R.id.action_info -> if (Utils.atLeastLollipop()) {
-                    launcherApps !!.startAppDetailsActivity(
-                        componentName,
-                        userUtils !!.getUser(app.user), null, null
-                    )
-                } else {
-                    startActivity(
-                        Intent(
-                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            packageNameUri
-                        )
-                    )
-                }
+                R.id.action_info -> AppUtils.openAppDetails(this, packageName, user)
                 R.id.action_uninstall -> AppUtils.uninstallApp(this, packageNameUri)
                 else ->                         // Catch click actions from the shortcut menu group.
                     if (item.groupId == SHORTCUT_MENU_GROUP) {

@@ -16,6 +16,7 @@ import android.os.Build
 import android.os.Process
 import android.os.UserHandle
 import android.os.UserManager
+import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import mono.hg.BuildConfig
@@ -141,6 +142,49 @@ object AppUtils {
      */
     fun uninstallApp(activity: Activity, packageName: Uri) {
         activity.startActivity(Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageName))
+    }
+
+    /**
+     * Opens the related Settings page of an app.
+     *
+     * This function requires a component name (and NOT a package name),
+     * as [ComponentName.unflattenFromString] and [getPackageName] will be called
+     * to create ComponentName and retrieve package name respectively. Using
+     * a package name in place of the component name may cause an unhandled
+     * exception.
+     *
+     * A different method is used to launch the settings page itself.
+     * For [Build.VERSION_CODES.LOLLIPOP], this function makes use of
+     * [LauncherApps.startAppDetailsActivity], which is unavailable
+     * in older API level. As such, the traditional intent launch
+     * with [Settings.ACTION_APPLICATION_DETAILS_SETTINGS] is used.
+     *
+     * @param activity      Current foreground activity.
+     * @param packageName   The component name of the app.
+     * @param user          The user that the app belongs to.
+     */
+    fun openAppDetails(activity: Activity, componentName: String, user: Long) {
+        if (Utils.atLeastLollipop()) {
+            val userUtils = UserUtils(activity)
+            val launcher = activity.getSystemService(
+                Context.LAUNCHER_APPS_SERVICE
+            ) as LauncherApps
+
+            val component = ComponentName.unflattenFromString(componentName)
+
+            launcher.startAppDetailsActivity(
+                component, userUtils.getUser(user), null, null
+            )
+        } else {
+            val packageNameUri = Uri.fromParts(
+                "package", getPackageName(componentName),
+                null
+            )
+
+            activity.startActivity(
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageNameUri)
+            )
+        }
     }
 
     /**

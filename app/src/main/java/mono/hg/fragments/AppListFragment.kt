@@ -239,7 +239,6 @@ class AppListFragment : GenericPageFragment() {
      */
     private fun createAppMenu(view: View, app: App?) {
         val packageName = app !!.packageName
-        val componentName = ComponentName.unflattenFromString(packageName)
         val user = app.user
 
         val packageNameUri = Uri.fromParts("package", AppUtils.getPackageName(packageName), null)
@@ -288,19 +287,7 @@ class AppListFragment : GenericPageFragment() {
                 R.id.action_pin -> {
                     getLauncherActivity().pinAppHere(app.userPackageName, user)
                 }
-                R.id.action_info -> if (Utils.atLeastLollipop()) {
-                    launcherApps !!.startAppDetailsActivity(
-                        componentName,
-                        userUtils !!.getUser(app.user), null, null
-                    )
-                } else {
-                    startActivity(
-                        Intent(
-                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            packageNameUri
-                        )
-                    )
-                }
+                R.id.action_info -> AppUtils.openAppDetails(requireActivity(), packageName, user)
                 R.id.action_uninstall -> AppUtils.uninstallApp(requireActivity(), packageNameUri)
                 R.id.action_shorthand -> makeRenameDialog(app.userPackageName, position)
                 R.id.action_hide -> {
