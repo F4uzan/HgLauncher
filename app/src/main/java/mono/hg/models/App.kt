@@ -21,13 +21,14 @@ import mono.hg.utils.AppUtils
 class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     private var HINT_MATCH_SCORE = 30
     private var NAME_MATCH_SCORE = 25
+    private var layoutType = 0
     var appName: String? = null
         private set
     var packageName: String
         private set
     lateinit var userPackageName: String
     var hintName: String? = null
-    var isAppHidden: Boolean = false
+    var isAppHidden = false
     var icon: Drawable? = null
     var user: Long = 0
         private set
@@ -40,9 +41,10 @@ class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     }
 
     constructor(icon: Drawable, packageName: String, user: Long) {
+        this.layoutType = 1
         this.icon = icon
         this.packageName = packageName
-        userPackageName = AppUtils.appendUser(user, packageName)
+        this.userPackageName = AppUtils.appendUser(user, packageName)
     }
 
     constructor(packageName: String, user: Long) {
@@ -80,11 +82,7 @@ class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     }
 
     override fun getItemViewType(): Int {
-        return if (appName.isNullOrBlank()) {
-            1
-        } else {
-            0
-        }
+        return layoutType
     }
 
     override fun createViewHolder(
