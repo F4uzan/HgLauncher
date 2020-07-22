@@ -118,6 +118,7 @@ class AppListFragment : GenericPageFragment() {
 
         if (fetchAppsTask != null && fetchAppsTask?.status == AsyncTask.Status.RUNNING) {
             fetchAppsTask?.cancel(true)
+            fetchAppsTask = null
         }
 
         unregisterBroadcast()
