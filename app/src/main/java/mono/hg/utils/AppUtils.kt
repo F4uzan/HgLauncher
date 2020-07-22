@@ -14,16 +14,16 @@ import android.content.pm.ShortcutInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Process
+import android.os.UserHandle
 import android.os.UserManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import eu.davidea.flexibleadapter.FlexibleAdapter
 import mono.hg.BuildConfig
 import mono.hg.R
+import mono.hg.adapters.AppAdapter
 import mono.hg.helpers.LauncherIconHelper
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.App
-import mono.hg.models.PinnedApp
 import mono.hg.utils.Utils.LogLevel
 import mono.hg.wrappers.DisplayNameComparator
 import java.util.*
@@ -119,10 +119,10 @@ object AppUtils {
      */
     fun pinApp(
         activity: Activity, user: Long, componentName: String,
-        adapter: FlexibleAdapter<PinnedApp?>, list: MutableList<PinnedApp?>
+        adapter: AppAdapter, list: MutableList<App?>
     ) {
         val icon = LauncherIconHelper.getIcon(activity, componentName, user, false)
-        val app = PinnedApp(icon, componentName, user)
+        val app = icon?.let { App(it, componentName, user) }
         list.add(app)
         adapter.updateDataSet(list, false)
     }
@@ -158,9 +158,11 @@ object AppUtils {
      * @param activity Current foreground activity.
      * @param app      App object to launch.
      */
-    fun launchApp(activity: Activity, app: App) {
+    fun launchApp(context: Context, app: App) {
         // Attempt to catch exceptions instead of crash landing directly to the floor.
         try {
+            val activity = context as Activity
+
             if (Utils.atLeastLollipop()) {
                 val userUtils = UserUtils(activity)
                 val launcher = activity.getSystemService(
@@ -179,14 +181,20 @@ object AppUtils {
                 )
             }
         } catch (e: ActivityNotFoundException) {
-            Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, R.string.err_activity_null, Toast.LENGTH_LONG).show()
             Utils.sendLog(
                 LogLevel.ERROR,
                 "Cannot start " + app.packageName + "; missing package?"
             )
         } catch (e: SecurityException) {
-            Toast.makeText(activity, R.string.err_activity_null, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, R.string.err_activity_null, Toast.LENGTH_LONG).show()
             Utils.sendLog(LogLevel.ERROR, "Cannot start " + app.packageName + "; invalid user?")
+        } catch (e: ClassCastException) {
+            // Whatever happened.
+            Utils.sendLog(
+                LogLevel.ERROR,
+                "Received ClassCastException when starting " + app.packageName
+            )
         }
     }
 
@@ -418,5 +426,27 @@ object AppUtils {
         )
         shortcutQuery.setPackage(getPackageName(componentName))
         return launcherApps.getShortcuts(shortcutQuery, Process.myUserHandle())
+    }
+
+    /**
+     * Launches an app shortcut.
+     *
+     * This function assumes that the launcher has shortcut host permission beforehand.
+     * If this assumption is not handled properly, then the launcher will likely crash.
+     *
+     * @param user          The user owning this [componentName]
+     * @param launcherApps  LauncherApps service from an activity
+     * @param componentName The component name of the app itself
+     * @param id            The unique ID of the shortcut. Must not be null.
+     */
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    fun launchShortcut(
+        user: UserHandle,
+        launcherApps: LauncherApps?,
+        componentName: String,
+        id: String
+    ) {
+        val packageName = getPackageName(componentName)
+        launcherApps?.startShortcut(packageName, id, null, null, user)
     }
 }

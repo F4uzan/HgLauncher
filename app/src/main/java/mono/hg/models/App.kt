@@ -12,14 +12,13 @@ import eu.davidea.viewholders.FlexibleViewHolder
 import mono.hg.R
 import mono.hg.helpers.KissFuzzySearch
 import mono.hg.helpers.PreferenceHelper
+import mono.hg.utils.AppUtils
 
 /**
  * The app object. Holds information such as package name, shorthands, icons, and visibility state.
  * Implements [IFilterable] to allow searching in the app list.
- *
- * This class is also extended by [PinnedApp].
  */
-open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
+class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     private var HINT_MATCH_SCORE = 30
     private var NAME_MATCH_SCORE = 25
     var appName: String? = null
@@ -28,9 +27,9 @@ open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
         private set
     lateinit var userPackageName: String
     var hintName: String? = null
-    var isAppHidden: Boolean
+    var isAppHidden: Boolean = false
     var icon: Drawable? = null
-    var user: Long
+    var user: Long = 0
         private set
 
     constructor(appName: String?, packageName: String, isAppHidden: Boolean, user: Long) {
@@ -38,6 +37,12 @@ open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
         this.appName = appName
         this.isAppHidden = isAppHidden
         this.user = user
+    }
+
+    constructor(icon: Drawable, packageName: String, user: Long) {
+        this.icon = icon
+        this.packageName = packageName
+        userPackageName = AppUtils.appendUser(user, packageName)
     }
 
     constructor(packageName: String, user: Long) {
@@ -63,10 +68,22 @@ open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     }
 
     override fun getLayoutRes(): Int {
-        return if (PreferenceHelper.useGrid()) {
-            R.layout.grid_generic_item
+        return when (itemViewType) {
+            GENERIC_APP_TYPE -> if (PreferenceHelper.useGrid()) {
+                R.layout.grid_generic_item
+            } else {
+                R.layout.list_generic_item
+            }
+            PINNED_APP_TYPE -> R.layout.list_pinned_item
+            else -> R.layout.list_generic_item
+        }
+    }
+
+    override fun getItemViewType(): Int {
+        return if (appName.isNullOrBlank()) {
+            1
         } else {
-            R.layout.list_generic_item
+            0
         }
     }
 
@@ -114,5 +131,10 @@ open class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
         FlexibleViewHolder(view, adapter) {
         var name: TextView? = view.findViewById(R.id.item_name)
         var icon: ImageView = view.findViewById(R.id.item_icon)
+    }
+
+    companion object {
+        const val GENERIC_APP_TYPE = 0
+        const val PINNED_APP_TYPE = 1
     }
 }

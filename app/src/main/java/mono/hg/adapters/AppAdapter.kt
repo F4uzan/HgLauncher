@@ -5,7 +5,9 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView.SectionedAdapter
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.FlexibleAdapter.OnItemClickListener
 import mono.hg.models.App
+import mono.hg.utils.AppUtils
 import mono.hg.utils.Utils
 import java.util.*
 
@@ -132,5 +134,12 @@ class AppAdapter(apps: List<App?>, listeners: Any?, stableIds: Boolean) :
                 else -> false
             }
         }
+    }
+
+    init {
+        addListener(OnItemClickListener { _, position ->
+            getItem(position)?.let { AppUtils.launchApp(recyclerView.context, it) }
+            true
+        })
     }
 }

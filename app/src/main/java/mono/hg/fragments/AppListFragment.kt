@@ -33,14 +33,12 @@ import mono.hg.databinding.LayoutRenameDialogBinding
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.SimpleScrollListener
 import mono.hg.models.App
-import mono.hg.models.PinnedApp
 import mono.hg.tasks.FetchAppsTask
 import mono.hg.utils.AppUtils
 import mono.hg.utils.UserUtils
 import mono.hg.utils.Utils
 import mono.hg.utils.ViewUtils
 import mono.hg.views.CustomGridLayoutManager
-import mono.hg.views.IndeterminateMaterialProgressBar
 import mono.hg.views.TogglingLinearLayoutManager
 import mono.hg.wrappers.ItemOffsetDecoration
 import java.util.*
@@ -158,18 +156,17 @@ class AppListFragment : GenericPageFragment() {
             }
         }
 
-        // Add item click action to app list.
-        appsAdapter.addListener(FlexibleAdapter.OnItemClickListener { _, position ->
-            appsAdapter.getItem(position)?.let { AppUtils.launchApp(requireActivity(), it) }
-            true
-        })
-
         // Add long click listener to apps in the apps list.
         // This shows a menu to manage the selected app.
         appsAdapter.addListener(FlexibleAdapter.OnItemLongClickListener { position ->
             val app = appsAdapter.getItem(position)
 
-            appsRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.let { createAppMenu(it, app) }
+            appsRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.let {
+                createAppMenu(
+                    it,
+                    app
+                )
+            }
         })
 
         appsAdapter.addListener(FlexibleAdapter.OnUpdateListener { size ->
@@ -243,7 +240,6 @@ class AppListFragment : GenericPageFragment() {
     private fun createAppMenu(view: View, app: App?) {
         val packageName = app !!.packageName
         val componentName = ComponentName.unflattenFromString(packageName)
-        val pinApp = PinnedApp(app.packageName, app.user)
         val user = app.user
 
         val packageNameUri = Uri.fromParts("package", AppUtils.getPackageName(packageName), null)
@@ -257,7 +253,7 @@ class AppListFragment : GenericPageFragment() {
 
         // Hide 'pin' if the app is already pinned or isPinned is set.
         appMenu !!.menu.findItem(R.id.action_pin).isVisible =
-            ! getLauncherActivity().isPinned(pinApp)
+            ! getLauncherActivity().isPinned(app)
 
         // Only show the 'unpin' option if isPinned is set.
         appMenu !!.menu.findItem(R.id.action_unpin).isVisible = false
@@ -317,12 +313,13 @@ class AppListFragment : GenericPageFragment() {
                     appsAdapter.removeItem(position)
                 }
                 else ->                         // Catch click actions from the shortcut menu group.
-                    if (item.groupId == SHORTCUT_MENU_GROUP && Utils.sdkIsAround(25)) {
-                        userUtils !!.getUser(user)?.let {
-                            launcherApps?.startShortcut(
-                                AppUtils.getPackageName(packageName),
-                                shortcutMap[item.itemId],
-                                null, null, it
+                    if (item.groupId == SHORTCUT_MENU_GROUP) {
+                        userUtils?.getUser(user)?.let {
+                            AppUtils.launchShortcut(
+                                it,
+                                launcherApps,
+                                packageName,
+                                shortcutMap[item.itemId]
                             )
                         }
                     }

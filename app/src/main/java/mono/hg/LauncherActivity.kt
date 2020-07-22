@@ -39,8 +39,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener
-import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.FlexibleAdapter.OnItemMoveListener
+import mono.hg.adapters.AppAdapter
 import mono.hg.adapters.PageAdapter
 import mono.hg.databinding.ActivityLauncherspaceBinding
 import mono.hg.databinding.DialogStartHintBinding
@@ -48,7 +48,6 @@ import mono.hg.helpers.LauncherIconHelper
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.GestureListener
 import mono.hg.models.App
-import mono.hg.models.PinnedApp
 import mono.hg.receivers.PackageChangesReceiver
 import mono.hg.utils.ActivityServiceUtils
 import mono.hg.utils.AppUtils
@@ -98,12 +97,12 @@ class LauncherActivity : AppCompatActivity() {
     /*
      * List containing pinned apps.
      */
-    private val pinnedAppList = ArrayList<PinnedApp?>()
+    private val pinnedAppList = ArrayList<App?>()
 
     /*
      * Adapter for pinned apps.
      */
-    private val pinnedAppsAdapter = FlexibleAdapter(pinnedAppList)
+    private val pinnedAppsAdapter = AppAdapter(pinnedAppList)
 
     /*
      * RecyclerView for pinned apps; shown in favourites panel.
@@ -231,7 +230,6 @@ class LauncherActivity : AppCompatActivity() {
         addSearchBarEditorListener()
         addGestureListener()
         addAdapterListener()
-        addListListeners()
         addPanelListener()
         registerForContextMenu(touchReceiver)
         PreferenceHelper.update("package_count", AppUtils.countInstalledPackage(packageManager))
@@ -560,7 +558,6 @@ class LauncherActivity : AppCompatActivity() {
         val packageName = app !!.packageName
         val componentName = ComponentName.unflattenFromString(packageName)
         val user = app.user
-        val pinApp = PinnedApp(app.packageName, app.user)
         val packageNameUri = Uri.fromParts(
             "package", AppUtils.getPackageName(packageName),
             null
@@ -636,12 +633,13 @@ class LauncherActivity : AppCompatActivity() {
                 }
                 R.id.action_uninstall -> AppUtils.uninstallApp(this, packageNameUri)
                 else ->                         // Catch click actions from the shortcut menu group.
-                    if (item.groupId == SHORTCUT_MENU_GROUP && Utils.sdkIsAround(25)) {
-                        userUtils !!.getUser(user)?.let {
-                            launcherApps?.startShortcut(
-                                AppUtils.getPackageName(packageName),
-                                shortcutMap[item.itemId],
-                                null, null, it
+                    if (item.groupId == SHORTCUT_MENU_GROUP) {
+                        userUtils?.getUser(user)?.let {
+                            AppUtils.launchShortcut(
+                                it,
+                                launcherApps,
+                                packageName,
+                                shortcutMap[item.itemId]
                             )
                         }
                     }
@@ -808,20 +806,7 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     /**
-     * Listeners for the app list.
-     */
-    private fun addListListeners() {
-        // Add item click action to the favourites panel.
-        pinnedAppsAdapter.addListener(FlexibleAdapter.OnItemClickListener { _, position ->
-            pinnedAppsAdapter.getItem(position)
-                ?.let { AppUtils.launchApp(this@LauncherActivity, it) }
-            true
-        })
-    }
-
-    /**
      * Listener for adapters.
-     * TODO: Maybe this can be moved to ListListener (or that can go here instead)?
      */
     private fun addAdapterListener() {
         pinnedAppsAdapter.addListener(object : OnItemMoveListener {
@@ -1006,7 +991,7 @@ class LauncherActivity : AppCompatActivity() {
      *
      * @param pinnedApp The PinnedApp object. Can be derived from an App object.
      */
-    fun isPinned(pinnedApp: PinnedApp): Boolean {
+    fun isPinned(pinnedApp: App): Boolean {
         return pinnedAppsAdapter.contains(pinnedApp)
     }
 
