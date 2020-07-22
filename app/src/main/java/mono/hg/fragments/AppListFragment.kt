@@ -66,11 +66,6 @@ class AppListFragment : GenericPageFragment() {
     private lateinit var appsRecyclerView: FastScrollRecyclerView
 
     /*
-     * Progress bar shown when populating app list.
-     */
-    private lateinit var loadProgress: IndeterminateMaterialProgressBar
-
-    /*
     * List of excluded apps. These will not be shown in the app list.
     */
     private val excludedAppsList = HashSet<String>()
@@ -148,7 +143,6 @@ class AppListFragment : GenericPageFragment() {
         }
         val itemDecoration = ItemOffsetDecoration(requireContext(), R.dimen.item_offset)
 
-        loadProgress = binding !!.loadProgress
         appsRecyclerView = binding !!.appsList.apply {
             isDrawingCacheEnabled = true
             drawingCacheQuality = View.DRAWING_CACHE_QUALITY_LOW
@@ -180,10 +174,9 @@ class AppListFragment : GenericPageFragment() {
 
         appsAdapter.addListener(FlexibleAdapter.OnUpdateListener { size ->
             if (size > 0 && ! appsAdapter.isEmpty) {
-                loadProgress.visibility = View.GONE
-                loadProgress.invalidate()
+                binding !!.loadProgress.hide()
             } else {
-                loadProgress.visibility = View.VISIBLE
+                binding !!.loadProgress.show()
             }
         })
 
@@ -369,7 +362,7 @@ class AppListFragment : GenericPageFragment() {
 
         // We want this fragment to receive the package change broadcast,
         // since otherwise it won't be notified when there are changes to that.
-        val filter = IntentFilter().apply {
+        IntentFilter().apply {
             addAction("mono.hg.PACKAGE_CHANGE_BROADCAST")
         }.also {
             requireActivity().registerReceiver(packageBroadcastReceiver, it)
