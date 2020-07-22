@@ -853,13 +853,7 @@ class LauncherActivity : AppCompatActivity() {
                 ) {
                     val app: App? = pinnedAppsAdapter.getItem(viewHolder !!.absoluteAdapterPosition)
 
-                    // Use LayoutManager method to get the view,
-                    // as RecyclerView will happily return null if it can.
-                    createAppMenu(
-                        pinnedAppsRecyclerView.layoutManager !!.findViewByPosition(
-                            viewHolder.absoluteAdapterPosition
-                        ), app
-                    )
+                    createAppMenu(viewHolder.itemView, app)
                 } else {
                     // Reset startTime and update the pinned apps, we were swiping.
                     startTime = 0

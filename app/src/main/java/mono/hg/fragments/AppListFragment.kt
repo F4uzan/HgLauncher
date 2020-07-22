@@ -174,11 +174,7 @@ class AppListFragment : GenericPageFragment() {
         appsAdapter.addListener(FlexibleAdapter.OnItemLongClickListener { position ->
             val app = appsAdapter.getItem(position)
 
-            // We need to rely on the LayoutManager here
-            // because app list is populated asynchronously,
-            // and will throw nulls if we try to directly ask RecyclerView for its child.
-            appsRecyclerView.layoutManager !!.findViewByPosition(position)
-                ?.let { createAppMenu(it, app) }
+            appsRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.let { createAppMenu(it, app) }
         })
 
         appsAdapter.addListener(FlexibleAdapter.OnUpdateListener { size ->
