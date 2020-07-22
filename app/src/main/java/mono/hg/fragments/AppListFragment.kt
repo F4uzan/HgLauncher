@@ -392,8 +392,7 @@ class AppListFragment : GenericPageFragment() {
     }
 
     private fun fetchApps() {
-        synchronized(appsList) {
-            fetchAppsTask?.cancel(true)
+        if (fetchAppsTask == null || fetchAppsTask?.status != AsyncTask.Status.RUNNING) {
             fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
             fetchAppsTask?.execute()
         }
