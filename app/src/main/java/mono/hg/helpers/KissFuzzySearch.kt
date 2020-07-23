@@ -49,14 +49,14 @@ object KissFuzzySearch {
             matchPositions.add(Pair.create(beginMatch, appPos))
         }
         if (queryPos == matchTo.length) {
-            // Add percentage of matched letters at a weight of 100
+            // Add percentage of matched letters
             relevance += (queryPos.toDouble() / source !!.length * 100).toInt()
 
-            // Add percentage of matched upper case letters (start of word), but at a weight of 60
-            relevance += (matchedWordStarts.toDouble() / totalWordStarts * 60).toInt()
+            // Add percentage of matched upper case letters (start of word)
+            relevance += (matchedWordStarts.toDouble() / totalWordStarts * 100).toInt()
 
             // The more fragmented the matches are, the less the result is important
-            relevance = (relevance * (0.1 + 0.6 * (1.0 / matchPositions.size))).toInt()
+            relevance = (relevance * (0.1 + 0.8 * matchPositions.size)).toInt()
         }
         return relevance
     }

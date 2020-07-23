@@ -19,7 +19,7 @@ import mono.hg.helpers.PreferenceHelper
  */
 class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     private var HINT_MATCH_SCORE = 30
-    private var NAME_MATCH_SCORE = 25
+    private var NAME_MATCH_SCORE = 22
     private var layoutType = 0
     var appName: String? = null
         private set
