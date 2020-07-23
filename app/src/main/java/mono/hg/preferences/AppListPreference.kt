@@ -19,13 +19,7 @@ import java.util.*
 @Keep
 class AppListPreference : PreferenceFragmentCompat() {
     val RestartingListListener = Preference.OnPreferenceChangeListener { _, _ ->
-        if (PreferenceHelper.preference.getString(
-                "icon_pack",
-                "default"
-            ) != PreferenceHelper.iconPackName
-        ) {
-            PreferenceHelper.update("require_refresh", true)
-        }
+        PreferenceHelper.update("require_refresh", true)
         true
     }
 

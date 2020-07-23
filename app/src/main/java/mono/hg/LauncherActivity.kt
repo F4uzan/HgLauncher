@@ -310,11 +310,6 @@ class LauncherActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
 
-        // See if user has changed icon pack. Clear cache if true.
-        if (PreferenceHelper.preference.getBoolean("require_refresh", false)) {
-            LauncherIconHelper.refreshIcons()
-        }
-
         // Refresh app list and pinned apps if there is a change in package count.
         if (AppUtils.hasNewPackage(packageManager)) {
             updatePinnedApps(true)
@@ -353,6 +348,12 @@ class LauncherActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
+
+        // See if user has changed icon pack. Clear cache if true.
+        if (PreferenceHelper.preference.getBoolean("require_refresh", false)) {
+            LauncherIconHelper.refreshIcons()
+            LauncherIconHelper.loadIconPack(packageManager)
+        }
 
         // Restart the launcher in case of an alien call.
         if (PreferenceHelper.wasAlien()) {

@@ -67,25 +67,25 @@ object BackupRestoreUtils {
             PreferenceHelper.editor?.clear()?.apply()
 
             val entries = it.readObject() as Map<String, *>
-            entries.forEach {
-                when (val v = it.value !!) {
+            entries.forEach { entry ->
+                when (val v = entry.value !!) {
                     is Boolean -> {
-                        PreferenceHelper.editor?.putBoolean(it.key, v)
+                        PreferenceHelper.editor?.putBoolean(entry.key, v)
                     }
                     is Float -> {
-                        PreferenceHelper.editor?.putFloat(it.key, v)
+                        PreferenceHelper.editor?.putFloat(entry.key, v)
                     }
                     is Int -> {
-                        PreferenceHelper.editor?.putInt(it.key, v)
+                        PreferenceHelper.editor?.putInt(entry.key, v)
                     }
                     is Long -> {
-                        PreferenceHelper.editor?.putLong(it.key, v)
+                        PreferenceHelper.editor?.putLong(entry.key, v)
                     }
                     is Set<*> -> {
-                        PreferenceHelper.editor?.putStringSet(it.key, v as Set<String?>)
+                        PreferenceHelper.editor?.putStringSet(entry.key, v as Set<String?>)
                     }
                     is String -> {
-                        PreferenceHelper.editor?.putString(it.key, v)
+                        PreferenceHelper.editor?.putString(entry.key, v)
                     }
                 }
                 PreferenceHelper.update("require_refresh", true)
@@ -93,7 +93,6 @@ object BackupRestoreUtils {
 
             // Fetch again.
             PreferenceHelper.editor?.apply()
-            PreferenceHelper.fetchPreference()
         }
     }
 

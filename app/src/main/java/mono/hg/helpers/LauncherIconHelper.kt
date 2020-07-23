@@ -36,16 +36,13 @@ import java.util.*
  * (https://stackoverflow.com/questions/24937890/using-icon-packs-in-my-app)
  */
 object LauncherIconHelper {
-    private val mPackagesDrawables = HashMap<String?, String?>()
-    private var iconPackageName = PreferenceHelper.preference
-        .getString("icon_pack", "default")
+    private var mPackagesDrawables = HashMap<String?, String?>()
 
     /**
      * Clears cached icon pack.
      */
     fun refreshIcons() {
-        iconPackageName = PreferenceHelper.preference.getString("icon_pack", "default")
-        mPackagesDrawables.clear()
+        mPackagesDrawables = HashMap()
     }
 
     /**
@@ -161,6 +158,7 @@ object LauncherIconHelper {
      */
     fun loadIconPack(packageManager: PackageManager): Int {
         var iconFilterXml: XmlPullParser? = null
+        val iconPackageName = PreferenceHelper.preference.getString("icon_pack", "default")
         val iconRes: Resources = try {
             if ("default" != iconPackageName) {
                 packageManager.getResourcesForApplication(iconPackageName !!)
@@ -260,6 +258,7 @@ object LauncherIconHelper {
     private fun getIconDrawable(activity: Activity, appPackageName: String, user: Long): Drawable? {
         val packageManager = activity.packageManager
         val componentName = "ComponentInfo{$appPackageName}"
+        val iconPackageName = PreferenceHelper.preference.getString("icon_pack", "default")
         var iconRes: Resources? = null
         var defaultIcon: Drawable? = null
         try {
