@@ -12,7 +12,6 @@ import eu.davidea.viewholders.FlexibleViewHolder
 import mono.hg.R
 import mono.hg.helpers.KissFuzzySearch
 import mono.hg.helpers.PreferenceHelper
-import mono.hg.utils.AppUtils
 
 /**
  * The app object. Holds information such as package name, shorthands, icons, and visibility state.
@@ -41,10 +40,9 @@ class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     }
 
     constructor(icon: Drawable, packageName: String, user: Long) {
-        this.layoutType = 1
+        this.layoutType = PINNED_APP_TYPE
         this.icon = icon
         this.packageName = packageName
-        this.userPackageName = AppUtils.appendUser(user, packageName)
     }
 
     constructor(packageName: String, user: Long) {

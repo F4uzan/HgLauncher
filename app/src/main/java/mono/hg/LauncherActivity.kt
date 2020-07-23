@@ -2,14 +2,12 @@ package mono.hg
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.text.Editable
 import android.util.SparseArray
 import android.view.ContextMenu
@@ -968,9 +966,15 @@ class LauncherActivity : AppCompatActivity() {
      * @param user The user eligible to launch the app.
      */
     fun pinAppHere(packageName: String, user: Long) {
-        AppUtils.pinApp(this, user, packageName, pinnedAppsAdapter, pinnedAppList)
-        pinnedAppString = "$pinnedAppString$packageName;"
-        PreferenceHelper.update("pinned_apps_list", pinnedAppString)
+        // We need to make sure that an app from another user can be pinned.
+        val userSplit = packageName.split("-".toRegex()).toTypedArray()
+        var componentName = packageName
+        if (userSplit.size == 2) {
+            componentName = userSplit[1]
+        }
+
+        AppUtils.pinApp(this, user, componentName, pinnedAppsAdapter, pinnedAppList)
+        updatePinnedApps(false)
     }
 
     /**

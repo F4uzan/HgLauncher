@@ -122,8 +122,16 @@ object AppUtils {
         activity: Activity, user: Long, componentName: String,
         adapter: AppAdapter, list: MutableList<App?>
     ) {
+        val userPackageName = if (user != UserUtils(activity).currentSerial) {
+            appendUser(user, componentName)
+        } else {
+            componentName
+        }
+
         val icon = LauncherIconHelper.getIcon(activity, componentName, user, false)
-        val app = icon?.let { App(it, componentName, user) }
+        val app = icon?.let { App(it, componentName, user) }.apply {
+            this?.userPackageName = userPackageName
+        }
         list.add(app)
         adapter.updateDataSet(list, false)
     }
