@@ -11,6 +11,9 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import mono.hg.R
 import mono.hg.utils.AppUtils
 import mono.hg.wrappers.AppSelectionPreferenceDialog
@@ -112,20 +115,22 @@ class GesturesPreference : PreferenceFragmentCompat() {
         // Fetch all available icon pack.
         val intent = Intent("mono.hg.GESTURE_HANDLER")
 
-        manager.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
-            .forEach {
-                with(it.activityInfo) {
-                    val className = this.name
-                    val packageName = this.packageName
-                    val componentName = "$packageName/$className"
-                    val appName = loadLabel(manager).toString()
-                    entries.add(appName)
-                    entryValues.add(componentName)
+        CoroutineScope(Dispatchers.Default).launch {
+            manager.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
+                .forEach {
+                    with(it.activityInfo) {
+                        val className = this.name
+                        val packageName = this.packageName
+                        val componentName = "$packageName/$className"
+                        val appName = loadLabel(manager).toString()
+                        entries.add(appName)
+                        entryValues.add(componentName)
+                    }
                 }
-            }
 
-        list?.entries = entries.toTypedArray<CharSequence>()
-        list?.entryValues = entryValues.toTypedArray<CharSequence>()
+            list?.entries = entries.toTypedArray<CharSequence>()
+            list?.entryValues = entryValues.toTypedArray<CharSequence>()
+        }
     }
 
     // Fetch apps and feed it into our list.

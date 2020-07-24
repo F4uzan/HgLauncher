@@ -12,13 +12,15 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import mono.hg.R
 import mono.hg.SettingsActivity
 import mono.hg.adapters.FileFolderAdapter
 import mono.hg.databinding.FragmentBackupRestoreBinding
 import mono.hg.models.FileFolder
 import mono.hg.utils.BackupRestoreUtils
-import mono.hg.utils.BackupRestoreUtils.RestoreBackupTask
 import mono.hg.wrappers.BackHandledFragment
 import java.io.File
 import java.util.*
@@ -94,10 +96,12 @@ class BackupRestoreFragment : BackHandledFragment() {
                 val possibleBackup =
                     "file://" + currentPath + File.separator + fileFoldersList[position].name
                 if (isInRestore && fileFoldersList[position].name.indexOf('.') > 0) {
-                    RestoreBackupTask(
-                        requireActivity() as SettingsActivity,
-                        possibleBackup
-                    ).execute()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        BackupRestoreUtils.restoreBackup(
+                            requireActivity() as SettingsActivity,
+                            possibleBackup
+                        )
+                    }
                 }
             }
         }

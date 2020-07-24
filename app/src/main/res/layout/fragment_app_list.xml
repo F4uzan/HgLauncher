@@ -5,13 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <mono.hg.views.IndeterminateMaterialProgressBar
-        android:id="@+id/load_progress"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:visibility="visible" />
+    <include layout="@layout/ui_load_progress" />
 
     <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
         android:id="@+id/apps_list"

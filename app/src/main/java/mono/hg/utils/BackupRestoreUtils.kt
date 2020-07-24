@@ -2,8 +2,9 @@ package mono.hg.utils
 
 import android.content.Context
 import android.net.Uri
-import android.os.AsyncTask
 import android.widget.Toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.SettingsActivity
 import mono.hg.helpers.PreferenceHelper
@@ -12,7 +13,6 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
-import java.lang.ref.WeakReference
 
 /**
  * Utils class that handles both backup and restore.
@@ -59,77 +59,49 @@ object BackupRestoreUtils {
      * the backup, and [PreferenceHelper.fetchPreference] will also be called
      * to clear the cached values.
      *
-     * @param uri The Uri representing the file itself.
-     */
-    fun restoreBackup(context: Context, uri: Uri) {
-        ObjectInputStream(context.contentResolver.openInputStream(uri)).use {
-            // We have to reset the leftover preferences to make sure they don't linger.
-            PreferenceHelper.editor?.clear()?.apply()
-
-            val entries = it.readObject() as Map<String, *>
-            entries.forEach { entry ->
-                when (val v = entry.value !!) {
-                    is Boolean -> {
-                        PreferenceHelper.editor?.putBoolean(entry.key, v)
-                    }
-                    is Float -> {
-                        PreferenceHelper.editor?.putFloat(entry.key, v)
-                    }
-                    is Int -> {
-                        PreferenceHelper.editor?.putInt(entry.key, v)
-                    }
-                    is Long -> {
-                        PreferenceHelper.editor?.putLong(entry.key, v)
-                    }
-                    is Set<*> -> {
-                        PreferenceHelper.editor?.putStringSet(entry.key, v as Set<String?>)
-                    }
-                    is String -> {
-                        PreferenceHelper.editor?.putString(entry.key, v)
-                    }
-                }
-                PreferenceHelper.update("require_refresh", true)
-            }
-
-            // Fetch again.
-            PreferenceHelper.editor?.apply()
-        }
-    }
-
-    /**
-     * An AsyncTask tied to [SettingsActivity], used to read a backup file (.xml)
-     * and attempts to restore it.
-     *
      * @param activity  The SettingsActivity itself.
      * @param path      Path to the backup file. This path will be parsed by [Uri.parse], therefore
      *                  it must be a valid Uri, prefixed by "file://".
      */
-    class RestoreBackupTask(activity: SettingsActivity, path: String?) :
-        AsyncTask<Void?, Void?, Void?>() {
-        private val fragmentRef: WeakReference<SettingsActivity> = WeakReference(activity)
-        private val uri: Uri = Uri.parse(path)
-        override fun onPreExecute() {
-            super.onPreExecute()
-            with(fragmentRef.get()) {
-                this?.progressBar?.show()
+    suspend fun restoreBackup(activity: SettingsActivity, path: String) {
+        val uri = Uri.parse(path)
+        activity.progressBar.show()
+        withContext(Dispatchers.IO) {
+            ObjectInputStream(activity.contentResolver.openInputStream(uri)).use {
+                // We have to reset the leftover preferences to make sure they don't linger.
+                PreferenceHelper.editor?.clear()?.apply()
+
+                val entries = it.readObject() as Map<String, *>
+                entries.forEach { entry ->
+                    when (val v = entry.value !!) {
+                        is Boolean -> {
+                            PreferenceHelper.editor?.putBoolean(entry.key, v)
+                        }
+                        is Float -> {
+                            PreferenceHelper.editor?.putFloat(entry.key, v)
+                        }
+                        is Int -> {
+                            PreferenceHelper.editor?.putInt(entry.key, v)
+                        }
+                        is Long -> {
+                            PreferenceHelper.editor?.putLong(entry.key, v)
+                        }
+                        is Set<*> -> {
+                            PreferenceHelper.editor?.putStringSet(entry.key, v as Set<String?>)
+                        }
+                        is String -> {
+                            PreferenceHelper.editor?.putString(entry.key, v)
+                        }
+                    }
+                    PreferenceHelper.update("require_refresh", true)
+                }
+
+                // Fetch again.
+                PreferenceHelper.editor?.apply()
             }
         }
-
-        override fun doInBackground(vararg params: Void?): Void? {
-            with(fragmentRef.get()) {
-                this?.let { restoreBackup(it, uri) }
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: Void?) {
-            super.onPostExecute(result)
-            with(fragmentRef.get()) {
-                this?.progressBar?.hide()
-                this?.let { ViewUtils.restartActivity(it, false) }
-                Toast.makeText(this, R.string.restore_complete, Toast.LENGTH_LONG).show()
-            }
-        }
-
+        activity.progressBar.hide()
+        ViewUtils.restartActivity(activity, false)
+        Toast.makeText(activity, R.string.restore_complete, Toast.LENGTH_LONG).show()
     }
 }

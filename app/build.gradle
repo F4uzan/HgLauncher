@@ -52,6 +52,8 @@ dependencies {
 
     // Kotlin libraries
     implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.8'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Android support libraries.

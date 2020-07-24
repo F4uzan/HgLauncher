@@ -14,13 +14,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import mono.hg.R
 import mono.hg.SettingsActivity
 import mono.hg.fragments.BackupRestoreFragment
 import mono.hg.fragments.CreditsDialogFragment
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.BackupRestoreUtils
-import mono.hg.utils.BackupRestoreUtils.RestoreBackupTask
 import mono.hg.utils.Utils
 import mono.hg.utils.ViewUtils
 import mono.hg.wrappers.SpinnerPreference
@@ -175,7 +177,12 @@ class BasePreference : PreferenceFragmentCompat() {
         if (resultCode == Activity.RESULT_OK && resultData != null) {
             uri = resultData.data
             if (requestCode == RESTORE_STORAGE_CODE) {
-                RestoreBackupTask(requireActivity() as SettingsActivity, uri.toString()).execute()
+                CoroutineScope(Dispatchers.Main).launch {
+                    BackupRestoreUtils.restoreBackup(
+                        requireActivity() as SettingsActivity,
+                        uri.toString()
+                    )
+                }
             } else if (requestCode == BACKUP_STORAGE_CODE) {
                 BackupRestoreUtils.saveBackup(requireActivity(), uri.toString())
             }

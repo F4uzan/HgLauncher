@@ -11,10 +11,15 @@ import android.widget.AdapterView
 import android.widget.ListView
 import androidx.annotation.Keep
 import androidx.preference.PreferenceFragmentCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.SettingsActivity
 import mono.hg.adapters.HiddenAppAdapter
 import mono.hg.databinding.FragmentHiddenAppsBinding
+import mono.hg.databinding.UiLoadProgressBinding
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.App
 import mono.hg.utils.AppUtils
@@ -26,6 +31,7 @@ import java.util.*
 @Keep
 class HiddenAppsPreference : PreferenceFragmentCompat() {
     private var binding: FragmentHiddenAppsBinding? = null
+    private var loaderBinding: UiLoadProgressBinding? = null
     private val appList = ArrayList<App>()
     private var hiddenAppAdapter: HiddenAppAdapter? = null
     private var excludedAppList = HashSet<String>()
@@ -41,6 +47,7 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHiddenAppsBinding.inflate(inflater, container, false)
+        loaderBinding = UiLoadProgressBinding.bind(binding !!.root)
         return binding !!.root
     }
 
@@ -102,13 +109,15 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     }
 
     private fun loadApps() {
-        // Clear the list to make sure that we aren't just adding over an existing list.
-        appList.clear()
-        hiddenAppAdapter?.notifyDataSetInvalidated()
-
-        // Fetch and add every app into our list,
-        appList.addAll(AppUtils.loadApps(requireActivity(), false))
-        hiddenAppAdapter?.notifyDataSetChanged()
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.Default) {
+                appList.clear()
+                appList.addAll(AppUtils.loadApps(requireActivity(), false))
+            }
+            hiddenAppAdapter?.notifyDataSetInvalidated()
+            hiddenAppAdapter?.notifyDataSetChanged()
+            loaderBinding !!.loader.hide()
+        }
     }
 
     private fun toggleHiddenState(position: Int) {

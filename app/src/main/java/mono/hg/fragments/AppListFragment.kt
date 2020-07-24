@@ -1,7 +1,6 @@
 package mono.hg.fragments
 
 import android.content.BroadcastReceiver
-import android.content.ComponentName
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -10,9 +9,7 @@ import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
-import android.provider.Settings
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.Menu
@@ -26,14 +23,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.adapters.AppAdapter
 import mono.hg.databinding.FragmentAppListBinding
 import mono.hg.databinding.LayoutRenameDialogBinding
+import mono.hg.databinding.UiLoadProgressBinding
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.SimpleScrollListener
 import mono.hg.models.App
-import mono.hg.tasks.FetchAppsTask
 import mono.hg.utils.AppUtils
 import mono.hg.utils.UserUtils
 import mono.hg.utils.Utils
@@ -90,8 +92,9 @@ class AppListFragment : GenericPageFragment() {
 
     private var launcherApps: LauncherApps? = null
     private var userUtils: UserUtils? = null
-    private var fetchAppsTask: FetchAppsTask? = null
+    private var fetchAppsJob: Job? = null
     private var binding: FragmentAppListBinding? = null
+    private var loaderBinding: UiLoadProgressBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,6 +102,7 @@ class AppListFragment : GenericPageFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAppListBinding.inflate(inflater, container, false)
+        loaderBinding = UiLoadProgressBinding.bind(binding !!.root)
 
         // Get a list of our hidden apps, default to null if there aren't any.
         excludedAppsList.addAll(PreferenceHelper.exclusionList)
@@ -109,9 +113,10 @@ class AppListFragment : GenericPageFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        if (fetchAppsTask != null && fetchAppsTask?.status == AsyncTask.Status.RUNNING) {
-            fetchAppsTask?.cancel(true)
-            fetchAppsTask = null
+        if (fetchAppsJob != null) {
+            CoroutineScope(Dispatchers.Default).launch {
+                fetchAppsJob?.cancel()
+            }
         }
 
         unregisterBroadcast()
@@ -171,9 +176,9 @@ class AppListFragment : GenericPageFragment() {
 
         appsAdapter.addListener(FlexibleAdapter.OnUpdateListener { size ->
             if (size > 0 && ! appsAdapter.isEmpty) {
-                binding !!.loadProgress.hide()
+                loaderBinding !!.loader.hide()
             } else {
-                binding !!.loadProgress.show()
+                loaderBinding !!.loader.show()
             }
         })
 
@@ -200,7 +205,16 @@ class AppListFragment : GenericPageFragment() {
         super.onStart()
 
         if (AppUtils.hasNewPackage(manager) || appsAdapter.isEmpty) {
-            fetchApps()
+            CoroutineScope(Dispatchers.Default).launch {
+                if (fetchAppsJob != null) {
+                    if (fetchAppsJob !!.isCompleted) {
+                        appsAdapter.finishedLoading(false)
+                        fetchApps()
+                    }
+                } else {
+                    fetchApps()
+                }
+            }
         }
 
         // Reset the app list filter.
@@ -329,13 +343,25 @@ class AppListFragment : GenericPageFragment() {
                 if (launchIntent != null) {
                     val hasLauncherCategory = launchIntent.hasCategory(Intent.CATEGORY_LAUNCHER)
 
-                    if (hasLauncherCategory) {
-                        fetchApps()
+                    if (hasLauncherCategory && appsAdapter.hasFinishedLoading()) {
+                        CoroutineScope(Dispatchers.Default).launch {
+                            if (fetchAppsJob !!.isCompleted) {
+                                appsAdapter.finishedLoading(false)
+                                fetchApps()
+                            }
+                        }
                     }
                 } else if (isRemoving) {
                     // Apps being uninstalled will have no launch intent,
                     // therefore it's better if we get the entire list again.
-                    fetchApps()
+                    if (appsAdapter.hasFinishedLoading()) {
+                        CoroutineScope(Dispatchers.Default).launch {
+                            if (fetchAppsJob !!.isCompleted) {
+                                appsAdapter.finishedLoading(false)
+                                fetchApps()
+                            }
+                        }
+                    }
                 }
 
                 // We should recount here, regardless of whether we update the list or not.
@@ -367,10 +393,18 @@ class AppListFragment : GenericPageFragment() {
         }
     }
 
-    private fun fetchApps() {
-        if (fetchAppsTask == null || fetchAppsTask?.status != AsyncTask.Status.RUNNING) {
-            fetchAppsTask = FetchAppsTask(requireActivity(), appsAdapter, appsList)
-            fetchAppsTask?.execute()
+    private suspend fun fetchApps() {
+        fetchAppsJob = CoroutineScope(Dispatchers.Default).launch {
+            withContext(Dispatchers.Main) {
+                appsAdapter.removeRange(0, appsList.size)
+            }
+            appsList.clear()
+            appsList.addAll(AppUtils.loadApps(requireActivity(), true))
+            withContext(Dispatchers.Main) {
+                appsAdapter.updateDataSet(appsList)
+            }
+            appsAdapter.recyclerView.setItemViewCacheSize(appsList.size)
+            appsAdapter.finishedLoading(true)
         }
     }
 
