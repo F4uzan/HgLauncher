@@ -350,7 +350,8 @@ object AppUtils {
      * (such as with older APIs without support for user profiles/multi-user),
      * [loadAppsLegacy] is called instead.
      *
-     * @param activity Current foreground activity.
+     * @param activity      Current foreground activity.
+     * @param hideHidden    Should hidden apps be hidden?
      *
      * @return List an App List containing the app list itself.
      */
@@ -381,7 +382,7 @@ object AppUtils {
                 } else {
                     componentName
                 }
-                val isHidden = (PreferenceHelper.exclusionList.contains(componentName)
+                val isHidden = (PreferenceHelper.exclusionList.contains(userPackageName)
                         || componentName.contains(BuildConfig.APPLICATION_ID))
                 if (! hideHidden || ! isHidden) {
                     val appName = activityInfo.label.toString()
