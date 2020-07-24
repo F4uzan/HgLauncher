@@ -320,9 +320,11 @@ class AppListFragment : GenericPageFragment() {
             override fun onReceive(context: Context, intent: Intent) {
                 val isRemoving =
                     intent.getStringExtra("action") == "android.intent.action.PACKAGE_REMOVED"
-                val launchIntent = requireActivity().packageManager.getLaunchIntentForPackage(
-                    intent.getStringExtra("package")
-                )
+                val launchIntent = intent.getStringExtra("package")?.let {
+                    requireActivity().packageManager.getLaunchIntentForPackage(
+                        it
+                    )
+                }
 
                 if (launchIntent != null) {
                     val hasLauncherCategory = launchIntent.hasCategory(Intent.CATEGORY_LAUNCHER)

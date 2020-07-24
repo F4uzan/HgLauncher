@@ -271,7 +271,11 @@ object LauncherIconHelper {
                     userManager.getUserForSerialNumber(user)
                 )[0].getBadgedIcon(0)
             } else {
-                packageManager.getActivityIcon(ComponentName.unflattenFromString(appPackageName))
+                ComponentName.unflattenFromString(appPackageName)?.let {
+                    packageManager.getActivityIcon(
+                        it
+                    )
+                }
             }
             iconRes = if ("default" != iconPackageName) {
                 packageManager.getResourcesForApplication(iconPackageName !!)

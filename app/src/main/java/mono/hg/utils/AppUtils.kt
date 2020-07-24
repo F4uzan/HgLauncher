@@ -42,7 +42,7 @@ object AppUtils {
      *
      * @return boolean True or false depending on the existence of the package.
      */
-    fun isAppInstalled(packageManager: PackageManager, packageName: String?): Boolean {
+    fun isAppInstalled(packageManager: PackageManager, packageName: String): Boolean {
         return try {
             // Get application info while handling exception spawning from it.
             packageManager.getApplicationInfo(packageName, 0)

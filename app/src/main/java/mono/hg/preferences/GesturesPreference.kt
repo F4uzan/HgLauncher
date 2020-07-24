@@ -86,10 +86,12 @@ class GesturesPreference : PreferenceFragmentCompat() {
                 }
             } else if (resultCode == Activity.RESULT_OK) {
                 val key = data.getStringExtra("key")
-                val app = AppUtils.getPackageLabel(
-                    requireActivity().packageManager,
-                    data.getStringExtra("app")
-                )
+                val app = data.getStringExtra("app")?.let {
+                    AppUtils.getPackageLabel(
+                        requireActivity().packageManager,
+                        it
+                    )
+                }
 
                 if (key != null) {
                     findPreference<ListPreference>(key)?.summary = app
