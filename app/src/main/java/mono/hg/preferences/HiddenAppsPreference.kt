@@ -47,7 +47,6 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHiddenAppsBinding.inflate(inflater, container, false)
-        loaderBinding = UiLoadProgressBinding.bind(binding !!.root)
         return binding !!.root
     }
 
@@ -110,13 +109,14 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
 
     private fun loadApps() {
         CoroutineScope(Dispatchers.Main).launch {
+            (requireActivity() as SettingsActivity).progressBar.show()
             withContext(Dispatchers.Default) {
                 appList.clear()
                 appList.addAll(AppUtils.loadApps(requireActivity(), false))
             }
             hiddenAppAdapter?.notifyDataSetInvalidated()
             hiddenAppAdapter?.notifyDataSetChanged()
-            loaderBinding !!.loader.hide()
+            (requireActivity() as SettingsActivity).progressBar.hide()
         }
     }
 
