@@ -219,7 +219,7 @@ object PreferenceHelper {
         map: Map<String, String>,
         set: HashSet<String>
     ) {
-        map.forEach { set.add("$it.key|$it.value") }
+        map.forEach { set.add("${it.key}|${it.value}") }
         update(pref_id, set)
     }
 

@@ -303,7 +303,7 @@ class AppListFragment : GenericPageFragment() {
                 }
                 R.id.action_info -> AppUtils.openAppDetails(requireActivity(), packageName, user)
                 R.id.action_uninstall -> AppUtils.uninstallApp(requireActivity(), packageNameUri)
-                R.id.action_shorthand -> makeRenameDialog(app.userPackageName, position)
+                R.id.action_shorthand -> buildShorthandDialog(position)
                 R.id.action_hide -> {
                     // Add the app's package name to the exclusion list.
                     excludedAppsList.add(app.userPackageName)
@@ -410,15 +410,14 @@ class AppListFragment : GenericPageFragment() {
 
     /**
      * Creates a dialog to set an app's shorthand.
-     *
-     * @param packageName The package name of the app.
      * @param position    Adapter position of the app.
      */
-    private fun makeRenameDialog(packageName: String, position: Int) {
+    private fun buildShorthandDialog(position: Int) {
         val binding = LayoutRenameDialogBinding.inflate(layoutInflater)
+        val packageName = appsAdapter.getItem(position)?.packageName
         val renameField = binding.renameField.apply {
             ViewCompat.setBackgroundTintList(this, ColorStateList.valueOf(PreferenceHelper.accent))
-            hint = PreferenceHelper.getLabel(packageName)
+            hint = packageName?.let { PreferenceHelper.getLabel(it) }
         }
 
         with(AlertDialog.Builder(requireContext())) {
@@ -432,7 +431,7 @@ class AppListFragment : GenericPageFragment() {
                     .trim { it <= ' ' }
 
                 // Unset shorthand if it is empty.
-                PreferenceHelper.updateLabel(packageName, newLabel, newLabel.isEmpty())
+                packageName?.let { PreferenceHelper.updateLabel(it, newLabel, newLabel.isEmpty()) }
 
                 // Update the specified item.
                 appsAdapter.getItem(position).apply {
