@@ -14,10 +14,12 @@ import mono.hg.helpers.PreferenceHelper
  */
 class IndeterminateMaterialProgressBar(context: Context, attrs: AttributeSet?) :
     ProgressBar(context, attrs) {
-    companion object {
-        private const val WIDTH_DP = 4
-    }
 
+    /**
+     * Hides and invalidates this [IndeterminateMaterialProgressBar] if it's visibility
+     * is not [View.GONE]. Calls [View.invalidate], as such it is best if
+     * the ProgressBar is not recalled again once hidden.
+     */
     fun hide() {
         if (visibility != View.GONE) {
             this.visibility = View.GONE
@@ -25,6 +27,9 @@ class IndeterminateMaterialProgressBar(context: Context, attrs: AttributeSet?) :
         }
     }
 
+    /**
+     * Show this [IndeterminateMaterialProgressBar] if it's not already visible.
+     */
     fun show() {
         if (visibility != View.VISIBLE) {
             this.visibility = View.VISIBLE
@@ -32,13 +37,16 @@ class IndeterminateMaterialProgressBar(context: Context, attrs: AttributeSet?) :
     }
 
     init {
-        val metrics = resources.displayMetrics
-        metrics.density.let {
-            val drawable = CircularProgressDrawable(context).apply {
+        resources.displayMetrics.density.let {
+            CircularProgressDrawable(context).apply {
                 setColorSchemeColors(PreferenceHelper.accent)
                 strokeWidth = WIDTH_DP * it
                 indeterminateDrawable = this
             }
         }
+    }
+
+    companion object {
+        private const val WIDTH_DP = 4
     }
 }

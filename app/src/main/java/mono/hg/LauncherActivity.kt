@@ -95,7 +95,7 @@ class LauncherActivity : AppCompatActivity() {
     /*
      * List containing pinned apps.
      */
-    private val pinnedAppList = ArrayList<App?>()
+    private val pinnedAppList = ArrayList<App>()
 
     /*
      * Adapter for pinned apps.
@@ -553,8 +553,8 @@ class LauncherActivity : AppCompatActivity() {
      * @param view     View for the PopupMenu to anchor to.
      * @param app      App object selected from the list.
      */
-    private fun createAppMenu(view: View?, app: App?) {
-        val packageName = app !!.packageName
+    private fun createAppMenu(view: View?, app: App) {
+        val packageName = app.packageName
         val user = app.user
         val packageNameUri = Uri.fromParts(
             "package", AppUtils.getPackageName(packageName),
@@ -746,20 +746,22 @@ class LauncherActivity : AppCompatActivity() {
                             }
                             searchSnack.dismiss()
                         } else {
-                            appMenu = PopupMenu(this@LauncherActivity, it)
-                            ViewUtils.createSearchMenu(
-                                this@LauncherActivity, appMenu !!,
-                                URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name())
-                            )
+                            appMenu = PopupMenu(this@LauncherActivity, it).apply {
+                                ViewUtils.createSearchMenu(
+                                    this@LauncherActivity, this,
+                                    URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name())
+                                )
+                            }
                         }
                     }).show()
                     if (PreferenceHelper.extendedSearchMenu() && PreferenceHelper.searchProvider != "none") {
                         searchSnack.setLongPressAction(View.OnLongClickListener {
-                            appMenu = PopupMenu(this@LauncherActivity, it)
-                            ViewUtils.createSearchMenu(
-                                this@LauncherActivity, appMenu !!,
-                                URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name())
-                            )
+                            appMenu = PopupMenu(this@LauncherActivity, it).apply {
+                                ViewUtils.createSearchMenu(
+                                    this@LauncherActivity, this,
+                                    URLEncoder.encode(trimmedInputText, Charsets.UTF_8.name())
+                                )
+                            }
                             true
                         })
                     }
@@ -824,7 +826,7 @@ class LauncherActivity : AppCompatActivity() {
                 ) {
                     val app: App? = pinnedAppsAdapter.getItem(viewHolder !!.absoluteAdapterPosition)
 
-                    createAppMenu(viewHolder.itemView, app)
+                    app?.let { createAppMenu(viewHolder.itemView, it) }
                 } else {
                     // Reset startTime and update the pinned apps, we were swiping.
                     startTime = 0
@@ -942,7 +944,7 @@ class LauncherActivity : AppCompatActivity() {
 
         // Iterate through the list to get package name of each pinned apps, then stringify them.
         pinnedAppList.forEach {
-            newAppString = newAppString + it?.userPackageName + ";"
+            newAppString = newAppString + it.userPackageName + ";"
         }
 
         // Update the saved pinned apps.

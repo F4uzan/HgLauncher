@@ -147,10 +147,11 @@ open class DagashiBar private constructor(
     @SuppressLint("RestrictedApi")
     fun setLongPressAction(listener: OnLongClickListener) {
         val contentLayout = view.getChildAt(0) as SnackbarContentLayout
-        val tv: TextView = contentLayout.actionView
-        tv.setOnLongClickListener { view ->
-            listener.onLongClick(view)
-            true
+        contentLayout.actionView.apply {
+            setOnLongClickListener {
+                listener.onLongClick(this)
+                true
+            }
         }
     }
 
@@ -198,14 +199,14 @@ open class DagashiBar private constructor(
         /**
          * Make a DagashiBar to display a message
          *
-         * @param view      The view to find a parent from.
-         * @param text      The text to show. Can be formatted text.
-         * @param duration  How long to display the message. Can be [.LENGTH_SHORT], [                  ][.LENGTH_LONG], [.LENGTH_INDEFINITE], or a custom duration in milliseconds.
-         * @param swipeable Whether swipe-to-dismiss is allowed.
+         * @param view          The view to find a parent from.
+         * @param text          The text to show. Can be formatted text.
+         * @param duration      How long to display the message. Can be [.LENGTH_SHORT], [.LENGTH_LONG], [.LENGTH_INDEFINITE], or a custom duration in milliseconds.
+         * @param allowSwipe    Whether swipe-to-dismiss is allowed.
          */
         @SuppressLint("PrivateResource")
         fun make(
-            view: View, text: CharSequence, @Duration duration: Int, swipeable: Boolean
+            view: View, text: CharSequence, @Duration duration: Int, allowSwipe: Boolean
         ): DagashiBar {
             val parent = findSuitableParent(view)
                 ?: throw IllegalArgumentException(
@@ -217,13 +218,15 @@ open class DagashiBar private constructor(
                 parent,
                 false
             ) as SnackbarContentLayout
-            val snackbar = DagashiBar(parent, content, content)
-            snackbar.setText(text)
-            snackbar.duration = duration
-            if (! swipeable) {
-                snackbar.setSwipeDisabled()
+            with(DagashiBar(parent, content, content)) {
+                setText(text)
+                this.duration = duration
+                if (! allowSwipe) {
+                    setSwipeDisabled()
+                }
+
+                return this
             }
-            return snackbar
         }
 
         /**

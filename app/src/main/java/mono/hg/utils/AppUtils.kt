@@ -120,7 +120,7 @@ object AppUtils {
      */
     fun pinApp(
         activity: Activity, user: Long, componentName: String,
-        adapter: AppAdapter, list: MutableList<App?>
+        adapter: AppAdapter, list: MutableList<App>
     ) {
         val userPackageName = if (user != UserUtils(activity).currentSerial) {
             appendUser(user, componentName)
@@ -132,8 +132,10 @@ object AppUtils {
         val app = icon?.let { App(it, componentName, user) }.apply {
             this?.userPackageName = userPackageName
         }
-        list.add(app)
-        adapter.updateDataSet(list, false)
+        app?.let {
+            list.add(it)
+            adapter.updateDataSet(list, false)
+        }
     }
 
     /**
@@ -366,7 +368,6 @@ object AppUtils {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun loadAppsWithUser(activity: Activity, hideHidden: Boolean): List<App> {
         val appsList: MutableList<App> = ArrayList()
-        val manager = activity.packageManager
         val userUtils = UserUtils(activity)
         val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
         val launcher = activity.getSystemService(

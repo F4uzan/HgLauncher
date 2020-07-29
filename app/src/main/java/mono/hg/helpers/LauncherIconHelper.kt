@@ -62,24 +62,20 @@ object LauncherIconHelper {
         user: Long,
         shouldHide: Boolean
     ): Drawable? {
-        var icon: Drawable? = null
-        if (! shouldHide) {
-            icon = getIconDrawable(activity, componentName, user)
-            if (PreferenceHelper.appTheme() == "light" && PreferenceHelper.shadeAdaptiveIcon()
-                && (Utils.atLeastOreo()
-                        && icon is AdaptiveIconDrawable)
-            ) {
+        return if (! shouldHide) {
+            var icon = getIconDrawable(activity, componentName, user)
+            if (PreferenceHelper.shadeAdaptiveIcon() &&
+                (Utils.atLeastOreo() && icon is AdaptiveIconDrawable)) {
                 icon = drawAdaptiveShadow(activity.resources, icon)
             }
+            icon
+        } else {
+            null
         }
-        return icon
     }
 
     private fun drawAdaptiveShadow(resources: Resources, icon: Drawable): BitmapDrawable {
-        return BitmapDrawable(
-            resources,
-            addShadow(icon, icon.intrinsicHeight, icon.intrinsicWidth, 4, 1f, 3f)
-        )
+        return BitmapDrawable(resources, addShadow(icon, icon.intrinsicHeight, icon.intrinsicWidth))
     }
 
     /**
@@ -88,25 +84,15 @@ object LauncherIconHelper {
      * TODO: Make this return Drawable for our use case.
      *
      * @param drawable  Drawable that should be used as the foreground layer
-     * of the shadow.
+     *                  of the shadow
      * @param dstHeight Height of the returned bitmap.
      * @param dstWidth  Width of the returned bitmap.
-     * @param size      Size of the drawn shadow.
-     * @param dx        Shadow x direction.
-     * @param dy        Shadow y direction.
      *
      * @return Bitmap with resulting shadow.
      *
      * @author schwiz (https://stackoverflow.com/a/24579764)
      */
-    private fun addShadow(
-        drawable: Drawable,
-        dstHeight: Int,
-        dstWidth: Int,
-        size: Int,
-        dx: Float,
-        dy: Float
-    ): Bitmap {
+    private fun addShadow(drawable: Drawable, dstHeight: Int, dstWidth: Int): Bitmap {
         val bm = Bitmap.createBitmap(
             drawable.intrinsicWidth,
             drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
@@ -117,15 +103,15 @@ object LauncherIconHelper {
         }
         val mask = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ALPHA_8)
         val src = RectF(0F, 0F, bm.width.toFloat(), bm.height.toFloat())
-        val dst = RectF(0F, 0F, dstWidth - dx, dstHeight - dy)
+        val dst = RectF(0F, 0F, dstWidth - 1F, dstHeight - 3F)
         val scaleToFit = Matrix().apply {
             setRectToRect(src, dst, Matrix.ScaleToFit.FILL)
         }
         val maskCanvas = Canvas(mask)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        val filter = BlurMaskFilter(size.toFloat(), BlurMaskFilter.Blur.SOLID)
+        val filter = BlurMaskFilter(4.toFloat(), BlurMaskFilter.Blur.SOLID)
         val dropShadow = Matrix(scaleToFit).apply {
-            postTranslate(dx, dy)
+            postTranslate(1F, 3F)
         }
 
         with(paint) {
@@ -141,7 +127,7 @@ object LauncherIconHelper {
 
         Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888).apply {
             with(Canvas(this)) {
-                drawBitmap(mask, 0f, 0f, paint)
+                drawBitmap(mask, 0F, 0F, paint)
                 drawBitmap(bm, scaleToFit, null)
             }
             mask.recycle()
@@ -236,13 +222,13 @@ object LauncherIconHelper {
      * @return null if there is no such icon associated with the name of the requested drawable.
      */
     private fun loadDrawable(
-        resources: Resources,
+        resources: Resources?,
         drawableName: String,
-        iconPackageName: String?
+        iconPackageName: String
     ): Drawable? {
-        val icon = resources.getIdentifier(drawableName, "drawable", iconPackageName)
+        val icon: Int = resources?.getIdentifier(drawableName, "drawable", iconPackageName) ?: 0
         return if (icon > 0) {
-            ResourcesCompat.getDrawable(resources, icon, null)
+            resources?.let { ResourcesCompat.getDrawable(it, icon, null) }
         } else null
     }
 
@@ -258,8 +244,8 @@ object LauncherIconHelper {
     private fun getIconDrawable(activity: Activity, appPackageName: String, user: Long): Drawable? {
         val packageManager = activity.packageManager
         val componentName = "ComponentInfo{$appPackageName}"
-        val iconPackageName = PreferenceHelper.preference.getString("icon_pack", "default")
-        var iconRes: Resources? = null
+        val iconPackageName = PreferenceHelper.preference.getString("icon_pack", "default") ?: "default"
+        var iconRes: Resources ?= null
         var defaultIcon: Drawable? = null
         try {
             defaultIcon = if (Utils.atLeastLollipop()) {
@@ -278,7 +264,7 @@ object LauncherIconHelper {
                 }
             }
             iconRes = if ("default" != iconPackageName) {
-                packageManager.getResourcesForApplication(iconPackageName !!)
+                packageManager.getResourcesForApplication(iconPackageName)
             } else {
                 return defaultIcon
             }
@@ -287,10 +273,6 @@ object LauncherIconHelper {
         }
 
         val drawable = mPackagesDrawables[componentName]
-        return if (drawable != null && iconRes != null) {
-            loadDrawable(iconRes, drawable, iconPackageName)
-        } else {
-            defaultIcon
-        }
+        return drawable?.let { loadDrawable(iconRes, it, iconPackageName) } ?: defaultIcon
     }
 }
