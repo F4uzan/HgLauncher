@@ -60,6 +60,8 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
 
         toolbar = binding.toolbar
         progressBar = binding.progressBar.apply {
+            indicatorColors = IntArray(1) { PreferenceHelper.darkerAccent }
+            trackColor = PreferenceHelper.accent
             hide()
         }
 
