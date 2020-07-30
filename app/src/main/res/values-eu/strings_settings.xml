@@ -31,7 +31,7 @@
     <string name="reset_preference">Konfigurazioa berrezarri</string>
     <string name="reset_preference_desc">Oraingo konfigurazioa eta lehenetsiak berrezarri.</string>
     <string name="reset_preference_warn">Aurrera egiteak zure konfigurazio guztia berrezarriko du. Behin eginda, ezingo duzu ekintza hau desegin!</string>
-    <string name="reset_preference_positive">Ulertuta</string>
+    <string name="dialog_ok">Ulertuta</string>
     <string name="reset_preference_toast">Konfigurazioa berrezarri da.</string>
 
     <!-- Web search provider -->
@@ -48,7 +48,7 @@
     <!-- Dialog and toast messages -->
     <string name="backup_exist">Babes-kopiaren izen berdina duen fitxategia bat existitzen da dagoeneko.</string>
     <string name="backup_exist_overwrite">Gainidatzi</string>
-    <string name="backup_exist_cancel">Utzi</string>
+    <string name="dialog_cancel">Utzi</string>
     <string name="backup_restore_dialog">Berrezartzen…</string>
     <string name="restore_complete">Berrezartzea osatu da!</string>
     <string name="backup_complete">Babes-kopia gorde da!</string>
@@ -80,7 +80,6 @@
 
     <string name="gesture_handler">Keinuen maneiatzailea</string>
     <string name="gesture_handler_default">Bat ere ez</string>
-    <string name="gesture_handler_default_value">none</string>
 
     <string name="gesture_action_default">Bat ere ez</string>
     <string name="gesture_action_widget">Widgeten tokia ireki</string>

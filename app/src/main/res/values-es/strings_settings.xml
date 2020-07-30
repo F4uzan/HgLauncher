@@ -28,7 +28,7 @@
     <string name="reset_preference">Restablecer la configuración</string>
     <string name="reset_preference_desc">Restablece la configuración actual y restituye los valores predeterminados.</string>
     <string name="reset_preference_warn">Hacer esto restituirá toda tu configuración. Una vez hecho, no podrás deshacer la operación!</string>
-    <string name="reset_preference_positive">Entendido</string>
+    <string name="dialog_ok">Entendido</string>
     <string name="reset_preference_toast">Configuration has been reset.</string>
     <!-- Web search provider -->
     <string name="pref_header_web_provider_title">Buscadores web</string>
@@ -42,7 +42,7 @@
     <!-- Dialog and toast messages -->
     <string name="backup_exist">Ya existe un archivo con el mismo nombre.</string>
     <string name="backup_exist_overwrite">Sobrescribir</string>
-    <string name="backup_exist_cancel">Cancelar</string>
+    <string name="dialog_cancel">Cancelar</string>
     <string name="backup_restore_dialog">Restituyendo…</string>
     <string name="restore_complete">Restitución completada!</string>
     <string name="backup_complete">Copia de seguridad guardada!</string>
@@ -69,7 +69,6 @@
     <string name="gesture_double_tap">Doble pulsación</string>
     <string name="gesture_handler">Controlador de gestos</string>
     <string name="gesture_handler_default">Ninguno</string>
-    <string name="gesture_handler_default_value">none</string>
     <string name="gesture_action_default">Ninguna</string>
     <string name="gesture_action_widget">Abrir el espacio de los widgets</string>
     <string name="gesture_action_handler">Usar la acción del controlador de gestos</string>

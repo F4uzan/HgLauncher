@@ -56,7 +56,6 @@
     <string name="gesture_action_list">Ouvrir la liste des applis</string>
     <string name="gesture_action_status">Élargir la barre de notification</string>
     <string name="gesture_action_default">Aucun</string>
-    <string name="gesture_handler_default_value">aucun</string>
     <string name="gesture_handler_default">Aucun</string>
     <string name="gesture_double_tap">Double-tapez</string>
     <string name="gesture_single_tap">Tapez</string>
@@ -81,14 +80,14 @@
     <string name="backup_complete">Sauvegarde enregistrée.</string>
     <string name="restore_complete">Sauvegarde restaurée.</string>
     <string name="backup_restore_dialog">Restauration…</string>
-    <string name="backup_exist_cancel">Annuler</string>
+    <string name="dialog_cancel">Annuler</string>
     <string name="backup_exist_overwrite">Écraser</string>
     <string name="web_provider_name_hint">Nom (doit être unique)</string>
     <string name="pref_header_web_provider_short">Moteurs de recherche</string>
     <string name="pref_header_web_provider_desc">Ajouter ou retirer des moteurs de recherche</string>
     <string name="pref_header_web_provider_title">Moteur de recherche web</string>
     <string name="reset_preference_toast">Configuration réinitialisée.</string>
-    <string name="reset_preference_positive">OK</string>
+    <string name="dialog_ok">OK</string>
     <string name="reset_preference_desc">Réinitialiser tous les paramètres par défaut</string>
     <string name="reset_preference">Réinitialiser la configuration</string>
     <string name="pref_header_restore_desc">Restaurer une configuration enregistrée</string>

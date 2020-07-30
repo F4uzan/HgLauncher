@@ -118,8 +118,8 @@ class BasePreference : PreferenceFragmentCompat() {
             with(AlertDialog.Builder(requireContext())) {
                 setTitle(getString(R.string.reset_preference))
                 setMessage(getString(R.string.reset_preference_warn))
-                setNegativeButton(getString(android.R.string.cancel), null)
-                setPositiveButton(R.string.reset_preference_positive) { _, _ ->
+                setNegativeButton(getString(R.string.dialog_cancel), null)
+                setPositiveButton(R.string.dialog_ok) { _, _ ->
                     // We have to reset the leftover preferences to make sure they don't linger.
                     PreferenceHelper.editor?.clear()?.apply()
                     PreferenceHelper.fetchPreference()

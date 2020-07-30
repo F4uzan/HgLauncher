@@ -8,7 +8,7 @@
     <string name="pref_header_web_provider_desc">Добавить или убрать поисковики</string>
     <string name="pref_header_web_provider_title">Поисковики</string>
     <string name="reset_preference_toast">Сброс настроек.</string>
-    <string name="reset_preference_positive">ОК</string>
+    <string name="dialog_ok">ОК</string>
     <string name="reset_preference_warn">Это навсегда сбросит ваши настройки.</string>
     <string name="reset_preference_desc">Сбросить все настройки на изначальные</string>
     <string name="reset_preference">Сбросить настройки</string>

@@ -143,7 +143,7 @@ class BackupRestoreFragment : BackHandledFragment() {
                         with(AlertDialog.Builder(requireActivity())) {
                             setTitle(getString(R.string.pref_header_backup))
                             setMessage(getString(R.string.backup_exist))
-                            setNegativeButton(getString(R.string.backup_exist_cancel), null)
+                            setNegativeButton(getString(R.string.dialog_cancel), null)
                             setPositiveButton(getString(R.string.backup_exist_overwrite)) { _, _ ->
                                 BackupRestoreUtils.saveBackup(requireActivity(), backupPath)
                                 traverseStorage(currentPath)

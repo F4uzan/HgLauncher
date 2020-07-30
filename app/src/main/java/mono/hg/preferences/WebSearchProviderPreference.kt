@@ -145,8 +145,8 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
                 providerAdapter?.notifyDataSetChanged()
                 PreferenceHelper.updateProvider(providerList)
             }
-            setNegativeButton(android.R.string.cancel, null)
-            setPositiveButton(android.R.string.ok) { _, _ ->
+            setNegativeButton(R.string.dialog_cancel, null)
+            setPositiveButton(R.string.dialog_ok) { _, _ ->
                 val name =
                     nameField.text.toString().replace("\\|".toRegex(), "").trim { it <= ' ' }
                 val url = urlField.text.toString().trim { it <= ' ' }

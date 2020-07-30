@@ -23,7 +23,7 @@
     <string name="reset_preference">Resetta la configurazione</string>
     <string name="reset_preference_desc">Resetta la configurazione corrente e ripristina la configurazione di base</string>
     <string name="reset_preference_warn">La procedura ripristinerà l\'intera configurazione. Se procedi, non potrai annullare l\'operazione!</string>
-    <string name="reset_preference_positive">Ho capito</string>
+    <string name="dialog_ok">Ho capito</string>
     <string name="reset_preference_toast">La configurazione è stata ripristinata.</string>
     <string name="pref_header_web_provider_title">Provider di ricerca Web</string>
     <string name="pref_header_web_provider_desc">Aggiungi o rimuovi i provider di ricerca web</string>
@@ -34,7 +34,7 @@
     <string name="version_key_name">HgLauncher (modalità test)</string>
     <string name="backup_exist">Esiste già un file di backup con questo nome.</string>
     <string name="backup_exist_overwrite">Sovrascrivi</string>
-    <string name="backup_exist_cancel">Cancella</string>
+    <string name="dialog_cancel">Cancella</string>
     <string name="backup_restore_dialog">Ripristino…</string>
     <string name="restore_complete">Il backup è stato ripristinato.</string>
     <string name="backup_complete">Il backup è stato salvato.</string>

@@ -23,15 +23,17 @@ class ThemeableListPreference(context: Context?, attrs: AttributeSet?) :
                 }
                 it.dismiss()
             }
-            setNegativeButton(android.R.string.cancel) { it, _ ->
+            setNegativeButton(R.string.dialog_cancel) { it, _ ->
                 it.dismiss()
             }
 
             create().apply {
                 show()
-                getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(PreferenceHelper.darkAccent)
-                getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
-                getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+                with(PreferenceHelper.darkAccent) {
+                    getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(this)
+                    getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(this)
+                    getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(this)
+                }
             }
         }
     }

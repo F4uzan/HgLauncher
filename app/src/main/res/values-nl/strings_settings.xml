@@ -18,7 +18,6 @@
     <string name="gesture_action_handler">Handeling van gebarenhandvat gebruiken</string>
     <string name="gesture_action_widget">Widgetscherm openen</string>
     <string name="gesture_action_default">Geen</string>
-    <string name="gesture_handler_default_value">geen</string>
     <string name="gesture_handler_default">Geen</string>
     <string name="gesture_handler">Gebarenhandvat</string>
     <string name="gesture_double_tap">Tweemaal drukken</string>
@@ -45,7 +44,7 @@
     <string name="backup_complete">De back-up is opgeslagen.</string>
     <string name="restore_complete">De back-up is hersteld.</string>
     <string name="backup_restore_dialog">Bezig met herstellen…</string>
-    <string name="backup_exist_cancel">Annuleren</string>
+    <string name="dialog_cancel">Annuleren</string>
     <string name="backup_exist_overwrite">Overschrijven</string>
     <string name="backup_exist">Er is al een back-up met deze naam.</string>
     <string name="version_key_name">HgLauncher (test)</string>
@@ -56,7 +55,7 @@
     <string name="pref_header_web_provider_desc">Zoekmachines toevoegen/verwijderen</string>
     <string name="pref_header_web_provider_title">Zoekmachines</string>
     <string name="reset_preference_toast">Hersteld.</string>
-    <string name="reset_preference_positive">Oké</string>
+    <string name="dialog_ok">Oké</string>
     <string name="reset_preference_warn">Dit herstelt al je instellingen permanent.</string>
     <string name="reset_preference_desc">Herstel alle instellingen</string>
     <string name="reset_preference">Standaardwaarden herstellen</string>

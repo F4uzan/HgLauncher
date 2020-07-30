@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="reset_preference">Tilbakestill oppsett</string>
-    <string name="reset_preference_positive">OK</string>
+    <string name="dialog_ok">OK</string>
     <string name="app_list_keep_search">Behold søketekst</string>
     <string name="pref_header_web_provider_title">Vevsøkemotorer</string>
-    <string name="gesture_handler_default_value">ingen</string>
     <string name="windowbar_mode_nav">Navigasjonsstolpe</string>
     <string name="pref_search_provider">Forvalgt vevsøkemotor</string>
     <string name="gesture_handler">Håndvendingshåndterer</string>
@@ -19,7 +18,7 @@
     <string name="web_search_long_press_desc">Med mindre \'Alltid spør\' er valg, vil det å trykke \'Søk\' lenge tillate valg av vevsøkemotor</string>
     <string name="static_favourites_desc">Behold favorittpanel synlig under rulling</string>
     <string name="pref_shade_view_desc">Synlig skygge på toppen og bunnen av bakgrunnen</string>
-    <string name="backup_exist_cancel">Avbryt</string>
+    <string name="dialog_cancel">Avbryt</string>
     <string name="icon_pack">Ikoner</string>
     <string name="gesture_down">Dra ↓</string>
     <string name="pref_header_gestures">Håndvendinger</string>

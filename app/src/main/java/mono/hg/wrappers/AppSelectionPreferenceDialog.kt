@@ -40,9 +40,11 @@ class AppSelectionPreferenceDialog : DialogFragment() {
     override fun onStart() {
         super.onStart()
         (dialog as AlertDialog).apply {
-            getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(PreferenceHelper.darkAccent)
-            getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
-            getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+            with(PreferenceHelper.darkAccent) {
+                getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(this)
+                getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(this)
+                getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(this)
+            }
         }
 
     }
@@ -61,7 +63,7 @@ class AppSelectionPreferenceDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         with(AlertDialog.Builder(requireActivity(), R.style.PreferenceList_NoRadio)) {
-            setNegativeButton(android.R.string.cancel, null)
+            setNegativeButton(R.string.dialog_cancel, null)
             setTitle(R.string.gesture_action_app_dialog_title)
             setSingleChoiceItems(mEntries, mClickedDialogEntryIndex, selectItemListener)
             return create()

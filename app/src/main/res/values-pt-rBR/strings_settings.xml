@@ -24,7 +24,7 @@
     <string name="reset_preference">Redefinir configuração</string>
     <string name="reset_preference_desc">Redefinir todas as configurações para os padrões</string>
     <string name="reset_preference_warn">Isso redefine sua configuração inteira permanentemente.</string>
-    <string name="reset_preference_positive">OK</string>
+    <string name="dialog_ok">OK</string>
     <string name="reset_preference_toast">Redefinição de configuração.</string>
     <string name="pref_header_web_provider_title">Motor de busca na Internet</string>
     <string name="pref_header_web_provider_desc">Adicionar ou remover mecanismos de busca na internet</string>
@@ -35,7 +35,7 @@
     <string name="version_key_name">HgLauncher (testando)</string>
     <string name="backup_exist">Este nome de arquivo de backup já existe.</string>
     <string name="backup_exist_overwrite">Substituir</string>
-    <string name="backup_exist_cancel">Cancelar</string>
+    <string name="dialog_cancel">Cancelar</string>
     <string name="backup_restore_dialog">Restaurando…</string>
     <string name="restore_complete">Backup restaurado.</string>
     <string name="backup_complete">Backup salvo.</string>
@@ -62,7 +62,6 @@
     <string name="gesture_double_tap">Toque duplo</string>
     <string name="gesture_handler">Controlador de gestos</string>
     <string name="gesture_handler_default">Nenhum</string>
-    <string name="gesture_handler_default_value">Nenhum</string>
     <string name="gesture_action_default">Nenhum</string>
     <string name="gesture_action_widget">Espaço do widget aberto</string>
     <string name="gesture_action_handler">Use a ação do controlador de gestos</string>

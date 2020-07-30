@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="reset_preference">Reiniciar configuração</string>
-    <string name="reset_preference_positive">ACEITAR</string>
+    <string name="dialog_ok">ACEITAR</string>
     <string name="app_list_keep_search">Manter texto de pesquisa</string>
     <string name="pref_header_web_provider_title">Mecanismos de pesquisa na Internet</string>
-    <string name="gesture_handler_default_value">nenhum</string>
     <string name="windowbar_mode_nav">Barra de navegação</string>
     <string name="pref_search_provider">Mecanismo padrão de pesquisa na Internet</string>
     <string name="gesture_handler">Manipulador de gestos</string>
@@ -19,7 +18,7 @@
     <string name="web_search_long_press_desc">A menos que definido para \'Perguntar sempre\', tocar e segurar em \"Ir\" permite selecionar o mecanismo de pesquisa</string>
     <string name="static_favourites_desc">Painel favorito visível quando deslizar</string>
     <string name="pref_shade_view_desc">Sombras da parte superior e inferior do papel de parede</string>
-    <string name="backup_exist_cancel">Cancelar</string>
+    <string name="dialog_cancel">Cancelar</string>
     <string name="icon_pack">Ícones</string>
     <string name="gesture_down">Deslizar ↓</string>
     <string name="pref_header_gestures">Gestos</string>

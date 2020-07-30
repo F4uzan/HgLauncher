@@ -21,7 +21,7 @@
     <string name="reset_preference">Resetuj ustawienia</string>
     <string name="reset_preference_desc">Przywróć ustawienia domyślne</string>
     <string name="reset_preference_warn">Chcesz usunąć własne ustawienia aplikacji? Po zakończeniu nie można cofnąć operacji!</string>
-    <string name="reset_preference_positive">Przywróć</string>
+    <string name="dialog_ok">Przywróć</string>
     <string name="reset_preference_toast">Przywrócono ustawienia domyślne.</string>
     <!-- Web search provider -->
     <string name="pref_header_web_provider_title">Dostawcy wyszukiwania w sieci</string>
@@ -35,7 +35,7 @@
     <!-- Dialog and toast messages -->
     <string name="backup_exist">Zmień nazwę. Kopia o tej nazwie już istnieje.</string>
     <string name="backup_exist_overwrite">Przepisz</string>
-    <string name="backup_exist_cancel">Anuluj</string>
+    <string name="dialog_cancel">Anuluj</string>
     <string name="backup_restore_dialog">Przywracanie…</string>
     <string name="restore_complete">Przywracanie ukończone.</string>
     <string name="backup_complete">Kopia zapasowa została zapisana.</string>
@@ -95,7 +95,6 @@
     <string name="gesture_single_tap">Stuknij</string>
     <string name="gesture_handler">Obsługa gestów</string>
     <string name="gesture_handler_default">Brak</string>
-    <string name="gesture_handler_default_value">brak</string>
     <string name="gesture_action_widget">Otwórz Widgetspace</string>
     <string name="gesture_action_handler">Użyj akcji obsługi gestów</string>
     <string name="gesture_action_status">Rozwiń pasek powiadomień</string>

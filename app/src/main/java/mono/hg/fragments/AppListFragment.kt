@@ -434,8 +434,8 @@ class AppListFragment : GenericPageFragment() {
                     packageName?.let { PreferenceHelper.updateLabel(it, newLabel, true) }
                 }
             }
-            setNegativeButton(android.R.string.cancel, null)
-            setPositiveButton(android.R.string.ok) { _, _ ->
+            setNegativeButton(R.string.dialog_cancel, null)
+            setPositiveButton(R.string.dialog_ok) { _, _ ->
                 // Update the specified item.
                 if (newLabel.isNotEmpty()) {
                     appsAdapter.getItem(position).apply {

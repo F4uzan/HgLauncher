@@ -28,7 +28,7 @@
     <string name="reset_preference">Konfiguration zurücksetzen</string>
     <string name="reset_preference_desc">Standardeinstellungen wiederherstellen</string>
     <string name="reset_preference_warn">Hierdurch wird die gesamte Konfiguration zurückgesetzt. Sobald dies geschehen ist, kann es nicht mehr rückgängig gemacht werden!</string>
-    <string name="reset_preference_positive">Verstanden</string>
+    <string name="dialog_ok">Verstanden</string>
     <string name="reset_preference_toast">Konfiguration wurde zurückgesetzt.</string>
     <!-- Web search provider -->
     <string name="pref_header_web_provider_title">Websuchmaschinen</string>
@@ -42,7 +42,7 @@
     <!-- Dialog and toast messages -->
     <string name="backup_exist">Eine Datei mit dem gleichen Namen existiert bereits.</string>
     <string name="backup_exist_overwrite">Überschreiben</string>
-    <string name="backup_exist_cancel">Abbrechen</string>
+    <string name="dialog_cancel">Abbrechen</string>
     <string name="backup_restore_dialog">Wiederherstellen…</string>
     <string name="restore_complete">Sicherung wiederhergestellt.</string>
     <string name="backup_complete">Sicherung gespeichert.</string>

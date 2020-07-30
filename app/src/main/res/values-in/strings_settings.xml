@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="reset_preference">Setel ulang konfigurasi</string>
-    <string name="reset_preference_positive">Oke</string>
+    <string name="dialog_ok">Oke</string>
     <string name="app_list_keep_search">Simpan teks pencarian</string>
     <string name="pref_header_web_provider_title">Mesin pencari web</string>
-    <string name="gesture_handler_default_value">tidak ada</string>
     <string name="windowbar_mode_nav">Bilah navigasi</string>
     <string name="pref_search_provider">Penyedia situs pencarian bawaan</string>
     <string name="gesture_handler">Penangan perilaku</string>
@@ -19,7 +18,7 @@
     <string name="web_search_long_press_desc">Kecuali diatur ke \'Selalu tanya\', menekan \'Cari\' yang lama memungkinkan memilih mesin pencari</string>
     <string name="static_favourites_desc">Panel favorit terlihat saat menggulir</string>
     <string name="pref_shade_view_desc">Bayangan bagian atas dan bawah Wallpaper</string>
-    <string name="backup_exist_cancel">Batalkan</string>
+    <string name="dialog_cancel">Batalkan</string>
     <string name="icon_pack">Ikon</string>
     <string name="gesture_down">Usap ↓</string>
     <string name="pref_header_gestures">Gerakan</string>

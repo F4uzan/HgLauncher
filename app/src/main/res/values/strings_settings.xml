@@ -31,7 +31,6 @@
     <string name="reset_preference">Reset configuration</string>
     <string name="reset_preference_desc">Reset all settings to defaults</string>
     <string name="reset_preference_warn">This resets your entire configuration permanently.</string>
-    <string name="reset_preference_positive">OK</string>
     <string name="reset_preference_toast">Configuration reset.</string>
 
     <!-- Web search provider -->
@@ -45,9 +44,10 @@
     <string name="version_key_toast">Tap again to confirm.</string>
     <string name="version_key_name">HgLauncher (testing)</string>
     <!-- Dialog and toast messages -->
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
     <string name="backup_exist">This backup filename already exists.</string>
     <string name="backup_exist_overwrite">Overwrite</string>
-    <string name="backup_exist_cancel">Cancel</string>
     <string name="backup_restore_dialog">Restoring…</string>
     <string name="restore_complete">Backup restored.</string>
     <string name="backup_complete">Backup saved.</string>
@@ -82,7 +82,7 @@
     <string name="gesture_pinch">Pinch</string>
     <string name="gesture_handler">Gesture handler</string>
     <string name="gesture_handler_default">None</string>
-    <string name="gesture_handler_default_value">none</string>
+    <string name="gesture_handler_default_value" translatable="false">none</string>
     <string name="gesture_action_default">None</string>
     <string name="gesture_action_default_value" translatable="false">none</string>
     <string name="gesture_action_widget">Open widget-space</string>
