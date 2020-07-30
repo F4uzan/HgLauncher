@@ -415,32 +415,38 @@ class AppListFragment : GenericPageFragment() {
     private fun buildShorthandDialog(position: Int) {
         val binding = LayoutRenameDialogBinding.inflate(layoutInflater)
         val packageName = appsAdapter.getItem(position)?.packageName
-        val hasHintName = appsAdapter.getItem(position)?.hintName.isNullOrEmpty()
+        val hasHintName = appsAdapter.getItem(position)?.hintName.isNullOrBlank()
         val renameField = binding.renameField.apply {
             ViewCompat.setBackgroundTintList(this, ColorStateList.valueOf(PreferenceHelper.accent))
             hint = packageName?.let { PreferenceHelper.getLabel(it) }
         }
 
         with(AlertDialog.Builder(requireContext())) {
-            val newLabel = renameField.text
-                .toString()
-                .replace("\\|".toRegex(), "")
-                .trim { it <= ' ' }
-
             setView(binding.root)
             setTitle(R.string.dialog_title_shorthand)
             if (! hasHintName) {
                 setNeutralButton(R.string.action_web_provider_remove) { _, _ ->
-                    packageName?.let { PreferenceHelper.updateLabel(it, newLabel, true) }
+                    appsAdapter.getItem(position).apply {
+                        this?.hintName = ""
+                    }
+
+                    packageName?.let { PreferenceHelper.updateLabel(it, "", true) }
                 }
             }
             setNegativeButton(R.string.dialog_cancel, null)
             setPositiveButton(R.string.dialog_ok) { _, _ ->
+                val newLabel = renameField.text
+                    .toString()
+                    .replace("\\|".toRegex(), "")
+                    .trim { it <= ' ' }
+
                 // Update the specified item.
-                if (newLabel.isNotEmpty()) {
+                if (newLabel.isNotBlank()) {
                     appsAdapter.getItem(position).apply {
                         this?.hintName = newLabel
                     }
+
+                    packageName?.let { PreferenceHelper.updateLabel(it, newLabel, false) }
                 }
             }
 
