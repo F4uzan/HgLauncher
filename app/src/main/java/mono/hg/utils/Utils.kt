@@ -306,13 +306,15 @@ object Utils {
         // defaultProvider will always be the same size as defaultProviderUrl.
         // However, we start at 1 to ignore the 'Always ask' option.
         defaultProvider.forEachIndexed { index, _ ->
-            list.add(
-                WebSearchProvider(
-                    defaultProvider[index],
-                    PreferenceHelper.getDefaultProvider(defaultProviderId[index]),
-                    defaultProvider[index]
+            if (index > 0) {
+                list.add(
+                    WebSearchProvider(
+                        defaultProvider[index],
+                        PreferenceHelper.getDefaultProvider(defaultProviderId[index]),
+                        defaultProvider[index]
+                    )
                 )
-            )
+            }
         }
 
         return list
