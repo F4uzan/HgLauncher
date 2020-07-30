@@ -9,6 +9,7 @@ import android.content.Context
 import android.os.Build
 import android.os.PowerManager
 import android.view.View
+import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import mono.hg.R
@@ -29,11 +30,15 @@ object ActivityServiceUtils {
             Activity.INPUT_METHOD_SERVICE
         ) as InputMethodManager
         if (activity.currentFocus != null) {
-            inputMethodManager.hideSoftInputFromWindow(
-                activity.currentFocus !!.windowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS
-            )
-            activity.currentFocus !!.clearFocus()
+            if (Utils.atLeastR()) {
+                activity.currentFocus?.windowInsetsController?.hide(WindowInsets.Type.ime())
+            } else {
+                inputMethodManager.hideSoftInputFromWindow(
+                    activity.currentFocus !!.windowToken,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                )
+                activity.currentFocus !!.clearFocus()
+            }
         }
     }
 
@@ -47,10 +52,14 @@ object ActivityServiceUtils {
         val inputMethodManager = activity.getSystemService(
             Activity.INPUT_METHOD_SERVICE
         ) as InputMethodManager
-        if (! view.isFocused) {
-            view.requestFocus()
+        if (Utils.atLeastR()) {
+            view.windowInsetsController?.show(WindowInsets.Type.ime())
+        } else {
+            if (! view.isFocused) {
+                view.requestFocus()
+            }
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
         }
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
     }
 
     /**

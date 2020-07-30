@@ -364,7 +364,10 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         // See if any of the system bars needed hiding.
-        if (Utils.atLeastKitKat()) {
+        @Suppress("DEPRECATION") // We are already handling the deprecation.
+        if (Utils.atLeastR()) {
+            ViewUtils.setWindowBarMode(this, PreferenceHelper.windowBarMode)
+        } else if (Utils.atLeastKitKat()) {
             window.decorView.systemUiVisibility =
                 ViewUtils.setWindowbarMode(PreferenceHelper.windowBarMode)
         } else if (Utils.sdkIsBelow(19) && PreferenceHelper.shouldHideStatusBar()) {

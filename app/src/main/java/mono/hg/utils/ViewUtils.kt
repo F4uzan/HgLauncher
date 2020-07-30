@@ -6,6 +6,9 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Build
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
@@ -48,6 +51,7 @@ object ViewUtils {
      *
      * @see R.array.pref_windowbar_values
      */
+    @Suppress("DEPRECATION") // This is meant for older APIs.
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     fun setWindowbarMode(mode: String?): Int {
         val baseLayout: Int = if (Utils.sdkIsAround(19)) {
@@ -67,6 +71,29 @@ object ViewUtils {
             "both" -> noStatusLayout or noNavLayout
             "none" -> View.SYSTEM_UI_LAYOUT_FLAGS
             else -> View.SYSTEM_UI_LAYOUT_FLAGS
+        }
+    }
+
+    /**
+     * Configures the status bar and navigation bar mode according to the
+     * user's preference.
+     *
+     * @param mode  Between "status", "nav", "both", or "none". The parameter used
+     *              set the mode of the system bars.
+     *
+     * @see R.array.pref_windowbar_values
+     */
+    @RequiresApi(Build.VERSION_CODES.R)
+    fun setWindowBarMode(activity: AppCompatActivity, mode: String?) {
+        activity.window.setDecorFitsSystemWindows(false)
+
+        val insetsController = activity.window.insetsController
+        insetsController?.systemBarsBehavior =
+            WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        when (mode) {
+            "status" -> insetsController?.hide(WindowInsets.Type.statusBars())
+            "nav" -> insetsController?.hide(WindowInsets.Type.navigationBars())
+            "both" -> insetsController?.hide(WindowInsets.Type.systemBars())
         }
     }
 

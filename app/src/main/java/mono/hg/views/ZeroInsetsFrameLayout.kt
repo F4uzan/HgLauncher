@@ -2,10 +2,10 @@ package mono.hg.views
 
 import android.content.Context
 import android.graphics.Rect
-import android.os.Build
 import android.util.AttributeSet
 import android.view.WindowInsets
 import android.widget.FrameLayout
+import mono.hg.utils.Utils
 
 /**
  * FrameLayout workaround for transparency issue in Android 4.4 and above.
@@ -31,15 +31,31 @@ class ZeroInsetsFrameLayout : FrameLayout {
         // Unused. Used only in XML initialisation.
     }
 
-    override fun computeSystemWindowInsets(`in`: WindowInsets, outLocalInsets: Rect): WindowInsets {
+    override fun computeSystemWindowInsets(
+        insets: WindowInsets,
+        outLocalInsets: Rect
+    ): WindowInsets {
         outLocalInsets.left = 0
         outLocalInsets.top = 0
         outLocalInsets.right = 0
-        return super.computeSystemWindowInsets(`in`, outLocalInsets)
+        return super.computeSystemWindowInsets(insets, outLocalInsets)
     }
 
+    override fun onApplyWindowInsets(insets: WindowInsets?): WindowInsets {
+        if (Utils.atLeastR()) {
+            insets?.inset(
+                0,
+                0,
+                0,
+                insets.getInsetsIgnoringVisibility(WindowInsets.Type.navigationBars()).top
+            )
+        }
+        return super.onApplyWindowInsets(insets)
+    }
+
+    @Suppress("DEPRECATION") // We aren't using this on newer API.
     override fun fitSystemWindows(windowInsets: Rect): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Utils.atLeastKitKat() && Utils.sdkIsBelow(30)) {
             // Intentionally do not modify the bottom inset. For some reason,
             // if the bottom inset is modified, window resizing stops working.
             // TODO: Figure out why.

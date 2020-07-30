@@ -113,6 +113,15 @@ object Utils {
     }
 
     /**
+     * Checks whether the system is at least R.
+     *
+     * @return True when the system SDK is equal to or more than 30 (R).
+     */
+    fun atLeastR(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+    }
+
+    /**
      * Parses a web provider URL then replaces its placeholder with the query.
      *
      * @param context  Context object for use with startActivity.
