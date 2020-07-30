@@ -415,34 +415,42 @@ class AppListFragment : GenericPageFragment() {
     private fun buildShorthandDialog(position: Int) {
         val binding = LayoutRenameDialogBinding.inflate(layoutInflater)
         val packageName = appsAdapter.getItem(position)?.packageName
+        val hasHintName = appsAdapter.getItem(position)?.hintName.isNullOrEmpty()
         val renameField = binding.renameField.apply {
             ViewCompat.setBackgroundTintList(this, ColorStateList.valueOf(PreferenceHelper.accent))
             hint = packageName?.let { PreferenceHelper.getLabel(it) }
         }
 
         with(AlertDialog.Builder(requireContext())) {
+            val newLabel = renameField.text
+                .toString()
+                .replace("\\|".toRegex(), "")
+                .trim { it <= ' ' }
+
             setView(binding.root)
-            setNegativeButton(android.R.string.cancel, null)
             setTitle(R.string.dialog_title_shorthand)
+            if (! hasHintName) {
+                setNeutralButton(R.string.action_web_provider_remove) { _, _ ->
+                    packageName?.let { PreferenceHelper.updateLabel(it, newLabel, true) }
+                }
+            }
+            setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(android.R.string.ok) { _, _ ->
-                val newLabel = renameField.text
-                    .toString()
-                    .replace("\\|".toRegex(), "")
-                    .trim { it <= ' ' }
-
-                // Unset shorthand if it is empty.
-                packageName?.let { PreferenceHelper.updateLabel(it, newLabel, newLabel.isEmpty()) }
-
                 // Update the specified item.
-                appsAdapter.getItem(position).apply {
-                    this?.hintName = newLabel
+                if (newLabel.isNotEmpty()) {
+                    appsAdapter.getItem(position).apply {
+                        this?.hintName = newLabel
+                    }
                 }
             }
 
             create().apply {
                 show()
-                getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
-                getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+                with(PreferenceHelper.darkAccent) {
+                    getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(this)
+                    getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(this)
+                    getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(this)
+                }
             }
         }
     }

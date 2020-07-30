@@ -14,7 +14,6 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.preference.PreferenceFragmentCompat
 import mono.hg.R
@@ -57,31 +56,11 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
         providerAdapter = context?.let { WebProviderAdapter(providerList, it) }
 
         providerListView.adapter = providerAdapter
-        providerListView.onItemLongClickListener =
-            AdapterView.OnItemLongClickListener { _, _, i, _ ->
-                val name = providerList[i].name
-                val url = providerList[i].url
-
-                val popupMenu = PopupMenu(requireActivity(), providerListView.getChildAt(i))
-                popupMenu.menuInflater.inflate(R.menu.menu_web_provider, popupMenu.menu)
-                popupMenu.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.action_web_provider_remove -> {
-                            providerList.removeAt(i)
-                            providerAdapter?.notifyDataSetChanged()
-                            PreferenceHelper.updateProvider(providerList)
-                            true
-                        }
-                        R.id.action_web_provider_edit -> {
-                            makeEditMenu(name, url, true, i)
-                            true
-                        }
-                        else -> true
-                    }
-                }
-                popupMenu.show()
-                true
-            }
+        providerListView.onItemClickListener = AdapterView.OnItemClickListener { _, _, i, _ ->
+            val name = providerList[i].name
+            val url = providerList[i].url
+            makeEditMenu(name, url, true, i)
+        }
 
         // Add defaults if we don't have any provider.
         with(PreferenceHelper.providerList) {
@@ -161,44 +140,50 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
         with(AlertDialog.Builder(requireActivity())) {
             setView(binding.root)
             setTitle(title)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { _, _ ->
-                    val name =
-                        nameField.text.toString().replace("\\|".toRegex(), "").trim { it <= ' ' }
-                    val url = urlField.text.toString().trim { it <= ' ' }
+            setNeutralButton(R.string.action_web_provider_remove) { _, _ ->
+                providerList.removeAt(position)
+                providerAdapter?.notifyDataSetChanged()
+                PreferenceHelper.updateProvider(providerList)
+            }
+            setNegativeButton(android.R.string.cancel, null)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                val name =
+                    nameField.text.toString().replace("\\|".toRegex(), "").trim { it <= ' ' }
+                val url = urlField.text.toString().trim { it <= ' ' }
 
-                    // Strip out %s as it triggers the matcher.
-                    // We won't use this URL, but we still need to check if the URL overall is valid.
-                    val safeUrl = url.replace("%s".toRegex(), "+s")
-                    if (! Patterns.WEB_URL.matcher(safeUrl).matches()) {
-                        // This is an invalid URL, cancel.
-                        Toast.makeText(
-                            requireContext(), R.string.err_invalid_url,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@OnClickListener
-                    }
-                    if ("none" != PreferenceHelper.getProvider(name) && ! isEditing) {
-                        // We already have that provider and/or we aren't editing.
-                        Toast.makeText(
-                            requireContext(), R.string.err_provider_exists,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@OnClickListener
-                    }
-                    if (isEditing) {
-                        providerList[position] = WebSearchProvider(name, url)
-                    } else {
-                        providerList.add(WebSearchProvider(name, url))
-                    }
-                    PreferenceHelper.updateProvider(providerList)
-                    providerAdapter?.notifyDataSetChanged()
-                })
+                // Strip out %s as it triggers the matcher.
+                // We won't use this URL, but we still need to check if the URL overall is valid.
+                val safeUrl = url.replace("%s".toRegex(), "+s")
+                if (! Patterns.WEB_URL.matcher(safeUrl).matches()) {
+                    // This is an invalid URL, cancel.
+                    Toast.makeText(
+                        requireContext(), R.string.err_invalid_url,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                if ("none" != PreferenceHelper.getProvider(name) && ! isEditing) {
+                    // We already have that provider and/or we aren't editing.
+                    Toast.makeText(
+                        requireContext(), R.string.err_provider_exists,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                if (isEditing) {
+                    providerList[position] = WebSearchProvider(name, url)
+                } else {
+                    providerList.add(WebSearchProvider(name, url))
+                }
+                PreferenceHelper.updateProvider(providerList)
+                providerAdapter?.notifyDataSetChanged()
+            }
 
             create().apply {
                 show()
-                getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
-                getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+                with(PreferenceHelper.darkAccent) {
+                    getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(this)
+                    getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(this)
+                    getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(this)
+                }
             }
         }
     }
