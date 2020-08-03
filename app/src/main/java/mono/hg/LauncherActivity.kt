@@ -486,8 +486,13 @@ class LauncherActivity : AppCompatActivity() {
         if (Utils.atLeastLollipop()
             && (PreferenceHelper.windowBarMode == "none" || PreferenceHelper.windowBarMode == "nav")
         ) {
-            window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            if (Utils.atLeastR()) {
+                window.setDecorFitsSystemWindows(false)
+            } else {
+                @Suppress("DEPRECATION") // We are already handling the deprecation.
+                window.decorView.systemUiVisibility =
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            }
             val homeParams = slidingHome.layoutParams as MarginLayoutParams
             homeParams.topMargin = ViewUtils.statusBarHeight
         }
