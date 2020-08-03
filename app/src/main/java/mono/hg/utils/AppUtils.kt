@@ -19,7 +19,6 @@ import android.os.UserManager
 import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import mono.hg.BuildConfig
 import mono.hg.R
 import mono.hg.adapters.AppAdapter
 import mono.hg.helpers.LauncherIconHelper
@@ -388,9 +387,8 @@ object AppUtils {
                 } else {
                     componentName
                 }
-                val isHidden = (PreferenceHelper.exclusionList.contains(userPackageName)
-                        || componentName.contains(BuildConfig.APPLICATION_ID))
-                if (! hideHidden || ! isHidden) {
+                val isHidden = (PreferenceHelper.exclusionList.contains(userPackageName))
+                if (! componentName.contains(activity.packageName) && (! isHidden || ! hideHidden)) {
                     val appName = activityInfo.label.toString()
                     val app = App(appName, componentName, false, user)
                     app.hintName = PreferenceHelper.getLabel(userPackageName)
@@ -426,9 +424,8 @@ object AppUtils {
         manager.queryIntentActivities(intent, 0).forEach {
             val packageName = it.activityInfo.packageName
             val componentName = packageName + "/" + it.activityInfo.name
-            val isHidden = (PreferenceHelper.exclusionList.contains(componentName)
-                    || componentName.contains(BuildConfig.APPLICATION_ID))
-            if (! hideHidden || ! isHidden) {
+            val isHidden = PreferenceHelper.exclusionList.contains(componentName)
+            if (! componentName.contains(activity.packageName) && (! isHidden || ! hideHidden)) {
                 val appName = it.loadLabel(manager).toString()
                 val app = App(appName, componentName, false, userUtils.currentSerial)
                 app.hintName = PreferenceHelper.getLabel(componentName)
