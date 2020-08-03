@@ -399,7 +399,10 @@ class AppListFragment : GenericPageFragment() {
                 appsAdapter.removeRange(0, appsList.size)
             }
             appsList.clear()
-            appsList.addAll(AppUtils.loadApps(requireActivity(), true))
+            appsList.addAll(AppUtils.loadApps(requireActivity(),
+                hideHidden = true,
+                shouldSort = true
+            ))
             withContext(Dispatchers.Main) {
                 appsAdapter.updateDataSet(appsList)
             }

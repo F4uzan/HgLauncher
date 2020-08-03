@@ -354,19 +354,24 @@ object AppUtils {
      *
      * @param activity      Current foreground activity.
      * @param hideHidden    Should hidden apps be hidden?
+     * @param shouldSort    Should the list be sorted?
      *
      * @return List an App List containing the app list itself.
      */
-    fun loadApps(activity: Activity, hideHidden: Boolean): List<App> {
+    fun loadApps(activity: Activity, hideHidden: Boolean, shouldSort: Boolean): List<App> {
         return if (Utils.atLeastLollipop()) {
-            loadAppsWithUser(activity, hideHidden)
+            loadAppsWithUser(activity, hideHidden, shouldSort)
         } else {
-            loadAppsLegacy(activity, hideHidden)
+            loadAppsLegacy(activity, hideHidden, shouldSort)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun loadAppsWithUser(activity: Activity, hideHidden: Boolean): List<App> {
+    private fun loadAppsWithUser(
+        activity: Activity,
+        hideHidden: Boolean,
+        shouldSort: Boolean
+    ): List<App> {
         val appsList: MutableList<App> = ArrayList()
         val userUtils = UserUtils(activity)
         val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
@@ -404,11 +409,15 @@ object AppUtils {
             }
         }
 
-        sortAppList(appsList)
+        sortAppList(appsList, shouldSort)
         return appsList
     }
 
-    private fun loadAppsLegacy(activity: Activity, hideHidden: Boolean): List<App> {
+    private fun loadAppsLegacy(
+        activity: Activity,
+        hideHidden: Boolean,
+        shouldSort: Boolean
+    ): List<App> {
         val appsList: MutableList<App> = ArrayList()
         val manager = activity.packageManager
         val userUtils = UserUtils(activity)
@@ -435,7 +444,7 @@ object AppUtils {
             }
         }
 
-        sortAppList(appsList)
+        sortAppList(appsList, shouldSort)
         return appsList
     }
 
@@ -447,10 +456,11 @@ object AppUtils {
      * should preferably be left alone for other app list aside from
      * the ones shown to launch apps.
      *
-     * @param list The list to be sorted.
+     * @param list          The list to be sorted.
+     * @param applyInverse  Should user-defined sorting be applied?
      */
-    private fun sortAppList(list: List<App>) {
-        if (PreferenceHelper.isListInverted) {
+    private fun sortAppList(list: List<App>, applyInverse: Boolean) {
+        if (PreferenceHelper.isListInverted && applyInverse) {
             Collections.sort(list, Collections.reverseOrder(DisplayNameComparator()))
         } else {
             Collections.sort(list, DisplayNameComparator())
