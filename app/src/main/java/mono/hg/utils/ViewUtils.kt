@@ -25,24 +25,6 @@ import mono.hg.helpers.PreferenceHelper
  */
 object ViewUtils {
     /**
-     * Fetches statusbar height from system's dimension.
-     *
-     * @return int Size of the statusbar. Returns the fallback value of 24dp if the
-     * associated dimen value cannot be found.
-     */
-    val statusBarHeight: Int
-        get() {
-            val idStatusBarHeight = Resources.getSystem()
-                .getIdentifier("status_bar_height", "dimen", "android")
-            return if (idStatusBarHeight > 0) {
-                Resources.getSystem().getDimensionPixelSize(idStatusBarHeight)
-            } else {
-                // Return fallback size if we can't get the value from the system.
-                Resources.getSystem().getDimensionPixelSize(R.dimen.status_bar_height_fallback)
-            }
-        }
-
-    /**
      * Configures the status bar and navigation bar mode according to the
      * user's preference.
      *

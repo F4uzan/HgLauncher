@@ -481,21 +481,6 @@ class LauncherActivity : AppCompatActivity() {
      * Modifies various views parameters and visibility based on the user preferences.
      */
     private fun applyPrefToViews() {
-        // Workaround v21+ status bar transparency issue.
-        // This is disabled if the status bar is hidden.
-        if (Utils.atLeastLollipop()
-            && (PreferenceHelper.windowBarMode == "none" || PreferenceHelper.windowBarMode == "nav")
-        ) {
-            if (Utils.atLeastR()) {
-                window.setDecorFitsSystemWindows(false)
-            } else {
-                @Suppress("DEPRECATION") // We are already handling the deprecation.
-                window.decorView.systemUiVisibility =
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            }
-            val homeParams = slidingHome.layoutParams as MarginLayoutParams
-            homeParams.topMargin = ViewUtils.statusBarHeight
-        }
         slidingHome.post { // Hide the favourites panel when there's nothing to show.
             if (pinnedAppsAdapter.isEmpty) {
                 pinnedAppsContainer.translationY = pinnedAppsContainer.measuredHeight.toFloat()
