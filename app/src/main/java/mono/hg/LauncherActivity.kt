@@ -16,7 +16,6 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup.MarginLayoutParams
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -918,12 +917,12 @@ class LauncherActivity : AppCompatActivity() {
         if (pinnedAppString.isNotEmpty() && restart) {
             pinnedAppList.clear()
             pinnedAppsAdapter.updateDataSet(pinnedAppList, false)
-            pinnedAppString.split(";".toRegex()).toTypedArray().forEach {
+            pinnedAppString.split(";".toRegex()).forEach {
                 var componentName = it
                 var user = userUtils !!.currentSerial
 
                 // Handle pinned apps coming from another user.
-                val userSplit = it.split("-".toRegex()).toTypedArray()
+                val userSplit = it.split("-".toRegex())
                 if (userSplit.size == 2) {
                     user = userSplit[0].toLong()
                     componentName = userSplit[1]
@@ -963,7 +962,7 @@ class LauncherActivity : AppCompatActivity() {
      */
     fun pinAppHere(packageName: String, user: Long) {
         // We need to make sure that an app from another user can be pinned.
-        val userSplit = packageName.split("-".toRegex()).toTypedArray()
+        val userSplit = packageName.split("-".toRegex())
         var componentName = packageName
         if (userSplit.size == 2) {
             componentName = userSplit[1]

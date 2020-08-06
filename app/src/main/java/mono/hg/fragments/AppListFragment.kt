@@ -147,8 +147,6 @@ class AppListFragment : GenericPageFragment() {
         val itemDecoration = ItemOffsetDecoration(requireContext(), R.dimen.item_offset)
 
         appsRecyclerView = binding !!.appsList.apply {
-            isDrawingCacheEnabled = true
-            drawingCacheQuality = View.DRAWING_CACHE_QUALITY_LOW
             setHasFixedSize(true)
             setThumbColor(PreferenceHelper.darkAccent)
             setThumbInactiveColor(PreferenceHelper.accent)
@@ -399,10 +397,13 @@ class AppListFragment : GenericPageFragment() {
                 appsAdapter.removeRange(0, appsList.size)
             }
             appsList.clear()
-            appsList.addAll(AppUtils.loadApps(requireActivity(),
-                hideHidden = true,
-                shouldSort = true
-            ))
+            appsList.addAll(
+                AppUtils.loadApps(
+                    requireActivity(),
+                    hideHidden = true,
+                    shouldSort = true
+                )
+            )
             withContext(Dispatchers.Main) {
                 appsAdapter.updateDataSet(appsList)
             }

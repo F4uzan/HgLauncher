@@ -180,17 +180,15 @@ object PreferenceHelper {
         editor = preference.edit()
 
         // Initialise widgets early on.
-        preference.getString("widgets_list", "") !!.split(";".toRegex()).toTypedArray().forEach {
-            if (it.isNotEmpty()) {
-                widgets_list.add(it)
-            }
-        }
+        preference.getString("widgets_list", "") !!.split(";".toRegex()).toList()
+            .filter { it.isNotEmpty() }
+            .forEach { widgets_list.add(it) }
     }
 
     private fun parseDelimitedSet(set: HashSet<String>?, map: MutableMap<String, String>) {
-        var toParse: Array<String>
+        var toParse: List<String>
         set !!.forEach {
-            toParse = it.split("\\|".toRegex()).toTypedArray()
+            toParse = it.split("\\|".toRegex())
             map[toParse[0]] = toParse[1]
         }
     }
@@ -241,11 +239,7 @@ object PreferenceHelper {
 
     fun updateWidgets(list: ArrayList<String>) {
         var tempList = ""
-        list.forEach {
-            if (it.isNotEmpty()) {
-                tempList = tempList.plus(";").plus(it)
-            }
-        }
+        list.filter { it.isNotEmpty() }.forEach { tempList = tempList.plus(";").plus(it) }
         update("widgets_list", tempList)
     }
 

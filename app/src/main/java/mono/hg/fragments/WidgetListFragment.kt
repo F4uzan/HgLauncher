@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -87,26 +88,18 @@ class WidgetListFragment : GenericPageFragment() {
         addWidget.backgroundTintList = ColorStateList.valueOf(PreferenceHelper.accent)
 
         if (widgetsList.isNotEmpty()) {
-            PreferenceHelper.widgetList().forEachIndexed { index, widgets ->
-                if (widgets.isNotEmpty()) {
+            PreferenceHelper.widgetList()
+                .filter { it.isNotEmpty() }
+                .forEachIndexed { index, widgets ->
                     val widgetIntent = Intent()
                     widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgets.toInt())
 
                     // Don't add ALL the widgets at once.
                     // TODO: Handle this a bit better, because not all devices are made equally.
-                    Handler().postDelayed({
-                        addWidget(widgetIntent, index, false)
-                    }, 300)
+                    Looper.myLooper()?.let {
+                        Handler(it).postDelayed({ addWidget(widgetIntent, index, false) }, 300)
+                    }
                 }
-            }
-
-            if (widgetsList.size > appWidgetContainer.childCount) {
-                // This shouldn't happen, but will occur in a corrupted backup/restore.
-                // We don't want to add or iterate over this corrupted list,
-                // so it's better to clear and redo.
-                widgetsList.clear()
-                PreferenceHelper.updateWidgets(widgetsList)
-            }
         }
 
         addWidget.setOnClickListener {

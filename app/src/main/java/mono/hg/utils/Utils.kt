@@ -129,8 +129,9 @@ object Utils {
      * @param query    The query itself
      */
     fun doWebSearch(context: Context, provider: String, query: String) {
-        val linkIntent = Intent(Intent.ACTION_VIEW, Uri.parse(provider.replace("%s", query)))
-        context.startActivity(linkIntent)
+        with(Intent(Intent.ACTION_VIEW, Uri.parse(provider.replace("%s", query)))) {
+            context.startActivity(this)
+        }
     }
 
     /**
@@ -143,10 +144,10 @@ object Utils {
      */
     @ColorInt
     fun getColorFromAttr(context: Context, @AttrRes attr: Int): Int {
-        val typedValue = TypedValue()
-        val theme = context.theme
-        theme.resolveAttribute(attr, typedValue, true)
-        return typedValue.data
+        with(TypedValue()) {
+            context.theme.resolveAttribute(attr, this, true)
+            return this.data
+        }
     }
 
     /**
@@ -163,7 +164,7 @@ object Utils {
         activity: AppCompatActivity,
         packageReceiver: PackageChangesReceiver?
     ) {
-        val intentFilter = IntentFilter().apply {
+        IntentFilter().apply {
             addAction(Intent.ACTION_PACKAGE_ADDED)
             addAction(Intent.ACTION_PACKAGE_REMOVED)
             addAction(Intent.ACTION_PACKAGE_REPLACED)
@@ -198,15 +199,15 @@ object Utils {
     /**
      * Handles gesture actions based on the direction of the gesture.
      *
-     * @param activity  The activity where the gesture is performed.
+     * @param activity  Instance of LauncheActivity.
      * @param direction The direction of the gesture.
      *
      * @see Gesture Valid directions for the gestures.
      */
-    fun handleGestureActions(activity: AppCompatActivity, direction: Int) {
+    fun handleGestureActions(activity: LauncherActivity, direction: Int) {
         when (PreferenceHelper.getGestureForDirection(direction)) {
             "handler" -> if (PreferenceHelper.gestureHandler != null) {
-                val handlerIntent = Intent("mono.hg.GESTURE_HANDLER").apply {
+                Intent("mono.hg.GESTURE_HANDLER").apply {
                     component = PreferenceHelper.gestureHandler
                     type = "text/plain"
                     putExtra("direction", direction)
@@ -214,10 +215,10 @@ object Utils {
                     activity.startActivity(it)
                 }
             }
-            "widget" -> (activity as LauncherActivity).doThis("open_widgets") // TODO: Definitely make this less reliant on LauncherActivity.
+            "widget" -> activity.doThis("open_widgets")
             "status" -> ActivityServiceUtils.expandStatusBar(activity)
             "panel" -> ActivityServiceUtils.expandSettingsPanel(activity)
-            "list" -> (activity as LauncherActivity).doThis("show_panel") // TODO: Maybe make this call less reliant on LauncherActivity?
+            "list" -> activity.doThis("show_panel")
             "none" -> {
             }
             else -> try {
@@ -261,33 +262,35 @@ object Utils {
         keyCode: Int
     ): Boolean? {
         // Get selected text for cut and copy.
-        val start = editText.selectionStart
-        val end = editText.selectionEnd
-        val text = editText.text.toString().substring(start, end)
-        return when (keyCode) {
-            KeyEvent.KEYCODE_A -> {
-                editText.selectAll()
-                true
+        with(editText) {
+            val text = editText.text.toString().substring(selectionStart, selectionEnd)
+            return when (keyCode) {
+                KeyEvent.KEYCODE_A -> {
+                    selectAll()
+                    true
+                }
+                KeyEvent.KEYCODE_X -> {
+                    ActivityServiceUtils.copyToClipboard(activity, text)
+                    setText(this.text.toString().replace(text, ""))
+                    true
+                }
+                KeyEvent.KEYCODE_C -> {
+                    ActivityServiceUtils.copyToClipboard(activity, text)
+                    true
+                }
+                KeyEvent.KEYCODE_V -> {
+                    this.text = this.text.replace(
+                        selectionStart.coerceAtMost(selectionEnd),
+                        selectionStart.coerceAtLeast(selectionEnd),
+                        ActivityServiceUtils.pasteFromClipboard(activity), 0,
+                        ActivityServiceUtils.pasteFromClipboard(activity).length
+                    )
+                    true
+                }
+                else ->
+                    // Do nothing.
+                    false
             }
-            KeyEvent.KEYCODE_X -> {
-                editText.setText(editText.text.toString().replace(text, ""))
-                true
-            }
-            KeyEvent.KEYCODE_C -> {
-                ActivityServiceUtils.copyToClipboard(activity, text)
-                true
-            }
-            KeyEvent.KEYCODE_V -> {
-                editText.text = editText.text.replace(
-                    start.coerceAtMost(end), start.coerceAtLeast(end),
-                    ActivityServiceUtils.pasteFromClipboard(activity), 0,
-                    ActivityServiceUtils.pasteFromClipboard(activity).length
-                )
-                true
-            }
-            else ->
-                // Do nothing.
-                false
         }
     }
 

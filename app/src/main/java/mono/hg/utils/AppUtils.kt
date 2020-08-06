@@ -78,18 +78,14 @@ object AppUtils {
      * @return boolean True if the application is a system app, false if otherwise.
      */
     fun isSystemApp(packageManager: PackageManager, componentName: String?): Boolean {
-        try {
-            val appFlags = packageManager.getApplicationInfo(
-                getPackageName(componentName), 0
-            )
-            if (appFlags.flags and ApplicationInfo.FLAG_SYSTEM == 1) {
-                return true
+        return try {
+            packageManager.getApplicationInfo(getPackageName(componentName), 0).let {
+                it.flags and ApplicationInfo.FLAG_SYSTEM == 1
             }
         } catch (e: PackageManager.NameNotFoundException) {
             Utils.sendLog(LogLevel.ERROR, e.toString())
-            return false
+            false
         }
-        return false
     }
 
     /**
@@ -121,15 +117,13 @@ object AppUtils {
         activity: Activity, user: Long, componentName: String,
         adapter: AppAdapter, list: MutableList<App>
     ) {
-        val userPackageName = if (user != UserUtils(activity).currentSerial) {
-            appendUser(user, componentName)
-        } else {
-            componentName
-        }
-
         val icon = LauncherIconHelper.getIcon(activity, componentName, user, false)
         val app = icon?.let { App(it, componentName, user) }.apply {
-            this?.userPackageName = userPackageName
+            this?.userPackageName = if (user != UserUtils(activity).currentSerial) {
+                appendUser(user, componentName)
+            } else {
+                componentName
+            }
         }
         app?.let {
             list.add(it)
@@ -174,25 +168,18 @@ object AppUtils {
      */
     fun openAppDetails(activity: Activity, componentName: String, user: Long) {
         if (Utils.atLeastLollipop()) {
-            val userUtils = UserUtils(activity)
+            val handle = UserUtils(activity).getUser(user)
             val launcher = activity.getSystemService(
                 Context.LAUNCHER_APPS_SERVICE
             ) as LauncherApps
 
-            val component = ComponentName.unflattenFromString(componentName)
-
-            launcher.startAppDetailsActivity(
-                component, userUtils.getUser(user), null, null
-            )
+            with(ComponentName.unflattenFromString(componentName)) {
+                launcher.startAppDetailsActivity(this, handle, null, null)
+            }
         } else {
-            val packageNameUri = Uri.fromParts(
-                "package", getPackageName(componentName),
-                null
-            )
-
-            activity.startActivity(
-                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageNameUri)
-            )
+            with(Uri.fromParts("package", getPackageName(componentName), null)) {
+                activity.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, this))
+            }
         }
     }
 
@@ -217,12 +204,13 @@ object AppUtils {
             val activity = context as Activity
 
             if (Utils.atLeastLollipop()) {
-                val userUtils = UserUtils(activity)
+                val handle = UserUtils(activity).getUser(app.user)
                 val launcher = activity.getSystemService(
                     Context.LAUNCHER_APPS_SERVICE
                 ) as LauncherApps
-                val componentName = ComponentName.unflattenFromString(app.packageName)
-                launcher.startMainActivity(componentName, userUtils.getUser(app.user), null, null)
+                with(ComponentName.unflattenFromString(app.packageName)) {
+                    launcher.startMainActivity(this, handle, null, null)
+                }
             } else {
                 quickLaunch(activity, app.packageName)
             }
@@ -266,9 +254,11 @@ object AppUtils {
         val component = ComponentName.unflattenFromString(componentName !!) ?: return
 
         // Forcibly end if we can't unflatten the string.
-        val intent = Intent.makeMainActivity(component)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-        activity.startActivity(intent)
+        Intent.makeMainActivity(component).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+        }.also {
+            activity.startActivity(it)
+        }
     }
 
     /**
@@ -279,8 +269,7 @@ object AppUtils {
      * @return String The package name if not null.
      */
     fun getPackageName(componentName: String?): String {
-        val unflattened = ComponentName.unflattenFromString(componentName !!)
-        return unflattened?.packageName ?: ""
+        return ComponentName.unflattenFromString(componentName !!)?.packageName ?: ""
     }
 
     /**
@@ -292,9 +281,8 @@ object AppUtils {
      * @return The label of the component name if no exception is thrown.
      */
     fun getPackageLabel(manager: PackageManager, componentName: String): String? {
-        var label = ""
-        try {
-            label = manager.getApplicationLabel(
+        return try {
+            manager.getApplicationLabel(
                 manager.getApplicationInfo(
                     getPackageName(componentName),
                     PackageManager.GET_META_DATA
@@ -302,8 +290,8 @@ object AppUtils {
             ) as String
         } catch (e: PackageManager.NameNotFoundException) {
             Utils.sendLog(LogLevel.ERROR, "Unable to find label for $componentName")
+            ""
         }
-        return label
     }
 
     /**
@@ -314,13 +302,7 @@ object AppUtils {
      * @return The number of installed packages, but without disabled packages.
      */
     fun countInstalledPackage(packageManager: PackageManager): Int {
-        var count = 0
-        packageManager.getInstalledApplications(0).forEach {
-            if (it.enabled) {
-                count ++
-            }
-        }
-        return count
+        return packageManager.getInstalledApplications(0).filter { it.enabled }.count()
     }
 
     /**
@@ -479,14 +461,16 @@ object AppUtils {
             return ArrayList(0)
         }
 
-        val shortcutQuery = ShortcutQuery()
-        shortcutQuery.setQueryFlags(
-            ShortcutQuery.FLAG_MATCH_DYNAMIC
-                    or ShortcutQuery.FLAG_MATCH_MANIFEST
-                    or ShortcutQuery.FLAG_MATCH_PINNED
-        )
-        shortcutQuery.setPackage(getPackageName(componentName))
-        return launcherApps.getShortcuts(shortcutQuery, Process.myUserHandle())
+        ShortcutQuery().apply {
+            setQueryFlags(
+                ShortcutQuery.FLAG_MATCH_DYNAMIC
+                        or ShortcutQuery.FLAG_MATCH_MANIFEST
+                        or ShortcutQuery.FLAG_MATCH_PINNED
+            )
+            setPackage(getPackageName(componentName))
+        }.also {
+            return launcherApps.getShortcuts(it, Process.myUserHandle())
+        }
     }
 
     /**
@@ -507,7 +491,6 @@ object AppUtils {
         componentName: String,
         id: String
     ) {
-        val packageName = getPackageName(componentName)
-        launcherApps?.startShortcut(packageName, id, null, null, user)
+        launcherApps?.startShortcut(getPackageName(componentName), id, null, null, user)
     }
 }

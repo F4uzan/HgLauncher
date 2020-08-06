@@ -3,7 +3,6 @@ package mono.hg.utils
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
@@ -168,7 +167,7 @@ object ViewUtils {
      *                  where the backstack is at its end.
      */
     fun restartActivity(activity: AppCompatActivity, clearTask: Boolean) {
-        val intent = Intent(activity.intent).apply {
+        Intent(activity.intent).apply {
             addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             if (clearTask) {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -180,7 +179,6 @@ object ViewUtils {
             activity.finish()
             activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
-
     }
 
 }

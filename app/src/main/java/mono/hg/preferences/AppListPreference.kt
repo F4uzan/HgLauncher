@@ -60,7 +60,7 @@ class AppListPreference : PreferenceFragmentCompat() {
             }
         }
 
-        list !!.entries = entries.toTypedArray<CharSequence>()
-        list.entryValues = entryValues.toTypedArray<CharSequence>()
+        list?.entries = entries.toTypedArray()
+        list?.entryValues = entryValues.toTypedArray()
     }
 }

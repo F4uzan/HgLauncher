@@ -46,11 +46,7 @@ class UserUtils(context: Context) {
      * @return Long The serial number itself, 0 on API level older than 17.
      */
     val currentSerial: Long
-        get() = if (Utils.sdkIsAround(17)) {
-            getSerial(currentUser)
-        } else {
-            0
-        }
+        get() = if (Utils.sdkIsAround(17)) getSerial(currentUser) else 0
 
     /**
      * Retrieves the UserHandle for the currently logged-in user.
@@ -58,11 +54,7 @@ class UserUtils(context: Context) {
      * @return UserHandle The UserHandle itself, null on API level older than 17.
      */
     val currentUser: UserHandle?
-        get() = if (Utils.sdkIsAround(17)) {
-            Process.myUserHandle()
-        } else {
-            null
-        }
+        get() = if (Utils.sdkIsAround(17)) Process.myUserHandle() else null
 
     init {
         // There is no point to running this class before the advent of multi-user.
