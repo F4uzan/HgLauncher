@@ -147,8 +147,7 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
             }
             setNegativeButton(R.string.dialog_cancel, null)
             setPositiveButton(R.string.dialog_ok) { _, _ ->
-                val name =
-                    nameField.text.toString().replace("\\|".toRegex(), "").trim { it <= ' ' }
+                val name = nameField.text.toString().replace("|", "").trim { it <= ' ' }
                 val url = urlField.text.toString().trim { it <= ' ' }
 
                 // Strip out %s as it triggers the matcher.

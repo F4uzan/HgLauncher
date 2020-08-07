@@ -153,11 +153,7 @@ object PreferenceHelper {
     }
 
     val searchProvider: String?
-        get() = if ("none" == search_provider_set) {
-            "none"
-        } else {
-            getProvider(search_provider_set)
-        }
+        get() = if ("none" == search_provider_set) "none" else getProvider(search_provider_set)
 
     fun getDefaultProvider(provider_id: String?): String {
         return when (provider_id) {
@@ -180,22 +176,17 @@ object PreferenceHelper {
         editor = preference.edit()
 
         // Initialise widgets early on.
-        preference.getString("widgets_list", "") !!.split(";".toRegex()).toList()
-            .filter { it.isNotEmpty() }
-            .forEach { widgets_list.add(it) }
+        preference.getString("widgets_list", "") !!.split(";")
+            .filterTo(widgets_list) { it.isNotEmpty() }
     }
 
-    private fun parseDelimitedSet(set: HashSet<String>?, map: MutableMap<String, String>) {
-        var toParse: List<String>
-        set !!.forEach {
-            toParse = it.split("\\|".toRegex())
-            map[toParse[0]] = toParse[1]
-        }
+    private fun parseDelimitedSet(set: HashSet<String>, map: MutableMap<String, String>) {
+        set.forEach { it.split("|").apply { map[this[0]] = this[1] } }
     }
 
     fun updateProvider(list: ArrayList<WebSearchProvider>) {
         val tempList = HashSet<String>()
-        list.forEach { tempList.add(it.name + "|" + it.url) }
+        list.mapTo(tempList) { "${it.name}|${it.url}" }
         update("provider_list", tempList)
 
         // Clear and update our Map.
@@ -204,12 +195,7 @@ object PreferenceHelper {
     }
 
     fun getProvider(id: String?): String? {
-        return if (providerList.containsKey(id)) {
-            provider_list[id]
-        } else {
-            // Whoops.
-            "none"
-        }
+        return provider_list[id] ?: "None"
     }
 
     private fun updateSeparatedSet(
@@ -217,7 +203,7 @@ object PreferenceHelper {
         map: Map<String, String>,
         set: HashSet<String>
     ) {
-        map.forEach { set.add("${it.key}|${it.value}") }
+        map.mapTo(set) { "${it.key}|${it.value}" }
         update(pref_id, set)
     }
 
@@ -238,9 +224,7 @@ object PreferenceHelper {
     }
 
     fun updateWidgets(list: ArrayList<String>) {
-        var tempList = ""
-        list.filter { it.isNotEmpty() }.forEach { tempList = tempList.plus(";").plus(it) }
-        update("widgets_list", tempList)
+        update("widgets_list", list.filter { it.isNotEmpty() }.joinToString(";"))
     }
 
     fun update(id: String?, stringSet: HashSet<String>?) {

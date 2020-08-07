@@ -913,16 +913,15 @@ class LauncherActivity : AppCompatActivity() {
      * @param restart Should a complete adapter & list re-initialisation be done?
      */
     private fun updatePinnedApps(restart: Boolean) {
-        var newAppString = ""
         if (pinnedAppString.isNotEmpty() && restart) {
             pinnedAppList.clear()
             pinnedAppsAdapter.updateDataSet(pinnedAppList, false)
-            pinnedAppString.split(";".toRegex()).forEach {
+            pinnedAppString.split(";").forEach {
                 var componentName = it
                 var user = userUtils !!.currentSerial
 
                 // Handle pinned apps coming from another user.
-                val userSplit = it.split("-".toRegex())
+                val userSplit = it.split("-")
                 if (userSplit.size == 2) {
                     user = userSplit[0].toLong()
                     componentName = userSplit[1]
@@ -935,13 +934,10 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         // Iterate through the list to get package name of each pinned apps, then stringify them.
-        pinnedAppList.forEach {
-            newAppString = newAppString + it.userPackageName + ";"
-        }
+        pinnedAppString = pinnedAppList.joinToString(";") { it.userPackageName }
 
         // Update the saved pinned apps.
-        PreferenceHelper.update("pinned_apps_list", newAppString)
-        pinnedAppString = newAppString
+        PreferenceHelper.update("pinned_apps_list", pinnedAppString)
     }
 
     /**
@@ -962,7 +958,7 @@ class LauncherActivity : AppCompatActivity() {
      */
     fun pinAppHere(packageName: String, user: Long) {
         // We need to make sure that an app from another user can be pinned.
-        val userSplit = packageName.split("-".toRegex())
+        val userSplit = packageName.split("-")
         var componentName = packageName
         if (userSplit.size == 2) {
             componentName = userSplit[1]

@@ -441,7 +441,7 @@ class AppListFragment : GenericPageFragment() {
             setPositiveButton(R.string.dialog_ok) { _, _ ->
                 val newLabel = renameField.text
                     .toString()
-                    .replace("\\|".toRegex(), "")
+                    .replace("|", "")
                     .trim { it <= ' ' }
 
                 // Update the specified item.
