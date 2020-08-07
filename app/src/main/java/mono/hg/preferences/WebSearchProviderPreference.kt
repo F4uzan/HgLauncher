@@ -123,12 +123,12 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
 
         val nameField = binding.providerEditName.apply {
             ViewCompat.setBackgroundTintList(this, ColorStateList.valueOf(PreferenceHelper.accent))
-            setText(url)
+            setText(name)
         }
 
         val urlField = binding.providerEditUrl.apply {
             ViewCompat.setBackgroundTintList(this, ColorStateList.valueOf(PreferenceHelper.accent))
-            setText(name)
+            setText(url)
         }
 
         val title: String = if (isEditing) {
@@ -147,30 +147,35 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
             }
             setNegativeButton(R.string.dialog_cancel, null)
             setPositiveButton(R.string.dialog_ok) { _, _ ->
-                val name = nameField.text.toString().replace("|", "").trim { it <= ' ' }
-                val url = urlField.text.toString().trim { it <= ' ' }
+                val currentName = nameField.text.toString().replace("|", "").trim()
+                val currentUrl = urlField.text.toString().trim()
 
                 // Strip out %s as it triggers the matcher.
                 // We won't use this URL, but we still need to check if the URL overall is valid.
-                val safeUrl = url.replace("%s".toRegex(), "+s")
+                val safeUrl = currentUrl.replace("%s".toRegex(), "+s")
                 if (! Patterns.WEB_URL.matcher(safeUrl).matches()) {
                     // This is an invalid URL, cancel.
                     Toast.makeText(
                         requireContext(), R.string.err_invalid_url,
                         Toast.LENGTH_SHORT
                     ).show()
+                    return@setPositiveButton
                 }
-                if ("none" != PreferenceHelper.getProvider(name) && ! isEditing) {
-                    // We already have that provider and/or we aren't editing.
+
+                if ("none" != PreferenceHelper.getProvider(currentName) &&
+                    currentUrl != PreferenceHelper.providerList[currentName]) {
+                    // We already have that provider.
                     Toast.makeText(
                         requireContext(), R.string.err_provider_exists,
                         Toast.LENGTH_SHORT
                     ).show()
+                    return@setPositiveButton
                 }
+
                 if (isEditing) {
-                    providerList[position] = WebSearchProvider(name, url)
+                    providerList[position] = WebSearchProvider(currentName, currentUrl)
                 } else {
-                    providerList.add(WebSearchProvider(name, url))
+                    providerList.add(WebSearchProvider(currentName, currentUrl))
                 }
                 PreferenceHelper.updateProvider(providerList)
                 providerAdapter?.notifyDataSetChanged()

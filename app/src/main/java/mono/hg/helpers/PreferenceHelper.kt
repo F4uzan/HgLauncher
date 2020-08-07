@@ -195,7 +195,7 @@ object PreferenceHelper {
     }
 
     fun getProvider(id: String?): String? {
-        return provider_list[id] ?: "None"
+        return provider_list[id] ?: "none"
     }
 
     private fun updateSeparatedSet(
