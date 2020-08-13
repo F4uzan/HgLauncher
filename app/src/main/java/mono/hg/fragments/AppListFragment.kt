@@ -393,21 +393,11 @@ class AppListFragment : GenericPageFragment() {
 
     private suspend fun fetchApps() {
         fetchAppsJob = CoroutineScope(Dispatchers.Default).launch {
+            val newList = AppUtils.loadApps(requireActivity(), hideHidden = true, shouldSort = true)
             withContext(Dispatchers.Main) {
-                appsAdapter.removeRange(0, appsList.size)
+                appsAdapter.updateDataSet(newList)
             }
-            appsList.clear()
-            appsList.addAll(
-                AppUtils.loadApps(
-                    requireActivity(),
-                    hideHidden = true,
-                    shouldSort = true
-                )
-            )
-            withContext(Dispatchers.Main) {
-                appsAdapter.updateDataSet(appsList)
-            }
-            appsAdapter.recyclerView.setItemViewCacheSize(appsList.size)
+            appsAdapter.recyclerView.setItemViewCacheSize(newList.size)
             appsAdapter.finishedLoading(true)
         }
     }

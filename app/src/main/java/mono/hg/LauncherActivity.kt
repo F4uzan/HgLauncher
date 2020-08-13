@@ -915,7 +915,7 @@ class LauncherActivity : AppCompatActivity() {
     private fun updatePinnedApps(restart: Boolean) {
         if (pinnedAppString.isNotEmpty() && restart) {
             pinnedAppList.clear()
-            pinnedAppsAdapter.updateDataSet(pinnedAppList, false)
+            pinnedAppsAdapter.updateDataSet(pinnedAppList)
             pinnedAppString.split(";").forEach {
                 var componentName = it
                 var user = userUtils !!.currentSerial
