@@ -15,6 +15,7 @@ import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.SettingsActivity
 import mono.hg.adapters.FileFolderAdapter
@@ -71,7 +72,7 @@ class BackupRestoreFragment : BackHandledFragment() {
         }
 
         setHasOptionsMenu(true)
-        fileFolderAdapter = context?.let { FileFolderAdapter(fileFoldersList, it) }
+        fileFolderAdapter = FileFolderAdapter(fileFoldersList, requireContext())
         val fileFolders = binding !!.filesList
         backupNameField = binding !!.fileInputEntry
         fileFolders.adapter = fileFolderAdapter
@@ -81,7 +82,10 @@ class BackupRestoreFragment : BackHandledFragment() {
             binding !!.fileInputContainer.visibility = View.GONE
         }
 
-        // Check for storage permission if we're in Marshmallow and up.
+        // This fragment is only used for API levels that does not specifically
+        // need scoped storage. These API levels will likely not require
+        // any change, and the deprecation warning is pointless.
+        @Suppress("DEPRECATION")
         currentPath = Environment.getExternalStorageDirectory()
         traverseStorage(currentPath)
         fileFolders.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -108,6 +112,7 @@ class BackupRestoreFragment : BackHandledFragment() {
     }
 
     override fun onBackPressed(): Boolean {
+        @Suppress("DEPRECATION")
         return if (currentPath?.path != Environment.getExternalStorageDirectory().path) {
             currentPath = File(currentPath?.parent)
             traverseStorage(currentPath)
@@ -169,10 +174,10 @@ class BackupRestoreFragment : BackHandledFragment() {
     // Open a directory and refresh fileFoldersList.
     private fun traverseStorage(path: File?) {
         fileFoldersList.clear()
-        fileFolderAdapter !!.notifyDataSetInvalidated()
+        fileFolderAdapter?.notifyDataSetInvalidated()
         val contents: Array<File>?
         contents = if (isInRestore) {
-            path !!.listFiles { dir ->
+            path?.listFiles { dir ->
                 (dir.name.toLowerCase(Locale.getDefault()).endsWith(".xml")
                         || dir.isDirectory && ! dir.isFile)
             }
@@ -180,19 +185,24 @@ class BackupRestoreFragment : BackHandledFragment() {
             path !!.listFiles()
         }
         if (contents != null && contents.isNotEmpty()) {
-            contents.filter { ! it.isHidden }
-                .forEach { fileFoldersList.add(FileFolder(it.name, it.isDirectory)) }
-            fileFolderAdapter !!.notifyDataSetChanged()
-        }
-
-        fileFoldersList.sortWith(Comparator { f1, f2 ->
-            if (f1.isFolder && ! f2.isFolder) {
-                - 1
-            } else if (! f1.isFolder && f2.isFolder) {
-                1
-            } else {
-                f1.name.compareTo(f2.name, ignoreCase = true)
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.Default) {
+                    contents.filter { ! it.isHidden }
+                        .forEach { fileFoldersList.add(FileFolder(it.name, it.isDirectory)) }
+                }
+                fileFoldersList.sortWith(Comparator { f1, f2 ->
+                    if (f1.isFolder && ! f2.isFolder) {
+                        - 1
+                    } else if (! f1.isFolder && f2.isFolder) {
+                        1
+                    } else {
+                        f1.name.compareTo(f2.name, ignoreCase = true)
+                    }
+                })
+                (requireActivity() as SettingsActivity).progressBar.show()
+                fileFolderAdapter?.notifyDataSetChanged()
+                (requireActivity() as SettingsActivity).progressBar.hide()
             }
-        })
+        }
     }
 }
