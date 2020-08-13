@@ -599,11 +599,7 @@ class LauncherActivity : AppCompatActivity() {
                 R.id.action_unpin -> {
                     pinnedAppList.remove(pinnedAppsAdapter.getItem(position))
                     pinnedAppsAdapter.removeItem(position)
-                    pinnedAppString = pinnedAppString.replace(
-                        app.userPackageName + ";",
-                        ""
-                    )
-                    PreferenceHelper.update("pinned_apps_list", pinnedAppString)
+                    updatePinnedApps(false)
                     if (pinnedAppsAdapter.isEmpty) {
                         doThis(HIDE_PINNED)
                     }
