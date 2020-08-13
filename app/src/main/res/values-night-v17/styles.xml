@@ -22,10 +22,6 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="Toolbar.Black" parent="@style/Widget.MaterialComponents.Toolbar">
-        <item name="android:background">@color/black</item>
-    </style>
-
     <style name="PreferenceList.NoRadio" parent="@style/Theme.MaterialComponents.Dialog.Alert">
         <item name="android:listChoiceIndicatorSingle">@null</item>
         <item name="android:background">@drawable/drawable_radio_selector_background</item>

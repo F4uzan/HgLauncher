@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.ListPreference
 import mono.hg.R
 import mono.hg.helpers.PreferenceHelper
+import mono.hg.utils.Utils
 
 /**
  * A ListPreference with custom style and dialogue buttons that follows [PreferenceHelper.accent].
@@ -14,7 +15,15 @@ import mono.hg.helpers.PreferenceHelper
 class ThemeableListPreference(context: Context?, attrs: AttributeSet?) :
     ListPreference(context, attrs) {
     override fun onClick() {
-        with(AlertDialog.Builder(context, R.style.PreferenceList_NoRadio)) {
+        val theme: Int =
+            if (Utils.sdkIsBelow(17) &&
+                (PreferenceHelper.appTheme() == "dark" || PreferenceHelper.appTheme() == "black")) {
+                R.style.PreferenceList_Night_NoRadio
+            } else {
+                R.style.PreferenceList_NoRadio
+            }
+
+        with(AlertDialog.Builder(context, theme)) {
             setTitle(title)
             setMessage(dialogMessage)
             setSingleChoiceItems(entries, entries.indexOf(entry)) { it, index ->

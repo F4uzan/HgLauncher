@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import mono.hg.R
 import mono.hg.helpers.PreferenceHelper
+import mono.hg.utils.Utils
 
 /**
  * A DialogFragment class that loads a list of apps, in style of ListPreference.
@@ -62,7 +63,15 @@ class AppSelectionPreferenceDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        with(AlertDialog.Builder(requireActivity(), R.style.PreferenceList_NoRadio)) {
+        val theme: Int =
+            if (Utils.sdkIsBelow(17) &&
+                (PreferenceHelper.appTheme() == "dark" || PreferenceHelper.appTheme() == "black")) {
+                R.style.PreferenceList_Night_NoRadio
+            } else {
+                R.style.PreferenceList_NoRadio
+            }
+
+        with(AlertDialog.Builder(requireActivity(), theme)) {
             setNegativeButton(R.string.dialog_cancel, null)
             setTitle(R.string.gesture_action_app_dialog_title)
             setSingleChoiceItems(mEntries, mClickedDialogEntryIndex, selectItemListener)

@@ -5,7 +5,6 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
@@ -137,19 +136,7 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
     }
 
     private fun setActivityTheme() {
-        when (PreferenceHelper.appTheme()) {
-            "light" -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
-            "dark" -> {
-                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
-                setTheme(R.style.AppTheme_Dark)
-            }
-            "black" -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
-            else -> if (Utils.atLeastQ()) {
-                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-            } else {
-                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-            }
-        }
+        ViewUtils.switchTheme(this, false)
         if (Utils.atLeastLollipop() && resources.configuration.uiMode and
             Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_NO
         ) {

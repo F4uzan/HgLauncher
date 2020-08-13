@@ -1,0 +1,34 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="BaseDialogStyle">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingStart">19dp</item>
+        <item name="android:paddingLeft">19dp</item>
+        <item name="android:paddingEnd">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+    </style>
+
+    <style name="WidgetDialogStyle" parent="@style/Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+
+    <style name="SearchSnack" parent="@style/Widget.MaterialComponents.Snackbar">
+        <item name="backgroundTint">@color/cardview_dark_background</item>
+    </style>
+
+    <style name="SearchSnack.TextView" parent="@style/Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="PreferenceList.NoRadio" parent="@style/Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:listChoiceIndicatorSingle">@null</item>
+        <item name="android:background">@drawable/drawable_radio_selector_background_light</item>
+    </style>
+
+    <style name="PreferenceList.Night.NoRadio" parent="@style/Theme.MaterialComponents.Dialog.Alert">
+        <item name="android:listChoiceIndicatorSingle">@null</item>
+        <item name="android:background">@drawable/drawable_radio_selector_background</item>
+    </style>
+</resources>

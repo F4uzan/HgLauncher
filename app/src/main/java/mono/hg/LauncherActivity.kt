@@ -22,7 +22,6 @@ import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.PopupMenu
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
@@ -165,10 +164,11 @@ class LauncherActivity : AppCompatActivity() {
     private var userUtils: UserUtils? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         // Load preferences before setting layout.
         loadPref()
+
+        super.onCreate(savedInstanceState)
+
         binding = ActivityLauncherspaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
         if (requestedOrientation != PreferenceHelper.orientation) {
@@ -522,23 +522,7 @@ class LauncherActivity : AppCompatActivity() {
             Utils.setDefaultProviders(resources, ArrayList())
         }
 
-        when (PreferenceHelper.appTheme()) {
-            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            "dark" -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                setTheme(R.style.LauncherTheme_Dark)
-            }
-            "black" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else -> if (Utils.atLeastQ()) {
-                AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                )
-            } else {
-                AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-                )
-            }
-        }
+        ViewUtils.switchTheme(this, true)
     }
 
     /**
