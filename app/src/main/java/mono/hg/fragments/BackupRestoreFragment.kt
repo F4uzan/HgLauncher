@@ -19,6 +19,8 @@ import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.SettingsActivity
 import mono.hg.adapters.FileFolderAdapter
+import mono.hg.compatHide
+import mono.hg.compatShow
 import mono.hg.databinding.FragmentBackupRestoreBinding
 import mono.hg.models.FileFolder
 import mono.hg.utils.BackupRestoreUtils
@@ -199,9 +201,9 @@ class BackupRestoreFragment : BackHandledFragment() {
                         f1.name.compareTo(f2.name, ignoreCase = true)
                     }
                 })
-                (requireActivity() as SettingsActivity).progressBar.show()
+                (requireActivity() as SettingsActivity).progressBar.compatShow()
                 fileFolderAdapter?.notifyDataSetChanged()
-                (requireActivity() as SettingsActivity).progressBar.hide()
+                (requireActivity() as SettingsActivity).progressBar.compatHide()
             }
         }
     }

@@ -18,8 +18,9 @@ import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.SettingsActivity
 import mono.hg.adapters.HiddenAppAdapter
+import mono.hg.compatHide
+import mono.hg.compatShow
 import mono.hg.databinding.FragmentHiddenAppsBinding
-import mono.hg.databinding.UiLoadProgressBinding
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.App
 import mono.hg.utils.AppUtils
@@ -109,7 +110,7 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     private fun loadApps() {
         if (isVisible) {
             CoroutineScope(Dispatchers.Main).launch {
-                (requireActivity() as SettingsActivity).progressBar.show()
+                (requireActivity() as SettingsActivity).progressBar.compatShow()
                 withContext(Dispatchers.Default) {
                     appList.clear()
                     appList.addAll(
@@ -121,7 +122,7 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
                     )
                 }
                 hiddenAppAdapter?.notifyDataSetChanged()
-                (requireActivity() as SettingsActivity).progressBar.hide()
+                (requireActivity() as SettingsActivity).progressBar.compatHide()
             }
         }
     }

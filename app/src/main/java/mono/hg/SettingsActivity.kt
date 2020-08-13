@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentTransaction
@@ -61,7 +62,7 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
         progressBar = binding.progressBar.apply {
             indicatorColors = IntArray(1) { PreferenceHelper.darkerAccent }
             trackColor = PreferenceHelper.accent
-            hide()
+            compatHide()
         }
 
         setSupportActionBar(toolbar)
@@ -166,5 +167,29 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
             supportActionBar !!.title = fragmentTitle
         }
         return true
+    }
+}
+
+/**
+ * Extension function for [ProgressIndicator]
+ * that handles hiding for API levels lower than 17.
+ */
+fun ProgressIndicator.compatHide() {
+    if (Utils.sdkIsAround(17)) {
+        hide()
+    } else {
+        visibility = View.INVISIBLE
+    }
+}
+
+/**
+ * Extension function for [ProgressIndicator]
+ * that handles showing the ProgressIndicator for API levels lower than 17.
+ */
+fun ProgressIndicator.compatShow() {
+    if (Utils.sdkIsAround(17)) {
+        show()
+    } else {
+        visibility = View.VISIBLE
     }
 }

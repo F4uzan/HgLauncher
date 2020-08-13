@@ -7,6 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.SettingsActivity
+import mono.hg.compatHide
+import mono.hg.compatShow
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.Utils.LogLevel
 import java.io.FileNotFoundException
@@ -65,7 +67,7 @@ object BackupRestoreUtils {
      */
     suspend fun restoreBackup(activity: SettingsActivity, path: String) {
         val uri = Uri.parse(path)
-        activity.progressBar.show()
+        activity.progressBar.compatShow()
         withContext(Dispatchers.IO) {
             ObjectInputStream(activity.contentResolver.openInputStream(uri)).use {
                 // We have to reset the leftover preferences to make sure they don't linger.
@@ -100,7 +102,7 @@ object BackupRestoreUtils {
                 PreferenceHelper.editor?.apply()
             }
         }
-        activity.progressBar.hide()
+        activity.progressBar.compatHide()
         ViewUtils.restartActivity(activity, false)
         Toast.makeText(activity, R.string.restore_complete, Toast.LENGTH_LONG).show()
     }
