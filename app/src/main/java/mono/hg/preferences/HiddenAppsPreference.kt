@@ -31,7 +31,6 @@ import java.util.*
 @Keep
 class HiddenAppsPreference : PreferenceFragmentCompat() {
     private var binding: FragmentHiddenAppsBinding? = null
-    private var loaderBinding: UiLoadProgressBinding? = null
     private val appList = ArrayList<App>()
     private var hiddenAppAdapter: HiddenAppAdapter? = null
     private var excludedAppList = HashSet<String>()
@@ -108,18 +107,22 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     }
 
     private fun loadApps() {
-        CoroutineScope(Dispatchers.Main).launch {
-            (requireActivity() as SettingsActivity).progressBar.show()
-            withContext(Dispatchers.Default) {
-                appList.clear()
-                appList.addAll(AppUtils.loadApps(requireActivity(),
-                    hideHidden = false,
-                    shouldSort = false
-                ))
+        if (isVisible) {
+            CoroutineScope(Dispatchers.Main).launch {
+                (requireActivity() as SettingsActivity).progressBar.show()
+                withContext(Dispatchers.Default) {
+                    appList.clear()
+                    appList.addAll(
+                        AppUtils.loadApps(
+                            requireActivity(),
+                            hideHidden = false,
+                            shouldSort = false
+                        )
+                    )
+                }
+                hiddenAppAdapter?.notifyDataSetChanged()
+                (requireActivity() as SettingsActivity).progressBar.hide()
             }
-            hiddenAppAdapter?.notifyDataSetInvalidated()
-            hiddenAppAdapter?.notifyDataSetChanged()
-            (requireActivity() as SettingsActivity).progressBar.hide()
         }
     }
 

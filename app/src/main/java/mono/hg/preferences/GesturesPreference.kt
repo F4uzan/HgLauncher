@@ -74,7 +74,9 @@ class GesturesPreference : PreferenceFragmentCompat() {
             }
         }
 
-        setGestureHandlerList(findPreference("gesture_handler"))
+        if (isVisible) {
+            setGestureHandlerList(findPreference("gesture_handler"))
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
