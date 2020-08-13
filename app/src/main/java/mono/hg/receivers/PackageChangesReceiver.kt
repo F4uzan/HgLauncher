@@ -14,13 +14,14 @@ open class PackageChangesReceiver : BroadcastReceiver() {
         if (intent.action != null && intent.data != null) {
             val packageName = intent.data !!.encodedSchemeSpecificPart
             val requireBroadcast = intent.action == "android.intent.action.PACKAGE_ADDED" ||
+                    intent.action == "android.intent.action.PACKAGE_FULLY_REMOVED" ||
                     intent.action == "android.intent.action.PACKAGE_REMOVED" ||
                     intent.action == "android.intent.action.PACKAGE_CHANGED" ||
                     intent.action == "android.intent.action.PACKAGE_REPLACED"
 
             // Receive intent from broadcast and let the Pages know they may need refresh.
             if (requireBroadcast && ! packageName.contains(context.packageName)) {
-                val mainIntent = Intent().apply {
+                Intent().apply {
                     putExtra("action", intent.action)
                     putExtra("package", packageName)
                     action = "mono.hg.PACKAGE_CHANGE_BROADCAST"
