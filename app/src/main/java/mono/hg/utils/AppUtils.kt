@@ -438,12 +438,8 @@ object AppUtils {
      * @param list          The list to be sorted.
      * @param applyInverse  Should user-defined sorting be applied?
      */
-    private fun sortAppList(list: List<App>, applyInverse: Boolean) {
-        if (PreferenceHelper.isListInverted && applyInverse) {
-            Collections.sort(list, Collections.reverseOrder(DisplayNameComparator()))
-        } else {
-            Collections.sort(list, DisplayNameComparator())
-        }
+    private fun sortAppList(list: MutableList<App>, applyInverse: Boolean) {
+        list.sortWith(DisplayNameComparator(PreferenceHelper.isListInverted && applyInverse))
     }
 
     /**

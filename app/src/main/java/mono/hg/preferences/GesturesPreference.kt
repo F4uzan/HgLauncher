@@ -68,7 +68,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
         // We can safely iterate through all the preferences and assume they're ListPreference
         // because GesturesPreference has nothing else aside from that.
         for (i in 0 until prefCount) {
-            val pref = prefScreen.getPreference(i).apply {
+            prefScreen.getPreference(i).apply {
                 setNestedListSummary(this as ListPreference)
                 this.onPreferenceChangeListener = NestingListListener
             }
@@ -84,7 +84,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
             if (resultCode == Activity.RESULT_CANCELED) {
                 val key = data.getStringExtra("key")
                 if (key !== null) {
-                    val preference = findPreference<ListPreference>(key).let {
+                    findPreference<ListPreference>(key).let {
                         it?.setSummary(R.string.gesture_action_default)
                         it?.value = getString(R.string.gesture_action_default_value)
                     }
@@ -148,15 +148,17 @@ class GesturesPreference : PreferenceFragmentCompat() {
 
             val intent = Intent(Intent.ACTION_MAIN, null)
             intent.addCategory(Intent.CATEGORY_LAUNCHER)
-            val availableActivities = manager.queryIntentActivities(intent, 0)
-            Collections.sort(availableActivities, ResolveInfo.DisplayNameComparator(manager))
-
-            // Fetch apps and feed it into our list.
-            availableActivities.forEach {
-                val appName = it.loadLabel(manager).toString()
-                val packageName = it.activityInfo.packageName + "/" + it.activityInfo.name
-                entries.add(appName)
-                entryValues.add(packageName)
+            manager.queryIntentActivities(intent, 0).apply {
+                sortWith(ResolveInfo.DisplayNameComparator(manager))
+            }.also {
+                // Fetch apps and feed it into our list.
+                it.forEach { resolveInfo ->
+                    val appName = resolveInfo.loadLabel(manager).toString()
+                    val packageName =
+                        resolveInfo.activityInfo.packageName + "/" + resolveInfo.activityInfo.name
+                    entries.add(appName)
+                    entryValues.add(packageName)
+                }
             }
 
             appListEntries = entries.toTypedArray()
