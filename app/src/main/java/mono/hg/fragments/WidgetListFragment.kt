@@ -145,19 +145,34 @@ class WidgetListFragment : GenericPageFragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Utils.sendLog(3, requestCode.toString())
         if (resultCode == Activity.RESULT_OK && data != null) {
             val widgetId =
                 data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
-            val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
-            if (requestCode != WIDGET_CONFIG_RETURN_CODE && appWidgetInfo.configure != null) {
-                Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE).apply {
-                    component = appWidgetInfo.configure
-                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-                }.also {
-                    startActivityForResult(it, WIDGET_CONFIG_RETURN_CODE)
+
+            // Add the widget first.
+            addWidget(data, appWidgetContainer.childCount, true)
+
+            // Launch widget configuration if it exists.
+            if (requestCode != WIDGET_CONFIG_RETURN_CODE) {
+                appWidgetManager.getAppWidgetInfo(widgetId).configure?.apply {
+                    if (Utils.atLeastLollipop()) {
+                        appWidgetHost.startAppWidgetConfigureActivityForResult(
+                            requireActivity(),
+                            widgetId,
+                            0,
+                            WIDGET_CONFIG_RETURN_CODE,
+                            null
+                        )
+                    } else {
+                        with(Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE)) {
+                            component = this@apply
+                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+                        }.also {
+                            startActivityForResult(it, WIDGET_CONFIG_RETURN_CODE)
+                        }
+                    }
                 }
-            } else {
-                addWidget(data, appWidgetContainer.childCount, true)
             }
         } else if (resultCode == Activity.RESULT_CANCELED && data != null) {
             val widgetId =
