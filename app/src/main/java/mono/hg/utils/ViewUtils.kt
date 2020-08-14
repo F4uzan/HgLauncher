@@ -5,8 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.view.View
+import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -24,6 +26,22 @@ import mono.hg.helpers.PreferenceHelper
  * Generally, most misc. view-handling is also stored here.
  */
 object ViewUtils {
+    /**
+     * Hides the status bar from the current activity.
+     *
+     * This function should only be used for API 14 and 15.
+     * For higher API levels, refer to [setWindowBarMode].
+     *
+     * @param window    The Window object from an activity,
+     *                  can be retrieved through getWindow().
+     */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    fun hideStatusBar(window: Window) {
+        if (Utils.sdkIsBelow(16)) {
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        }
+    }
     /**
      * Configures the status bar and navigation bar mode according to the
      * user's preference.

@@ -367,8 +367,12 @@ class LauncherActivity : AppCompatActivity() {
         } else if (Utils.atLeastKitKat()) {
             window.decorView.systemUiVisibility =
                 ViewUtils.setWindowbarMode(PreferenceHelper.windowBarMode)
-        } else if (Utils.sdkIsBelow(19) && PreferenceHelper.shouldHideStatusBar()) {
-            window.decorView.systemUiVisibility = ViewUtils.setWindowbarMode("status")
+        } else if (PreferenceHelper.shouldHideStatusBar()) {
+            if (Utils.sdkIsAround(16)) {
+                window.decorView.systemUiVisibility = ViewUtils.setWindowbarMode("status")
+            } else {
+                ViewUtils.hideStatusBar(window)
+            }
         }
     }
 
