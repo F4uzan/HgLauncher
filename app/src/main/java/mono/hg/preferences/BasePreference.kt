@@ -11,11 +11,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import mono.hg.R
 import mono.hg.SettingsActivity
@@ -177,7 +176,7 @@ class BasePreference : PreferenceFragmentCompat() {
         if (resultCode == Activity.RESULT_OK && resultData != null) {
             uri = resultData.data
             if (requestCode == RESTORE_STORAGE_CODE) {
-                CoroutineScope(Dispatchers.Main).launch {
+                lifecycleScope.launch {
                     BackupRestoreUtils.restoreBackup(
                         requireActivity() as SettingsActivity,
                         uri.toString()

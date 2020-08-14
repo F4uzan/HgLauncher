@@ -18,12 +18,12 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.ViewCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -113,12 +113,6 @@ class AppListFragment : GenericPageFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        if (fetchAppsJob != null) {
-            CoroutineScope(Dispatchers.Default).launch {
-                fetchAppsJob?.cancel()
-            }
-        }
-
         unregisterBroadcast()
         binding = null
     }
@@ -203,7 +197,7 @@ class AppListFragment : GenericPageFragment() {
         super.onStart()
 
         if (AppUtils.hasNewPackage(manager) || appsAdapter.isEmpty) {
-            CoroutineScope(Dispatchers.Default).launch {
+            lifecycleScope.launchWhenStarted {
                 if (fetchAppsJob != null) {
                     if (fetchAppsJob !!.isCompleted) {
                         appsAdapter.finishedLoading(false)
@@ -342,7 +336,7 @@ class AppListFragment : GenericPageFragment() {
                     val hasLauncherCategory = launchIntent.hasCategory(Intent.CATEGORY_LAUNCHER)
 
                     if (hasLauncherCategory && appsAdapter.hasFinishedLoading()) {
-                        CoroutineScope(Dispatchers.Default).launch {
+                        lifecycleScope.launch {
                             if (fetchAppsJob !!.isCompleted) {
                                 appsAdapter.finishedLoading(false)
                                 fetchApps()
@@ -353,7 +347,7 @@ class AppListFragment : GenericPageFragment() {
                     // Apps being uninstalled will have no launch intent,
                     // therefore it's better if we get the entire list again.
                     if (appsAdapter.hasFinishedLoading()) {
-                        CoroutineScope(Dispatchers.Default).launch {
+                        lifecycleScope.launch {
                             if (fetchAppsJob !!.isCompleted) {
                                 appsAdapter.finishedLoading(false)
                                 fetchApps()
@@ -392,11 +386,13 @@ class AppListFragment : GenericPageFragment() {
     }
 
     private suspend fun fetchApps() {
-        fetchAppsJob = CoroutineScope(Dispatchers.Default).launch {
-            val newList = AppUtils.loadApps(requireActivity(), hideHidden = true, shouldSort = true)
-            withContext(Dispatchers.Main) {
-                appsAdapter.updateDataSet(newList)
+        fetchAppsJob = lifecycleScope.launch {
+            var newList: List<App>
+            withContext(Dispatchers.Default) {
+                newList = AppUtils.loadApps(requireActivity(), hideHidden = true, shouldSort = true)
             }
+
+            appsAdapter.updateDataSet(newList)
             appsAdapter.recyclerView.setItemViewCacheSize(newList.size)
             appsAdapter.finishedLoading(true)
         }

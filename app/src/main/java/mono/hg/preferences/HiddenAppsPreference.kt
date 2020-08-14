@@ -10,10 +10,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
 import androidx.annotation.Keep
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceFragmentCompat
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.SettingsActivity
@@ -69,6 +68,7 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     override fun onDestroyView() {
         super.onDestroyView()
 
+        (requireActivity() as SettingsActivity).progressBar.compatHide()
         PreferenceHelper.update("hidden_apps", excludedAppList)
 
         // We have been sent back. Set the action bar title accordingly.
@@ -108,22 +108,20 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     }
 
     private fun loadApps() {
-        if (isVisible) {
-            CoroutineScope(Dispatchers.Main).launch {
-                (requireActivity() as SettingsActivity).progressBar.compatShow()
-                withContext(Dispatchers.Default) {
-                    appList.clear()
-                    appList.addAll(
-                        AppUtils.loadApps(
-                            requireActivity(),
-                            hideHidden = false,
-                            shouldSort = false
-                        )
+        lifecycleScope.launchWhenStarted {
+            (requireActivity() as SettingsActivity).progressBar.compatShow()
+            withContext(Dispatchers.Default) {
+                appList.clear()
+                appList.addAll(
+                    AppUtils.loadApps(
+                        requireActivity(),
+                        hideHidden = false,
+                        shouldSort = false
                     )
-                }
-                hiddenAppAdapter?.notifyDataSetChanged()
-                (requireActivity() as SettingsActivity).progressBar.compatHide()
+                )
             }
+            hiddenAppAdapter?.notifyDataSetChanged()
+            (requireActivity() as SettingsActivity).progressBar.compatHide()
         }
     }
 

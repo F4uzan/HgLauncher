@@ -7,13 +7,14 @@ import android.content.pm.ResolveInfo
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.Keep
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.utils.AppUtils
 import mono.hg.wrappers.AppSelectionPreferenceDialog
@@ -74,9 +75,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
             }
         }
 
-        if (isVisible) {
-            setGestureHandlerList(findPreference("gesture_handler"))
-        }
+        setGestureHandlerList(findPreference("gesture_handler"))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -117,18 +116,20 @@ class GesturesPreference : PreferenceFragmentCompat() {
         // Fetch all available icon pack.
         val intent = Intent("mono.hg.GESTURE_HANDLER")
 
-        CoroutineScope(Dispatchers.Default).launch {
-            manager.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
-                .forEach {
-                    with(it.activityInfo) {
-                        val className = this.name
-                        val packageName = this.packageName
-                        val componentName = "$packageName/$className"
-                        val appName = loadLabel(manager).toString()
-                        entries.add(appName)
-                        entryValues.add(componentName)
+        lifecycleScope.launch {
+            withContext(Dispatchers.Default) {
+                manager.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
+                    .forEach {
+                        with(it.activityInfo) {
+                            val className = this.name
+                            val packageName = this.packageName
+                            val componentName = "$packageName/$className"
+                            val appName = loadLabel(manager).toString()
+                            entries.add(appName)
+                            entryValues.add(componentName)
+                        }
                     }
-                }
+            }
 
             list?.entries = entries.toTypedArray()
             list?.entryValues = entryValues.toTypedArray()

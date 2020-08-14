@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Toast
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -102,7 +102,7 @@ class BackupRestoreFragment : BackHandledFragment() {
                 val possibleBackup =
                     "file://" + currentPath + File.separator + fileFoldersList[position].name
                 if (isInRestore && fileFoldersList[position].name.indexOf('.') > 0) {
-                    CoroutineScope(Dispatchers.Main).launch {
+                    lifecycleScope.launch {
                         BackupRestoreUtils.restoreBackup(
                             requireActivity() as SettingsActivity,
                             possibleBackup
@@ -187,7 +187,7 @@ class BackupRestoreFragment : BackHandledFragment() {
             path !!.listFiles()
         }
         if (contents != null && contents.isNotEmpty()) {
-            CoroutineScope(Dispatchers.Main).launch {
+            lifecycleScope.launch {
                 withContext(Dispatchers.Default) {
                     contents.filter { ! it.isHidden }
                         .forEach { fileFoldersList.add(FileFolder(it.name, it.isDirectory)) }
