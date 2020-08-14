@@ -145,7 +145,6 @@ class WidgetListFragment : GenericPageFragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Utils.sendLog(3, requestCode.toString())
         if (resultCode == Activity.RESULT_OK && data != null) {
             val widgetId =
                 data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
