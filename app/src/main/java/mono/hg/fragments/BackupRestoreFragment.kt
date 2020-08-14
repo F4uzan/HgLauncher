@@ -55,9 +55,7 @@ class BackupRestoreFragment : BackHandledFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (arguments != null) {
-            isInRestore = requireArguments().getBoolean("isRestore", false)
-        }
+        isInRestore = arguments?.getBoolean("isRestore", false) ?: false
         super.onCreate(savedInstanceState)
 
         /*

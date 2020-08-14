@@ -198,12 +198,12 @@ class AppListFragment : GenericPageFragment() {
 
         if (AppUtils.hasNewPackage(manager) || appsAdapter.isEmpty) {
             lifecycleScope.launchWhenStarted {
-                if (fetchAppsJob != null) {
-                    if (fetchAppsJob !!.isCompleted) {
+                fetchAppsJob?.apply {
+                    if (this.isCompleted) {
                         appsAdapter.finishedLoading(false)
                         fetchApps()
                     }
-                } else {
+                } ?: run {
                     fetchApps()
                 }
             }
@@ -324,15 +324,13 @@ class AppListFragment : GenericPageFragment() {
     private fun registerBroadcast() {
         packageBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                val isRemoving =
-                    intent.getStringExtra("action") == "android.intent.action.PACKAGE_REMOVED"
                 val launchIntent = intent.getStringExtra("package")?.let {
                     requireActivity().packageManager.getLaunchIntentForPackage(
                         it
                     )
                 }
 
-                if (launchIntent != null) {
+                launchIntent?.apply {
                     val hasLauncherCategory = launchIntent.hasCategory(Intent.CATEGORY_LAUNCHER)
 
                     if (hasLauncherCategory && appsAdapter.hasFinishedLoading()) {
@@ -343,7 +341,7 @@ class AppListFragment : GenericPageFragment() {
                             }
                         }
                     }
-                } else if (isRemoving) {
+                } ?: run {
                     // Apps being uninstalled will have no launch intent,
                     // therefore it's better if we get the entire list again.
                     if (appsAdapter.hasFinishedLoading()) {
@@ -374,10 +372,10 @@ class AppListFragment : GenericPageFragment() {
     }
 
     private fun unregisterBroadcast() {
-        if (packageBroadcastReceiver != null) {
+        packageBroadcastReceiver?.apply {
             requireActivity().unregisterReceiver(packageBroadcastReceiver)
             packageBroadcastReceiver = null
-        } else {
+        } ?: run {
             Utils.sendLog(
                 Utils.LogLevel.VERBOSE,
                 "unregisterBroadcast() was called to a null receiver."

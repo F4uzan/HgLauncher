@@ -97,9 +97,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
                     )
                 }
 
-                if (key != null) {
-                    findPreference<ListPreference>(key)?.summary = app
-                }
+                key?.let { findPreference<ListPreference>(it)?.summary = app }
             }
         }
     }

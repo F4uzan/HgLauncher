@@ -31,11 +31,9 @@ class AppSelectionPreferenceDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            preference = arguments?.getString("key")
-            mEntries = arguments?.getCharSequenceArray("entries")
-            mEntryValues = arguments?.getCharSequenceArray("entryValues")
-        }
+        preference = arguments?.getString("key")
+        mEntries = arguments?.getCharSequenceArray("entries")
+        mEntryValues = arguments?.getCharSequenceArray("entryValues")
     }
 
     override fun onStart() {

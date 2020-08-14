@@ -206,9 +206,9 @@ object Utils {
      */
     fun handleGestureActions(activity: LauncherActivity, direction: Int) {
         when (PreferenceHelper.getGestureForDirection(direction)) {
-            "handler" -> if (PreferenceHelper.gestureHandler != null) {
-                Intent("mono.hg.GESTURE_HANDLER").apply {
-                    component = PreferenceHelper.gestureHandler
+            "handler" -> PreferenceHelper.gestureHandler?.apply {
+                with (Intent("mono.hg.GESTURE_HANDLER")) {
+                    component = this@apply
                     type = "text/plain"
                     putExtra("direction", direction)
                 }.also {

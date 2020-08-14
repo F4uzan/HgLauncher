@@ -181,19 +181,19 @@ object LauncherIconHelper {
         }
 
         // Begin parsing the received appfilter.
-        if (iconFilterXml != null) {
+        iconFilterXml?.apply {
             try {
-                var eventType = iconFilterXml.eventType
+                var eventType = this.eventType
                 while (eventType != XmlPullParser.END_DOCUMENT) {
                     if (eventType == XmlPullParser.START_TAG) {
-                        if (iconFilterXml.name == "item") {
+                        if (this.name == "item") {
                             var componentName: String? = null
                             var drawableName: String? = null
-                            for (i in 0 until iconFilterXml.attributeCount) {
-                                if (iconFilterXml.getAttributeName(i) == "component") {
-                                    componentName = iconFilterXml.getAttributeValue(i)
-                                } else if (iconFilterXml.getAttributeName(i) == "drawable") {
-                                    drawableName = iconFilterXml.getAttributeValue(i)
+                            for (i in 0 until this.attributeCount) {
+                                if (this.getAttributeName(i) == "component") {
+                                    componentName = this.getAttributeValue(i)
+                                } else if (this.getAttributeName(i) == "drawable") {
+                                    drawableName = this.getAttributeValue(i)
                                 }
                             }
                             if (! mPackagesDrawables.containsKey(componentName)) {
@@ -201,7 +201,7 @@ object LauncherIconHelper {
                             }
                         }
                     }
-                    eventType = iconFilterXml.next()
+                    eventType = this.next()
                 }
             } catch (e: IOException) {
                 Utils.sendLog(LogLevel.ERROR, e.toString())

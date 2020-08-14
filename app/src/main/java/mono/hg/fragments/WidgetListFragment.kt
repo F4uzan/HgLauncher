@@ -235,13 +235,9 @@ class WidgetListFragment : GenericPageFragment() {
 
         val widgetId =
             data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
-        val appWidgetInfo = appWidgetManager.getAppWidgetInfo(widgetId)
 
-        if (appWidgetInfo != null) {
-            val appWidgetHostView = appWidgetHost.createView(
-                requireActivity().applicationContext,
-                widgetId, appWidgetInfo
-            ).apply {
+        appWidgetManager.getAppWidgetInfo(widgetId).apply {
+            with(appWidgetHost.createView(requireActivity().applicationContext, widgetId, this)) {
                 // Notify widget of the available minimum space.
                 minimumHeight = appWidgetInfo.minHeight
                 setAppWidget(widgetId, appWidgetInfo)
@@ -251,21 +247,21 @@ class WidgetListFragment : GenericPageFragment() {
                         appWidgetInfo.minHeight, appWidgetInfo.minWidth, appWidgetInfo.minHeight
                     )
                 }
-            }
 
-            // Add the widget.
-            appWidgetContainer.addView(appWidgetHostView, index)
+                // Add the widget.
+                appWidgetContainer.addView(this, index)
 
-            // Immediately listens for the widget.
-            appWidgetHost.startListening()
-            addWidgetActionListener(index)
-            registerForContextMenu(appWidgetContainer.getChildAt(index))
-            if (newWidget) {
-                // Update our list.
-                widgetsList.add(widgetId.toString())
+                // Immediately listens for the widget.
+                appWidgetHost.startListening()
+                addWidgetActionListener(index)
+                registerForContextMenu(appWidgetContainer.getChildAt(index))
+                if (newWidget) {
+                    // Update our list.
+                    widgetsList.add(widgetId.toString())
 
-                // Apply preference changes.
-                PreferenceHelper.updateWidgets(widgetsList)
+                    // Apply preference changes.
+                    PreferenceHelper.updateWidgets(widgetsList)
+                }
             }
         }
     }

@@ -27,11 +27,7 @@ class WebSearchProvider {
         val `object` = other as WebSearchProvider?
 
         // URL can be shared, but names should stay unique.
-        return if (`object` != null) {
-            name == `object`.name || this.javaClass == other !!.javaClass
-        } else {
-            false
-        }
+        return name == `object`?.name || this.javaClass == other !!.javaClass
     }
 
     override fun hashCode(): Int {

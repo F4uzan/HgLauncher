@@ -328,11 +328,7 @@ class LauncherActivity : AppCompatActivity() {
 
         // Restore last search query if the user requests for it.
         if (PreferenceHelper.keepLastSearch()) {
-            if (viewPagerAdapter.getCurrentPage() != null) {
-                if (viewPagerAdapter.getCurrentPage() !!.isAcceptingSearch()) {
-                    viewPagerAdapter.getCurrentPage()?.commitSearch(searchBar.text.toString())
-                }
-            }
+            doSearch(searchBar.text.toString())
         }
 
         // Toggle back the refresh switch.
@@ -408,14 +404,10 @@ class LauncherActivity : AppCompatActivity() {
      */
     fun doThis(action: String?) {
         when (action) {
-            CLOSE_MENU -> if (appMenu != null) {
-                if (appMenu !!.menu.findItem(R.id.action_app_actions) != null) {
-                    appMenu !!.menu.findItem(R.id.action_app_actions).subMenu.close()
-                }
-                if (appMenu !!.menu.findItem(SHORTCUT_MENU_GROUP) != null) {
-                    appMenu !!.menu.findItem(SHORTCUT_MENU_GROUP).subMenu.close()
-                }
-                appMenu !!.dismiss()
+            CLOSE_MENU -> appMenu?.apply {
+                this.menu.findItem(R.id.action_app_actions)?.subMenu?.close()
+                this.menu.findItem(SHORTCUT_MENU_GROUP)?.subMenu?.close()
+                this.dismiss()
             }
             SHOW_PANEL -> slidingHome.setPanelState(
                 SlidingUpPanelLayout.PanelState.COLLAPSED,
@@ -641,12 +633,8 @@ class LauncherActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 
-                // Pages should be informed of the new query as soon as they are selected.
-                if (viewPagerAdapter.getCurrentPage() != null) {
-                    if (viewPagerAdapter.getCurrentPage() !!.isAcceptingSearch()) {
-                        viewPagerAdapter.getCurrentPage()?.commitSearch(searchBar.text.toString())
-                    }
-                }
+                // Pages should be informed about the new query as soon as they are selected.
+                doSearch(searchBar.text.toString())
             }
         })
 
@@ -667,20 +655,12 @@ class LauncherActivity : AppCompatActivity() {
                     if (isContextVisible) {
                         doThis("hide_context_button")
                     }
-                    if (viewPagerAdapter.getCurrentPage() != null) {
-                        if (viewPagerAdapter.getCurrentPage() !!.isAcceptingSearch()) {
-                            viewPagerAdapter.getCurrentPage()?.resetSearch()
-                        }
-                    }
+                    resetSearch()
                     searchSnack.dismiss()
                     stopTimer()
                 } else {
                     // Begin filtering our list.
-                    if (viewPagerAdapter.getCurrentPage() != null) {
-                        if (viewPagerAdapter.getCurrentPage() !!.isAcceptingSearch()) {
-                            viewPagerAdapter.getCurrentPage()?.commitSearch(trimmedInputText)
-                        }
-                    }
+                    doSearch(trimmedInputText)
                 }
             }
 
@@ -924,6 +904,22 @@ class LauncherActivity : AppCompatActivity() {
 
         // Update the saved pinned apps.
         PreferenceHelper.update("pinned_apps_list", pinnedAppString)
+    }
+
+    private fun doSearch(query: String) {
+        viewPagerAdapter.getCurrentPage()?.apply {
+            if (this.isAcceptingSearch()) {
+                this.commitSearch(query)
+            }
+        }
+    }
+
+    private fun resetSearch() {
+        viewPagerAdapter.getCurrentPage()?.apply {
+            if (this.isAcceptingSearch()) {
+                this.resetSearch()
+            }
+        }
     }
 
     /**

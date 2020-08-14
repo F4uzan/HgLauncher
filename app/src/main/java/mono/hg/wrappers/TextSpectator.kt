@@ -28,12 +28,8 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
      *
      * @return The contents of EditText.
      */
-    protected val inputText: String?
-        get() = if (watchField != null) {
-            watchField.get() !!.text.toString()
-        } else {
-            null
-        }
+    protected val inputText: String
+        get() = watchField?.get()?.text.toString()
 
     /**
      * Fetch the input text of the attached EditText. Trimmed using String.trim().
@@ -41,11 +37,7 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
      * @return The trimmed contents of EditText;
      */
     val trimmedInputText: String
-        get() = if (watchField != null) {
-            watchField.get() !!.text.toString().trim { it <= ' ' }
-        } else {
-            ""
-        }
+        get() = watchField?.get()?.text.toString().trim()
 
     /**
      * Stops the Handler loop.

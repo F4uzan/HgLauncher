@@ -29,15 +29,15 @@ object ActivityServiceUtils {
         val inputMethodManager = activity.getSystemService(
             Activity.INPUT_METHOD_SERVICE
         ) as InputMethodManager
-        if (activity.currentFocus != null) {
+        activity.currentFocus?.apply {
             if (Utils.atLeastR()) {
-                activity.currentFocus?.windowInsetsController?.hide(WindowInsets.Type.ime())
+                this.windowInsetsController?.hide(WindowInsets.Type.ime())
             } else {
                 inputMethodManager.hideSoftInputFromWindow(
-                    activity.currentFocus !!.windowToken,
+                    this.windowToken,
                     InputMethodManager.HIDE_NOT_ALWAYS
                 )
-                activity.currentFocus !!.clearFocus()
+                this.clearFocus()
             }
         }
     }

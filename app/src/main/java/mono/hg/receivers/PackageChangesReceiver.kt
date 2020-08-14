@@ -12,7 +12,7 @@ import android.content.Intent
 open class PackageChangesReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != null && intent.data != null) {
-            val packageName = intent.data !!.encodedSchemeSpecificPart
+            val packageName = intent.data?.encodedSchemeSpecificPart ?: ""
             val requireBroadcast = intent.action == "android.intent.action.PACKAGE_ADDED" ||
                     intent.action == "android.intent.action.PACKAGE_FULLY_REMOVED" ||
                     intent.action == "android.intent.action.PACKAGE_REMOVED" ||
