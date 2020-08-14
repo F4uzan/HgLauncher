@@ -17,7 +17,8 @@ class ThemeableListPreference(context: Context?, attrs: AttributeSet?) :
     override fun onClick() {
         val theme: Int =
             if (Utils.sdkIsBelow(17) &&
-                (PreferenceHelper.appTheme() == "dark" || PreferenceHelper.appTheme() == "black")) {
+                (PreferenceHelper.appTheme() == "dark" || PreferenceHelper.appTheme() == "black")
+            ) {
                 R.style.PreferenceList_Night_NoRadio
             } else {
                 R.style.PreferenceList_NoRadio

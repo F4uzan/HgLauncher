@@ -13,7 +13,7 @@ class DisplayNameComparator(private var descending: Boolean) : Comparator<App> {
     private val collator = Collator.getInstance()
     override fun compare(a: App, b: App): Int {
         return if (descending) {
-            collator.compare(a.appName, b.appName) * (-1)
+            collator.compare(a.appName, b.appName) * (- 1)
         } else {
             collator.compare(a.appName, b.appName)
         }

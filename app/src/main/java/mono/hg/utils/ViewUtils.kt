@@ -38,10 +38,13 @@ object ViewUtils {
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     fun hideStatusBar(window: Window) {
         if (Utils.sdkIsBelow(16)) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
         }
     }
+
     /**
      * Configures the status bar and navigation bar mode according to the
      * user's preference.

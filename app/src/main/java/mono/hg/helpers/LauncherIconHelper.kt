@@ -65,7 +65,8 @@ object LauncherIconHelper {
         return if (! shouldHide) {
             var icon = getIconDrawable(activity, componentName, user)
             if (PreferenceHelper.shadeAdaptiveIcon() &&
-                (Utils.atLeastOreo() && icon is AdaptiveIconDrawable)) {
+                (Utils.atLeastOreo() && icon is AdaptiveIconDrawable)
+            ) {
                 icon = drawAdaptiveShadow(activity.resources, icon)
             }
             icon
@@ -244,8 +245,9 @@ object LauncherIconHelper {
     private fun getIconDrawable(activity: Activity, appPackageName: String, user: Long): Drawable? {
         val packageManager = activity.packageManager
         val componentName = "ComponentInfo{$appPackageName}"
-        val iconPackageName = PreferenceHelper.preference.getString("icon_pack", "default") ?: "default"
-        var iconRes: Resources ?= null
+        val iconPackageName =
+            PreferenceHelper.preference.getString("icon_pack", "default") ?: "default"
+        var iconRes: Resources? = null
         var defaultIcon: Drawable? = null
         try {
             defaultIcon = if (Utils.atLeastLollipop()) {

@@ -163,7 +163,8 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
                 }
 
                 if ("none" != PreferenceHelper.getProvider(currentName) &&
-                    currentUrl != PreferenceHelper.providerList[currentName]) {
+                    currentUrl != PreferenceHelper.providerList[currentName]
+                ) {
                     // We already have that provider.
                     Toast.makeText(
                         requireContext(), R.string.err_provider_exists,
