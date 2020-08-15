@@ -827,12 +827,9 @@ class LauncherActivity : AppCompatActivity() {
                                     override fun onAnimationStart(animation: Animator) {
                                         searchContainer.visibility = View.VISIBLE
                                     }
-
-                                    override fun onAnimationEnd(animation: Animator) {
-                                        searchContainer.clearAnimation()
-                                    }
                                 })
                         } else {
+                            searchContainer.animate().alpha(1f)
                             searchContainer.visibility = View.VISIBLE
                         }
                     }
