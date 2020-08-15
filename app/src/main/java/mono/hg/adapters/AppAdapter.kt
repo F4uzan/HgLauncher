@@ -125,14 +125,20 @@ class AppAdapter(apps: List<App?>, listeners: Any?, stableIds: Boolean) :
 
         private fun isUp(keycode: Int): Boolean {
             return when (keycode) {
-                KeyEvent.KEYCODE_SYSTEM_NAVIGATION_UP, KeyEvent.KEYCODE_DPAD_UP -> true
+                KeyEvent.KEYCODE_SYSTEM_NAVIGATION_UP,
+                KeyEvent.KEYCODE_SYSTEM_NAVIGATION_LEFT,
+                KeyEvent.KEYCODE_DPAD_LEFT,
+                KeyEvent.KEYCODE_DPAD_UP -> true
                 else -> false
             }
         }
 
         private fun isDown(keycode: Int): Boolean {
             return when (keycode) {
-                KeyEvent.KEYCODE_SYSTEM_NAVIGATION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN -> true
+                KeyEvent.KEYCODE_SYSTEM_NAVIGATION_DOWN,
+                KeyEvent.KEYCODE_SYSTEM_NAVIGATION_RIGHT,
+                KeyEvent.KEYCODE_DPAD_RIGHT,
+                KeyEvent.KEYCODE_DPAD_DOWN -> true
                 else -> false
             }
         }
