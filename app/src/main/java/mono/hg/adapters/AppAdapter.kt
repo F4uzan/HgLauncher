@@ -51,6 +51,8 @@ class AppAdapter(apps: List<App?>, listeners: Any?, stableIds: Boolean) :
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
 
+        adapterRecyclerView = recyclerView
+
         // Handle key up and key down and attempt to move selection.
         // This is unnecessary for newer API.
         if (Utils.sdkIsBelow(21)) {
