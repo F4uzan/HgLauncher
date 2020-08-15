@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -182,39 +181,6 @@ class WidgetListFragment : GenericPageFragment() {
         }
     }
 
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        val index = appWidgetContainer.indexOfChild(callingView)
-        return when (item.itemId) {
-            0 -> {
-                // Don't pull the panel just yet.
-                getLauncherActivity().requestPanelLock()
-
-                Intent(AppWidgetManager.ACTION_APPWIDGET_PICK).apply {
-                    putExtra(
-                        AppWidgetManager.EXTRA_APPWIDGET_ID,
-                        appWidgetHost.allocateAppWidgetId()
-                    )
-                }.also {
-                    startActivityForResult(it, WIDGET_CONFIG_START_CODE)
-                }
-                true
-            }
-            1 -> {
-                callingView?.let { removeWidget(it, callingView !!.appWidgetId) }
-                true
-            }
-            2 -> {
-                swapWidget(index, index - 1)
-                true
-            }
-            3 -> {
-                swapWidget(index, index + 1)
-                true
-            }
-            else -> super.onContextItemSelected(item)
-        }
-    }
-
     /**
      * Adds a widget to the desktop.
      *
@@ -253,7 +219,6 @@ class WidgetListFragment : GenericPageFragment() {
                 // Immediately listens for the widget.
                 appWidgetHost.startListening()
                 addWidgetActionListener(index)
-                registerForContextMenu(appWidgetContainer.getChildAt(index))
                 if (newWidget) {
                     // Update our list.
                     widgetsList.add(widgetId.toString())
@@ -270,7 +235,6 @@ class WidgetListFragment : GenericPageFragment() {
      * relating to widgets.
      */
     private fun removeWidget(view: View, id: Int) {
-        unregisterForContextMenu(view)
         appWidgetContainer.removeView(view)
 
         // Remove the widget from the list.
@@ -324,8 +288,36 @@ class WidgetListFragment : GenericPageFragment() {
                 getItem(3).isVisible = appWidgetContainer.childCount != index + 1
             }
 
-            popupMenu.setOnMenuItemClickListener {
-                onContextItemSelected(it)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    0 -> {
+                        // Don't pull the panel just yet.
+                        getLauncherActivity().requestPanelLock()
+
+                        Intent(AppWidgetManager.ACTION_APPWIDGET_PICK).apply {
+                            putExtra(
+                                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                                appWidgetHost.allocateAppWidgetId()
+                            )
+                        }.also {
+                            startActivityForResult(it, WIDGET_CONFIG_START_CODE)
+                        }
+                        true
+                    }
+                    1 -> {
+                        removeWidget(callingView !!, callingView !!.appWidgetId)
+                        true
+                    }
+                    2 -> {
+                        swapWidget(index, index - 1)
+                        true
+                    }
+                    3 -> {
+                        swapWidget(index, index + 1)
+                        true
+                    }
+                    else -> false
+                }
             }
 
             popupMenu.show()
