@@ -18,6 +18,7 @@ package mono.hg.appwidget
 import android.appwidget.AppWidgetHostView
 import android.content.Context
 import android.view.MotionEvent
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 
 /**
@@ -35,7 +36,7 @@ class LauncherAppWidgetHostView(context: Context?) : AppWidgetHostView(context) 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         downTime = when (event.action) {
             MotionEvent.ACTION_DOWN -> System.currentTimeMillis()
-            MotionEvent.ACTION_UP -> {
+            MotionEvent.ACTION_MOVE -> {
                 val isLongPressing = System.currentTimeMillis() - downTime > LONG_PRESS_DURATION
                 return if (isLongPressing) {
                     longClickListener?.onLongClick(this)
@@ -56,6 +57,6 @@ class LauncherAppWidgetHostView(context: Context?) : AppWidgetHostView(context) 
 
     companion object {
         // Default duration before long press is triggered.
-        private const val LONG_PRESS_DURATION = 300L
+        private val LONG_PRESS_DURATION = ViewConfiguration.getLongPressTimeout()
     }
 }
