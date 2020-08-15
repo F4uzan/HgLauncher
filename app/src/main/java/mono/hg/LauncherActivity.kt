@@ -843,11 +843,14 @@ class LauncherActivity : AppCompatActivity() {
                         // Hide keyboard if container is invisible.
                         ActivityServiceUtils.hideSoftKeyboard(this@LauncherActivity)
 
-                        // Animate the container.
+                        // Toggle the visibility early.
                         searchContainer.visibility = View.INVISIBLE
 
                         if (! isResuming && ! ActivityServiceUtils.isPowerSaving(this@LauncherActivity)) {
-                            searchContainer.animate().alpha(0f).duration = animateDuration.toLong()
+                            // Animate the container.
+                            searchContainer.animate().alpha(0f)
+                                .setDuration(animateDuration.toLong())
+                                .setListener(null)
                         } else {
                             isResuming = false
                         }
