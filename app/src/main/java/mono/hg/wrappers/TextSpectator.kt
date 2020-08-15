@@ -1,6 +1,7 @@
 package mono.hg.wrappers
 
 import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
@@ -13,12 +14,12 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
     private val watchField: WeakReference<EditText>?
     private var tickDuration = DEFAULT_TICK_DURATION
     private var timerStopped = false
-    private val handler = Handler()
+    private val handler = Looper.myLooper()?.let { Handler(it) }
     private val runnable: Runnable = object : Runnable {
         override fun run() {
             if (! timerStopped) {
                 whenTimerTicked()
-                handler.postDelayed(this, tickDuration.toLong())
+                handler?.postDelayed(this, tickDuration.toLong())
             }
         }
     }
@@ -51,7 +52,7 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
      */
     protected fun startTimer() {
         timerStopped = false
-        handler.postDelayed(runnable, tickDuration.toLong())
+        handler?.postDelayed(runnable, tickDuration.toLong())
     }
 
     /**
