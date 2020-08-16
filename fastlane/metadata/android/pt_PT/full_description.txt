@@ -1,11 +1,14 @@
-Uma lista "sobe e desce" de aplicativos,
- se tu encontraste o que desejas, não procures mais.
+Uma lista de rolagem de apps para iniciá-los,
+ se encontrou o que deseja, não procure mais.
  
-'Se funcionar, funcionou.'
+ 'Se funcionar, funciona.'
 
-Recursos:
+ Recursos:
 
-• Usar o teu dispositivo de forma mais rápida.
-• Aplicativo livre; usar, ver o código fonte, modificar e compartilhar (https://github.com/F4uzan/HgLauncher).
-• Sem anúncios.
-• Traduzir para a tua linguagem, caso não exista a tradução (https://hosted.weblate.org/engage/hglauncher/).
+ • Use menos, faça mais, rapidamente.
+ • Copyleft; Use, veja, modifique e compartilhe à vontade, com todos.
+ • Mais papel de parede, menos obstrução.
+ • Personalize, pacotes de ícones, ocultação de apps e muito mais!
+ • Uso mínimo de memória, preservando o melhor desempenho.
+ • Sem anúncios, sem restrições de recursos.
+ • Disponível no seu idioma ou ajude a fazê-lo.
