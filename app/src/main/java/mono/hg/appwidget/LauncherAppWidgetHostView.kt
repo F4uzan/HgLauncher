@@ -36,6 +36,7 @@ class LauncherAppWidgetHostView(context: Context?) : AppWidgetHostView(context) 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         downTime = when (event.action) {
             MotionEvent.ACTION_DOWN -> System.currentTimeMillis()
+            MotionEvent.ACTION_UP -> 0
             MotionEvent.ACTION_MOVE -> {
                 val isLongPressing = System.currentTimeMillis() - downTime > LONG_PRESS_DURATION
                 return if (isLongPressing) {
