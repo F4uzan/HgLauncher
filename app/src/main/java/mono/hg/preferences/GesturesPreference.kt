@@ -29,28 +29,26 @@ class GesturesPreference : PreferenceFragmentCompat() {
     private lateinit var appListEntryValues: Array<CharSequence>
     private val NestingListListener =
         Preference.OnPreferenceChangeListener { preference, newValue ->
-            val list = preference as ListPreference
-            when (newValue as String) {
-                "handler" -> list.setSummary(R.string.gesture_action_handler)
-                "widget" -> list.setSummary(R.string.gesture_action_widget)
-                "status" -> list.setSummary(R.string.gesture_action_status)
-                "panel" -> list.setSummary(R.string.gesture_action_panel)
-                "list" -> list.setSummary(R.string.gesture_action_list)
-                "app" -> {
-                    // Create the Bundle to pass to AppSelectionPreferenceDialog.
-                    val appListBundle = Bundle()
-                    appListBundle.putString("key", list.key)
-                    appListBundle.putCharSequenceArray("entries", appListEntries)
-                    appListBundle.putCharSequenceArray("entryValues", appListEntryValues)
+            with (preference as ListPreference) {
+                when (newValue as String) {
+                    "app" -> {
+                        // Create the Bundle to pass to AppSelectionPreferenceDialog.
+                        val appListBundle = Bundle()
+                        appListBundle.putString("key", key)
+                        appListBundle.putCharSequenceArray("entries", appListEntries)
+                        appListBundle.putCharSequenceArray("entryValues", appListEntryValues)
 
-                    // Call and create AppSelectionPreferenceDialog.
-                    val appList = AppSelectionPreferenceDialog()
-                    appList.setTargetFragment(this@GesturesPreference, APPLICATION_DIALOG_CODE)
-                    appList.arguments = appListBundle
-                    appList.show(requireActivity().supportFragmentManager, "AppSelectionDialog")
+                        // Call and create AppSelectionPreferenceDialog.
+                        val appList = AppSelectionPreferenceDialog()
+                        appList.setTargetFragment(this@GesturesPreference, APPLICATION_DIALOG_CODE)
+                        appList.arguments = appListBundle
+                        appList.show(requireActivity().supportFragmentManager, "AppSelectionDialog")
+                    }
+                    else -> {
+                        value = newValue.toString()
+                        summary = entry
+                    }
                 }
-                "none" -> list.setSummary(R.string.gesture_action_default)
-                else -> list.setSummary(R.string.gesture_action_default)
             }
             true
         }
@@ -131,6 +129,17 @@ class GesturesPreference : PreferenceFragmentCompat() {
 
             list?.entries = entries.toTypedArray()
             list?.entryValues = entryValues.toTypedArray()
+
+            list?.summary = if (list?.value == "none") {
+                getString(R.string.gesture_handler_default)
+            } else {
+                list?.value?.let {
+                    AppUtils.getPackageLabel(
+                        requireActivity().packageManager,
+                        it
+                    )
+                }
+            }
         }
     }
 
