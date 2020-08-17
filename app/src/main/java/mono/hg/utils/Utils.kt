@@ -260,7 +260,7 @@ object Utils {
         activity: AppCompatActivity,
         editText: EditText,
         keyCode: Int
-    ): Boolean? {
+    ): Boolean {
         // Get selected text for cut and copy.
         with(editText) {
             val text = editText.text.toString().substring(selectionStart, selectionEnd)

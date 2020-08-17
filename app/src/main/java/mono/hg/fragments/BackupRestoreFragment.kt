@@ -46,7 +46,7 @@ class BackupRestoreFragment : BackHandledFragment() {
         container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentBackupRestoreBinding.inflate(inflater, container, false)
-        return binding !!.root
+        return binding?.root
     }
 
     override fun onDestroyView() {
@@ -182,7 +182,7 @@ class BackupRestoreFragment : BackHandledFragment() {
                         || dir.isDirectory && ! dir.isFile)
             }
         } else {
-            path !!.listFiles()
+            path?.listFiles()
         }
         if (contents != null && contents.isNotEmpty()) {
             lifecycleScope.launch {

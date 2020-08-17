@@ -384,7 +384,7 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         return if (event.action == KeyEvent.ACTION_DOWN && event.isCtrlPressed) {
-            searchBar.let { Utils.handleInputShortcut(this, it, keyCode) } !!
+            Utils.handleInputShortcut(this, searchBar, keyCode)
         } else {
             if (keyCode == KeyEvent.KEYCODE_SPACE) {
                 if (window.currentFocus !== searchBar) {
@@ -527,7 +527,7 @@ class LauncherActivity : AppCompatActivity() {
      * @param view     View for the PopupMenu to anchor to.
      * @param app      App object selected from the list.
      */
-    private fun createAppMenu(view: View?, app: App) {
+    private fun createAppMenu(view: View, app: App) {
         val packageName = app.packageName
         val user = app.user
         val packageNameUri = Uri.fromParts(
@@ -538,7 +538,7 @@ class LauncherActivity : AppCompatActivity() {
         val position = pinnedAppsAdapter.getGlobalPositionOf(app)
 
         // Inflate the app menu.
-        appMenu = PopupMenu(this@LauncherActivity, view !!)
+        appMenu = PopupMenu(this@LauncherActivity, view)
         appMenu !!.menuInflater.inflate(R.menu.menu_app, appMenu !!.menu)
         appMenu !!.menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
 
@@ -555,7 +555,7 @@ class LauncherActivity : AppCompatActivity() {
         // Show uninstall menu if the app is not a system app.
         appMenu !!.menu.findItem(R.id.action_uninstall).isVisible =
             (! AppUtils.isSystemApp(packageManager, packageName)
-                    && app.user == userUtils !!.currentSerial)
+                    && app.user == userUtils?.currentSerial)
 
         // Inflate app shortcuts.
         if (Utils.sdkIsAround(25)) {
@@ -782,9 +782,10 @@ class LauncherActivity : AppCompatActivity() {
                 if (newState != ItemTouchHelper.ACTION_STATE_DRAG && System.currentTimeMillis() - startTime == System
                         .currentTimeMillis()
                 ) {
-                    val app: App? = pinnedAppsAdapter.getItem(viewHolder !!.absoluteAdapterPosition)
-
-                    app?.let { createAppMenu(viewHolder.itemView, it) }
+                    viewHolder?.apply {
+                        val app: App? = pinnedAppsAdapter.getItem(this.absoluteAdapterPosition)
+                        app?.let { createAppMenu(this.itemView, it) }
+                    }
                 } else {
                     // Reset startTime and update the pinned apps, we were swiping.
                     startTime = 0
@@ -883,15 +884,12 @@ class LauncherActivity : AppCompatActivity() {
             pinnedAppList.clear()
             pinnedAppsAdapter.updateDataSet(pinnedAppList)
             pinnedAppString.split(";").forEach {
-                var componentName = it
-                var user = userUtils !!.currentSerial
-
                 // Handle pinned apps coming from another user.
                 val userSplit = it.split("-")
-                if (userSplit.size == 2) {
-                    user = userSplit[0].toLong()
-                    componentName = userSplit[1]
-                }
+                val componentName = if (userSplit.size == 2) userSplit[1] else it
+                val user =
+                    if (userSplit.size == 2) userSplit[0].toLong() else userUtils?.currentSerial
+                        ?: 0
 
                 if (AppUtils.doesComponentExist(packageManager, componentName)) {
                     AppUtils.pinApp(this, user, componentName, pinnedAppsAdapter, pinnedAppList)
@@ -941,10 +939,7 @@ class LauncherActivity : AppCompatActivity() {
     fun pinAppHere(packageName: String, user: Long) {
         // We need to make sure that an app from another user can be pinned.
         val userSplit = packageName.split("-")
-        var componentName = packageName
-        if (userSplit.size == 2) {
-            componentName = userSplit[1]
-        }
+        val componentName = if (userSplit.size == 2) userSplit[1] else packageName
 
         AppUtils.pinApp(this, user, componentName, pinnedAppsAdapter, pinnedAppList)
         updatePinnedApps(false)

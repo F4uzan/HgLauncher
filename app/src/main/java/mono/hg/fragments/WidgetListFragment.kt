@@ -59,7 +59,7 @@ class WidgetListFragment : GenericPageFragment() {
         appWidgetHost = LauncherAppWidgetHost(requireContext(), WIDGET_HOST_ID)
 
         widgetsList = PreferenceHelper.widgetList()
-        return binding !!.root
+        return binding?.root
     }
 
     override fun onDestroyView() {

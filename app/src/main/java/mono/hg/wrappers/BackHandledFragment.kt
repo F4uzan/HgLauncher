@@ -30,7 +30,7 @@ abstract class BackHandledFragment : Fragment() {
         super.onStart()
 
         // Mark this fragment as the selected Fragment.
-        backHandlerInterface !!.setSelectedFragment(this)
+        backHandlerInterface?.setSelectedFragment(this)
     }
 
     /**

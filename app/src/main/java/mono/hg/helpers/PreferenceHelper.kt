@@ -56,13 +56,13 @@ object PreferenceHelper {
         private set
     var listBackground: String? = null
         private set
-    private var gesture_left_action: String? = null
-    private var gesture_right_action: String? = null
-    private var gesture_up_action: String? = null
-    private var gesture_down_action: String? = null
-    private var gesture_single_tap_action: String? = null
-    private var gesture_double_tap_action: String? = null
-    private var gesture_pinch_action: String? = null
+    private lateinit var gesture_left_action: String
+    private lateinit var gesture_right_action: String
+    private lateinit var gesture_up_action: String
+    private lateinit var gesture_down_action: String
+    private lateinit var gesture_single_tap_action: String
+    private lateinit var gesture_double_tap_action: String
+    private lateinit var gesture_pinch_action: String
     var windowBarMode: String? = null
         private set
     private var widgets_list: ArrayList<String> = ArrayList()
@@ -135,7 +135,7 @@ object PreferenceHelper {
         was_alien = alien
     }
 
-    fun getGestureForDirection(direction: Int): String? {
+    fun getGestureForDirection(direction: Int): String {
         return when (direction) {
             Utils.Gesture.LEFT -> gesture_left_action
             Utils.Gesture.RIGHT -> gesture_right_action
@@ -176,8 +176,8 @@ object PreferenceHelper {
         editor = preference.edit()
 
         // Initialise widgets early on.
-        preference.getString("widgets_list", "") !!.split(";")
-            .filterTo(widgets_list) { it.isNotEmpty() }
+        preference.getString("widgets_list", "")?.split(";")
+            ?.filterTo(widgets_list) { it.isNotEmpty() }
     }
 
     private fun parseDelimitedSet(set: HashSet<String>, map: MutableMap<String, String>) {
@@ -207,8 +207,8 @@ object PreferenceHelper {
         update(pref_id, set)
     }
 
-    fun getLabel(packageName: String): String? {
-        return label_list[packageName]
+    fun getLabel(packageName: String): String {
+        return label_list[packageName] ?: ""
     }
 
     fun updateLabel(packageName: String, newLabel: String, remove: Boolean) {
@@ -247,7 +247,7 @@ object PreferenceHelper {
         isTesting = preference.getBoolean("is_grandma", false)
         isNewUser = preference.getBoolean("is_new_user", true)
         launchAnim = preference.getString("launch_anim", "default")
-        orientation = preference.getString("orientation_mode", "-1") !!.toInt()
+        orientation = preference.getString("orientation_mode", "-1")?.toInt() ?: - 1
         icon_hide = preference.getBoolean("icon_hide_switch", false)
         iconPackName = preference.getString("icon_pack", "default")
         list_order = (preference.getString("list_order", "alphabetical")
@@ -272,15 +272,15 @@ object PreferenceHelper {
         windowbar_status_switch = preference.getBoolean("windowbar_status_switch", false)
         windowBarMode = preference.getString("windowbar_mode", "none")
         use_grid_mode = preference.getString("app_list_mode", "list") == "grid"
-        gesture_left_action = preference.getString("gesture_left", "none")
-        gesture_right_action = preference.getString("gesture_right", "none")
-        gesture_up_action = preference.getString("gesture_up", "none")
-        gesture_down_action = preference.getString("gesture_down", "none")
-        gesture_single_tap_action = preference.getString("gesture_single_tap", "list")
-        gesture_double_tap_action = preference.getString("gesture_double_tap", "none")
-        gesture_pinch_action = preference.getString("gesture_pinch", "none")
+        gesture_left_action = preference.getString("gesture_left", "none") ?: "none"
+        gesture_right_action = preference.getString("gesture_right", "none") ?: "none"
+        gesture_up_action = preference.getString("gesture_up", "none") ?: "none"
+        gesture_down_action = preference.getString("gesture_down", "none") ?: "none"
+        gesture_single_tap_action = preference.getString("gesture_single_tap", "list") ?: "list"
+        gesture_double_tap_action = preference.getString("gesture_double_tap", "none") ?: "none"
+        gesture_pinch_action = preference.getString("gesture_pinch", "none") ?: "none"
         gestureHandler = ComponentName.unflattenFromString(
-            preference.getString("gesture_handler", "none") !!
+            preference.getString("gesture_handler", "none") ?: "none"
         )
         exclusionList = preference.getStringSet("hidden_apps", HashSet()) as HashSet<String>
         val tempLabelList = preference.getStringSet("label_list", HashSet()) as HashSet<String>

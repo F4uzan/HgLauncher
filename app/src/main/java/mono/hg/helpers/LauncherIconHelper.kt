@@ -145,10 +145,11 @@ object LauncherIconHelper {
      */
     fun loadIconPack(packageManager: PackageManager): Int {
         var iconFilterXml: XmlPullParser? = null
-        val iconPackageName = PreferenceHelper.preference.getString("icon_pack", "default")
+        val iconPackageName =
+            PreferenceHelper.preference.getString("icon_pack", "default") ?: "default"
         val iconRes: Resources = try {
             if ("default" != iconPackageName) {
-                packageManager.getResourcesForApplication(iconPackageName !!)
+                packageManager.getResourcesForApplication(iconPackageName)
             } else {
                 // Return with a success because there's nothing to fetch.
                 return 1

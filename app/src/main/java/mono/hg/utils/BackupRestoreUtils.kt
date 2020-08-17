@@ -43,10 +43,8 @@ object BackupRestoreUtils {
             Utils.sendLog(LogLevel.ERROR, e.toString())
         } finally {
             try {
-                if (out != null) {
-                    out.close()
-                    out.flush()
-                }
+                out?.close()
+                out?.flush()
             } catch (e: IOException) {
                 Utils.sendLog(LogLevel.ERROR, e.toString())
             }
@@ -75,7 +73,7 @@ object BackupRestoreUtils {
 
                 val entries = it.readObject() as Map<String, *>
                 entries.forEach { entry ->
-                    when (val v = entry.value !!) {
+                    when (val v = entry.value) {
                         is Boolean -> {
                             PreferenceHelper.editor?.putBoolean(entry.key, v)
                         }

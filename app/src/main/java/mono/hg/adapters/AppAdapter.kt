@@ -18,7 +18,6 @@ import java.util.*
 class AppAdapter(apps: List<App?>, listeners: Any?, stableIds: Boolean) :
     FlexibleAdapter<App>(apps, listeners, stableIds), SectionedAdapter {
     private var mSelectedItem = 0
-    private lateinit var adapterRecyclerView: RecyclerView
     private var finishedLoading = false
 
     constructor(apps: List<App?>) : this(apps, null, true)
@@ -51,8 +50,6 @@ class AppAdapter(apps: List<App?>, listeners: Any?, stableIds: Boolean) :
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
 
-        adapterRecyclerView = recyclerView
-
         // Handle key up and key down and attempt to move selection.
         // This is unnecessary for newer API.
         if (Utils.sdkIsBelow(21)) {
@@ -67,9 +64,9 @@ class AppAdapter(apps: List<App?>, listeners: Any?, stableIds: Boolean) :
                         return@OnKeyListener true
                     } else {
                         if (isDown(keyCode)) {
-                            return@OnKeyListener tryMoveSelection(1)
+                            return@OnKeyListener tryMoveSelection(1, recyclerView)
                         } else if (isUp(keyCode)) {
-                            return@OnKeyListener tryMoveSelection(- 1)
+                            return@OnKeyListener tryMoveSelection(- 1, recyclerView)
                         }
                     }
                 } else if (event.action == KeyEvent.ACTION_UP && isConfirmButton(event)
@@ -104,7 +101,7 @@ class AppAdapter(apps: List<App?>, listeners: Any?, stableIds: Boolean) :
         finishedLoading = finished
     }
 
-    private fun tryMoveSelection(direction: Int): Boolean {
+    private fun tryMoveSelection(direction: Int, recyclerView: RecyclerView): Boolean {
         val nextSelectItem = mSelectedItem + direction
 
         // If still within valid bounds, move the selection, notify to redraw, and scroll.
@@ -112,7 +109,7 @@ class AppAdapter(apps: List<App?>, listeners: Any?, stableIds: Boolean) :
             notifyItemChanged(mSelectedItem)
             mSelectedItem = nextSelectItem
             notifyItemChanged(mSelectedItem)
-            adapterRecyclerView.smoothScrollToPosition(mSelectedItem)
+            recyclerView.smoothScrollToPosition(mSelectedItem)
             return true
         }
         return false

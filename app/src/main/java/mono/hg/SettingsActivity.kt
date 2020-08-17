@@ -66,11 +66,10 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
         }
 
         setSupportActionBar(toolbar)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
-            supportActionBar !!.title = getString(R.string.title_activity_settings)
+            supportActionBar?.title = getString(R.string.title_activity_settings)
             ViewUtils.setFragment(supportFragmentManager, BasePreference(), "settings")
         } else {
             fragmentTitle = savedInstanceState.getCharSequence("title")
@@ -87,11 +86,12 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
     override fun onBackPressed() {
         if (selectedFragment == null || ! selectedFragment !!.onBackPressed()) {
             // Selected fragment did not consume the back press event.
-            if (supportFragmentManager.findFragmentByTag("settings") is BasePreference) {
-                supportActionBar?.title = getString(R.string.title_activity_settings)
-            } else {
-                supportActionBar?.title = fragmentTitle
-            }
+            supportActionBar?.title =
+                if (supportFragmentManager.findFragmentByTag("settings") is BasePreference) {
+                    getString(R.string.title_activity_settings)
+                } else {
+                    fragmentTitle
+                }
             super.onBackPressed()
         }
     }
@@ -102,11 +102,12 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            if (supportFragmentManager.findFragmentByTag("settings") is BasePreference) {
-                supportActionBar?.title = getString(R.string.title_activity_settings)
-            } else {
-                supportActionBar?.title = fragmentTitle
-            }
+            supportActionBar?.title =
+                if (supportFragmentManager.findFragmentByTag("settings") is BasePreference) {
+                    getString(R.string.title_activity_settings)
+                } else {
+                    fragmentTitle
+                }
             super.onBackPressed()
             ActivityServiceUtils.hideSoftKeyboard(this)
             return true

@@ -10,7 +10,7 @@ import java.util.*
  * Parts have been slightly altered to fit our codes here.
  */
 object KissFuzzySearch {
-    fun doFuzzy(sourceName: String?, queryMatch: String): Int {
+    fun doFuzzy(sourceName: String, queryMatch: String): Int {
         val matchPositions = ArrayList<Pair<Int, Int>>()
         var relevance = 0
         var queryPos = 0
@@ -21,9 +21,9 @@ object KissFuzzySearch {
         var match = false
 
         // Normalise query and source (app name).
-        val source = sourceName?.toLowerCase(Locale.getDefault())
-        val matchTo = queryMatch.toLowerCase(Locale.getDefault()).trim { it <= ' ' }
-        source?.toCharArray()?.forEach {
+        val source = sourceName.toLowerCase(Locale.getDefault())
+        val matchTo = queryMatch.toLowerCase(Locale.getDefault()).trim()
+        source.toCharArray().forEach {
             if (queryPos < matchTo.length && matchTo[queryPos] == it) {
                 // If we aren't already matching something, let's save the beginning of the match
                 if (! match) {
@@ -50,7 +50,7 @@ object KissFuzzySearch {
         }
         if (queryPos == matchTo.length) {
             // Add percentage of matched letters
-            relevance += (queryPos.toDouble() / source !!.length * 100).toInt()
+            relevance += (queryPos.toDouble() / source.length * 100).toInt()
 
             // Add percentage of matched upper case letters (start of word)
             relevance += (matchedWordStarts.toDouble() / totalWordStarts * 100).toInt()

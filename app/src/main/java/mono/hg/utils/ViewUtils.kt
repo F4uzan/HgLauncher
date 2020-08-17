@@ -132,9 +132,9 @@ object ViewUtils {
      * @param fragmentManager The fragment manager in the current activity.
      * @param fragment        The fragment to use.
      */
-    fun setFragment(fragmentManager: FragmentManager, fragment: Fragment?, tag: String?) {
+    fun setFragment(fragmentManager: FragmentManager, fragment: Fragment, tag: String?) {
         fragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment !!, tag)
+            .replace(R.id.fragment_container, fragment, tag)
             .commit()
     }
 
@@ -149,9 +149,9 @@ object ViewUtils {
      * @param fragment        The fragment to use.
      * @param tag             The tag used for the fragment.
      */
-    fun replaceFragment(fragmentManager: FragmentManager, fragment: Fragment?, tag: String?) {
+    fun replaceFragment(fragmentManager: FragmentManager, fragment: Fragment, tag: String?) {
         fragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment !!)
+            .replace(R.id.fragment_container, fragment)
             .addToBackStack(tag)
             .commit()
     }

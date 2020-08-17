@@ -23,7 +23,7 @@ class AppSelectionPreferenceDialog : DialogFragment() {
     private val selectItemListener = DialogInterface.OnClickListener { dialog, which ->
         if (mClickedDialogEntryIndex != which) {
             mClickedDialogEntryIndex = which
-            mValue = mEntryValues !![mClickedDialogEntryIndex].toString()
+            mValue = mEntryValues?.get(mClickedDialogEntryIndex).toString()
             PreferenceHelper.update(preference, mValue)
         }
         dialog.dismiss()
@@ -52,11 +52,11 @@ class AppSelectionPreferenceDialog : DialogFragment() {
         super.onDismiss(dialog)
         if (mValue == null) {
             val i = Intent().putExtra("key", preference)
-            targetFragment !!.onActivityResult(targetRequestCode, Activity.RESULT_CANCELED, i)
+            targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_CANCELED, i)
             PreferenceHelper.update(preference, "none")
         } else {
             val i = Intent().putExtra("key", preference).putExtra("app", mValue)
-            targetFragment !!.onActivityResult(targetRequestCode, Activity.RESULT_OK, i)
+            targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, i)
         }
     }
 

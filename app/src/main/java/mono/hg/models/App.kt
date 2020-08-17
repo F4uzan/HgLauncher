@@ -21,18 +21,18 @@ class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     private var HINT_MATCH_SCORE = 30
     private var NAME_MATCH_SCORE = 22
     private var layoutType = 0
-    var appName: String? = null
+    var appName: String = ""
         private set
     var packageName: String
         private set
     lateinit var userPackageName: String
-    var hintName: String? = null
+    var hintName: String = ""
     var isAppHidden = false
     var icon: Drawable? = null
     var user: Long = 0
         private set
 
-    constructor(appName: String?, packageName: String, isAppHidden: Boolean, user: Long) {
+    constructor(appName: String, packageName: String, isAppHidden: Boolean, user: Long) {
         this.packageName = packageName
         this.appName = appName
         this.isAppHidden = isAppHidden
@@ -51,8 +51,11 @@ class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
         this.user = user
     }
 
-    private fun hasHintName(): Boolean {
-        return hintName != null
+    /**
+     * Checks whether this App object has a valid hint name.
+     */
+    fun hasHintName(): Boolean {
+        return ! hintName.isBlank()
     }
 
     override fun equals(other: Any?): Boolean {

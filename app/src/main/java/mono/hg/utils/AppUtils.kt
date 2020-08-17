@@ -64,7 +64,7 @@ object AppUtils {
      *
      * @return True if application is installed.
      */
-    fun doesComponentExist(packageManager: PackageManager, componentName: String?): Boolean {
+    fun doesComponentExist(packageManager: PackageManager, componentName: String): Boolean {
         return isAppInstalled(packageManager, getPackageName(componentName))
     }
 
@@ -77,7 +77,7 @@ object AppUtils {
      *
      * @return boolean True if the application is a system app, false if otherwise.
      */
-    fun isSystemApp(packageManager: PackageManager, componentName: String?): Boolean {
+    fun isSystemApp(packageManager: PackageManager, componentName: String): Boolean {
         return try {
             packageManager.getApplicationInfo(getPackageName(componentName), 0).let {
                 it.flags and ApplicationInfo.FLAG_SYSTEM == 1
@@ -162,9 +162,9 @@ object AppUtils {
      * in older API level. As such, the traditional intent launch
      * with [Settings.ACTION_APPLICATION_DETAILS_SETTINGS] is used.
      *
-     * @param activity      Current foreground activity.
-     * @param packageName   The component name of the app.
-     * @param user          The user that the app belongs to.
+     * @param activity          Current foreground activity.
+     * @param componentName     The component name of the app.
+     * @param user              The user that the app belongs to.
      */
     fun openAppDetails(activity: Activity, componentName: String, user: Long) {
         if (Utils.atLeastLollipop()) {
@@ -195,8 +195,8 @@ object AppUtils {
      * This behaviour will not occur if [PreferenceHelper.launchAnim]
      * returns "default" or an invalid value.
      *
-     * @param activity Current foreground activity.
-     * @param app      App object to launch.
+     * @param context   Current foreground activity.
+     * @param app       App object to launch.
      */
     fun launchApp(context: Context, app: App) {
         // Attempt to catch exceptions instead of crash landing directly to the floor.
@@ -246,12 +246,12 @@ object AppUtils {
      * @param componentName Component name of the app to be launched.
      */
     @Throws(ActivityNotFoundException::class)
-    fun quickLaunch(activity: Activity, componentName: String?) {
+    fun quickLaunch(activity: Activity, componentName: String) {
         // When receiving 'none', it's probably a gesture that hasn't been registered.
         if ("none" == componentName) {
             return
         }
-        val component = ComponentName.unflattenFromString(componentName !!) ?: return
+        val component = ComponentName.unflattenFromString(componentName) ?: return
 
         // Forcibly end if we can't unflatten the string.
         Intent.makeMainActivity(component).apply {
@@ -268,8 +268,8 @@ object AppUtils {
      *
      * @return String The package name if not null.
      */
-    fun getPackageName(componentName: String?): String {
-        return ComponentName.unflattenFromString(componentName !!)?.packageName ?: ""
+    fun getPackageName(componentName: String): String {
+        return ComponentName.unflattenFromString(componentName)?.packageName ?: ""
     }
 
     /**
@@ -451,7 +451,7 @@ object AppUtils {
      * @return List A list of shortcuts. Null if nonexistent.
      */
     @TargetApi(Build.VERSION_CODES.N_MR1)
-    fun getShortcuts(launcherApps: LauncherApps?, componentName: String?): List<ShortcutInfo>? {
+    fun getShortcuts(launcherApps: LauncherApps?, componentName: String): List<ShortcutInfo>? {
         // Return nothing if we don't have permission to retrieve shortcuts.
         if (launcherApps == null || ! launcherApps.hasShortcutHostPermission()) {
             return ArrayList(0)

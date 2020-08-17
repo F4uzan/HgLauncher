@@ -102,12 +102,12 @@ class AppListFragment : GenericPageFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAppListBinding.inflate(inflater, container, false)
-        loaderBinding = UiLoadProgressBinding.bind(binding !!.root)
+        loaderBinding = binding?.root?.let { UiLoadProgressBinding.bind(it) }
 
         // Get a list of our hidden apps, default to null if there aren't any.
         excludedAppsList.addAll(PreferenceHelper.exclusionList)
 
-        return binding !!.root
+        return binding?.root
     }
 
     override fun onDestroyView() {
@@ -168,9 +168,9 @@ class AppListFragment : GenericPageFragment() {
 
         appsAdapter.addListener(FlexibleAdapter.OnUpdateListener { size ->
             if (size > 0 && ! appsAdapter.isEmpty) {
-                loaderBinding !!.loader.hide()
+                loaderBinding?.loader?.hide()
             } else {
-                loaderBinding !!.loader.show()
+                loaderBinding?.loader?.show()
             }
         })
 
@@ -403,7 +403,7 @@ class AppListFragment : GenericPageFragment() {
     private fun buildShorthandDialog(position: Int) {
         val binding = LayoutRenameDialogBinding.inflate(layoutInflater)
         val packageName = appsAdapter.getItem(position)?.packageName
-        val hasHintName = appsAdapter.getItem(position)?.hintName.isNullOrBlank()
+        val hasHintName = appsAdapter.getItem(position)?.hasHintName() ?: false
         val renameField = binding.renameField.apply {
             ViewCompat.setBackgroundTintList(this, ColorStateList.valueOf(PreferenceHelper.accent))
             hint = packageName?.let { PreferenceHelper.getLabel(it) }
@@ -412,7 +412,7 @@ class AppListFragment : GenericPageFragment() {
         with(AlertDialog.Builder(requireContext())) {
             setView(binding.root)
             setTitle(R.string.dialog_title_shorthand)
-            if (! hasHintName) {
+            if (hasHintName) {
                 setNeutralButton(R.string.action_web_provider_remove) { _, _ ->
                     appsAdapter.getItem(position).apply {
                         this?.hintName = ""
