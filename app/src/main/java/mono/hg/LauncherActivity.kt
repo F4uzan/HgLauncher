@@ -515,7 +515,7 @@ class LauncherActivity : AppCompatActivity() {
 
         // Get the default providers list if it's empty.
         if (PreferenceHelper.providerList.isEmpty()) {
-            Utils.setDefaultProviders(resources, ArrayList())
+            PreferenceHelper.updateProvider(Utils.setDefaultProviders(resources, ArrayList()))
         }
 
         ViewUtils.switchTheme(this, true)
