@@ -282,12 +282,9 @@ object AppUtils {
      */
     fun getPackageLabel(manager: PackageManager, componentName: String): String? {
         return try {
-            manager.getApplicationLabel(
-                manager.getApplicationInfo(
-                    getPackageName(componentName),
-                    PackageManager.GET_META_DATA
-                )
-            ) as String
+            manager.getApplicationInfo(getPackageName(componentName), PackageManager.GET_META_DATA)
+                .loadLabel(manager)
+                .toString()
         } catch (e: PackageManager.NameNotFoundException) {
             Utils.sendLog(LogLevel.ERROR, "Unable to find label for $componentName")
             ""
