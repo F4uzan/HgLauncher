@@ -355,10 +355,7 @@ class AppListFragment : GenericPageFragment() {
                 }
 
                 // We should recount here, regardless of whether we update the list or not.
-                PreferenceHelper.update(
-                    "package_count",
-                    AppUtils.countInstalledPackage(requireActivity().packageManager)
-                )
+                AppUtils.updatePackageCount(requireActivity().packageManager)
             }
         }
 

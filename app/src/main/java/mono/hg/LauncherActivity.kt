@@ -309,6 +309,9 @@ class LauncherActivity : AppCompatActivity() {
 
         // Refresh app list and pinned apps if there is a change in package count.
         if (AppUtils.hasNewPackage(packageManager)) {
+            // Retrieve the internal package count again.
+            AppUtils.updatePackageCount(packageManager)
+
             updatePinnedApps(true)
         }
 

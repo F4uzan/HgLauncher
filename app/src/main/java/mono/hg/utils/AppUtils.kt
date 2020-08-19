@@ -311,14 +311,16 @@ object AppUtils {
      * @return boolean True if there is a change in number.
      */
     fun hasNewPackage(packageManager: PackageManager): Boolean {
-        if (PreferenceHelper.preference.getInt("package_count", 0) != countInstalledPackage(
-                packageManager
-            )
-        ) {
-            PreferenceHelper.update("package_count", countInstalledPackage(packageManager))
-            return true
-        }
-        return false
+        return PreferenceHelper.preference.getInt("package_count", 0) != countInstalledPackage(packageManager)
+    }
+
+    /**
+     * Updates the internal package count of the launcher.
+     *
+     * @param packageManager PackageManager used to count the installed packages.
+     */
+    fun updatePackageCount(packageManager: PackageManager) {
+        PreferenceHelper.update("package_count", countInstalledPackage(packageManager))
     }
 
     /**
