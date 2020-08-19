@@ -6,8 +6,6 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,9 +93,7 @@ class WidgetListFragment : GenericPageFragment() {
 
                     // Don't add ALL the widgets at once.
                     // TODO: Handle this a bit better, because not all devices are made equally.
-                    Looper.myLooper()?.let {
-                        Handler(it).postDelayed({ addWidget(widgetIntent, index, false) }, 300)
-                    }
+                    appWidgetContainer.postDelayed({ addWidget(widgetIntent, index, false) }, 300)
                 }
         }
 
