@@ -540,70 +540,60 @@ class LauncherActivity : AppCompatActivity() {
         val shortcutMap = SparseArray<String>()
         val position = pinnedAppsAdapter.getGlobalPositionOf(app)
 
-        // Inflate the app menu.
-        appMenu = PopupMenu(this@LauncherActivity, view)
-        appMenu !!.menuInflater.inflate(R.menu.menu_app, appMenu !!.menu)
-        appMenu !!.menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
-
-        // Hide 'pin' if the app is already pinned or isPinned is set.
-        appMenu !!.menu.findItem(R.id.action_pin).isVisible = false
-
-        // We can't hide an app from the favourites panel.
-        appMenu !!.menu.findItem(R.id.action_hide).isVisible = false
-        appMenu !!.menu.findItem(R.id.action_shorthand).isVisible = false
-
-        // Only show the 'unpin' option if isPinned is set.
-        appMenu !!.menu.findItem(R.id.action_unpin).isVisible = true
-
-        // Show uninstall menu if the app is not a system app.
-        appMenu !!.menu.findItem(R.id.action_uninstall).isVisible =
-            (! AppUtils.isSystemApp(packageManager, packageName)
-                    && app.user == userUtils?.currentSerial)
-
-        // Inflate app shortcuts.
-        if (Utils.sdkIsAround(25)) {
-            var menuId = SHORTCUT_MENU_GROUP
-            AppUtils.getShortcuts(launcherApps, packageName)?.forEach {
-                shortcutMap.put(menuId, it.id)
-                appMenu !!.menu
-                    .findItem(SHORTCUT_MENU_GROUP)
-                    .subMenu
-                    .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
-                menuId ++
-            }
-            if (shortcutMap.size() == 0) {
-                appMenu !!.menu.getItem(0).isVisible = false
-            }
-        } else {
-            appMenu !!.menu.getItem(0).isVisible = false
-        }
-
-        appMenu !!.show()
-        appMenu !!.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_unpin -> {
-                    pinnedAppList.remove(pinnedAppsAdapter.getItem(position))
-                    pinnedAppsAdapter.removeItem(position)
-                    updatePinnedApps(false)
-                    if (pinnedAppsAdapter.isEmpty) {
-                        doThis(HIDE_PINNED)
-                    }
+        appMenu = ViewUtils.createAppMenu(
+            this,
+            view,
+            (! AppUtils.isSystemApp(
+                packageManager,
+                packageName
+            ) && app.user == userUtils?.currentSerial),
+            true
+        ).apply {
+            // Inflate app shortcuts.
+            if (Utils.sdkIsAround(25)) {
+                var menuId = SHORTCUT_MENU_GROUP
+                AppUtils.getShortcuts(launcherApps, packageName)?.forEach {
+                    shortcutMap.put(menuId, it.id)
+                    menu
+                        .findItem(SHORTCUT_MENU_GROUP)
+                        .subMenu
+                        .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
+                    menuId ++
                 }
-                R.id.action_info -> AppUtils.openAppDetails(this, packageName, user)
-                R.id.action_uninstall -> AppUtils.uninstallApp(this, packageNameUri)
-                else ->                         // Catch click actions from the shortcut menu group.
-                    if (item.groupId == SHORTCUT_MENU_GROUP) {
-                        userUtils?.getUser(user)?.let {
-                            AppUtils.launchShortcut(
-                                it,
-                                launcherApps,
-                                packageName,
-                                shortcutMap[item.itemId]
-                            )
+                menu.getItem(0).isVisible = shortcutMap.size() > 0
+            } else {
+                menu.getItem(0).isVisible = false
+            }
+
+            show()
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.action_unpin -> unpinApp(position)
+                    R.id.action_info -> AppUtils.openAppDetails(
+                        this@LauncherActivity,
+                        packageName,
+                        user
+                    )
+                    R.id.action_uninstall -> AppUtils.uninstallApp(
+                        this@LauncherActivity,
+                        packageNameUri
+                    )
+                    else -> {
+                        // Catch click actions from the shortcut menu group.
+                        if (item.groupId == SHORTCUT_MENU_GROUP) {
+                            userUtils?.getUser(user)?.let {
+                                AppUtils.launchShortcut(
+                                    it,
+                                    launcherApps,
+                                    packageName,
+                                    shortcutMap[item.itemId]
+                                )
+                            }
                         }
                     }
+                }
+                true
             }
-            true
         }
     }
 
@@ -946,6 +936,15 @@ class LauncherActivity : AppCompatActivity() {
 
         AppUtils.pinApp(this, user, componentName, pinnedAppsAdapter, pinnedAppList)
         updatePinnedApps(false)
+    }
+
+    private fun unpinApp(positionInAdapter: Int) {
+        pinnedAppList.remove(pinnedAppsAdapter.getItem(positionInAdapter))
+        pinnedAppsAdapter.removeItem(positionInAdapter)
+        updatePinnedApps(false)
+        if (pinnedAppsAdapter.isEmpty) {
+            doThis(HIDE_PINNED)
+        }
     }
 
     /**

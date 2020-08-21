@@ -246,78 +246,63 @@ class AppListFragment : GenericPageFragment() {
     private fun createAppMenu(view: View, app: App?) {
         val packageName = app !!.packageName
         val user = app.user
-
         val packageNameUri = Uri.fromParts("package", AppUtils.getPackageName(packageName), null)
         val shortcutMap = SparseArray<String>()
         val position = appsAdapter.getGlobalPositionOf(app)
 
-        // Inflate the app menu.
-        appMenu = PopupMenu(requireContext(), view)
-        appMenu !!.menuInflater.inflate(R.menu.menu_app, appMenu !!.menu)
-        appMenu !!.menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
-
-        // Hide 'pin' if the app is already pinned or isPinned is set.
-        appMenu !!.menu.findItem(R.id.action_pin).isVisible =
-            ! getLauncherActivity().isPinned(app)
-
-        // Only show the 'unpin' option if isPinned is set.
-        appMenu !!.menu.findItem(R.id.action_unpin).isVisible = false
-
-        // Show uninstall menu if the app is not a system app.
-        appMenu !!.menu.findItem(R.id.action_uninstall).isVisible =
-            (! AppUtils.isSystemApp(manager, packageName)
-                    && app.user == userUtils !!.currentSerial)
-
-        // Inflate app shortcuts.
-        if (Utils.sdkIsAround(25)) {
-            var menuId = SHORTCUT_MENU_GROUP
-            AppUtils.getShortcuts(launcherApps, packageName)?.forEach {
-                shortcutMap.put(menuId, it.id)
-                appMenu !!.menu
-                    .findItem(SHORTCUT_MENU_GROUP)
-                    .subMenu
-                    .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
-                menuId ++
-            }
-            if (shortcutMap.size() == 0) {
-                appMenu !!.menu.getItem(0).isVisible = false
-            }
-        } else {
-            appMenu !!.menu.getItem(0).isVisible = false
-        }
-
-        appMenu !!.show()
-
-        appMenu !!.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_pin -> {
-                    getLauncherActivity().pinAppHere(app.userPackageName, user)
+        appMenu = ViewUtils.createAppMenu(
+            requireActivity(),
+            view,
+            (! AppUtils.isSystemApp(manager, packageName) && app.user == userUtils?.currentSerial),
+            getLauncherActivity().isPinned(app)
+        ).apply {
+            // Inflate app shortcuts.
+            if (Utils.sdkIsAround(25)) {
+                var menuId = SHORTCUT_MENU_GROUP
+                AppUtils.getShortcuts(launcherApps, packageName)?.forEach {
+                    shortcutMap.put(menuId, it.id)
+                    menu
+                        .findItem(SHORTCUT_MENU_GROUP)
+                        .subMenu
+                        .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
+                    menuId ++
                 }
-                R.id.action_info -> AppUtils.openAppDetails(requireActivity(), packageName, user)
-                R.id.action_uninstall -> AppUtils.uninstallApp(requireActivity(), packageNameUri)
-                R.id.action_shorthand -> buildShorthandDialog(position)
-                R.id.action_hide -> {
-                    // Add the app's package name to the exclusion list.
-                    excludedAppsList.add(app.userPackageName)
-                    PreferenceHelper.update("hidden_apps", excludedAppsList)
+                menu.getItem(0).isVisible = shortcutMap.size() > 0
+            } else {
+                menu.getItem(0).isVisible = false
+            }
 
-                    // Reload the app list!
-                    appsList.remove(appsAdapter.getItem(position))
-                    appsAdapter.removeItem(position)
-                }
-                else ->                         // Catch click actions from the shortcut menu group.
-                    if (item.groupId == SHORTCUT_MENU_GROUP) {
-                        userUtils?.getUser(user)?.let {
-                            AppUtils.launchShortcut(
-                                it,
-                                launcherApps,
-                                packageName,
-                                shortcutMap[item.itemId]
-                            )
+            show()
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.action_pin -> getLauncherActivity().pinAppHere(app.userPackageName, user)
+                    R.id.action_info -> AppUtils.openAppDetails(
+                        requireActivity(),
+                        packageName,
+                        user
+                    )
+                    R.id.action_uninstall -> AppUtils.uninstallApp(
+                        requireActivity(),
+                        packageNameUri
+                    )
+                    R.id.action_shorthand -> buildShorthandDialog(position)
+                    R.id.action_hide -> hideApp(position)
+                    else -> {
+                        // Catch click actions from the shortcut menu group.
+                        if (item.groupId == SHORTCUT_MENU_GROUP) {
+                            userUtils?.getUser(user)?.let {
+                                AppUtils.launchShortcut(
+                                    it,
+                                    launcherApps,
+                                    packageName,
+                                    shortcutMap[item.itemId]
+                                )
+                            }
                         }
                     }
+                }
+                true
             }
-            true
         }
     }
 
@@ -390,6 +375,18 @@ class AppListFragment : GenericPageFragment() {
             appsAdapter.updateDataSet(newList)
             appsAdapter.recyclerView.setItemViewCacheSize(newList.size)
             appsAdapter.finishedLoading(true)
+        }
+    }
+
+    private fun hideApp(positionInAdapter: Int) {
+        appsAdapter.getItem(positionInAdapter)?.apply {
+            // Add the app's package name to the exclusion list.
+            excludedAppsList.add(userPackageName)
+            PreferenceHelper.update("hidden_apps", excludedAppsList)
+
+            // Reload the app list!
+            appsList.remove(this)
+            appsAdapter.removeItem(positionInAdapter)
         }
     }
 

@@ -26,6 +26,8 @@ import mono.hg.helpers.PreferenceHelper
  * Generally, most misc. view-handling is also stored here.
  */
 object ViewUtils {
+    private const val SHORTCUT_MENU_GROUP = 247
+
     /**
      * Hides the status bar from the current activity.
      *
@@ -179,6 +181,43 @@ object ViewUtils {
     }
 
     /**
+     * Creates a [PopupMenu] used when long-pressing an app, mostly
+     * in a list. This PopupMenu is dynamically modified during runtime,
+     * but otherwise inflates from [R.menu.menu_app].
+     *
+     * @param activity          The foreground activity, where [focusedView] exists.
+     * @param focusedView       The view to anchor the PopupMenu.
+     * @param isUninstallable   Can this app be uninstalled? Shows the Uninstall menu if true.
+     * @param isPinned           Is this app pinned? Shows context regarding unpinning if true.
+     *
+     * @return PopupMenu relating to the app.
+     */
+    fun createAppMenu(
+        activity: Activity,
+        focusedView: View,
+        isUninstallable: Boolean,
+        isPinned: Boolean
+    ): PopupMenu {
+        return PopupMenu(activity, focusedView).apply {
+            menuInflater.inflate(R.menu.menu_app, menu)
+            menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
+
+            // Hide 'pin' if the app is already pinned or isPinned is set.
+            menu.findItem(R.id.action_pin).isVisible = ! isPinned
+
+            // We can't hide an app from the favourites panel.
+            menu.findItem(R.id.action_hide).isVisible = ! isPinned
+            menu.findItem(R.id.action_shorthand).isVisible = ! isPinned
+
+            // Only show the 'unpin' option if isPinned is set.
+            menu.findItem(R.id.action_unpin).isVisible = isPinned
+
+            // Show uninstall menu if the app is not a system app.
+            menu.findItem(R.id.action_uninstall).isVisible = isUninstallable
+        }
+    }
+
+    /**
      * A helper function used to switch the current theme of the activity.
      *
      * This function calls [switchThemeLegacy] for API level lower than 17 (Jelly Bean MR1),
@@ -261,5 +300,4 @@ object ViewUtils {
             activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
     }
-
 }
