@@ -11,7 +11,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 30
         versionCode dateVersionCode
-        versionName "1.4.3-rc4"
+        versionName "1.4.3-rc5"
         vectorDrawables.useSupportLibrary = true
         buildFeatures {
             viewBinding = true
@@ -63,7 +63,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'com.google.android.material:material:1.3.0-alpha02'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
 
     // Other third-party libraries
     implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.1'
