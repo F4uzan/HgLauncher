@@ -735,7 +735,7 @@ class LauncherActivity : AppCompatActivity() {
                         Utils.doWebSearch(
                             this@LauncherActivity,
                             it,
-                            searchBar.text.toString()
+                            URLEncoder.encode(searchBar.text.toString(), Charsets.UTF_8.name())
                         )
                     }
                 }
