@@ -38,6 +38,8 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
+        <item name="popupMenuStyle">@style/Widget.Popup.Light</item>
+        <item name="widgetPopupStyle">@style/Widget.AppCompat.Light.PopupMenu.Overflow</item>
     </style>
 
     <style name="LauncherTheme.Dark" parent="@style/AppTheme">
@@ -49,6 +51,8 @@
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
         <item name="backgroundColor">@color/colorBackgroundGray</item>
         <item name="backgroundColorAlt">@color/colorBackgroundGrayAlt</item>
+        <item name="popupMenuStyle">@style/Widget.Popup.Dark</item>
+        <item name="widgetPopupStyle">@style/Widget.Popup.Dark</item>
     </style>
 
 </resources>

@@ -12,6 +12,7 @@
         <item name="textDefaultColor">@color/black</item>
         <item name="snackbarStyle">@style/SearchSnack</item>
         <item name="snackbarTextViewStyle">@style/SearchSnack.TextView</item>
+        <item name="popupMenuStyle">@style/Widget.Popup.Light</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
@@ -29,6 +30,7 @@
         <item name="textDefaultColor">@color/white</item>
         <item name="snackbarStyle">@style/SearchSnack</item>
         <item name="snackbarTextViewStyle">@style/SearchSnack.TextView</item>
+        <item name="popupMenuStyle">@style/Widget.Popup.Dark</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
@@ -43,6 +45,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
+        <item name="widgetPopupStyle">@style/Widget.Popup.Light</item>
     </style>
 
     <style name="LauncherTheme.Night" parent="@style/AppTheme.Night">
@@ -52,6 +55,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
+        <item name="widgetPopupStyle">@style/Widget.Popup.Dark</item>
     </style>
 
     <style name="LauncherTheme.Dark" parent="@style/LauncherTheme.Night">

@@ -16,7 +16,7 @@
         app:umanoInitialState="expanded"
         app:umanoPanelHeight="56dp"
         app:umanoParallaxOffset="@dimen/search_bar_size"
-        app:umanoScrollableView="@id/apps_list"
+        app:umanoScrollableView="@id/app_list_container"
         app:umanoShadowHeight="0dp">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout

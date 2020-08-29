@@ -6,5 +6,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="popupMenuStyle">@style/Widget.AppCompat.PopupMenu.Overflow</item>
+        <item name="widgetPopupStyle">@style/Widget.AppCompat.PopupMenu.Overflow</item>
     </style>
 </resources>

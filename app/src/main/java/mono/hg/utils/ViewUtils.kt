@@ -12,7 +12,12 @@ import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
@@ -300,4 +305,29 @@ object ViewUtils {
             activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
     }
+}
+
+/**
+ * Extension function for [AppCompatSeekBar].
+ * Applies [PreferenceHelper.accent] to the thumb and progress drawable.
+ */
+fun AppCompatSeekBar.applyAccent() {
+    if (Utils.sdkIsBelow(16)) {
+        // Android 4.0.x have no proper way to set the thumb color.
+        // So, we have to workaround this by getting a drawable, coloring it,
+        // and then applying said drawable as the thumb.
+        ContextCompat.getDrawable(context, androidx.appcompat.R.drawable.abc_seekbar_thumb_material)
+            ?.let { DrawableCompat.wrap(it) }.also {
+                thumb = it
+                it?.let { thumb -> DrawableCompat.setTint(thumb, PreferenceHelper.accent) }
+        }
+    } else {
+        DrawableCompat.setTint(thumb, PreferenceHelper.accent)
+    }
+
+    progressDrawable.colorFilter =
+        BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+            PreferenceHelper.accent,
+            BlendModeCompat.SRC_ATOP
+        )
 }

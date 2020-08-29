@@ -5,4 +5,5 @@
     <attr name="cardColor" format="reference|color" />
     <attr name="textDefaultColor" format="reference|color" />
     <attr name="dividerColor" format="reference|color" />
+    <attr name="widgetPopupStyle" format="reference" />
 </resources>

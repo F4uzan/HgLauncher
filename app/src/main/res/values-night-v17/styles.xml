@@ -26,4 +26,9 @@
         <item name="android:listChoiceIndicatorSingle">@null</item>
         <item name="android:background">@drawable/drawable_radio_selector_background</item>
     </style>
+
+    <style name="Widget.Popup" parent="@style/Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:background">?attr/colorBackgroundFloating</item>
+        <item name="android:popupBackground">?attr/colorBackgroundFloating</item>
+    </style>
 </resources>
