@@ -7,8 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.SettingsActivity
-import mono.hg.compatHide
-import mono.hg.compatShow
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.Utils.LogLevel
 import java.io.FileNotFoundException

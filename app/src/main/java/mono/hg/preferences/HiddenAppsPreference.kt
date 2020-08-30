@@ -17,12 +17,12 @@ import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.SettingsActivity
 import mono.hg.adapters.HiddenAppAdapter
-import mono.hg.compatHide
-import mono.hg.compatShow
 import mono.hg.databinding.FragmentHiddenAppsBinding
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.App
 import mono.hg.utils.AppUtils
+import mono.hg.utils.compatHide
+import mono.hg.utils.compatShow
 import java.util.*
 
 /**

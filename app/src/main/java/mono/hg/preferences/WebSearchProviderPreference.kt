@@ -1,6 +1,5 @@
 package mono.hg.preferences
 
-import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Patterns
@@ -17,13 +16,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.preference.PreferenceFragmentCompat
 import mono.hg.R
-import mono.hg.SettingsActivity
 import mono.hg.adapters.WebProviderAdapter
 import mono.hg.databinding.FragmentWebProviderBinding
 import mono.hg.databinding.LayoutWebProviderEditDialogBinding
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.WebSearchProvider
 import mono.hg.utils.Utils
+import mono.hg.utils.applyAccent
 import java.util.*
 
 
@@ -176,11 +175,7 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
 
             create().apply {
                 show()
-                with(PreferenceHelper.darkAccent) {
-                    getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(this)
-                    getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(this)
-                    getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(this)
-                }
+                applyAccent()
             }
         }
     }

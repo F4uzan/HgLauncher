@@ -311,7 +311,9 @@ object AppUtils {
      * @return boolean True if there is a change in number.
      */
     fun hasNewPackage(packageManager: PackageManager): Boolean {
-        return PreferenceHelper.preference.getInt("package_count", 0) != countInstalledPackage(packageManager)
+        return PreferenceHelper.preference.getInt("package_count", 0) != countInstalledPackage(
+            packageManager
+        )
     }
 
     /**

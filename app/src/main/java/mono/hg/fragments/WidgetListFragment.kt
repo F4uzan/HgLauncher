@@ -272,7 +272,7 @@ class WidgetListFragment : GenericPageFragment() {
         // Don't obliterate the widget by setting it to a 0-height view.
         // If 0 is received, set the actual size to 1 instead.
         view.updateLayoutParams<ViewGroup.LayoutParams> {
-                height = if (newSize > 0) baseSize * newSize else baseSize
+            height = if (newSize > 0) baseSize * newSize else baseSize
         }
     }
 

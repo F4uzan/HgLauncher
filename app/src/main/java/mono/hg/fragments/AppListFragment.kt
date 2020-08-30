@@ -2,7 +2,6 @@ package mono.hg.fragments
 
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.LauncherApps
@@ -40,6 +39,7 @@ import mono.hg.utils.AppUtils
 import mono.hg.utils.UserUtils
 import mono.hg.utils.Utils
 import mono.hg.utils.ViewUtils
+import mono.hg.utils.applyAccent
 import mono.hg.views.CustomGridLayoutManager
 import mono.hg.views.TogglingLinearLayoutManager
 import mono.hg.wrappers.ItemOffsetDecoration
@@ -156,13 +156,10 @@ class AppListFragment : GenericPageFragment() {
         // Add long click listener to apps in the apps list.
         // This shows a menu to manage the selected app.
         appsAdapter.addListener(FlexibleAdapter.OnItemLongClickListener { position ->
-            val app = appsAdapter.getItem(position)
-
-            appsRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.let {
-                createAppMenu(
-                    it,
-                    app
-                )
+            appsAdapter.getItem(position)?.apply {
+                appsRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.let {
+                    createAppMenu(it, this)
+                }
             }
         })
 
@@ -243,8 +240,8 @@ class AppListFragment : GenericPageFragment() {
      * @param view     View for the PopupMenu to anchor to.
      * @param app      App object selected from the list.
      */
-    private fun createAppMenu(view: View, app: App?) {
-        val packageName = app !!.packageName
+    private fun createAppMenu(view: View, app: App) {
+        val packageName = app.packageName
         val user = app.user
         val packageNameUri = Uri.fromParts("package", AppUtils.getPackageName(packageName), null)
         val shortcutMap = SparseArray<String>()
@@ -434,11 +431,7 @@ class AppListFragment : GenericPageFragment() {
 
             create().apply {
                 show()
-                with(PreferenceHelper.darkAccent) {
-                    getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(this)
-                    getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(this)
-                    getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(this)
-                }
+                applyAccent()
             }
         }
     }

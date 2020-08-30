@@ -21,11 +21,11 @@ import kotlinx.coroutines.withContext
 import mono.hg.R
 import mono.hg.SettingsActivity
 import mono.hg.adapters.FileFolderAdapter
-import mono.hg.compatHide
-import mono.hg.compatShow
 import mono.hg.databinding.FragmentBackupRestoreBinding
 import mono.hg.models.FileFolder
 import mono.hg.utils.BackupRestoreUtils
+import mono.hg.utils.compatHide
+import mono.hg.utils.compatShow
 import java.io.File
 import java.util.*
 import kotlin.Comparator
@@ -79,6 +79,7 @@ class BackupRestoreFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         isInRestore = arguments?.getBoolean("isRestore", false) ?: false
+
         super.onCreate(savedInstanceState)
 
         /*
@@ -145,10 +146,10 @@ class BackupRestoreFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.home -> {
                 requireActivity().onBackPressed()
-                return true
+                true
             }
             1 -> {
                 // Send our backup signal!
@@ -175,12 +176,10 @@ class BackupRestoreFragment : Fragment() {
                     Toast.makeText(requireActivity(), R.string.backup_empty, Toast.LENGTH_SHORT)
                         .show()
                 }
-                return true
+                true
             }
-            else -> {
-            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     // Open a directory and refresh fileFoldersList.
@@ -190,8 +189,8 @@ class BackupRestoreFragment : Fragment() {
         val contents: Array<File>?
         contents = if (isInRestore) {
             path?.listFiles { dir ->
-                (dir.name.toLowerCase(Locale.getDefault()).endsWith(".xml")
-                        || dir.isDirectory && ! dir.isFile)
+                (dir.name.toLowerCase(Locale.getDefault())
+                    .endsWith(".xml") || dir.isDirectory && ! dir.isFile)
             }
         } else {
             path?.listFiles()
@@ -202,6 +201,7 @@ class BackupRestoreFragment : Fragment() {
                     contents.filter { ! it.isHidden }
                         .forEach { fileFoldersList.add(FileFolder(it.name, it.isDirectory)) }
                 }
+
                 fileFoldersList.sortWith(Comparator { f1, f2 ->
                     if (f1.isFolder && ! f2.isFolder) {
                         - 1

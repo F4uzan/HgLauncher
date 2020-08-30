@@ -2,6 +2,7 @@ package mono.hg.utils
 
 import android.annotation.TargetApi
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.view.View
@@ -10,6 +11,7 @@ import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatSeekBar
@@ -21,6 +23,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.progressindicator.ProgressIndicator
 import mono.hg.R
 import mono.hg.adapters.AppAdapter
 import mono.hg.helpers.PreferenceHelper
@@ -320,7 +323,7 @@ fun AppCompatSeekBar.applyAccent() {
             ?.let { DrawableCompat.wrap(it) }.also {
                 thumb = it
                 it?.let { thumb -> DrawableCompat.setTint(thumb, PreferenceHelper.accent) }
-        }
+            }
     } else {
         DrawableCompat.setTint(thumb, PreferenceHelper.accent)
     }
@@ -330,4 +333,39 @@ fun AppCompatSeekBar.applyAccent() {
             PreferenceHelper.accent,
             BlendModeCompat.SRC_ATOP
         )
+}
+
+/**
+ * Extension function for [ProgressIndicator] that handles hiding for API levels lower than 17.
+ */
+fun ProgressIndicator.compatHide() {
+    if (Utils.sdkIsAround(17)) {
+        hide()
+    } else {
+        visibility = View.INVISIBLE
+    }
+}
+
+/**
+ * Extension function for [ProgressIndicator]
+ * that handles showing the ProgressIndicator for API levels lower than 17.
+ */
+fun ProgressIndicator.compatShow() {
+    if (Utils.sdkIsAround(17)) {
+        show()
+    } else {
+        visibility = View.VISIBLE
+    }
+}
+
+/**
+ * Extension function for [AlertDialog].
+ * Applies [PreferenceHelper.darkAccent] to all the dialogue buttons.
+ */
+fun AlertDialog.applyAccent() {
+    with(PreferenceHelper.darkAccent) {
+        getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(this)
+        getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(this)
+        getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(this)
+    }
 }

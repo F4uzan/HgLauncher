@@ -161,8 +161,7 @@ object PreferenceHelper {
             "ddg" -> "https://www.duckduckgo.com/?q=%s"
             "searx" -> "https://www.searx.me/?q=%s"
             "startpage" -> "https://www.startpage.com/do/search?query=%s"
-            else ->                 // We can't go here. Return an empty string just in case.
-                ""
+            else -> "" // We can't go here. Return an empty string just in case.
         }
     }
 

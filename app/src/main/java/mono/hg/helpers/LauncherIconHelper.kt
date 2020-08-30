@@ -27,7 +27,6 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.IOException
-import java.io.InputStream
 import java.util.*
 
 /**
@@ -89,7 +88,7 @@ object LauncherIconHelper {
      * @param dstHeight Height of the returned bitmap.
      * @param dstWidth  Width of the returned bitmap.
      *
-     * @return Bitmap with resulting shadow.
+     * @return Resulting bitmap with a shadow drawn.
      *
      * @author schwiz (https://stackoverflow.com/a/24579764)
      */
@@ -126,14 +125,12 @@ object LauncherIconHelper {
             isFilterBitmap = true
         }
 
-        Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888).apply {
+        return Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888).apply {
             with(Canvas(this)) {
                 drawBitmap(mask, 0F, 0F, paint)
                 drawBitmap(bm, scaleToFit, null)
             }
             mask.recycle()
-        }.also {
-            return it
         }
     }
 
@@ -142,6 +139,9 @@ object LauncherIconHelper {
      *
      * @param packageManager PackageManager object used to fetch resources from the
      * icon pack.
+     *
+     * @return  1 if there is no exception thrown (a success), or 0 if otherwise. In the event of
+     *          an exception, the default icon pack will be automatically loaded.
      */
     fun loadIconPack(packageManager: PackageManager): Int {
         var iconFilterXml: XmlPullParser? = null
@@ -165,16 +165,14 @@ object LauncherIconHelper {
 
         // Get appfilter from the icon pack.
         try {
-            val iconAsset: InputStream
             val appFilterXml: Int = iconRes.getIdentifier("appfilter", "xml", iconPackageName)
             if (appFilterXml > 0) {
                 iconFilterXml = iconRes.getXml(appFilterXml)
             } else {
-                iconAsset = iconRes.assets.open("appfilter.xml")
-                val factory = XmlPullParserFactory.newInstance()
-                factory.isNamespaceAware = true
-                iconFilterXml = factory.newPullParser()
-                iconFilterXml.setInput(iconAsset, "utf-8")
+                iconFilterXml = XmlPullParserFactory.newInstance()
+                    .apply { isNamespaceAware = true }.newPullParser().also {
+                        it.setInput(iconRes.assets.open("appfilter.xml"), Charsets.UTF_8.name())
+                    }
             }
         } catch (e: IOException) {
             Utils.sendLog(LogLevel.ERROR, e.toString())
@@ -261,9 +259,7 @@ object LauncherIconHelper {
                 )[0].getBadgedIcon(0)
             } else {
                 ComponentName.unflattenFromString(appPackageName)?.let {
-                    packageManager.getActivityIcon(
-                        it
-                    )
+                    packageManager.getActivityIcon(it)
                 }
             }
             iconRes = if ("default" != iconPackageName) {

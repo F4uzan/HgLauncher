@@ -103,21 +103,7 @@ class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     }
 
     override fun filter(constraint: String): Boolean {
-        var fuzzyScore = 0
-
-        // See if we can match by hint names.
-        if (hasHintName()) {
-            fuzzyScore = KissFuzzySearch.doFuzzy(hintName, constraint)
-        }
-
-        // Is the hint name strong enough?
-        return if (fuzzyScore >= HINT_MATCH_SCORE) {
-            true
-        } else {
-            // Fall back to app name matching if it isn't.
-            fuzzyScore = KissFuzzySearch.doFuzzy(appName, constraint)
-            fuzzyScore >= NAME_MATCH_SCORE
-        }
+        return KissFuzzySearch.doFuzzy(appName + hintName, constraint) >= NAME_MATCH_SCORE
     }
 
     /**

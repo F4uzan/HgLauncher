@@ -68,8 +68,8 @@ class FileFolderAdapter(
     }
 
     private class ViewHolder {
-        internal var content: ImageView? = null
-        internal var name: TextView? = null
+        var content: ImageView? = null
+        var name: TextView? = null
     }
 
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import mono.hg.R
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.Utils
+import mono.hg.utils.applyAccent
 
 /**
  * A DialogFragment class that loads a list of apps, in style of ListPreference.
@@ -38,13 +39,7 @@ class AppSelectionPreferenceDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        (dialog as AlertDialog).apply {
-            with(PreferenceHelper.darkAccent) {
-                getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(this)
-                getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(this)
-                getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(this)
-            }
-        }
+        (dialog as AlertDialog).applyAccent()
 
     }
 

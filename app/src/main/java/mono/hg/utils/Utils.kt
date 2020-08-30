@@ -144,9 +144,9 @@ object Utils {
      */
     @ColorInt
     fun getColorFromAttr(context: Context, @AttrRes attr: Int): Int {
-        with(TypedValue()) {
+        return with(TypedValue()) {
             context.theme.resolveAttribute(attr, this, true)
-            return this.data
+            this.data
         }
     }
 
@@ -287,9 +287,7 @@ object Utils {
                     )
                     true
                 }
-                else ->
-                    // Do nothing.
-                    false
+                else -> false // Do nothing.
             }
         }
     }

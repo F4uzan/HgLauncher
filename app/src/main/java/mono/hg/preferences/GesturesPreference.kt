@@ -29,7 +29,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
     private lateinit var appListEntryValues: Array<CharSequence>
     private val NestingListListener =
         Preference.OnPreferenceChangeListener { preference, newValue ->
-            with (preference as ListPreference) {
+            with(preference as ListPreference) {
                 when (newValue as String) {
                     "app" -> {
                         // Create the Bundle to pass to AppSelectionPreferenceDialog.

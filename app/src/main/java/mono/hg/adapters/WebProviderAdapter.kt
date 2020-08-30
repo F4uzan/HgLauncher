@@ -49,7 +49,7 @@ class WebProviderAdapter(
     }
 
     private class ViewHolder {
-        internal var title: TextView? = null
-        internal var url: TextView? = null
+        var title: TextView? = null
+        var url: TextView? = null
     }
 }

@@ -48,6 +48,7 @@ class HiddenAppAdapter(private val hiddenAppsList: ArrayList<App>, private val c
             appHolder.icon?.let { ImageViewCompat.setImageTintList(it, null) }
             appHolder.name?.typeface = Typeface.DEFAULT
         }
+
         return view
     }
 
@@ -68,8 +69,8 @@ class HiddenAppAdapter(private val hiddenAppsList: ArrayList<App>, private val c
     }
 
     private class ViewHolder {
-        internal var icon: ImageView? = null
-        internal var name: TextView? = null
+        var icon: ImageView? = null
+        var name: TextView? = null
     }
 
 }
