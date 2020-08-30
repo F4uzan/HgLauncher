@@ -9,6 +9,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import mono.hg.R
+import mono.hg.SettingsActivity
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.Utils
 import java.util.*
@@ -25,6 +26,13 @@ class AppListPreference : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.pref_app_list, rootKey)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Update the action bar title.
+        (requireActivity() as SettingsActivity).supportActionBar?.setTitle(R.string.pref_header_list)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

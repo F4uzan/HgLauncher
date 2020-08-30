@@ -43,6 +43,13 @@ class BasePreference : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.pref_base, rootKey)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // Update the action bar title.
+        (requireActivity() as SettingsActivity).supportActionBar?.setTitle(R.string.action_settings)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val appTheme = findPreference<SpinnerPreference>("app_theme")
@@ -145,16 +152,16 @@ class BasePreference : PreferenceFragmentCompat() {
     // Used to check for storage permission.
     // Throws true when API is less than M.
     private fun hasStoragePermission(): Boolean {
-        if (Utils.atLeastMarshmallow()) {
+        return if (Utils.atLeastMarshmallow()) {
             requestPermissions(
                 arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 PERMISSION_STORAGE_CODE
             )
+            false
         } else {
             openBackupRestore(isRestore)
             return true
         }
-        return false
     }
 
     override fun onRequestPermissionsResult(

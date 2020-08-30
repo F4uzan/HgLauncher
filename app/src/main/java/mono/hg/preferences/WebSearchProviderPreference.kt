@@ -72,14 +72,6 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        // We have been sent back. Set the action bar title accordingly.
-        val actionBar = (requireActivity() as SettingsActivity).supportActionBar
-        actionBar?.setTitle(R.string.pref_header_web)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         with(menu) {
             clear()

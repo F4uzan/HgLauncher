@@ -70,10 +70,6 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
 
         (requireActivity() as SettingsActivity).progressBar.compatHide()
         PreferenceHelper.update("hidden_apps", excludedAppList)
-
-        // We have been sent back. Set the action bar title accordingly.
-        val actionBar = (requireActivity() as SettingsActivity).supportActionBar
-        actionBar?.setTitle(R.string.pref_header_list)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -6,6 +6,7 @@ import androidx.annotation.Keep
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import mono.hg.R
+import mono.hg.SettingsActivity
 import mono.hg.helpers.PreferenceHelper
 import java.util.*
 
@@ -32,6 +33,9 @@ class WebSearchPreference : PreferenceFragmentCompat() {
 
         // Set this here to make sure its values are updated every time we return to it.
         setProviderList(providerList)
+
+        // Update the action bar title.
+        (requireActivity() as SettingsActivity).supportActionBar?.setTitle(R.string.pref_header_web)
     }
 
     private fun setProviderList(list: ListPreference?) {

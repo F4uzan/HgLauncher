@@ -17,8 +17,6 @@ import mono.hg.preferences.BasePreference
 import mono.hg.utils.ActivityServiceUtils
 import mono.hg.utils.Utils
 import mono.hg.utils.ViewUtils
-import mono.hg.wrappers.BackHandledFragment
-import mono.hg.wrappers.BackHandledFragment.BackHandlerInterface
 
 
 /**
@@ -26,9 +24,7 @@ import mono.hg.wrappers.BackHandledFragment.BackHandlerInterface
  *
  * This activity can be called through 'Additional setting' in the System settings as well.
  */
-class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
-    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
-    private var selectedFragment: BackHandledFragment? = null
+class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     private var fragmentTitle: CharSequence? = null
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var toolbar: Toolbar
@@ -83,31 +79,8 @@ class SettingsActivity : AppCompatActivity(), BackHandlerInterface,
         outState.putCharSequence("title", fragmentTitle)
     }
 
-    override fun onBackPressed() {
-        if (selectedFragment == null || ! selectedFragment !!.onBackPressed()) {
-            // Selected fragment did not consume the back press event.
-            supportActionBar?.title =
-                if (supportFragmentManager.findFragmentByTag("settings") is BasePreference) {
-                    getString(R.string.title_activity_settings)
-                } else {
-                    fragmentTitle
-                }
-            super.onBackPressed()
-        }
-    }
-
-    override fun setSelectedFragment(backHandledFragment: BackHandledFragment?) {
-        this.selectedFragment = backHandledFragment
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            supportActionBar?.title =
-                if (supportFragmentManager.findFragmentByTag("settings") is BasePreference) {
-                    getString(R.string.title_activity_settings)
-                } else {
-                    fragmentTitle
-                }
             super.onBackPressed()
             ActivityServiceUtils.hideSoftKeyboard(this)
             return true
