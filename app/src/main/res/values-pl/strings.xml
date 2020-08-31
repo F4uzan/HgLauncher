@@ -7,9 +7,9 @@
     <string name="action_wallpaper">Zmień tapetę</string>
     <string name="action_force_refresh">Odśwież</string>
     <string name="action_view_widgets">Dodaj widżet</string>
-    <string name="action_remove_widget">Usuń widżet</string>
-    <string name="action_up_widget">Wyżej</string>
-    <string name="action_down_widget">Niżej</string>
+    <string name="action_remove_widget">Usuń</string>
+    <string name="action_up_widget">Przesuń w górę</string>
+    <string name="action_down_widget">Przesuń się w dół</string>
     <string name="action_web_provider_remove">Usuń</string>
     <string name="action_web_provider_exclude">Wyklucz</string>
     <string name="action_web_provider_edit">Edytuj</string>
