@@ -98,7 +98,9 @@ class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
         holder: ViewHolder, position: Int,
         payloads: List<Any>
     ) {
+        holder.contentView.contentDescription = appName
         holder.name?.text = appName
+        holder.icon.contentDescription = appName
         holder.icon.setImageDrawable(icon)
     }
 
