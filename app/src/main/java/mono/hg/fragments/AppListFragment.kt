@@ -10,10 +10,12 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.util.SparseArray
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.ViewCompat
@@ -157,7 +159,9 @@ class AppListFragment : GenericPageFragment() {
         // This shows a menu to manage the selected app.
         appsAdapter.addListener(FlexibleAdapter.OnItemLongClickListener { position ->
             appsAdapter.getItem(position)?.apply {
-                appsRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.let {
+                appsRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.findViewById<TextView>(
+                    R.id.item_name
+                )?.let {
                     createAppMenu(it, this)
                 }
             }
@@ -269,6 +273,7 @@ class AppListFragment : GenericPageFragment() {
                 menu.getItem(0).isVisible = false
             }
 
+            gravity = Gravity.NO_GRAVITY
             show()
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
