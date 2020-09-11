@@ -17,6 +17,7 @@ import android.widget.PopupWindow
 import android.widget.SeekBar
 import androidx.appcompat.view.menu.MenuAdapter
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.core.widget.PopupWindowCompat
@@ -28,6 +29,7 @@ import mono.hg.databinding.LayoutWidgetPopupBinding
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.Utils
 import mono.hg.utils.applyAccent
+import mono.hg.wrappers.NoInterceptScrollView
 import java.util.*
 
 /**
@@ -98,7 +100,7 @@ class WidgetListFragment : GenericPageFragment() {
         var scrollYPosition = 0
 
         appWidgetContainer = binding !!.widgetContainer
-        val widgetScroller: NestedScrollView = binding !!.widgetScroller
+        val widgetScroller: NoInterceptScrollView = binding !!.widgetScroller
         val addWidget: FloatingActionButton = binding !!.addWidget
 
         addWidget.backgroundTintList = ColorStateList.valueOf(PreferenceHelper.accent)
@@ -250,6 +252,7 @@ class WidgetListFragment : GenericPageFragment() {
 
                 // Immediately listens for the widget.
                 appWidgetHost.startListening()
+                ViewCompat.setNestedScrollingEnabled(this, false)
                 addWidgetActionListener(this)
                 if (newWidget) {
                     // Update our list.
