@@ -142,23 +142,21 @@ class WidgetListFragment : GenericPageFragment() {
 
         widgetScroller.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
             val scrollYDelta = scrollY - oldScrollY
-            val bottomDelta: Int =
-                widgetScroller.getChildAt(0).bottom + widgetScroller.paddingBottom - (widgetScroller.height + widgetScroller.scrollY)
 
-            if (bottomDelta == 0) {
+            if (! widgetScroller.canScrollVertically(NestedScrollView.FOCUS_DOWN)) {
                 if (! isFavouritesShowing) {
                     getLauncherActivity().showPinnedApps()
                     addWidget.hide()
                     isFavouritesShowing = true
                 }
                 scrollYPosition = 0
-            } else if (scrollYPosition < - 48) {
-                if (isFavouritesShowing) {
+            } else {
+                if (scrollYPosition < -48 && isFavouritesShowing) {
                     getLauncherActivity().hidePinnedApps()
                     addWidget.show()
                     isFavouritesShowing = false
+                    scrollYPosition = 0
                 }
-                scrollYPosition = 0
             }
 
             if (scrollYDelta < 0) {
