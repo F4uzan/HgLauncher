@@ -19,11 +19,6 @@ import java.util.*
  */
 @Keep
 class AppListPreference : PreferenceFragmentCompat() {
-    val RestartingListListener = Preference.OnPreferenceChangeListener { _, _ ->
-        PreferenceHelper.update("require_refresh", true)
-        true
-    }
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.pref_app_list, rootKey)
     }
@@ -37,8 +32,11 @@ class AppListPreference : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        findPreference<ListPreference>("icon_pack").apply {
-            this?.onPreferenceChangeListener = RestartingListListener
+        findPreference<ListPreference>("icon_pack")?.apply {
+            onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+                PreferenceHelper.update("require_refresh", true)
+                true
+            }
             setIconList(this)
         }
 

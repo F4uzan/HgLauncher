@@ -62,7 +62,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
         val prefScreen: PreferenceScreen = preferenceScreen
         val prefCount: Int = prefScreen.preferenceCount
 
-        appList
+        getAppList
 
         // We can safely iterate through all the preferences and assume they're ListPreference
         // because GesturesPreference has nothing else aside from that.
@@ -79,20 +79,16 @@ class GesturesPreference : PreferenceFragmentCompat() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == APPLICATION_DIALOG_CODE && data != null) {
             if (resultCode == Activity.RESULT_CANCELED) {
-                val key = data.getStringExtra("key")
-                if (key !== null) {
-                    findPreference<ListPreference>(key).let {
-                        it?.setSummary(R.string.gesture_action_default)
-                        it?.value = getString(R.string.gesture_action_default_value)
+                data.getStringExtra("key")?.apply {
+                    findPreference<ListPreference>(this)?.let {
+                        it.setSummary(R.string.gesture_action_default)
+                        it.value = getString(R.string.gesture_action_default_value)
                     }
                 }
             } else if (resultCode == Activity.RESULT_OK) {
                 val key = data.getStringExtra("key")
                 val app = data.getStringExtra("app")?.let {
-                    AppUtils.getPackageLabel(
-                        requireActivity().packageManager,
-                        it
-                    )
+                    AppUtils.getPackageLabel(requireActivity().packageManager, it)
                 }
 
                 key?.let { findPreference<ListPreference>(it)?.summary = app }
@@ -127,24 +123,20 @@ class GesturesPreference : PreferenceFragmentCompat() {
                     }
             }
 
-            list?.entries = entries.toTypedArray()
-            list?.entryValues = entryValues.toTypedArray()
-
-            list?.summary = if (list?.value == "none") {
-                getString(R.string.gesture_handler_default)
-            } else {
-                list?.value?.let {
-                    AppUtils.getPackageLabel(
-                        requireActivity().packageManager,
-                        it
-                    )
+            list?.apply {
+                this.entries = entries.toTypedArray()
+                this.entryValues = entryValues.toTypedArray()
+                list.summary = if (list.value == "none") {
+                    getString(R.string.gesture_handler_default)
+                } else {
+                    AppUtils.getPackageLabel(requireActivity().packageManager, list.value)
                 }
             }
         }
     }
 
     // Fetch apps and feed it into our list.
-    private val appList: Unit
+    private val getAppList: Unit
         get() {
             val manager = requireActivity().packageManager
             val entries: MutableList<String> = ArrayList()
@@ -156,17 +148,14 @@ class GesturesPreference : PreferenceFragmentCompat() {
 
             val intent = Intent(Intent.ACTION_MAIN, null)
             intent.addCategory(Intent.CATEGORY_LAUNCHER)
-            manager.queryIntentActivities(intent, 0).apply {
-                sortWith(ResolveInfo.DisplayNameComparator(manager))
-            }.also {
-                // Fetch apps and feed it into our list.
-                it.forEach { resolveInfo ->
-                    val appName = resolveInfo.loadLabel(manager).toString()
+            manager.queryIntentActivities(intent, 0)
+                .sortedWith(ResolveInfo.DisplayNameComparator(manager)).forEach {
+                    // Fetch apps and feed it into our list.
+                    val appName = it.loadLabel(manager).toString()
                     val packageName =
-                        resolveInfo.activityInfo.packageName + "/" + resolveInfo.activityInfo.name
+                        it.activityInfo.packageName + "/" + it.activityInfo.name
                     entries.add(appName)
                     entryValues.add(packageName)
-                }
             }
 
             appListEntries = entries.toTypedArray()

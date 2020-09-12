@@ -2,7 +2,6 @@ package mono.hg.preferences
 
 import android.Manifest
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -24,6 +23,7 @@ import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.BackupRestoreUtils
 import mono.hg.utils.Utils
 import mono.hg.utils.ViewUtils
+import mono.hg.utils.applyAccent
 import mono.hg.wrappers.SpinnerPreference
 
 /**
@@ -32,7 +32,6 @@ import mono.hg.wrappers.SpinnerPreference
  */
 class BasePreference : PreferenceFragmentCompat() {
     private var isRestore = false
-    private var versionMenu: Preference? = null
 
     private val RestartingListListener = Preference.OnPreferenceChangeListener { _, _ ->
         ViewUtils.restartActivity(requireActivity() as AppCompatActivity, false)
@@ -52,49 +51,44 @@ class BasePreference : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val appTheme = findPreference<SpinnerPreference>("app_theme")
-        val appAccent = findPreference<ColorPreferenceCompat>("app_accent")
-        versionMenu = findPreference("version_key")
-        appTheme?.onPreferenceChangeListener = RestartingListListener
-        appAccent?.onPreferenceChangeListener = RestartingListListener
+        RestartingListListener.apply {
+            findPreference<SpinnerPreference>("app_theme")?.onPreferenceChangeListener = this
+            findPreference<ColorPreferenceCompat>("app_accent")?.onPreferenceChangeListener = this
+        }
         addVersionCounterListener()
         addFragmentListener()
     }
 
     private fun addVersionCounterListener() {
+        val versionMenu = findPreference<Preference>("version_key")
+
         if (! PreferenceHelper.preference.getBoolean("is_grandma", false)) {
             versionMenu?.onPreferenceClickListener = object : Preference.OnPreferenceClickListener {
                 var counter = 9
-                lateinit var counterToast: Toast
+                var counterToast: Toast? = null
                 override fun onPreferenceClick(preference: Preference): Boolean {
-                    when {
-                        counter > 1 -> {
-                            counterToast.cancel()
-                            if (counter < 8) {
-                                counterToast = Toast.makeText(
-                                    requireActivity(), String.format(
-                                        getString(R.string.version_key_toast_plural),
-                                        counter
-                                    ), Toast.LENGTH_SHORT
-                                )
-                                counterToast.show()
-                            }
-                            counter --
+                    counterToast?.cancel()
+                    when (counter) {
+                        in 2 .. 7 -> {
+                            counterToast = Toast.makeText(
+                                requireActivity(), String.format(
+                                    getString(R.string.version_key_toast_plural),
+                                    counter
+                                ), Toast.LENGTH_SHORT
+                            ).apply { show() }
                         }
-                        counter == 0 -> {
-                            PreferenceHelper.update("is_grandma", true)
-                            versionMenu?.setTitle(R.string.version_key_name)
-                        }
-                        counter == 1 -> {
-                            counterToast.cancel()
+                        1 -> {
                             counterToast = Toast.makeText(
                                 requireActivity(), R.string.version_key_toast,
                                 Toast.LENGTH_SHORT
-                            )
-                            counterToast.show()
-                            counter --
+                            ).apply { show() }
+                        }
+                        0 -> {
+                            PreferenceHelper.update("is_grandma", true)
+                            versionMenu?.setTitle(R.string.version_key_name)
                         }
                     }
+                    counter --
                     return false
                 }
             }
@@ -141,8 +135,7 @@ class BasePreference : PreferenceFragmentCompat() {
 
                 create().apply {
                     show()
-                    getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(PreferenceHelper.darkAccent)
-                    getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(PreferenceHelper.darkAccent)
+                    applyAccent()
                 }
             }
             false
@@ -202,27 +195,28 @@ class BasePreference : PreferenceFragmentCompat() {
      */
     private fun openBackupRestore(isRestore: Boolean) {
         if (Utils.atLeastKitKat()) {
-            val intent: Intent = if (isRestore) {
+            if (isRestore) {
                 Intent(Intent.ACTION_OPEN_DOCUMENT)
             } else {
                 Intent(Intent.ACTION_CREATE_DOCUMENT)
-            }
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "text/xml"
-            if (isRestore) {
-                startActivityForResult(intent, RESTORE_STORAGE_CODE)
-            } else {
-                startActivityForResult(intent, BACKUP_STORAGE_CODE)
+            }.apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "text/xml"
+            }.also {
+                if (isRestore) {
+                    startActivityForResult(it, RESTORE_STORAGE_CODE)
+                } else {
+                    startActivityForResult(it, BACKUP_STORAGE_CODE)
+                }
             }
         } else {
-            val backupRestoreFragment = BackupRestoreFragment()
-            val fragmentBundle = Bundle()
-            fragmentBundle.putBoolean("isRestore", isRestore)
-            backupRestoreFragment.arguments = fragmentBundle
-            ViewUtils.replaceFragment(
-                requireActivity().supportFragmentManager, backupRestoreFragment,
-                "backup_restore"
-            )
+            Bundle().apply { putBoolean("isRestore", isRestore) }.also {
+                ViewUtils.replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    BackupRestoreFragment().apply { arguments = it },
+                    "backup_restore"
+                )
+            }
         }
     }
 

@@ -410,10 +410,7 @@ class AppListFragment : GenericPageFragment() {
             setTitle(R.string.dialog_title_shorthand)
             if (hasHintName) {
                 setNeutralButton(R.string.action_web_provider_remove) { _, _ ->
-                    appsAdapter.getItem(position).apply {
-                        this?.hintName = ""
-                    }
-
+                    appsAdapter.getItem(position)?.apply { hintName = "" }
                     packageName?.let { PreferenceHelper.updateLabel(it, "", true) }
                 }
             }
@@ -426,10 +423,7 @@ class AppListFragment : GenericPageFragment() {
 
                 // Update the specified item.
                 if (newLabel.isNotBlank()) {
-                    appsAdapter.getItem(position).apply {
-                        this?.hintName = newLabel
-                    }
-
+                    appsAdapter.getItem(position)?.apply { hintName = newLabel }
                     packageName?.let { PreferenceHelper.updateLabel(it, newLabel, false) }
                 }
             }

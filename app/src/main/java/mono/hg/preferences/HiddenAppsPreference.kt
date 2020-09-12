@@ -77,8 +77,17 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
             clear()
             add(0, 1, 100, getString(R.string.action_hidden_app_reset))
             getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            getItem(0).isVisible = excludedAppList.isNotEmpty()
+            getItem(0).isVisible = false // Don't show this just yet
             super.onCreateOptionsMenu(this, inflater)
+        }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        if (excludedAppList.isNotEmpty() && appList.isNotEmpty()) {
+            // Show the 'Restore all menu',
+            // since the user can now see all the available (and hidden) apps
+            menu.getItem(0).isVisible = true
         }
     }
 
@@ -117,6 +126,7 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
                 )
             }
             hiddenAppAdapter?.notifyDataSetChanged()
+            requireActivity().invalidateOptionsMenu()
             (requireActivity() as SettingsActivity).progressBar.compatHide()
         }
     }

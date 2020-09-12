@@ -117,17 +117,17 @@ object AppUtils {
         activity: Activity, user: Long, componentName: String,
         adapter: AppAdapter, list: MutableList<App>
     ) {
-        val icon = LauncherIconHelper.getIcon(activity, componentName, user, false)
-        val app = icon?.let { App(it, componentName, user) }.apply {
-            this?.userPackageName = if (user != UserUtils(activity).currentSerial) {
-                appendUser(user, componentName)
-            } else {
-                componentName
+        LauncherIconHelper.getIcon(activity, componentName, user, false)?.apply {
+            App(this, componentName, user).apply {
+                userPackageName = if (user != UserUtils(activity).currentSerial) {
+                    appendUser(user, componentName)
+                } else {
+                    componentName
+                }
+            }.also {
+                list.add(it)
+                adapter.updateDataSet(list, false)
             }
-        }
-        app?.let {
-            list.add(it)
-            adapter.updateDataSet(list, false)
         }
     }
 
