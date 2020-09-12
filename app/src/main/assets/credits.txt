@@ -22,6 +22,7 @@ Contributors:
 - Ruan O. Lima
 - Scott MacDonald
 - sicherist
+- ssantos
 - WaldiS
 
 Libraries and others:
