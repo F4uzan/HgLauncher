@@ -7,6 +7,11 @@
         android:summary="@string/pref_header_hidden_apps_desc"
         android:title="@string/pref_header_hidden_apps" />
 
+    <mono.hg.wrappers.ThemeableSwitchPreference
+        android:defaultValue="true"
+        android:key="widget_space_visible"
+        android:title="@string/action_view_widgets" />
+
     <mono.hg.wrappers.SpinnerPreference
         android:defaultValue="list"
         android:entries="@array/pref_app_list_mode_title"

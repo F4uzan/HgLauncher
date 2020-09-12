@@ -39,6 +39,7 @@ object PreferenceHelper {
     private var keep_last_search = false
     private var adaptive_shade = false
     private var windowbar_status_switch = false
+    private var widget_space_visible = true
     private var web_search_long_press = false
     private var use_grid_mode = false
     var isTesting = false
@@ -125,6 +126,10 @@ object PreferenceHelper {
 
     fun useGrid(): Boolean {
         return use_grid_mode
+    }
+
+    fun widgetSpaceVisible(): Boolean {
+        return widget_space_visible
     }
 
     fun wasAlien(): Boolean {
@@ -258,6 +263,7 @@ object PreferenceHelper {
         accent = preference.getInt("app_accent", - 49023) // The default accent in Int.
         darkAccent = ColorUtils.blendARGB(accent, Color.BLACK, 0.25f)
         darkerAccent = ColorUtils.blendARGB(accent, Color.BLACK, 0.4f)
+        widget_space_visible = preference.getBoolean("widget_space_visible", true)
         web_search_enabled = preference.getBoolean("web_search_enabled", true)
         web_search_long_press = preference.getBoolean("web_search_long_press", false)
         search_provider_set = preference.getString("search_provider", "none")
