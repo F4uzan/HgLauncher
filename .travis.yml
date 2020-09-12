@@ -4,7 +4,7 @@ android:
     - tools
     - platform-tools
     - tools
-    - build-tools-30.0.1
+    - build-tools-30.0.2
     - android-22
     - android-30
     - extra-google-m2repository
@@ -12,7 +12,7 @@ android:
     - sys-img-armeabi-v7a-android-22
 
 before_install:
-  - yes | sdkmanager "build-tools;30.0.1"
+  - yes | sdkmanager "build-tools;30.0.2"
 
 before_script:
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a

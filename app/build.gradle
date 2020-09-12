@@ -5,7 +5,7 @@ def dateVersionCode = (int) (((new Date().getTime() / 1000) - 1593866693) / 10)
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "mono.hg"
         minSdkVersion 14
@@ -61,7 +61,7 @@ dependencies {
 
     // Kotlin libraries
     implementation "androidx.core:core-ktx:+"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.8'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha07'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -72,7 +72,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'com.google.android.material:material:1.3.0-alpha02'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
+    implementation 'androidx.viewpager2:viewpager2:1.1.0-alpha01'
 
     // Other third-party libraries
     implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.1'
