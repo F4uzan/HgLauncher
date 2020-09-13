@@ -63,7 +63,6 @@
     <string name="pref_header_hidden_apps_desc">Kelola daftar aplikasi tersembunyi</string>
     <string name="pref_header_backup">Cadangkan</string>
     <string name="icon_pack_default">Bawaan</string>
-    <string name="pref_header_cust">Kustomisasi</string>
     <string name="title_activity_settings">Pengaturan</string>
     <string name="pref_header_restore_desc">Memulihkan konfigurasi yang disimpan</string>
     <string name="orientation_sensor">Sistem</string>
@@ -86,10 +85,8 @@
     <string name="pref_header_behavior">Perilaku</string>
     <string name="app_theme_dark">Gelap</string>
     <string name="app_theme">Tema</string>
-    <string name="backup_restore_dialog">Memulihkan…</string>
     <string name="windowbar_mode_none">Mati</string>
     <string name="orientation_portrait">Potret</string>
-    <string name="pref_header_web_provider_short">Mesin pencari</string>
     <string name="backup_exist_overwrite">Menimpa</string>
     <string name="pref_header_about">Tentang</string>
     <string name="restore_complete">Cadangan dipulihkan.</string>

@@ -2,7 +2,6 @@
 <resources>
     <string name="title_activity_settings">Podešavanja</string>
     <string name="pref_header_about">O aplikaciji</string>
-    <string name="pref_header_cust">Prilagođavanje</string>
     <string name="pref_header_gestures">Gestovi</string>
     <string name="pref_header_wall">Radno okruženje</string>
     <string name="pref_header_list">Lista aplikacija</string>
@@ -27,13 +26,11 @@
     <string name="reset_preference_toast">Konfiguracija je resetovana.</string>
     <string name="pref_header_web_provider_title">Provajderi internet pretrage</string>
     <string name="pref_header_web_provider_desc">Dodaj ili ukloni provajdere internet pretrage</string>
-    <string name="pref_header_web_provider_short">Provajderi pretrage</string>
     <string name="web_provider_name_hint">Ime (mora biti jedinstveno)</string>
     <string name="version_key_toast_plural">"Klikni  %1$d puta kako bi aktivirao režim testera."</string>
     <string name="version_key_toast">Klikni još jednom kako bi potvrdio.</string>
     <string name="backup_exist">Datoteka istog imena kao rezervna kopija već postoji.</string>
     <string name="dialog_cancel">Odustani</string>
-    <string name="backup_restore_dialog">Vraćanje u toku…</string>
     <string name="restore_complete">Rezervna kopija je vraćena.</string>
     <string name="backup_complete">Rezervna kopija je sačuvana.</string>
     <string name="backup_empty">Ime rezervne kopije ne može biti prazno.</string>

@@ -11,17 +11,13 @@
     <string name="action_up_widget">Mover hacia arriba</string>
     <string name="action_down_widget">Mover hacia abajo</string>
     <string name="action_web_provider_remove">Quitar</string>
-    <string name="action_web_provider_exclude">Excluir</string>
-    <string name="action_web_provider_edit">Editar</string>
     <string name="action_hidden_app_reset">Restablecer todo</string>
     <string name="action_web_provider_add">Añadir</string>
     <string name="action_web_provider_reset">Restablecer</string>
-    <string name="action_save_backup">Guardar</string>
     <!-- App menu actions -->
     <string name="action_pin">Fijar</string>
     <string name="action_unpin">Soltar</string>
     <string name="action_hide">Ocultar</string>
-    <string name="action_show">Restablecer</string>
     <string name="action_backup">Copia de seguridad</string>
     <string name="action_uninstall">Desinstalar</string>
     <string name="action_info">Información de la aplicación</string>
@@ -36,7 +32,6 @@
     <string name="dialog_title_add_provider">Añadir buscador</string>
     <string name="dialog_title_edit_provider">Editar buscador</string>
     <string name="dialog_title_shorthand">Establecer abreviatura</string>
-    <string name="dialog_title_widgets">Espacio de los widgets</string>
     <string name="dialog_action_close">Cerrar</string>
     <string name="dialog_action_add">Añadir</string>
     <!-- Error messages -->
@@ -48,7 +43,6 @@
     <string name="desc_touch_receiver">Vista de escritorio</string>
     <string name="desc_apps_list">Lista de Aplicaciones</string>
     <string name="desc_icon">Aplicación</string>
-    <string name="desc_file">Archivo</string>
     <!-- Built-in search providers -->
     <string name="search_provider_none">Preguntar siempre</string>
     <string name="desc_clear_search">Vaciar búsqueda de consultas</string>

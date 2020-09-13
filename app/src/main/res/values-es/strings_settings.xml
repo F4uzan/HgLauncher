@@ -4,7 +4,6 @@
     <string name="title_activity_settings">Ajustes</string>
     <!-- Header/category names -->
     <string name="pref_header_about">Acerca de</string>
-    <string name="pref_header_cust">Personalizaciones</string>
     <string name="pref_header_gestures">Gestos</string>
     <string name="pref_header_wall">Escritorio</string>
     <string name="pref_header_list">Lista de aplicaciones</string>
@@ -33,7 +32,6 @@
     <!-- Web search provider -->
     <string name="pref_header_web_provider_title">Buscadores web</string>
     <string name="pref_header_web_provider_desc">Añade o quita buscadores web.</string>
-    <string name="pref_header_web_provider_short">Buscador web</string>
     <string name="web_provider_name_hint">Nombre (debe ser único)</string>
     <!-- Easter egg -->
     <string name="version_key_toast_plural">Pulsa %1$d veces más para activar el modo de pruebas.</string>
@@ -43,7 +41,6 @@
     <string name="backup_exist">Ya existe un archivo con el mismo nombre.</string>
     <string name="backup_exist_overwrite">Sobrescribir</string>
     <string name="dialog_cancel">Cancelar</string>
-    <string name="backup_restore_dialog">Restituyendo…</string>
     <string name="restore_complete">Restitución completada!</string>
     <string name="backup_complete">Copia de seguridad guardada!</string>
     <string name="backup_empty">El nombre de la copia de seguridad no puede estar vacío.</string>

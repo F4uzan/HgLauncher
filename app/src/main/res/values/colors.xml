@@ -13,10 +13,8 @@
     <color name="colorBackgroundGrayAlt">#20F2F2F2</color>
     <color name="colorBackgroundWhite">#F5F5F5</color>
     <color name="colorBackgroundWhiteAlt">#70F6F6F6</color>
-    <color name="colorCardBackgroundWhite">#242424</color>
     <color name="colorCardBackgroundGray">#101010</color>
     <color name="colorDividerLight">#D0D0D0</color>
-    <color name="actionBarGray">#131313</color>
     <color name="navigationBarShade">#80000000</color>
     <color name="editTextHint">#BEBEBE</color> <!-- from @android:color/dim_foreground_dark -->
 

@@ -9,15 +9,11 @@
     <string name="action_up_widget">Mover para cima</string>
     <string name="action_down_widget">Mover para baixo</string>
     <string name="action_web_provider_remove">Remover</string>
-    <string name="action_web_provider_exclude">Excluir</string>
-    <string name="action_web_provider_edit">Editar</string>
     <string name="action_hidden_app_reset">Restaurar tudo</string>
     <string name="action_web_provider_add">Adc</string>
     <string name="action_web_provider_reset">Redefinir</string>
-    <string name="action_save_backup">Salvar</string>
     <string name="action_pin">Pin</string>
     <string name="action_hide">Esconder</string>
-    <string name="action_show">Restaurar</string>
     <string name="action_backup">Cópia de segurança</string>
     <string name="action_uninstall">Desinstalar</string>
     <string name="action_info">Informações do aplicativo</string>
@@ -31,7 +27,6 @@
     <string name="dialog_title_add_provider">Adc provedor</string>
     <string name="dialog_title_edit_provider">Editar provedor</string>
     <string name="dialog_title_shorthand">Definir forma abreviada</string>
-    <string name="dialog_title_widgets">Espaço do widget</string>
     <string name="dialog_action_close">Fechar</string>
     <string name="dialog_action_add">Adc</string>
     <string name="err_activity_null">Não foi possível iniciar o aplicativo.</string>
@@ -44,7 +39,6 @@
 \n  • Pressione e segure para alterar o papel de parede e abrir as configurações</string>
     <string name="desc_touch_receiver">Visualização da área de trabalho</string>
     <string name="desc_apps_list">Lista de apps</string>
-    <string name="desc_file">Arquivo</string>
     <string name="desc_clear_search">Limpar consulta de pesquisa</string>
     <string name="search_provider_none">Sempre pergunte</string>
 </resources>

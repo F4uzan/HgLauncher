@@ -689,7 +689,7 @@ class LauncherActivity : AppCompatActivity() {
                     }
 
                     // Prompt user if they want to search their query online.
-                    searchSnack.setNonDismissAction(searchSnackAction, View.OnClickListener {
+                    searchSnack.setNonDismissAction(searchSnackAction) {
                         if (PreferenceHelper.searchProvider != "none") {
                             PreferenceHelper.searchProvider?.let { provider ->
                                 Utils.doWebSearch(
@@ -707,9 +707,9 @@ class LauncherActivity : AppCompatActivity() {
                                 )
                             }
                         }
-                    }).show()
+                    }.show()
                     if (PreferenceHelper.extendedSearchMenu() && PreferenceHelper.searchProvider != "none") {
-                        searchSnack.setLongPressAction(View.OnLongClickListener {
+                        searchSnack.setLongPressAction {
                             appMenu = PopupMenu(this@LauncherActivity, it).apply {
                                 ViewUtils.createSearchMenu(
                                     this@LauncherActivity, this,
@@ -717,7 +717,7 @@ class LauncherActivity : AppCompatActivity() {
                                 )
                             }
                             true
-                        })
+                        }
                     }
                 }
             }

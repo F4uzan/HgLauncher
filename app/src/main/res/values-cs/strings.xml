@@ -9,16 +9,12 @@
     <string name="action_up_widget">Posunout nahoru</string>
     <string name="action_down_widget">Posunout dolu</string>
     <string name="action_web_provider_remove">Odstranit</string>
-    <string name="action_web_provider_exclude">Vyloučit</string>
-    <string name="action_web_provider_edit">Upravit</string>
     <string name="action_hidden_app_reset">Obnovit vše</string>
     <string name="action_web_provider_add">Přidat</string>
     <string name="action_web_provider_reset">Reset</string>
-    <string name="action_save_backup">Uložit</string>
     <string name="action_pin">Připnout</string>
     <string name="action_unpin">Odepnout</string>
     <string name="action_hide">Skrýt</string>
-    <string name="action_show">Obnovit</string>
     <string name="action_backup">Záloha</string>
     <string name="action_uninstall">Odinstalovat</string>
     <string name="action_info">Informace o aplikaci</string>
@@ -42,7 +38,6 @@
     <string name="desc_touch_receiver">Zobrazení plochy</string>
     <string name="desc_apps_list">Seznam aplikací</string>
     <string name="desc_icon">Aplikace</string>
-    <string name="desc_file">Soubor</string>
     <string name="desc_clear_search">Vymazat vyhledávací dotaz</string>
     <string name="search_provider_none">Vždy se zeptat</string>
 </resources>

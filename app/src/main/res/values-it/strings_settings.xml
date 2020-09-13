@@ -2,7 +2,6 @@
 <resources>
     <string name="title_activity_settings">Impostazioni</string>
     <string name="pref_header_about">Informazioni</string>
-    <string name="pref_header_cust">Personalizzazioni</string>
     <string name="pref_header_gestures">Gestures</string>
     <string name="pref_header_wall">Desktop</string>
     <string name="pref_header_list">Lista applicazioni</string>
@@ -27,7 +26,6 @@
     <string name="reset_preference_toast">La configurazione è stata ripristinata.</string>
     <string name="pref_header_web_provider_title">Provider di ricerca Web</string>
     <string name="pref_header_web_provider_desc">Aggiungi o rimuovi i provider di ricerca web</string>
-    <string name="pref_header_web_provider_short">Cerca provider</string>
     <string name="web_provider_name_hint">Nome (deve essere univoco)</string>
     <string name="version_key_toast_plural">Premi %1$d più di una volta per abilitare la modalità test.</string>
     <string name="version_key_toast">Premi nuovamente per confermare.</string>
@@ -35,7 +33,6 @@
     <string name="backup_exist">Esiste già un file di backup con questo nome.</string>
     <string name="backup_exist_overwrite">Sovrascrivi</string>
     <string name="dialog_cancel">Cancella</string>
-    <string name="backup_restore_dialog">Ripristino…</string>
     <string name="restore_complete">Il backup è stato ripristinato.</string>
     <string name="backup_complete">Il backup è stato salvato.</string>
     <string name="backup_empty">Il nome del backup non può essere vuoto.</string>

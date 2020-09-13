@@ -7,8 +7,8 @@
         android:title="@string/web_search" />
 
     <mono.hg.wrappers.ThemeableSwitchPreference
-        android:dependency="web_search_enabled"
         android:defaultValue="false"
+        android:dependency="web_search_enabled"
         android:key="web_search_long_press"
         android:summary="@string/web_search_long_press_desc"
         android:title="@string/web_search_long_press" />
@@ -21,8 +21,8 @@
         android:title="@string/pref_header_web_provider_title" />
 
     <mono.hg.wrappers.ThemeableListPreference
-        android:dependency="web_search_enabled"
         android:defaultValue="none"
+        android:dependency="web_search_enabled"
         android:entries="@array/pref_search_provider_title"
         android:entryValues="@array/pref_search_provider_values"
         android:key="search_provider"

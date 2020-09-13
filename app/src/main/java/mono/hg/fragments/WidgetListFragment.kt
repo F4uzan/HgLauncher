@@ -151,7 +151,7 @@ class WidgetListFragment : GenericPageFragment() {
                 }
                 scrollYPosition = 0
             } else {
-                if (scrollYPosition < -48 && isFavouritesShowing) {
+                if (scrollYPosition < - 48 && isFavouritesShowing) {
                     getLauncherActivity().hidePinnedApps()
                     addWidget.show()
                     isFavouritesShowing = false
@@ -259,7 +259,7 @@ class WidgetListFragment : GenericPageFragment() {
                     // Apply preference changes.
                     PreferenceHelper.updateWidgets(widgetsList)
                 } else {
-                    widgetsList.set(index, "$widgetId-$size")
+                    widgetsList[index] = "$widgetId-$size"
                 }
             }
         }

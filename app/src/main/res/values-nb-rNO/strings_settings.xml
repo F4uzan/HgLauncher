@@ -63,7 +63,6 @@
     <string name="pref_header_hidden_apps_desc">Håndter liste over skjulte programmer</string>
     <string name="pref_header_backup">Sikkerhetskopier</string>
     <string name="icon_pack_default">Forvalg</string>
-    <string name="pref_header_cust">Tilpasninger</string>
     <string name="title_activity_settings">Innstillinger</string>
     <string name="pref_header_restore_desc">Gjenopprett et lagret oppsett</string>
     <string name="orientation_sensor">System</string>
@@ -86,10 +85,8 @@
     <string name="pref_header_behavior">Oppførsel</string>
     <string name="app_theme_dark">Mørk</string>
     <string name="app_theme">Drakt</string>
-    <string name="backup_restore_dialog">Gjenoppretter…</string>
     <string name="windowbar_mode_none">Avskrudd</string>
     <string name="orientation_portrait">Stående</string>
-    <string name="pref_header_web_provider_short">Søkemotorer</string>
     <string name="backup_exist_overwrite">Overskriv</string>
     <string name="pref_header_about">Om</string>
     <string name="restore_complete">Sikkerhetskopi gjenopprettet.</string>

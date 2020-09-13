@@ -43,7 +43,6 @@
     <string name="backup_empty">Voer een naam in.</string>
     <string name="backup_complete">De back-up is opgeslagen.</string>
     <string name="restore_complete">De back-up is hersteld.</string>
-    <string name="backup_restore_dialog">Bezig met herstellen…</string>
     <string name="dialog_cancel">Annuleren</string>
     <string name="backup_exist_overwrite">Overschrijven</string>
     <string name="backup_exist">Er is al een back-up met deze naam.</string>
@@ -51,7 +50,6 @@
     <string name="version_key_toast">Druk nogmaals om te bevestigen.</string>
     <string name="version_key_toast_plural">Druk nog %1$d keer om de testmodus in te schakelen.</string>
     <string name="web_provider_name_hint">Naam (moet uniek zijn)</string>
-    <string name="pref_header_web_provider_short">Zoekmachines</string>
     <string name="pref_header_web_provider_desc">Zoekmachines toevoegen/verwijderen</string>
     <string name="pref_header_web_provider_title">Zoekmachines</string>
     <string name="reset_preference_toast">Hersteld.</string>
@@ -77,7 +75,6 @@
     <string name="pref_header_interface">Uiterlijk</string>
     <string name="pref_header_wall">Startscherm</string>
     <string name="pref_header_gestures">Gebaren</string>
-    <string name="pref_header_cust">Aanpassingen</string>
     <string name="pref_header_about">Over</string>
     <string name="title_activity_settings">Instellingen</string>
     <string name="orientation_landscape">Horizontaal</string>

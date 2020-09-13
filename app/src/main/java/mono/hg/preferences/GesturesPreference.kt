@@ -156,7 +156,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
                         it.activityInfo.packageName + "/" + it.activityInfo.name
                     entries.add(appName)
                     entryValues.add(packageName)
-            }
+                }
 
             appListEntries = entries.toTypedArray()
             appListEntryValues = entryValues.toTypedArray()

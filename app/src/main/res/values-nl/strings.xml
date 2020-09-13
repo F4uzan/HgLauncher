@@ -3,7 +3,6 @@
     <string name="app_name">HgLauncher</string>
     <string name="search_provider_none">Altijd vragen</string>
     <string name="desc_clear_search">Zoekopdracht wissen</string>
-    <string name="desc_file">Bestand</string>
     <string name="desc_icon">App</string>
     <string name="desc_apps_list">App-lijst</string>
     <string name="desc_touch_receiver">Startschermweergave</string>
@@ -17,7 +16,6 @@
     <string name="err_activity_null">De app kan niet worden geopend.</string>
     <string name="dialog_action_add">Toevoegen</string>
     <string name="dialog_action_close">Sluiten</string>
-    <string name="dialog_title_widgets">Widgetscherm</string>
     <string name="dialog_title_shorthand">Afkorting instellen</string>
     <string name="dialog_title_edit_provider">Zoekmachine bewerken</string>
     <string name="dialog_title_add_provider">Zoekmachine toevoegen</string>
@@ -31,16 +29,12 @@
     <string name="action_info">App-informatie</string>
     <string name="action_uninstall">Deïnstalleren</string>
     <string name="action_backup">Back-uppen</string>
-    <string name="action_show">Herstellen</string>
     <string name="action_hide">Verbergen</string>
     <string name="action_unpin">Losmaken</string>
     <string name="action_pin">Vastmaken</string>
-    <string name="action_save_backup">Opslaan</string>
     <string name="action_web_provider_reset">Standaardwaarden</string>
     <string name="action_web_provider_add">Toevoegen</string>
     <string name="action_hidden_app_reset">Alles herstellen</string>
-    <string name="action_web_provider_edit">Bewerken</string>
-    <string name="action_web_provider_exclude">Uitsluiten</string>
     <string name="action_web_provider_remove">Verwijderen</string>
     <string name="action_down_widget">Omlaag verplaatsen</string>
     <string name="action_up_widget">Omhoog verplaatsen</string>

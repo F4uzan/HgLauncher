@@ -79,11 +79,9 @@
     <string name="backup_empty">Tapez le nom de la sauvegarde.</string>
     <string name="backup_complete">Sauvegarde enregistrée.</string>
     <string name="restore_complete">Sauvegarde restaurée.</string>
-    <string name="backup_restore_dialog">Restauration…</string>
     <string name="dialog_cancel">Annuler</string>
     <string name="backup_exist_overwrite">Écraser</string>
     <string name="web_provider_name_hint">Nom (doit être unique)</string>
-    <string name="pref_header_web_provider_short">Moteurs de recherche</string>
     <string name="pref_header_web_provider_desc">Ajouter ou retirer des moteurs de recherche</string>
     <string name="pref_header_web_provider_title">Moteur de recherche web</string>
     <string name="reset_preference_toast">Configuration réinitialisée.</string>
@@ -106,7 +104,6 @@
     <string name="pref_header_list">Liste d\'applis</string>
     <string name="pref_header_wall">Bureau</string>
     <string name="pref_header_gestures">Gestes</string>
-    <string name="pref_header_cust">Personnalisations</string>
     <string name="pref_header_about">À propos</string>
     <string name="title_activity_settings">Paramètres</string>
 </resources>

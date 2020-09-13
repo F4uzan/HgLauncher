@@ -7,15 +7,11 @@
     <string name="action_view_widgets">Spazio widget</string>
     <string name="action_remove_widget">Rimuovi il widget</string>
     <string name="action_web_provider_remove">Rimuovi</string>
-    <string name="action_web_provider_exclude">Escludi</string>
-    <string name="action_web_provider_edit">Modifica</string>
     <string name="action_hidden_app_reset">Ripristina tutto</string>
     <string name="action_web_provider_add">Aggiungi</string>
     <string name="action_web_provider_reset">Reset</string>
-    <string name="action_save_backup">Salva</string>
     <string name="action_pin">Metti in evidenza</string>
     <string name="action_hide">Nascondi</string>
-    <string name="action_show">Ripristina</string>
     <string name="action_backup">Backup</string>
     <string name="action_uninstall">Disinstalla</string>
     <string name="action_info">Informazioni App</string>
@@ -38,7 +34,6 @@
 \n • Tieni premuto per cambiare lo sfondo e aprire le impostazioni</string>
     <string name="desc_apps_list">Lista Applicazioni</string>
     <string name="desc_icon">Applicazione</string>
-    <string name="desc_file">File</string>
     <string name="desc_clear_search">Svuota la cronologia delle ricerche</string>
     <string name="search_provider_none">Chiedi sempre</string>
 </resources>

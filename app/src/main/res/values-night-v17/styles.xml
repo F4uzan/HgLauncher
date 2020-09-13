@@ -1,17 +1,10 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="BaseDialogStyle">
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingStart">19dp</item>
         <item name="android:paddingLeft">19dp</item>
         <item name="android:paddingEnd">15dp</item>
         <item name="android:paddingRight">15dp</item>
-    </style>
-
-    <style name="WidgetDialogStyle" parent="@style/Theme.AppCompat.Dialog.Alert">
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
 
     <style name="SearchSnack" parent="@style/Widget.MaterialComponents.Snackbar">

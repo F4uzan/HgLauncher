@@ -7,7 +7,6 @@
     <string name="app_name">HgLauncher</string>
     <string name="search_provider_none">Toujours demander</string>
     <string name="desc_clear_search">Effacer la requête de recherche</string>
-    <string name="desc_file">Fichier</string>
     <string name="desc_icon">Appli</string>
     <string name="desc_apps_list">Liste des applis</string>
     <string name="desc_touch_receiver">Vue de bureau</string>
@@ -18,7 +17,6 @@
     <string name="err_activity_null">Impossible de démarrer l\'application.</string>
     <string name="dialog_action_add">Ajouter</string>
     <string name="dialog_action_close">Fermer</string>
-    <string name="dialog_title_widgets">Espace widget</string>
     <string name="dialog_title_shorthand">Définir l\'abréviation</string>
     <string name="dialog_title_edit_provider">Modifier le fournisseur</string>
     <string name="dialog_title_add_provider">Ajouter un fournisseur</string>
@@ -31,16 +29,12 @@
     <string name="action_info">À propos</string>
     <string name="action_uninstall">Désinstaller</string>
     <string name="action_backup">Sauvegarder</string>
-    <string name="action_show">Restaurer</string>
     <string name="action_hide">Masquer</string>
     <string name="action_unpin">Désépingler</string>
     <string name="action_pin">Épingler</string>
-    <string name="action_save_backup">Enregistrer</string>
     <string name="action_web_provider_reset">Réinitialiser</string>
     <string name="action_web_provider_add">Ajouter</string>
     <string name="action_hidden_app_reset">Restaurer tout</string>
-    <string name="action_web_provider_edit">Modifier</string>
-    <string name="action_web_provider_exclude">Exclure</string>
     <string name="action_web_provider_remove">Retirer</string>
     <string name="action_down_widget">Descendre</string>
     <string name="action_up_widget">Monter</string>

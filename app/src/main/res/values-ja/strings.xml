@@ -4,7 +4,6 @@
     <string name="app_name">Hg Launcher</string>
     <string name="search_provider_none">常に尋ねる</string>
     <string name="desc_clear_search">検索クエリをクリア</string>
-    <string name="desc_file">ファイル</string>
     <string name="desc_icon">アプリ</string>
     <string name="desc_apps_list">アプリ一覧</string>
     <string name="desc_touch_receiver">デスクトップビュー</string>
@@ -18,7 +17,6 @@
     <string name="err_activity_null">アプリを起動できませんでした。</string>
     <string name="dialog_action_add">追加</string>
     <string name="dialog_action_close">閉じる</string>
-    <string name="dialog_title_widgets">ウィジェットスペース</string>
     <string name="dialog_title_shorthand">速記を設定する</string>
     <string name="dialog_title_edit_provider">プロバイダーを編集</string>
     <string name="dialog_title_add_provider">プロバイダーを追加</string>
@@ -32,16 +30,12 @@
     <string name="action_info">アプリ情報</string>
     <string name="action_uninstall">アンインストール</string>
     <string name="action_backup">バックアップ</string>
-    <string name="action_show">戻す</string>
     <string name="action_hide">隠す</string>
     <string name="action_unpin">解除</string>
     <string name="action_pin">ピン</string>
-    <string name="action_save_backup">セーブ</string>
     <string name="action_web_provider_reset">リセット</string>
     <string name="action_web_provider_add">追加</string>
     <string name="action_hidden_app_reset">すべての復元</string>
-    <string name="action_web_provider_edit">編集</string>
-    <string name="action_web_provider_exclude">除外</string>
     <string name="action_web_provider_remove">削除</string>
     <string name="action_down_widget">下に移動</string>
     <string name="action_up_widget">上に移動</string>

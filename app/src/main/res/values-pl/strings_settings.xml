@@ -4,7 +4,6 @@
     <string name="title_activity_settings">Ustawienia</string>
     <!-- Header/category names -->
     <string name="pref_header_about">Informacje</string>
-    <string name="pref_header_cust">Modyfikacje</string>
     <string name="pref_header_gestures">Gesty</string>
     <string name="pref_header_wall">Pulpit</string>
     <string name="pref_header_list">Lista aplikacji</string>
@@ -26,7 +25,6 @@
     <!-- Web search provider -->
     <string name="pref_header_web_provider_title">Dostawcy wyszukiwania w sieci</string>
     <string name="pref_header_web_provider_desc">Zarządzaj dostawcami wyszukiwania</string>
-    <string name="pref_header_web_provider_short">Dostawcy wyszukiwania</string>
     <string name="web_provider_name_hint">Nazwa (musi być unikalna)</string>
     <!-- Easter egg -->
     <string name="version_key_toast_plural">Stuknij %1$d więcej razy, aby włączyć tryb testowy.</string>
@@ -36,7 +34,6 @@
     <string name="backup_exist">Zmień nazwę. Kopia o tej nazwie już istnieje.</string>
     <string name="backup_exist_overwrite">Przepisz</string>
     <string name="dialog_cancel">Anuluj</string>
-    <string name="backup_restore_dialog">Przywracanie…</string>
     <string name="restore_complete">Przywracanie ukończone.</string>
     <string name="backup_complete">Kopia zapasowa została zapisana.</string>
     <string name="backup_empty">Nazwa kopii zapasowej nie może być pusta.</string>

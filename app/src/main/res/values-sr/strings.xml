@@ -9,16 +9,12 @@
     <string name="action_up_widget">Pomeri ka gore</string>
     <string name="action_down_widget">Pomeri dole</string>
     <string name="action_web_provider_remove">Ukloni</string>
-    <string name="action_web_provider_exclude">Isključi</string>
-    <string name="action_web_provider_edit">Izmeni</string>
     <string name="action_hidden_app_reset">Vrati sve</string>
     <string name="action_web_provider_add">Dodaj</string>
     <string name="action_web_provider_reset">Resetovanje</string>
-    <string name="action_save_backup">Sačuvaj</string>
     <string name="action_pin">Zakači</string>
     <string name="action_unpin">Otkači</string>
     <string name="action_hide">Sakrij</string>
-    <string name="action_show">Vrati</string>
     <string name="action_backup">Rezerva</string>
     <string name="action_uninstall">Deinstaliraj</string>
     <string name="action_info">Informacije o aplikaciji</string>
@@ -32,7 +28,6 @@
     <string name="dialog_title_add_provider">Dodaj provajdera</string>
     <string name="dialog_title_edit_provider">Izmeni provajdera</string>
     <string name="dialog_title_shorthand">Podesi skraćeno</string>
-    <string name="dialog_title_widgets">Prostor za vidžete</string>
     <string name="dialog_action_close">Zatvori</string>
     <string name="dialog_action_add">Dodaj</string>
     <string name="err_activity_null">Nije moguće pokrenuti aplikaciju.</string>
@@ -42,6 +37,5 @@
     <string name="desc_touch_receiver">Prikaz radne površine</string>
     <string name="desc_apps_list">Lista aplikacija</string>
     <string name="desc_icon">Aplikacija</string>
-    <string name="desc_file">Datoteka</string>
     <string name="search_provider_none">Uvek pitaj</string>
 </resources>

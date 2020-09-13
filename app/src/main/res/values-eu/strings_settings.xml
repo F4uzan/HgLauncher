@@ -5,7 +5,6 @@
 
     <!-- Header/category names -->
     <string name="pref_header_about">Honi buruz</string>
-    <string name="pref_header_cust">Pertsonalizazioak</string>
     <string name="pref_header_gestures">Keinuak</string>
     <string name="pref_header_wall">Mahaigaina</string>
     <string name="pref_header_list">Aplikazioen zerrenda</string>
@@ -37,7 +36,6 @@
     <!-- Web search provider -->
     <string name="pref_header_web_provider_title">Web bilaketetarako hornitzaileak</string>
     <string name="pref_header_web_provider_desc">Gehitu edo kendu web bilaketetarako hornitzaileak.</string>
-    <string name="pref_header_web_provider_short">Bilaketa hornitzaileak</string>
     <string name="web_provider_name_hint">Izena (ezin da errepikatu)</string>
 
     <!-- Easter egg -->
@@ -49,7 +47,6 @@
     <string name="backup_exist">Babes-kopiaren izen berdina duen fitxategia bat existitzen da dagoeneko.</string>
     <string name="backup_exist_overwrite">Gainidatzi</string>
     <string name="dialog_cancel">Utzi</string>
-    <string name="backup_restore_dialog">Berrezartzen…</string>
     <string name="restore_complete">Berrezartzea osatu da!</string>
     <string name="backup_complete">Babes-kopia gorde da!</string>
     <string name="backup_empty">Babes-kopiaren izena ezin da hutsik egon.</string>

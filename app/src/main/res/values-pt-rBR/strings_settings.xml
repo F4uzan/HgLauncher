@@ -2,7 +2,6 @@
 <resources>
     <string name="title_activity_settings">Configurações!</string>
     <string name="pref_header_about">Sobre</string>
-    <string name="pref_header_cust">Personalizações</string>
     <string name="pref_header_gestures">Gestos</string>
     <string name="pref_header_wall">Área de Trabalho</string>
     <string name="pref_header_list">Lista de aplicações</string>
@@ -28,7 +27,6 @@
     <string name="reset_preference_toast">Redefinição de configuração.</string>
     <string name="pref_header_web_provider_title">Motor de busca na Internet</string>
     <string name="pref_header_web_provider_desc">Adicionar ou remover mecanismos de busca na internet</string>
-    <string name="pref_header_web_provider_short">Mecanismos de busca</string>
     <string name="web_provider_name_hint">Nome (deve ser único)</string>
     <string name="version_key_toast_plural">Toque %1$d mais vezes para ativar o modo de teste.</string>
     <string name="version_key_toast">Toque novamente para confirmar.</string>
@@ -36,7 +34,6 @@
     <string name="backup_exist">Este nome de arquivo de backup já existe.</string>
     <string name="backup_exist_overwrite">Substituir</string>
     <string name="dialog_cancel">Cancelar</string>
-    <string name="backup_restore_dialog">Restaurando…</string>
     <string name="restore_complete">Backup restaurado.</string>
     <string name="backup_complete">Backup salvo.</string>
     <string name="backup_empty">Digite o nome do backup.</string>

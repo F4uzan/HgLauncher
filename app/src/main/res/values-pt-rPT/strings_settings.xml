@@ -63,7 +63,6 @@
     <string name="pref_header_hidden_apps_desc">Gerenciar a lista de apps escondidas</string>
     <string name="pref_header_backup">Cópia de segurança</string>
     <string name="icon_pack_default">Predefinição</string>
-    <string name="pref_header_cust">Personalizações</string>
     <string name="title_activity_settings">Configurações</string>
     <string name="pref_header_restore_desc">Restaurar uma configuração salvada</string>
     <string name="orientation_sensor">Sistema</string>
@@ -86,10 +85,8 @@
     <string name="pref_header_behavior">Comportamento</string>
     <string name="app_theme_dark">Escuro</string>
     <string name="app_theme">Tema</string>
-    <string name="backup_restore_dialog">Recuperando…</string>
     <string name="windowbar_mode_none">Desativar</string>
     <string name="orientation_portrait">Retrato</string>
-    <string name="pref_header_web_provider_short">Mecanismos de pesquisa</string>
     <string name="backup_exist_overwrite">Substituir</string>
     <string name="pref_header_about">Sobre</string>
     <string name="restore_complete">Cópia de segurança recuperada.</string>
