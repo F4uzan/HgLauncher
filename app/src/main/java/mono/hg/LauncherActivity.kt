@@ -247,6 +247,9 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        // Hide widget-space from the menu if it's disabled by the user.
+        menu.getItem(2).isVisible = PreferenceHelper.widgetSpaceVisible()
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
