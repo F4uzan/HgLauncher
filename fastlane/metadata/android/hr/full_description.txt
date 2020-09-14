@@ -1,0 +1,14 @@
+Popis programa za pokretanje.
+Kad nađeš što tražiš, ne traži dalje.
+
+„Ako radi, onda radi”.
+
+Karakteristike:
+
+• Koristi manje, uradi više, brzo.
+• Copyleft; Koristi, vidi, promijeni i dijeli po volji, sa svima.
+• Više slika pozadina, manje ometanja.
+• Prilagođavanje, paketi ikona, skrivanje programa i još više!
+• Minimalna upotreba memorije uz očuvanje najbolje učinkovitosti.
+• Bez oglasa, bez funkcionalnih ograničenja.
+• Dostupno na tvom jeziku ili pomogni prevesti.
