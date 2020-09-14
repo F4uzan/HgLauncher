@@ -1,2 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="action_up_widget">Pomakni se prema gore</string>
+    <string name="err_provider_exists">Ime tražilice mora biti jedinstveno.</string>
+    <string name="action_actions">Radnje</string>
+    <string name="dialog_action_add">Dodaj</string>
+    <string name="err_invalid_url">Neispravan URL.</string>
+    <string name="action_shorthand">Kratica</string>
+    <string name="action_pin">Prikvači</string>
+    <string name="action_wallpaper">Promijeni sliku pozadine</string>
+    <string name="action_web_provider_add">Dodaj</string>
+    <string name="search_web_button_prompt">S</string>
+    <string name="action_view_widgets">Prostor programčića</string>
+    <string name="desc_clear_search">Izbriši upit</string>
+    <string name="action_settings">Postavke</string>
+    <string name="dialog_action_edit">Uredi</string>
+    <string name="action_down_widget">Pomakni se prema dolje</string>
+    <string name="dialog_action_close">Zatvori</string>
+    <string name="dialog_start_hint_message_one">"Ovo je tvoja radna površina. Ovdje možeš …
+\n  • Dodirom otvoriti popis programa
+\n  • Dugim dodirom promijeniti sliku pozadine i otvoriti postavke"</string>
+    <string name="search_hint">Pretraga …</string>
+    <string name="action_web_provider_reset">Resetiraj</string>
+    <string name="err_no_method_panel">Ovo je moguće samo na novijem Androidu.</string>
+    <string name="dialog_start_hint_title">Dobro došao, dobro došla!</string>
+    <string name="action_unpin">Otkvači</string>
+    <string name="action_hidden_app_reset">Obnovi sve</string>
+    <string name="action_uninstall">Deinstaliraj</string>
+    <string name="action_shortcuts">Prečaci</string>
+    <string name="desc_apps_list">Popis programa</string>
+    <string name="desc_touch_receiver">Prikaz radne površine</string>
+    <string name="action_info">Podaci programa</string>
+    <string name="dialog_title_shorthand">Postavi kraticu</string>
+    <string name="app_name">HgLauncher</string>
+    <string name="action_web_provider_remove">Ukloni</string>
+    <string name="action_force_refresh">Aktualiziraj</string>
+    <string name="dialog_title_add_provider">Dodaj pružatelja usluge</string>
+    <string name="action_backup">Sigurnosna kopija</string>
+    <string name="action_hide">Sakrij</string>
+    <string name="dialog_title_edit_provider">Uredi pružatelja usluge</string>
+    <string name="err_activity_null">Neuspjelo pokretanje programa.</string>
+    <string name="search_web_button">Kreni</string>
+    <string name="desc_icon">Program</string>
+    <string name="search_web_hint">Traži „%1$s” na internetu</string>
+    <string name="action_remove_widget">Ukloni</string>
+    <string name="search_provider_none">Uvijek pitaj</string>
+</resources>
