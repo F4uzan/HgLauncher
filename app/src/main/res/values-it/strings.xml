@@ -36,4 +36,5 @@
     <string name="desc_icon">Applicazione</string>
     <string name="desc_clear_search">Svuota la cronologia delle ricerche</string>
     <string name="search_provider_none">Chiedi sempre</string>
+    <string name="dialog_action_edit">Modifica</string>
 </resources>

@@ -40,4 +40,5 @@
     <string name="desc_icon">Aplikace</string>
     <string name="desc_clear_search">Vymazat vyhledávací dotaz</string>
     <string name="search_provider_none">Vždy se zeptat</string>
+    <string name="dialog_action_edit">Upravit</string>
 </resources>

@@ -43,4 +43,5 @@
     <string name="action_force_refresh">Rafraîchir</string>
     <string name="action_wallpaper">Changer le fond d\'écran</string>
     <string name="action_settings">Paramètres</string>
+    <string name="dialog_action_edit">Modifier</string>
 </resources>

@@ -43,4 +43,5 @@
     <string name="app_name">HgLauncher</string>
     <string name="action_force_refresh">Обновить</string>
     <string name="action_wallpaper">Поменять обои</string>
+    <string name="dialog_action_edit">Изменить</string>
 </resources>

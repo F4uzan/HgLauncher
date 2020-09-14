@@ -50,4 +50,5 @@
     <string name="dialog_start_hint_message_one">To jest Twój pulpit. W tym miejscu można...
 \n • Dotknij, aby otworzyć listę aplikacji
 \n • Długie naciśnięcie, aby zmienić tapetę i otworzyć ustawienia</string>
+    <string name="dialog_action_edit">Edytuj</string>
 </resources>

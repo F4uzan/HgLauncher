@@ -38,4 +38,5 @@
     <string name="desc_apps_list">Lista aplikacija</string>
     <string name="desc_icon">Aplikacija</string>
     <string name="search_provider_none">Uvek pitaj</string>
+    <string name="dialog_action_edit">Izmeni</string>
 </resources>

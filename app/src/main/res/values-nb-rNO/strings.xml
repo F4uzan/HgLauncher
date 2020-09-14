@@ -43,4 +43,5 @@
     <string name="dialog_start_hint_message_one">Dette er skrivebordet ditt. Her kan du…
 \n • Trykke for å åpne programlisten
 \n • Lang-trykke for å endre bakgrunn og åpne innstillingene</string>
+    <string name="dialog_action_edit">Rediger</string>
 </resources>

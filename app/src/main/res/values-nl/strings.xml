@@ -43,4 +43,5 @@
     <string name="action_force_refresh">Verversen</string>
     <string name="action_wallpaper">Achtergrond wijzigen</string>
     <string name="action_settings">Instellingen</string>
+    <string name="dialog_action_edit">Bewerken</string>
 </resources>

@@ -43,4 +43,5 @@
     <string name="app_name">Ambiente de Utilizador Hg</string>
     <string name="err_activity_null">Não foi possível iniciar a app.</string>
     <string name="action_wallpaper">Mudar papel de parede</string>
+    <string name="dialog_action_edit">Editar</string>
 </resources>

@@ -41,4 +41,5 @@
     <string name="desc_apps_list">Lista de apps</string>
     <string name="desc_clear_search">Limpar consulta de pesquisa</string>
     <string name="search_provider_none">Sempre pergunte</string>
+    <string name="dialog_action_edit">Editar</string>
 </resources>

@@ -16,12 +16,10 @@
             app:allowDividerAbove="false"
             app:allowDividerBelow="false" />
 
-        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        <mono.hg.wrappers.ThemeableColorPreference
             android:defaultValue="@color/colorAccent"
             android:key="app_accent"
-            android:title="@string/app_theme_accent"
-            app:cpv_dialogTitle="@string/app_theme_accent_dialog"
-            app:cpv_showAlphaSlider="false" />
+            android:title="@string/app_theme_accent" />
 
         <androidx.preference.Preference
             android:fragment="mono.hg.preferences.DesktopPreference"

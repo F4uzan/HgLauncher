@@ -58,4 +58,5 @@
 
     <!-- Built-in search providers -->
     <string name="search_provider_none">Immer nachfragen</string>
+    <string name="dialog_action_edit">Bearbeiten</string>
 </resources>

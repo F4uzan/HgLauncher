@@ -50,4 +50,5 @@
 
     <!-- Built-in search providers -->
     <string name="search_provider_none">Galdetu beti</string>
+    <string name="dialog_action_edit">Editatu</string>
 </resources>

@@ -43,4 +43,5 @@
     <string name="app_name">HgLauncher</string>
     <string name="err_activity_null">Tidak dapat memulai aplikasi.</string>
     <string name="action_wallpaper">Ubah wallpaper</string>
+    <string name="dialog_action_edit">Sunting</string>
 </resources>
