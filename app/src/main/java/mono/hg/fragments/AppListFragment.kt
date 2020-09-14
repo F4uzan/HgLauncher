@@ -251,12 +251,7 @@ class AppListFragment : GenericPageFragment() {
         val shortcutMap = SparseArray<String>()
         val position = appsAdapter.getGlobalPositionOf(app)
 
-        appMenu = ViewUtils.createAppMenu(
-            requireActivity(),
-            view,
-            (! AppUtils.isSystemApp(manager, packageName) && app.user == userUtils?.currentSerial),
-            getLauncherActivity().isPinned(app)
-        ).apply {
+        appMenu = ViewUtils.createAppMenu(requireActivity(), view, app).apply {
             // Inflate app shortcuts.
             if (Utils.sdkIsAround(25)) {
                 var menuId = SHORTCUT_MENU_GROUP

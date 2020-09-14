@@ -45,6 +45,7 @@ object PreferenceHelper {
     var isTesting = false
         private set
     private var was_alien = false
+    private lateinit var pinned_apps_list : String
     private val label_list: MutableMap<String, String> = HashMap()
     private val provider_list: MutableMap<String, String> = HashMap()
     private val label_list_set = HashSet<String>()
@@ -198,6 +199,10 @@ object PreferenceHelper {
         parseDelimitedSet(tempList, provider_list)
     }
 
+    fun getPinnedApps(): String {
+        return pinned_apps_list
+    }
+
     fun getProvider(id: String?): String? {
         return provider_list[id] ?: "none"
     }
@@ -287,6 +292,7 @@ object PreferenceHelper {
         gestureHandler = ComponentName.unflattenFromString(
             preference.getString("gesture_handler", "none") ?: "none"
         )
+        pinned_apps_list = preference.getString("pinned_apps_list", "") ?: ""
         exclusionList = preference.getStringSet("hidden_apps", HashSet()) as HashSet<String>
         val tempLabelList = preference.getStringSet("label_list", HashSet()) as HashSet<String>
         parseDelimitedSet(

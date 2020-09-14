@@ -27,6 +27,7 @@ import com.google.android.material.progressindicator.ProgressIndicator
 import mono.hg.R
 import mono.hg.adapters.AppAdapter
 import mono.hg.helpers.PreferenceHelper
+import mono.hg.models.App
 
 /**
  * Utils class handling transformation of views relating to the launcher.
@@ -193,21 +194,18 @@ object ViewUtils {
      * in a list. This PopupMenu is dynamically modified during runtime,
      * but otherwise inflates from [R.menu.menu_app].
      *
-     * @param activity          The foreground activity, where [focusedView] exists.
-     * @param focusedView       The view to anchor the PopupMenu.
-     * @param isUninstallable   Can this app be uninstalled? Shows the Uninstall menu if true.
-     * @param isPinned           Is this app pinned? Shows context regarding unpinning if true.
+     * @param activity      The foreground activity, where [focusedView] exists.
+     * @param focusedView   The view to anchor the PopupMenu.
+     * @param app           The app used as a context for this PopupMenu.
      *
      * @return PopupMenu relating to the app.
      */
-    fun createAppMenu(
-        activity: Activity,
-        focusedView: View,
-        isUninstallable: Boolean,
-        isPinned: Boolean
-    ): PopupMenu {
+    fun createAppMenu(activity: Activity, focusedView: View, app: App): PopupMenu {
         return PopupMenu(activity, focusedView).apply {
-            menuInflater.inflate(R.menu.menu_app, menu)
+            inflate(R.menu.menu_app)
+
+            val isPinned = PreferenceHelper.getPinnedApps().contains(app.userPackageName)
+
             menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
 
             // Hide 'pin' if the app is already pinned or isPinned is set.
@@ -221,7 +219,10 @@ object ViewUtils {
             menu.findItem(R.id.action_unpin).isVisible = isPinned
 
             // Show uninstall menu if the app is not a system app.
-            menu.findItem(R.id.action_uninstall).isVisible = isUninstallable
+            menu.findItem(R.id.action_uninstall).isVisible = (! AppUtils.isSystemApp(
+                activity.packageManager,
+                app.packageName
+            ) && app.user == UserUtils(activity).currentSerial)
         }
     }
 

@@ -517,7 +517,7 @@ class LauncherActivity : AppCompatActivity() {
         PreferenceHelper.fetchPreference()
 
         // Get pinned apps.
-        pinnedAppString = PreferenceHelper.preference.getString("pinned_apps_list", "").toString()
+        pinnedAppString = PreferenceHelper.getPinnedApps()
 
         // Get the default providers list if it's empty.
         if (PreferenceHelper.providerList.isEmpty()) {
@@ -543,15 +543,7 @@ class LauncherActivity : AppCompatActivity() {
         val shortcutMap = SparseArray<String>()
         val position = pinnedAppsAdapter.getGlobalPositionOf(app)
 
-        appMenu = ViewUtils.createAppMenu(
-            this,
-            view,
-            (! AppUtils.isSystemApp(
-                packageManager,
-                packageName
-            ) && app.user == userUtils?.currentSerial),
-            true
-        ).apply {
+        appMenu = ViewUtils.createAppMenu(this, view, app).apply {
             // Inflate app shortcuts.
             if (Utils.sdkIsAround(25)) {
                 var menuId = SHORTCUT_MENU_GROUP
