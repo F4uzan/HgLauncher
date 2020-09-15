@@ -37,10 +37,19 @@ import java.util.*
 object LauncherIconHelper {
     private var mPackagesDrawables = HashMap<String?, String?>()
 
+    private var mBackImages = ArrayList<Bitmap>()
+    private var mMaskImage: Bitmap? = null
+    private var mFrontImage: Bitmap? = null
+    private var mFactor = 1.0f
+
     /**
      * Clears cached icon pack.
      */
     fun refreshIcons() {
+        mFactor = 1.0f
+        mBackImages.clear()
+        mMaskImage = null
+        mFrontImage = null
         mPackagesDrawables = HashMap()
     }
 
@@ -62,7 +71,9 @@ object LauncherIconHelper {
         shouldHide: Boolean
     ): Drawable? {
         return if (! shouldHide) {
-            var icon = getIconDrawable(activity, componentName, user)
+            var icon = getIconDrawable(activity, componentName, user)?.let {
+                generateBitmap(activity.resources, it)
+            }
             if (PreferenceHelper.shadeAdaptiveIcon() &&
                 (Utils.atLeastOreo() && icon is AdaptiveIconDrawable)
             ) {
@@ -186,22 +197,48 @@ object LauncherIconHelper {
                 var eventType = this.eventType
                 while (eventType != XmlPullParser.END_DOCUMENT) {
                     if (eventType == XmlPullParser.START_TAG) {
-                        if (this.name == "item") {
-                            var componentName: String? = null
-                            var drawableName: String? = null
-                            for (i in 0 until this.attributeCount) {
-                                if (this.getAttributeName(i) == "component") {
-                                    componentName = this.getAttributeValue(i)
-                                } else if (this.getAttributeName(i) == "drawable") {
-                                    drawableName = this.getAttributeValue(i)
+                        when (name) {
+                            "iconback" -> {
+                                for (i in 0 until attributeCount) {
+                                    if (getAttributeName(i).startsWith("img")) {
+                                        loadBitmap(iconRes, getAttributeValue(i), iconPackageName)?.apply {
+                                            mBackImages.add(this)
+                                        }
+                                    }
                                 }
                             }
-                            if (! mPackagesDrawables.containsKey(componentName)) {
-                                mPackagesDrawables[componentName] = drawableName
+                            "iconmask" -> {
+                                if (attributeCount > 0 && getAttributeName(0) == "img1") {
+                                    mMaskImage = loadBitmap(iconRes, getAttributeValue(0), iconPackageName)
+                                }
+                            }
+                            "iconupon" -> {
+                                if (attributeCount > 0 && getAttributeName(0) == "img1") {
+                                    mFrontImage = loadBitmap(iconRes, getAttributeValue(0), iconPackageName)
+                                }
+                            }
+                            "scale" -> {
+                                mFactor =
+                                    if (this.attributeCount > 0 && this.getAttributeName(0) == "factor")
+                                        this.getAttributeValue(0).toFloat() else 1.0f
+                            }
+                            "item" -> {
+                                var componentName: String? = null
+                                var drawableName: String? = null
+                                for (i in 0 until attributeCount) {
+                                    if (getAttributeName(i) == "component") {
+                                        componentName = getAttributeValue(i)
+                                    } else if (getAttributeName(i) == "drawable") {
+                                        drawableName = getAttributeValue(i)
+                                    }
+                                }
+                                if (! mPackagesDrawables.containsKey(componentName)) {
+                                    mPackagesDrawables[componentName] = drawableName
+                                }
                             }
                         }
                     }
-                    eventType = this.next()
+                    eventType = next()
                 }
             } catch (e: IOException) {
                 Utils.sendLog(LogLevel.ERROR, e.toString())
@@ -210,6 +247,30 @@ object LauncherIconHelper {
             }
         }
         return 1
+    }
+
+    /**
+     * Loads a Bitmap from icon pack.
+     *
+     * @param resources       Resources object to use with getIdentifier() and getDrawable().
+     * @param drawableName    Name of drawable (usually package name) to load.
+     * @param iconPackageName Package name of the icon pack.
+     *
+     * @return null if there is no such identifier associated with the name of the requested drawable.
+     */
+    private fun loadBitmap(
+        resources: Resources?,
+        drawableName: String,
+        iconPackageName: String
+    ): Bitmap? {
+        val id: Int = resources?.getIdentifier(drawableName, "drawable", iconPackageName) ?: 0
+        if (id > 0) {
+            resources?.let {
+                ResourcesCompat.getDrawable(it, id, null)
+                    ?.apply { if (this is BitmapDrawable) return bitmap }
+            }
+        }
+        return null
     }
 
     /**
@@ -273,5 +334,84 @@ object LauncherIconHelper {
 
         val drawable = mPackagesDrawables[componentName]
         return drawable?.let { loadDrawable(iconRes, it, iconPackageName) } ?: defaultIcon
+    }
+
+    /**
+     * Generates a masked [BitmapDrawable], used to facilitate
+     * icon packs with a specific drawable mask (i.e, to make icons uniform).
+     *
+     * The codes written below are based off KISS Launcher IconsHandler:
+     * (https://github.com/Neamar/KISS/blob/master/app/src/main/java/fr/neamar/kiss/IconsHandler.java)
+     *
+     * @param resources The resources object used to generate the new [BitmapDrawable]
+     * @param icon      The base icon that will be transformed with the icon pack's mask.
+     *
+     * @return Drawable A [BitmapDrawable] if the icon pack has the necessary icon
+     *                  background. The original Drawable otherwise.
+     */
+    private fun generateBitmap(resources: Resources?, icon: Drawable): Drawable {
+        // Return the original icon when the icon pack doesn't provide any
+        // background image/mask.
+        if (mBackImages.size == 0) return icon
+
+        val defaultBitmap = Bitmap.createBitmap(
+            icon.intrinsicWidth,
+            icon.intrinsicHeight, Bitmap.Config.ARGB_8888
+        )
+
+        with(Canvas(defaultBitmap)) {
+            icon.setBounds(0, 0, width, height)
+            icon.draw(this)
+        }
+
+        val backImage = mBackImages[Random().nextInt(mBackImages.size)]
+        val width = backImage.width
+        val height = backImage.height
+        val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val mCanvas = Canvas(result).apply { density = Bitmap.DENSITY_NONE}
+
+        // Draw the background first
+        mCanvas.drawBitmap(backImage, 0f, 0f, null)
+
+        // Create a mutable mask bitmap with the same mask
+        val scaledBitmap = Bitmap.createScaledBitmap(
+            defaultBitmap,
+            (width * mFactor).toInt(),
+            (height * mFactor).toInt(),
+            false
+        ).apply { density = Bitmap.DENSITY_NONE }
+
+        mMaskImage?.apply {
+            // Draw the scaled bitmap with mask
+            val matScale = Matrix()
+            matScale.setScale(width / this.width.toFloat(), height / this.height.toFloat())
+
+            val paint = Paint(Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG).apply {
+                xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OUT)
+            }
+
+            mCanvas.drawBitmap(
+                scaledBitmap,
+                (width - scaledBitmap.width) / 2f,
+                (height - scaledBitmap.height) / 2f,
+                null
+            )
+
+            mCanvas.drawBitmap(this, matScale, paint)
+            paint.xfermode = null
+        } ?: run {
+            // Draw the back image as a mask to the scaled bitmap.
+            mCanvas.drawBitmap(
+                scaledBitmap,
+                (width - scaledBitmap.width) / 2f,
+                (height - scaledBitmap.height) / 2f,
+                null
+            )
+        }
+
+        // Apply the front image bitmap.
+        mFrontImage?.apply { mCanvas.drawBitmap(this, 0f, 0f, null) }
+
+        return BitmapDrawable(resources, result)
     }
 }

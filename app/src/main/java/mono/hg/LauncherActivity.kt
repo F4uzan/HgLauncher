@@ -215,13 +215,6 @@ class LauncherActivity : AppCompatActivity() {
         viewPager.adapter = viewPagerAdapter
         viewPager.setCurrentItem(1, false)
 
-        // Get icons from icon pack.
-        if ("default" != PreferenceHelper.iconPackName &&
-            LauncherIconHelper.loadIconPack(packageManager) == 0
-        ) {
-            PreferenceHelper.editor?.putString("icon_pack", "default")?.apply()
-        }
-
         // Start initialising listeners.
         addSearchBarTextListener()
         addSearchBarEditorListener()
@@ -347,12 +340,6 @@ class LauncherActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-
-        // See if user has changed icon pack. Clear cache if true.
-        if (PreferenceHelper.preference.getBoolean("require_refresh", false)) {
-            LauncherIconHelper.refreshIcons()
-            LauncherIconHelper.loadIconPack(packageManager)
-        }
 
         // Restart the launcher in case of an alien call.
         if (PreferenceHelper.wasAlien()) {
@@ -525,6 +512,18 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         ViewUtils.switchTheme(this, true)
+
+        // Clear icon pack cache if we receive the flag to hard refresh.
+        if (PreferenceHelper.preference.getBoolean("require_refresh", false)) {
+            LauncherIconHelper.refreshIcons()
+        }
+
+        // Get icons from icon pack.
+        if ("default" != PreferenceHelper.iconPackName &&
+            LauncherIconHelper.loadIconPack(packageManager) == 0
+        ) {
+            PreferenceHelper.editor?.putString("icon_pack", "default")?.apply()
+        }
     }
 
     /**
@@ -545,7 +544,7 @@ class LauncherActivity : AppCompatActivity() {
 
         appMenu = ViewUtils.createAppMenu(this, view, app).apply {
             // Inflate app shortcuts.
-            if (Utils.sdkIsAround(25)) {
+            menu.getItem(0).isVisible = if (Utils.sdkIsAround(25)) {
                 var menuId = SHORTCUT_MENU_GROUP
                 AppUtils.getShortcuts(launcherApps, packageName)?.forEach {
                     shortcutMap.put(menuId, it.id)
@@ -555,9 +554,10 @@ class LauncherActivity : AppCompatActivity() {
                         .add(SHORTCUT_MENU_GROUP, menuId, Menu.NONE, it.shortLabel)
                     menuId ++
                 }
-                menu.getItem(0).isVisible = shortcutMap.size() > 0
+
+                shortcutMap.size() > 0 // Only show the menu if there's a shortcut.
             } else {
-                menu.getItem(0).isVisible = false
+                false // API level older than 25 doesn't have support for shortcuts.
             }
 
             show()
