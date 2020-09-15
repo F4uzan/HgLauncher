@@ -153,15 +153,27 @@ class WebSearchProviderPreference : PreferenceFragmentCompat() {
                     return@setPositiveButton
                 }
 
-                if ("none" != PreferenceHelper.getProvider(currentName) &&
-                    currentUrl != PreferenceHelper.providerList[currentName]
-                ) {
-                    // We already have that provider.
-                    Toast.makeText(
-                        requireContext(), R.string.err_provider_exists,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setPositiveButton
+                if (isEditing) {
+                    if (PreferenceHelper.providerList.containsKey(currentName)
+                        && PreferenceHelper.providerList.containsValue(currentUrl)
+                    ) {
+                        // We already have that provider.
+                        Toast.makeText(
+                            requireContext(), R.string.err_provider_exists,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setPositiveButton
+                    }
+                } else {
+                    // We don't necessarily care about the URL when we're adding a new engine.
+                    if (PreferenceHelper.providerList.containsKey(currentName)) {
+                        // We already have that provider.
+                        Toast.makeText(
+                            requireContext(), R.string.err_provider_exists,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setPositiveButton
+                    }
                 }
 
                 if (isEditing) {
