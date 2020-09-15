@@ -370,7 +370,6 @@ class AppListFragment : GenericPageFragment() {
             }
 
             appsAdapter.updateDataSet(newList)
-            appsAdapter.recyclerView.setItemViewCacheSize(newList.size)
             appsAdapter.finishedLoading(true)
         }
     }
