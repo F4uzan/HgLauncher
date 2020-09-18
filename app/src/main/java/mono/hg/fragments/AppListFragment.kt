@@ -34,6 +34,7 @@ import mono.hg.adapters.AppAdapter
 import mono.hg.databinding.FragmentAppListBinding
 import mono.hg.databinding.LayoutRenameDialogBinding
 import mono.hg.databinding.UiLoadProgressBinding
+import mono.hg.helpers.LauncherIconHelper
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.SimpleScrollListener
 import mono.hg.models.App
@@ -44,6 +45,7 @@ import mono.hg.utils.ViewUtils
 import mono.hg.utils.applyAccent
 import mono.hg.views.CustomGridLayoutManager
 import mono.hg.views.TogglingLinearLayoutManager
+import mono.hg.wrappers.DisplayNameComparator
 import mono.hg.wrappers.ItemOffsetDecoration
 import java.util.*
 
@@ -55,7 +57,7 @@ class AppListFragment : GenericPageFragment() {
     /*
      * List containing installed apps.
      */
-    private val appsList = ArrayList<App?>()
+    private val appsList = ArrayList<App>()
 
     /*
      * Adapter for installed apps.
@@ -313,15 +315,24 @@ class AppListFragment : GenericPageFragment() {
                     )
                 }
 
-                launchIntent?.apply {
+                launchIntent?.component?.apply {
                     val hasLauncherCategory = launchIntent.hasCategory(Intent.CATEGORY_LAUNCHER)
 
+                    val user = userUtils?.currentSerial ?: 0
+                    val componentName = this.flattenToString()
+
+                    // If the intent has no launcher category, then it may mean that
+                    // this intent is meant for an uninstalled/removed package,
+                    // or it can be meant for an app without a launcher activity.
+                    // Either way, we don't want to fetch anything if that is the case.
                     if (hasLauncherCategory && appsAdapter.hasFinishedLoading()) {
+                        // Add our new app to the list.
                         lifecycleScope.launch {
-                            if (fetchAppsJob !!.isCompleted) {
-                                appsAdapter.finishedLoading(false)
-                                fetchApps()
+                            var newList: List<App>
+                            withContext(Dispatchers.Default) {
+                                newList = addApp(componentName, user)
                             }
+                            appsAdapter.updateDataSet(newList)
                         }
                     }
                 } ?: run {
@@ -381,6 +392,31 @@ class AppListFragment : GenericPageFragment() {
             // Reload the app list!
             appsList.remove(this)
             appsAdapter.removeItem(positionInAdapter)
+        }
+    }
+
+    private fun addApp(componentName: String, user: Long): List<App> {
+        App(componentName, user).apply {
+            appName = AppUtils.getPackageLabel(
+                requireActivity().packageManager,
+                componentName
+            )
+            userPackageName = AppUtils.appendUser(user, componentName)
+            icon = LauncherIconHelper.getIcon(
+                requireActivity(),
+                componentName,
+                user,
+                PreferenceHelper.shouldHideIcon()
+            )
+        }.also {
+            // We need to use currentItems here because
+            // using the default list would basically create a filter.
+            return appsAdapter.currentItems.toMutableList().apply {
+                add(it)
+
+                // Resort to make sure we have the list in proper order.
+                sortWith(DisplayNameComparator(PreferenceHelper.isListInverted))
+            }
         }
     }
 

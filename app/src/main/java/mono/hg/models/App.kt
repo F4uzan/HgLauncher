@@ -21,8 +21,7 @@ class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     private var HINT_MATCH_SCORE = 30
     private var NAME_MATCH_SCORE = 22
     private var layoutType = 0
-    var appName: String = ""
-        private set
+    var appName: String? = ""
     var packageName: String
         private set
     lateinit var userPackageName: String
