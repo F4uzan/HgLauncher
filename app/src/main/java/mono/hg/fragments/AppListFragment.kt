@@ -306,7 +306,8 @@ class AppListFragment : GenericPageFragment() {
     private fun registerBroadcast() {
         packageBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                val launchIntent = intent.getStringExtra("package")?.let {
+                val packageName = intent.getStringExtra("package")
+                val launchIntent = packageName?.let {
                     requireActivity().packageManager.getLaunchIntentForPackage(
                         it
                     )
@@ -324,15 +325,12 @@ class AppListFragment : GenericPageFragment() {
                         }
                     }
                 } ?: run {
-                    // Apps being uninstalled will have no launch intent,
-                    // therefore it's better if we get the entire list again.
-                    if (appsAdapter.hasFinishedLoading()) {
-                        lifecycleScope.launch {
-                            if (fetchAppsJob !!.isCompleted) {
-                                appsAdapter.finishedLoading(false)
-                                fetchApps()
-                            }
-                        }
+                    // If the app is being uninstalled, it will not have
+                    // a launch intent, so it's safe to remove it from the list.
+                    packageName?.apply {
+                        appsAdapter.updateDataSet(appsAdapter.currentItems.filterNot {
+                            it.packageName.contains(this)
+                        })
                     }
                 }
 
