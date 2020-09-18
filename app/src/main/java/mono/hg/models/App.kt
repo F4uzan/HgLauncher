@@ -32,10 +32,9 @@ class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     var user: Long = 0
         private set
 
-    constructor(appName: String, packageName: String, isAppHidden: Boolean, user: Long) {
+    constructor(appName: String, packageName: String, user: Long) {
         this.packageName = packageName
         this.appName = appName
-        this.isAppHidden = isAppHidden
         this.user = user
     }
 

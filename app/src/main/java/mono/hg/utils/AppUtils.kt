@@ -373,7 +373,7 @@ object AppUtils {
                 val isHidden = (PreferenceHelper.exclusionList.contains(userPackageName))
                 if (! componentName.contains(activity.packageName) && (! isHidden || ! hideHidden)) {
                     val appName = activityInfo.label.toString()
-                    val app = App(appName, componentName, false, user)
+                    val app = App(appName, componentName, user)
                     app.hintName = PreferenceHelper.getLabel(userPackageName)
                     app.userPackageName = userPackageName
                     app.icon = LauncherIconHelper.getIcon(
@@ -410,7 +410,7 @@ object AppUtils {
             val isHidden = PreferenceHelper.exclusionList.contains(componentName)
             if (! componentName.contains(activity.packageName) && (! isHidden || ! hideHidden)) {
                 val appName = it.loadLabel(manager).toString()
-                val app = App(appName, componentName, false, userUtils.currentSerial)
+                val app = App(appName, componentName, userUtils.currentSerial)
                 app.hintName = PreferenceHelper.getLabel(componentName)
                 app.userPackageName = componentName
                 app.icon = LauncherIconHelper.getIcon(
