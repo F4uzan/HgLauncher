@@ -201,7 +201,11 @@ object LauncherIconHelper {
                             "iconback" -> {
                                 for (i in 0 until attributeCount) {
                                     if (getAttributeName(i).startsWith("img")) {
-                                        loadBitmap(iconRes, getAttributeValue(i), iconPackageName)?.apply {
+                                        loadBitmap(
+                                            iconRes,
+                                            getAttributeValue(i),
+                                            iconPackageName
+                                        )?.apply {
                                             mBackImages.add(this)
                                         }
                                     }
@@ -209,12 +213,14 @@ object LauncherIconHelper {
                             }
                             "iconmask" -> {
                                 if (attributeCount > 0 && getAttributeName(0) == "img1") {
-                                    mMaskImage = loadBitmap(iconRes, getAttributeValue(0), iconPackageName)
+                                    mMaskImage =
+                                        loadBitmap(iconRes, getAttributeValue(0), iconPackageName)
                                 }
                             }
                             "iconupon" -> {
                                 if (attributeCount > 0 && getAttributeName(0) == "img1") {
-                                    mFrontImage = loadBitmap(iconRes, getAttributeValue(0), iconPackageName)
+                                    mFrontImage =
+                                        loadBitmap(iconRes, getAttributeValue(0), iconPackageName)
                                 }
                             }
                             "scale" -> {
@@ -307,33 +313,40 @@ object LauncherIconHelper {
         val componentName = "ComponentInfo{$appPackageName}"
         val iconPackageName =
             PreferenceHelper.preference.getString("icon_pack", "default") ?: "default"
-        var iconRes: Resources? = null
-        var defaultIcon: Drawable? = null
-        try {
-            defaultIcon = if (Utils.atLeastLollipop()) {
-                val launcher =
-                    activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-                val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
-                launcher.getActivityList(
-                    AppUtils.getPackageName(appPackageName),
-                    userManager.getUserForSerialNumber(user)
-                )[0].getBadgedIcon(0)
-            } else {
-                ComponentName.unflattenFromString(appPackageName)?.let {
-                    packageManager.getActivityIcon(it)
-                }
+        val defaultIcon: Drawable? = if (Utils.atLeastLollipop()) {
+            val launcher =
+                activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+            val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
+            launcher.getActivityList(
+                AppUtils.getPackageName(appPackageName),
+                userManager.getUserForSerialNumber(user)
+            )[0].getBadgedIcon(0)
+        } else {
+            ComponentName.unflattenFromString(appPackageName)?.let {
+                packageManager.getActivityIcon(it)
             }
-            iconRes = if ("default" != iconPackageName) {
+        }
+
+        try {
+            val iconRes = if ("default" != iconPackageName) {
                 packageManager.getResourcesForApplication(iconPackageName)
             } else {
                 return defaultIcon
             }
-        } catch (e: PackageManager.NameNotFoundException) {
-            Utils.sendLog(LogLevel.ERROR, e.toString())
-        }
 
-        val drawable = mPackagesDrawables[componentName]
-        return drawable?.let { loadDrawable(iconRes, it, iconPackageName) } ?: defaultIcon
+            val drawable = mPackagesDrawables[componentName]
+            return drawable?.let { loadDrawable(iconRes, it, iconPackageName) } ?: defaultIcon
+        } catch (e: PackageManager.NameNotFoundException) {
+            // The icon pack might have been removed
+            // and we haven't yet set iconPackageName to 'default',
+            // so as a fallback, return the default icon and re-set everything here.
+            refreshIcons()
+            if (iconPackageName != "default") PreferenceHelper.editor?.putString(
+                "icon_pack",
+                "default"
+            )?.apply()
+            return defaultIcon
+        }
     }
 
     /**
@@ -352,7 +365,10 @@ object LauncherIconHelper {
     private fun generateBitmap(resources: Resources?, icon: Drawable): Drawable {
         // Return the original icon when the icon pack doesn't provide any
         // background image/mask.
-        if (mBackImages.size == 0) return icon
+        val iconPackageName =
+            PreferenceHelper.preference.getString("icon_pack", "default") ?: "default"
+
+        if (mBackImages.size == 0 || iconPackageName == "default") return icon
 
         val defaultBitmap = Bitmap.createBitmap(
             icon.intrinsicWidth,
@@ -368,7 +384,7 @@ object LauncherIconHelper {
         val width = backImage.width
         val height = backImage.height
         val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val mCanvas = Canvas(result).apply { density = Bitmap.DENSITY_NONE}
+        val mCanvas = Canvas(result).apply { density = Bitmap.DENSITY_NONE }
 
         // Draw the background first
         mCanvas.drawBitmap(backImage, 0f, 0f, null)
