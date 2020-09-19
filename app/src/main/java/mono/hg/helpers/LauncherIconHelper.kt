@@ -71,9 +71,7 @@ object LauncherIconHelper {
         shouldHide: Boolean
     ): Drawable? {
         return if (! shouldHide) {
-            var icon = getIconDrawable(activity, componentName, user)?.let {
-                generateBitmap(activity.resources, it)
-            }
+            var icon = getIconDrawable(activity, componentName, user)
             if (PreferenceHelper.shadeAdaptiveIcon() &&
                 (Utils.atLeastOreo() && icon is AdaptiveIconDrawable)
             ) {
@@ -335,7 +333,8 @@ object LauncherIconHelper {
             }
 
             val drawable = mPackagesDrawables[componentName]
-            return drawable?.let { loadDrawable(iconRes, it, iconPackageName) } ?: defaultIcon
+            return drawable?.let { loadDrawable(iconRes, it, iconPackageName) }
+                ?: defaultIcon?.let { generateBitmap(iconRes, it) }
         } catch (e: PackageManager.NameNotFoundException) {
             // The icon pack might have been removed
             // and we haven't yet set iconPackageName to 'default',
