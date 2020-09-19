@@ -12,17 +12,21 @@ import android.content.Intent
 open class PackageChangesReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != null && intent.data != null) {
+            var packageAction = -1
             val packageName = intent.data?.encodedSchemeSpecificPart ?: ""
-            val requireBroadcast = intent.action == "android.intent.action.PACKAGE_ADDED" ||
-                    intent.action == "android.intent.action.PACKAGE_FULLY_REMOVED" ||
-                    intent.action == "android.intent.action.PACKAGE_REMOVED" ||
-                    intent.action == "android.intent.action.PACKAGE_CHANGED" ||
-                    intent.action == "android.intent.action.PACKAGE_REPLACED"
+
+            packageAction = when (intent.action) {
+                "android.intent.action.PACKAGE_REPLACED" -> PACKAGE_UPDATED
+                "android.intent.action.PACKAGE_ADDED" -> PACKAGE_INSTALLED
+                "android.intent.action.PACKAGE_REMOVED", "android.intent.action.PACKAGE_FULLY_REMOVED" -> PACKAGE_REMOVED
+                "android.intent.action.PACKAGE_CHANGED" -> PACKAGE_MISC
+                else -> -1
+            }
 
             // Receive intent from broadcast and let the Pages know they may need refresh.
-            if (requireBroadcast && ! packageName.contains(context.packageName)) {
+            if (packageAction != -1 && ! packageName.contains(context.packageName)) {
                 Intent().apply {
-                    putExtra("action", intent.action)
+                    putExtra("action", packageAction)
                     putExtra("package", packageName)
                     action = "mono.hg.PACKAGE_CHANGE_BROADCAST"
                 }.also {
@@ -30,5 +34,12 @@ open class PackageChangesReceiver : BroadcastReceiver() {
                 }
             }
         }
+    }
+
+    companion object {
+        const val PACKAGE_REMOVED = 0
+        const val PACKAGE_INSTALLED = 1
+        const val PACKAGE_UPDATED = 2
+        const val PACKAGE_MISC = 42
     }
 }

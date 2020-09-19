@@ -38,6 +38,7 @@ import mono.hg.helpers.LauncherIconHelper
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.SimpleScrollListener
 import mono.hg.models.App
+import mono.hg.receivers.PackageChangesReceiver
 import mono.hg.utils.AppUtils
 import mono.hg.utils.UserUtils
 import mono.hg.utils.Utils
@@ -309,6 +310,7 @@ class AppListFragment : GenericPageFragment() {
         packageBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 val packageName = intent.getStringExtra("package")
+                val action = intent.getIntExtra("action", 42)
                 val launchIntent = packageName?.let {
                     requireActivity().packageManager.getLaunchIntentForPackage(
                         it
@@ -338,10 +340,12 @@ class AppListFragment : GenericPageFragment() {
                 } ?: run {
                     // If the app is being uninstalled, it will not have
                     // a launch intent, so it's safe to remove it from the list.
-                    packageName?.apply {
-                        appsAdapter.updateDataSet(appsAdapter.currentItems.filterNot {
-                            it.packageName.contains(this)
-                        })
+                    if (action == PackageChangesReceiver.PACKAGE_REMOVED) {
+                        packageName?.apply {
+                            appsAdapter.updateDataSet(appsAdapter.currentItems.filterNot {
+                                it.packageName.contains(this)
+                            })
+                        }
                     }
                 }
 
@@ -396,27 +400,51 @@ class AppListFragment : GenericPageFragment() {
     }
 
     private fun addApp(componentName: String, user: Long): List<App> {
-        App(componentName, user).apply {
-            appName = AppUtils.getPackageLabel(
-                requireActivity().packageManager,
-                componentName
-            )
-            userPackageName = AppUtils.appendUser(user, componentName)
-            icon = LauncherIconHelper.getIcon(
-                requireActivity(),
-                componentName,
-                user,
-                PreferenceHelper.shouldHideIcon()
-            )
-        }.also {
-            // We need to use currentItems here because
-            // using the default list would basically create a filter.
-            return appsAdapter.currentItems.toMutableList().apply {
-                add(it)
+        with (appsAdapter.currentItems.toMutableList()) {
+            // If there's an app with a matching componentName,
+            // then it's probably the same app. Update that entry instead
+            // of adding a new app.
+            this.find { it.packageName == componentName }?.apply {
+                appName = AppUtils.getPackageLabel(
+                    requireActivity().packageManager,
+                    componentName
+                )
+                userPackageName = AppUtils.appendUser(user, componentName)
+                icon = LauncherIconHelper.getIcon(
+                    requireActivity(),
+                    componentName,
+                    user,
+                    PreferenceHelper.shouldHideIcon()
+                )
+            } ?: run {
+                App(componentName, user).apply {
+                    appName = AppUtils.getPackageLabel(
+                        requireActivity().packageManager,
+                        componentName
+                    )
+                    userPackageName = AppUtils.appendUser(user, componentName)
+                    icon = LauncherIconHelper.getIcon(
+                        requireActivity(),
+                        componentName,
+                        user,
+                        PreferenceHelper.shouldHideIcon()
+                    )
+                }.also {
+                    // We need to use currentItems here because
+                    // using the default list would basically create a filter.
+                    return this.apply {
+                        // Don't add the new app if we already have it.
+                        // This probably caused by two receivers firing at once.
+                        if (! this.contains(it)) {
+                            add(it)
 
-                // Resort to make sure we have the list in proper order.
-                sortWith(DisplayNameComparator(PreferenceHelper.isListInverted))
+                            // Re-sort to make sure we have the list in proper order.
+                            sortWith(DisplayNameComparator(PreferenceHelper.isListInverted))
+                        }
+                    }
+                }
             }
+            return this
         }
     }
 
