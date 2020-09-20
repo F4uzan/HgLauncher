@@ -18,7 +18,6 @@ import android.widget.SeekBar
 import androidx.appcompat.view.menu.MenuAdapter
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.ViewCompat
-import androidx.core.view.allViews
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.core.widget.PopupWindowCompat
@@ -109,7 +108,7 @@ class WidgetListFragment : GenericPageFragment() {
         if (widgetsList.isNotEmpty()) {
             PreferenceHelper.widgetList()
                 .filter { it.isNotEmpty() }
-                .forEachIndexed { index, widgets ->
+                .forEach { widgets ->
                     val widgetSplit = widgets.split("-")
                     val widgetId =
                         if (widgetSplit.size == 2) widgetSplit[0].toInt() else widgets.toInt()
@@ -122,7 +121,6 @@ class WidgetListFragment : GenericPageFragment() {
                     appWidgetContainer.postDelayed({
                         addWidget(
                             widgetIntent,
-                            index,
                             widgetSize,
                             false
                         )
@@ -170,27 +168,13 @@ class WidgetListFragment : GenericPageFragment() {
         return false
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        if (PreferenceHelper.widgetList().size < widgetsList.size) {
-            // Our widget list might have been reset.
-            // Let's make that assumption and also reset the views.
-            appWidgetContainer.allViews.forEachIndexed { index, it ->
-                removeWidget(index, (it as AppWidgetHostView).appWidgetId)
-            }
-
-            widgetsList = PreferenceHelper.widgetList()
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
             val widgetId =
                 data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
 
             // Add the widget first.
-            addWidget(data, appWidgetContainer.childCount, 2, true)
+            addWidget(data, 2, true)
 
             // Launch widget configuration if it exists.
             if (requestCode != WIDGET_CONFIG_RETURN_CODE) {
@@ -227,20 +211,19 @@ class WidgetListFragment : GenericPageFragment() {
      *
      * @param data Intent used to receive the ID of the widget being added.
      */
-    private fun addWidget(data: Intent, index: Int, size: Int, newWidget: Boolean) {
+    private fun addWidget(data: Intent, size: Int, newWidget: Boolean) {
         if (! isAdded || activity == null) {
             // Nope. Not doing anything.
             return
         }
 
-        if (index > appWidgetContainer.childCount) {
-            // This might be caused by a broken restore.
-            // We don't want this to happen, so don't do anything.
-            return
-        }
-
         val widgetId =
             data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
+
+        // Add this widget to the map early on.
+        // It will be removed later if it doesn't exist,
+        // so we won't have any lingering entries.
+        widgetsMap[widgetId] = size
 
         appWidgetManager.getAppWidgetInfo(widgetId)?.apply {
             with(appWidgetHost.createView(requireActivity().applicationContext, widgetId, this)) {
@@ -257,10 +240,7 @@ class WidgetListFragment : GenericPageFragment() {
                     )
                 }
 
-                tag = widgetId
-
-                // Add the widget.
-                widgetsMap[widgetId] = size
+                // Calculate size then add the widget.
                 val actualHeight =
                     if (size > 0) appWidgetInfo.minHeight * size else appWidgetInfo.minHeight
                 appWidgetContainer.addView(this, - 1, actualHeight)
@@ -275,10 +255,15 @@ class WidgetListFragment : GenericPageFragment() {
 
                     // Apply preference changes.
                     PreferenceHelper.updateWidgets(widgetsList)
-                } else {
-                    widgetsList[index] = "$widgetId-$size"
+                } else if (! widgetsList.contains("$widgetId-$size")) {
+                    widgetsList.add("$widgetId-$size")
                 }
             }
+        } ?: run {
+            // We can't find anything, so remove this widget.
+            // The index value doesn't matter here as we
+            // don't have a view reference anyway.
+            removeWidget(- 1, widgetId)
         }
     }
 
@@ -295,18 +280,20 @@ class WidgetListFragment : GenericPageFragment() {
     }
 
     private fun removeWidget(index: Int, id: Int) {
-        val view = appWidgetContainer.getChildAt(index) as AppWidgetHostView
+        appWidgetContainer.getChildAt(index)?.apply {
+            val view = appWidgetContainer.getChildAt(index) as AppWidgetHostView
 
-        // Remove the widget from the list and map, then deallocate it from the host.
-        widgetsList.remove("$id-${widgetsMap[view.appWidgetId]}")
-        widgetsMap.remove(view.appWidgetId)
-        appWidgetHost.deleteAppWidgetId(view.appWidgetId)
+            // Now we can safely remove it from the container itself.
+            appWidgetContainer.removeView(view)
+        }.also {
+            // Remove the widget from the list and map, then deallocate it from the host.
+            widgetsList.remove("$id-${widgetsMap[id]}")
+            widgetsMap.remove(id)
+            appWidgetHost.deleteAppWidgetId(id)
 
-        // Now we can safely remove it from the container itself.
-        appWidgetContainer.removeView(view)
-
-        // Update the preference by having the new list on it.
-        PreferenceHelper.updateWidgets(widgetsList)
+            // Update the preference by having the new list on it.
+            PreferenceHelper.updateWidgets(widgetsList)
+        }
     }
 
     private fun swapWidget(one: Int, two: Int) {
