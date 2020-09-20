@@ -18,6 +18,7 @@ import android.widget.SeekBar
 import androidx.appcompat.view.menu.MenuAdapter
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.ViewCompat
+import androidx.core.view.allViews
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.core.widget.PopupWindowCompat
@@ -169,6 +170,20 @@ class WidgetListFragment : GenericPageFragment() {
         return false
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        if (PreferenceHelper.widgetList().size < widgetsList.size) {
+            // Our widget list might have been reset.
+            // Let's make that assumption and also reset the views.
+            appWidgetContainer.allViews.forEachIndexed { index, it ->
+                removeWidget(index, (it as AppWidgetHostView).appWidgetId)
+            }
+
+            widgetsList = PreferenceHelper.widgetList()
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
             val widgetId =
@@ -241,6 +256,8 @@ class WidgetListFragment : GenericPageFragment() {
                         appWidgetInfo.minHeight
                     )
                 }
+
+                tag = widgetId
 
                 // Add the widget.
                 widgetsMap[widgetId] = size
