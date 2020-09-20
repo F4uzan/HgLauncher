@@ -12,19 +12,25 @@ import android.content.Intent
 open class PackageChangesReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != null && intent.data != null) {
-            var packageAction = -1
+            var packageAction = - 1
+            val isReplacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)
             val packageName = intent.data?.encodedSchemeSpecificPart ?: ""
 
-            packageAction = when (intent.action) {
-                "android.intent.action.PACKAGE_REPLACED" -> PACKAGE_UPDATED
-                "android.intent.action.PACKAGE_ADDED" -> PACKAGE_INSTALLED
-                "android.intent.action.PACKAGE_REMOVED", "android.intent.action.PACKAGE_FULLY_REMOVED" -> PACKAGE_REMOVED
-                "android.intent.action.PACKAGE_CHANGED" -> PACKAGE_MISC
-                else -> -1
+            packageAction = if (isReplacing) {
+                // If Intent.EXTRA_REPLACING is detected, then the action
+                // should be updating, so don't use PACKAGE_REMOVED.
+                // https://developer.android.com/reference/android/content/Intent.html#EXTRA_REPLACING
+                PACKAGE_UPDATED
+            } else when (intent.action) {
+                Intent.ACTION_PACKAGE_REPLACED -> PACKAGE_UPDATED
+                Intent.ACTION_PACKAGE_ADDED -> PACKAGE_INSTALLED
+                Intent.ACTION_PACKAGE_REMOVED, Intent.ACTION_PACKAGE_FULLY_REMOVED -> PACKAGE_REMOVED
+                Intent.ACTION_PACKAGE_CHANGED -> PACKAGE_MISC
+                else -> - 1
             }
 
             // Receive intent from broadcast and let the Pages know they may need refresh.
-            if (packageAction != -1 && ! packageName.contains(context.packageName)) {
+            if (packageAction != - 1 && ! packageName.contains(context.packageName)) {
                 Intent().apply {
                     putExtra("action", packageAction)
                     putExtra("package", packageName)
