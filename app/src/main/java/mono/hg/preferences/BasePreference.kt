@@ -121,7 +121,7 @@ class BasePreference : PreferenceFragmentCompat() {
                 setNegativeButton(getString(R.string.dialog_cancel), null)
                 setPositiveButton(R.string.dialog_ok) { _, _ ->
                     // We have to reset the leftover preferences to make sure they don't linger.
-                    PreferenceHelper.editor?.clear()?.apply()
+                    PreferenceHelper.reset()
                     PreferenceHelper.fetchPreference()
 
                     PreferenceHelper.update("require_refresh", true)

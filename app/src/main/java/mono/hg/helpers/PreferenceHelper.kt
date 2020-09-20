@@ -252,6 +252,16 @@ object PreferenceHelper {
         editor?.putInt(id, integer)?.apply()
     }
 
+    fun reset() {
+        editor?.clear()?.apply()
+
+        // We have to individually clear the collections here.
+        widgets_list.clear()
+        provider_list.clear()
+        label_list_set.clear()
+        label_list.clear()
+    }
+
     fun fetchPreference() {
         isTesting = preference.getBoolean("is_grandma", false)
         isNewUser = preference.getBoolean("is_new_user", true)
