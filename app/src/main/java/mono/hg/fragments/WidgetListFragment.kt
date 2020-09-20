@@ -220,6 +220,9 @@ class WidgetListFragment : GenericPageFragment() {
         val widgetId =
             data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
 
+        // New widget can't be already allocated.
+        if (widgetsList.contains("$widgetId-$size") && newWidget) return
+
         // Add this widget to the map early on.
         // It will be removed later if it doesn't exist,
         // so we won't have any lingering entries.
