@@ -45,7 +45,7 @@ object PreferenceHelper {
     var isTesting = false
         private set
     private var was_alien = false
-    private lateinit var pinned_apps_list : String
+    private var pinned_apps_list : String = ""
     private val label_list: MutableMap<String, String> = HashMap()
     private val provider_list: MutableMap<String, String> = HashMap()
     private val label_list_set = HashSet<String>()
@@ -58,13 +58,13 @@ object PreferenceHelper {
         private set
     var listBackground: String? = null
         private set
-    private lateinit var gesture_left_action: String
-    private lateinit var gesture_right_action: String
-    private lateinit var gesture_up_action: String
-    private lateinit var gesture_down_action: String
-    private lateinit var gesture_single_tap_action: String
-    private lateinit var gesture_double_tap_action: String
-    private lateinit var gesture_pinch_action: String
+    private var gesture_left_action: String = "none"
+    private var gesture_right_action: String = "none"
+    private var gesture_up_action: String = "none"
+    private var gesture_down_action: String = "none"
+    private var gesture_single_tap_action: String = "list"
+    private var gesture_double_tap_action: String = "none"
+    private var gesture_pinch_action: String = "none"
     var windowBarMode: String? = null
         private set
     private var widgets_list: ArrayList<String> = ArrayList()

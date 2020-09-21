@@ -171,6 +171,7 @@ class LauncherActivity : AppCompatActivity() {
 
         binding = ActivityLauncherspaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         if (requestedOrientation != PreferenceHelper.orientation) {
             requestedOrientation = PreferenceHelper.orientation
         }
@@ -1012,7 +1013,7 @@ class LauncherActivity : AppCompatActivity() {
         /*
          * String containing pinned apps. Delimited by a semicolon (;).
          */
-        private lateinit var pinnedAppString: String
+        private var pinnedAppString: String = ""
 
         // Constants used for doThis()
         private const val SHOW_PINNED = "show_favourites"
