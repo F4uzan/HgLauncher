@@ -34,7 +34,7 @@
     <string name="gesture_up">Deslizar ↑</string>
     <string name="static_favourites">Painel favorito estático</string>
     <string name="gesture_action_list">Abrir lista de apps</string>
-    <string name="reset_preference_desc">Voltar para as configurações predefinidas</string>
+    <string name="reset_preference_desc">Voltar às configurações predefinidas</string>
     <string name="app_list_order_normal">A para Z</string>
     <string name="about_credits_desc">Os criadores do HgLauncher</string>
     <string name="pref_header_interface">Interface</string>
@@ -60,7 +60,7 @@
     <string name="backup_empty">Digite o nome da cópia de segurança.</string>
     <string name="gesture_action_widget">Abrir área de ferramentas</string>
     <string name="pref_header_restore">Restaurar</string>
-    <string name="pref_header_hidden_apps_desc">Gerenciar a lista de apps escondidas</string>
+    <string name="pref_header_hidden_apps_desc">Gerir a lista de apps escondidas</string>
     <string name="pref_header_backup">Cópia de segurança</string>
     <string name="icon_pack_default">Predefinição</string>
     <string name="title_activity_settings">Configurações</string>
