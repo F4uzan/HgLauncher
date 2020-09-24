@@ -40,12 +40,12 @@ class App : AbstractFlexibleItem<App.ViewHolder>, IFilterable<String> {
     constructor(icon: Drawable, packageName: String, user: Long) {
         this.layoutType = PINNED_APP_TYPE
         this.icon = icon
+        this.user = user
         this.packageName = packageName
     }
 
     constructor(packageName: String, user: Long) {
         this.packageName = packageName
-        isAppHidden = false
         this.user = user
     }
 
