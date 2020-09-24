@@ -17,7 +17,6 @@ import android.widget.PopupWindow
 import android.widget.SeekBar
 import androidx.appcompat.view.menu.MenuAdapter
 import androidx.appcompat.view.menu.MenuBuilder
-import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.core.widget.PopupWindowCompat
@@ -112,7 +111,8 @@ class WidgetListFragment : GenericPageFragment() {
                     val widgetSplit = widgets.split("-")
                     val widgetId =
                         if (widgetSplit.size == 2) widgetSplit[0].toInt() else widgets.toInt()
-                    val widgetSize = if (widgetSplit.size == 2) widgetSplit[1].toInt() else 2
+                    val widgetSize =
+                        if (widgetSplit.size == 2) widgetSplit[1].toInt() else WIDGET_DEFAULT_SIZE
                     val widgetIntent = Intent()
                     widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
 
@@ -174,7 +174,7 @@ class WidgetListFragment : GenericPageFragment() {
                 data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
 
             // Add the widget first.
-            addWidget(data, 2, true)
+            addWidget(data, WIDGET_DEFAULT_SIZE, true)
 
             // Launch widget configuration if it exists.
             if (requestCode != WIDGET_CONFIG_RETURN_CODE) {
@@ -245,12 +245,11 @@ class WidgetListFragment : GenericPageFragment() {
 
                 // Calculate size then add the widget.
                 val actualHeight =
-                    if (size > 0) appWidgetInfo.minHeight * size else appWidgetInfo.minHeight
+                    if (size >= 10) appWidgetInfo.minHeight * (size / 10) else appWidgetInfo.minHeight
                 appWidgetContainer.addView(this, - 1, actualHeight)
 
                 // Immediately listens for the widget.
                 appWidgetHost.startListening()
-                ViewCompat.setNestedScrollingEnabled(this, false)
                 addWidgetActionListener(this)
                 if (newWidget) {
                     // Update our list.
@@ -278,7 +277,7 @@ class WidgetListFragment : GenericPageFragment() {
         // Don't obliterate the widget by setting it to a 0-height view.
         // If 0 is received, set the actual size to 1 instead.
         view.updateLayoutParams<ViewGroup.LayoutParams> {
-            height = if (newSize > 0) baseSize * newSize else baseSize
+            height = if (newSize >= 10) baseSize * (newSize / 10) else baseSize
         }
     }
 
@@ -413,5 +412,7 @@ class WidgetListFragment : GenericPageFragment() {
         private const val WIDGET_CONFIG_RETURN_CODE = 2
         private const val WIDGET_CONFIG_DEFAULT_CODE = - 1
         private const val WIDGET_HOST_ID = 314
+
+        private const val WIDGET_DEFAULT_SIZE = 20
     }
 }
