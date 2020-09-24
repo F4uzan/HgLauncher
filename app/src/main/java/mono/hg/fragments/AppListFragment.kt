@@ -63,7 +63,7 @@ class AppListFragment : GenericPageFragment() {
     /*
      * Adapter for installed apps.
      */
-    private val appsAdapter = AppAdapter(appsList)
+    private val appsAdapter = AppAdapter(ArrayList<App>())
 
     /*
      * RecyclerView for app list.
@@ -214,7 +214,7 @@ class AppListFragment : GenericPageFragment() {
         }
 
         // Reset the app list filter.
-        appsAdapter.resetFilter()
+        resetAppFilter()
     }
 
     override fun isAcceptingSearch(): Boolean {
@@ -222,12 +222,14 @@ class AppListFragment : GenericPageFragment() {
     }
 
     override fun commitSearch(query: String) {
-        appsAdapter.setFilter(query)
-        appsAdapter.filterItems()
+        if (appsAdapter.hasNewFilter(query)) {
+            appsAdapter.setFilter(query)
+            appsAdapter.filterItems(appsList)
+        }
     }
 
     override fun resetSearch() {
-        appsAdapter.resetFilter()
+        resetAppFilter()
     }
 
     override fun launchPreselection(): Boolean {
@@ -380,6 +382,7 @@ class AppListFragment : GenericPageFragment() {
             var newList: List<App>
             withContext(Dispatchers.Default) {
                 newList = AppUtils.loadApps(requireActivity(), hideHidden = true, shouldSort = true)
+                appsList.addAll(newList)
             }
 
             appsAdapter.updateDataSet(newList)
@@ -394,7 +397,6 @@ class AppListFragment : GenericPageFragment() {
             PreferenceHelper.update("hidden_apps", excludedAppsList)
 
             // Reload the app list!
-            appsList.remove(this)
             appsAdapter.removeItem(positionInAdapter)
         }
     }
@@ -445,6 +447,13 @@ class AppListFragment : GenericPageFragment() {
                 }
             }
             return this
+        }
+    }
+
+    private fun resetAppFilter() {
+        if (appsAdapter.hasFilter()) {
+            appsAdapter.setFilter("")
+            appsAdapter.filterItems(appsList)
         }
     }
 

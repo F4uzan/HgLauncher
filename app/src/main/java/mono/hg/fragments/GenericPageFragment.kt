@@ -72,4 +72,11 @@ open class GenericPageFragment : Fragment() {
     open fun launchPreselection(): Boolean {
         return false
     }
+
+    override fun onPause() {
+        super.onPause()
+
+        // When pages are paused, relevant data should be returned to default.
+        if (isAcceptingSearch()) resetSearch()
+    }
 }

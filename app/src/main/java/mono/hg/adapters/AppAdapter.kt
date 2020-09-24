@@ -22,14 +22,6 @@ class AppAdapter(apps: List<App?>, listeners: Any?, stableIds: Boolean) :
 
     constructor(apps: List<App?>) : this(apps, null, true)
 
-    /**
-     * Resets the current filter, as well as the filtered items.
-     */
-    fun resetFilter() {
-        setFilter("")
-        filterItems()
-    }
-
     override fun filterItems() {
         if (hasFinishedLoading()) {
             super.filterItems()
