@@ -63,7 +63,7 @@
     <string name="gesture_left">Deslizar ←</string>
     <string name="windowbar_mode_both">Ambas</string>
     <string name="windowbar_mode_nav">Barra de navegação</string>
-    <string name="windowbar_mode_status">Barra de status</string>
+    <string name="windowbar_mode_status">Barra de estado</string>
     <string name="windowbar_mode_none">Desativar</string>
     <string name="windowbar_mode">Esconder barras do sistema</string>
     <string name="app_theme_black">Preto</string>
