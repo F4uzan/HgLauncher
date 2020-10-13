@@ -1,4 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="dialog_action_edit">Изменить</string>
+    <string name="search_provider_none">Всегда справшивать</string>
+    <string name="desc_clear_search">Очистить поисковый запрос</string>
+    <string name="desc_icon">Приложение</string>
+    <string name="desc_apps_list">Список приложений</string>
+    <string name="desc_touch_receiver">Вид рабочего стола</string>
+    <string name="dialog_start_hint_message_one">Это ваш рабочий стол. Здесь вы можете...
+\n • Нажмите для открытия списка приложений
+\n • Зажмите для изменения фона и открытия настроек</string>
+    <string name="dialog_start_hint_title">Добро пожаловать!</string>
+    <string name="err_no_method_panel">Это возможно только на более новом Android.</string>
+    <string name="err_provider_exists">Имя поискового движка должно быть уникальным.</string>
+    <string name="err_invalid_url">Некорректный URL.</string>
+    <string name="err_activity_null">Не удается запустить приложение.</string>
+    <string name="dialog_action_add">Добавить</string>
+    <string name="dialog_action_close">Закрыть</string>
+    <string name="dialog_title_shorthand">Установить стенографию</string>
+    <string name="dialog_title_edit_provider">Изменить поставщика</string>
+    <string name="dialog_title_add_provider">Добавить поставщика</string>
+    <string name="search_web_button">Вперед</string>
+    <string name="search_web_button_prompt">С</string>
+    <string name="search_web_hint">Поиск \'%1$s\' онлайн</string>
+    <string name="search_hint">Поиск…</string>
+    <string name="action_shortcuts">Ярлыки</string>
+    <string name="action_actions">Действия</string>
+    <string name="action_shorthand">Стенография</string>
+    <string name="action_info">Информация о приложении</string>
+    <string name="action_uninstall">Удалить</string>
+    <string name="action_backup">Создать резервную копию</string>
+    <string name="action_hide">Скрыть</string>
+    <string name="action_unpin">Открепить</string>
+    <string name="action_pin">Закрепить</string>
+    <string name="action_web_provider_reset">Сбросить</string>
+    <string name="action_web_provider_add">Добавить</string>
+    <string name="action_hidden_app_reset">Восстановить все</string>
+    <string name="action_web_provider_remove">Удалить</string>
+    <string name="action_down_widget">Переместить вниз</string>
+    <string name="action_up_widget">Переместить вверх</string>
+    <string name="action_remove_widget">Удалить</string>
+    <string name="action_view_widgets">Виджеты</string>
+    <string name="action_force_refresh">Обновить</string>
+    <string name="action_wallpaper">Изменить фон</string>
+    <string name="action_settings">Настройки</string>
+    <string name="app_name">HgLauncher</string>
 </resources>
