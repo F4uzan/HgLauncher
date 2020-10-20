@@ -41,9 +41,7 @@ class AppListPreference : PreferenceFragmentCompat() {
         }
 
         // Adaptive icon is not available before Android O/API 26.
-        if (Utils.atLeastOreo()) {
-            findPreference<Preference>("adaptive_shade_switch")?.isVisible = true
-        }
+        findPreference<Preference>("adaptive_shade_switch")?.isVisible = Utils.atLeastOreo()
     }
 
     private fun setIconList(list: ListPreference?) {

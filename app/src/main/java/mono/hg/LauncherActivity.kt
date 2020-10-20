@@ -223,7 +223,6 @@ class LauncherActivity : AppCompatActivity() {
         addAdapterListener()
         addPanelListener()
         registerForContextMenu(touchReceiver)
-        PreferenceHelper.update("package_count", AppUtils.countInstalledPackage(packageManager))
 
         // Start pinning apps.
         updatePinnedApps(true)
@@ -304,11 +303,8 @@ class LauncherActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
 
-        // Refresh app list and pinned apps if there is a change in package count.
+        // Refresh app pinned apps if there is a change in package count.
         if (AppUtils.hasNewPackage(packageManager)) {
-            // Retrieve the internal package count again.
-            AppUtils.updatePackageCount(packageManager)
-
             updatePinnedApps(true)
         }
 
