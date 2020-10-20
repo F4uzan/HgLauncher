@@ -1,9 +1,7 @@
 package mono.hg.preferences
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -31,8 +29,6 @@ import mono.hg.wrappers.SpinnerPreference
  * as a hub for other preferences, and it hosts main-level preferences.
  */
 class BasePreference : PreferenceFragmentCompat() {
-    private var isRestore = false
-
     private val RestartingListListener = Preference.OnPreferenceChangeListener { _, _ ->
         ViewUtils.restartActivity(requireActivity() as AppCompatActivity, false)
         true
@@ -107,12 +103,12 @@ class BasePreference : PreferenceFragmentCompat() {
             false
         }
         backupMenu?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            isRestore = false
-            hasStoragePermission()
+            openBackupRestore(false)
+            true
         }
         restoreMenu?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            isRestore = true
-            hasStoragePermission()
+            openBackupRestore(true)
+            true
         }
         resetMenu?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             with(AlertDialog.Builder(requireContext())) {
@@ -139,32 +135,6 @@ class BasePreference : PreferenceFragmentCompat() {
                 }
             }
             false
-        }
-    }
-
-    // Used to check for storage permission.
-    // Throws true when API is less than M.
-    private fun hasStoragePermission(): Boolean {
-        return if (Utils.atLeastMarshmallow()) {
-            requestPermissions(
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                PERMISSION_STORAGE_CODE
-            )
-            false
-        } else {
-            openBackupRestore(isRestore)
-            return true
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == PERMISSION_STORAGE_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openBackupRestore(isRestore)
-            }
         }
     }
 
@@ -221,7 +191,6 @@ class BasePreference : PreferenceFragmentCompat() {
     }
 
     companion object {
-        private const val PERMISSION_STORAGE_CODE = 4200
         private const val RESTORE_STORAGE_CODE = 3600
         private const val BACKUP_STORAGE_CODE = 3200
     }
