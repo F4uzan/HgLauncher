@@ -63,7 +63,7 @@
     <string name="gesture_left">Deslizar ←</string>
     <string name="windowbar_mode_both">Ambas</string>
     <string name="windowbar_mode_nav">Barra de navegação</string>
-    <string name="windowbar_mode_status">Barra de status</string>
+    <string name="windowbar_mode_status">Barra de estado</string>
     <string name="windowbar_mode_none">Desativar</string>
     <string name="windowbar_mode">Esconder barras do sistema</string>
     <string name="app_theme_black">Preto</string>
@@ -71,8 +71,8 @@
     <string name="app_theme_light">Claro</string>
     <string name="app_theme">Tema</string>
     <string name="about_credits_desc">Os criadores do HgLauncher</string>
-    <string name="about_credits">Créditos</string>
-    <string name="about_credits_dialog_title">Créditos</string>
+    <string name="about_credits">Méritos</string>
+    <string name="about_credits_dialog_title">Méritos</string>
     <string name="backup_empty">Digite o nome da cópia de segurança.</string>
     <string name="backup_complete">Cópia de segurança salvada.</string>
     <string name="restore_complete">Cópia de segurança recuperada.</string>
