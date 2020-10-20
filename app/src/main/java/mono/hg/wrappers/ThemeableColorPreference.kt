@@ -10,6 +10,9 @@ import mono.hg.R
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.applyAccent
 
+/**
+ * A [ColorPreferenceCompat] that follows the launcher's accent theme.
+ */
 class ThemeableColorPreference(context: Context?, attrs: AttributeSet?) :
     ColorPreferenceCompat(context, attrs) {
 

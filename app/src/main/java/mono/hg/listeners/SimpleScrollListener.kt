@@ -2,6 +2,10 @@ package mono.hg.listeners
 
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Scroll listener for [RecyclerView].
+ * This class detects scrolling, upwards scroll, as well as scroll end situations.
+ */
 abstract class SimpleScrollListener protected constructor(private val HIDE_THRESHOLD: Int) :
     RecyclerView.OnScrollListener() {
     private var mScrolledDistance = 0

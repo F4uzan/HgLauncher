@@ -464,7 +464,8 @@ class LauncherActivity : AppCompatActivity() {
      * Modifies various views parameters and visibility based on the user preferences.
      */
     private fun applyPrefToViews() {
-        slidingHome.post { // Hide the favourites panel when there's nothing to show.
+        slidingHome.post {
+            // Hide the favourites panel when there's nothing to show.
             if (pinnedAppsAdapter.isEmpty) {
                 pinnedAppsContainer.translationY = pinnedAppsContainer.measuredHeight.toFloat()
                 isFavouritesVisible = false
