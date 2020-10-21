@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
+import android.os.UserManager
 import android.util.SparseArray
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -114,6 +115,7 @@ class AppListFragment : GenericPageFragment() {
 
     private var launcherApps: LauncherApps? = null
     private var userUtils: UserUtils? = null
+    private var userManager: UserManager? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -138,6 +140,10 @@ class AppListFragment : GenericPageFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (Utils.atLeastLollipop()) {
+            userManager = requireActivity().getSystemService(Context.USER_SERVICE) as UserManager
+        }
 
         manager = requireActivity().packageManager
 
@@ -254,20 +260,26 @@ class AppListFragment : GenericPageFragment() {
                     newPackageNameList.subtract(packageNameList)
                         .plus(packageNameList.subtract(newPackageNameList))
                         .forEach { app ->
-                            // If there is no launch intent, then it's either
-                            // an app being removed or it's not an app that
-                            // should be visible in the list.
-                            manager.getLaunchIntentForPackage(app)?.apply {
-                                val componentName = this.component?.flattenToString() ?: ""
-                                if (componentName.isNotBlank()) {
-                                    userUtils?.currentSerial?.let {
-                                        addApp(mutableAdapterList, componentName, it)
-                                    }
-                                }
+                            // Handle packages changes from another user.
+                            val userSplit = app.split("-")
+                            val componentName = if (userSplit.size == 2) userSplit[1] else app
+                            val user =
+                                if (userSplit.size == 2) userSplit[0].toLong() else userUtils?.currentSerial
+                                    ?: 0
+
+                            // First, check if this user & component name combination
+                            // exists in the current list. This is because our list
+                            // won't be notified on an app update. There can only
+                            // be two states: installing or removing.
+                            mutableAdapterList.find { it.userPackageName.contains(app) }?.apply {
+                                // If it exists, then it's probably an uninstall signal.
+                                mutableAdapterList.remove(this)
                             } ?: run {
-                                mutableAdapterList.retainAll(appsAdapter.currentItems.filterNot {
-                                    it.packageName.contains(app)
-                                })
+                                // Otherwise, try and add this app.
+                                manager.getLaunchIntentForPackage(AppUtils.getPackageName(componentName))
+                                    ?.apply {
+                                        addApp(mutableAdapterList, componentName, user)
+                                    }
                             }
                         }
                 }
@@ -424,6 +436,7 @@ class AppListFragment : GenericPageFragment() {
                 }
 
                 // We should recount here, regardless of whether we update the list or not.
+                getPackageNameList(packageNameList)
                 AppUtils.updatePackageCount(requireActivity().packageManager)
             }
         }
@@ -482,7 +495,11 @@ class AppListFragment : GenericPageFragment() {
             // If there's an app with a matching componentName,
             // then it's probably the same app. Update that entry instead
             // of adding a new app.
-            this.find { it.packageName == componentName }?.apply {
+            if (user == userUtils?.currentSerial) {
+                this.find { it.userPackageName == componentName }
+            } else {
+                this.find { it.userPackageName == "${user}-${componentName}" }
+            }?.apply {
                 appName = AppUtils.getPackageLabel(
                     requireActivity().packageManager,
                     componentName
@@ -536,9 +553,30 @@ class AppListFragment : GenericPageFragment() {
         // Clear the list first, since mapTo() will duplicate the contents.
         list.clear()
 
-        // Return the package count.
-        return manager.getInstalledApplications(0).filter { it.enabled }
-            .mapTo(list) { it.packageName.toString() }.sorted()
+        // Get the list of package names.
+        if (Utils.atLeastLollipop()) {
+            // Handle multiple user scenario here.
+            userManager?.apply {
+                this.userProfiles.forEach { profile ->
+                    launcherApps?.getActivityList(null, profile)?.mapTo(list) {
+                        if (userUtils?.currentUser != profile) {
+                            "${userUtils?.getSerial(profile)}-${it.componentName.flattenToString()}"
+                        } else {
+                            it.componentName.flattenToString()
+                        }
+                    }
+                }
+            }
+        } else {
+            Intent(Intent.ACTION_MAIN, null).apply { addCategory(Intent.CATEGORY_LAUNCHER) }.also {
+                return manager.queryIntentActivities(it, 0).mapTo(list) { resolve ->
+                    "${resolve.activityInfo.packageName}/${resolve.activityInfo.name}"
+                }
+            }
+        }
+
+        // Return the sorted list.
+        return list.sorted()
     }
 
     /**
