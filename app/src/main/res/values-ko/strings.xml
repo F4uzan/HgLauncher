@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="action_force_refresh">새로고침</string>
+    <string name="action_wallpaper">배경 변경</string>
+    <string name="action_settings">설정</string>
+</resources>
