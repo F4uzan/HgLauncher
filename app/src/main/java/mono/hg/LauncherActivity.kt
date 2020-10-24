@@ -290,7 +290,7 @@ class LauncherActivity : AppCompatActivity() {
             // Clear the search bar text if app list is set to be kept open
             // unless keepLastSearch setting indicates maintain last search
             if (! PreferenceHelper.keepLastSearch()) {
-                clearSearch(searchBar)
+                clearSearchBar(searchBar)
             }
         } else {
             doThis(HIDE_PANEL)
@@ -589,9 +589,6 @@ class LauncherActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Listeners for touch receivers.
-     */
     private fun addGestureListener() {
         // Handle touch events in touchReceiver.
         touchReceiver.setOnTouchListener(object : GestureListener(this@LauncherActivity) {
@@ -610,9 +607,6 @@ class LauncherActivity : AppCompatActivity() {
         })
     }
 
-    /**
-     * Listeners for the search bar query.
-     */
     private fun addSearchBarTextListener() {
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -710,9 +704,6 @@ class LauncherActivity : AppCompatActivity() {
         })
     }
 
-    /**
-     * Listener for search bar editor (keyboard) action.
-     */
     private fun addSearchBarEditorListener() {
         searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (searchBar.text.isNotEmpty()
@@ -722,8 +713,7 @@ class LauncherActivity : AppCompatActivity() {
                 if (! pageAvailable && PreferenceHelper.promptSearch() && PreferenceHelper.searchProvider != "none") {
                     PreferenceHelper.searchProvider?.let {
                         Utils.doWebSearch(
-                            this@LauncherActivity,
-                            it,
+                            this@LauncherActivity, it,
                             URLEncoder.encode(searchBar.text.toString(), Charsets.UTF_8.name())
                         )
                     }
@@ -733,9 +723,6 @@ class LauncherActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Listener for adapters.
-     */
     private fun addAdapterListener() {
         pinnedAppsAdapter.addListener(object : OnItemMoveListener {
             var newState = 0
@@ -778,9 +765,6 @@ class LauncherActivity : AppCompatActivity() {
         })
     }
 
-    /**
-     * Listeners for the app panel.
-     */
     private fun addPanelListener() {
         slidingHome.addPanelSlideListener(object : PanelSlideListener {
             override fun onPanelSlide(view: View, v: Float) {
@@ -799,7 +783,7 @@ class LauncherActivity : AppCompatActivity() {
                         // Clear the search bar text if app list is set to be kept open
                         // unless keepLastSearch setting indicates maintain last search
                         if (! PreferenceHelper.keepLastSearch()) {
-                            clearSearch(searchBar)
+                            clearSearchBar(searchBar)
                         }
 
                         // Animate search container entering the view.
@@ -816,7 +800,8 @@ class LauncherActivity : AppCompatActivity() {
                             searchContainer.visibility = View.VISIBLE
                         }
                     }
-                    SlidingUpPanelLayout.PanelState.COLLAPSED ->                         // Show the keyboard.
+                    SlidingUpPanelLayout.PanelState.COLLAPSED ->
+                        // Show the keyboard.
                         if (PreferenceHelper.shouldFocusKeyboard()
                             && previousState == SlidingUpPanelLayout.PanelState.DRAGGING
                         ) {
@@ -838,7 +823,8 @@ class LauncherActivity : AppCompatActivity() {
                             isResuming = false
                         }
                     }
-                    SlidingUpPanelLayout.PanelState.ANCHORED ->                         // Please don't anchor, we don't want it.
+                    SlidingUpPanelLayout.PanelState.ANCHORED ->
+                        // Please don't anchor, we don't want it.
                         if (previousState != SlidingUpPanelLayout.PanelState.DRAGGING) {
                             slidingHome.setPanelState(
                                 previousState,
@@ -902,12 +888,7 @@ class LauncherActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Clears the search bar.
-     *
-     * @param view Unused. Only needed for XML initialisation.
-     */
-    fun clearSearch(view: View) {
+    fun clearSearchBar(view: View) {
         // Clear the search bar text if app list is set to be kept open
         searchBar.setText("")
     }
@@ -934,15 +915,6 @@ class LauncherActivity : AppCompatActivity() {
         if (pinnedAppsAdapter.isEmpty) {
             doThis(HIDE_PINNED)
         }
-    }
-
-    /**
-     * Determine whether an app is pinned.
-     *
-     * @param pinnedApp The PinnedApp object. Can be derived from an App object.
-     */
-    fun isPinned(pinnedApp: App): Boolean {
-        return pinnedAppsAdapter.contains(pinnedApp)
     }
 
     /**

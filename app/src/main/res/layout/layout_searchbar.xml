@@ -39,7 +39,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:background="@android:color/transparent"
-        android:onClick="clearSearch"
+        android:onClick="clearSearchBar"
         android:translationX="42dp"
         app:srcCompat="@drawable/ic_search_clear"
         android:contentDescription="@string/desc_clear_search" />

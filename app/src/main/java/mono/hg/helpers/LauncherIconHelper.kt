@@ -263,16 +263,14 @@ object LauncherIconHelper {
      * @return null if there is no such identifier associated with the name of the requested drawable.
      */
     private fun loadBitmap(
-        resources: Resources?,
+        resources: Resources,
         drawableName: String,
         iconPackageName: String
     ): Bitmap? {
-        val id: Int = resources?.getIdentifier(drawableName, "drawable", iconPackageName) ?: 0
+        val id: Int = resources.getIdentifier(drawableName, "drawable", iconPackageName)
         if (id > 0) {
-            resources?.let {
-                ResourcesCompat.getDrawable(it, id, null)
-                    ?.apply { if (this is BitmapDrawable) return bitmap }
-            }
+            ResourcesCompat.getDrawable(resources, id, null)
+                ?.apply { if (this is BitmapDrawable) return bitmap }
         }
         return null
     }
