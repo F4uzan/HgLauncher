@@ -2,29 +2,30 @@ HgLauncher is an open-source project.
 (https://github.com/F4uzan/HgLauncher)
 
 Contributors:
-- Allan Nordhøy
-- beriain
-- Deviltrucker
-- Dhimas Ilya'sa
-- doeki
-- F4
-- Fahreza Ali Syahdani
-- Fynn Godau
-- giupardeb
-- Heimen Stoffels
+- Allan Nordhøy (comradekingu)
+- beriain (beriain)
+- Deviltrucker (Deviltrucker)
+- Dhimas Ilya'sa (MikuDroid)
+- doeki (dokieki)
+- F4 (F4uzan)
+- Fahreza Ali Syahdani (thefahre)
+- FeeLie O
+- Fynn Godau (fynngodau)
+- giupardeb (giupardeb)
+- Heimen Stoffels (Vistaus)
 - Jeannette L
-- Leviatansan21
+- Leviatansan21 (Leviatansan21)
 - Lucas Araujo
-- Maawu
-- Manuela Silva
-- Milo Ivir
+- Maawu (Maawu)
+- Manuela Silva (mansil)
+- Milo Ivir (milotype)
 - Paper Mountain Studio
-- Pavle Radosavljević
+- Pavle Radosavljević (pavlepiramida)
 - Ruan O. Lima
-- Scott MacDonald
-- sicherist
-- ssantos
-- WaldiS
+- Scott MacDonald (macdonaldster)
+- sicherist (sicherist)
+- ssantos (SantosSi)
+- WaldiS (WaldiSt)
 
 Libraries and others:
 - AndroidX Support Libraries: Google and contributors (https://android.googlesource.com/platform/frameworks/support). Licensed under Apache v2.
