@@ -4,8 +4,10 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.style.CharacterStyle
 import android.widget.EditText
 import java.lang.ref.WeakReference
+
 
 /**
  * TextSpectator is an extension to TextWatcher, used when it is attached to an EditText.
@@ -104,6 +106,9 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
         if (s.isNotEmpty() && s[0] == ' ') {
             s.delete(0, 1)
         }
+
+        s.getSpans(0, s.length, CharacterStyle::class.java).forEach { s.removeSpan(it) }
+
         afterChanged(s)
     }
 

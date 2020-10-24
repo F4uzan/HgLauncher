@@ -8,7 +8,6 @@ import android.content.pm.LauncherApps
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
 import android.util.SparseArray
 import android.view.ContextMenu
 import android.view.ContextMenu.ContextMenuInfo
@@ -655,10 +654,7 @@ class LauncherActivity : AppCompatActivity() {
 
                 // Text used for searchSnack.
                 searchHint = String.format(resources.getString(R.string.search_web_hint), inputText)
-            }
 
-            override fun afterChanged(s: Editable?) {
-                super.afterChanged(s)
                 startTimer()
                 if (trimmedInputText.isNotEmpty() && PreferenceHelper.promptSearch()) {
                     // HACK: Show a view stub to make sure app list anchors properly.
