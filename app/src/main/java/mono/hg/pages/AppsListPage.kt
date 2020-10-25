@@ -306,10 +306,8 @@ class AppsListPage : GenericPage() {
     }
 
     override fun commitSearch(query: String) {
-        if (appsAdapter.hasNewFilter(query)) {
-            appsAdapter.setFilter(query)
-            appsAdapter.filterItems()
-        }
+        appsAdapter.setFilter(query)
+        appsAdapter.filterItems()
     }
 
     override fun launchPreselection(): Boolean {
