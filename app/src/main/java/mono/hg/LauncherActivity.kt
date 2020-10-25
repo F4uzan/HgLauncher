@@ -634,17 +634,16 @@ class LauncherActivity : AppCompatActivity() {
                     if (isContextVisible) {
                         doThis("hide_context_button")
                     }
-                    resetSearch()
                     searchSnack.dismiss()
                     stopTimer()
-                } else {
-                    // Begin filtering our list.
-                    doSearch(trimmedInputText)
                 }
             }
 
             override fun whenChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 super.whenChanged(s, start, before, count)
+
+                // Filter the list.
+                doSearch(trimmedInputText)
 
                 // Text used for searchSnack.
                 searchHint = String.format(resources.getString(R.string.search_web_hint), inputText)
@@ -876,14 +875,6 @@ class LauncherActivity : AppCompatActivity() {
         viewPagerAdapter.getCurrentPage()?.apply {
             if (this.isAcceptingSearch()) {
                 this.commitSearch(query)
-            }
-        }
-    }
-
-    private fun resetSearch() {
-        viewPagerAdapter.getCurrentPage()?.apply {
-            if (this.isAcceptingSearch()) {
-                this.resetSearch()
             }
         }
     }

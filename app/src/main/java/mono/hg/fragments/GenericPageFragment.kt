@@ -31,17 +31,6 @@ open class GenericPageFragment : Fragment() {
     }
 
     /**
-     * Resets the query. This is called in LauncherActivity
-     * when the search has been cleared/emptied.
-     *
-     * Override to make sure the filter applied are properly
-     * cleared or handled.
-     */
-    open fun resetSearch() {
-        // Override when necessary.
-    }
-
-    /**
      * Checks if a Page is accepting search queries.
      *
      * @return Boolean Whether the Page can accept search queries.
@@ -71,12 +60,5 @@ open class GenericPageFragment : Fragment() {
      */
     open fun launchPreselection(): Boolean {
         return false
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        // When pages are paused, relevant data should be returned to default.
-        if (isAcceptingSearch()) resetSearch()
     }
 }

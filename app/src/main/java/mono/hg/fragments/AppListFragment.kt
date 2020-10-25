@@ -312,10 +312,6 @@ class AppListFragment : GenericPageFragment() {
         }
     }
 
-    override fun resetSearch() {
-        resetAppFilter()
-    }
-
     override fun launchPreselection(): Boolean {
         return if (! appsAdapter.isEmpty) {
             appsRecyclerView.let {
