@@ -1,4 +1,4 @@
-package mono.hg.fragments
+package mono.hg.pages
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -35,7 +35,7 @@ import java.util.*
  * Page displaying a widget list.
  * This is the generic implementation of a widget list that also handles its scrolling events.
  */
-class WidgetListFragment : GenericPageFragment() {
+class WidgetsListPage : GenericPage() {
     /*
     * Used to handle and add widgets to widgetContainer.
     */

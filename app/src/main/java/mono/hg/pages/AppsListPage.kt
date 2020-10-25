@@ -1,4 +1,4 @@
-package mono.hg.fragments
+package mono.hg.pages
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -56,7 +56,7 @@ import kotlin.collections.ArrayList
  * Page displaying an app list.
  * This is the generic implementation of an app list that handles the required features.
  */
-class AppListFragment : GenericPageFragment() {
+class AppsListPage : GenericPage() {
     /*
      * List containing installed apps.
      */
