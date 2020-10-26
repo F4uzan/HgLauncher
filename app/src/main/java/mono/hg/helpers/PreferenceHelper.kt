@@ -199,6 +199,11 @@ object PreferenceHelper {
         parseDelimitedSet(tempList, provider_list)
     }
 
+    fun updatePinnedApps(newAppsString: String) {
+        update("pinned_apps_list", newAppsString)
+        pinned_apps_list = preference.getString("pinned_apps_list", "") ?: ""
+    }
+
     fun getPinnedApps(): String {
         return pinned_apps_list
     }

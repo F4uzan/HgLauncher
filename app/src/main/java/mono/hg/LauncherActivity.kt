@@ -868,7 +868,7 @@ class LauncherActivity : AppCompatActivity() {
         pinnedAppString = pinnedAppList.joinToString(";") { it.userPackageName }
 
         // Update the saved pinned apps.
-        PreferenceHelper.update("pinned_apps_list", pinnedAppString)
+        PreferenceHelper.updatePinnedApps(pinnedAppString)
     }
 
     private fun doSearch(query: String) {
