@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="72dp"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical"
     android:gravity="center"
     android:paddingTop="6dp"
@@ -13,6 +12,7 @@
         android:id="@+id/item_icon"
         android:layout_width="46dp"
         android:layout_height="46dp"
+        android:background="?selectableItemBackgroundBorderless"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/desc_icon" />
