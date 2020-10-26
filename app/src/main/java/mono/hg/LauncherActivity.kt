@@ -813,7 +813,7 @@ class LauncherActivity : AppCompatActivity() {
                         // Toggle the visibility early.
                         searchContainer.visibility = View.INVISIBLE
 
-                        if (! isResuming && ! ActivityServiceUtils.isPowerSaving(this@LauncherActivity)) {
+                        if (! isResuming || ! ActivityServiceUtils.isPowerSaving(this@LauncherActivity)) {
                             // Animate the container.
                             searchContainer.animate().alpha(0f)
                                 .setDuration(animateDuration.toLong())
