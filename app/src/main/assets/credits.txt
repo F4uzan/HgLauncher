@@ -26,6 +26,7 @@ Contributors:
 - sicherist (sicherist)
 - ssantos (SantosSi)
 - WaldiS (WaldiSt)
+- 권나연
 
 Libraries and others:
 - AndroidX Support Libraries: Google and contributors (https://android.googlesource.com/platform/frameworks/support). Licensed under Apache v2.
