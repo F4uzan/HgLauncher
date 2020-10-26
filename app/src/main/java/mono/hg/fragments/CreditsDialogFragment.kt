@@ -1,14 +1,25 @@
 package mono.hg.fragments
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
-import android.text.util.Linkify
+import android.text.method.LinkMovementMethod
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.text.util.LinkifyCompat
+import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import mono.hg.R
 import mono.hg.databinding.FragmentCreditsDialogBinding
+import mono.hg.databinding.FragmentCreditsDisplayBinding
 import mono.hg.helpers.PreferenceHelper
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -17,6 +28,7 @@ import java.io.InputStreamReader
  * A DialogFragment that reads from assets/credits.txt, returning its content to a TextView.
  */
 class CreditsDialogFragment : DialogFragment() {
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val binding = FragmentCreditsDialogBinding.inflate(requireActivity().layoutInflater)
 
@@ -25,12 +37,33 @@ class CreditsDialogFragment : DialogFragment() {
             setView(binding.root)
             setPositiveButton(R.string.dialog_action_close, null)
 
-            binding.creditsPlaceholder.apply {
-                highlightColor = PreferenceHelper.darkAccent
-                setLinkTextColor(PreferenceHelper.accent)
-                text = readCredits()
-                LinkifyCompat.addLinks(this, Linkify.WEB_URLS)
-            }
+            val adapter = CreditsDisplayAdapter(this@CreditsDialogFragment)
+            val viewPager = binding.creditsPager
+            viewPager.adapter = adapter
+
+            val tabLayout = binding.creditsTab
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                when (position) {
+                    0 -> tab.icon =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_credit_license)
+                    1 -> tab.icon =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_credit_author)
+                    2 -> tab.icon =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_credit_translator)
+                }
+            }.attach()
+
+            tabLayout.tabIconTint = ColorStateList(
+                arrayOf(
+                    intArrayOf(android.R.attr.state_selected),
+                    intArrayOf()
+                ), intArrayOf(
+                    PreferenceHelper.accent,
+                    Color.LTGRAY
+                )
+            )
+
+            tabLayout.setSelectedTabIndicatorColor(PreferenceHelper.darkAccent)
 
             create().apply {
                 show()
@@ -40,17 +73,53 @@ class CreditsDialogFragment : DialogFragment() {
             }
         }
     }
+}
+
+class CreditsDisplayAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+    override fun getItemCount(): Int = 3
+
+    override fun createFragment(position: Int): Fragment {
+        return when (position) {
+            0 -> CreditsDisplayFragment("license.txt")
+            1 -> CreditsDisplayFragment("authors.txt")
+            2 -> CreditsDisplayFragment("translators.txt")
+            else -> CreditsDisplayFragment("placeholder.txt") // This shouldn't happen.
+        }
+    }
+}
+
+class CreditsDisplayFragment(val file: String) : Fragment() {
+    private var binding: FragmentCreditsDisplayBinding? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentCreditsDisplayBinding.inflate(inflater, container, false)
+
+        return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding?.creditsPlaceholder?.apply {
+            highlightColor = PreferenceHelper.darkAccent
+            setLinkTextColor(PreferenceHelper.accent)
+            text = HtmlCompat.fromHtml(readCredits(), HtmlCompat.FROM_HTML_MODE_COMPACT)
+            movementMethod = LinkMovementMethod.getInstance()
+        }
+    }
 
     private fun readCredits(): String {
         val stringBuilder = StringBuilder()
 
-        BufferedReader(InputStreamReader(requireActivity().assets.open("credits.txt"))).use {
+        BufferedReader(InputStreamReader(requireActivity().assets.open(file))).use {
             var currentLine: String?
             while (it.readLine().also { line -> currentLine = line } != null) {
                 stringBuilder.append(currentLine).append('\n')
             }
         }
 
-        return stringBuilder.toString()
+        return stringBuilder.toString().replace("\n","<br/>")
     }
 }

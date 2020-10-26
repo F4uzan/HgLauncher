@@ -1,0 +1,74 @@
+HgLauncher has been translated into different languages thanks to the help of contributors listed here.
+
+If you see a missing/incorrect translation, or would like to translate HgLauncher to your language, please help us through our <a href="https://hosted.weblate.org/engage/hglauncher">Hosted Weblate</a>.
+
+Alternatively, you may open an issue or pull request on our <a href="https://github.com/F4uzan/HgLauncher">GitHub repository</a>.
+
+<b>Allan Nordhøy (comradekingu)</b>
+Norwegian Bokmål translation
+
+<b>beriain (beriain)</b>
+Basque and Spanish translation
+
+<b>Deviltrucker (Deviltrucker)</b>
+Spanish translation
+
+<b>Dhimas Ilya'sa (MikuDroid)</b>
+Indonesian translation
+
+<b>doeki (dokieki)</b>
+Russian translation
+
+<b>Fahreza Ali Syahdani (thefahre)</b>
+Indonesian translation
+
+<b>FeeLie O</b>
+Korean translation
+
+<b>Fynn Godau (fynngodau)</b>
+German translation
+
+<b>giupardeb (giupardeb)</b>
+Italian translation
+
+<b>Heimen Stoffels (Vistaus)</b>
+Dutch translation
+
+<b>Jeannette L</b>
+French, German, and Italian translation
+
+<b>Leviatansan21 (Leviatansan21)</b>
+Japanese and Spanish translation
+
+<b>Lucas Araujo</b>
+Portuguese (Brazil) translation
+
+<b>Maawu (Maawu)</b>
+Portuguese (Brazil) translation
+
+<b>Manuela Silva (mansil)</b>
+Portuguese (Portugal) translation
+
+<b>Milo Ivir (milotype)</b>
+Croatian translation
+
+<b>Paper Mountain Studio</b>
+Czech translation
+
+<b>Pavle Radosavljević (pavlepiramida)</b>
+Serbian translation
+
+<b>Ruan O. Lima</b>
+Portuguese (Portugal) translation
+
+<b>sicherist (sicherist)</b>
+German translation
+
+<b>ssantos (SantosSi)</b>
+Portuguese translation
+
+<b>WaldiS (WaldiSt)</b>
+Polish translation
+
+<b>권나연</b>
+Korean translation

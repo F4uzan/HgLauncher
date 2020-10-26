@@ -1,0 +1,44 @@
+<b>F4 (F4uzan)</b>
+Maintainer and developer
+
+<b>Scott MacDonald (macdonaldster)</b>
+Developer
+
+HgLauncher uses the following open-source libraries:
+<b>AndroidX Support Libraries</b>
+Google and contributors
+<a href="https://android.googlesource.com/platform/frameworks/support">https://android.googlesource.com/platform/frameworks/support</a>
+Licensed under Apache v2
+
+<b>AndroidSlidingUpPanel</b>
+umano
+Modified for HgLauncher by F4
+<a href="https://github.com/umano/AndroidSlidingUpPanel">https://github.com/umano/AndroidSlidingUpPanel</a>
+<a href="https://github.com/F4uzan/AndroidSlidingUpPanel">https://github.com/F4uzan/AndroidSlidingUpPanel</a>
+Licensed under Apache v2
+
+<b>RecyclerView-FastScroll</b>
+Tim Malseed and contributors
+<a href="https://github.com/timusus/RecyclerView-FastScroll">https://github.com/timusus/RecyclerView-FastScroll</a>
+Licensed under Apache v2
+
+<b>FlexibleAdapter</b>
+Davide Steduto and contributors
+<a href="https://github.com/davideas/FlexibleAdapter">https://github.com/davideas/FlexibleAdapter</a>
+Licensed under Apache v2
+
+<b>ColorPicker</b>
+Jared Rummler and contributors
+<a href="https://github.com/jaredrummler/ColorPicker">https://github.com/jaredrummler/ColorPicker</a>
+Licensed under Apache v2
+
+HgLauncher cannot exist without these projects:
+<b>KISS launcher</b>
+Matthieu Bacconnier and contributors
+<a href="https://github.com/Neamar/KISS">https://github.com/Neamar/KISS</a>
+Licensed under GPLv3
+
+<b>Essential Launcher</b>
+Clemens Bartz and contributors
+<a href="https://github.com/clemensbartz/essential-launcher">https://github.com/clemensbartz/essential-launcher</a>
+Licensed under GPLv3 or later
