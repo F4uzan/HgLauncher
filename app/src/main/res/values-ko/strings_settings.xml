@@ -4,4 +4,17 @@
     <string name="pref_header_gestures">제스처</string>
     <string name="pref_header_about">About</string>
     <string name="title_activity_settings">설정</string>
+    <string name="web_provider_name_hint">이름 ( 고유해야함)</string>
+    <string name="pref_header_web_provider_desc">"웹 검색 엔진의 추가  삭제"</string>
+    <string name="pref_header_web_provider_title">웹 검색 엔진</string>
+    <string name="pref_header_hidden_apps">숨김 앱</string>
+    <string name="pref_header_hidden_apps_desc">숨김 앱 관리 목록</string>
+    <string name="pref_header_backup">백업</string>
+    <string name="pref_header_list">앱 목록</string>
+    <string name="pref_summary_gestures">제스처 설정</string>
+    <string name="pref_summary_web">웹 검색 설정</string>
+    <string name="pref_header_backup_restore">백업 &amp; 복구</string>
+    <string name="pref_header_web">웹 검색</string>
+    <string name="pref_header_behavior">행동</string>
+    <string name="pref_header_interface">인터페이스</string>
 </resources>
