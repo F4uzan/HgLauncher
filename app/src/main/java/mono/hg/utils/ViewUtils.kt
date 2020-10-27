@@ -211,12 +211,13 @@ object ViewUtils {
             // Hide 'pin' if the app is already pinned or isPinned is set.
             menu.findItem(R.id.action_pin).isVisible = ! isPinned
 
-            // We can't hide an app from the favourites panel.
-            menu.findItem(R.id.action_hide).isVisible = ! isPinned
-            menu.findItem(R.id.action_shorthand).isVisible = ! isPinned
-
             // Only show the 'unpin' option if isPinned is set.
-            menu.findItem(R.id.action_unpin).isVisible = isPinned
+            menu.findItem(R.id.action_unpin).isVisible =
+                isPinned && app.itemViewType == App.PINNED_APP_TYPE
+
+            // We can't hide an app from the favourites panel.
+            menu.findItem(R.id.action_hide).isVisible = app.itemViewType != App.PINNED_APP_TYPE
+            menu.findItem(R.id.action_shorthand).isVisible = app.itemViewType != App.PINNED_APP_TYPE
 
             // Show uninstall menu if the app is not a system app.
             menu.findItem(R.id.action_uninstall).isVisible = (! AppUtils.isSystemApp(
