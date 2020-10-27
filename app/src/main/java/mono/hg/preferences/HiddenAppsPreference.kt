@@ -113,7 +113,7 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
     }
 
     private fun loadApps() {
-        lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             (requireActivity() as SettingsActivity).progressBar.compatShow()
             withContext(Dispatchers.Default) {
                 appList.clear()

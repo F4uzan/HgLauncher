@@ -221,7 +221,7 @@ class AppsListPage : GenericPage() {
         super.onStart()
 
         if (appsAdapter.isEmpty) {
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 fetchAppsJob?.apply {
                     if (this.isCompleted) {
                         appsAdapter.finishedLoading(false)
@@ -243,7 +243,7 @@ class AppsListPage : GenericPage() {
         // Detect newly installed/removed apps.
         // This check is used when changes occur
         // when the launcher is in the background (i.e, not caught by the receiver).
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             val mutableAdapterList = ArrayList<App>()
 
             withContext(Dispatchers.Default) {
@@ -409,7 +409,7 @@ class AppsListPage : GenericPage() {
                     // Either way, we don't want to fetch anything if that is the case.
                     if (hasLauncherCategory && appsAdapter.hasFinishedLoading()) {
                         // Add our new app to the list.
-                        lifecycleScope.launch {
+                        viewLifecycleOwner.lifecycleScope.launch {
                             val newList: MutableList<App> = appsAdapter.currentItems.toMutableList()
                             withContext(Dispatchers.Default) {
                                 addApp(newList, componentName, user)
@@ -457,7 +457,7 @@ class AppsListPage : GenericPage() {
     }
 
     private suspend fun fetchApps() {
-        fetchAppsJob = lifecycleScope.launch {
+        fetchAppsJob = viewLifecycleOwner.lifecycleScope.launch {
             var newList: List<App>
             withContext(Dispatchers.Default) {
                 getPackageNameList(packageNameList)

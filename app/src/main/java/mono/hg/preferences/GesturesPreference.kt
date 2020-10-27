@@ -108,7 +108,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
         // Fetch all available icon pack.
         val intent = Intent("mono.hg.GESTURE_HANDLER")
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             withContext(Dispatchers.Default) {
                 manager.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
                     .forEach {

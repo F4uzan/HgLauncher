@@ -124,7 +124,7 @@ class BackupRestoreFragment : Fragment() {
                 val possibleBackup =
                     "file://" + currentPath + File.separator + fileFoldersList[position].name
                 if (isInRestore && fileFoldersList[position].name.indexOf('.') > 0) {
-                    lifecycleScope.launch {
+                    viewLifecycleOwner.lifecycleScope.launch {
                         BackupRestoreUtils.restoreBackup(
                             requireActivity() as SettingsActivity,
                             possibleBackup
@@ -196,7 +196,7 @@ class BackupRestoreFragment : Fragment() {
             path?.listFiles()
         }
         if (contents != null && contents.isNotEmpty()) {
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 withContext(Dispatchers.Default) {
                     contents.filter { ! it.isHidden }
                         .forEach { fileFoldersList.add(FileFolder(it.name, it.isDirectory)) }

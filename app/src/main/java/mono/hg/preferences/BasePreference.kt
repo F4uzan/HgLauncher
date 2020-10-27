@@ -146,7 +146,7 @@ class BasePreference : PreferenceFragmentCompat() {
         if (resultCode == Activity.RESULT_OK && resultData != null) {
             uri = resultData.data
             if (requestCode == RESTORE_STORAGE_CODE) {
-                lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch {
                     BackupRestoreUtils.restoreBackup(
                         requireActivity() as SettingsActivity,
                         uri.toString()
