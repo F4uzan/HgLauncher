@@ -137,10 +137,10 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
         // Check if package is already in exclusion.
         if (excludedAppList.contains(packageName)) {
             excludedAppList.remove(packageName)
-            PreferenceHelper.update("hidden_apps", excludedAppList)
+            updatePreference()
         } else {
             excludedAppList.add(packageName)
-            PreferenceHelper.update("hidden_apps", excludedAppList)
+            updatePreference()
         }
         appList[position].isAppHidden = excludedAppList.contains(packageName)
 
@@ -149,6 +149,11 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
 
         // Toggle the state of the 'restore all' button.
         requireActivity().invalidateOptionsMenu()
+    }
+
+    private fun updatePreference() {
+        PreferenceHelper.update("hidden_apps", excludedAppList)
+        PreferenceHelper.update("require_refresh", true)
     }
 
     private fun addListeners() {

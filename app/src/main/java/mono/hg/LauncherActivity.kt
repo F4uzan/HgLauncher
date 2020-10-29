@@ -328,6 +328,7 @@ class LauncherActivity : AppCompatActivity() {
 
         // Toggle back the refresh switch.
         PreferenceHelper.update("require_refresh", false)
+        PreferenceHelper.update("require_reinit", false)
 
         panelLockRequested = false
 
@@ -363,8 +364,10 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // Handle preference change. Refresh when necessary.
-        if (requestCode == SETTINGS_RETURN_CODE && ! PreferenceHelper.wasAlien()) {
+        if (PreferenceHelper.preference.getBoolean("require_refresh", false) && ! PreferenceHelper.wasAlien()) {
             ViewUtils.restartActivity(this, true)
+        } else if (PreferenceHelper.preference.getBoolean("require_reinit", false)) {
+            PreferenceHelper.fetchPreference()
         }
 
         // Call super to handle anything else not handled here.

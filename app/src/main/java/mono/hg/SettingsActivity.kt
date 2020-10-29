@@ -1,5 +1,6 @@
 package mono.hg
 
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.os.Bundle
@@ -24,11 +25,17 @@ import mono.hg.utils.compatHide
  * This activity can be called through 'Additional setting' in the System settings as well.
  */
 class SettingsActivity : AppCompatActivity(),
-    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
+    SharedPreferences.OnSharedPreferenceChangeListener {
     private var fragmentTitle: CharSequence? = null
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var toolbar: Toolbar
     lateinit var progressBar: ProgressIndicator
+
+    // The list of preferences that will trigger a launcher restart.
+    // This restart will be done in LauncherActivity itself.
+    private val preferenceRestartTrigger =
+        "app_theme app_accent widget_space_visible app_list_mode list_bg icon_hide_switch adaptive_shade_switch icon_pack list_order shade_view_switch"
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         if (! PreferenceHelper.hasEditor()) {
@@ -71,6 +78,28 @@ class SettingsActivity : AppCompatActivity(),
             fragmentTitle = savedInstanceState.getCharSequence("title")
                 ?: getString(R.string.title_activity_settings)
             supportActionBar?.title = fragmentTitle
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        PreferenceHelper.preference.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        PreferenceHelper.preference.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(pref: SharedPreferences?, key: String?) {
+        if (preferenceRestartTrigger.contains(key.toString())) {
+            PreferenceHelper.update("require_refresh", true)
+
+            // A reinitialisation isn't necessary since we're doing a full refresh.
+            PreferenceHelper.update("require_reinit", false)
+        } else {
+            // These preferences will only require a refresh of PreferenceHelper.
+            PreferenceHelper.update("require_reinit", true)
         }
     }
 
