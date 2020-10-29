@@ -33,9 +33,9 @@
     <string name="err_invalid_url">URL tidak valid.</string>
     <string name="action_web_provider_add">Tambah</string>
     <string name="dialog_title_shorthand">Tetapkan singkatan</string>
-    <string name="dialog_start_hint_message_one">Ini adalah beranda Anda. Di sini, Anda bisa...
+    <string name="dialog_start_hint_message_one"><![CDATA[Ini adalah beranda Anda. Di sini, Anda bisa…
 \n • Ketuk untuk membuka daftar aplikasi
-\n • Tekan lama untuk mengubah wallpaper dan membuka pengaturan</string>
+\n • Tekan lama untuk mengubah wallpaper dan membuka pengaturan]]></string>
     <string name="action_settings">Pengaturan</string>
     <string name="action_backup">Cadangkan</string>
     <string name="search_provider_none">Selalu tanya</string>

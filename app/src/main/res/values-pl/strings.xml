@@ -27,7 +27,7 @@
     <!-- Misc -->
     <string name="search_hint">Wyszukaj…</string>
     <string name="search_web_hint">Szukaj \'%1$s\' w sieci</string>
-    <string name="search_web_button_prompt">Idź...</string>
+    <string name="search_web_button_prompt">Idź…</string>
     <string name="search_web_button">Idz</string>
     <string name="dialog_title_add_provider">Dodaj wyszukiwarkę</string>
     <string name="dialog_title_edit_provider">Edytuj dostawcę</string>
@@ -47,7 +47,7 @@
     <string name="err_no_method_panel">Ta akcja nie jest dostępna dla tej wersji systemu Android.</string>
     <string name="desc_clear_search">Wyczyść wyszukiwanie</string>
     <string name="dialog_start_hint_title">Witaj!</string>
-    <string name="dialog_start_hint_message_one">To jest Twój pulpit. W tym miejscu można...
+    <string name="dialog_start_hint_message_one">To jest Twój pulpit. W tym miejscu można…
 \n • Dotknij, aby otworzyć listę aplikacji
 \n • Długie naciśnięcie, aby zmienić tapetę i otworzyć ustawienia</string>
     <string name="dialog_action_edit">Edytuj</string>

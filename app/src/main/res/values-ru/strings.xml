@@ -6,7 +6,7 @@
     <string name="desc_icon">Приложение</string>
     <string name="desc_apps_list">Список приложений</string>
     <string name="desc_touch_receiver">Вид рабочего стола</string>
-    <string name="dialog_start_hint_message_one">Это ваш рабочий стол. Здесь вы можете...
+    <string name="dialog_start_hint_message_one">Это ваш рабочий стол. Здесь вы можете…
 \n • Нажмите для открытия списка приложений
 \n • Зажмите для изменения фона и открытия настроек</string>
     <string name="dialog_start_hint_title">Добро пожаловать!</string>

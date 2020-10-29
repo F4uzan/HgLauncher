@@ -11,7 +11,7 @@
     <string name="search_provider_none">Всегда спрашивать</string>
     <string name="desc_icon">Приложение</string>
     <string name="desc_apps_list">Список приложений</string>
-    <string name="dialog_start_hint_message_one">Это твой рабочий стол. Здесь ты можешь...
+    <string name="dialog_start_hint_message_one">Это твой рабочий стол. Здесь ты можешь…
 \n• Нажми чтобы открыть список приложений
 \n• Зажми для изменения обоев и открытия настроек</string>
     <string name="dialog_start_hint_title">Добро пожаловать!</string>

@@ -32,7 +32,7 @@
     <string name="err_provider_exists">Jméno poskytovatele musí být unikátní.</string>
     <string name="err_no_method_panel">Tato akce není dostupná ve Vaší verzi Android.</string>
     <string name="dialog_start_hint_title">Vítejte!</string>
-    <string name="dialog_start_hint_message_one">Toto je vaše plocha. Zde můžete...
+    <string name="dialog_start_hint_message_one">Toto je vaše plocha. Zde můžete…
 \n • Klepnutím otevřít seznam aplikací
 \n • Dlouhým stiskem změnit tapetu a otevřít nastavení</string>
     <string name="desc_touch_receiver">Zobrazení plochy</string>

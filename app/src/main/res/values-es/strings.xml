@@ -47,8 +47,8 @@
     <string name="search_provider_none">Preguntar siempre</string>
     <string name="desc_clear_search">Vaciar búsqueda de consultas</string>
     <string name="dialog_start_hint_title">Bienvenido!</string>
-    <string name="dialog_start_hint_message_one">Este es tu escritorio. Aquí puedes ...
+    <string name="dialog_start_hint_message_one"><![CDATA[Este es tu escritorio. Aquí puedes …
 \n  • Toque para abrir la lista de aplicaciones.
-\n  • Mantenga presionado para cambiar el fondo de pantalla y abrir la configuración</string>
+\n  • Mantenga presionado para cambiar el fondo de pantalla y abrir la configuración]]></string>
     <string name="dialog_action_edit">Editar</string>
 </resources>
