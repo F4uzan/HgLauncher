@@ -1,8 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def dateVersionCode = (int) (((new Date().getTime() / 1000) - 1593866693) / 10)
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -10,8 +8,8 @@ android {
         applicationId "mono.hg"
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode dateVersionCode
-        versionName "1.4.3-rc7"
+        versionCode 1500000
+        versionName "1.5.0"
         vectorDrawables.useSupportLibrary = true
         buildFeatures {
             viewBinding = true
