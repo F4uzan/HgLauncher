@@ -14,9 +14,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -321,7 +321,7 @@ fun AppCompatSeekBar.applyAccent() {
         // Android 4.0.x have no proper way to set the thumb color.
         // So, we have to workaround this by getting a drawable, coloring it,
         // and then applying said drawable as the thumb.
-        ContextCompat.getDrawable(context, androidx.appcompat.R.drawable.abc_seekbar_thumb_material)
+        AppCompatResources.getDrawable(context, androidx.appcompat.R.drawable.abc_seekbar_thumb_material)
             ?.let { DrawableCompat.wrap(it) }.also {
                 thumb = it
                 it?.let { thumb -> DrawableCompat.setTint(thumb, PreferenceHelper.accent) }

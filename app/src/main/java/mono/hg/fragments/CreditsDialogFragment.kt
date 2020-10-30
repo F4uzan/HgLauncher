@@ -11,7 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -45,11 +45,11 @@ class CreditsDialogFragment : DialogFragment() {
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                 when (position) {
                     0 -> tab.icon =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_credit_license)
+                        AppCompatResources.getDrawable(requireContext(), R.drawable.ic_credit_license)
                     1 -> tab.icon =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_credit_author)
+                        AppCompatResources.getDrawable(requireContext(), R.drawable.ic_credit_author)
                     2 -> tab.icon =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_credit_translator)
+                        AppCompatResources.getDrawable(requireContext(), R.drawable.ic_credit_translator)
                 }
             }.attach()
 
