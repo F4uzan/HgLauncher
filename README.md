@@ -14,9 +14,9 @@ A scrolling list of apps to launch them from, if you found what you want, look n
 
 ### What does it look like?
 
-| | | |
-|:-------------------------:|:-------------------------:|:-------------------------:|
-![Homescreen](https://github.com/F4uzan/HgLauncher/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.png "Homescreen") | ![App list](https://github.com/F4uzan/HgLauncher/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.png "List all your apps") | ![App search](https://github.com/F4uzan/HgLauncher/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.png "Search and find apps")
+| | | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
+![Homescreen](https://github.com/F4uzan/HgLauncher/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.png "Homescreen") | ![App list](https://github.com/F4uzan/HgLauncher/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.png "List all your apps") | ![App search](https://github.com/F4uzan/HgLauncher/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.png "Search and find apps") | ![Widget-space](https://github.com/F4uzan/HgLauncher/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.png "View and add widgets")
 
 ### Where can I get it?
 
@@ -40,7 +40,7 @@ Bug reports and feature requests can be made through the [Issue Tracker](https:/
 * Wait until your changes are reviewed
 * Enjoy your life and move on
 
-### Licence
+### License
 
 > This program is libre software: You can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 >
