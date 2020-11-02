@@ -15,12 +15,12 @@ import mono.hg.utils.Utils
 import java.util.*
 
 /**
- * Preferences for app lists and the view surrounding it.
+ * Preferences for the apps list page.
  */
 @Keep
-class AppListPreference : PreferenceFragmentCompat() {
+class AppsPagePreference : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.pref_app_list, rootKey)
+        setPreferencesFromResource(R.xml.pref_page_apps, rootKey)
     }
 
     override fun onResume() {
@@ -43,6 +43,7 @@ class AppListPreference : PreferenceFragmentCompat() {
         // Adaptive icon is not available before Android O/API 26.
         findPreference<Preference>("adaptive_shade_switch")?.isVisible = Utils.atLeastOreo()
     }
+
 
     private fun setIconList(list: ListPreference?) {
         val manager = requireActivity().packageManager

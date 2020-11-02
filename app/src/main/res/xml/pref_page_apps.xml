@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <androidx.preference.Preference
         android:fragment="mono.hg.preferences.HiddenAppsPreference"
         android:key="hidden_apps_menu"
         android:summary="@string/pref_header_hidden_apps_desc"
         android:title="@string/pref_header_hidden_apps" />
-
-    <mono.hg.wrappers.ThemeableSwitchPreference
-        android:defaultValue="true"
-        android:key="widget_space_visible"
-        android:title="@string/action_view_widgets" />
 
     <mono.hg.wrappers.SpinnerPreference
         android:defaultValue="list"
@@ -19,16 +16,6 @@
         android:key="app_list_mode"
         android:summary="%s"
         android:title="@string/app_list_mode"
-        app:allowDividerAbove="false"
-        app:allowDividerBelow="false" />
-
-    <mono.hg.wrappers.SpinnerPreference
-        android:defaultValue="opaque"
-        android:entries="@array/pref_list_background_title"
-        android:entryValues="@array/pref_list_background_values"
-        android:key="list_bg"
-        android:summary="%s"
-        android:title="@string/list_background"
         app:allowDividerAbove="false"
         app:allowDividerBelow="false" />
 
@@ -53,24 +40,6 @@
         app:allowDividerAbove="false"
         app:allowDividerBelow="false" />
 
-    <mono.hg.wrappers.ThemeableSwitchPreference
-        android:defaultValue="false"
-        android:key="static_favourites_panel_switch"
-        android:summary="@string/static_favourites_desc"
-        android:title="@string/static_favourites" />
-
-    <mono.hg.wrappers.ThemeableSwitchPreference
-        android:defaultValue="false"
-        android:key="static_app_list_switch"
-        android:summary="@string/static_app_list_desc"
-        android:title="@string/static_app_list" />
-
-    <mono.hg.wrappers.ThemeableSwitchPreference
-        android:defaultValue="false"
-        android:key="keep_last_search_switch"
-        android:summary="@string/app_list_keep_search_desc"
-        android:title="@string/app_list_keep_search" />
-
     <mono.hg.wrappers.SpinnerPreference
         android:defaultValue="alphabetical"
         android:entries="@array/pref_app_list_order_titles"
@@ -91,9 +60,4 @@
         app:allowDividerAbove="false"
         app:allowDividerBelow="false" />
 
-    <mono.hg.wrappers.ThemeableSwitchPreference
-        android:defaultValue="false"
-        android:key="keyboard_focus"
-        android:summary="@string/keyboard_focus_desc"
-        android:title="@string/keyboard_focus" />
-</androidx.preference.PreferenceScreen>
+</PreferenceScreen>

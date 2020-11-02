@@ -6,35 +6,38 @@
     <string name="pref_header_about">About</string>
     <string name="pref_header_gestures">Gestures</string>
     <string name="pref_header_wall">Desktop</string>
+    <string name="pref_header_pages">Pages</string>
     <string name="pref_header_list">App list</string>
     <string name="pref_header_interface">Interface</string>
     <string name="pref_header_behavior">Behavior</string>
     <string name="pref_header_web">Web search</string>
     <string name="pref_header_backup_restore">Backup &amp; restore</string>
+    <string name="pref_header_hidden_apps">Hidden apps</string>
+    <string name="pref_header_hidden_apps_desc">Manage list of hidden apps</string>
+    <string name="pref_header_backup">Backup</string>
+    <string name="pref_header_restore">Restore</string>
+    <string name="pref_header_web_provider_title">Web search engines</string>
+    <string name="pref_header_pages_drawer">Drawer</string>
 
     <!-- Summaries for headers/categories -->
     <string name="pref_summary_web">Web search settings</string>
     <string name="pref_summary_gestures">Gesture settings</string>
     <string name="pref_summary_wall">Screen orientation, system bar mode</string>
     <string name="pref_summary_list">Hidden apps, icon pack, app list behavior</string>
+    <string name="pref_summary_pages">Widget-space, app list content, drawer behavior</string>
+    <string name="pref_header_restore_desc">Restore a saved configuration</string>
+    <string name="pref_header_backup_desc">Save launcher configuration</string>
+    <string name="pref_header_web_provider_desc">Add or remove web search engines</string>
 
 
     <!-- Backup and restore -->
-    <string name="pref_header_hidden_apps">Hidden apps</string>
-    <string name="pref_header_hidden_apps_desc">Manage list of hidden apps</string>
-    <string name="pref_header_backup">Backup</string>
-    <string name="pref_header_backup_desc">Save launcher configuration</string>
     <string name="backup_name_hint">Type in a name…</string>
-    <string name="pref_header_restore">Restore</string>
-    <string name="pref_header_restore_desc">Restore a saved configuration</string>
     <string name="reset_preference">Reset configuration</string>
     <string name="reset_preference_desc">Reset all settings to defaults</string>
     <string name="reset_preference_warn">This resets your entire configuration permanently.</string>
     <string name="reset_preference_toast">Configuration reset.</string>
 
     <!-- Web search provider -->
-    <string name="pref_header_web_provider_title">Web search engines</string>
-    <string name="pref_header_web_provider_desc">Add or remove web search engines</string>
     <string name="web_provider_name_hint">Name (must be unique)</string>
     <string name="web_provider_url_hint" translatable="false">https://{url}/search?q=%s</string>
     <!-- Easter egg -->
@@ -87,7 +90,7 @@
     <string name="gesture_action_app">Launch app</string>
     <string name="gesture_action_status">Expand notification bar</string>
     <string name="gesture_action_panel">Expand quick settings panel</string>
-    <string name="gesture_action_list">Open app list</string>
+    <string name="gesture_action_list">Open drawer</string>
 
     <string name="gesture_action_app_dialog_title">Select app</string>
 
@@ -95,9 +98,9 @@
     <string name="app_list_order_normal">A to Z</string>
     <string name="app_list_order_inverse">Z to A</string>
     <!-- Translate this as "An always open app list -->
-    <string name="static_app_list">Always open app list</string>
+    <string name="static_app_list">Always open drawer</string>
     <!-- Translate as "Open the app list when" -->
-    <string name="static_app_list_desc">Open app list when entering launcher</string>
+    <string name="static_app_list_desc">Open drawer when entering launcher</string>
 
     <string name="app_list_keep_search">Keep search text</string>
     <string name="app_list_keep_search_desc">Keep search query after dismissing launcher</string>
@@ -113,7 +116,7 @@
     <string name="web_search_long_press_desc">Unless set to \'Always ask\', long-pressing \'Go\' allows selecting search engine</string>
 
     <string name="keyboard_focus">Keyboard focus</string>
-    <string name="keyboard_focus_desc">Show keyboard when the app list is pulled down</string>
+    <string name="keyboard_focus_desc">Show keyboard when the drawer is pulled down</string>
     <!-- Translate as "Ask about …" -->
     <string name="web_search">Prompt for web search</string>
     <string name="web_search_desc">Asks to take your search online</string>
@@ -130,7 +133,7 @@
     <string name="static_favourites">Static favorite panel</string>
     <string name="static_favourites_desc">Favorite panel visible when scrolling</string>
 
-    <string name="app_list_mode">App list mode</string>
+    <string name="app_list_mode">Mode</string>
     <string name="app_list_mode_list">List</string>
     <string name="app_list_mode_grid">Grid</string>
 
