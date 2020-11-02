@@ -262,6 +262,9 @@ class AppsListPage : GenericPage() {
                     newPackageNameList.subtract(packageNameList)
                         .plus(packageNameList.subtract(newPackageNameList))
                         .forEach { app ->
+                            // There's no need to process ourselves.
+                            if (app.contains(requireContext().packageName)) return@forEach
+
                             // Handle packages changes from another user.
                             val userSplit = app.split("-")
                             val componentName = if (userSplit.size == 2) userSplit[1] else app
@@ -278,7 +281,11 @@ class AppsListPage : GenericPage() {
                                 mutableAdapterList.remove(this)
                             } ?: run {
                                 // Otherwise, try and add this app.
-                                manager.getLaunchIntentForPackage(AppUtils.getPackageName(componentName))
+                                manager.getLaunchIntentForPackage(
+                                    AppUtils.getPackageName(
+                                        componentName
+                                    )
+                                )
                                     ?.apply {
                                         addApp(mutableAdapterList, componentName, user)
                                     }
@@ -399,6 +406,9 @@ class AppsListPage : GenericPage() {
                     )
                 }
 
+                // End early if it has anything to do with us.
+                if (! packageName.isNullOrEmpty() && packageName.contains(requireContext().packageName)) return
+
                 launchIntent?.component?.apply {
                     val hasLauncherCategory = launchIntent.hasCategory(Intent.CATEGORY_LAUNCHER)
 
@@ -487,6 +497,9 @@ class AppsListPage : GenericPage() {
     }
 
     private fun addApp(list: MutableList<App>, componentName: String, user: Long) {
+        // Don't add the app if it has the same package name as us.
+        if (componentName.contains(requireContext().packageName)) return
+
         with(list) {
             // If there's an app with a matching componentName,
             // then it's probably the same app. Update that entry instead
@@ -554,7 +567,9 @@ class AppsListPage : GenericPage() {
             // Handle multiple user scenario here.
             userManager?.apply {
                 this.userProfiles.forEach { profile ->
-                    launcherApps?.getActivityList(null, profile)?.mapTo(list) {
+                    launcherApps?.getActivityList(null, profile)?.filterNot {
+                        it.componentName.flattenToString().contains(requireContext().packageName)
+                    }?.mapTo(list) {
                         if (userUtils?.currentUser != profile) {
                             "${userUtils?.getSerial(profile)}-${it.componentName.flattenToString()}"
                         } else {
@@ -565,9 +580,11 @@ class AppsListPage : GenericPage() {
             }
         } else {
             Intent(Intent.ACTION_MAIN, null).apply { addCategory(Intent.CATEGORY_LAUNCHER) }.also {
-                return manager.queryIntentActivities(it, 0).mapTo(list) { resolve ->
-                    "${resolve.activityInfo.packageName}/${resolve.activityInfo.name}"
-                }
+                return manager.queryIntentActivities(it, 0)
+                    .filterNot { app -> app.activityInfo.packageName.contains(requireContext().packageName) }
+                    .mapTo(list) { resolve ->
+                        "${resolve.activityInfo.packageName}/${resolve.activityInfo.name}"
+                    }
             }
         }
 
