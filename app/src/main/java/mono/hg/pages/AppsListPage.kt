@@ -170,7 +170,9 @@ class AppsListPage : GenericPage() {
             setThumbColor(PreferenceHelper.darkAccent)
             setThumbInactiveColor(PreferenceHelper.accent)
             setPopupBgColor(PreferenceHelper.darkerAccent)
-            adapter = appsAdapter
+            adapter = appsAdapter.apply {
+                setNotifyChangeOfUnfilteredItems(false)
+            }
             layoutManager = appsLayoutManager
             itemAnimator = DefaultItemAnimator()
             if (PreferenceHelper.useGrid()) {
@@ -289,7 +291,7 @@ class AppsListPage : GenericPage() {
                         appsAdapter.updateDataSet(
                             mutableAdapterList.sortedWith(
                                 DisplayNameComparator(PreferenceHelper.isListInverted)
-                            )
+                            ), true
                         )
                     }
                 }
@@ -414,7 +416,7 @@ class AppsListPage : GenericPage() {
                             withContext(Dispatchers.Default) {
                                 addApp(newList, componentName, user)
                             }
-                            appsAdapter.updateDataSet(newList)
+                            appsAdapter.updateDataSet(newList, true)
                         }
                     }
                 } ?: run {
@@ -424,7 +426,7 @@ class AppsListPage : GenericPage() {
                         packageName?.apply {
                             appsAdapter.updateDataSet(appsAdapter.currentItems.filterNot {
                                 it.packageName.contains(this)
-                            })
+                            }, true)
                         }
                     }
                 }
@@ -464,7 +466,7 @@ class AppsListPage : GenericPage() {
                 newList = AppUtils.loadApps(requireActivity(), hideHidden = true, shouldSort = true)
             }
 
-            appsAdapter.updateDataSet(newList)
+            appsAdapter.updateDataSet(newList, true)
             appsAdapter.finishedLoading(true)
 
             // Always update the package count when retrieving apps.
