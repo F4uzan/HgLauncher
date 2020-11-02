@@ -28,10 +28,10 @@
             android:title="@string/pref_header_wall" />
 
         <androidx.preference.Preference
-            android:fragment="mono.hg.preferences.AppListPreference"
+            android:fragment="mono.hg.preferences.PagesPreference"
             android:key="app_list"
-            android:summary="@string/pref_summary_list"
-            android:title="@string/pref_header_list" />
+            android:summary="@string/pref_summary_pages"
+            android:title="@string/pref_header_pages" />
 
     </mono.hg.wrappers.ThemeablePreferenceCategory>
 
