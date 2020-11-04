@@ -59,7 +59,7 @@ object LauncherIconHelper {
      *
      * @param activity      Activity where LauncherApps service can be retrieved.
      * @param componentName Component name of the activity.
-     * @param user          The numerical representation of the user.
+     * @param user          The serial number of the user.
      * @param shouldHide    Whether we are even needed at all.
      *
      * @return Drawable of the icon.
@@ -81,6 +81,20 @@ object LauncherIconHelper {
         } else {
             null
         }
+    }
+
+    /**
+     * Retrieves the default icon for a component name.
+     * This icon is not affected by user preferences.
+     *
+     * @param activity      Activity where LauncherApps service can be retrieved.
+     * @param componentName Component name of the activity.
+     * @param user          The serial number of the user.
+     *
+     * @return Drawable of the icon.
+     */
+    fun getDefaultIcon(activity: Activity, componentName: String, user: Long): Drawable? {
+        return getDefaultIconDrawable(activity, componentName, user)
     }
 
     private fun drawAdaptiveShadow(resources: Resources, icon: Drawable): BitmapDrawable {
@@ -309,19 +323,7 @@ object LauncherIconHelper {
         val componentName = "ComponentInfo{$appPackageName}"
         val iconPackageName =
             PreferenceHelper.preference.getString("icon_pack", "default") ?: "default"
-        val defaultIcon: Drawable? = if (Utils.atLeastLollipop()) {
-            val launcher =
-                activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-            val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
-            launcher.getActivityList(
-                AppUtils.getPackageName(appPackageName),
-                userManager.getUserForSerialNumber(user)
-            )[0].getBadgedIcon(0)
-        } else {
-            ComponentName.unflattenFromString(appPackageName)?.let {
-                packageManager.getActivityIcon(it)
-            }
-        }
+        val defaultIcon: Drawable? = getDefaultIconDrawable(activity, appPackageName, user)
 
         try {
             val iconRes = if ("default" != iconPackageName) {
@@ -426,5 +428,21 @@ object LauncherIconHelper {
         mFrontImage?.apply { mCanvas.drawBitmap(this, 0f, 0f, null) }
 
         return BitmapDrawable(resources, result)
+    }
+
+    private fun getDefaultIconDrawable(activity: Activity, appPackageName: String, user:Long): Drawable? {
+        return if (Utils.atLeastLollipop()) {
+            val launcher =
+                activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+            val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
+            launcher.getActivityList(
+                AppUtils.getPackageName(appPackageName),
+                userManager.getUserForSerialNumber(user)
+            )[0].getBadgedIcon(0)
+        } else {
+            ComponentName.unflattenFromString(appPackageName)?.let {
+                activity.packageManager.getActivityIcon(it)
+            }
+        }
     }
 }

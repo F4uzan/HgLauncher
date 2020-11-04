@@ -336,25 +336,22 @@ object AppUtils {
      * [loadAppsLegacy] is called instead.
      *
      * @param activity      Current foreground activity.
-     * @param hideHidden    Should hidden apps be hidden?
-     * @param shouldSort    Should the list be sorted?
+     * @param isMainList    Whether we are being called for the main app list.
+     *                      Enabling this will apply user-specified sorting
+     *                      and icon preferences.
      *
      * @return List an App List containing the app list itself.
      */
-    fun loadApps(activity: Activity, hideHidden: Boolean, shouldSort: Boolean): List<App> {
+    fun loadApps(activity: Activity, isMainList: Boolean): List<App> {
         return if (Utils.atLeastLollipop()) {
-            loadAppsWithUser(activity, hideHidden, shouldSort)
+            loadAppsWithUser(activity, isMainList)
         } else {
-            loadAppsLegacy(activity, hideHidden, shouldSort)
+            loadAppsLegacy(activity, isMainList)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun loadAppsWithUser(
-        activity: Activity,
-        hideHidden: Boolean,
-        shouldSort: Boolean
-    ): List<App> {
+    private fun loadAppsWithUser(activity: Activity, isMainList: Boolean): List<App> {
         val appsList: MutableList<App> = ArrayList()
         val userUtils = UserUtils(activity)
         val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
@@ -372,17 +369,21 @@ object AppUtils {
                     componentName
                 }
                 val isHidden = (PreferenceHelper.exclusionList.contains(userPackageName))
-                if (! componentName.contains(activity.packageName) && (! isHidden || ! hideHidden)) {
+                if (! componentName.contains(activity.packageName) && (! isHidden || ! isMainList)) {
                     val appName = activityInfo.label.toString()
                     val app = App(appName, componentName, user)
                     app.hintName = PreferenceHelper.getLabel(userPackageName)
                     app.userPackageName = userPackageName
-                    app.icon = LauncherIconHelper.getIcon(
-                        activity,
-                        componentName,
-                        user,
-                        PreferenceHelper.shouldHideIcon()
-                    )
+                    app.icon = if (isMainList) {
+                        LauncherIconHelper.getIcon(
+                            activity,
+                            componentName,
+                            user,
+                            PreferenceHelper.shouldHideIcon()
+                        )
+                    } else {
+                        LauncherIconHelper.getDefaultIcon(activity, componentName, user)
+                    }
                     app.isAppHidden = isHidden
                     if (! appsList.contains(app)) {
                         appsList.add(app)
@@ -391,15 +392,11 @@ object AppUtils {
             }
         }
 
-        sortAppList(appsList, shouldSort)
+        sortAppList(appsList, isMainList)
         return appsList
     }
 
-    private fun loadAppsLegacy(
-        activity: Activity,
-        hideHidden: Boolean,
-        shouldSort: Boolean
-    ): List<App> {
+    private fun loadAppsLegacy(activity: Activity, isMainList: Boolean): List<App> {
         val appsList: MutableList<App> = ArrayList()
         val manager = activity.packageManager
         val userUtils = UserUtils(activity)
@@ -409,15 +406,21 @@ object AppUtils {
             val packageName = it.activityInfo.packageName
             val componentName = packageName + "/" + it.activityInfo.name
             val isHidden = PreferenceHelper.exclusionList.contains(componentName)
-            if (! componentName.contains(activity.packageName) && (! isHidden || ! hideHidden)) {
+            if (! componentName.contains(activity.packageName) && (! isHidden || ! isMainList)) {
                 val appName = it.loadLabel(manager).toString()
                 val app = App(appName, componentName, userUtils.currentSerial)
                 app.hintName = PreferenceHelper.getLabel(componentName)
                 app.userPackageName = componentName
-                app.icon = LauncherIconHelper.getIcon(
-                    activity, componentName,
-                    userUtils.currentSerial, PreferenceHelper.shouldHideIcon()
-                )
+                app.icon = if (isMainList) {
+                    LauncherIconHelper.getIcon(
+                        activity,
+                        componentName,
+                        userUtils.currentSerial,
+                        PreferenceHelper.shouldHideIcon()
+                    )
+                } else {
+                    LauncherIconHelper.getDefaultIcon(activity, componentName, userUtils.currentSerial)
+                }
                 app.isAppHidden = isHidden
                 if (! appsList.contains(app)) {
                     appsList.add(app)
@@ -425,7 +428,7 @@ object AppUtils {
             }
         }
 
-        sortAppList(appsList, shouldSort)
+        sortAppList(appsList, isMainList)
         return appsList
     }
 

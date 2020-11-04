@@ -117,13 +117,7 @@ class HiddenAppsPreference : PreferenceFragmentCompat() {
             (requireActivity() as SettingsActivity).progressBar.compatShow()
             withContext(Dispatchers.Default) {
                 appList.clear()
-                appList.addAll(
-                    AppUtils.loadApps(
-                        requireActivity(),
-                        hideHidden = false,
-                        shouldSort = false
-                    )
-                )
+                appList.addAll(AppUtils.loadApps(requireActivity(), false))
             }
             hiddenAppAdapter?.notifyDataSetChanged()
             requireActivity().invalidateOptionsMenu()
