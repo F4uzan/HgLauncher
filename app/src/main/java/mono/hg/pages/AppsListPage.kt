@@ -58,14 +58,9 @@ import kotlin.collections.ArrayList
  */
 class AppsListPage : GenericPage() {
     /*
-     * List containing installed apps.
-     */
-    private val appsList = ArrayList<App>()
-
-    /*
      * Adapter for installed apps.
      */
-    private val appsAdapter = AppAdapter(appsList)
+    private val appsAdapter = AppAdapter(ArrayList<App>())
 
     /*
      * RecyclerView for app list.
@@ -285,8 +280,7 @@ class AppsListPage : GenericPage() {
                                     AppUtils.getPackageName(
                                         componentName
                                     )
-                                )
-                                    ?.apply {
+                                )?.apply {
                                         addApp(mutableAdapterList, componentName, user)
                                     }
                             }
@@ -470,13 +464,10 @@ class AppsListPage : GenericPage() {
 
     private fun fetchApps() {
         fetchAppsJob = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            var newList: List<App>
-            withContext(Dispatchers.Default) {
+            appsAdapter.updateDataSet(withContext(Dispatchers.Default) {
                 getPackageNameList(packageNameList)
-                newList = AppUtils.loadApps(requireActivity(), hideHidden = true, shouldSort = true)
-            }
-
-            appsAdapter.updateDataSet(newList, true)
+                AppUtils.loadApps(requireActivity(), hideHidden = true, shouldSort = true)
+            }, true)
             appsAdapter.finishedLoading(true)
 
             // Always update the package count when retrieving apps.
@@ -491,7 +482,6 @@ class AppsListPage : GenericPage() {
             PreferenceHelper.update("hidden_apps", excludedAppsList)
 
             // Reload the app list!
-            appsList.remove(this)
             appsAdapter.removeItem(positionInAdapter)
         }
     }

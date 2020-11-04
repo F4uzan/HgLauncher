@@ -3,10 +3,10 @@ package mono.hg.adapters
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import mono.hg.helpers.PreferenceHelper
 import mono.hg.pages.AppsListPage
 import mono.hg.pages.GenericPage
 import mono.hg.pages.WidgetsListPage
-import mono.hg.helpers.PreferenceHelper
 
 /**
  * The adapter used to hold Pages such as [WidgetsListPage] and [AppsListPage].
@@ -25,7 +25,19 @@ class PageAdapter(fragment: FragmentActivity, viewPager: ViewPager2) :
             0 -> return if (PreferenceHelper.widgetSpaceVisible()) WidgetsListPage() else AppsListPage()
             1 -> if (PreferenceHelper.widgetSpaceVisible()) return AppsListPage()
         }
-        return GenericPage() // Return a generic page as a fallback.
+
+        // Return a generic page as a fallback.
+        return object: GenericPage() {
+            override fun commitSearch(query: String) {}
+
+            override fun isAcceptingSearch(): Boolean {
+                return false
+            }
+
+            override fun launchPreselection(): Boolean {
+                return false
+            }
+        }
     }
 
     /**

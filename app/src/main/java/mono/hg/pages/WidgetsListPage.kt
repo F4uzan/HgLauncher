@@ -164,7 +164,14 @@ class WidgetsListPage : GenericPage() {
         }
     }
 
+    // Unused. This page doesn't support search.
+    override fun commitSearch(query: String) {}
+
     override fun isAcceptingSearch(): Boolean {
+        return false
+    }
+
+    override fun launchPreselection(): Boolean {
         return false
     }
 
