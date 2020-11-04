@@ -466,7 +466,7 @@ class AppsListPage : GenericPage() {
         fetchAppsJob = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             appsAdapter.updateDataSet(withContext(Dispatchers.Default) {
                 getPackageNameList(packageNameList)
-                AppUtils.loadApps(requireActivity(), hideHidden = true, shouldSort = true)
+                AppUtils.loadApps(requireActivity(), true)
             }, true)
             appsAdapter.finishedLoading(true)
 
