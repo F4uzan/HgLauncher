@@ -7,9 +7,7 @@ import mono.hg.LauncherActivity
  * A Fragment class that is specifically used to host Pages.
  * Pages must extend from this class, as LauncherActivity expects proper call to handle searches.
  */
-open class GenericPage : Fragment() {
-    private var acceptsSearch: Boolean = false
-
+abstract class GenericPage : Fragment() {
     /**
      * Returns the attached LauncherActivity.
      *
@@ -26,27 +24,14 @@ open class GenericPage : Fragment() {
      *
      * @param query The query used to filter the items.
      */
-    open fun commitSearch(query: String) {
-        // Override when necessary.
-    }
+    abstract fun commitSearch(query: String)
 
     /**
      * Checks if a Page is accepting search queries.
      *
      * @return Boolean Whether the Page can accept search queries.
      */
-    open fun isAcceptingSearch(): Boolean {
-        return acceptsSearch
-    }
-
-    /**
-     * A setter to allow a Page's items to be searched.
-     *
-     * @param search Does this Page accepts search queries?
-     */
-    fun acceptsSearch(search: Boolean) {
-        this.acceptsSearch = search
-    }
+    abstract fun isAcceptingSearch(): Boolean
 
     /**
      * When searching, the keyboard 'Search'/'Enter' button
@@ -58,7 +43,5 @@ open class GenericPage : Fragment() {
      *                  otherwise, let the LauncherActivity
      *                  consume the key press.
      */
-    open fun launchPreselection(): Boolean {
-        return false
-    }
+    abstract fun launchPreselection(): Boolean
 }
