@@ -453,6 +453,10 @@ class LauncherActivity : AppCompatActivity() {
                         isContextVisible = false
                     }
                 })
+            "open_apps" -> {
+                viewPager.currentItem = if (PreferenceHelper.widgetSpaceVisible()) 1 else 0
+                doThis(SHOW_PANEL)
+            }
             "open_widgets" -> {
                 viewPager.currentItem = 0
                 doThis(SHOW_PANEL)

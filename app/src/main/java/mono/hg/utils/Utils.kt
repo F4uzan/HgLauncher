@@ -218,7 +218,8 @@ object Utils {
             "widget" -> activity.doThis("open_widgets")
             "status" -> ActivityServiceUtils.expandStatusBar(activity)
             "panel" -> ActivityServiceUtils.expandSettingsPanel(activity)
-            "list" -> activity.doThis("show_panel")
+            "drawer" -> activity.doThis("show_panel")
+            "list" -> activity.doThis("open_apps")
             "none" -> {
             }
             else -> try {
