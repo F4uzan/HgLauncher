@@ -454,11 +454,11 @@ class LauncherActivity : AppCompatActivity() {
                     }
                 })
             "open_apps" -> {
-                viewPager.currentItem = if (PreferenceHelper.widgetSpaceVisible()) 1 else 0
+                viewPager.setCurrentItem(if (PreferenceHelper.widgetSpaceVisible()) 1 else 0, false)
                 doThis(SHOW_PANEL)
             }
             "open_widgets" -> {
-                viewPager.currentItem = 0
+                viewPager.setCurrentItem(0, false)
                 doThis(SHOW_PANEL)
             }
             else -> {
