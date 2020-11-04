@@ -60,8 +60,9 @@
 
     <string-array name="pref_gesture_actions_title">
         <item>@string/gesture_action_default</item>
-        <item>@string/gesture_action_widget</item>
+        <item>@string/gesture_action_drawer</item>
         <item>@string/gesture_action_list</item>
+        <item>@string/gesture_action_widget</item>
         <item>@string/gesture_action_status</item>
         <item>@string/gesture_action_panel</item>
         <item>@string/gesture_action_app</item>
@@ -69,8 +70,9 @@
     </string-array>
     <string-array name="pref_gesture_actions_values">
         <item>@string/gesture_action_default_value</item>
-        <item>widget</item>
+        <item>drawer</item>
         <item>list</item>
+        <item>widget</item>
         <item>status</item>
         <item>panel</item>
         <item>app</item>

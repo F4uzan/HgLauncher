@@ -62,7 +62,7 @@ object PreferenceHelper {
     private var gesture_right_action: String = "none"
     private var gesture_up_action: String = "none"
     private var gesture_down_action: String = "none"
-    private var gesture_single_tap_action: String = "list"
+    private var gesture_single_tap_action: String = "drawer"
     private var gesture_double_tap_action: String = "none"
     private var gesture_pinch_action: String = "none"
     var windowBarMode: String? = null
@@ -301,7 +301,7 @@ object PreferenceHelper {
         gesture_right_action = preference.getString("gesture_right", "none") ?: "none"
         gesture_up_action = preference.getString("gesture_up", "none") ?: "none"
         gesture_down_action = preference.getString("gesture_down", "none") ?: "none"
-        gesture_single_tap_action = preference.getString("gesture_single_tap", "list") ?: "list"
+        gesture_single_tap_action = preference.getString("gesture_single_tap", "drawer") ?: "drawer"
         gesture_double_tap_action = preference.getString("gesture_double_tap", "none") ?: "none"
         gesture_pinch_action = preference.getString("gesture_pinch", "none") ?: "none"
         gestureHandler = ComponentName.unflattenFromString(
