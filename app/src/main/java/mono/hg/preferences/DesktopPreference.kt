@@ -16,6 +16,13 @@ import mono.hg.utils.Utils
 class DesktopPreference : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.pref_desktop, rootKey)
+
+        // Window bar hiding works only reliably in KitKat and above.
+        if (Utils.atLeastKitKat()) {
+            findPreference<Preference>("windowbar_mode")?.isVisible = true
+        } else {
+            findPreference<Preference>("windowbar_status_switch")?.isVisible = true
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -25,12 +32,5 @@ class DesktopPreference : PreferenceFragmentCompat() {
                 requireActivity().requestedOrientation = Integer.parseInt(newValue as String)
                 true
             }
-
-        // Window bar hiding works only reliably in KitKat and above.
-        if (Utils.atLeastKitKat()) {
-            findPreference<Preference>("windowbar_mode")?.isVisible = true
-        } else {
-            findPreference<Preference>("windowbar_status_switch")?.isVisible = true
-        }
     }
 }

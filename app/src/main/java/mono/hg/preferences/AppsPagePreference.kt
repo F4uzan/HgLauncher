@@ -21,6 +21,9 @@ import java.util.*
 class AppsPagePreference : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.pref_page_apps, rootKey)
+
+        // Adaptive icon is not available before Android O/API 26.
+        findPreference<Preference>("adaptive_shade_switch")?.isVisible = Utils.atLeastOreo()
     }
 
     override fun onResume() {
@@ -39,9 +42,6 @@ class AppsPagePreference : PreferenceFragmentCompat() {
             }
             setIconList(this)
         }
-
-        // Adaptive icon is not available before Android O/API 26.
-        findPreference<Preference>("adaptive_shade_switch")?.isVisible = Utils.atLeastOreo()
     }
 
 
