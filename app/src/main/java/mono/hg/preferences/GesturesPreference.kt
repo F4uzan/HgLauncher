@@ -62,7 +62,10 @@ class GesturesPreference : PreferenceFragmentCompat() {
         val prefScreen: PreferenceScreen = preferenceScreen
         val prefCount: Int = prefScreen.preferenceCount
 
-        getAppList
+        // Load the app list required for the 'launch app' menu.
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            getAppList
+        }
 
         // We can safely iterate through all the preferences and assume they're ListPreference
         // because GesturesPreference has nothing else aside from that.
