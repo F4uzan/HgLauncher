@@ -254,37 +254,36 @@ class AppsListPage : GenericPage() {
                     // Since the new list and the old list can vary in size,
                     // we can't really just subtract it. We need to subtract
                     // twice then add the differences together.
-                    newPackageNameList.subtract(packageNameList)
-                        .plus(packageNameList.subtract(newPackageNameList))
-                        .forEach { app ->
-                            // There's no need to process ourselves.
-                            if (app.contains(requireContext().packageName)) return@forEach
+                    val start = newPackageNameList.minus(packageNameList)
+                    val end = packageNameList.minus(newPackageNameList)
 
-                            // Handle packages changes from another user.
-                            val userSplit = app.split("-")
-                            val componentName = if (userSplit.size == 2) userSplit[1] else app
-                            val user =
-                                if (userSplit.size == 2) userSplit[0].toLong() else userUtils?.currentSerial
-                                    ?: 0
+                    start.plus(end).forEach { app ->
+                        // There's no need to process ourselves.
+                        if (app.contains(requireContext().packageName)) return@forEach
 
-                            // First, check if this user & component name combination
-                            // exists in the current list. This is because our list
-                            // won't be notified on an app update. There can only
-                            // be two states: installing or removing.
-                            mutableAdapterList.find { it.userPackageName.contains(app) }?.apply {
-                                // If it exists, then it's probably an uninstall signal.
-                                mutableAdapterList.remove(this)
-                            } ?: run {
-                                // Otherwise, try and add this app.
-                                manager.getLaunchIntentForPackage(
-                                    AppUtils.getPackageName(
-                                        componentName
-                                    )
-                                )?.apply {
-                                        addApp(mutableAdapterList, componentName, user)
-                                    }
+                        // Handle packages changes from another user.
+                        val userSplit = app.split("-")
+                        val componentName = if (userSplit.size == 2) userSplit[1] else app
+                        val user =
+                            if (userSplit.size == 2) userSplit[0].toLong() else userUtils?.currentSerial
+                                ?: 0
+
+                        // First, check if this user & component name combination
+                        // exists in the current list. This is because our list
+                        // won't be notified on an app update. There can only
+                        // be two states: installing or removing.
+                        mutableAdapterList.find { it.userPackageName.contains(app) }?.apply {
+                            // If it exists, then it's probably an uninstall signal.
+                            mutableAdapterList.remove(this)
+                        } ?: run {
+                            // Otherwise, try and add this app.
+                            manager.getLaunchIntentForPackage(
+                                AppUtils.getPackageName(componentName)
+                            )?.apply {
+                                addApp(mutableAdapterList, componentName, user)
                             }
                         }
+                    }
                 }
 
                 withContext(Dispatchers.Main) {
