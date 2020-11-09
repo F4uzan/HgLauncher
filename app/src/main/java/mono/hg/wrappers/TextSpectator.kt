@@ -104,7 +104,7 @@ open class TextSpectator protected constructor(editText: EditText) : TextWatcher
 
     override fun afterTextChanged(s: Editable) {
         if (s.isNotEmpty()) {
-            if (s[0] == ' ') s.delete(0, 1)
+            if (s[0] == ' ' && s.length < 2) s.delete(0, 1)
 
             s.getSpans(0, s.length, CharacterStyle::class.java).forEach { s.removeSpan(it) }
         }
