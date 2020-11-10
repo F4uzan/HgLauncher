@@ -2,4 +2,5 @@
     <dimen name="uniform_panel_margin">8dp</dimen>
     <dimen name="search_bar_size">48dp</dimen>
     <dimen name="item_offset">2dp</dimen>
+    <dimen name="grid_item_width">72dp</dimen>
 </resources>
