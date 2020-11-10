@@ -4,6 +4,9 @@ Maintainer and developer
 <b>Scott MacDonald (macdonaldster)</b>
 Developer
 
+<b>Tebriz (tebriz159)</b>
+Logo designer
+
 HgLauncher uses the following open-source libraries:
 <b>AndroidX Support Libraries</b>
 Google and contributors
