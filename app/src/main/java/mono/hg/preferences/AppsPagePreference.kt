@@ -10,7 +10,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import mono.hg.R
 import mono.hg.SettingsActivity
-import mono.hg.helpers.PreferenceHelper
 import mono.hg.utils.Utils
 import java.util.*
 
@@ -24,6 +23,8 @@ class AppsPagePreference : PreferenceFragmentCompat() {
 
         // Adaptive icon is not available before Android O/API 26.
         findPreference<Preference>("adaptive_shade_switch")?.isVisible = Utils.atLeastOreo()
+
+        findPreference<ListPreference>("icon_pack")?.let { setIconList(it) }
     }
 
     override fun onResume() {
@@ -35,13 +36,6 @@ class AppsPagePreference : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        findPreference<ListPreference>("icon_pack")?.apply {
-            onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-                PreferenceHelper.update("require_refresh", true)
-                true
-            }
-            setIconList(this)
-        }
     }
 
 
