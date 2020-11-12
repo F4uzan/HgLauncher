@@ -5,7 +5,7 @@
     <string name="pref_header_about">대하여</string>
     <string name="title_activity_settings">설정</string>
     <string name="web_provider_name_hint">이름 ( 고유해야함)</string>
-    <string name="pref_header_web_provider_desc">"웹 검색 엔진의 추가  삭제"</string>
+    <string name="pref_header_web_provider_desc">웹 검색 엔진의 추가 혹은 삭제</string>
     <string name="pref_header_web_provider_title">웹 검색 엔진</string>
     <string name="pref_header_hidden_apps">숨김 앱</string>
     <string name="pref_header_hidden_apps_desc">숨김 앱 관리 목록</string>
@@ -43,4 +43,15 @@
     <string name="dialog_ok">네</string>
     <string name="version_key_toast">확인을 위해 다시 두드리세요.</string>
     <string name="reset_preference_toast">구성 재설정.</string>
+    <string name="reset_preference_desc">모든 설정 초기화</string>
+    <string name="reset_preference">배열 리셋</string>
+    <string name="backup_name_hint">이름을 입력하세요…</string>
+    <string name="pref_header_backup_desc">런처 배열 저장</string>
+    <string name="pref_header_restore_desc">저장된 배열 복원</string>
+    <string name="pref_summary_pages">위젯-스페이스, 앱 목록 콘텐츠, 보관함 작동</string>
+    <string name="pref_summary_list">숨김 앱, 아이콘 꾸러미, 앱 목록 동작</string>
+    <string name="pref_summary_wall">화면 방향, 시스템 바 모드</string>
+    <string name="pref_header_pages_drawer">보관함</string>
+    <string name="pref_header_restore">복원</string>
+    <string name="pref_header_pages">페이지</string>
 </resources>
