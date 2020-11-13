@@ -31,6 +31,9 @@ German translation
 <b>giupardeb (giupardeb)</b>
 Italian translation
 
+<b>harryjdh (harryjdh)</b>
+Korean translation
+
 <b>Heimen Stoffels (Vistaus)</b>
 Dutch translation
 
