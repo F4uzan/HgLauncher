@@ -5,8 +5,8 @@
     <string name="pref_app_launch_anim">Opstartanimatie</string>
     <string name="app_list_keep_search_desc">Bewaar de zoekopdracht na het verlaten van het startscherm</string>
     <string name="app_list_keep_search">Zoektermen bewaren</string>
-    <string name="static_app_list_desc">App-lijst openen bij terugkeren naar startscherm</string>
-    <string name="static_app_list">App-lijst altijd openen</string>
+    <string name="static_app_list_desc">Applijst openen bij terugkeren naar startscherm</string>
+    <string name="static_app_list">Applijst altijd openen</string>
     <string name="app_list_order_inverse">Z tot A</string>
     <string name="app_list_order_normal">A tot Z</string>
     <string name="pref_title_app_list_order">Volgorde</string>
@@ -97,7 +97,7 @@
     <string name="shadow_adaptive_icon">Adaptieve pictogramschaduw</string>
     <string name="web_search_desc">Toont de vraag of je online wilt zoeken</string>
     <string name="web_search">Vragen alvorens online te zoeken</string>
-    <string name="keyboard_focus_desc">Toon het toetsenbord na het openen van de app-lijst</string>
+    <string name="keyboard_focus_desc">Toon het toetsenbord na het openen van de applijst</string>
     <string name="keyboard_focus">Toetsenbord tonen</string>
     <string name="web_search_long_press_desc">Houd \'Gaan\' lang ingedrukt om een zoekmachine te kiezen, tenzij \'Altijd vragen\' is ingesteld</string>
     <string name="web_search_long_press">Uitgebreid zoekmenu</string>
@@ -105,7 +105,11 @@
     <string name="anim_list_slide_in">Glijden</string>
     <string name="app_theme_auto">Automatisch</string>
     <string name="app_list_mode_grid">Raster</string>
-    <string name="app_list_mode">Overzichtsmodus</string>
+    <string name="app_list_mode">Modus</string>
     <string name="app_list_mode_list">Lijst</string>
     <string name="gesture_pinch">Knijpen</string>
+    <string name="gesture_action_drawer">Applijst openen</string>
+    <string name="pref_summary_pages">Widgetruimte, applijstinhoud, applijstgedrag</string>
+    <string name="pref_header_pages_drawer">Applijst</string>
+    <string name="pref_header_pages">Pagina\'s</string>
 </resources>
