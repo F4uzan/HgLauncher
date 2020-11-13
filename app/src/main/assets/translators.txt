@@ -75,3 +75,6 @@ Polish translation
 
 <b>권나연</b>
 Korean translation
+
+<b>김민우</b>
+Korean translation
