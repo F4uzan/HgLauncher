@@ -15,12 +15,18 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import mono.hg.R
+import mono.hg.SettingsActivity
 import mono.hg.databinding.FragmentCreditsDialogBinding
 import mono.hg.databinding.FragmentCreditsDisplayBinding
 import mono.hg.helpers.PreferenceHelper
+import mono.hg.utils.compatHide
+import mono.hg.utils.compatShow
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -105,12 +111,20 @@ class CreditsDisplayFragment(val file: String) : Fragment() {
         binding?.creditsPlaceholder?.apply {
             highlightColor = PreferenceHelper.darkAccent
             setLinkTextColor(PreferenceHelper.accent)
-            text = HtmlCompat.fromHtml(readCredits(), HtmlCompat.FROM_HTML_MODE_COMPACT)
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                text = withContext(Dispatchers.IO) {
+                    HtmlCompat.fromHtml(readCredits(), HtmlCompat.FROM_HTML_MODE_COMPACT)
+                }
+            }
             movementMethod = LinkMovementMethod.getInstance()
         }
     }
 
-    private fun readCredits(): String {
+    private suspend fun readCredits(): String {
+        withContext(Dispatchers.Main) {
+            (requireActivity() as SettingsActivity).progressBar.compatShow()
+        }
+
         val stringBuilder = StringBuilder()
 
         BufferedReader(InputStreamReader(requireActivity().assets.open(file))).use {
@@ -120,6 +134,9 @@ class CreditsDisplayFragment(val file: String) : Fragment() {
             }
         }
 
-        return stringBuilder.toString().replace("\n","<br/>")
+        withContext(Dispatchers.Main) {
+            (requireActivity() as SettingsActivity).progressBar.compatHide()
+        }
+        return stringBuilder.toString().replace("\n", "<br/>")
     }
 }
