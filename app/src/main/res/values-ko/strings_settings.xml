@@ -2,7 +2,7 @@
 <resources>
     <string name="pref_header_wall">데스크탑</string>
     <string name="pref_header_gestures">제스처</string>
-    <string name="pref_header_about">About</string>
+    <string name="pref_header_about">대하여</string>
     <string name="title_activity_settings">설정</string>
     <string name="web_provider_name_hint">이름 ( 고유해야함)</string>
     <string name="pref_header_web_provider_desc">"웹 검색 엔진의 추가  삭제"</string>
@@ -17,4 +17,30 @@
     <string name="pref_header_web">웹 검색</string>
     <string name="pref_header_behavior">행동</string>
     <string name="pref_header_interface">인터페이스</string>
+    <string name="gesture_pinch">꼬집기</string>
+    <string name="gesture_double_tap">두 번 두드리기</string>
+    <string name="gesture_single_tap">두드리기</string>
+    <string name="gesture_left">바꾸기</string>
+    <string name="app_theme_accent_dialog">색상을 고르시오</string>
+    <string name="app_theme_accent">억양</string>
+    <string name="windowbar_mode_both">둘 다</string>
+    <string name="windowbar_mode_nav">길찾기 막대</string>
+    <string name="windowbar_mode_status">상태 막대</string>
+    <string name="windowbar_mode">설정 막대들을 숨기기</string>
+    <string name="app_theme_black">검정</string>
+    <string name="app_theme_dark">어두운</string>
+    <string name="app_theme_light">밝은</string>
+    <string name="app_theme_auto">자동</string>
+    <string name="app_theme">이론</string>
+    <string name="about_credits_desc">HgLauncher의 제작자</string>
+    <string name="about_credits">신용 거래</string>
+    <string name="about_credits_dialog_title">신용 거래</string>
+    <string name="backup_empty">백업 이름을 입력하시오.</string>
+    <string name="backup_complete">저장된 백업.</string>
+    <string name="restore_complete">복원된 백업.</string>
+    <string name="backup_exist_overwrite">덮어쓰기</string>
+    <string name="dialog_cancel">취소하다</string>
+    <string name="dialog_ok">네</string>
+    <string name="version_key_toast">확인을 위해 다시 두드리세요.</string>
+    <string name="reset_preference_toast">구성 재설정.</string>
 </resources>
