@@ -792,6 +792,10 @@ class LauncherActivity : AppCompatActivity() {
                             clearSearchBar(searchBar)
                         }
 
+                        // Make sure the panel responds to touch here,
+                        // since we have to leverage it for the interactivity of the search bar.
+                        slidingHome.isTouchEnabled = true
+
                         // Animate search container entering the view.
                         if (! ActivityServiceUtils.isPowerSaving(this@LauncherActivity)) {
                             searchContainer.animate().alpha(1f)
@@ -816,6 +820,9 @@ class LauncherActivity : AppCompatActivity() {
                     SlidingUpPanelLayout.PanelState.EXPANDED -> {
                         // Hide keyboard if container is invisible.
                         ActivityServiceUtils.hideSoftKeyboard(this@LauncherActivity)
+
+                        // Disable the drawer when the search bar is invisible.
+                        slidingHome.isTouchEnabled = false
 
                         // Toggle the visibility early.
                         searchContainer.visibility = View.INVISIBLE
