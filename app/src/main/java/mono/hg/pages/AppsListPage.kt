@@ -45,6 +45,7 @@ import mono.hg.utils.UserUtils
 import mono.hg.utils.Utils
 import mono.hg.utils.ViewUtils
 import mono.hg.utils.applyAccent
+import mono.hg.utils.autoFitColumns
 import mono.hg.views.CustomGridLayoutManager
 import mono.hg.views.TogglingLinearLayoutManager
 import mono.hg.wrappers.DisplayNameComparator
@@ -151,10 +152,7 @@ class AppsListPage : GenericPage() {
         registerBroadcast()
 
         appsLayoutManager = if (PreferenceHelper.useGrid()) {
-            CustomGridLayoutManager(
-                requireContext(),
-                resources.getInteger(R.integer.column_default_size)
-            )
+            CustomGridLayoutManager(requireContext(), 1) // Span will be set with autoFitColumns below.
         } else {
             TogglingLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
         }
@@ -173,6 +171,9 @@ class AppsListPage : GenericPage() {
             if (PreferenceHelper.useGrid()) {
                 addItemDecoration(itemDecoration)
             }
+
+            // Set the span for GridLayoutManager.
+            autoFitColumns(resources.getDimensionPixelSize(R.dimen.grid_item_width))
         }
 
         // Add long click listener to apps in the apps list.

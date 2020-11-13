@@ -22,6 +22,7 @@ import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.ProgressIndicator
 import mono.hg.R
@@ -321,7 +322,10 @@ fun AppCompatSeekBar.applyAccent() {
         // Android 4.0.x have no proper way to set the thumb color.
         // So, we have to workaround this by getting a drawable, coloring it,
         // and then applying said drawable as the thumb.
-        AppCompatResources.getDrawable(context, androidx.appcompat.R.drawable.abc_seekbar_thumb_material)
+        AppCompatResources.getDrawable(
+            context,
+            androidx.appcompat.R.drawable.abc_seekbar_thumb_material
+        )
             ?.let { DrawableCompat.wrap(it) }.also {
                 thumb = it
                 it?.let { thumb -> DrawableCompat.setTint(thumb, PreferenceHelper.accent) }
@@ -369,5 +373,22 @@ fun AlertDialog.applyAccent() {
         getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(this)
         getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(this)
         getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(this)
+    }
+}
+
+/**
+ * Extension function for [RecyclerView].
+ * Automatically resizes the column of a GridLayoutManager.
+ *
+ * Taken from https://stackoverflow.com/a/63494388.
+ *
+ * @param columnWidth - in dp
+ * @author Lior Iluz (https://stackoverflow.com/users/444324/lior-iluz)
+ */
+fun RecyclerView.autoFitColumns(columnWidth: Int) {
+    if (this.layoutManager is GridLayoutManager) {
+        val displayMetrics = this.context.resources.displayMetrics
+        (this.layoutManager as GridLayoutManager).spanCount =
+            (displayMetrics.widthPixels / columnWidth)
     }
 }

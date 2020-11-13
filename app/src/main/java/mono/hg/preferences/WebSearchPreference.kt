@@ -1,7 +1,6 @@
 package mono.hg.preferences
 
 import android.os.Bundle
-import android.view.View
 import androidx.annotation.Keep
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
@@ -20,10 +19,7 @@ class WebSearchPreference : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.pref_web, rootKey)
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         providerList = findPreference("search_provider")
         setProviderList(providerList)
     }

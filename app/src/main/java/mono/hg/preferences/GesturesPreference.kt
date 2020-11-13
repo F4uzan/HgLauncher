@@ -76,6 +76,7 @@ class GesturesPreference : PreferenceFragmentCompat() {
             }
         }
 
+        // Load the gesture handler list.
         setGestureHandlerList(findPreference("gesture_handler"))
     }
 

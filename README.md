@@ -1,10 +1,25 @@
 ## HgLauncher
 
- [![Build Status](https://travis-ci.org/F4uzan/HgLauncher.svg?branch=master)](https://travis-ci.org/F4uzan/HgLauncher)
- [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7b102385347b4be5b180ce56391d1bd1)](https://app.codacy.com/app/F4uzan/HgLauncher?utm_source=github.com&utm_medium=referral&utm_content=F4uzan/HgLauncher&utm_campaign=Badge_Grade_Dashboard)
- [![Weblate](https://hosted.weblate.org/widgets/hglauncher/-/svg-badge.svg)](https://hosted.weblate.org/engage/hglauncher/?utm_source=widget)
-
- [![GitHub Release](https://img.shields.io/github/release/F4uzan/HgLauncher.svg?logo=github)](https://github.com/F4uzan/HgLauncher/releases) [![F-Droid](https://img.shields.io/f-droid/v/mono.hg.svg)](https://f-droid.org/app/mono.hg)
+<p align="center">
+    <a href="https://travis-ci.org/F4uzan/HgLauncher.svg?branch=master" alt="TravisCI">
+        <img src="https://travis-ci.org/F4uzan/HgLauncher.svg?branch=master" /></a>
+    <a href="https://app.codacy.com/app/F4uzan/HgLauncher?utm_source=github.com&utm_medium=referral&utm_content=F4uzan/HgLauncher&utm_campaign=Badge_Grade_Dashboard" alt="Codacy">
+        <img src="https://api.codacy.com/project/badge/Grade/7b102385347b4be5b180ce56391d1bd1" /></a>
+     <a href="https://hosted.weblate.org/engage/hglauncher/?utm_source=widget" alt="Weblate">
+        <img src="https://hosted.weblate.org/widgets/hglauncher/-/svg-badge.svg" /></a>
+ </p>
+<p align="center">
+    <a href="https://github.com/F4uzan/HgLauncher/releases" alt="GitHub Releases">
+        <img src="https://img.shields.io/github/release/F4uzan/HgLauncher.svg?logo=github" /></a>
+    <a href="https://f-droid.org/app/mono.hg" alt="F-Droid Releases">
+        <img src="https://img.shields.io/f-droid/v/mono.hg.svg" /></a>
+</p>
+<p align="center">
+    <a href="https://discord.gg/AD94mvts8w" alt="F-Droid Releases">
+        <img src="https://img.shields.io/discord/775600810481418240.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2" /></a>
+</p>
+ 
+---
 
 A scrolling list of apps to launch them from, if you found what you want, look no further.
 
@@ -47,4 +62,3 @@ Bug reports and feature requests can be made through the [Issue Tracker](https:/
 > This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 > 
 > See the [GNU General Public License version 3](https://www.gnu.org/licenses/gpl-3.0.html/) for more details.
-
