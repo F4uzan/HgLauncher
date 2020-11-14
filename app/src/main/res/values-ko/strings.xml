@@ -15,7 +15,7 @@
     <string name="search_hint">검색…</string>
     <string name="action_info">앱 정보</string>
     <string name="err_provider_exists">검색 엔진 이름은 고유해야합니다.</string>
-    <string name="action_uninstall">설치해제 \? 삭제\?</string>
+    <string name="action_uninstall">제거</string>
     <string name="action_backup">백업</string>
     <string name="action_hide">숨김</string>
     <string name="action_unpin">해제</string>
@@ -28,4 +28,15 @@
     <string name="action_up_widget">위로 이동</string>
     <string name="action_remove_widget">삭제</string>
     <string name="action_view_widgets">위젯-스페이스</string>
+    <string name="search_provider_none">항상 묻다</string>
+    <string name="desc_clear_search">검색 문의 지우기</string>
+    <string name="desc_icon">앱</string>
+    <string name="dialog_title_shorthand">속기 설정</string>
+    <string name="dialog_title_edit_provider">제공자 편집</string>
+    <string name="dialog_title_add_provider">제공자 추가</string>
+    <string name="search_web_button">가다</string>
+    <string name="search_web_button_prompt">함께</string>
+    <string name="action_shortcuts">지름길</string>
+    <string name="action_actions">동작</string>
+    <string name="action_shorthand">속기</string>
 </resources>
