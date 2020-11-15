@@ -2,7 +2,7 @@
 <resources>
     <string name="pref_header_wall">데스크탑</string>
     <string name="pref_header_gestures">제스처</string>
-    <string name="pref_header_about">대하여</string>
+    <string name="pref_header_about"></string>
     <string name="title_activity_settings">설정</string>
     <string name="web_provider_name_hint">이름 ( 고유해야함)</string>
     <string name="pref_header_web_provider_desc">웹 검색 엔진의 추가 혹은 삭제</string>
@@ -20,9 +20,9 @@
     <string name="gesture_pinch">꼬집기</string>
     <string name="gesture_double_tap">두 번 두드리기</string>
     <string name="gesture_single_tap">두드리기</string>
-    <string name="gesture_left">바꾸기</string>
+    <string name="gesture_left">밀어 넘기기←</string>
     <string name="app_theme_accent_dialog">색상을 고르시오</string>
-    <string name="app_theme_accent">억양</string>
+    <string name="app_theme_accent"></string>
     <string name="windowbar_mode_both">둘 다</string>
     <string name="windowbar_mode_nav">길찾기 막대</string>
     <string name="windowbar_mode_status">상태 막대</string>
@@ -54,4 +54,11 @@
     <string name="pref_header_pages_drawer">보관함</string>
     <string name="pref_header_restore">복원</string>
     <string name="pref_header_pages">페이지</string>
+    <string name="gesture_handler">제스처 관리</string>
+    <string name="gesture_down">밀어 넘기기↓</string>
+    <string name="gesture_up">밀어 넘기기↑</string>
+    <string name="gesture_right">밀어 넘기기→</string>
+    <string name="backup_exist">백업 파일이름이 이미 존재합니다.</string>
+    <string name="version_key_name">HgLauncher (테스트)</string>
+    <string name="version_key_toast_plural">테스팅 모드로 진입하기 위해서 %1$d 번 탭 하세요.</string>
 </resources>
