@@ -325,15 +325,15 @@ class WidgetsListPage : GenericPage() {
     /**
      * Adds a long press action to widgets.
      */
-    private fun addWidgetActionListener(view: View) {
-        view.setOnLongClickListener {
+    private fun addWidgetActionListener(view: View?) {
+        view?.setOnLongClickListener {
             createPopupWindow(it as AppWidgetHostView)
             true
         }
     }
 
     @SuppressLint("RestrictedApi")
-    private fun createPopupWindow(view: AppWidgetHostView) {
+    private fun createPopupWindow(view: AppWidgetHostView?) {
         val index = appWidgetContainer.indexOfChild(view)
 
         popupWindow = PopupWindow(requireActivity(), null, R.attr.widgetPopupStyle).apply {
@@ -374,7 +374,7 @@ class WidgetsListPage : GenericPage() {
                                 startActivityForResult(it, WIDGET_CONFIG_START_CODE)
                             }
                         }
-                        1 -> removeWidget(index, view.appWidgetId)
+                        1 -> view?.let { removeWidget(index, it.appWidgetId) }
                         // Position 2 can be 'upwards' or 'downwards'
                         // depending on the position of the widget
                         // and the availability of other widgets.
@@ -391,11 +391,11 @@ class WidgetsListPage : GenericPage() {
                 // Set the progress to the current size of the widget.
                 widgetPopupResize.apply {
                     applyAccent()
-                    progress = widgetsMap[view.appWidgetId] !!
+                    progress = widgetsMap[view?.appWidgetId] ?: 0
                     setOnSeekBarChangeListener(object :
                         SeekBar.OnSeekBarChangeListener {
                         override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
-                            resizeWidget(index, view.appWidgetInfo.minHeight, progress)
+                            view?.appWidgetInfo?.let { resizeWidget(index, it.minHeight, progress) }
                         }
 
                         override fun onStartTrackingTouch(p0: SeekBar?) {}
@@ -404,13 +404,15 @@ class WidgetsListPage : GenericPage() {
                 }
             }
 
-            PopupWindowCompat.setOverlapAnchor(this, true)
-            if (Utils.sdkIsBelow(21)) {
-                PopupWindowCompat.showAsDropDown(this, view, 0, - view.height, Gravity.TOP)
-            } else {
-                showAsDropDown(view)
+            view?.let { anchor ->
+                PopupWindowCompat.setOverlapAnchor(this, true)
+                if (Utils.sdkIsBelow(21)) {
+                    PopupWindowCompat.showAsDropDown(this, anchor, 0, - anchor.height, Gravity.TOP)
+                } else {
+                    showAsDropDown(anchor)
+                }
+                update(anchor.measuredWidth / 2, ViewGroup.LayoutParams.WRAP_CONTENT)
             }
-            update(view.measuredWidth / 2, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
     }
 
