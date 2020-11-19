@@ -432,13 +432,23 @@ object LauncherIconHelper {
 
     private fun getDefaultIconDrawable(activity: Activity, appPackageName: String, user:Long): Drawable? {
         return if (Utils.atLeastLollipop()) {
-            val launcher =
-                activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-            val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
-            launcher.getActivityList(
-                AppUtils.getPackageName(appPackageName),
-                userManager.getUserForSerialNumber(user)
-            )[0].getBadgedIcon(0)
+            try {
+                val launcher =
+                    activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+
+                val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
+
+                launcher.getActivityList(
+                    AppUtils.getPackageName(appPackageName),
+                    userManager.getUserForSerialNumber(user)
+                )[0].getBadgedIcon(0)
+            } catch (w: SecurityException) {
+                // Fall back and retrieve the icon from package manager.
+                // We probably don't have permission to access the badged icon yet.
+                ComponentName.unflattenFromString(appPackageName)?.let {
+                    activity.packageManager.getActivityIcon(it)
+                }
+            }
         } else {
             ComponentName.unflattenFromString(appPackageName)?.let {
                 activity.packageManager.getActivityIcon(it)
