@@ -39,8 +39,8 @@ class WidgetsListPage : GenericPage() {
     /*
     * Used to handle and add widgets to widgetContainer.
     */
-    private lateinit var appWidgetManager: AppWidgetManager
-    private lateinit var appWidgetHost: LauncherAppWidgetHost
+    private var appWidgetManager: AppWidgetManager? = null
+    private var appWidgetHost: LauncherAppWidgetHost? = null
     private lateinit var appWidgetContainer: LinearLayout
 
     /*
@@ -81,7 +81,7 @@ class WidgetsListPage : GenericPage() {
         // Workaround to prevent widgets from being stuck (not updating).
         // https://github.com/Neamar/KISS/commit/3d5410307b8a8dc29b1fdc48d9f7c6ea1864dcd6
         if (Utils.atLeastOreo()) {
-            appWidgetHost.stopListening()
+            appWidgetHost?.stopListening()
         }
 
         PreferenceHelper.updateWidgets(widgetsList)
@@ -134,7 +134,7 @@ class WidgetsListPage : GenericPage() {
             getLauncherActivity().requestPanelLock()
 
             Intent(AppWidgetManager.ACTION_APPWIDGET_PICK).apply {
-                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetHost.allocateAppWidgetId())
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetHost?.allocateAppWidgetId())
             }.also {
                 startActivityForResult(it, WIDGET_CONFIG_START_CODE)
             }
@@ -186,9 +186,9 @@ class WidgetsListPage : GenericPage() {
 
             // Launch widget configuration if it exists.
             if (requestCode != WIDGET_CONFIG_RETURN_CODE) {
-                appWidgetManager.getAppWidgetInfo(widgetId).configure?.apply {
+                appWidgetManager?.getAppWidgetInfo(widgetId)?.configure?.apply {
                     if (Utils.atLeastLollipop()) {
-                        appWidgetHost.startAppWidgetConfigureActivityForResult(
+                        appWidgetHost?.startAppWidgetConfigureActivityForResult(
                             requireActivity(),
                             widgetId,
                             0,
@@ -209,7 +209,7 @@ class WidgetsListPage : GenericPage() {
             val widgetId =
                 data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WIDGET_CONFIG_DEFAULT_CODE)
             if (widgetId != WIDGET_CONFIG_DEFAULT_CODE) {
-                appWidgetHost.deleteAppWidgetId(widgetId)
+                appWidgetHost?.deleteAppWidgetId(widgetId)
             }
         }
     }
@@ -236,8 +236,8 @@ class WidgetsListPage : GenericPage() {
         // so we won't have any lingering entries.
         widgetsMap[widgetId] = size
 
-        appWidgetManager.getAppWidgetInfo(widgetId)?.apply {
-            with(appWidgetHost.createView(requireActivity().applicationContext, widgetId, this)) {
+        appWidgetManager?.getAppWidgetInfo(widgetId)?.apply {
+            appWidgetHost?.createView(requireActivity().applicationContext, widgetId, this)?.apply {
                 // Notify widget of the available minimum space.
                 setAppWidget(widgetId, appWidgetInfo)
                 if (Utils.sdkIsAround(16)) {
@@ -257,7 +257,7 @@ class WidgetsListPage : GenericPage() {
                 appWidgetContainer.addView(this, - 1, actualHeight)
 
                 // Immediately listens for the widget.
-                appWidgetHost.startListening()
+                appWidgetHost?.startListening()
                 addWidgetActionListener(this)
                 if (newWidget) {
                     // Update our list.
@@ -299,7 +299,7 @@ class WidgetsListPage : GenericPage() {
             // Remove the widget from the list and map, then deallocate it from the host.
             widgetsList.remove("$id-${widgetsMap[id]}")
             widgetsMap.remove(id)
-            appWidgetHost.deleteAppWidgetId(id)
+            appWidgetHost?.deleteAppWidgetId(id)
 
             // Update the preference by having the new list on it.
             PreferenceHelper.updateWidgets(widgetsList)
@@ -369,7 +369,7 @@ class WidgetsListPage : GenericPage() {
                             Intent(AppWidgetManager.ACTION_APPWIDGET_PICK).apply {
                                 putExtra(
                                     AppWidgetManager.EXTRA_APPWIDGET_ID,
-                                    appWidgetHost.allocateAppWidgetId()
+                                    appWidgetHost?.allocateAppWidgetId()
                                 )
                             }.also {
                                 startActivityForResult(it, WIDGET_CONFIG_START_CODE)
