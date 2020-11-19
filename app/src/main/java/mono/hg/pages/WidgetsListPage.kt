@@ -83,6 +83,7 @@ class WidgetsListPage : GenericPage() {
         if (Utils.atLeastOreo()) {
             appWidgetHost.stopListening()
         }
+
         PreferenceHelper.updateWidgets(widgetsList)
 
         binding = null
@@ -399,7 +400,9 @@ class WidgetsListPage : GenericPage() {
                         }
 
                         override fun onStartTrackingTouch(p0: SeekBar?) {}
-                        override fun onStopTrackingTouch(p0: SeekBar?) {}
+                        override fun onStopTrackingTouch(p0: SeekBar?) {
+                            PreferenceHelper.updateWidgets(widgetsList)
+                        }
                     })
                 }
             }
