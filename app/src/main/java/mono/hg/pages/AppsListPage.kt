@@ -264,10 +264,14 @@ class AppsListPage : GenericPage() {
 
                         // Handle packages changes from another user.
                         val userSplit = app.split("-")
-                        val componentName = if (userSplit.size == 2) userSplit[1] else app
-                        val user =
-                            if (userSplit.size == 2) userSplit[0].toLong() else userUtils?.currentSerial
+                        val componentName = if (userSplit.size == 2) userSplit[1].trim() else app
+                        val user = try {
+                            if (userSplit.size == 2) userSplit[0].trim()
+                                .toLong() else userUtils?.currentSerial
                                 ?: 0
+                        } catch (w: NumberFormatException) {
+                            0 // Return the default serial number if we can't get any.
+                        }
 
                         // First, check if this user & component name combination
                         // exists in the current list. This is because our list

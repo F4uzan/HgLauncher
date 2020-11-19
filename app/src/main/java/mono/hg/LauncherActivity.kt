@@ -364,7 +364,11 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // Handle preference change. Refresh when necessary.
-        if (PreferenceHelper.preference.getBoolean("require_refresh", false) && ! PreferenceHelper.wasAlien()) {
+        if (PreferenceHelper.preference.getBoolean(
+                "require_refresh",
+                false
+            ) && ! PreferenceHelper.wasAlien()
+        ) {
             ViewUtils.restartActivity(this, true)
         } else if (PreferenceHelper.preference.getBoolean("require_reinit", false)) {
             PreferenceHelper.fetchPreference()
@@ -867,10 +871,13 @@ class LauncherActivity : AppCompatActivity() {
             pinnedAppString.split(";").forEach {
                 // Handle pinned apps coming from another user.
                 val userSplit = it.split("-")
-                val componentName = if (userSplit.size == 2) userSplit[1] else it
-                val user =
-                    if (userSplit.size == 2) userSplit[0].toLong() else userUtils?.currentSerial
-                        ?: 0
+                val componentName = if (userSplit.size == 2) userSplit[1].trim() else it
+                val user = try {
+                    if (userSplit.size == 2) userSplit[0].trim()
+                        .toLong() else userUtils?.currentSerial ?: 0
+                } catch (w: NumberFormatException) {
+                    0 // Return the default serial number if we can't get any.
+                }
 
                 if (AppUtils.doesComponentExist(packageManager, componentName)) {
                     AppUtils.pinApp(this, user, componentName, pinnedAppsAdapter, pinnedAppList)
