@@ -410,7 +410,7 @@ object AppUtils {
                 val appName = it.loadLabel(manager).toString()
                 val app = App(appName, componentName, userUtils.currentSerial)
                 app.hintName = PreferenceHelper.getLabel(componentName)
-                app.userPackageName = componentName
+                app.userPackageName = "${userUtils.currentSerial}-${componentName}"
                 app.icon = if (isMainList) {
                     LauncherIconHelper.getIcon(
                         activity,

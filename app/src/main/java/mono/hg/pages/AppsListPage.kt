@@ -273,7 +273,7 @@ class AppsListPage : GenericPage() {
                         // exists in the current list. This is because our list
                         // won't be notified on an app update. There can only
                         // be two states: installing or removing.
-                        mutableAdapterList.find { it.userPackageName.contains(app) }?.apply {
+                        mutableAdapterList.find { it.userPackageName == app }?.apply {
                             // If it exists, then it's probably an uninstall signal.
                             mutableAdapterList.remove(this)
                         } ?: run {
@@ -429,7 +429,7 @@ class AppsListPage : GenericPage() {
                     if (action == PackageChangesReceiver.PACKAGE_REMOVED) {
                         packageName?.apply {
                             appsAdapter.updateDataSet(appsAdapter.currentItems.filterNot {
-                                it.packageName.contains(this)
+                                it.packageName == this
                             }, true)
                         }
                     }
@@ -560,11 +560,7 @@ class AppsListPage : GenericPage() {
                     launcherApps?.getActivityList(null, profile)?.filterNot {
                         it.componentName.flattenToString().contains(requireContext().packageName)
                     }?.mapTo(list) {
-                        if (userUtils?.currentUser != profile) {
-                            "${userUtils?.getSerial(profile)}-${it.componentName.flattenToString()}"
-                        } else {
-                            it.componentName.flattenToString()
-                        }
+                        "${userUtils?.getSerial(profile)}-${it.componentName.flattenToString()}"
                     }
                 }
             }
@@ -573,7 +569,7 @@ class AppsListPage : GenericPage() {
                 return manager.queryIntentActivities(it, 0)
                     .filterNot { app -> app.activityInfo.packageName.contains(requireContext().packageName) }
                     .mapTo(list) { resolve ->
-                        "${resolve.activityInfo.packageName}/${resolve.activityInfo.name}"
+                        "${userUtils?.currentSerial}-${resolve.activityInfo.packageName}/${resolve.activityInfo.name}"
                     }
             }
         }
