@@ -14,11 +14,7 @@
     <a href="https://f-droid.org/app/mono.hg" alt="F-Droid Releases">
         <img src="https://img.shields.io/f-droid/v/mono.hg.svg" /></a>
 </p>
-<p align="center">
-    <a href="https://discord.gg/AD94mvts8w" alt="F-Droid Releases">
-        <img src="https://img.shields.io/discord/775600810481418240.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2" /></a>
-</p>
- 
+
 ---
 
 A scrolling list of apps to launch them from, if you found what you want, look no further.
