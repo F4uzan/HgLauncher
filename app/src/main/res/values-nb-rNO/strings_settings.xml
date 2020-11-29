@@ -106,6 +106,10 @@
     <string name="app_theme_auto">Automatisk</string>
     <string name="app_list_mode_grid">Rutenett</string>
     <string name="app_list_mode_list">Liste</string>
-    <string name="app_list_mode">Programlistemodus</string>
+    <string name="app_list_mode">Modus</string>
     <string name="gesture_pinch">Klyp</string>
+    <string name="gesture_action_drawer">Åpne skuff</string>
+    <string name="pref_summary_pages">Miniprogramsområde, programlisteinnhold, skuffoppførsel</string>
+    <string name="pref_header_pages_drawer">Skuff</string>
+    <string name="pref_header_pages">Sider</string>
 </resources>
