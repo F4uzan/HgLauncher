@@ -24,7 +24,7 @@
     <string name="app_theme_accent_dialog">색상을 고르시오</string>
     <string name="app_theme_accent">색</string>
     <string name="windowbar_mode_both">둘 다</string>
-    <string name="windowbar_mode_nav">길찾기 바</string>
+    <string name="windowbar_mode_nav">내비게이션 바</string>
     <string name="windowbar_mode_status">상태 바</string>
     <string name="windowbar_mode">설정 바 숨기기</string>
     <string name="app_theme_black">검정</string>
@@ -75,10 +75,10 @@
     <string name="icon_pack">아이콘</string>
     <string name="app_list_mode_list">목록</string>
     <string name="app_list_mode">모드</string>
-    <string name="static_favourites_desc">화면을 스크롤할 때 즐겨찾기 보이기</string>
+    <string name="static_favourites_desc">화면 스크롤 중 즐겨찾기 표시</string>
     <string name="static_favourites">즐겨찾기 고정</string>
     <string name="pref_shade_view_desc">위에서 아래까지의 배경화면 음영</string>
-    <string name="pref_shade_view">배경화면 음영</string>
+    <string name="pref_shade_view">배경화면 투명도</string>
     <string name="pref_icon_view_desc">속도가 느린 기기에서 더 효과적임</string>
     <string name="pref_icon_view">아이콘 숨기기</string>
     <string name="shadow_adaptive_icon_desc">아이콘에 가벼운 그림자 적용</string>
@@ -111,5 +111,5 @@
     <string name="gesture_action_widget">오픈 위젯-스페이스</string>
     <string name="gesture_action_default">None</string>
     <string name="windowbar_mode_none">끄기</string>
-    <string name="reset_preference_warn">당신이 한 모든 배치가 재설정됩니다.</string>
+    <string name="reset_preference_warn">당신이 구성한 모든 배치가 재설정됩니다.</string>
 </resources>
