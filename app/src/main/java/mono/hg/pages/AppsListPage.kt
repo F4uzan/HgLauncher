@@ -152,7 +152,8 @@ class AppsListPage : GenericPage() {
         registerBroadcast()
 
         appsLayoutManager = if (PreferenceHelper.useGrid()) {
-            CustomGridLayoutManager(requireContext(), 1) // Span will be set with autoFitColumns below.
+            // Span will be set with autoFitColumns below.
+            CustomGridLayoutManager(requireContext(), 1)
         } else {
             TogglingLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
         }
@@ -491,8 +492,11 @@ class AppsListPage : GenericPage() {
     }
 
     private fun addApp(list: MutableList<App>, componentName: String, user: Long) {
-        // Don't add the app if it has the same package name as us.
-        if (componentName.contains(requireContext().packageName)) return
+        // Don't add the app if it has the launcher's package name or if it's hidden.
+        if (componentName.contains(requireContext().packageName) ||
+            excludedAppsList.contains(componentName)) {
+            return
+        }
 
         with(list) {
             // If there's an app with a matching componentName,
