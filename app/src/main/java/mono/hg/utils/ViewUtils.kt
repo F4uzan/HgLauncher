@@ -24,7 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.progressindicator.ProgressIndicator
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import mono.hg.R
 import mono.hg.adapters.AppAdapter
 import mono.hg.helpers.PreferenceHelper
@@ -344,7 +344,7 @@ fun AppCompatSeekBar.applyAccent() {
 /**
  * Extension function for [ProgressIndicator] that handles hiding for API levels lower than 17.
  */
-fun ProgressIndicator.compatHide() {
+fun LinearProgressIndicator.compatHide() {
     if (Utils.sdkIsAround(17)) {
         hide()
     } else {
@@ -356,7 +356,7 @@ fun ProgressIndicator.compatHide() {
  * Extension function for [ProgressIndicator]
  * that handles showing the ProgressIndicator for API levels lower than 17.
  */
-fun ProgressIndicator.compatShow() {
+fun LinearProgressIndicator.compatShow() {
     if (Utils.sdkIsAround(17)) {
         show()
     } else {

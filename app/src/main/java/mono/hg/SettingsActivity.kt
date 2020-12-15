@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.google.android.material.progressindicator.ProgressIndicator
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import mono.hg.databinding.ActivitySettingsBinding
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.preferences.BasePreference
@@ -30,7 +30,7 @@ class SettingsActivity : AppCompatActivity(),
     private var fragmentTitle: CharSequence? = null
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var toolbar: Toolbar
-    lateinit var progressBar: ProgressIndicator
+    lateinit var progressBar: LinearProgressIndicator
 
     // The list of preferences that will trigger a launcher restart.
     // This restart will be done in LauncherActivity itself.
@@ -63,7 +63,7 @@ class SettingsActivity : AppCompatActivity(),
 
         toolbar = binding.toolbar
         progressBar = binding.progressBar.apply {
-            indicatorColors = IntArray(1) { PreferenceHelper.darkerAccent }
+            setIndicatorColor(PreferenceHelper.darkerAccent)
             trackColor = PreferenceHelper.accent
             compatHide()
         }

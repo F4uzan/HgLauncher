@@ -18,13 +18,12 @@
         android:minHeight="1dp"
         android:background="?attr/dividerColor" />
 
-    <com.google.android.material.progressindicator.ProgressIndicator
+    <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:layout_below="@+id/toolbar"
-        android:indeterminate="true"
-        app:linearSeamless="true" />
+        android:indeterminate="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
