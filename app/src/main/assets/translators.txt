@@ -55,6 +55,9 @@ Portuguese (Portugal) translation
 <b>Milo Ivir (milotype)</b>
 Croatian translation
 
+<b>nanayeon (nanayeon)</b>
+Korean translation
+
 <b>Paper Mountain Studio</b>
 Czech translation
 
