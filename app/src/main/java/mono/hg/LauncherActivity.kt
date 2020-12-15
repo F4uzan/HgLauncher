@@ -948,10 +948,7 @@ class LauncherActivity : AppCompatActivity() {
      * This function is provided for Pages to toggle favourites panel visibility.
      */
     fun showPinnedApps() {
-        if (! pinnedAppsAdapter.isEmpty
-            && ! isFavouritesVisible
-            && PreferenceHelper.favouritesAcceptScroll()
-        ) {
+        if (! pinnedAppsAdapter.isEmpty && ! isFavouritesVisible) {
             doThis(SHOW_PINNED)
         }
     }
