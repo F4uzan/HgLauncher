@@ -8,8 +8,8 @@ android {
         applicationId "mono.hg"
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode 1500000
-        versionName "1.5.0"
+        versionCode 1510000
+        versionName "1.5.1"
         vectorDrawables.useSupportLibrary = true
         buildFeatures {
             viewBinding = true
