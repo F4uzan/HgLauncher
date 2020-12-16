@@ -5,7 +5,9 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.SparseArray
@@ -83,6 +85,11 @@ class LauncherActivity : AppCompatActivity() {
      * Whether a Page has requested a panel lock.
      */
     private var panelLockRequested = true
+
+    /*
+     * Index of an app that is currently being edited.
+     */
+    private var editingAppPosition: Int = - 1
 
     /*
      * Animation duration; fetched from system's duration.
@@ -374,6 +381,23 @@ class LauncherActivity : AppCompatActivity() {
             PreferenceHelper.fetchPreference()
         }
 
+        // Update icon when an icon set request is detected.
+        if (resultCode == RESULT_OK && requestCode == SET_ICON_REQUEST) {
+            data?.getParcelableExtra<Bitmap>("icon")?.let { bitmap ->
+                pinnedAppsAdapter.getItem(editingAppPosition).apply {
+                    this?.packageName?.let {
+                        LauncherIconHelper.cacheIcon(
+                            this@LauncherActivity,
+                            bitmap,
+                            "pinned-",
+                            AppUtils.getPackageName(it)
+                        )
+                    }
+                    this?.icon = BitmapDrawable(resources, bitmap)
+                }?.let { pinnedAppsAdapter.updateItem(it) }
+            }
+        }
+
         // Call super to handle anything else not handled here.
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -571,6 +595,20 @@ class LauncherActivity : AppCompatActivity() {
             show()
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
+                    R.id.action_icon -> {
+                        // Update the index first.
+                        editingAppPosition = pinnedAppsAdapter.getGlobalPositionOf(app)
+
+                        // Load the picker intent.
+                        // TODO: We should use more intent actions here.
+                        Intent("org.adw.launcher.icons.ACTION_PICK_ICON").apply {
+                            startActivityForResult(
+                                Intent.createChooser(
+                                    this, getString(R.string.dialog_title_set_icon)
+                                ), SET_ICON_REQUEST
+                            )
+                        }
+                    }
                     R.id.action_unpin -> unpinApp(position)
                     R.id.action_info -> AppUtils.openAppDetails(
                         this@LauncherActivity,
@@ -983,6 +1021,7 @@ class LauncherActivity : AppCompatActivity() {
     companion object {
         private const val SETTINGS_RETURN_CODE = 12
         private const val SHORTCUT_MENU_GROUP = 247
+        private const val SET_ICON_REQUEST = 8000
 
         /*
          * String containing pinned apps. Delimited by a semicolon (;).

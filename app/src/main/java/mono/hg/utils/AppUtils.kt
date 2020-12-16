@@ -117,7 +117,7 @@ object AppUtils {
         activity: Activity, user: Long, componentName: String,
         adapter: AppAdapter, list: MutableList<App>
     ) {
-        LauncherIconHelper.getIcon(activity, componentName, user, false)?.apply {
+        LauncherIconHelper.getIconForPinned(activity, componentName, user)?.apply {
             App(this, componentName, user).apply {
                 userPackageName = if (user != UserUtils(activity).currentSerial) {
                     appendUser(user, componentName)

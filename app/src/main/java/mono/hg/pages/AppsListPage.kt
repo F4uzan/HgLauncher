@@ -328,6 +328,7 @@ class AppsListPage : GenericPage() {
                         LauncherIconHelper.cacheIcon(
                             requireContext(),
                             bitmap,
+                            "",
                             AppUtils.getPackageName(it)
                         )
                     }

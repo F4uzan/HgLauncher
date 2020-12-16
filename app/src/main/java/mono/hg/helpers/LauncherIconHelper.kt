@@ -74,7 +74,7 @@ object LauncherIconHelper {
         shouldHide: Boolean
     ): Drawable? {
         return if (! shouldHide) {
-            var icon = getIconDrawable(activity, componentName, user)
+            var icon = getIconDrawable(activity, componentName, "", user)
             if (PreferenceHelper.shadeAdaptiveIcon() &&
                 (Utils.atLeastOreo() && icon is AdaptiveIconDrawable)
             ) {
@@ -84,6 +84,23 @@ object LauncherIconHelper {
         } else {
             null
         }
+    }
+
+    /**
+     * Retrieve an icon for a component name, used for pinned apps.
+     *
+     * @param activity      Activity where LauncherApps service can be retrieved.
+     * @param componentName Component name of the activity.
+     * @param user          The serial number of the user.
+     *
+     * @return Drawable of the icon.
+     */
+    fun getIconForPinned(
+        activity: Activity,
+        componentName: String,
+        user: Long
+    ): Drawable? {
+        return getIconDrawable(activity, componentName, "pinned-", user)
     }
 
     /**
@@ -108,12 +125,13 @@ object LauncherIconHelper {
      *
      * @param context       Context required to retrieve the path to the files directory.
      * @param bitmap        The Bitmap to cache.
+     * @param prefix        The filename prefix for this cache.
      * @param componentName The component name that will use this cached Bitmap.
      *                      This component name will be reduced to package name.
      */
-    fun cacheIcon(context: Context, bitmap: Bitmap, componentName: String) {
+    fun cacheIcon(context: Context, bitmap: Bitmap, prefix: String, componentName: String) {
         try {
-            FileOutputStream(context.filesDir.path + File.separatorChar + componentName).apply {
+            FileOutputStream(context.filesDir.path + File.separatorChar + prefix + componentName).apply {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, this) // Quality is unused here.
                 flush()
                 close()
@@ -340,18 +358,27 @@ object LauncherIconHelper {
      *
      * @param activity       where LauncherApps service can be retrieved.
      * @param appPackageName Package name of the app whose icon is to be loaded.
+     * @param prefix         Prefix used for custom icon path.
+     * @param user           User serial number required to load badged icon.
      *
      * @return Drawable Will return null if there is no icon associated with the package name,
      * otherwise an associated icon from the icon pack will be returned.
      */
-    private fun getIconDrawable(activity: Activity, appPackageName: String, user: Long): Drawable? {
+    private fun getIconDrawable(
+        activity: Activity,
+        appPackageName: String,
+        prefix: String,
+        user: Long
+    ): Drawable? {
         val packageManager = activity.packageManager
         val componentName = "ComponentInfo{$appPackageName}"
         val iconPackageName =
             PreferenceHelper.preference.getString("icon_pack", "default") ?: "default"
         val defaultIcon: Drawable? = getDefaultIconDrawable(activity, appPackageName, user)
         val customIconPath =
-            activity.filesDir.path + File.separatorChar + AppUtils.getPackageName(appPackageName)
+            activity.filesDir.path + File.separatorChar + prefix + AppUtils.getPackageName(
+                appPackageName
+            )
 
         try {
             // If there is a custom icon set, use that over the default one.
@@ -360,7 +387,10 @@ object LauncherIconHelper {
                     BitmapFactory.Options().apply {
                         inPreferredConfig = Bitmap.Config.ARGB_8888
                     }.also {
-                        return BitmapDrawable(activity.resources, BitmapFactory.decodeFile(this.path, it))
+                        return BitmapDrawable(
+                            activity.resources,
+                            BitmapFactory.decodeFile(this.path, it)
+                        )
                     }
                 }
             }
