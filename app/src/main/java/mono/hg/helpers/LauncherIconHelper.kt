@@ -7,6 +7,7 @@ import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.Color
@@ -26,6 +27,8 @@ import mono.hg.utils.Utils.LogLevel
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
@@ -95,6 +98,29 @@ object LauncherIconHelper {
      */
     fun getDefaultIcon(activity: Activity, componentName: String, user: Long): Drawable? {
         return getDefaultIconDrawable(activity, componentName, user)
+    }
+
+    /**
+     * Caches an icon to the launcher's files directory.
+     *
+     * This is only used for custom icon.
+     * Most icons are not cached to save on space.
+     *
+     * @param context       Context required to retrieve the path to the files directory.
+     * @param bitmap        The Bitmap to cache.
+     * @param componentName The component name that will use this cached Bitmap.
+     *                      This component name will be reduced to package name.
+     */
+    fun cacheIcon(context: Context, bitmap: Bitmap, componentName: String) {
+        try {
+            FileOutputStream(context.filesDir.path + File.separatorChar + componentName).apply {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, this) // Quality is unused here.
+                flush()
+                close()
+            }
+        } catch (e: Exception) {
+            Utils.sendLog(3, e.toString())
+        }
     }
 
     private fun drawAdaptiveShadow(resources: Resources, icon: Drawable): BitmapDrawable {
@@ -324,8 +350,21 @@ object LauncherIconHelper {
         val iconPackageName =
             PreferenceHelper.preference.getString("icon_pack", "default") ?: "default"
         val defaultIcon: Drawable? = getDefaultIconDrawable(activity, appPackageName, user)
+        val customIconPath =
+            activity.filesDir.path + File.separatorChar + AppUtils.getPackageName(appPackageName)
 
         try {
+            // If there is a custom icon set, use that over the default one.
+            with(File(customIconPath)) {
+                if (exists() && ! isDirectory) {
+                    BitmapFactory.Options().apply {
+                        inPreferredConfig = Bitmap.Config.ARGB_8888
+                    }.also {
+                        return BitmapDrawable(activity.resources, BitmapFactory.decodeFile(this.path, it))
+                    }
+                }
+            }
+
             val iconRes = if ("default" != iconPackageName) {
                 packageManager.getResourcesForApplication(iconPackageName)
             } else {
@@ -430,7 +469,11 @@ object LauncherIconHelper {
         return BitmapDrawable(resources, result)
     }
 
-    private fun getDefaultIconDrawable(activity: Activity, appPackageName: String, user:Long): Drawable? {
+    private fun getDefaultIconDrawable(
+        activity: Activity,
+        appPackageName: String,
+        user: Long
+    ): Drawable? {
         return if (Utils.atLeastLollipop()) {
             try {
                 val launcher =

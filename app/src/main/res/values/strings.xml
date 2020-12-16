@@ -15,6 +15,7 @@
     <string name="action_web_provider_add">Add</string>
     <string name="action_web_provider_reset">Reset</string>
     <!-- App menu actions -->
+    <string name="action_icon">Icon</string>
     <string name="action_pin">Pin</string>
     <string name="action_unpin">Unpin</string>
     <string name="action_hide">Hide</string>
@@ -29,9 +30,12 @@
     <string name="search_web_hint">Search for \'%1$s\' online</string>
     <string name="search_web_button_prompt">With</string>
     <string name="search_web_button">Go</string>
+    <!-- Dialog titles -->
     <string name="dialog_title_add_provider">Add provider</string>
     <string name="dialog_title_edit_provider">Edit provider</string>
     <string name="dialog_title_shorthand">Set shorthand</string>
+    <string name="dialog_title_set_icon">Select icon pack</string>
+    <!-- Dialog actions -->
     <string name="dialog_action_close">Close</string>
     <string name="dialog_action_add">Add</string>
     <string name="dialog_action_edit">Edit</string>
@@ -40,7 +44,7 @@
     <string name="err_invalid_url">Invalid URL.</string>
     <string name="err_provider_exists">Search engine name must be unique.</string>
     <string name="err_no_method_panel">This is only possible on newer Android.</string>
-    <!-- Start up dialogue, shown to new user -->
+    <!-- Start up dialog, shown to new user -->
     <string name="dialog_start_hint_title">Welcome!</string>
     <string name="dialog_start_hint_message_one">This is your desktop. In here, you can…\n
         • Tap to open the app list\n

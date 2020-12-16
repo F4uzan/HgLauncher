@@ -1,5 +1,6 @@
 package mono.hg.pages
 
+import android.app.Activity.RESULT_OK
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -7,6 +8,8 @@ import android.content.IntentFilter
 import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.UserManager
@@ -58,6 +61,11 @@ import kotlin.collections.ArrayList
  * This is the generic implementation of an app list that handles the required features.
  */
 class AppsListPage : GenericPage() {
+    /*
+     * Index of an app that is currently being edited.
+     */
+    private var editingAppPosition: Int = -1
+
     /*
      * Adapter for installed apps.
      */
@@ -309,6 +317,29 @@ class AppsListPage : GenericPage() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Update the icon on the selected app.
+        if (resultCode == RESULT_OK && requestCode == SET_ICON_REQUEST) {
+            data?.getParcelableExtra<Bitmap>("icon")?.let { bitmap ->
+                appsAdapter.getItem(editingAppPosition).apply {
+                    this?.packageName?.let {
+                        LauncherIconHelper.cacheIcon(
+                            requireContext(),
+                            bitmap,
+                            AppUtils.getPackageName(it)
+                        )
+                    }
+                    this?.icon = BitmapDrawable(resources, bitmap)
+                }?.let { appsAdapter.updateItem(it) }
+            }
+
+            // Reset the index once we're done.
+            editingAppPosition = -1
+        }
+    }
+
     override fun isAcceptingSearch(): Boolean {
         return true
     }
@@ -363,6 +394,20 @@ class AppsListPage : GenericPage() {
             show()
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
+                    R.id.action_icon -> {
+                        // Update the index first.
+                        editingAppPosition = appsAdapter.getGlobalPositionOf(app)
+
+                        // Load the picker intent.
+                        // TODO: We should use more intent actions here.
+                        Intent("org.adw.launcher.icons.ACTION_PICK_ICON").apply {
+                            startActivityForResult(
+                                Intent.createChooser(
+                                    this, getString(R.string.dialog_title_set_icon)
+                                ), SET_ICON_REQUEST
+                            )
+                        }
+                    }
                     R.id.action_pin -> getLauncherActivity().pinAppHere(app.userPackageName, user)
                     R.id.action_info -> AppUtils.openAppDetails(
                         requireActivity(),
@@ -494,7 +539,8 @@ class AppsListPage : GenericPage() {
     private fun addApp(list: MutableList<App>, componentName: String, user: Long) {
         // Don't add the app if it has the launcher's package name or if it's hidden.
         if (componentName.contains(requireContext().packageName) ||
-            excludedAppsList.contains(componentName)) {
+            excludedAppsList.contains(componentName)
+        ) {
             return
         }
 
@@ -631,5 +677,6 @@ class AppsListPage : GenericPage() {
 
     companion object {
         private const val SHORTCUT_MENU_GROUP = 247
+        private const val SET_ICON_REQUEST = 8000
     }
 }

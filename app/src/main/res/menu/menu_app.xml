@@ -10,6 +10,11 @@
         android:title="@string/action_actions">
 
         <menu android:id="@+id/menu_app_actions">
+            <item
+                android:id="@+id/action_icon"
+                android:orderInCategory="100"
+                android:title="@string/action_icon"
+                app:showAsAction="never" />
 
             <item
                 android:id="@+id/action_unpin"
