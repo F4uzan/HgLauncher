@@ -200,7 +200,7 @@ class AppsListPage : GenericPage() {
         appsAdapter.addListener(FlexibleAdapter.OnUpdateListener { size ->
             if (size > 0 && ! appsAdapter.isEmpty) {
                 loaderBinding?.loader?.hide()
-            } else {
+            } else if (! appsAdapter.hasFilter()) {
                 loaderBinding?.loader?.show()
             }
         })
