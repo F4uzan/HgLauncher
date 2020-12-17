@@ -11,12 +11,6 @@
 
         <menu android:id="@+id/menu_app_actions">
             <item
-                android:id="@+id/action_unpin"
-                android:orderInCategory="100"
-                android:title="@string/action_unpin"
-                app:showAsAction="never" />
-
-            <item
                 android:id="@+id/action_pin"
                 android:orderInCategory="100"
                 android:title="@string/action_pin"
@@ -27,9 +21,7 @@
                 android:orderInCategory="100"
                 android:title="@string/action_hide"
                 app:showAsAction="never" />
-
         </menu>
-
     </item>
 
     <item
@@ -57,6 +49,12 @@
                 app:showAsAction="never" />
         </menu>
     </item>
+
+    <item
+        android:id="@+id/action_unpin"
+        android:orderInCategory="100"
+        android:title="@string/action_unpin"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_info"
