@@ -206,7 +206,7 @@ object ViewUtils {
         return PopupMenu(activity, focusedView).apply {
             inflate(R.menu.menu_app)
 
-            val isPinned = PreferenceHelper.getPinnedApps().contains(app.userPackageName)
+            val isPinned = app.itemViewType == App.PINNED_APP_TYPE
             val iconPrefix = if (isPinned) "pinned-" else ""
 
             menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
@@ -216,15 +216,14 @@ object ViewUtils {
                 ! LauncherIconHelper.getCachedIconPath(activity, iconPrefix, app.packageName).isNullOrEmpty()
 
             // Only show the 'unpin' option if isPinned is set.
-            menu.findItem(R.id.action_unpin).isVisible =
-                isPinned && app.itemViewType == App.PINNED_APP_TYPE
+            menu.findItem(R.id.action_unpin).isVisible = isPinned
 
             // Hide the 'Actions' menu if the app is not pinned
             // Pinned apps only have the 'Unpin' action, which is not in this menu.
-            menu.findItem(R.id.action_app_actions).isVisible = app.itemViewType != App.PINNED_APP_TYPE
+            menu.findItem(R.id.action_app_actions).isVisible = ! isPinned
 
             // We can't shorthand an app from the favourites panel.
-            menu.findItem(R.id.action_shorthand).isVisible = app.itemViewType != App.PINNED_APP_TYPE
+            menu.findItem(R.id.action_shorthand).isVisible = ! isPinned
 
             // Show uninstall menu if the app is not a system app.
             menu.findItem(R.id.action_uninstall).isVisible = (! AppUtils.isSystemApp(
@@ -348,7 +347,7 @@ fun AppCompatSeekBar.applyAccent() {
 }
 
 /**
- * Extension function for [ProgressIndicator] that handles hiding for API levels lower than 17.
+ * Extension function for [LinearProgressIndicator] that handles hiding for API levels lower than 17.
  */
 fun LinearProgressIndicator.compatHide() {
     if (Utils.sdkIsAround(17)) {
@@ -359,8 +358,8 @@ fun LinearProgressIndicator.compatHide() {
 }
 
 /**
- * Extension function for [ProgressIndicator]
- * that handles showing the ProgressIndicator for API levels lower than 17.
+ * Extension function for [LinearProgressIndicator]
+ * that handles showing the LinearProgressIndicator for API levels lower than 17.
  */
 fun LinearProgressIndicator.compatShow() {
     if (Utils.sdkIsAround(17)) {
