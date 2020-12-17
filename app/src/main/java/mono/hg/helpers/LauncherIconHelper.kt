@@ -141,6 +141,46 @@ object LauncherIconHelper {
         }
     }
 
+    /**
+     * Retrieves the path to a cached custom icon.
+     *
+     * @param context       Context required to retrieve the path to the files directory.
+     * @param prefix        The filename prefix of the cached icon.
+     * @param componentName The component name of this cached icon.
+     *
+     * @return The path to the cached icon. Null if it can't be found.
+     */
+    fun getCachedIconPath(context: Context, prefix: String, componentName: String): String? {
+        val customIconPath =
+            context.filesDir.path + File.separatorChar + prefix + AppUtils.getPackageName(
+                componentName
+            )
+
+        with(File(customIconPath)) {
+            return if (exists() && ! isDirectory) {
+                customIconPath
+            } else {
+                null
+            }
+        }
+    }
+
+    /**
+     * Removes a cached icon.
+     *
+     * This function internally calls [getCachedIconPath]
+     * to check for the availability of the icon first.
+     *
+     * @param context       Context required to retrieve the path to the files directory.
+     * @param prefix        The filename prefix of the cached icon.
+     * @param componentName The component name of this cached icon.
+     */
+    fun deleteCachedIcon(context: Context, prefix: String, componentName: String) {
+        getCachedIconPath(context, prefix, componentName)?.apply {
+            File(this).delete()
+        }
+    }
+
     private fun drawAdaptiveShadow(resources: Resources, icon: Drawable): BitmapDrawable {
         return BitmapDrawable(resources, addShadow(icon, icon.intrinsicHeight, icon.intrinsicWidth))
     }
@@ -375,23 +415,17 @@ object LauncherIconHelper {
         val iconPackageName =
             PreferenceHelper.preference.getString("icon_pack", "default") ?: "default"
         val defaultIcon: Drawable? = getDefaultIconDrawable(activity, appPackageName, user)
-        val customIconPath =
-            activity.filesDir.path + File.separatorChar + prefix + AppUtils.getPackageName(
-                appPackageName
-            )
 
         try {
             // If there is a custom icon set, use that over the default one.
-            with(File(customIconPath)) {
-                if (exists() && ! isDirectory) {
-                    BitmapFactory.Options().apply {
-                        inPreferredConfig = Bitmap.Config.ARGB_8888
-                    }.also {
-                        return BitmapDrawable(
-                            activity.resources,
-                            BitmapFactory.decodeFile(this.path, it)
-                        )
-                    }
+            getCachedIconPath(activity, prefix, appPackageName)?.let { path ->
+                BitmapFactory.Options().apply {
+                    inPreferredConfig = Bitmap.Config.ARGB_8888
+                }.also {
+                    return BitmapDrawable(
+                        activity.resources,
+                        BitmapFactory.decodeFile(path, it)
+                    )
                 }
             }
 

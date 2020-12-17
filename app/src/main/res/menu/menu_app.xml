@@ -11,12 +11,6 @@
 
         <menu android:id="@+id/menu_app_actions">
             <item
-                android:id="@+id/action_icon"
-                android:orderInCategory="100"
-                android:title="@string/action_icon"
-                app:showAsAction="never" />
-
-            <item
                 android:id="@+id/action_unpin"
                 android:orderInCategory="100"
                 android:title="@string/action_unpin"
@@ -34,14 +28,34 @@
                 android:title="@string/action_hide"
                 app:showAsAction="never" />
 
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/action_app_customize"
+        android:orderInCategory="100"
+        android:title="@string/action_customize">
+
+        <menu android:id="@+id/menu_app_customize">
+            <item
+                android:id="@+id/action_icon_set"
+                android:orderInCategory="100"
+                android:title="@string/action_icon_set"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_icon_reset"
+                android:orderInCategory="100"
+                android:title="@string/action_icon_reset"
+                app:showAsAction="never" />
+
             <item
                 android:id="@+id/action_shorthand"
                 android:orderInCategory="100"
                 android:title="@string/action_shorthand"
                 app:showAsAction="never" />
-
         </menu>
-
     </item>
 
     <item

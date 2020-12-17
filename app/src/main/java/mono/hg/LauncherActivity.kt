@@ -595,7 +595,7 @@ class LauncherActivity : AppCompatActivity() {
             show()
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.action_icon -> {
+                    R.id.action_icon_set -> {
                         // Update the index first.
                         editingAppPosition = pinnedAppsAdapter.getGlobalPositionOf(app)
 
@@ -608,6 +608,22 @@ class LauncherActivity : AppCompatActivity() {
                                 ), SET_ICON_REQUEST
                             )
                         }
+                    }
+                    R.id.action_icon_reset -> {
+                        // Reset the icon cache first.
+                        LauncherIconHelper.deleteCachedIcon(
+                            this@LauncherActivity,
+                            "pinned-",
+                            app.packageName
+                        )
+
+                        // Retrieve a brand new icon.
+                        app.icon = LauncherIconHelper.getIconForPinned(
+                            this@LauncherActivity,
+                            app.userPackageName,
+                            app.user
+                        )
+                        pinnedAppsAdapter.updateItem(app)
                     }
                     R.id.action_unpin -> unpinApp(position)
                     R.id.action_info -> AppUtils.openAppDetails(

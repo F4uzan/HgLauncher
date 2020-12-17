@@ -395,7 +395,7 @@ class AppsListPage : GenericPage() {
             show()
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.action_icon -> {
+                    R.id.action_icon_set -> {
                         // Update the index first.
                         editingAppPosition = appsAdapter.getGlobalPositionOf(app)
 
@@ -408,6 +408,19 @@ class AppsListPage : GenericPage() {
                                 ), SET_ICON_REQUEST
                             )
                         }
+                    }
+                    R.id.action_icon_reset -> {
+                        // Reset the icon cache first.
+                        LauncherIconHelper.deleteCachedIcon(requireContext(), "", app.packageName)
+
+                        // Retrieve a brand new icon.
+                        app.icon = LauncherIconHelper.getIcon(
+                            requireActivity(),
+                            app.userPackageName,
+                            app.user,
+                            false
+                        )
+                        appsAdapter.updateItem(app)
                     }
                     R.id.action_pin -> getLauncherActivity().pinAppHere(app.userPackageName, user)
                     R.id.action_info -> AppUtils.openAppDetails(

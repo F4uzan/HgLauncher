@@ -15,7 +15,8 @@
     <string name="action_web_provider_add">Add</string>
     <string name="action_web_provider_reset">Reset</string>
     <!-- App menu actions -->
-    <string name="action_icon">Icon</string>
+    <string name="action_icon_set">Set icon</string>
+    <string name="action_icon_reset">Reset icon</string>
     <string name="action_pin">Pin</string>
     <string name="action_unpin">Unpin</string>
     <string name="action_hide">Hide</string>
@@ -25,6 +26,7 @@
     <string name="action_shorthand">Shorthand</string>
     <string name="action_actions">Actions</string>
     <string name="action_shortcuts">Shortcuts</string>
+    <string name="action_customize">Customize</string>
     <!-- Misc -->
     <string name="search_hint">Search…</string>
     <string name="search_web_hint">Search for \'%1$s\' online</string>

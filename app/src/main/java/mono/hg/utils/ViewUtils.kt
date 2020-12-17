@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import mono.hg.R
 import mono.hg.adapters.AppAdapter
+import mono.hg.helpers.LauncherIconHelper
 import mono.hg.helpers.PreferenceHelper
 import mono.hg.models.App
 
@@ -206,8 +207,13 @@ object ViewUtils {
             inflate(R.menu.menu_app)
 
             val isPinned = PreferenceHelper.getPinnedApps().contains(app.userPackageName)
+            val iconPrefix = if (isPinned) "pinned-" else ""
 
             menu.addSubMenu(1, SHORTCUT_MENU_GROUP, 0, R.string.action_shortcuts)
+
+            // 'Reset icon' should only be visible if there's a custom icon.
+            menu.findItem(R.id.action_icon_reset).isVisible =
+                ! LauncherIconHelper.getCachedIconPath(activity, iconPrefix, app.packageName).isNullOrEmpty()
 
             // Hide 'pin' if the app is already pinned or isPinned is set.
             menu.findItem(R.id.action_pin).isVisible = ! isPinned
