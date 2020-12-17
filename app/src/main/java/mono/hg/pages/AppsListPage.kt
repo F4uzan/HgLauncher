@@ -643,7 +643,10 @@ class AppsListPage : GenericPage() {
         val hasHintName = appsAdapter.getItem(position)?.hasHintName() ?: false
         val renameField = binding.renameField.apply {
             ViewCompat.setBackgroundTintList(this, ColorStateList.valueOf(PreferenceHelper.accent))
-            hint = packageName?.let { PreferenceHelper.getLabel(it) }
+            packageName?.let {
+                setText(PreferenceHelper.getLabel(it))
+                hint = text
+            }
         }
 
         with(AlertDialog.Builder(requireContext())) {
