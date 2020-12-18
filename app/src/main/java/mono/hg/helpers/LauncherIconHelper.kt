@@ -3,6 +3,7 @@ package mono.hg.helpers
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.content.res.Resources
@@ -124,22 +125,32 @@ object LauncherIconHelper {
      * Most icons are not cached to save on space.
      *
      * @param context       Context required to retrieve the path to the files directory.
-     * @param bitmap        The Bitmap to cache.
+     * @param intent        The intent sent by the icon pack.
      * @param prefix        The filename prefix for this cache.
      * @param componentName The component name that will use this cached Bitmap.
      *                      This component name will be reduced to package name.
      * @param user          The user owning this component name.
      */
-    fun cacheIcon(context: Context, bitmap: Bitmap, prefix: String, componentName: String, user: Long) {
-        try {
-            FileOutputStream("${context.filesDir.path}/${user}-${prefix}${componentName}").apply {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, this) // Quality is unused here.
-                flush()
-                close()
+    fun cacheIcon(context: Context, intent: Intent, prefix: String, componentName: String, user: Long): Drawable? {
+        val iconPath = "${context.filesDir.path}/${user}-${prefix}${componentName}"
+
+        // Used for icon packs that sends over a Bitmap directly.
+        intent.getParcelableExtra<Bitmap>("icon")?.let {
+            saveBitmapToFile(iconPath, it)
+            return BitmapDrawable(context.resources, it)
+        } ?: run {
+            // Try and see if this icon returns a URI instead.
+            intent.data?.apply {
+                BitmapFactory.decodeStream(context.contentResolver.openInputStream(this))?.let {
+                    saveBitmapToFile(iconPath, it)
+                    return BitmapDrawable(context.resources, it)
+                }
             }
-        } catch (e: Exception) {
-            Utils.sendLog(3, e.toString())
         }
+
+        // We can't get anything so return null.
+        Utils.sendLog(LogLevel.ERROR, "Unable to retrieve icon from intent!")
+        return null
     }
 
     /**
@@ -183,6 +194,18 @@ object LauncherIconHelper {
 
     private fun drawAdaptiveShadow(resources: Resources, icon: Drawable): BitmapDrawable {
         return BitmapDrawable(resources, addShadow(icon, icon.intrinsicHeight, icon.intrinsicWidth))
+    }
+
+    private fun saveBitmapToFile(path: String, bitmap: Bitmap) {
+        try {
+            FileOutputStream(path).apply {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, this) // Quality is unused here.
+                flush()
+                close()
+            }
+        } catch (e: Exception) {
+            Utils.sendLog(LogLevel.ERROR, e.toString())
+        }
     }
 
     /**

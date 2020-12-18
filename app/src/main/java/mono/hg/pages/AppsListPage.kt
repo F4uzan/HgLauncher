@@ -8,8 +8,6 @@ import android.content.IntentFilter
 import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.UserManager
@@ -321,19 +319,16 @@ class AppsListPage : GenericPage() {
         super.onActivityResult(requestCode, resultCode, data)
 
         // Update the icon on the selected app.
-        if (resultCode == RESULT_OK && requestCode == SET_ICON_REQUEST) {
-            data?.getParcelableExtra<Bitmap>("icon")?.let { bitmap ->
-                appsAdapter.getItem(editingAppPosition)?.apply {
-                    LauncherIconHelper.cacheIcon(
-                        requireContext(),
-                        bitmap,
-                        "",
-                        AppUtils.getPackageName(packageName),
-                        user
-                    )
-                    icon = BitmapDrawable(resources, bitmap)
-                }?.let { appsAdapter.updateItem(it) }
-            }
+        if (resultCode == RESULT_OK && requestCode == SET_ICON_REQUEST && data != null) {
+            appsAdapter.getItem(editingAppPosition)?.apply {
+                LauncherIconHelper.cacheIcon(
+                    requireContext(),
+                    data,
+                    "",
+                    AppUtils.getPackageName(packageName),
+                    user
+                )?.let { icon = it }
+            }?.let { appsAdapter.updateItem(it) }
 
             // Reset the index once we're done.
             editingAppPosition = - 1

@@ -5,9 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.SparseArray
@@ -382,19 +380,16 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         // Update icon when an icon set request is detected.
-        if (resultCode == RESULT_OK && requestCode == SET_ICON_REQUEST) {
-            data?.getParcelableExtra<Bitmap>("icon")?.let { bitmap ->
-                pinnedAppsAdapter.getItem(editingAppPosition)?.apply {
-                    LauncherIconHelper.cacheIcon(
-                        this@LauncherActivity,
-                        bitmap,
-                        "pinned-",
-                        AppUtils.getPackageName(packageName),
-                        user
-                    )
-                    icon = BitmapDrawable(resources, bitmap)
-                }?.let { pinnedAppsAdapter.updateItem(it) }
-            }
+        if (resultCode == RESULT_OK && requestCode == SET_ICON_REQUEST && data != null) {
+            pinnedAppsAdapter.getItem(editingAppPosition)?.apply {
+                LauncherIconHelper.cacheIcon(
+                    this@LauncherActivity,
+                    data,
+                    "pinned-",
+                    AppUtils.getPackageName(packageName),
+                    user
+                )?.let { icon = it }
+            }?.let { pinnedAppsAdapter.updateItem(it) }
         }
 
         // Call super to handle anything else not handled here.
