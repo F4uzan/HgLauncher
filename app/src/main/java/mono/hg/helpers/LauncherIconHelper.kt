@@ -131,7 +131,13 @@ object LauncherIconHelper {
      *                      This component name will be reduced to package name.
      * @param user          The user owning this component name.
      */
-    fun cacheIcon(context: Context, intent: Intent, prefix: String, componentName: String, user: Long): Drawable? {
+    fun cacheIcon(
+        context: Context,
+        intent: Intent,
+        prefix: String,
+        componentName: String,
+        user: Long
+    ): Drawable? {
         val iconPath = "${context.filesDir.path}/${user}-${prefix}${componentName}"
 
         // Used for icon packs that sends over a Bitmap directly.
@@ -163,8 +169,14 @@ object LauncherIconHelper {
      *
      * @return The path to the cached icon. Null if it can't be found.
      */
-    fun getCachedIconPath(context: Context, prefix: String, componentName: String, user: Long): String? {
-        val customIconPath = "${context.filesDir.path}/${user}-${prefix}${AppUtils.getPackageName(componentName)}"
+    fun getCachedIconPath(
+        context: Context,
+        prefix: String,
+        componentName: String,
+        user: Long
+    ): String? {
+        val customIconPath =
+            "${context.filesDir.path}/${user}-${prefix}${AppUtils.getPackageName(componentName)}"
 
         with(File(customIconPath)) {
             return if (exists() && ! isDirectory) {
@@ -561,17 +573,18 @@ object LauncherIconHelper {
         appPackageName: String,
         user: Long
     ): Drawable? {
-        return if (Utils.atLeastLollipop()) {
+        if (Utils.atLeastLollipop()) {
             try {
                 val launcher =
-                    activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-
+                    activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps?
                 val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
 
-                launcher.getActivityList(
-                    AppUtils.getPackageName(appPackageName),
-                    userManager.getUserForSerialNumber(user)
-                )[0].getBadgedIcon(0)
+                launcher?.apply {
+                    return getActivityList(
+                        AppUtils.getPackageName(appPackageName),
+                        userManager.getUserForSerialNumber(user)
+                    )[0].getBadgedIcon(0)
+                }
             } catch (w: SecurityException) {
                 // Fall back and retrieve the icon from package manager.
                 // We probably don't have permission to access the badged icon yet.
@@ -579,10 +592,9 @@ object LauncherIconHelper {
                     activity.packageManager.getActivityIcon(it)
                 }
             }
-        } else {
-            ComponentName.unflattenFromString(appPackageName)?.let {
-                activity.packageManager.getActivityIcon(it)
-            }
         }
+
+        return ComponentName.unflattenFromString(appPackageName)
+            ?.let { activity.packageManager.getActivityIcon(it) }
     }
 }

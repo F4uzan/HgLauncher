@@ -151,7 +151,7 @@ class AppsListPage : GenericPage() {
 
         if (Utils.atLeastLollipop()) {
             launcherApps =
-                requireActivity().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+                requireActivity().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps?
         }
         userUtils = UserUtils(requireContext())
 

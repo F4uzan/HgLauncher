@@ -181,7 +181,7 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         if (Utils.atLeastLollipop()) {
-            launcherApps = this.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+            launcherApps = this.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps?
         }
         userUtils = UserUtils(this)
 

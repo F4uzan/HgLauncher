@@ -171,10 +171,10 @@ object AppUtils {
             val handle = UserUtils(activity).getUser(user)
             val launcher = activity.getSystemService(
                 Context.LAUNCHER_APPS_SERVICE
-            ) as LauncherApps
+            ) as LauncherApps?
 
             with(ComponentName.unflattenFromString(componentName)) {
-                launcher.startAppDetailsActivity(this, handle, null, null)
+                launcher?.startAppDetailsActivity(this, handle, null, null)
             }
         } else {
             with(Uri.fromParts("package", getPackageName(componentName), null)) {
@@ -207,9 +207,9 @@ object AppUtils {
                 val handle = UserUtils(activity).getUser(app.user)
                 val launcher = activity.getSystemService(
                     Context.LAUNCHER_APPS_SERVICE
-                ) as LauncherApps
+                ) as LauncherApps?
                 with(ComponentName.unflattenFromString(app.packageName)) {
-                    launcher.startMainActivity(this, handle, null, null)
+                    launcher?.startMainActivity(this, handle, null, null)
                 }
             } else {
                 quickLaunch(activity, app.packageName)
@@ -357,9 +357,9 @@ object AppUtils {
         val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
         val launcher = activity.getSystemService(
             Context.LAUNCHER_APPS_SERVICE
-        ) as LauncherApps
+        ) as LauncherApps?
         userManager.userProfiles.forEach { profile ->
-            launcher.getActivityList(null, profile).forEach { activityInfo ->
+            launcher?.getActivityList(null, profile)?.forEach { activityInfo ->
                 val componentName = activityInfo.componentName.flattenToString()
                 val userPackageName: String
                 val user = userUtils.getSerial(profile)
