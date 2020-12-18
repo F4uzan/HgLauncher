@@ -64,7 +64,7 @@ class AppsListPage : GenericPage() {
     /*
      * Index of an app that is currently being edited.
      */
-    private var editingAppPosition: Int = -1
+    private var editingAppPosition: Int = - 1
 
     /*
      * Adapter for installed apps.
@@ -323,21 +323,20 @@ class AppsListPage : GenericPage() {
         // Update the icon on the selected app.
         if (resultCode == RESULT_OK && requestCode == SET_ICON_REQUEST) {
             data?.getParcelableExtra<Bitmap>("icon")?.let { bitmap ->
-                appsAdapter.getItem(editingAppPosition).apply {
-                    this?.packageName?.let {
-                        LauncherIconHelper.cacheIcon(
-                            requireContext(),
-                            bitmap,
-                            "",
-                            AppUtils.getPackageName(it)
-                        )
-                    }
-                    this?.icon = BitmapDrawable(resources, bitmap)
+                appsAdapter.getItem(editingAppPosition)?.apply {
+                    LauncherIconHelper.cacheIcon(
+                        requireContext(),
+                        bitmap,
+                        "",
+                        AppUtils.getPackageName(packageName),
+                        user
+                    )
+                    icon = BitmapDrawable(resources, bitmap)
                 }?.let { appsAdapter.updateItem(it) }
             }
 
             // Reset the index once we're done.
-            editingAppPosition = -1
+            editingAppPosition = - 1
         }
     }
 
@@ -411,7 +410,12 @@ class AppsListPage : GenericPage() {
                     }
                     R.id.action_icon_reset -> {
                         // Reset the icon cache first.
-                        LauncherIconHelper.deleteCachedIcon(requireContext(), "", app.packageName)
+                        LauncherIconHelper.deleteCachedIcon(
+                            requireContext(),
+                            "",
+                            app.packageName,
+                            app.user
+                        )
 
                         // Retrieve a brand new icon.
                         app.icon = LauncherIconHelper.getIcon(

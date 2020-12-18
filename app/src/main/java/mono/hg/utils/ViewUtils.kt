@@ -213,7 +213,12 @@ object ViewUtils {
 
             // 'Reset icon' should only be visible if there's a custom icon.
             menu.findItem(R.id.action_icon_reset).isVisible =
-                ! LauncherIconHelper.getCachedIconPath(activity, iconPrefix, app.packageName).isNullOrEmpty()
+                ! LauncherIconHelper.getCachedIconPath(
+                    activity,
+                    iconPrefix,
+                    app.packageName,
+                    app.user
+                ).isNullOrEmpty()
 
             // Only show the 'unpin' option if isPinned is set.
             menu.findItem(R.id.action_unpin).isVisible = isPinned

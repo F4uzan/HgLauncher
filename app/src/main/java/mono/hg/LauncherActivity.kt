@@ -384,16 +384,15 @@ class LauncherActivity : AppCompatActivity() {
         // Update icon when an icon set request is detected.
         if (resultCode == RESULT_OK && requestCode == SET_ICON_REQUEST) {
             data?.getParcelableExtra<Bitmap>("icon")?.let { bitmap ->
-                pinnedAppsAdapter.getItem(editingAppPosition).apply {
-                    this?.packageName?.let {
-                        LauncherIconHelper.cacheIcon(
-                            this@LauncherActivity,
-                            bitmap,
-                            "pinned-",
-                            AppUtils.getPackageName(it)
-                        )
-                    }
-                    this?.icon = BitmapDrawable(resources, bitmap)
+                pinnedAppsAdapter.getItem(editingAppPosition)?.apply {
+                    LauncherIconHelper.cacheIcon(
+                        this@LauncherActivity,
+                        bitmap,
+                        "pinned-",
+                        AppUtils.getPackageName(packageName),
+                        user
+                    )
+                    icon = BitmapDrawable(resources, bitmap)
                 }?.let { pinnedAppsAdapter.updateItem(it) }
             }
         }
@@ -614,7 +613,8 @@ class LauncherActivity : AppCompatActivity() {
                         LauncherIconHelper.deleteCachedIcon(
                             this@LauncherActivity,
                             "pinned-",
-                            app.packageName
+                            app.packageName,
+                            app.user
                         )
 
                         // Retrieve a brand new icon.

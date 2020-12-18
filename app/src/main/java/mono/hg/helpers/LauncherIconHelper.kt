@@ -128,10 +128,11 @@ object LauncherIconHelper {
      * @param prefix        The filename prefix for this cache.
      * @param componentName The component name that will use this cached Bitmap.
      *                      This component name will be reduced to package name.
+     * @param user          The user owning this component name.
      */
-    fun cacheIcon(context: Context, bitmap: Bitmap, prefix: String, componentName: String) {
+    fun cacheIcon(context: Context, bitmap: Bitmap, prefix: String, componentName: String, user: Long) {
         try {
-            FileOutputStream(context.filesDir.path + File.separatorChar + prefix + componentName).apply {
+            FileOutputStream("${context.filesDir.path}/${user}-${prefix}${componentName}").apply {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, this) // Quality is unused here.
                 flush()
                 close()
@@ -147,14 +148,12 @@ object LauncherIconHelper {
      * @param context       Context required to retrieve the path to the files directory.
      * @param prefix        The filename prefix of the cached icon.
      * @param componentName The component name of this cached icon.
+     * @param user          The user owning this component name.
      *
      * @return The path to the cached icon. Null if it can't be found.
      */
-    fun getCachedIconPath(context: Context, prefix: String, componentName: String): String? {
-        val customIconPath =
-            context.filesDir.path + File.separatorChar + prefix + AppUtils.getPackageName(
-                componentName
-            )
+    fun getCachedIconPath(context: Context, prefix: String, componentName: String, user: Long): String? {
+        val customIconPath = "${context.filesDir.path}/${user}-${prefix}${AppUtils.getPackageName(componentName)}"
 
         with(File(customIconPath)) {
             return if (exists() && ! isDirectory) {
@@ -174,9 +173,10 @@ object LauncherIconHelper {
      * @param context       Context required to retrieve the path to the files directory.
      * @param prefix        The filename prefix of the cached icon.
      * @param componentName The component name of this cached icon.
+     * @param user          The user owning this component name.
      */
-    fun deleteCachedIcon(context: Context, prefix: String, componentName: String) {
-        getCachedIconPath(context, prefix, componentName)?.apply {
+    fun deleteCachedIcon(context: Context, prefix: String, componentName: String, user: Long) {
+        getCachedIconPath(context, prefix, componentName, user)?.apply {
             File(this).delete()
         }
     }
@@ -418,7 +418,7 @@ object LauncherIconHelper {
 
         try {
             // If there is a custom icon set, use that over the default one.
-            getCachedIconPath(activity, prefix, appPackageName)?.let { path ->
+            getCachedIconPath(activity, prefix, appPackageName, user)?.let { path ->
                 BitmapFactory.Options().apply {
                     inPreferredConfig = Bitmap.Config.ARGB_8888
                 }.also {
