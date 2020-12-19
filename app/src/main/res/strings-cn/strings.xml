@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App information -->
+    <string name="app_name">HgLauncher</string>
+    <!-- Menu actions -->
+    <string name="action_settings">设置</string>
+    <string name="action_wallpaper">更换壁纸</string>
+    <string name="action_force_refresh">刷新</string>
+    <string name="action_view_widgets">小部件空间</string>
+    <string name="action_remove_widget">移除</string>
+    <string name="action_up_widget">向上移</string>
+    <string name="action_down_widget">向下移</string>
+    <string name="action_web_provider_remove">移除</string>
+    <string name="action_hidden_app_reset">还原全部</string>
+    <string name="action_web_provider_add">添加</string>
+    <string name="action_web_provider_reset">重置</string>
+    <!-- App menu actions -->
+    <string name="action_pin">固定</string>
+    <string name="action_unpin">取消固定</string>
+    <string name="action_hide">隐藏</string>
+    <string name="action_backup">备份</string>
+    <string name="action_uninstall">卸载</string>
+    <string name="action_info">应用信息</string>
+    <string name="action_shorthand">缩略词</string>
+    <string name="action_actions">动作</string>
+    <string name="action_shortcuts">快捷方式</string>
+    <!-- Misc -->
+    <string name="search_hint">搜索......</string>
+    <string name="search_web_hint">在线搜索 \'%1$s\' </string>
+    <string name="search_web_button_prompt">通过</string>
+    <string name="search_web_button">前往</string>
+    <string name="dialog_title_add_provider">添加供应商</string>
+    <string name="dialog_title_edit_provider">编辑供应商</string>
+    <string name="dialog_title_shorthand">设置缩略词</string>
+    <string name="dialog_action_close">关闭</string>
+    <string name="dialog_action_add">添加</string>
+    <string name="dialog_action_edit">编辑</string>
+    <!-- Error messages -->
+    <string name="err_activity_null">无法启动应用</string>
+    <string name="err_invalid_url">无效的 URL</string>
+    <string name="err_provider_exists">搜索引擎名称必须是独有的</string>
+    <string name="err_no_method_panel">这只在较新的安卓系统上才有可能</string>
+    <!-- Start up dialogue, shown to new user -->
+    <string name="dialog_start_hint_title">欢迎！</string>
+    <string name="dialog_start_hint_message_one">这是你的桌面。在这里，你可以......\n
+        • 点击打开应用程序列表\n
+        • 长按更改壁纸和打开设置</string>
+    <!-- Accessibility string -->
+    <string name="desc_touch_receiver">桌面视图</string>
+    <string name="desc_apps_list">应用列表</string>
+    <string name="desc_icon">应用程序</string>
+    <string name="desc_clear_search">清除搜索查询</string>
+    <!-- Built-in search providers -->
+    <string name="search_provider_none">始终询问</string>
+    <string name="search_provider_google" translatable="false">Google</string>
+    <string name="search_provider_ddg" translatable="false">DuckDuckGo</string>
+    <string name="search_provider_searx" translatable="false">searx</string>
+    <string name="search_provider_startpage" translatable="false">Startpage</string>
+</resources>
