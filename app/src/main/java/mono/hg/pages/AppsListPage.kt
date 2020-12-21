@@ -245,15 +245,15 @@ class AppsListPage : GenericPage() {
     override fun onResume() {
         super.onResume()
 
+        // Create a new package name list to compare against the old package name list
+        val newPackageNameList = getPackageNameList(ArrayList())
+
         // Detect newly installed/removed apps.
         // This check is used when changes occur
         // when the launcher is in the background (i.e, not caught by the receiver).
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             withContext(Dispatchers.Default) {
                 val mutableAdapterList = ArrayList<App>()
-
-                // Create the second list to compare against the first.
-                val newPackageNameList = getPackageNameList(ArrayList())
 
                 val start = newPackageNameList.subtract(packageNameList)
                 val end = packageNameList.subtract(newPackageNameList)
