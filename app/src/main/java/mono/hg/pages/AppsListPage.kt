@@ -249,23 +249,25 @@ class AppsListPage : GenericPage() {
         // This check is used when changes occur
         // when the launcher is in the background (i.e, not caught by the receiver).
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            val mutableAdapterList = ArrayList<App>()
-
             withContext(Dispatchers.Default) {
+                val mutableAdapterList = ArrayList<App>()
+
                 // Create the second list to compare against the first.
                 val newPackageNameList = getPackageNameList(ArrayList())
 
-                if (newPackageNameList != packageNameList.sorted() && appsAdapter.hasFinishedLoading()) {
-                    mutableAdapterList.addAll(appsAdapter.currentItems.toMutableList())
+                val start = newPackageNameList.subtract(packageNameList)
+                val end = packageNameList.subtract(newPackageNameList)
 
-                    // Find the difference in the two lists.
-                    // Since the new list and the old list can vary in size,
-                    // we can't really just subtract it. We need to subtract
-                    // twice then add the differences together.
-                    val start = newPackageNameList.minus(packageNameList)
-                    val end = packageNameList.minus(newPackageNameList)
+                // Find the difference in the two lists.
+                // Since the new list and the old list can vary in size,
+                // we can't really just subtract it. We need to subtract
+                // twice then add the differences together.
+                start.plus(end).apply {
+                    if (this.isNotEmpty()) {
+                        mutableAdapterList.addAll(appsAdapter.currentItems.toMutableList())
+                    }
 
-                    start.plus(end).forEach { app ->
+                    this.forEach { app ->
                         // There's no need to process ourselves.
                         if (app.contains(requireContext().packageName)) return@forEach
 
@@ -284,11 +286,10 @@ class AppsListPage : GenericPage() {
                         // exists in the current list. This is because our list
                         // won't be notified on an app update. There can only
                         // be two states: installing or removing.
-                        mutableAdapterList.find { it.userPackageName == app }?.apply {
-                            // If it exists, then it's probably an uninstall signal.
-                            mutableAdapterList.remove(this)
-                        } ?: run {
-                            // Otherwise, try and add this app.
+                        //
+                        // If retainAll doesn't return a true, then assume
+                        // that the app is a new one.
+                        if (! mutableAdapterList.retainAll { it.userPackageName != app }) {
                             manager.getLaunchIntentForPackage(
                                 AppUtils.getPackageName(componentName)
                             )?.apply {
@@ -296,21 +297,21 @@ class AppsListPage : GenericPage() {
                             }
                         }
                     }
-                }
 
-                withContext(Dispatchers.Main) {
-                    if (mutableAdapterList.isNotEmpty()) {
-                        appsAdapter.updateDataSet(
-                            mutableAdapterList.sortedWith(
-                                DisplayNameComparator(PreferenceHelper.isListInverted)
-                            ), true
-                        )
+                    withContext(Dispatchers.Main) {
+                        if (mutableAdapterList.isNotEmpty()) {
+                            appsAdapter.updateDataSet(
+                                mutableAdapterList.sortedWith(
+                                    DisplayNameComparator(PreferenceHelper.isListInverted)
+                                ), true
+                            )
+                        }
                     }
-                }
 
-                // Update the internal list.
-                getPackageNameList(packageNameList)
-                AppUtils.updatePackageCount(manager)
+                    // Update the internal list.
+                    getPackageNameList(packageNameList)
+                    AppUtils.updatePackageCount(manager)
+                }
             }
         }
     }
@@ -561,11 +562,7 @@ class AppsListPage : GenericPage() {
             // If there's an app with a matching componentName,
             // then it's probably the same app. Update that entry instead
             // of adding a new app.
-            if (user == userUtils?.currentSerial) {
-                this.find { it.userPackageName == componentName }
-            } else {
-                this.find { it.userPackageName == "${user}-${componentName}" }
-            }?.apply {
+            this.find { it.userPackageName == "${user}-${componentName}" }?.apply {
                 appName = AppUtils.getPackageLabel(
                     requireActivity().packageManager,
                     componentName
