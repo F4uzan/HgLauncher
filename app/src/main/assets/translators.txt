@@ -70,6 +70,9 @@ Portuguese (Portugal) translation
 <b>sicherist (sicherist)</b>
 German translation
 
+<b>sr093906 (sr093906)</b>
+Chinese translation
+
 <b>ssantos (SantosSi)</b>
 Portuguese translation
 
