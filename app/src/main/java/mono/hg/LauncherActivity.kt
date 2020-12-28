@@ -872,7 +872,7 @@ class LauncherActivity : AppCompatActivity() {
                         }
                     SlidingUpPanelLayout.PanelState.EXPANDED -> {
                         // Hide keyboard if container is invisible.
-                        ActivityServiceUtils.hideSoftKeyboard(this@LauncherActivity)
+                        ActivityServiceUtils.hideSoftKeyboard(this@LauncherActivity, searchBar)
 
                         // Disable the drawer when the search bar is invisible.
                         slidingHome.isTouchEnabled = false
