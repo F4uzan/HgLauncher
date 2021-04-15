@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Strings for Settings (and all related activity) -->
+    <string name="title_activity_settings">设置</string>
+    <!-- Header/category names -->
+    <string name="pref_header_about">关于</string>
+    <string name="pref_header_gestures">手势</string>
+    <string name="pref_header_wall">桌面</string>
+    <string name="pref_header_pages">页面</string>
+    <string name="pref_header_list">应用程序列表</string>
+    <string name="pref_header_interface">界面</string>
+    <string name="pref_header_behavior">行为</string>
+    <string name="pref_header_web">Web 搜索</string>
+    <string name="pref_header_backup_restore">备份 &amp; 还原</string>
+    <string name="pref_header_hidden_apps">隐藏的应用程序</string>
+    <string name="pref_header_hidden_apps_desc">管理隐藏应用的列表</string>
+    <string name="pref_header_backup">备份</string>
+    <string name="pref_header_restore">还原</string>
+    <string name="pref_header_web_provider_title">Web 搜索引擎</string>
+    <string name="pref_header_pages_drawer">抽屉</string>
+
+    <!-- Summaries for headers/categories -->
+    <string name="pref_summary_web">Web 搜索设置</string>
+    <string name="pref_summary_gestures">手势设置</string>
+    <string name="pref_summary_wall">屏幕方向、系统栏模式</string>
+    <string name="pref_summary_list">隐藏的应用、图标包、应用列表行为</string>
+    <string name="pref_summary_pages">小部件空间、应用列表内容、抽屉行为</string>
+    <string name="pref_header_restore_desc">还原保存的配置文件</string>
+    <string name="pref_header_backup_desc">保存启动器配置</string>
+    <string name="pref_header_web_provider_desc">添加或删除 web 搜索引擎</string>
+
+
+    <!-- Backup and restore -->
+    <string name="backup_name_hint">输入一个名称......</string>
+    <string name="reset_preference">重置配置</string>
+    <string name="reset_preference_desc">重置所有设置到默认值</string>
+    <string name="reset_preference_warn">这会永久重置你的整个配置</string>
+    <string name="reset_preference_toast">配置重置</string>
+
+    <!-- Web search provider -->
+    <string name="web_provider_name_hint">名称 (必须独有)</string>
+    <string name="web_provider_url_hint" translatable="false">https://{url}/search?q=%s</string>
+    <!-- Easter egg -->
+    <string name="version_key_toast_plural">再点 %1$d 下以打开测试模式。</string>
+    <string name="version_key_toast">再次点击以确认</string>
+    <string name="version_key_name">HgLauncher (测试)</string>
+    <!-- Dialog and toast messages -->
+    <string name="dialog_ok">好的</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="backup_exist">这个备份名称已经存在</string>
+    <string name="backup_exist_overwrite">覆盖</string>
+    <string name="restore_complete">备份已还原</string>
+    <string name="backup_complete">备份已保存</string>
+    <string name="backup_empty">输入备份文件名</string>
+
+    <!-- Credits dialog. -->
+    <string name="about_credits_dialog_title">致谢</string>
+    <string name="about_credits">致谢</string>
+    <string name="about_credits_desc">HgLauncher 的缔造者们</string>
+
+    <!-- Customizations -->
+    <string name="app_theme">主题</string>
+    <string name="app_theme_auto">自动</string>
+    <string name="app_theme_light">浅色</string>
+    <string name="app_theme_dark">深色</string>
+    <string name="app_theme_black">黑色</string>
+    <string name="windowbar_mode">隐藏系统栏</string>
+    <string name="windowbar_mode_none">关闭</string>
+    <string name="windowbar_mode_status">状态栏</string>
+    <string name="windowbar_mode_nav">导航栏</string>
+    <string name="windowbar_mode_both">两者</string>
+
+    <!-- Accent can be translated as 'color' too. Relates to the color scheme of the launcher. -->
+    <string name="app_theme_accent">强调色</string>
+    <string name="app_theme_accent_dialog">挑一种颜色</string>
+
+    <string name="gesture_left">左滑</string>
+    <string name="gesture_right">右滑</string>
+    <string name="gesture_up">上滑</string>
+    <string name="gesture_down">下滑</string>
+    <string name="gesture_single_tap">点按</string>
+    <string name="gesture_double_tap">按两次</string>
+    <string name="gesture_pinch">缩放</string>
+    <string name="gesture_handler">手势处理程序</string>
+    <string name="gesture_handler_default">无</string>
+    <string name="gesture_handler_default_value" translatable="false">none</string>
+    <string name="gesture_action_default">无</string>
+    <string name="gesture_action_default_value" translatable="false">none</string>
+    <string name="gesture_action_widget">打开小部件空间</string>
+    <string name="gesture_action_handler">使用手势处理程序的操作</string>
+    <string name="gesture_action_app">启用应用程序</string>
+    <string name="gesture_action_status">展开通知栏</string>
+    <string name="gesture_action_panel">展开快速设置面板</string>
+    <string name="gesture_action_list">打开应用列表</string>
+    <string name="gesture_action_drawer">打开抽屉</string>
+
+    <string name="gesture_action_app_dialog_title">选择应用</string>
+
+    <string name="pref_title_app_list_order">顺序</string>
+    <string name="app_list_order_normal">A 到 Z</string>
+    <string name="app_list_order_inverse">Z 到 A</string>
+    <!-- Translate this as "An always open drawer -->
+    <string name="static_app_list">始终打开抽屉</string>
+    <!-- Translate as "Open the drawer when" -->
+    <string name="static_app_list_desc">进入启动器时打开抽屉</string>
+
+    <string name="app_list_keep_search">保留搜索文本</string>
+    <string name="app_list_keep_search_desc">解散启动器保持后保留搜索查询</string>
+    <!-- This is the animation shown when starting an app from the launcher -->
+    <string name="pref_app_launch_anim">应用启动动画</string>
+    <string name="anim_list_default">系统定义</string>
+    <string name="anim_list_pull_up">引体上升</string>
+    <string name="anim_list_slide_in">滑入</string>
+
+    <string name="pref_search_provider">默认 web 搜索引擎</string>
+
+    <string name="web_search_long_press">扩展的搜索菜单</string>
+    <string name="web_search_long_press_desc">除非设置为 \'始终询问\'，长按 \'转到\' 允许选择搜索引擎</string>
+
+    <string name="keyboard_focus">键盘聚焦</string>
+    <string name="keyboard_focus_desc">拉下抽屉时显示键盘</string>
+    <!-- Translate as "Ask about …" -->
+    <string name="web_search">web 搜索提示</string>
+    <string name="web_search_desc">询问是否进行在线搜索</string>
+    <!-- There are many such adaptive icons -->
+    <string name="shadow_adaptive_icon">适应性图标阴影</string>
+    <string name="shadow_adaptive_icon_desc">浅阴影自适应图标</string>
+
+    <string name="pref_icon_view">隐藏应用图标</string>
+    <string name="pref_icon_view_desc">在较慢的设备上更好</string>
+
+    <string name="pref_shade_view">壁纸阴影</string>
+    <string name="pref_shade_view_desc">对壁纸的顶部和底部进行阴影处理</string>
+    <!-- This is an option to have an always open favorite panel -->
+    <string name="static_favourites">静态收藏面板</string>
+    <string name="static_favourites_desc">滚动时可以看到收藏面板</string>
+
+    <!-- The display mode of the app list -->
+    <string name="app_list_mode">模式</string>
+    <string name="app_list_mode_list">列表</string>
+    <string name="app_list_mode_grid">网格</string>
+
+    <string name="icon_pack">图标</string>
+    <string name="icon_pack_default">默认</string>
+    <string name="icon_pack_default_value" translatable="false">default</string>
+
+    <!-- The background of the app list -->
+    <string name="list_background">背景</string>
+    <string name="list_background_theme">不透明</string>
+    <string name="list_background_trans">透明</string>
+    <string name="list_background_none">无</string>
+
+    <string name="orientation">方向</string>
+    <string name="orientation_sensor">系统</string>
+    <string name="orientation_portrait">竖屏</string>
+    <string name="orientation_landscape">横屏</string>
+</resources>
