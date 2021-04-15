@@ -28,7 +28,7 @@
     <string name="gesture_single_tap">Tekan</string>
     <string name="pref_shade_view">Bayangan wallpaper</string>
     <string name="app_theme_light">Terang</string>
-    <string name="keyboard_focus_desc">Tampilkan keyboard saat daftar aplikasi ditarik ke bawah</string>
+    <string name="keyboard_focus_desc">Tampilkan keyboard saat drawer ditarik ke bawah</string>
     <string name="web_provider_name_hint">Nama (harus unik)</string>
     <string name="backup_name_hint">Ketikkan nama…</string>
     <string name="gesture_up">Usap ↑</string>
@@ -47,7 +47,7 @@
     <string name="gesture_action_handler">Gunakan tindakan penangan perilaku</string>
     <string name="pref_icon_view_desc">Lebih baik pada perangkat yang lebih lambat</string>
     <string name="gesture_right">Usap →</string>
-    <string name="static_app_list_desc">Buka daftar aplikasi saat memasuki peluncur</string>
+    <string name="static_app_list_desc">Buka drawer saat memasuki peluncur</string>
     <string name="windowbar_mode">Sembunyikan bilah sistem</string>
     <string name="version_key_toast_plural">Ketuk %1$d kali lagi untuk menghidupkan modus pengujian.</string>
     <string name="backup_exist">Nama file cadangan ini sudah ada.</string>
@@ -76,7 +76,7 @@
     <string name="gesture_action_panel">Perluas panel pengaturan cepat</string>
     <string name="web_search_desc">Meminta untuk mencari pencarian Anda secara daring</string>
     <string name="pref_header_backup_restore">Cadangkan &amp; pulihkan</string>
-    <string name="static_app_list">Selalu buka daftar aplikasi</string>
+    <string name="static_app_list">Selalu buka drawer</string>
     <string name="pref_header_web_provider_desc">Tambah atau hapus mesin pencari web</string>
     <string name="backup_complete">Cadangan disimpan.</string>
     <string name="app_list_keep_search_desc">Simpan permintaan pencarian setelah mengabaikan peluncur</string>
@@ -106,6 +106,10 @@
     <string name="app_theme_auto">Otomatis</string>
     <string name="app_list_mode_grid">Kisi</string>
     <string name="app_list_mode_list">Daftar</string>
-    <string name="app_list_mode">Mode daftar aplikasi</string>
+    <string name="app_list_mode">Mode</string>
     <string name="gesture_pinch">Cubit</string>
+    <string name="gesture_action_drawer">Buka drawer</string>
+    <string name="pref_summary_pages">Ruang widget, daftar konten aplikasi, perilaku drawer</string>
+    <string name="pref_header_pages_drawer">Drawer</string>
+    <string name="pref_header_pages">Halaman</string>
 </resources>

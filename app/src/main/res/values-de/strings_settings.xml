@@ -26,7 +26,7 @@
     <string name="pref_header_restore_desc">Gesicherte Einstellungen laden</string>
     <string name="reset_preference">Konfiguration zurücksetzen</string>
     <string name="reset_preference_desc">Standardeinstellungen wiederherstellen</string>
-    <string name="reset_preference_warn">Hierdurch wird die gesamte Konfiguration zurückgesetzt. Sobald dies geschehen ist, kann es nicht mehr rückgängig gemacht werden!</string>
+    <string name="reset_preference_warn">Dadurch wird die gesamte Konfiguration dauerhaft zurückgesetzt.</string>
     <string name="dialog_ok">Verstanden</string>
     <string name="reset_preference_toast">Konfiguration wurde zurückgesetzt.</string>
     <!-- Web search provider -->
@@ -78,7 +78,7 @@
     <string name="app_list_order_normal">A nach Z</string>
     <string name="app_list_order_inverse">Z nach A</string>
     <string name="static_app_list">App-Liste immer öffnen</string>
-    <string name="static_app_list_desc">App-Liste beim öffnen des Launchers öffnen. Dies verhindert nicht, dass sie geschlossen wird.</string>
+    <string name="static_app_list_desc">Schublade beim Aufrufen des Launcher öffnen</string>
     <string name="app_list_keep_search_desc">Suchanfrage beibehalten, auch wenn der Launcher in den Hintergrund gerät</string>
     <string name="app_list_keep_search">Suchtext beibehalten</string>
     <string name="pref_app_launch_anim">Startanimation</string>
@@ -93,7 +93,7 @@
     <string name="web_search">Internetsuche anbieten</string>
     <string name="web_search_desc">Leiste zur Online-Suche anzeigen</string>
     <string name="shadow_adaptive_icon">Schatten für adaptive Icons</string>
-    <string name="shadow_adaptive_icon_desc">Adaptive Icons mit einem leichten Schatten hinterlegen. Kann Leistung verringern.</string>
+    <string name="shadow_adaptive_icon_desc">Adaptive Icons mit einem hellem Schatten</string>
     <string name="pref_icon_view">Icons verstecken</string>
     <string name="pref_icon_view_desc">Auf langsamen Geräten empfohlen</string>
     <string name="pref_shade_view">Schatten über Hintergrundbild</string>
@@ -108,4 +108,6 @@
     <string name="orientation_landscape">Horizontal</string>
     <string name="app_theme_accent_dialog">Wählen Sie eine Farbe</string>
     <string name="app_theme_auto">Automatisch</string>
+    <string name="pref_header_pages_drawer">Schublade</string>
+    <string name="pref_header_pages">Seiten</string>
 </resources>
