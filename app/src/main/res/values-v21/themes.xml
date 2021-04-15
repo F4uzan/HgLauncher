@@ -9,17 +9,4 @@
         <item name="popupMenuStyle">@style/Widget.AppCompat.PopupMenu.Overflow</item>
         <item name="widgetPopupStyle">@style/Widget.AppCompat.Light.PopupMenu.Overflow</item>
     </style>
-
-    <style name="LauncherTheme.Dark" parent="@style/AppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowShowWallpaper">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="backgroundColor">@color/colorBackgroundGray</item>
-        <item name="backgroundColorAlt">@color/colorBackgroundGrayAlt</item>
-        <item name="popupMenuStyle">@style/Widget.AppCompat.PopupMenu.Overflow</item>
-        <item name="widgetPopupStyle">@style/Widget.AppCompat.PopupMenu.Overflow</item>
-    </style>
 </resources>

@@ -60,8 +60,6 @@
     <string name="app_theme">Aplikazioaren itxura</string>
     <string name="app_theme_light">Argia</string>
     <string name="app_theme_dark">Iluna</string>
-    <string name="app_theme_black">Beltza</string>
-
     <string name="windowbar_mode">Sistemaren barrak ezkutatu</string>
     <string name="windowbar_mode_none">Ezgaituta</string>
     <string name="windowbar_mode_status">Egoera barra ezkutatu</string>

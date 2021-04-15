@@ -51,7 +51,6 @@
     <string name="windowbar_mode">Esconder barras do sistema</string>
     <string name="version_key_toast_plural">Tocar em %1$d mais vezes para ativar o modo de teste.</string>
     <string name="backup_exist">Este nome de ficheiro de cópia de segurança já existe.</string>
-    <string name="app_theme_black">Preto</string>
     <string name="about_credits_dialog_title">Créditos</string>
     <string name="gesture_action_app">Iniciar app</string>
     <string name="windowbar_mode_status">Barra de status</string>

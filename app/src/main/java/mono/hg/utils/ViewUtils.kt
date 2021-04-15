@@ -5,11 +5,7 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
-import android.view.View
-import android.view.Window
-import android.view.WindowInsets
-import android.view.WindowInsetsController
-import android.view.WindowManager
+import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -248,11 +244,12 @@ object ViewUtils {
      * @param activity              The activity to set the theme to.
      * @param isLauncherActivity    Whether to use the LauncherTheme. This is a special theme
      *                              meant to be used solely for the LauncherActivity,
-     *                              and will likely cause issues with a= regular activity.
+     *                              and will likely cause issues with a regular activity.
+     *                              This argument is only used for API 15 and lower.
      */
     fun switchTheme(activity: AppCompatActivity, isLauncherActivity: Boolean) {
         if (Utils.sdkIsAround(17)) {
-            switchThemeDelegate(activity, isLauncherActivity)
+            switchThemeDelegate(activity)
         } else {
             switchThemeLegacy(activity, isLauncherActivity)
         }
@@ -262,33 +259,21 @@ object ViewUtils {
         if (isLauncherActivity) {
             when (PreferenceHelper.appTheme()) {
                 "light" -> activity.setTheme(R.style.LauncherTheme)
-                "dark" -> activity.setTheme(R.style.LauncherTheme_Dark)
-                "black" -> activity.setTheme(R.style.LauncherTheme_Night)
-                else -> activity.setTheme(R.style.LauncherTheme_Night)
+                else -> activity.setTheme(R.style.LauncherTheme_Dark)
             }
         } else {
             when (PreferenceHelper.appTheme()) {
                 "light" -> activity.setTheme(R.style.AppTheme)
-                "dark" -> activity.setTheme(R.style.AppTheme_Dark)
-                "black" -> activity.setTheme(R.style.AppTheme_Night)
-                else -> activity.setTheme(R.style.AppTheme_Night)
+                else -> activity.setTheme(R.style.AppTheme_Dark)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private fun switchThemeDelegate(activity: AppCompatActivity, isLauncherActivity: Boolean) {
+    private fun switchThemeDelegate(activity: AppCompatActivity) {
         when (PreferenceHelper.appTheme()) {
             "light" -> activity.delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
-            "dark" -> {
-                activity.delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
-                if (isLauncherActivity) {
-                    activity.setTheme(R.style.LauncherTheme_Dark)
-                } else {
-                    activity.setTheme(R.style.AppTheme_Dark)
-                }
-            }
-            "black" -> activity.delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+            "dark" -> activity.delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
             else -> if (Utils.atLeastQ()) {
                 activity.delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             } else {

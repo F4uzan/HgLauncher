@@ -45,7 +45,6 @@
     <string name="app_theme">Wybierz motyw</string>
     <string name="app_theme_light">Biały</string>
     <string name="app_theme_dark">Szary</string>
-    <string name="app_theme_black">Czarny</string>
     <string name="windowbar_mode">Ukryj paski systemowe</string>
     <string name="windowbar_mode_none">Wyłączone</string>
     <string name="windowbar_mode_status">Ukryj pasek stanu</string>

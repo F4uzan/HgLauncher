@@ -43,7 +43,6 @@
     <string name="app_theme">Tema</string>
     <string name="app_theme_light">Claro</string>
     <string name="app_theme_dark">Escuro</string>
-    <string name="app_theme_black">Preto</string>
     <string name="windowbar_mode">Ocultar barras do sistema</string>
     <string name="windowbar_mode_none">Fora</string>
     <string name="windowbar_mode_status">Barra de status</string>

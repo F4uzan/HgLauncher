@@ -63,7 +63,6 @@
     <string name="app_theme_auto">Auto</string>
     <string name="app_theme_light">Light</string>
     <string name="app_theme_dark">Dark</string>
-    <string name="app_theme_black">Black</string>
     <string name="windowbar_mode">Hide system bars</string>
     <string name="windowbar_mode_none">Off</string>
     <string name="windowbar_mode_status">Status bar</string>

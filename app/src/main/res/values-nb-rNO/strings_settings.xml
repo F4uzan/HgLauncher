@@ -51,7 +51,6 @@
     <string name="windowbar_mode">Skjul systemstolper</string>
     <string name="version_key_toast_plural">Trykk %1$d ganger til for å skru på testmodus.</string>
     <string name="backup_exist">Sikkerhetskopifilnavnet finnes allerede.</string>
-    <string name="app_theme_black">Svart</string>
     <string name="about_credits_dialog_title">Bidragsytere</string>
     <string name="gesture_action_app">Start program</string>
     <string name="windowbar_mode_status">Statusstolpe</string>

@@ -42,7 +42,6 @@
     <string name="app_theme">Tema app</string>
     <string name="app_theme_light">Chiaro</string>
     <string name="app_theme_dark">Nero</string>
-    <string name="app_theme_black">Nero scuro</string>
     <string name="windowbar_mode">Nascondi le barre di sistema</string>
     <string name="windowbar_mode_none">Disabilitato</string>
     <string name="windowbar_mode_status">Barra di stato</string>

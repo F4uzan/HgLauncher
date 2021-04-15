@@ -52,7 +52,6 @@
     <string name="app_theme">Aspecto de la aplicación</string>
     <string name="app_theme_light">Claro</string>
     <string name="app_theme_dark">Oscuro</string>
-    <string name="app_theme_black">Negro</string>
     <string name="windowbar_mode">Ocultar las barras del sistema</string>
     <string name="windowbar_mode_none">Deshabilitado</string>
     <string name="windowbar_mode_status">Ocultar la barra de estado</string>

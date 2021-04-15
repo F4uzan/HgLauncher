@@ -52,7 +52,6 @@
     <string name="app_theme">App-Design</string>
     <string name="app_theme_light">Hell</string>
     <string name="app_theme_dark">Dunkel</string>
-    <string name="app_theme_black">Schwarz</string>
     <string name="windowbar_mode">Systemleisten versteckenHide system bars</string>
     <string name="windowbar_mode_none">Deaktiviert</string>
     <string name="windowbar_mode_status">Statusleiste</string>

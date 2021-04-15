@@ -27,7 +27,6 @@
     <string name="windowbar_mode_nav">내비게이션 바</string>
     <string name="windowbar_mode_status">상태 바</string>
     <string name="windowbar_mode">설정 바 숨기기</string>
-    <string name="app_theme_black">검정</string>
     <string name="app_theme_dark">어둡게</string>
     <string name="app_theme_light">밝게</string>
     <string name="app_theme_auto">자동</string>

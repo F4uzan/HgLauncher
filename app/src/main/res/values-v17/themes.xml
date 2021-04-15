@@ -4,29 +4,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorEdgeEffect" tools:targetApi="lollipop">@color/colorBackgroundGrayAlt</item>
+        <item name="android:colorEdgeEffect" tools:targetApi="lollipop">
+            @color/colorBackgroundGrayAlt
+        </item>
         <item name="cardColor">@color/colorBackgroundGray</item>
         <item name="backgroundColor">@color/colorBackgroundWhite</item>
         <item name="backgroundColorAlt">@color/colorBackgroundWhiteAlt</item>
         <item name="dividerColor">@color/colorDividerLight</item>
         <item name="textDefaultColor">@color/black</item>
-        <item name="snackbarStyle">@style/SearchSnack</item>
-        <item name="snackbarTextViewStyle">@style/SearchSnack.TextView</item>
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-    </style>
-
-    <style name="AppTheme.Dark" parent="AppTheme">
-        <item name="colorPrimary">@color/colorAccent</item>
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorEdgeEffect" tools:targetApi="lollipop">@color/white</item>
-        <item name="cardColor">@color/colorCardBackgroundGray</item>
-        <item name="android:windowBackground">@color/colorBackgroundGray</item>
-        <item name="backgroundColor">@color/colorBackgroundGray</item>
-        <item name="backgroundColorAlt">@color/transparentBlack</item>
-        <item name="dividerColor">@color/colorBackgroundWhiteAlt</item>
-        <item name="textDefaultColor">@color/white</item>
         <item name="snackbarStyle">@style/SearchSnack</item>
         <item name="snackbarTextViewStyle">@style/SearchSnack.TextView</item>
         <item name="windowNoTitle">true</item>
@@ -41,18 +26,4 @@
         <item name="popupMenuStyle">@style/Widget.Popup.Light</item>
         <item name="widgetPopupStyle">@style/Widget.AppCompat.Light.PopupMenu.Overflow</item>
     </style>
-
-    <style name="LauncherTheme.Dark" parent="@style/AppTheme">
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowShowWallpaper">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
-        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
-        <item name="backgroundColor">@color/colorBackgroundGray</item>
-        <item name="backgroundColorAlt">@color/colorBackgroundGrayAlt</item>
-        <item name="popupMenuStyle">@style/Widget.Popup.Dark</item>
-        <item name="widgetPopupStyle">@style/Widget.Popup.Dark</item>
-    </style>
-
 </resources>

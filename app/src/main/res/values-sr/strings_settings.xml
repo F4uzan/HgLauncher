@@ -41,7 +41,6 @@
     <string name="app_theme">Tema aplikacije</string>
     <string name="app_theme_light">Svetlo</string>
     <string name="app_theme_dark">Tamno</string>
-    <string name="app_theme_black">Crno</string>
     <string name="windowbar_mode">Sakrij sistemsku traku</string>
     <string name="windowbar_mode_none">Onemogući</string>
     <string name="windowbar_mode_status">Sistemska traka</string>

@@ -67,7 +67,6 @@
     <string name="windowbar_mode_nav">Панель навигации</string>
     <string name="windowbar_mode_none">Выключить</string>
     <string name="windowbar_mode">Скрыть системные панели</string>
-    <string name="app_theme_black">Черная</string>
     <string name="app_theme_dark">Темная</string>
     <string name="app_theme_light">Светлая</string>
     <string name="app_theme_auto">Автоматически</string>

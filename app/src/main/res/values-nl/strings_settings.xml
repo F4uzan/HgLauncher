@@ -33,7 +33,6 @@
     <string name="windowbar_mode_status">Statusbalk</string>
     <string name="windowbar_mode_none">Uit</string>
     <string name="windowbar_mode">Systeembalken verbergen</string>
-    <string name="app_theme_black">Zwart</string>
     <string name="app_theme_dark">Donker</string>
     <string name="app_theme_light">Licht</string>
     <string name="app_theme">Thema</string>

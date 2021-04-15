@@ -51,7 +51,6 @@
     <string name="windowbar_mode">Sembunyikan bilah sistem</string>
     <string name="version_key_toast_plural">Ketuk %1$d kali lagi untuk menghidupkan modus pengujian.</string>
     <string name="backup_exist">Nama file cadangan ini sudah ada.</string>
-    <string name="app_theme_black">Hitam</string>
     <string name="about_credits_dialog_title">Ucapan terima kasih</string>
     <string name="gesture_action_app">Meluncurkan aplikasi</string>
     <string name="windowbar_mode_status">Bilah status</string>

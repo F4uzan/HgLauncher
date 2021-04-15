@@ -69,7 +69,6 @@
     <string name="windowbar_mode_nav">Barre de navigation</string>
     <string name="windowbar_mode_status">Barre d\'état</string>
     <string name="windowbar_mode_none">Désactivé</string>
-    <string name="app_theme_black">Noir</string>
     <string name="app_theme_dark">Sombre</string>
     <string name="app_theme_light">Clair</string>
     <string name="app_theme_auto">Auto</string>

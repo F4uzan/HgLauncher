@@ -1,12 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="AppTheme" parent="Theme.MaterialComponents">
         <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorEdgeEffect" tools:targetApi="lollipop">@color/white</item>
         <item name="cardColor">@color/colorCardBackgroundGray</item>
-        <item name="android:windowBackground">@color/black</item>
-        <item name="backgroundColor">@color/black</item>
+        <item name="android:windowBackground">@color/colorBackgroundGray</item>
+        <item name="backgroundColor">@color/colorBackgroundGray</item>
         <item name="backgroundColorAlt">@color/transparentBlack</item>
         <item name="dividerColor">@color/colorBackgroundWhiteAlt</item>
         <item name="textDefaultColor">@color/white</item>
@@ -23,7 +24,9 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
-        <item name="popupMenuStyle">@style/Widget.Popup</item>
-        <item name="widgetPopupStyle">@style/Widget.Popup</item>
+        <item name="backgroundColor">@color/colorBackgroundGray</item>
+        <item name="backgroundColorAlt">@color/colorBackgroundGrayAlt</item>
+        <item name="popupMenuStyle">@style/Widget.Popup.Dark</item>
+        <item name="widgetPopupStyle">@style/Widget.Popup.Dark</item>
     </style>
 </resources>

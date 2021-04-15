@@ -63,7 +63,6 @@
     <string name="app_theme_auto">自动</string>
     <string name="app_theme_light">浅色</string>
     <string name="app_theme_dark">深色</string>
-    <string name="app_theme_black">黑色</string>
     <string name="windowbar_mode">隐藏系统栏</string>
     <string name="windowbar_mode_none">关闭</string>
     <string name="windowbar_mode_status">状态栏</string>

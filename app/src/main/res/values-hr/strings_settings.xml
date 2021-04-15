@@ -28,7 +28,6 @@
     <string name="static_app_list">Uvijek otvori ladicu</string>
     <string name="static_favourites">Stalni prikaz ploče favorita</string>
     <string name="app_list_order_normal">A – Z</string>
-    <string name="app_theme_black">Crna</string>
     <string name="backup_complete">Sigurnosna kopija spremljena.</string>
     <string name="pref_shade_view_desc">Zasjenjuje vrh i dno slike pozadine</string>
     <string name="gesture_right">Povuci →</string>
