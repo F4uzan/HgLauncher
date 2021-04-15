@@ -25,19 +25,19 @@ object ActivityServiceUtils {
      *
      * @param activity The activity where the keyboard focus is being achieved.
      */
-    fun hideSoftKeyboard(activity: Activity) {
-        val inputMethodManager = activity.getSystemService(
-            Activity.INPUT_METHOD_SERVICE
-        ) as InputMethodManager
-        activity.currentFocus?.apply {
+    fun hideSoftKeyboard(activity: Activity, view: View?) {
+        view?.apply {
             if (Utils.atLeastR()) {
                 this.windowInsetsController?.hide(WindowInsets.Type.ime())
             } else {
+                val inputMethodManager = activity.getSystemService(
+                    Activity.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
+
                 inputMethodManager.hideSoftInputFromWindow(
                     this.windowToken,
                     InputMethodManager.HIDE_NOT_ALWAYS
                 )
-                this.clearFocus()
             }
         }
     }
@@ -48,17 +48,24 @@ object ActivityServiceUtils {
      * @param activity The activity hosting the view to be in focus.
      * @param view     The view requesting focus.
      */
-    fun showSoftKeyboard(activity: Activity, view: View) {
-        val inputMethodManager = activity.getSystemService(
-            Activity.INPUT_METHOD_SERVICE
-        ) as InputMethodManager
-        if (Utils.atLeastR()) {
-            view.windowInsetsController?.show(WindowInsets.Type.ime())
-        } else {
+    fun showSoftKeyboard(activity: Activity, view: View?) {
+        view?.apply {
+            if (Utils.atLeastR()) {
+                windowInsetsController?.show(WindowInsets.Type.ime())
+            } else {
+                val inputMethodManager = activity.getSystemService(
+                    Activity.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
+
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
+            }
+
+            //FIXME: For some reason, if requestFocus() is called before
+            // WindowInsetsController.show(), the keyboard will fail to show
+            // when the drawer is first pulled.
             if (! view.isFocused) {
                 view.requestFocus()
             }
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
         }
     }
 

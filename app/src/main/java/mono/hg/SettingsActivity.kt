@@ -111,7 +111,7 @@ class SettingsActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             super.onBackPressed()
-            ActivityServiceUtils.hideSoftKeyboard(this)
+            ActivityServiceUtils.hideSoftKeyboard(this, currentFocus)
             return true
         }
         return super.onOptionsItemSelected(item)

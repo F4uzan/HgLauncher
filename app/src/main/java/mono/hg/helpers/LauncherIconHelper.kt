@@ -3,10 +3,12 @@ package mono.hg.helpers
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.Color
@@ -26,6 +28,8 @@ import mono.hg.utils.Utils.LogLevel
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
@@ -71,7 +75,7 @@ object LauncherIconHelper {
         shouldHide: Boolean
     ): Drawable? {
         return if (! shouldHide) {
-            var icon = getIconDrawable(activity, componentName, user)
+            var icon = getIconDrawable(activity, componentName, "", user)
             if (PreferenceHelper.shadeAdaptiveIcon() &&
                 (Utils.atLeastOreo() && icon is AdaptiveIconDrawable)
             ) {
@@ -81,6 +85,23 @@ object LauncherIconHelper {
         } else {
             null
         }
+    }
+
+    /**
+     * Retrieve an icon for a component name, used for pinned apps.
+     *
+     * @param activity      Activity where LauncherApps service can be retrieved.
+     * @param componentName Component name of the activity.
+     * @param user          The serial number of the user.
+     *
+     * @return Drawable of the icon.
+     */
+    fun getIconForPinned(
+        activity: Activity,
+        componentName: String,
+        user: Long
+    ): Drawable? {
+        return getIconDrawable(activity, componentName, "pinned-", user)
     }
 
     /**
@@ -97,8 +118,106 @@ object LauncherIconHelper {
         return getDefaultIconDrawable(activity, componentName, user)
     }
 
+    /**
+     * Caches an icon to the launcher's files directory.
+     *
+     * This is only used for custom icon.
+     * Most icons are not cached to save on space.
+     *
+     * @param context       Context required to retrieve the path to the files directory.
+     * @param intent        The intent sent by the icon pack.
+     * @param prefix        The filename prefix for this cache.
+     * @param componentName The component name that will use this cached Bitmap.
+     *                      This component name will be reduced to package name.
+     * @param user          The user owning this component name.
+     */
+    fun cacheIcon(
+        context: Context,
+        intent: Intent,
+        prefix: String,
+        componentName: String,
+        user: Long
+    ): Drawable? {
+        val iconPath = "${context.filesDir.path}/${user}-${prefix}${componentName}"
+
+        // Used for icon packs that sends over a Bitmap directly.
+        intent.getParcelableExtra<Bitmap>("icon")?.let {
+            saveBitmapToFile(iconPath, it)
+            return BitmapDrawable(context.resources, it)
+        } ?: run {
+            // Try and see if this icon returns a URI instead.
+            intent.data?.apply {
+                BitmapFactory.decodeStream(context.contentResolver.openInputStream(this))?.let {
+                    saveBitmapToFile(iconPath, it)
+                    return BitmapDrawable(context.resources, it)
+                }
+            }
+        }
+
+        // We can't get anything so return null.
+        Utils.sendLog(LogLevel.ERROR, "Unable to retrieve icon from intent!")
+        return null
+    }
+
+    /**
+     * Retrieves the path to a cached custom icon.
+     *
+     * @param context       Context required to retrieve the path to the files directory.
+     * @param prefix        The filename prefix of the cached icon.
+     * @param componentName The component name of this cached icon.
+     * @param user          The user owning this component name.
+     *
+     * @return The path to the cached icon. Null if it can't be found.
+     */
+    fun getCachedIconPath(
+        context: Context,
+        prefix: String,
+        componentName: String,
+        user: Long
+    ): String? {
+        val customIconPath =
+            "${context.filesDir.path}/${user}-${prefix}${AppUtils.getPackageName(componentName)}"
+
+        with(File(customIconPath)) {
+            return if (exists() && ! isDirectory) {
+                customIconPath
+            } else {
+                null
+            }
+        }
+    }
+
+    /**
+     * Removes a cached icon.
+     *
+     * This function internally calls [getCachedIconPath]
+     * to check for the availability of the icon first.
+     *
+     * @param context       Context required to retrieve the path to the files directory.
+     * @param prefix        The filename prefix of the cached icon.
+     * @param componentName The component name of this cached icon.
+     * @param user          The user owning this component name.
+     */
+    fun deleteCachedIcon(context: Context, prefix: String, componentName: String, user: Long) {
+        getCachedIconPath(context, prefix, componentName, user)?.apply {
+            File(this).delete()
+        }
+    }
+
     private fun drawAdaptiveShadow(resources: Resources, icon: Drawable): BitmapDrawable {
         return BitmapDrawable(resources, addShadow(icon, icon.intrinsicHeight, icon.intrinsicWidth))
+    }
+
+    private fun saveBitmapToFile(path: String, bitmap: Bitmap) {
+        try {
+            FileOutputStream(path).apply {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, this) // Quality is unused here.
+                flush()
+                close()
+            }
+        } catch (e: Exception) {
+            Utils.sendLog(LogLevel.ERROR, e.toString())
+        }
     }
 
     /**
@@ -314,11 +433,18 @@ object LauncherIconHelper {
      *
      * @param activity       where LauncherApps service can be retrieved.
      * @param appPackageName Package name of the app whose icon is to be loaded.
+     * @param prefix         Prefix used for custom icon path.
+     * @param user           User serial number required to load badged icon.
      *
      * @return Drawable Will return null if there is no icon associated with the package name,
      * otherwise an associated icon from the icon pack will be returned.
      */
-    private fun getIconDrawable(activity: Activity, appPackageName: String, user: Long): Drawable? {
+    private fun getIconDrawable(
+        activity: Activity,
+        appPackageName: String,
+        prefix: String,
+        user: Long
+    ): Drawable? {
         val packageManager = activity.packageManager
         val componentName = "ComponentInfo{$appPackageName}"
         val iconPackageName =
@@ -326,6 +452,18 @@ object LauncherIconHelper {
         val defaultIcon: Drawable? = getDefaultIconDrawable(activity, appPackageName, user)
 
         try {
+            // If there is a custom icon set, use that over the default one.
+            getCachedIconPath(activity, prefix, appPackageName, user)?.let { path ->
+                BitmapFactory.Options().apply {
+                    inPreferredConfig = Bitmap.Config.ARGB_8888
+                }.also {
+                    return BitmapDrawable(
+                        activity.resources,
+                        BitmapFactory.decodeFile(path, it)
+                    )
+                }
+            }
+
             val iconRes = if ("default" != iconPackageName) {
                 packageManager.getResourcesForApplication(iconPackageName)
             } else {
@@ -430,18 +568,23 @@ object LauncherIconHelper {
         return BitmapDrawable(resources, result)
     }
 
-    private fun getDefaultIconDrawable(activity: Activity, appPackageName: String, user:Long): Drawable? {
-        return if (Utils.atLeastLollipop()) {
+    private fun getDefaultIconDrawable(
+        activity: Activity,
+        appPackageName: String,
+        user: Long
+    ): Drawable? {
+        if (Utils.atLeastLollipop()) {
             try {
                 val launcher =
-                    activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-
+                    activity.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps?
                 val userManager = activity.getSystemService(Context.USER_SERVICE) as UserManager
 
-                launcher.getActivityList(
-                    AppUtils.getPackageName(appPackageName),
-                    userManager.getUserForSerialNumber(user)
-                )[0].getBadgedIcon(0)
+                launcher?.apply {
+                    return getActivityList(
+                        AppUtils.getPackageName(appPackageName),
+                        userManager.getUserForSerialNumber(user)
+                    )[0].getBadgedIcon(0)
+                }
             } catch (w: SecurityException) {
                 // Fall back and retrieve the icon from package manager.
                 // We probably don't have permission to access the badged icon yet.
@@ -449,10 +592,9 @@ object LauncherIconHelper {
                     activity.packageManager.getActivityIcon(it)
                 }
             }
-        } else {
-            ComponentName.unflattenFromString(appPackageName)?.let {
-                activity.packageManager.getActivityIcon(it)
-            }
         }
+
+        return ComponentName.unflattenFromString(appPackageName)
+            ?.let { activity.packageManager.getActivityIcon(it) }
     }
 }

@@ -1,5 +1,6 @@
 package mono.hg.pages
 
+import android.app.Activity.RESULT_OK
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -58,6 +59,11 @@ import kotlin.collections.ArrayList
  * This is the generic implementation of an app list that handles the required features.
  */
 class AppsListPage : GenericPage() {
+    /*
+     * Index of an app that is currently being edited.
+     */
+    private var editingAppPosition: Int = - 1
+
     /*
      * Adapter for installed apps.
      */
@@ -145,7 +151,7 @@ class AppsListPage : GenericPage() {
 
         if (Utils.atLeastLollipop()) {
             launcherApps =
-                requireActivity().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+                requireActivity().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps?
         }
         userUtils = UserUtils(requireContext())
 
@@ -192,7 +198,7 @@ class AppsListPage : GenericPage() {
         appsAdapter.addListener(FlexibleAdapter.OnUpdateListener { size ->
             if (size > 0 && ! appsAdapter.isEmpty) {
                 loaderBinding?.loader?.hide()
-            } else {
+            } else if (! appsAdapter.hasFilter()) {
                 loaderBinding?.loader?.show()
             }
         })
@@ -239,27 +245,29 @@ class AppsListPage : GenericPage() {
     override fun onResume() {
         super.onResume()
 
+        // Create a new package name list to compare against the old package name list
+        val newPackageNameList = getPackageNameList(ArrayList())
+
         // Detect newly installed/removed apps.
         // This check is used when changes occur
         // when the launcher is in the background (i.e, not caught by the receiver).
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            val mutableAdapterList = ArrayList<App>()
-
             withContext(Dispatchers.Default) {
-                // Create the second list to compare against the first.
-                val newPackageNameList = getPackageNameList(ArrayList())
+                val mutableAdapterList = ArrayList<App>()
 
-                if (newPackageNameList != packageNameList.sorted() && appsAdapter.hasFinishedLoading()) {
-                    mutableAdapterList.addAll(appsAdapter.currentItems.toMutableList())
+                val start = newPackageNameList.subtract(packageNameList)
+                val end = packageNameList.subtract(newPackageNameList)
 
-                    // Find the difference in the two lists.
-                    // Since the new list and the old list can vary in size,
-                    // we can't really just subtract it. We need to subtract
-                    // twice then add the differences together.
-                    val start = newPackageNameList.minus(packageNameList)
-                    val end = packageNameList.minus(newPackageNameList)
+                // Find the difference in the two lists.
+                // Since the new list and the old list can vary in size,
+                // we can't really just subtract it. We need to subtract
+                // twice then add the differences together.
+                start.plus(end).apply {
+                    if (this.isNotEmpty()) {
+                        mutableAdapterList.addAll(appsAdapter.currentItems.toMutableList())
+                    }
 
-                    start.plus(end).forEach { app ->
+                    this.forEach { app ->
                         // There's no need to process ourselves.
                         if (app.contains(requireContext().packageName)) return@forEach
 
@@ -278,11 +286,10 @@ class AppsListPage : GenericPage() {
                         // exists in the current list. This is because our list
                         // won't be notified on an app update. There can only
                         // be two states: installing or removing.
-                        mutableAdapterList.find { it.userPackageName == app }?.apply {
-                            // If it exists, then it's probably an uninstall signal.
-                            mutableAdapterList.remove(this)
-                        } ?: run {
-                            // Otherwise, try and add this app.
+                        //
+                        // If retainAll doesn't return a true, then assume
+                        // that the app is a new one.
+                        if (! mutableAdapterList.retainAll { it.userPackageName != app }) {
                             manager.getLaunchIntentForPackage(
                                 AppUtils.getPackageName(componentName)
                             )?.apply {
@@ -290,22 +297,42 @@ class AppsListPage : GenericPage() {
                             }
                         }
                     }
-                }
 
-                withContext(Dispatchers.Main) {
-                    if (mutableAdapterList.isNotEmpty()) {
-                        appsAdapter.updateDataSet(
-                            mutableAdapterList.sortedWith(
-                                DisplayNameComparator(PreferenceHelper.isListInverted)
-                            ), true
-                        )
+                    withContext(Dispatchers.Main) {
+                        if (mutableAdapterList.isNotEmpty()) {
+                            appsAdapter.updateDataSet(
+                                mutableAdapterList.sortedWith(
+                                    DisplayNameComparator(PreferenceHelper.isListInverted)
+                                ), true
+                            )
+                        }
                     }
-                }
 
-                // Update the internal list.
-                getPackageNameList(packageNameList)
-                AppUtils.updatePackageCount(manager)
+                    // Update the internal list.
+                    getPackageNameList(packageNameList)
+                    AppUtils.updatePackageCount(manager)
+                }
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Update the icon on the selected app.
+        if (resultCode == RESULT_OK && requestCode == SET_ICON_REQUEST && data != null) {
+            appsAdapter.getItem(editingAppPosition)?.apply {
+                LauncherIconHelper.cacheIcon(
+                    requireContext(),
+                    data,
+                    "",
+                    AppUtils.getPackageName(packageName),
+                    user
+                )?.let { icon = it }
+            }?.let { appsAdapter.updateItem(it) }
+
+            // Reset the index once we're done.
+            editingAppPosition = - 1
         }
     }
 
@@ -363,6 +390,38 @@ class AppsListPage : GenericPage() {
             show()
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
+                    R.id.action_icon_set -> {
+                        // Update the index first.
+                        editingAppPosition = appsAdapter.getGlobalPositionOf(app)
+
+                        // Load the picker intent.
+                        // TODO: We should use more intent actions here.
+                        Intent("org.adw.launcher.icons.ACTION_PICK_ICON").apply {
+                            startActivityForResult(
+                                Intent.createChooser(
+                                    this, getString(R.string.dialog_title_set_icon)
+                                ), SET_ICON_REQUEST
+                            )
+                        }
+                    }
+                    R.id.action_icon_reset -> {
+                        // Reset the icon cache first.
+                        LauncherIconHelper.deleteCachedIcon(
+                            requireContext(),
+                            "",
+                            app.packageName,
+                            app.user
+                        )
+
+                        // Retrieve a brand new icon.
+                        app.icon = LauncherIconHelper.getIcon(
+                            requireActivity(),
+                            app.userPackageName,
+                            app.user,
+                            false
+                        )
+                        appsAdapter.updateItem(app)
+                    }
                     R.id.action_pin -> getLauncherActivity().pinAppHere(app.userPackageName, user)
                     R.id.action_info -> AppUtils.openAppDetails(
                         requireActivity(),
@@ -494,7 +553,8 @@ class AppsListPage : GenericPage() {
     private fun addApp(list: MutableList<App>, componentName: String, user: Long) {
         // Don't add the app if it has the launcher's package name or if it's hidden.
         if (componentName.contains(requireContext().packageName) ||
-            excludedAppsList.contains(componentName)) {
+            excludedAppsList.contains(componentName)
+        ) {
             return
         }
 
@@ -502,11 +562,7 @@ class AppsListPage : GenericPage() {
             // If there's an app with a matching componentName,
             // then it's probably the same app. Update that entry instead
             // of adding a new app.
-            if (user == userUtils?.currentSerial) {
-                this.find { it.userPackageName == componentName }
-            } else {
-                this.find { it.userPackageName == "${user}-${componentName}" }
-            }?.apply {
+            this.find { it.userPackageName == "${user}-${componentName}" }?.apply {
                 appName = AppUtils.getPackageLabel(
                     requireActivity().packageManager,
                     componentName
@@ -596,7 +652,10 @@ class AppsListPage : GenericPage() {
         val hasHintName = appsAdapter.getItem(position)?.hasHintName() ?: false
         val renameField = binding.renameField.apply {
             ViewCompat.setBackgroundTintList(this, ColorStateList.valueOf(PreferenceHelper.accent))
-            hint = packageName?.let { PreferenceHelper.getLabel(it) }
+            packageName?.let {
+                setText(PreferenceHelper.getLabel(it))
+                hint = text
+            }
         }
 
         with(AlertDialog.Builder(requireContext())) {
@@ -631,5 +690,6 @@ class AppsListPage : GenericPage() {
 
     companion object {
         private const val SHORTCUT_MENU_GROUP = 247
+        private const val SET_ICON_REQUEST = 8000
     }
 }

@@ -85,6 +85,11 @@ class LauncherActivity : AppCompatActivity() {
     private var panelLockRequested = true
 
     /*
+     * Index of an app that is currently being edited.
+     */
+    private var editingAppPosition: Int = - 1
+
+    /*
      * Animation duration; fetched from system's duration.
      */
     private var animateDuration = 0
@@ -176,7 +181,7 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         if (Utils.atLeastLollipop()) {
-            launcherApps = this.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+            launcherApps = this.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps?
         }
         userUtils = UserUtils(this)
 
@@ -372,6 +377,19 @@ class LauncherActivity : AppCompatActivity() {
             ViewUtils.restartActivity(this, true)
         } else if (PreferenceHelper.preference.getBoolean("require_reinit", false)) {
             PreferenceHelper.fetchPreference()
+        }
+
+        // Update icon when an icon set request is detected.
+        if (resultCode == RESULT_OK && requestCode == SET_ICON_REQUEST && data != null) {
+            pinnedAppsAdapter.getItem(editingAppPosition)?.apply {
+                LauncherIconHelper.cacheIcon(
+                    this@LauncherActivity,
+                    data,
+                    "pinned-",
+                    AppUtils.getPackageName(packageName),
+                    user
+                )?.let { icon = it }
+            }?.let { pinnedAppsAdapter.updateItem(it) }
         }
 
         // Call super to handle anything else not handled here.
@@ -571,6 +589,37 @@ class LauncherActivity : AppCompatActivity() {
             show()
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
+                    R.id.action_icon_set -> {
+                        // Update the index first.
+                        editingAppPosition = pinnedAppsAdapter.getGlobalPositionOf(app)
+
+                        // Load the picker intent.
+                        // TODO: We should use more intent actions here.
+                        Intent("org.adw.launcher.icons.ACTION_PICK_ICON").apply {
+                            startActivityForResult(
+                                Intent.createChooser(
+                                    this, getString(R.string.dialog_title_set_icon)
+                                ), SET_ICON_REQUEST
+                            )
+                        }
+                    }
+                    R.id.action_icon_reset -> {
+                        // Reset the icon cache first.
+                        LauncherIconHelper.deleteCachedIcon(
+                            this@LauncherActivity,
+                            "pinned-",
+                            app.packageName,
+                            app.user
+                        )
+
+                        // Retrieve a brand new icon.
+                        app.icon = LauncherIconHelper.getIconForPinned(
+                            this@LauncherActivity,
+                            app.userPackageName,
+                            app.user
+                        )
+                        pinnedAppsAdapter.updateItem(app)
+                    }
                     R.id.action_unpin -> unpinApp(position)
                     R.id.action_info -> AppUtils.openAppDetails(
                         this@LauncherActivity,
@@ -823,7 +872,7 @@ class LauncherActivity : AppCompatActivity() {
                         }
                     SlidingUpPanelLayout.PanelState.EXPANDED -> {
                         // Hide keyboard if container is invisible.
-                        ActivityServiceUtils.hideSoftKeyboard(this@LauncherActivity)
+                        ActivityServiceUtils.hideSoftKeyboard(this@LauncherActivity, searchBar)
 
                         // Disable the drawer when the search bar is invisible.
                         slidingHome.isTouchEnabled = false
@@ -983,6 +1032,7 @@ class LauncherActivity : AppCompatActivity() {
     companion object {
         private const val SETTINGS_RETURN_CODE = 12
         private const val SHORTCUT_MENU_GROUP = 247
+        private const val SET_ICON_REQUEST = 8000
 
         /*
          * String containing pinned apps. Delimited by a semicolon (;).
