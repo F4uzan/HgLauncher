@@ -25,8 +25,8 @@ import mono.hg.utils.compatHide
  * This activity can be called through 'Additional setting' in the System settings as well.
  */
 class SettingsActivity : AppCompatActivity(),
-    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
-    SharedPreferences.OnSharedPreferenceChangeListener {
+        PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
+        SharedPreferences.OnSharedPreferenceChangeListener {
     private var fragmentTitle: CharSequence? = null
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var toolbar: Toolbar
@@ -35,10 +35,10 @@ class SettingsActivity : AppCompatActivity(),
     // The list of preferences that will trigger a launcher restart.
     // This restart will be done in LauncherActivity itself.
     private val preferenceRestartTrigger =
-        "app_theme app_accent widget_space_visible app_list_mode list_bg icon_hide_switch adaptive_shade_switch icon_pack list_order shade_view_switch"
+            "app_theme app_accent widget_space_visible app_list_mode list_bg icon_hide_switch adaptive_shade_switch icon_pack orientation_mode list_order shade_view_switch"
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        if (! PreferenceHelper.hasEditor()) {
+        if (!PreferenceHelper.hasEditor()) {
             PreferenceHelper.initPreference(this)
         }
 
@@ -76,7 +76,7 @@ class SettingsActivity : AppCompatActivity(),
             ViewUtils.setFragment(supportFragmentManager, BasePreference(), "settings")
         } else {
             fragmentTitle = savedInstanceState.getCharSequence("title")
-                ?: getString(R.string.title_activity_settings)
+                    ?: getString(R.string.title_activity_settings)
             supportActionBar?.title = fragmentTitle
         }
     }
@@ -120,7 +120,7 @@ class SettingsActivity : AppCompatActivity(),
     private fun checkCaller() {
         // If this activity is called from anywhere else but the launcher,
         // then the launcher needs to be informed of the changes made that it may not be aware of.
-        if (callingActivity == null && ! PreferenceHelper.wasAlien()) {
+        if (callingActivity == null && !PreferenceHelper.wasAlien()) {
             PreferenceHelper.isAlien(true)
         }
     }
@@ -128,28 +128,28 @@ class SettingsActivity : AppCompatActivity(),
     private fun setActivityTheme() {
         ViewUtils.switchTheme(this, false)
         if (Utils.atLeastLollipop() && resources.configuration.uiMode and
-            Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_NO
+                Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_NO
         ) {
             window.statusBarColor = PreferenceHelper.darkerAccent
         }
     }
 
     override fun onPreferenceStartFragment(
-        caller: PreferenceFragmentCompat,
-        pref: Preference
+            caller: PreferenceFragmentCompat,
+            pref: Preference
     ): Boolean {
         // Instantiate the new Fragment
         val fragment =
-            supportFragmentManager.fragmentFactory.instantiate(classLoader, pref.fragment)
+                supportFragmentManager.fragmentFactory.instantiate(classLoader, pref.fragment)
         fragment.setTargetFragment(caller, 0)
         fragmentTitle = pref.title
 
         // Replace the existing Fragment with the new Fragment
         supportFragmentManager.beginTransaction()
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .replace(R.id.fragment_container, fragment, pref.key)
-            .addToBackStack(pref.key)
-            .commit()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(R.id.fragment_container, fragment, pref.key)
+                .addToBackStack(pref.key)
+                .commit()
 
         // Update the Activity's action bar
         supportActionBar?.title = fragmentTitle

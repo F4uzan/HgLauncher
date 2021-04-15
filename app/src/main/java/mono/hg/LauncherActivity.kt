@@ -9,12 +9,8 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.SparseArray
-import android.view.ContextMenu
+import android.view.*
 import android.view.ContextMenu.ContextMenuInfo
-import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -44,11 +40,7 @@ import mono.hg.helpers.PreferenceHelper
 import mono.hg.listeners.GestureListener
 import mono.hg.models.App
 import mono.hg.receivers.PackageChangesReceiver
-import mono.hg.utils.ActivityServiceUtils
-import mono.hg.utils.AppUtils
-import mono.hg.utils.UserUtils
-import mono.hg.utils.Utils
-import mono.hg.utils.ViewUtils
+import mono.hg.utils.*
 import mono.hg.views.DagashiBar
 import mono.hg.wrappers.TextSpectator
 import java.net.URLEncoder
@@ -171,14 +163,14 @@ class LauncherActivity : AppCompatActivity() {
         // Load preferences before setting layout.
         loadPref()
 
+        if (requestedOrientation != PreferenceHelper.orientation) {
+            requestedOrientation = PreferenceHelper.orientation
+        }
+
         super.onCreate(savedInstanceState)
 
         binding = ActivityLauncherspaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        if (requestedOrientation != PreferenceHelper.orientation) {
-            requestedOrientation = PreferenceHelper.orientation
-        }
 
         if (Utils.atLeastLollipop()) {
             launcherApps = this.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps?
