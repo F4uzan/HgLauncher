@@ -64,6 +64,9 @@ Czech translation
 <b>Pavle Radosavljević (pavlepiramida)</b>
 Serbian translation
 
+<b>Reza (rezaalmanda)</b>
+Indonesian translation
+
 <b>Ruan O. Lima</b>
 Portuguese (Portugal) translation
 
