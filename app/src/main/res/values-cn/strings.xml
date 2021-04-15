@@ -56,4 +56,7 @@
     <string name="search_provider_ddg" translatable="false">DuckDuckGo</string>
     <string name="search_provider_searx" translatable="false">searx</string>
     <string name="search_provider_startpage" translatable="false">Startpage</string>
+    <string name="action_customize">自定义</string>
+    <string name="action_icon_reset">重设图标</string>
+    <string name="action_icon_set">设置图标</string>
 </resources>
