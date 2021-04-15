@@ -15,7 +15,7 @@
     <string name="action_web_provider_add">添加</string>
     <string name="action_web_provider_reset">重置</string>
     <!-- App menu actions -->
-	<string name="action_icon_set">设置图标</string>
+    <string name="action_icon_set">设置图标</string>
     <string name="action_icon_reset">重设图标</string>
     <string name="action_pin">固定</string>
     <string name="action_unpin">取消固定</string>
@@ -26,7 +26,7 @@
     <string name="action_shorthand">缩略词</string>
     <string name="action_actions">动作</string>
     <string name="action_shortcuts">快捷方式</string>
-	 <string name="action_customize">自定义</string>
+    <string name="action_customize">自定义</string>
     <!-- Misc -->
     <string name="search_hint">搜索......</string>
     <string name="search_web_hint">在线搜索 \'%1$s\' </string>
@@ -36,7 +36,7 @@
     <string name="dialog_title_add_provider">添加供应商</string>
     <string name="dialog_title_edit_provider">编辑供应商</string>
     <string name="dialog_title_shorthand">设置缩略词</string>
-	 <string name="dialog_title_set_icon">选择图标包</string>
+    <string name="dialog_title_set_icon">选择图标包</string>
     <!-- Dialog actions -->
     <string name="dialog_action_close">关闭</string>
     <string name="dialog_action_add">添加</string>
