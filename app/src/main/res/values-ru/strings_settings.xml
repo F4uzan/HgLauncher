@@ -82,4 +82,5 @@
     <string name="backup_exist">Наименование резервной копии уже существует.</string>
     <string name="dialog_cancel">Отмена</string>
     <string name="pref_summary_list">Скрытые приложения, икон паки, поведение списка приложений</string>
+    <string name="pref_header_pages">Страницы</string>
 </resources>
