@@ -103,4 +103,10 @@
     <string name="list_background_none">Desativado</string>
     <string name="app_theme_accent">Realce</string>
     <string name="app_theme_accent_dialog">Escolher uma cor</string>
+    <string name="pref_header_pages_drawer">Menu</string>
+    <string name="pref_header_pages">Páginas</string>
+    <string name="pref_summary_pages">Widget, lista de aplicações, comportamento</string>
+    <string name="app_theme_auto">Automático</string>
+    <string name="gesture_pinch">Apertar</string>
+    <string name="gesture_action_drawer">Abrir menu</string>
 </resources>
